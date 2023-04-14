@@ -55,7 +55,7 @@ niucloud-admin是一款快速开发SAAS通用管理系统后台框架，前端�
 #### 宝塔部署
 - 1.环境要求<br/>
 php 8.0  <br/>    mysql5.6及以上  <br/>      启用redis   <br/>      Nignx/Apache
-- 2.登录网站【<a href='https://gitee.com/niuteam/niucloud-admin/' target="_blank">https://gitee.com/niuteam/niucloud-admin/</a>】下载框架源码。
+- 2.登录网站【<a href='https://gitee.com/niucloud-team/niucloud-admin.git' target="_blank">https://gitee.com/niucloud-team/niucloud-admin/</a>】下载框架源码。
 - 3.源码放置到宝塔根目录，访问本地或者虚拟域名，进入安装界面，点击下一步，输入数据库安装信息，下一步完成安装。详细教程查看 :arrow_right: <a href='https://www.kancloud.cn/cui18734824089/niucloud-admin-develop/3148343' target="_blank">【开发手册】 :arrow_left: </a>
 - 4.配置伪静态<br/>
 可直接复制下方代码：
