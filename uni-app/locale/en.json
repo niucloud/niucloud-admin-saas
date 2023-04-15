@@ -1,0 +1,12 @@
+{
+    // pages.json 英文标题
+    "pages.index.index": "Index",
+    "pages.article.list": "Information Center",
+    "pages.article.detail": "Information detail",
+    "pages.member.index": "My",
+    "pages.auth.login": "Login",
+    "pages.auth.register": "Register",
+    "pages.auth.resetpwd": "Retrieve password",
+    "pages.setting.index": "Settings",
+    "pages.auth.bind": "Bind Mobile"
+}

@@ -1,0 +1,21 @@
+{
+      "name": "短信类型",
+      "aliSms":"阿里云短信",
+      "tencentSms": "腾讯云短信",
+      "isUse":"是否启用",
+      "config":"设置",
+      "aliAppKey": "APP_KEY",
+      "aliSign":"短信签名",
+      "aliSecretKey":"SECRET_KEY",
+      "aliAppKeyPlaceholder": "请输入APP_KEY",
+      "aliSignPlaceholder":"请输入短信签名",
+      "aliSecretKeyPlaceholder":"请输入SECRET_KEY",
+      "tencentSign":"短信签名",
+      "tencentAppId":"APP_ID",
+      "tencentSecretId":"SECRET_ID",
+      "tencentSecretKey":"SECRET_KEY",
+      "tencentSignPlaceholder":"请输入短信签名",
+      "tencentAppIdPlaceholder":"请输入APP_ID",
+      "tencentSecretIdPlaceholder":"请输入SECRET_ID",
+      "tencentSecretKeyPlaceholder":"请输入SECRET_KEY"
+}

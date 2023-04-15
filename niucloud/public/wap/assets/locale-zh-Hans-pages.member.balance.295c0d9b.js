@@ -1,0 +1,1 @@
+const e="充值",a="余额明细",r="可用余额",c="充值金额错误",l="立即充值",o="请输入充值金额",t={recharge:"充值",balanceDetail:a,availableBalance:r,rechargeAmountError:c,clickRecharge:l,rechargeAmountPlaceholder:o};export{r as availableBalance,a as balanceDetail,l as clickRecharge,t as default,e as recharge,c as rechargeAmountError,o as rechargeAmountPlaceholder};

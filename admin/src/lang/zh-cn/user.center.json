@@ -1,0 +1,17 @@
+{
+    "headImg": "头像",
+    "realName": "名称",
+    "originalPassword": "原始密码",
+    "password": "新密码",
+    "passwordCopy": "确认密码",
+    "passwordTip": "修改密码时必填.不修改密码时留空",
+    "realNamePlaceholder": "请输入用户名称",
+    "headImgPlaceholder": "请输入用户头像",
+    "originalPasswordPlaceholder": "请输入原始密码",
+    "passwordPlaceholder": "请输入新密码",
+    "save": "保存",
+    "cancel": "取消",
+    "originalPasswordHint": "原始密码不能为空",
+    "newPasswordHint": "请输入确认密码",
+    "doubleCipherHint": "两次新密码不同"
+}

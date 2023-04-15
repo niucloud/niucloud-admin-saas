@@ -1,0 +1,18 @@
+{
+      "siteId":"站点ID",
+      "name":"栏目名称",
+      "sort":"排序",
+      "isShow":"是否显示",
+      "siteIdPlaceholder":"请输入站点ID",
+      "namePlaceholder":"请输入栏目名称",
+      "sortPlaceholder":"请输入排序",
+      "isShowPlaceholder":"是否显示",
+      "addArticleCategory":"添加栏目",
+      "updateArticleCategory":"编辑栏目",
+      "articleCategoryDeleteTips" : "确定要删除该栏目吗？",
+      "nameMax":"名称不能超过20个字符",
+      "sortNumber":"排序号必须是数字",
+      "sortBetween":"排序号不能超过10000",
+      "show":"显示",
+      "hide":"不显示"
+}

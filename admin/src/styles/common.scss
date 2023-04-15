@@ -1,0 +1,99 @@
+:root {
+    --aside-width: 210px;
+    --el-mask-color: rgba(255,255,255,1)
+}
+
+.border-color {
+    border-color: var(--el-border-color-lighter);
+}
+
+.table-search-wrap {
+    background: #f5f7fa !important;
+    border-radius: 0!important;
+
+    .el-form {
+        margin-bottom: -18px;
+    }
+}
+
+.el-form {
+    .form-tip {
+        width: 100%;
+        font-size: var(--el-font-size-small);
+        color: var(--el-color-info-light-3);
+        line-height: 1;
+        margin-top: 10px;
+    }
+}
+
+.page-form {
+    .input-width {
+        width: 300px;
+    }
+}
+
+.w-e-full-screen-container {
+    z-index: 10;
+}
+
+.w-e-toolbar {
+    .w-e-bar-divider {
+        display: none;
+    }
+}
+
+.main-container{
+    .full-container {
+        height: calc(100vh - 122px);
+    }
+}
+
+.panel-title {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.fixed-footer-wrap {
+    height: 48px;
+
+    .fixed-footer {
+        position: fixed;
+        height: inherit;
+        background:var(--el-bg-color-overlay);
+        padding-left: var(--aside-width);
+        width: 100%;
+        left: 0;
+        bottom: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        --tw-shadow: var(--el-box-shadow);
+        --tw-shadow-colored: var(--el-box-shadow);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),var(--tw-ring-shadow, 0 0 #0000),var(--tw-shadow);
+        transition:var(--el-transition-duration) width ease-in-out,var(--el-transition-duration) padding-left ease-in-out,var(--el-transition-duration) padding-right ease-in-out
+    }
+}
+
+html.dark {
+    .el-table {
+        --el-table-header-bg-color: var(--el-bg-color)!important
+    }
+    .table-search-wrap {
+        background-color: var(--el-bg-color)!important;
+    }
+    --w-e-toolbar-bg-color: var(--el-bg-color-overlay);
+    --w-e-textarea-bg-color: var(--el-bg-color-overlay);
+    --w-e-textarea-color: var(--el-input-text-color);
+    --w-e-toolbar-border-color: var(--el-border-color);
+    --w-e-toolbar-active-bg-color:var(--el-bg-color);
+    --w-e-toolbar-active-color:var(--el-text-color-primary);
+}
+
+:root input:-webkit-autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+    box-shadow: 0 0 50px 50px white inset;
+}

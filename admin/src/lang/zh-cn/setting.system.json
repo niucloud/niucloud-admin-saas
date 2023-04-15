@@ -1,0 +1,25 @@
+{
+      "websiteInfo":"网站设置",
+      "contactAddress":"联系地址",
+      "siteName": "站点名称",
+      "keywords": "网站关键字",
+      "logo": "网站Logo",
+      "desc": "网站简介",
+      "province": "省",
+      "city": "市",
+      "district": "区/县",
+      "selectAddress": "请选择地址",
+      "address": "详细地址",
+      "phone": "客服电话",
+      "businessHours": "营业时间",
+      "contactAddressPlaceholder":"联系地址",
+      "siteNamePlaceholder": "站点名称",
+      "keywordsPlaceholder": "网站关键字",
+      "logoPlaceholder": "网站Logo",
+      "descPlaceholder": "网站简介",
+     
+      "addressPlaceholder": "详细地址",
+      "phonePlaceholder": "客服电话",
+      "businessHoursPlaceholder": "营业时间",
+      "businessHoursTips": "例：上午9:00-12:00，下午2:00-6:00"
+}

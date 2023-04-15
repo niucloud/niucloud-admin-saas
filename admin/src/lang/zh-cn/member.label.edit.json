@@ -1,0 +1,13 @@
+{
+    "siteId":"站点id",
+    "labelName":"标签名称",
+    "memo":"备注",
+    "sort":"排序",
+    "siteIdPlaceholder":"请输入站点id",
+    "labelNamePlaceholder":"请输入标签名称",
+    "memoPlaceholder":"请输入备注",
+    "sortPlaceholder":"请输入排序",
+    "addMemberLabel":"添加会员标签",
+    "updateMemberLabel":"编辑会员标签",
+    "memberLabelDeleteTips":"确定要删除该会员标签吗？"
+}

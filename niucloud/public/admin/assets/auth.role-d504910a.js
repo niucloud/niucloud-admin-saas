@@ -1,0 +1,1 @@
+const e="新增角色",o="编辑角色",l="角色名称",t="确定要删除该角色吗？",c="请输入角色名称",r="请选择权限",s="父子级不关联",a="权限",d={addRole:e,updateRole:o,roleName:l,roleDeleteTips:t,roleNamePlaceholder:c,rulesPlaceholder:r,checkStrictly:s,permission:a};export{e as addRole,s as checkStrictly,d as default,a as permission,t as roleDeleteTips,l as roleName,c as roleNamePlaceholder,r as rulesPlaceholder,o as updateRole};

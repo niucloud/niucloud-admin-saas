@@ -1,0 +1,19 @@
+{
+    
+    "bind": "绑定",
+    "binding": "绑定中",
+    "usernamePlaceholder": "请输入账号",
+    "passwordPlaceholder": "请输入密码",
+    "confirmPasswordPlaceholder": "请再次确认密码",
+    "confirmPasswordError": "两次输入的密码不一致",
+    "resetpwd": "忘记密码",
+    "haveAccount": "已有账号",
+    "toLogin": "去登录",
+    "and": "和",
+    "bindAgreeTips": "绑定代表您同意",
+    "usernameRegister": "账号绑定",
+    "mobileRegister": "手机号绑定",
+    "mobilePlaceholder": "请输入手机号",
+    "mobileBind": "手机号绑定"
+    
+}

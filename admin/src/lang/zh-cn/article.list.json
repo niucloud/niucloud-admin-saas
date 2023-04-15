@@ -1,0 +1,20 @@
+{
+      "categoryName":"栏目",
+      "title":"标题",
+      "intro":"简介",
+      "summary":"摘要",
+      "image":"封面",
+      "author":"作者",
+      "content":"文章内容",
+      "visit":"实际浏览量",
+      "visitVirtual":"虚拟浏览量",
+      "isShow":"是否显示",
+      "sort":"排序",
+      "createTime":"创建时间",
+      "updateTime":"更新时间",
+      "addArticle":"添加文章",
+      "updateArticle":"编辑文章",
+      "titlePlaceholder":"请输入文章标题",
+      "categoryIdPlaceholder":"请选择文章栏目",
+      "articleDeleteTips" : "确定要删除该文章吗？"
+}

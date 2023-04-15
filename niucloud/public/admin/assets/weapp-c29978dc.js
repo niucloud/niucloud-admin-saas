@@ -1,0 +1,1 @@
+import{w as e}from"./index-aae906bf.js";function r(){return e.get("weapp/config")}function a(t){return e.put("weapp/config",t,{showErrorMessage:!0,showSuccessMessage:!0})}function p(){return e.get("weapp/template")}function n(t){return e.put("weapp/template/sync",t,{showErrorMessage:!0,showSuccessMessage:!0})}export{p as a,n as b,r as g,a as s};

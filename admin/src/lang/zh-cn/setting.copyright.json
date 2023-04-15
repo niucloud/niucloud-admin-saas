@@ -1,0 +1,23 @@
+{
+      "copyrightEdit":"版权设置",
+      "putOnRecordEdit":"备案设置",
+
+      "companyName": "公司名称",
+      "copyrightLink": "版权链接",
+      "copyrightDesc": "版权信息",
+
+      "icp": "网站ICP备案号",
+      "govRecord": "网站公安备案",
+      "govUrl": "网站公安链接",
+      "marketSupervisionUrl": "市场监督管理局链接",
+
+      "companyNamePlaceholder": "请输入公司名称",
+      "copyrightLinkPlaceholder": "请输入版权链接",
+      "copyrightDescPlaceholder": "请输入版权信息",
+
+      "icpPlaceholder": "请输入网站ICP备案号",
+      "govRecordPlaceholder": "请输入网站公安备案",
+      "govUrlPlaceholder": "请输入网站公安链接",
+      "marketSupervisionUrlPlaceholder": "请输入市场监督管理局链接"
+      
+}

@@ -1,0 +1,1 @@
+import{aW as t}from"./entry.08c6ab45.js";function s(){return t.get("captcha",{},{showErrorMessage:!0})}function o(e){return t.post(`send/mobile/${e.type}`,e,{showErrorMessage:!0})}function n(e){return t.get("copyright",e)}export{n as a,s as g,o as s};

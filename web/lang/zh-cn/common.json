@@ -1,0 +1,13 @@
+{
+    "login": "登录",
+    "register": "注册",
+    "getSmsCode": "获取短信验证码",
+    "smsCodeChangeText": "秒后重新获取",
+    "captchaTitle": "请先完成安全验证",
+    "confirm": "确认",
+    "cancel": "取消",
+    "captchaPlaceholder": "请输入验证码",
+    "mobilePlaceholder": "请输入手机号码",
+    "mobileError": "请输入正确的手机号",
+    "codePlaceholder": "请输入手机验证码"
+}

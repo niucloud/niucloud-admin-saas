@@ -1,0 +1,12 @@
+{
+    "nickname": "昵称",
+    "sex": "性别",
+    "mobile": "手机号",
+    "birthday": "生日",
+    "unknown": "未知",
+    "updateHeadimg": "更换头像",
+    "updateNickname": "修改昵称",
+    "man": "男",
+    "woman": "女",
+    "bindMobile": "绑定手机"
+}

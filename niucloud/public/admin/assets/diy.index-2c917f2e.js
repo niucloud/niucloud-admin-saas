@@ -1,0 +1,1 @@
+const c="装修",e="预览",t="微信小程序",o="微信公众号",p="链接",s="复制",n="复制成功",a="小程序未配置",w={decorate:c,preview:e,weapp:t,wechat:o,link:p,copy:s,copySuccess:n,weappNotSet:a};export{s as copy,n as copySuccess,c as decorate,w as default,p as link,e as preview,t as weapp,a as weappNotSet,o as wechat};

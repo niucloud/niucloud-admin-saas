@@ -1,0 +1,13 @@
+{
+    // pages.json 中文标题
+    "pages.index.index": "",
+    "pages.article.list": "资讯中心",
+    "pages.article.detail": "文章详情",
+    "pages.member.index": "",
+    "pages.auth.login": "登录",
+    "pages.auth.register": "注册",
+    "pages.auth.resetpwd": "找回密码",
+    "pages.setting.index": "设置",
+    "pages.auth.bind": "绑定手机号",
+    "pages.member.personal": "个人资料"
+}

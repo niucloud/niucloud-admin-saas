@@ -1,0 +1,182 @@
+{
+    "pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+        {
+            "path": "pages/index/index",
+            "style": {
+                // #ifdef H5
+                "navigationStyle": "custom",
+                // #endif
+                "navigationBarTitleText": "%pages.index.index%"
+            }
+        }, {
+            "path": "pages/index/diy",
+            "style": {
+                // #ifdef H5
+                "navigationStyle": "custom",
+                // #endif
+                "navigationBarTitleText": "%pages.index.diy%"
+            }
+        },
+        {
+            "path": "pages/auth/login",
+            "style": {
+                // #ifdef H5
+                "navigationStyle": "custom",
+                // #endif
+                "navigationBarBackgroundColor": "#fff",
+                "navigationBarTitleText": "%pages.auth.login%"
+            }
+        },
+        {
+            "path": "pages/auth/register",
+            "style": {
+                // #ifdef H5
+                "navigationStyle": "custom",
+                // #endif
+                "navigationBarBackgroundColor": "#fff",
+                "navigationBarTitleText": "%pages.auth.register%"
+            }
+        },
+        {
+            "path": "pages/auth/resetpwd",
+            "style": {
+                // #ifdef H5
+                "navigationStyle": "custom",
+                // #endif
+                "navigationBarBackgroundColor": "#fff",
+                "navigationBarTitleText": "%pages.auth.resetpwd%"
+            }
+        },
+        {
+            "path": "pages/auth/bind",
+            "style": {
+                // #ifdef H5
+                "navigationStyle": "custom",
+                // #endif
+                "navigationBarBackgroundColor": "#fff",
+                "navigationBarTitleText": "%pages.auth.bind%"
+            }
+        },
+        {
+            "path": "pages/auth/agreement",
+            "style": {
+                "navigationBarTitleText": "",
+                "navigationBarBackgroundColor": "#ffffff"
+            }
+        },
+        {
+            "path": "pages/article/list",
+            "style": {
+                // #ifdef H5
+                "navigationStyle": "custom",
+                // #endif
+                "navigationBarTitleText": "%pages.article.list%"
+            }
+        },
+        {
+            "path": "pages/article/detail",
+            "style": {
+                // #ifdef H5
+                "navigationStyle": "custom",
+                // #endif
+                "navigationBarTitleText": "%pages.article.detail%"
+            }
+        },
+        {
+            "path": "pages/member/index",
+            "style": {
+                "navigationStyle": "custom",
+                "navigationBarTitleText": "%pages.member.index%"
+            }
+        },
+        {
+            "path": "pages/member/info",
+            "style": {
+                "navigationBarTitleText": "%pages.member.index%"
+            },
+            "needLogin": true
+        },
+        {
+            "path": "pages/setting/index",
+            "style": {
+                "navigationBarBackgroundColor": "#f7f7f7",
+                "navigationBarTitleText": "%pages.setting.index%"
+            },
+            "needLogin": true
+        },
+        {
+            "path": "pages/member/personal",
+            "style": {
+                "navigationBarBackgroundColor": "#f7f7f7",
+                "navigationBarTitleText": "%pages.member.personal%"
+            },
+            "needLogin": true
+        },
+        {
+            "path": "pages/member/point",
+            "style": {
+                // #ifdef H5
+                "navigationStyle": "custom",
+                // #endif
+                "navigationBarTitleText": "%pages.member.balance%"
+            },
+            "needLogin": true
+        },
+        {
+            "path": "pages/member/balance",
+            "style": {
+                // #ifdef H5
+                "navigationStyle": "custom",
+                // #endif
+                "navigationBarTitleText": "%pages.member.balance%"
+            },
+            "needLogin": true
+        },
+        {
+            "path": "pages/webview/index",
+            "style": {
+                // #ifdef H5
+                "navigationStyle": "custom",
+                // #endif
+                "navigationBarTitleText": "%pages.webview.index%"
+            }
+        },
+        {
+            "path": "pages/pay/result",
+            "style": {
+                "navigationStyle": "custom"
+            }
+        },
+        {
+            "path": "pages/pay/browser",
+            "style": {
+                "navigationStyle": "custom"
+            }
+        }
+    ],
+    "tabBar": {
+        "list": [{
+                "pagePath": "pages/index/index"
+            },
+            {
+                "pagePath": "pages/article/list"
+            },
+            {
+                "pagePath": "pages/member/index"
+            }
+        ]
+    },
+    "globalStyle": {
+        "navigationBarTextStyle": "black",
+        "navigationBarTitleText": "uni-app",
+        "navigationBarBackgroundColor": "#F8F8F8",
+        "backgroundColor": "#F8F8F8"
+    },
+    "uniIdRouter": {},
+    "easycom": {
+        "custom": {
+            "^u-(.*)": "uview-plus/components/u-$1/u-$1.vue",
+            "diy-(\W.*)": "@/components/diy/$1/index.vue"
+        }
+    }
+}

@@ -1,0 +1,62 @@
+<template>
+	<el-config-provider :locale="locale">
+		<NuxtLayout>
+			<NuxtLoadingIndicator />
+			<NuxtPage />
+		</NuxtLayout>
+	</el-config-provider>
+</template>
+
+<script lang="ts" setup>
+import useConfigStore from '@/stores/config'
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+import en from 'element-plus/dist/locale/en.mjs'
+import Language from '~~/utils/language'
+import useSystemStore from '@/stores/system'
+import useAppStore from '@/stores/app'
+import useMemberStore from '@/stores/member'
+// 引入全局样式
+import '@/assets/styles/index.scss'
+
+// 初始化设置语言
+const systemStore = useSystemStore()
+const locale = computed(() => (systemStore.lang === 'zh-cn' ? zhCn : en))
+
+// 初始化查询一些配置
+const configStore = useConfigStore()
+configStore.getLoginConfig()
+
+// 如果已登录
+getToken() && useMemberStore().setToken(getToken())
+
+const route = useRoute()
+watch(route, (nval, oval) => {
+	useAppStore().$patch(state => {
+		state.route = route.path
+	})
+
+	// 设置页面title
+	let path = route.path == '/' ? '/index' : route.path
+	path = !path.lastIndexOf('/') ? `${path}/index` : path
+	const key = path.replace('/', '').replaceAll('/', '.')
+
+	setTimeout(() => {
+		useHead({
+			title: t(`pages.${key}`)
+		})
+	}, !oval ? 500 : 0)
+}, { immediate: true })
+
+// 语言包初始化加载
+const language = new Language(useNuxtApp().$getI18n())
+language.loadLocaleMessages(route.path, useSystemStore().lang)
+
+// 设置title模板
+useHead({
+	titleTemplate: (productCategory) => {
+		return productCategory
+			? `${productCategory} - NIUCLOUD-ADMIN 一款快速开发SAAS通用管理系统后台框架`
+			: 'NIUCLOUD-ADMIN 一款快速开发SAAS通用管理系统后台框架'
+	}
+})
+</script>

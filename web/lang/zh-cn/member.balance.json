@@ -1,0 +1,8 @@
+{
+    "myBalance": "我的余额",
+    "accountType": "账户类型",
+    "changeInAmount": "金额变化",
+    "modeOfOccurrence": "发生方式",
+    "remark": "备注",
+    "occurrenceTime": "发生时间"
+}

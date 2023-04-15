@@ -1,0 +1,19 @@
+{
+      "orderInfo":"订单详情",
+      "orderDiscountMoney":"优惠金额",
+      "ip":"下单IP",
+      "payTime":"支付时间",
+      "remark":"商家留言",
+      "memberMessage":"买家留言",
+      "orderNo":"订单编号",
+      "orderStatus":"订单状态",
+      "orderNoPlaceholder":"请输入订单编号",
+      "createTime":"创建时间",
+      "rechargeMoney":"充值金额",
+      "orderMoney":"订单金额",
+      "member":"买家",
+      "orderFromName":"订单来源",
+      "payTypeName":"支付方式",
+      "startDate":"开始时间",
+      "endDate":"结束时间"
+}

@@ -1,0 +1,19 @@
+{
+    "name": "类型",
+    "response": "回复内容",
+    "isStart": "是否启用",
+    "serialNumber": "编号",
+    "operation": "操作",
+    "operationTip": "温馨提示",
+    "operationTipOne": "请在小程序的服务类目中添加类目：一级类目：商业服务 二级类目：软件/建站/技术开发",
+    "operationTipTwo": "小程序最多支持50个消息模板获取时请注意小程序剩余模板数量是否充足",
+    "buyerNews": "买家消息",
+    "sellerMessage": "卖家消息",
+    "started": "启用",
+    "closed": "禁用",
+    "close": "关闭",
+    "open": "开启",
+    "regain": "重新获取",
+    "batchAcquisition": "一键获取"
+
+}

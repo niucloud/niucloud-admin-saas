@@ -1,0 +1,19 @@
+{
+    "userRealName": "真实姓名",
+    "userInfo":"用户详情",
+    "headimg":"头像",
+    "lastTime": "最后登录时间",
+    "createTime": "添加时间",
+    "lastIp": "最后登录IP",
+    "accountNumberPlaceholder": "请输入账号",
+    "userNamePlaceholder" :"请输入账号",
+    "passwordPlaceholder": "请输入密码",
+    "confirmPasswordPlaceholder": "请再次确认密码",
+    "userRealNamePlaceholder": "请输入名称",
+    "confirmPasswordError": "两次输入的密码不一致",
+    "userRoleName": "角色",
+    "isAdmin":"超级管理员",
+    "siteName":"站点名称",
+    "userRolePlaceholder": "请选择角色",
+    "siteNamePlaceholder":"请输入站点名称"
+}

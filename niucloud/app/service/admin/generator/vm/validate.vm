@@ -1,0 +1,28 @@
+<?php
+// +----------------------------------------------------------------------
+// | Niucloud-admin 企业快速开发的saas管理平台
+// +----------------------------------------------------------------------
+// | 官方网址：https://www.niucloud-admin.com
+// +----------------------------------------------------------------------
+// | niucloud团队 版权所有 开源版本可自由商用
+// +----------------------------------------------------------------------
+// | Author: Niucloud Team
+// +----------------------------------------------------------------------
+
+{NAMESPACE}
+
+/**
+ * {CLASS_COMMENT}
+ * Class {UCASE_NAME}
+ * @package app\validate{PACKAGE_NAME}
+ */
+class {UCASE_NAME} extends \think\Validate
+{
+
+       protected $rule = {RULE};
+
+       protected $message = {MESSAGE};
+
+       protected $scene = {SCENE};
+
+}

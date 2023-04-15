@@ -1,0 +1,39 @@
+<?php
+// +----------------------------------------------------------------------
+// | Niushop商城系统 - 团队十年电商经验汇集巨献!
+// +----------------------------------------------------------------------
+// | Copyright (c) 2022~2025 https://www.niushop.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed Niushop并不是自由软件，未经许可不能去掉Niushop相关版权
+// +----------------------------------------------------------------------
+// | Author: Niushop Team <niucloud@outlook.com>
+// +----------------------------------------------------------------------
+
+use think\facade\Route;
+
+use app\adminapi\middleware\AdminCheckRole;
+use app\adminapi\middleware\AdminCheckToken;
+use app\adminapi\middleware\AdminLog;
+
+/**
+ * {CLASS_COMMENT}
+ */
+Route::group('{MODULE_NAME}', function () {
+
+    /***************************************************** {NOTES}管理 ****************************************************/
+    //{NOTES}列表
+    Route::get('{ROUTE_NAME}', '{MODULE_NAME}.{UCASE_CLASS_NAME}/lists');
+    //{NOTES}详情
+    Route::get('{ROUTE_NAME}/:id', '{MODULE_NAME}.{UCASE_CLASS_NAME}/info');
+    //添加{NOTES}
+    Route::post('{ROUTE_NAME}', '{MODULE_NAME}.{UCASE_CLASS_NAME}/add');
+    //编辑{NOTES}
+    Route::put('{ROUTE_NAME}/:id', '{MODULE_NAME}.{UCASE_CLASS_NAME}/update');
+    //删除{NOTES}
+    Route::delete('{ROUTE_NAME}/:id', '{MODULE_NAME}.{UCASE_CLASS_NAME}/del');
+
+})->middleware([
+    AdminCheckToken::class,
+    AdminCheckRole::class,
+    AdminLog::class
+]);

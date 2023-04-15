@@ -1,0 +1,77 @@
+<?php
+// +----------------------------------------------------------------------
+// | Niucloud-admin 企业快速开发的saas管理平台
+// +----------------------------------------------------------------------
+// | 官方网址：https://www.niucloud-admin.com
+// +----------------------------------------------------------------------
+// | niucloud团队 版权所有 开源版本可自由商用
+// +----------------------------------------------------------------------
+// | Author: Niucloud Team
+// +----------------------------------------------------------------------
+
+{NAMESPACE}
+
+{USE}
+
+/**
+ * {CLASS_COMMENT}
+ * Class {UCASE_NAME}Controller
+ * @package app\adminapi\controller{PACKAGE_NAME}
+ */
+class {UCASE_CLASS_NAME} extends BaseAdminController
+{
+   /**
+    * 获取{NOTES}列表
+    * @return \think\Response
+    */
+    public function lists(){
+        $data = $this->request->params([
+{SEARCH_PARAMS}
+        ]);
+        return success((new {UCASE_NAME}Service())->getPage($data));
+    }
+
+    /**
+     * {NOTES}详情
+     * @param int $id
+     * @return \think\Response
+     */
+    public function info(int $id){
+        return success((new {UCASE_NAME}Service())->getInfo($id));
+    }
+
+    /**
+     * 添加{NOTES}
+     * @return \think\Response
+     */
+    public function add(){
+        $data = $this->request->params({ADD_FILED_NOTE});
+        $this->validate($data, '{VALIDATE}.add');
+        $id = (new {UCASE_NAME}Service())->add($data);
+        return success(100011, ['id' => $id]);
+    }
+
+    /**
+     * {NOTES}编辑
+     * @param $id  {NOTES}id
+     * @return \think\Response
+     */
+    public function update($id){
+        $data = $this->request->params({EDIT_FILED_NOTE});
+        $this->validate($data, '{VALIDATE}.update');
+        (new {UCASE_NAME}Service())->update($id, $data);
+        return success(100004);
+    }
+
+    /**
+     * {NOTES}删除
+     * @param $id  {NOTES}id
+     * @return \think\Response
+     */
+    public function del(int $id){
+        (new {UCASE_NAME}Service())->del($id);
+        return success(100003);
+    }
+
+
+}

@@ -1,0 +1,20 @@
+{
+    "addUser": "新增管理员",
+    "updateUser": "编辑管理员",
+    "userRealName": "姓名",
+    "lastLoginTime": "最后登录时间",
+    "lastLoginIP": "最后登录IP",
+    "accountNumberPlaceholder": "请输入账号",
+    "passwordPlaceholder": "请输入密码",
+    "confirmPasswordPlaceholder": "请再次确认密码",
+    "userRealNamePlaceholder": "请输入姓名",
+    "confirmPasswordError": "两次输入的密码不一致",
+    "userRoleName": "角色",
+    "administrator":"超级管理员",
+    "userRolePlaceholder": "请选择角色",
+    "lock":"锁定",
+    "unlock":"解锁",
+    "status":"用户状态",
+    "userUnlockTips":"确定要解锁该管理员吗？",
+    "userLockTips":"确定要锁定该管理员吗？"
+}
