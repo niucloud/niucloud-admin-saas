@@ -161,8 +161,6 @@ npm run build
 ![输入图片说明](https://www.niucloud.com/img/readme/%E5%90%88%E4%BD%9C%E4%BC%99%E4%BC%B4.png)
 
 ### 版权信息
-版权所有Copyright © 2023-2030 niucloud-admin 版权所有
-
+版权所有Copyright  2015-2035 niucloud-admin 版权所有
 All rights reserved。
-
-杭州数字云动科技有限公司 提供技术支持
+杭州牛之云科技有限公司 提供技术支持
