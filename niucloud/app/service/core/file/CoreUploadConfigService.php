@@ -35,10 +35,18 @@ class CoreUploadConfigService extends BaseCoreService
         $info = (new  CoreConfigService())->getConfig($site_id, ConfigKeyEnum::UPLOAD)['value'] ?? [];
         if (empty($info)) {
             $info = [
-                'image_ext' => '',//图片上传文件后缀
-                'video_ext' => '',//视频上传文件后缀
+                'image_ext' => [
+                    'jpg', 'png', 'gif', 'jpeg', 'webp'
+                ],//图片上传文件后缀
+                'video_ext' => [
+                    'wmv', 'avi', 'mpg', 'mpeg', '3gp', 'mov', 'mp4', 'flv', 'f4v', 'rmvb', 'mkv'
+                ],//视频上传文件后缀
+                'document_ext' => [
+                    'crt', 'pem'
+                ],
                 'image_size' => 0,//图片上传大小限制
                 'video_size' => 0,//视频上传大小限制
+                'document_size' => 0,//文件上传大小限制
             ];
         }
         return $info;

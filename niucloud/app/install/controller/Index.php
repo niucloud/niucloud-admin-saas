@@ -57,14 +57,14 @@ class Index extends BaseInstall
             $dirs_list = [
                 [ "path" => $root_path . DIRECTORY_SEPARATOR . ".env", "path_name" => "niucloud/.env", "name" => "env" ],
                 [ "path" => $root_path . DIRECTORY_SEPARATOR . ".example.env", "path_name" => "niucloud/.example_env", "name" => "env" ],
-                [ "path" => $root_path . DIRECTORY_SEPARATOR . 'runtime/', "path_name" => "niucloud/runtime", "name" => "runtime" ],
-                [ "path" => $root_path . DIRECTORY_SEPARATOR . 'public/upload/', "path_name" => "niucloud/public/upload", "name" => "upload" ],
-                [ "path" => $root_path . DIRECTORY_SEPARATOR . 'app/install/', "path_name" => "niucloud/app/install", "name" => "安装目录" ]
+                [ "path" => $root_path . DIRECTORY_SEPARATOR . 'runtime'.DIRECTORY_SEPARATOR, "path_name" => "niucloud/runtime", "name" => "runtime" ],
+                [ "path" => $root_path . DIRECTORY_SEPARATOR . 'public'.DIRECTORY_SEPARATOR.'upload'.DIRECTORY_SEPARATOR, "path_name" => "niucloud/public/upload", "name" => "upload" ],
+                [ "path" => $root_path . DIRECTORY_SEPARATOR . 'app'.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR, "path_name" => "niucloud/app/install", "name" => "安装目录" ]
             ];
             //目录 可读 可写检测
             $is_dir = true;
             foreach ($dirs_list as $k => $v) {
-                !is_dir($v[ "path" ]) && mkdirs($v[ "path" ], 0755, true);
+                @mkdir($v[ "path" ], 0755, true);
                 $is_readable = is_readable($v[ "path" ]);
                 $is_write = is_write($v[ "path" ]);
                 $dirs_list[ $k ][ "is_readable" ] = $is_readable;

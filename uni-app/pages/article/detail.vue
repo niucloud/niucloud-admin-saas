@@ -27,7 +27,6 @@
 	import { t } from '@/locale'
 	import { getArticleDetail } from '@/api/article';
 	import { useShare } from '@/hooks/useShare'
-	import { currShareRoute } from '@/utils/common';
 
 	const { setShare, onShareAppMessage, onShareTimeline } = useShare()
 	onShareAppMessage()

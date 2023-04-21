@@ -119,11 +119,13 @@ class CoreUploadService extends CoreFileService
         $config['file_ext'] = match ($att_type) {
             FileEnum::IMAGE => $config['image_ext'] ?? [],
             FileEnum::VIDEO => $config['video_ext'] ?? [],
+            FileEnum::DOCUMENT => $config['document_ext'] ?? [],
             default => [],
         };
         $config['file_size'] = match ($att_type) {
             FileEnum::IMAGE => $config['image_size'] ?? 0,
             FileEnum::VIDEO => $config['video_size'] ?? 0,
+            FileEnum::DOCUMENT => $config['document_size'] ?? [],
             default => 0,
         };
         $rule = [];
