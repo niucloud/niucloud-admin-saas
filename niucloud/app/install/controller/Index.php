@@ -55,11 +55,11 @@ class Index extends BaseInstall
             $root_path = str_replace("\\", DIRECTORY_SEPARATOR, dirname(dirname(dirname(dirname(__FILE__)))));
             $root_path = str_replace("../", DIRECTORY_SEPARATOR, $root_path);
             $dirs_list = [
-                [ "path" => $root_path . DIRECTORY_SEPARATOR . ".env", "path_name" => "env", "name" => "env" ],
-                [ "path" => $root_path . DIRECTORY_SEPARATOR . ".example.env", "path_name" => "example_env", "name" => "env" ],
-                [ "path" => $root_path . DIRECTORY_SEPARATOR . 'runtime', "path_name" => "runtime", "name" => "runtime" ],
-                [ "path" => $root_path . DIRECTORY_SEPARATOR . 'public/upload/', "path_name" => "upload", "name" => "upload" ],
-                [ "path" => $root_path . DIRECTORY_SEPARATOR . 'app/install', "path_name" => "app/install", "name" => "安装目录" ]
+                [ "path" => $root_path . DIRECTORY_SEPARATOR . ".env", "path_name" => "niucloud/.env", "name" => "env" ],
+                [ "path" => $root_path . DIRECTORY_SEPARATOR . ".example.env", "path_name" => "niucloud/.example_env", "name" => "env" ],
+                [ "path" => $root_path . DIRECTORY_SEPARATOR . 'runtime/', "path_name" => "niucloud/runtime", "name" => "runtime" ],
+                [ "path" => $root_path . DIRECTORY_SEPARATOR . 'public/upload/', "path_name" => "niucloud/public/upload", "name" => "upload" ],
+                [ "path" => $root_path . DIRECTORY_SEPARATOR . 'app/install/', "path_name" => "niucloud/app/install", "name" => "安装目录" ]
             ];
             //目录 可读 可写检测
             $is_dir = true;

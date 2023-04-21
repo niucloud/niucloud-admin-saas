@@ -137,9 +137,13 @@ class CorePayService extends BaseCoreService
      * @param string $out_trade_no
      * @return void
      */
-    public function returnTo(int $site_id, string $out_trade_no){
-
-        $pay = $this->findPayInfoByOutTradeNo($site_id, $out_trade_no);
+    public function returnTo(int $site_id, $pay_item){
+        if(is_object($pay_item)){
+            $pay = $pay_item;
+        }else{
+            $out_trade_no = $pay_item;
+            $pay = $this->findPayInfoByOutTradeNo($site_id, $out_trade_no);
+        }
         if($pay->isEmpty()) return true;
         if($pay['status'] != PayEnum::STATUS_ING)  return true;
         if(empty($pay->type)) return true;
@@ -157,7 +161,7 @@ class CorePayService extends BaseCoreService
             $pay->save($data);
         }
 
-        return true;
+        return $close;
     }
 
     /**
@@ -306,5 +310,27 @@ class CorePayService extends BaseCoreService
             }
 
         }
+    }
+
+    public function reset(int $site_id, string $out_trade_no, float $money){
+        $pay = $this->findPayInfoByOutTradeNo($site_id, $out_trade_no);
+        if($pay->isEmpty()) throw new PayException(700000);
+        if(!in_array($pay['status'], [
+            PayEnum::STATUS_WAIT,
+            PayEnum::STATUS_ING
+        ]))  throw new PayException(700011);//只有待支付可以重置支付
+        if($pay['status'] == PayEnum::STATUS_ING){
+            if(!$this->returnTo($site_id, $pay)){
+                throw new PayException(700012);
+            }
+        }
+        $out_trade_no = create_no('pay', $pay['main_id']);
+        $data = array(
+            'out_trade_no' => $out_trade_no,
+            'money' => $money
+        );
+        $pay->save($data);
+        //todo  需要考虑是业务调用重置支付,还是支付重置反馈业务
+        return $out_trade_no;
     }
 }
