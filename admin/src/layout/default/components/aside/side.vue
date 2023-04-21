@@ -106,9 +106,5 @@ const menuActive = computed(() => String(route.name))
             font-size: 20px;
         }
     }
-    .el-menu-item.is-active{
-        background-color: var(--el-color-primary-light-9);
-        border-right: 2px solid var(--el-menu-active-color);
-    }
 }
 </style>
