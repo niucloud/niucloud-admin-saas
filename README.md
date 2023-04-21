@@ -57,7 +57,7 @@ niucloud-admin是一款快速开发SAAS通用管理系统后台框架，前端�
 php 8.0  <br/>    mysql5.6及以上  <br/>      启用redis   <br/>      Nignx/Apache
 - 2.登录网站【<a href='https://gitee.com/niucloud-team/niucloud-admin.git' target="_blank">https://gitee.com/niucloud-team/niucloud-admin/</a>】下载框架源码。
 - 3.源码放置到宝塔根目录，访问域名/niucloud/public/index.php，进入安装界面，点击下一步，输入数据库安装信息，下一步完成安装。详细教程查看 :arrow_right: <a href='https://www.kancloud.cn/niucloud/niucloud-admin-develop/3148343' target="_blank">【开发手册】 :arrow_left: </a>
-- 4.redis配置：
+- 4.redis配置：<br/>
  ①安装redis，如下图：
 ![输入图片说明](https://www.niucloud.com/img/readme/%E5%AE%9D%E5%A1%94%E5%AE%89%E8%A3%85redis.png)
 ②安装php的扩展redis，如下图所示：
