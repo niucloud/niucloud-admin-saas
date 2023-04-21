@@ -56,8 +56,16 @@ niucloud-admin是一款快速开发SAAS通用管理系统后台框架，前端�
 - 1.环境要求<br/>
 php 8.0  <br/>    mysql5.6及以上  <br/>      启用redis   <br/>      Nignx/Apache
 - 2.登录网站【<a href='https://gitee.com/niucloud-team/niucloud-admin.git' target="_blank">https://gitee.com/niucloud-team/niucloud-admin/</a>】下载框架源码。
-- 3.源码放置到宝塔根目录，访问本地或者虚拟域名，进入安装界面，点击下一步，输入数据库安装信息，下一步完成安装。详细教程查看 :arrow_right: <a href='https://www.kancloud.cn/niucloud/niucloud-admin-develop/3148343' target="_blank">【开发手册】 :arrow_left: </a>
-- 4.配置伪静态<br/>
+- 3.源码放置到宝塔根目录，访问域名/niucloud/public/index.php，进入安装界面，点击下一步，输入数据库安装信息，下一步完成安装。详细教程查看 :arrow_right: <a href='https://www.kancloud.cn/niucloud/niucloud-admin-develop/3148343' target="_blank">【开发手册】 :arrow_left: </a>
+- 4.redis配置：<br/>
+ ①安装redis，如下图：
+![输入图片说明](https://www.niucloud.com/img/readme/%E5%AE%9D%E5%A1%94%E5%AE%89%E8%A3%85redis.png)
+②安装php的扩展redis，如下图所示：
+![输入图片说明](https://www.niucloud.com/img/readme/php%E6%89%A9%E5%B1%95%E5%AE%89%E8%A3%85redis%E6%89%A9%E5%B1%95.png)
+③将redis密码填入到niucloud/.env文件中，如下图：
+![输入图片说明](https://www.niucloud.com/img/readme/%E9%85%8D%E7%BD%AEredis%E5%AF%86%E7%A0%81.png)
+
+- 5.配置伪静态<br/>
 可直接复制下方代码：
 Nginx配置
 
@@ -90,7 +98,7 @@ Options +FollowSymlinks -Multiviews
 ```
 docker run -d --name niucloudadmin_php -p 20221:80 niucloud/niucloudadmin_php:1.6.0
 ```
-- 2.访问配置的虚拟域名或者localhost或者127.0.0.1即可进入安装界面。
+- 2.访问配置的虚拟域名或者localhost或者127.0.0.1/niucloud/public/index.php即可进入安装界面。
 
 #### 前端运行
 - 1.拉取代码
