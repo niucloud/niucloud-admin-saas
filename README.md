@@ -124,13 +124,7 @@ npm run dev
 npm run build
 ```
 
-
-**即日起加入Niucloud开发者联盟，不仅可以拿到0~9.9元现金红包，而且还可享受超值六大权益，这还不够，联盟会还会不定时为大家提供免费培训会、答疑会、线上交流会等，在这里您不仅可以快速提升自身研发水平，还可以结识来自五湖四海有共同兴趣爱好的朋友们，还犹豫什么？赶快加入吧~~闭眼上船，一起让我们在Niucloud的陪伴下领略一份精彩非凡的旅行！！！**
-
-### 如何加入Niucloud开发者联盟以及可享受到的六大权益
-![输入图片说明](https://www.niucloud.com/img/readme/%E5%8A%A0%E5%85%A5%E6%B5%81%E7%A8%8B-old.png)
-
-首先来添加属于你的专属客服吧~
+快来添加属于你的专属客服吧~
 
 ![输入图片说明](https://www.niucloud.com/img/readme/%E6%B7%BB%E5%8A%A0%E5%AE%A2%E6%9C%8D-old.png)
 ![输入图片说明](https://www.niucloud.com/img/readme/%E4%BA%AB%E5%8F%97%E5%85%AD%E5%A4%A7%E6%9D%83%E7%9B%8A-old.png)
