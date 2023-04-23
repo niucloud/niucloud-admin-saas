@@ -1,4 +1,3 @@
-# 一款快速开发SAAS通用管理系统后台框架
 
 ![输入图片说明](https://www.niucloud.com/img/readme/%E9%A1%B6%E9%83%A8%E5%B9%BF%E5%91%8A.jpg)
 
