@@ -1,6 +1,6 @@
 # 一款快速开发SAAS通用管理系统后台框架
 
-![输入图片说明](https://www.niucloud.com/img/readme/%E9%A1%B6%E9%83%A8%E5%B9%BF%E5%91%8A-new.png)
+![输入图片说明](https://www.niucloud.com/img/readme/%E9%A1%B6%E9%83%A8%E5%B9%BF%E5%91%8A.jpg)
 
 ### niucloud-admin是什么？
 niucloud-admin是一款快速开发SAAS通用管理系统后台框架，前端采用最新的技术栈Vite+TypeScript+Vue3+ElementPlus最流行技术架构，后台结合PHP8、Java SDK、Python等主流后端语言搭建，内置集成用户权限、代码生成器、表单设计、云存储、短信发送、素材中心、微信及公众号、Api模块一系列开箱即用功能，是一款快速可以开发企业级应用的软件系统。
@@ -35,9 +35,9 @@ niucloud-admin是一款快速开发SAAS通用管理系统后台框架，前端�
  :fa-th-list:  [官网地址](https://www.niucloud.com)
  | [服务市场]()
  | [系统功能]()
- | [系统演示](http://niushopvite.niuteam.cn/)
- | [使用手册](https://www.kancloud.cn/niucloud/niushop_b2c_v4/1842076)
- | [二开手册]()
+ | [系统演示](https://demo.niucloud.com/web/)
+ | [使用手册](https://www.kancloud.cn/niucloud/niucloud-admin-develop/3153336)
+ | [二开手册](https://www.kancloud.cn/niucloud/niucloud-admin-develop/3153336)
  | [论坛地址](https://www.niushop.com/web/community/index.html)
  | [留言评论](https://www.niushop.com/web/community/index.html)
 
