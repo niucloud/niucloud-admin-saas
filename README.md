@@ -3,7 +3,9 @@
 
 
 
- :point_up:  :small_blue_diamond:  :small_orange_diamond:  :small_blue_diamond: 如果对您有帮助，您可以点右上角 “ **Star** ” 收藏一下 ，获取第一时间更新，谢谢！
+ :point_up:  :small_blue_diamond:  :small_orange_diamond:  :small_blue_diamond:  :small_blue_diamond:  :small_orange_diamond:  :small_blue_diamond:如果对您有帮助，您可以点右上角 “ **Star** ” 收藏一下 ，获取第一时间更新，谢谢！
+
+<br>
 
 ### niucloud-admin是什么？
 niucloud-admin是一款快速开发SaaS通用管理系统后台框架，前端采用最新的技术栈Vite+TypeScript+Vue3+ElementPlus最流行技术架构，后台结合PHP8、Java SDK、Python等主流后端语言搭建，内置集成Saas多站点、多租户套餐、用户权限、代码生成器、表单设计、云存储、短信发送、素材中心、微信及公众号、支付宝小程序、Api模块一系列开箱即用功能，是一款快速可以开发企业级应用的软件系统。
