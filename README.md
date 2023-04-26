@@ -186,7 +186,7 @@ npm run build
 ![输入图片说明](https://www.niucloud.com/img/readme/%E5%90%88%E4%BD%9C%E4%BC%99%E4%BC%B4.png)
 
 ### MIT开源协议官方声明
-![输入图片说明](https://img.kancloud.cn/05/b3/05b34f6e22d0a0c1535928e3ce4b209e_1700x2338.jpg)
+![输入图片说明](https://img.kancloud.cn/c0/2e/c02eff57fa95c8059bdcf811922cfc02_1700x2338.png)
 
 ### 版权信息
 版权所有Copyright  2015-2035 niucloud-admin 版权所有
