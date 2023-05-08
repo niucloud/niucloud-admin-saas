@@ -68,8 +68,8 @@ niucloud-admin是一款快速开发SaaS通用管理系统后台框架，前端�
 ### 演示地址
 - 电脑端演示网址：[<a href='https://demo.niucloud.com/web/s2/' target="_blank"> 查看 </a>]       
 <a href='https://demo.niucloud.com/web/s2/' target="_blank">https://demo.niucloud.com/web/s2/</a>  账号：自行注册
-- 站点后台演示网址：[<a href='https://demo.niucloud.com/admin/login/site' target="_blank"> 查看 </a>]       
-<a href='https://demo.niucloud.com/admin/login/site' target="_blank">https://demo.niucloud.com/admin/login/site</a>  账号：test  密码：123456
+- 站点后台演示网址：[<a href='https://demo.niucloud.com/admin/login?type=site' target="_blank"> 查看 </a>]       
+<a href='https://demo.niucloud.com/admin/login?type=site' target="_blank">https://demo.niucloud.com/admin/login?type=site</a>  账号：test  密码：123456
 - 平台后台演示网址：[<a href='https://demo.niucloud.com/admin/login' target="_blank"> 查看 </a>]       
 <a href='https://demo.niucloud.com/admin/login' target="_blank">https://demo.niucloud.com/admin/login</a>  账号：admin  密码：123456
 
