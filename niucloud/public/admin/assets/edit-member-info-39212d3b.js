@@ -1,1 +1,0 @@
-import{u as o}from"./diy-89488517.js";import{d as t,b as _,e as r}from"./runtime-core.esm-bundler-7c3fd514.js";const n={class:"edit-member-info"},s=t({__name:"edit-member-info",setup(i,{expose:e}){return o(),e({}),(a,c)=>(_(),r("div",n))}}),p=Object.freeze(Object.defineProperty({__proto__:null,default:s},Symbol.toStringTag,{value:"Module"}));export{p as _};
