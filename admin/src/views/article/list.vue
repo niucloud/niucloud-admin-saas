@@ -1,7 +1,7 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-         
+
             <div class="flex justify-between">
                 <el-button type="primary" @click="addEvent">
                     {{ t('addArticle') }}
@@ -14,8 +14,8 @@
                         <el-input v-model="articleTableData.searchParam.title" :placeholder="t('titlePlaceholder')" />
                     </el-form-item>
                     <el-form-item :label="t('categoryName')" prop="category_id">
-                        <el-select v-model="articleTableData.searchParam.category_id" clearable :placeholder="t('categoryIdPlaceholder')"
-                            class="input-width">
+                        <el-select v-model="articleTableData.searchParam.category_id" clearable
+                            :placeholder="t('categoryIdPlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')" value="" />
                             <el-option :label="item['name']" :value="item['category_id']" v-for="item in categoryList" />
                         </el-select>
@@ -34,18 +34,18 @@
                     </template>
 
                     <el-table-column prop="title" :show-overflow-tooltip="true" :label="t('title')" width="140" />
-                    
+
                     <el-table-column :label="t('image')" min-width="120" align="center">
                         <template #default="{ row }">
-                            <el-image  class="w-12 h-12" v-if="row.image" :src="img(row.image)" fit="contain" />
-                           
+                            <el-image class="w-12 h-12" v-if="row.image" :src="img(row.image)" fit="contain" />
+
                         </template>
                     </el-table-column>
 
-                    <el-table-column prop="category_name" :label="t('categoryName')"  align="center" min-width="140" />
+                    <el-table-column prop="category_name" :label="t('categoryName')" align="center" min-width="140" />
 
-                    <el-table-column prop="summary" :label="t('summary')" width="180"  :show-overflow-tooltip="true"/>
-                    
+                    <el-table-column prop="summary" :label="t('summary')" width="180" :show-overflow-tooltip="true" />
+
                     <el-table-column :label="t('isShow')" min-width="120" align="center">
                         <template #default="{ row }">
                             <span v-if="row.is_show == 1">{{ t('show') }}</span>
@@ -83,8 +83,8 @@
 <script lang="ts" setup>
 import { reactive, ref, watch } from 'vue'
 import { t } from '@/lang'
-import { getArticleList, deleteArticle,getArticleCategoryAll } from '@/api/article'
-import { img } from '@/utils/common'
+import { getArticleList, deleteArticle, getArticleCategoryAll } from '@/api/article'
+import { img, getAppType } from '@/utils/common'
 import { ElMessageBox } from 'element-plus'
 import { useRouter } from 'vue-router'
 
@@ -96,7 +96,7 @@ const articleTableData = reactive({
     data: [],
     searchParam: {
         title: '',
-        category_id:''
+        category_id: ''
     }
 })
 const categoryList = ref([])

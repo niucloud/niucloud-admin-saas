@@ -8,7 +8,7 @@ import request from '@/utils/request'
  * @returns
  */
 export function getDiyPageList(params: Record<string, any>) {
-    return request.get(`diy/diy`, {params})
+    return request.get(`diy/diy`, { params })
 }
 
 /**
@@ -26,15 +26,15 @@ export function getDiyPageInfo(id: number) {
  * @returns
  */
 export function addDiyPage(params: Record<string, any>) {
-    return request.post('diy/diy', params, {showErrorMessage: true, showSuccessMessage: true})
+    return request.post('diy/diy', params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
 /**
  * 编辑自定义页面
  * @param params
  */
-export function updateDiyPage(params: Record<string, any>) {
-    return request.put(`diy/diy/${params.id}`, params, {showErrorMessage: true, showSuccessMessage: true})
+export function editDiyPage(params: Record<string, any>) {
+    return request.put(`diy/diy/${params.id}`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
 /**
@@ -42,15 +42,15 @@ export function updateDiyPage(params: Record<string, any>) {
  * @param params
  */
 export function setUseDiyPage(params: Record<string, any>) {
-    return request.put(`diy/use`, params, {showErrorMessage: true, showSuccessMessage: true})
+    return request.put(`diy/use`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
 /**
  * 修改自定义页面分享内容
  * @param params
  */
-export function updateDiyPageShare(params: Record<string, any>) {
-    return request.put(`diy/diy/share`, params, {showErrorMessage: true, showSuccessMessage: true})
+export function editDiyPageShare(params: Record<string, any>) {
+    return request.put(`diy/diy/share`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
 /**
@@ -59,28 +59,28 @@ export function updateDiyPageShare(params: Record<string, any>) {
  * @returns
  */
 export function deleteDiyPage(id: number) {
-    return request.delete(`diy/diy/${id}`, {showErrorMessage: true, showSuccessMessage: true})
+    return request.delete(`diy/diy/${id}`, { showErrorMessage: true, showSuccessMessage: true })
 }
 
 /**
  * 获取自定义页面初始化数据
  */
 export function initPage(params: Record<string, any>) {
-    return request.get(`diy/init`, {params})
+    return request.get(`diy/init`, { params })
 }
 
 /**
  * 获取自定义链接列表
  */
 export function getLink(params: Record<string, any>) {
-    return request.get(`diy/link`, {params})
+    return request.get(`diy/link`, { params })
 }
 
 /**
  * 获取底部导航数据
  */
 export function getDiyBottom(params: Record<string, any>) {
-    return request.get(`diy/bottom`, {params})
+    return request.get(`diy/bottom`, { params })
 }
 
 /**
@@ -89,14 +89,14 @@ export function getDiyBottom(params: Record<string, any>) {
  * @returns
  */
 export function setDiyBottom(params: Record<string, any>) {
-    return request.post('diy/bottom', params, {showErrorMessage: true, showSuccessMessage: true})
+    return request.post('diy/bottom', params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
 /**
  * 获取页面类型
  */
 export function getDiyPageType(params: Record<string, any>) {
-    return request.get(`diy/type`, {params})
+    return request.get(`diy/type`, { params })
 }
 
 /**
@@ -105,13 +105,21 @@ export function getDiyPageType(params: Record<string, any>) {
  * @returns
  */
 export function getDiyRouteList(params: Record<string, any>) {
-    return request.get(`diy/route`, {params})
+    return request.get(`diy/route`, { params })
+}
+
+/**
+ * 获取自定义路由信息
+ * @param params
+ */
+export function getDiyRouteInfo(params: Record<string, any>) {
+    return request.get(`diy/route/info`, { params });
 }
 
 /**
  * 修改路由页面分享内容
  * @param params
  */
-export function updateDiyRouteShare(params: Record<string, any>) {
-    return request.put(`diy/route/share`, params, {showErrorMessage: true, showSuccessMessage: true})
+export function editDiyRouteShare(params: Record<string, any>) {
+    return request.put(`diy/route/share`, params, { showErrorMessage: true, showSuccessMessage: true })
 }

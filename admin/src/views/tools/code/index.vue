@@ -3,7 +3,6 @@
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex">
                 <el-button type="primary" @click="addEvent">
-                     />
                     {{ t('addCode') }}
                 </el-button>
             </div>

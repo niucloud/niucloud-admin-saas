@@ -12,6 +12,6 @@
     "updateMemberLabel":"编辑会员标签",
     "sortVerifyOne":"排序要大于零",
     "sortVerifyTwo":"排序不能是小数",
-    "member_labelDeleteTips":"确定要删除该会员标签吗？"
+    "memberLabelDeleteTips":"确定要删除该会员标签吗？"
     
 }

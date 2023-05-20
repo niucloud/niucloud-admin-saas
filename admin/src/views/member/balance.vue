@@ -1,9 +1,33 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
+			<el-card class="box-card !border-none table-search-wrap" shadow="never">
+			    <el-row class="flex">
+			        <el-col :span="12" class="min-w-[100px]">
+			            <el-statistic :value="balanceStatistics.money">
+			                <template #title>
+			                    <div class="text-[14px] mb-[9px]">{{ t('money') }}</div>
+			                </template> 
+			            </el-statistic>
+			        </el-col>
+			        <el-col :span="12" class="min-w-[100px]">
+			            <el-statistic :precision="2" :value="balanceStatistics.balance">
+			                <template #title>
+			                    <div class="text-[14px] mb-[9px]">{{ t('balance') }}</div>
+			                </template>
+			            </el-statistic>
+			        </el-col>
+			    </el-row>
+			</el-card>
             <el-card class="box-card !border-none my-[16px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="memberAccountLogTableData.searchParam" ref="searchFormRef">
-                  
+					<el-form-item :label="t('balanceType')" prop="from_type">
+					    <el-select v-model="memberAccountLogTableData.balance_type" clearable :placeholder="t('fromTypePlaceholder')" class="input-width" @change="checkAccountType">
+					        <el-option :label="t('selectPlaceholder')" value="" />
+					        <el-option :label="item.name" :value="item.type" v-for="(item,key) in balanceStatus" />
+					    </el-select>
+					</el-form-item>
+					
                     <el-form-item :label="t('fromType')" prop="from_type">
                         <el-select v-model="memberAccountLogTableData.searchParam.from_type" clearable :placeholder="t('fromTypePlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')" value="" />
@@ -24,6 +48,7 @@
                         <el-button @click="searchFormRef?.resetFields()">{{ t('reset') }}</el-button>
                     </el-form-item>
                 </el-form>
+				
             </el-card>
 
             <div class="mt-[16px]">
@@ -46,6 +71,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="account_data" :label="t('accountData')" min-width="120" />
+					<el-table-column prop="account_type_name" :label="t('balanceType')" min-width="120" />
                     <el-table-column prop="from_type_name" :label="t('fromType')" min-width="120" />
                     <el-table-column prop="create_time" :show-overflow-tooltip="true" :label="t('createTime')" min-width="150" />
                     <el-table-column prop="memo" :label="t('memo')" min-width="120" />
@@ -71,7 +97,14 @@
 <script lang="ts" setup>
 import { reactive, ref, watch } from 'vue'
 import { t } from '@/lang'
-import { getBalanceList,getChangeTypeList } from '@/api/member'
+import { 
+	getBalanceList,
+	getChangeTypeList,
+	getBalanceSum,
+	getBalanceStatus,
+	getMoneyList,
+	getAccountType,
+} from '@/api/member'
 import { img } from '@/utils/common'
 import balanceInfo from '@/views/member/components/member-balance-info.vue'
 import { useRoute,useRouter } from 'vue-router'
@@ -88,14 +121,17 @@ let memberAccountLogTableData = reactive({
       from_type:"",
       create_time:"",
       mobile:"",
-      member_id
-    }
+      member_id,
+	 
+    },
+	balance_type: ""
 })
 
 let fromTypeList = ref([])
 
 const setFromTypeList = async () => {
     fromTypeList.value = await (await getChangeTypeList('balance')).data
+	console.log(fromTypeList.value)
 }
 
 setFromTypeList();
@@ -108,18 +144,33 @@ const searchFormRef = ref<FormInstance>()
 const loadMemberAccountLogList = (page: number = 1) => {
     memberAccountLogTableData.loading = true
     memberAccountLogTableData.page = page
+	if(memberAccountLogTableData.balance_type == "" || memberAccountLogTableData.balance_type == "balance"){
+		getBalanceList({
+		    page: memberAccountLogTableData.page,
+		    limit: memberAccountLogTableData.limit,
+		     ...memberAccountLogTableData.searchParam
+		}).then(res => {
+		    memberAccountLogTableData.loading = false
+		    memberAccountLogTableData.data = res.data.data
+		    memberAccountLogTableData.total = res.data.total
+			console.log(memberAccountLogTableData.data)
+		}).catch(() => {
+		    memberAccountLogTableData.loading = false
+		})
+	}else{
+		getMoneyList({
+		    page: memberAccountLogTableData.page,
+		    limit: memberAccountLogTableData.limit,
+		     ...memberAccountLogTableData.searchParam
+		}).then(res => {
+		    memberAccountLogTableData.loading = false
+		    memberAccountLogTableData.data = res.data.data
+		    memberAccountLogTableData.total = res.data.total
+		}).catch(() => {
+		    memberAccountLogTableData.loading = false
+		})
+	}
 
-    getBalanceList({
-        page: memberAccountLogTableData.page,
-        limit: memberAccountLogTableData.limit,
-         ...memberAccountLogTableData.searchParam
-    }).then(res => {
-        memberAccountLogTableData.loading = false
-        memberAccountLogTableData.data = res.data.data
-        memberAccountLogTableData.total = res.data.total
-    }).catch(() => {
-        memberAccountLogTableData.loading = false
-    })
 }
 loadMemberAccountLogList()
 
@@ -141,7 +192,47 @@ const router = useRouter()
 const toMember = (member_id:number) => {
     router.push(`/member/detail?id=${member_id}`)
 }
+
+/**
+ * 获取余额总计
+ */
+const balanceStatistics = ref([])
+const checkBalanceInfo = () => {
+	getBalanceSum({
+		member_id
+	 }).then(res => {
+		balanceStatistics.value = res.data;
+	 })
+}
+checkBalanceInfo()
  
+//获取余额类型
+const balanceStatus = ref([])
+const checkBalanceStatus = () => {
+	 getBalanceStatus({
+	 }).then(res => {
+		for (var i in res.data) {
+			if(i == 'balance' || i == 'money'){
+				 balanceStatus.value.push({"name" : res.data[i], "type" : i})
+			} 
+		}
+	 })
+}
+checkBalanceStatus()
+
+const checkAccountType = () => {
+	let account_type = memberAccountLogTableData.balance_type;
+	if(memberAccountLogTableData.balance_type == ""){
+		account_type = "balance"
+	}
+	getAccountType({
+		account_type 
+	}).then(res => {
+		fromTypeList.value = res.data;
+	})
+}
+checkAccountType()
+
 </script>
 
 <style lang="scss" scoped></style>

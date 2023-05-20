@@ -1,8 +1,9 @@
-import type {App} from 'vue'
+import type { App } from 'vue'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
-import {useCssVar, useTitle} from '@vueuse/core'
+import { useCssVar, useTitle } from '@vueuse/core'
 import colorFunction from 'css-color-function'
 import storage from './storage'
+import { useRoute } from 'vue-router'
 
 /**
  * 全局注册element-icon
@@ -46,6 +47,20 @@ export function setThemeColor(color: string, mode: string = 'light'): void {
 }
 
 /**
+ * 获取当前访问应用类型
+ */
+export function getAppType() {
+    const path = location.pathname.split('/').filter((val) => { return val })
+
+    if (!path.length) {
+        return 'admin'
+    } else {
+        const app = path[0]
+        return app == 'decorate' ? 'site' : app
+    }
+}
+
+/**
  * 设置网站 title
  * @param value
  */
@@ -68,7 +83,7 @@ export function getToken(): null | string {
  * @returns
  */
 export function setToken(token: string): void {
-    storage.set({key: 'token', data: token})
+    storage.set({ key: 'token', data: token })
 }
 
 /**
@@ -142,4 +157,20 @@ export function getWapDomain(): string {
     } else {
         return (import.meta.env.VITE_WAP_DOMAIN || location.origin + '/wap') + (storage.get('siteId') == 1 ? '' : '/s' + storage.get('siteId'));
     }
+}
+
+/**
+ * url 转 route
+ * @param url 
+ */
+export function urlToRouteRaw(url: string) {
+    const query = {}
+	const [path, param] = url.split('?')
+
+	param && param.split('&').forEach((str : string) => {
+		let [name, value] = str.split('=')
+		query[name] = value
+	})
+
+	return { path, query }
 }

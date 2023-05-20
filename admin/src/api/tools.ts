@@ -8,7 +8,7 @@ import request from '@/utils/request'
  * @returns
  */
 export function getGenerateTableList(params: Record<string, any>) {
-    return request.get(`generator/generator`, {params})
+    return request.get(`generator/generator`, { params })
 }
 
 /**
@@ -35,7 +35,7 @@ export function addGenerateTable(params: Record<string, any>) {
  * @param params
  * @returns
  */
-export function updateGenerateTable(params: Record<string, any>) {
+export function editGenerateTable(params: Record<string, any>) {
     return request.put(`generator/generator/${params.id}`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
@@ -66,3 +66,11 @@ export function generateTable() {
     return request.get(`generator/table`)
 }
 
+/**
+ * 获取服务器环境配置
+ * @param file
+ * @returns
+ */
+export function getSystem() {
+    return request.get(`sys/system`)
+}

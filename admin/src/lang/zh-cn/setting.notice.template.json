@@ -1,10 +1,10 @@
 {
-      "buyerMessage": "会员消息",
-      "sellerMessage":"平台消息",
+      "buyerNotice": "会员消息",
+      "sellerNotice":"平台消息",
       "sms":"短信",
       "weapp":"微信小程序",
       "wechat":"微信公众号",
-      "messageSetting":"消息设置",
+      "noticeSetting":"消息设置",
       "name": "模板名称",
       "title": "场景",
       "smsContent": "短信内容",

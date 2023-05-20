@@ -1,7 +1,7 @@
 <template>
-    <el-dialog v-model="showDialog" :title="popTitle" width="500px"
-        :destroy-on-close="true">
-        <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
+    <el-dialog v-model="showDialog" :title="popTitle" width="500px" :destroy-on-close="true">
+        <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form"
+            v-loading="loading">
             <el-form-item :label="t('accountNumber')" prop="username">
                 <el-input v-model="formData.username" :placeholder="t('accountNumberPlaceholder')" clearable
                     :disabled="formData.uid" class="input-width" maxlength="10" show-word-limit />
@@ -35,8 +35,8 @@
 
             <el-form-item :label="t('status')">
                 <el-radio-group v-model="formData.status">
-                    <el-radio :label="1">{{ t('statusNormal') }}</el-radio>
-                    <el-radio :label="0">{{ t('statusDeactivate') }}</el-radio>
+                    <el-radio :label="1">{{ t('statusUnlock') }}</el-radio>
+                    <el-radio :label="0">{{ t('lock') }}</el-radio>
                 </el-radio-group>
             </el-form-item>
         </el-form>
@@ -56,12 +56,12 @@
 import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import { addUser, updateUser, getUserInfo } from '@/api/site'
+import { addUser, editUser, getUserInfo } from '@/api/site'
 import { allRole } from '@/api/sys'
 
 const showDialog = ref(false)
 const loading = ref(false)
-let popTitle:string = '';
+let popTitle: string = '';
 
 /**
  * 表单数据
@@ -75,7 +75,7 @@ const initialFormData = {
     confirm_password: '',
     status: 1,
     role_ids: [],
-    userrole:{}
+    userrole: {}
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 
@@ -115,6 +115,9 @@ const emit = defineEmits(['complete'])
 const roles = ref<Record<string, any>>([])
 allRole().then(res => {
     roles.value = res.data
+    roles.value.forEach(element => {
+        element.role_id = element.role_id.toString()
+    });
 })
 
 /**
@@ -123,7 +126,7 @@ allRole().then(res => {
  */
 const confirm = async (formEl: FormInstance | undefined) => {
     if (loading.value || !formEl) return
-    const save = formData.uid ? updateUser : addUser
+    const save = formData.uid ? editUser : addUser
 
     await formEl.validate(async (valid) => {
         if (valid) {
@@ -147,7 +150,7 @@ const setFormData = async (row: any = null) => {
     loading.value = true
     Object.assign(formData, initialFormData)
     popTitle = t('addUser')
-    
+
     if (row) {
         popTitle = t('updateUser')
         const data = await (await getUserInfo(row.uid)).data

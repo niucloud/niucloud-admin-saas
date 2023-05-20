@@ -31,9 +31,9 @@
                     </el-table-column>
                     <el-table-column :label="t('status')" min-width="120" align="center">
                         <template #default="{ row }">
-                            <el-tag class="ml-2" type="success" v-if="row.status == 1">{{ t('statusNormal') }}</el-tag>
+                            <el-tag class="ml-2" type="success" v-if="row.status == 1">{{ t('statusUnlock') }}</el-tag>
                             <el-tag class="ml-2" type="error" v-if="row.status == 0">{{
-                                t('statusDeactivate')
+                                t('statusLock')
                             }}</el-tag>
                         </template>
                     </el-table-column>

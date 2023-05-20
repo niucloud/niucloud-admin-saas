@@ -9,6 +9,7 @@ let i18n = createI18n({
     datetimeFormats: {},
     numberFormats: {},
     globalInjection: true, //是否全局注入
+    silentTranslationWarn: true,
     messages: {
         "zh-cn": zhCn,
         en

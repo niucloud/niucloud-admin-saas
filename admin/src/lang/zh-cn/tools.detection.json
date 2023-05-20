@@ -1,0 +1,15 @@
+{
+      "title": "名称",
+	  "serverInformation": "服务器信息",
+	  "systemDemand": "系统环境要求",
+	  "authorityStatus": "权限状态",
+      "name": "选项",
+	  "demand": "要求",
+	  "status": "状态",
+	  "environment": "环境",
+	  "version": "版本",
+	  "phpType": "PHP版本",
+	  "phpTypeValue": "大于等于8.0.0",
+	  "mysqlType": "mysql版本",
+	  "mysqlTypeValue": "大于等于5.7"
+}

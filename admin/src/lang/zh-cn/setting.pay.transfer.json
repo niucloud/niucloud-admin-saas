@@ -1,14 +1,6 @@
 {
-    "status": "是否启用",
-    "name": "支付类型",
-    "wechatpay": "微信支付",
-    "alipay": "支付宝支付",
-    "paydesc": "支付方式描述",
-    "wechatpayDesc": "微信支付，用户通过扫描二维码、微信内打开商品页面购买等多种方式调起微信支付模块完成支付。",
-    "alipayDesc": "支付宝网站(www.alipay.com) 是国内先进的网上支付平台。",
-    "config": "设置",
-    "updateWechat": "微信支付",
-    "updateAlipay": "支付宝支付",
+    "wechatpay": "微信打款设置",
+    "alipay": "支付宝打款设置",
     "mchId": "商户号",
     "mchIdPlaceholder": "请输入商户号",
     "mchIdTips": "微信支付商户号（MCHID）",
@@ -34,5 +26,6 @@
     "appIdTips": "支付宝分配给开发者的应用ID",
     "appPublicCertPathTips": "上传appCertPublicKey文件",
     "alipayPublicCertPathTips": "上传alipayCertPublicKey文件",
-    "alipayRootCertPathTips": "上传alipayRootCert文件"
+    "alipayRootCertPathTips": "上传alipayRootCert文件",
+    "operationTip": "温馨提示：打款设置用于会员提现转账，发放红包等场景"
 }

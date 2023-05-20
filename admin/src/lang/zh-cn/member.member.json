@@ -1,9 +1,9 @@
 {
-    "registerType":"注册方式",
+    "registerChannel":"注册来源",
     "nickname":"会员名称",
     "mobile":"手机号",
     "createTime":"注册时间",
-    "lastVisitTime":"最后登录时间",
+    "lastVisitTime":"最后访问时间",
     "addMember":"添加会员",
     "updateMember":"编辑会员",
     "nickNamePlaceholder":"请输入会员名称",
@@ -39,9 +39,11 @@
     "doubleCipherHint": "输入的两次密码不一致",
     "mobileHint": "请输入正确的手机号!",
     "lable": "标签",
-    "setLable": "设置标签",
+    "setLable": "标签",
     "notAvailable": "暂无",
     "memberLabelPlaceholder": "请选择会员标签",
     "memberInfo":"会员信息",
-    "memberInfoPlaceholder":"请输入会员名称/会员昵称/手机号"
+    "memberInfoPlaceholder":"请输入会员名称/会员昵称/手机号",
+	"lock": "锁定",
+	"scrubLock": "取消锁定"
 }

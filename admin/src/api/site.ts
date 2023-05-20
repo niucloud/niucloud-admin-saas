@@ -10,7 +10,7 @@ import request from '@/utils/request'
  * @returns 
  */
 export function getSiteList(params: Record<string, any>) {
-    return request.get(`site/site`, {params})
+    return request.get(`site/site`, { params })
 }
 
 /**
@@ -37,7 +37,7 @@ export function addSite(params: Record<string, any>) {
  * @param params 
  * @returns 
  */
-export function updateSite(params: Record<string, any>) {
+export function editSite(params: Record<string, any>) {
     return request.put(`site/site/${params.site_id}`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
@@ -59,7 +59,7 @@ export function getStatusList() {
  * @returns 
  */
 export function getSiteGroupList(params: Record<string, any>) {
-    return request.get(`site/group`, {params})
+    return request.get(`site/group`, { params })
 }
 
 /**
@@ -86,7 +86,7 @@ export function addSiteGroup(params: Record<string, any>) {
  * @param params 
  * @returns 
  */
-export function updateSiteGroup(params: Record<string, any>) {
+export function editSiteGroup(params: Record<string, any>) {
     return request.put(`site/group/${params.group_id}`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
@@ -144,7 +144,7 @@ export function addUser(params: Record<string, any>) {
  * @param params 
  * @returns 
  */
-export function updateUser(params: Record<string, any>) {
+export function editUser(params: Record<string, any>) {
     return request.put(`site/user/${params.uid}`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 

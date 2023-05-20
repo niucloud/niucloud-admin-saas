@@ -82,7 +82,7 @@
 import { ref } from 'vue'
 import { t } from '@/lang'
 import { ElMessageBox, ElMessage } from 'element-plus'
-import { getWechatMenu, updateWechatMenu } from '@/api/wechat'
+import { getWechatMenu, editWechatMenu } from '@/api/wechat'
 import menuForm from './components/menu-form.vue'
 
 const loading = ref(true)
@@ -199,7 +199,7 @@ const save = async () => {
     }
     if (loading.value) return
     loading.value = true
-    updateWechatMenu({ button: button.value }).then(() => {
+    editWechatMenu({ button: button.value }).then(() => {
         loading.value = false
     }).catch(() => {
         loading.value = false

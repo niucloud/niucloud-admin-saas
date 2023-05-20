@@ -129,7 +129,7 @@
 <script lang="ts" setup>
 import { reactive, ref, watch } from 'vue'
 import { t } from '@/lang'
-import { getWechatConfig, getWechatStatic, updateWechatConfig } from '@/api/wechat'
+import { getWechatConfig, getWechatStatic, editWechatConfig } from '@/api/wechat'
 import { useClipboard } from '@vueuse/core'
 import { ElMessage, FormInstance, FormRules } from 'element-plus'
 
@@ -223,7 +223,7 @@ const save = async (formEl: FormInstance | undefined) => {
     await formEl.validate(async (valid) => {
         if (valid) {
             loading.value = true
-            updateWechatConfig(formData).then(() => {
+            editWechatConfig(formData).then(() => {
                 loading.value = false
             }).catch(() => {
                 loading.value = false

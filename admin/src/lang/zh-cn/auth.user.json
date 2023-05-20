@@ -15,6 +15,8 @@
     "lock":"锁定",
     "unlock":"解锁",
     "status":"用户状态",
+    "statusUnlock":"正常",
+    "statusLock":"锁定",
     "userUnlockTips":"确定要解锁该管理员吗？",
     "userLockTips":"确定要锁定该管理员吗？"
 }

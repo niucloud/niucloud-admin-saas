@@ -50,20 +50,19 @@ const useDiyStore = defineStore('diy', {
     },
     actions: {
         // 添加组件
-        addComponent(data: any) {
+        addComponent(key: string, data: any) {
             // 加载完才能添加组件
-            if(!this.load) return;
+            if (!this.load) return;
 
             // 删除不用的字段
             let component = cloneDeep(data);
 
             component.id = this.generateRandom();
-            component.componentName = component.name;
+            component.componentName = key;
             component.componentTitle = component.title;
             component.maxCount = component.max_count;
 
             Object.assign(component, component.value);
-            delete component.name;
             delete component.title;
             delete component.value;
             delete component.type;

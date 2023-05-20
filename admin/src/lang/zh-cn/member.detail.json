@@ -24,6 +24,7 @@
     "wxOpenid": "微信小程openid",
     "memberLabel": "会员标签",
     "memberLabelPlaceholder": "请选择会员标签",
+    "nickNamePlaceholder": "请输入会员名称",
     "updateMember": "编辑会员信息",
     "notAvailable":"暂无",
     "girlSex":"女",
@@ -42,6 +43,8 @@
     "mobile":"手机号",
     "detail":"详情",
     "accumulative":"累计",
-    "looseChange":"零钱",
-    "adjustPoint":"调整积分"
+    "money":"可提现余额",
+    "adjustPoint":"调整积分",
+    "commission":"佣金",
+    "memberNull":"未读取到会员详情信息"
 }

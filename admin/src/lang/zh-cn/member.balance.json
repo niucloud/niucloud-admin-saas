@@ -1,6 +1,6 @@
 {
     "accountData":"金额",
-    "fromType":"变动类型",
+    "fromType":"来源/用途",
     "balanceInfo":"余额变动详情",
     "memo":"备注",
     "mobile":"手机号码",
@@ -20,5 +20,8 @@
     "memoPlaceholder":"请输入备注信息",
     "addMemberAccountLog":"添加会员账单表",
     "updateMemberAccountLog":"编辑会员账单表",
-    "member_account_logDeleteTips":"确定要删除该会员账单表吗？"
+    "memberAccountLogDeleteTips":"确定要删除该会员账单表吗？",
+	"balance": "不可提现余额",
+	"money":"可提现余额",
+	"balanceType":"账户类型"
 }

@@ -34,6 +34,7 @@
   "yes": "是",
   "no": "否",
   "copy": "复制",
+  "complete": "完成",
   "copySuccess": "复制成功",
   "notSupportCopy": "浏览器不支持一键复制，请手动进行复制",
   "selectPlaceholder": "全部",
@@ -69,7 +70,10 @@
     "layoutSetting": "主题设置",
     "darkMode": "黑暗模式",
     "sidebarMode": "主题风格",
-    "themeColor": "主题颜色"
+    "themeColor": "主题颜色",
+    "detectionLoginOperation": "确定",
+    "detectionLoginContent": "已检测到有其他账号登录，需要刷新后才能继续操作。",
+    "detectionLoginTip": "提示"
   },
   "axios": {
     "unknownError": "未知错误",

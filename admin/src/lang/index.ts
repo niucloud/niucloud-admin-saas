@@ -3,7 +3,7 @@ import useAppStore from '@/stores/modules/app'
 
 const t = (message: string) => {
     const path = useAppStore().route
-    const file = path == '/' ? 'index' : path.replace('/', '').replaceAll('/', '.')
+    const file = path == '/' ? 'index' : path.replace(/^(\/admin\/|\/site\/|\/)/, '').replaceAll('/', '.')
     const key = `${file}.${message}`
     return i18n.global.t(key) != key ? i18n.global.t(key) : i18n.global.t(message)
 }

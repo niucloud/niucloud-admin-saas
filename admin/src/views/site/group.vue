@@ -31,7 +31,7 @@
                    
                     <el-table-column prop="group_desc" :label="t('remark')"></el-table-column>
                     <el-table-column prop="create_time" :label="t('createTime')"></el-table-column>
-                    <el-table-column :label="t('operation')" fixed="right" width="130">
+                    <el-table-column  prop="group_roles" :label="t('operation')" fixed="right" width="130">
                         <template #default="{ row }">
                             <el-button type="primary" link @click="editEvent(row)">{{ t('edit') }}</el-button>
                             <el-button type="danger" link @click="deleteEvent(row.group_id)">{{ t('delete') }}</el-button>

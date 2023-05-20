@@ -5,8 +5,8 @@ import request from '@/utils/request'
  * @param params 
  * @returns 
  */
-export function login(params: Record<string, any>) {
-    return request.get('login', { params, showErrorMessage: true })
+export function login(params: Record<string, any>, app_type: string) {
+    return request.get(`login/${app_type}`, { params, showErrorMessage: true })
 }
 
 /**
@@ -23,4 +23,12 @@ export function getAuthMenus() {
  */
 export function getSiteInfo() {
     return request.get('auth/site')
+}
+
+/**
+ * 获取登录配置信息
+ * @returns 
+ */
+export function getLoginConfig() {
+    return request.get('login/config')
 }

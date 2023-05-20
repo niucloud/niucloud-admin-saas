@@ -6,7 +6,7 @@
                     <el-form-item :label="t('userName')" prop="username">
                         <el-input v-model="userTableData.searchParam.username" :placeholder="t('userNamePlaceholder')" />
                     </el-form-item>
- 
+
                     <el-form-item>
                         <el-button type="primary" @click="loadUserList()">{{ t('search') }}</el-button>
                         <el-button @click="searchFormRef?.resetFields()">{{ t('reset') }}</el-button>
@@ -33,7 +33,7 @@
                     </el-table-column>
                     <el-table-column :label="t('isAdmin')" width="120" align="center">
                         <template #default="{ row }">
-                            {{  row.roles[0].is_admin ? t('yes') : t('no')  }}
+                            {{ row.roles[0].is_admin ? t('yes') : t('no') }}
                         </template>
                     </el-table-column>
                     <el-table-column :label="t('status')" min-width="120" align="center">
@@ -46,7 +46,7 @@
                     </el-table-column>
 
                     <el-table-column prop="create_time" :label="t('createTime')" min-width="120" show-overflow-tooltip />
-                 
+
                     <el-table-column :label="t('operation')" fixed="right" width="100">
                         <template #default="{ row }">
                             <el-button type="primary" link @click="infoEvent(row)">{{ t('info') }}</el-button>
@@ -72,7 +72,6 @@ import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getUserList } from '@/api/user'
 import { img } from '@/utils/common'
-import { ElMessageBox } from 'element-plus'
 import type { FormInstance } from 'element-plus'
 import userInfo from '@/views/site/components/user-info.vue'
 
@@ -82,9 +81,9 @@ const userTableData = reactive({
     total: 0,
     loading: true,
     data: [],
-    searchParam:{
-        username:"",
-        site_name:""
+    searchParam: {
+        username: '',
+        site_name: ''
     }
 })
 
@@ -117,7 +116,7 @@ const userDialog: Record<string, any> | null = ref(null)
  * 查看详情
  * @param data
  */
- const infoEvent = (data: any) => {
+const infoEvent = (data: any) => {
     userDialog.value.setFormData(data)
     userDialog.value.showDialog = true
 }

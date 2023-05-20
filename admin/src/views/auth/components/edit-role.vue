@@ -1,7 +1,7 @@
 <template>
-    <el-dialog v-model="showDialog" :title="popTitle" width="500px"
-        :destroy-on-close="true">
-        <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
+    <el-dialog v-model="showDialog" :title="popTitle" width="500px" :destroy-on-close="true">
+        <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form"
+            v-loading="loading">
             <el-form-item :label="t('roleName')" prop="role_name">
                 <el-input v-model="formData.role_name" :placeholder="t('roleNamePlaceholder')" clearable
                     :disabled="formData.uid" class="input-width" maxlength="10" :show-word-limit="true" />
@@ -42,12 +42,12 @@
 import { ref, reactive, computed, watch, toRaw } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import { addRole, updateRole, getRoleInfo, getSiteMenus } from '@/api/sys'
+import { addRole, editRole, getRoleInfo, getSiteMenus } from '@/api/sys'
 import { debounce } from '@/utils/common'
 
 const showDialog = ref(false)
 const loading = ref(false)
-let popTitle:string = '';
+let popTitle: string = '';
 
 // 获取权限数据
 const menus = ref<Record<string, any>[]>([])
@@ -110,7 +110,7 @@ const emit = defineEmits(['complete'])
  */
 const confirm = async (formEl: FormInstance | undefined) => {
     if (loading.value || !formEl) return
-    const save = formData.role_id ? updateRole : addRole
+    const save = formData.role_id ? editRole : addRole
 
     await formEl.validate(async (valid) => {
         if (valid) {
@@ -134,7 +134,7 @@ const setFormData = async (row: any = null) => {
     loading.value = true
     selectAll.value = false
     Object.assign(formData, initialFormData)
-    popTitle = t('addRole') 
+    popTitle = t('addRole')
     if (row) {
         popTitle = t('updateRole')
         const data = await (await getRoleInfo(row.role_id)).data

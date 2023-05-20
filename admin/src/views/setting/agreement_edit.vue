@@ -27,7 +27,7 @@
 import { ref, reactive, computed, watch } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import { getAgreementInfo, updateAgreement } from '@/api/sys'
+import { getAgreementInfo, editAgreement } from '@/api/sys'
 import { useRoute, useRouter } from 'vue-router'
 import useTabbarStore from '@/stores/modules/tabbar'
 import useAppStore from '@/stores/modules/app'
@@ -42,7 +42,7 @@ const tabbarStore = useTabbarStore()
 
 // 页面返回按钮
 appStore.pageReturn = true;
-watch(route, (newX,oldX) => {
+watch(route, (newX, oldX) => {
     appStore.pageReturn = false;
 });
 
@@ -88,7 +88,7 @@ const onSave = async (formEl: FormInstance | undefined) => {
             loading.value = true
             const data = formData
             data.key = formData.agreement_key;
-            updateAgreement(data).then(res => {
+            editAgreement(data).then(res => {
                 loading.value = false
                 back();
             }).catch(() => {

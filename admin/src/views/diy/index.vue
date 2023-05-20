@@ -49,18 +49,21 @@
     import {t} from '@/lang'
     import {useRoute, useRouter} from 'vue-router'
     import {getWeappConfig} from '@/api/weapp'
+    import {getUrl} from '@/api/sys'
     import {useClipboard} from '@vueuse/core'
     import {ElMessage} from 'element-plus'
     import {img} from '@/utils/common'
-    import {getWapDomain} from '@/utils/common'
     import QRCode from "qrcode";
 
-    const wapDomain = ref(getWapDomain() + '/pages/index/index')
+    const wapDomain = ref('')
     const wapImage = ref('')
 
-    QRCode.toDataURL(wapDomain.value, {errorCorrectionLevel: 'L', margin: 0, width: 100}).then(url => {
-        wapImage.value = url
-    })
+    getUrl().then((res:any)=>{
+        wapDomain.value = res.data.wap_url + '/pages/index/index'
+        QRCode.toDataURL(wapDomain.value, {errorCorrectionLevel: 'L', margin: 0, width: 100}).then(url => {
+            wapImage.value = url
+        })
+    });
 
     const router = useRouter()
 
@@ -84,6 +87,7 @@
         path: '/decorate/edit',
         query: {name: 'DIY_INDEX'}
     });
+
     const toDecorate = () => {
         router.push('/decorate/edit?name=DIY_INDEX')
         // window.open(url.href);

@@ -1,9 +1,9 @@
 {
     "todayData": "今日数据",
-    "memberNumb": "会员数量",
+    "memberNumb": "新增会员数",
     "orderMoney": "订单金额",
     "numberOfSites": "站点数量",
-    "numberOfVisitors": "访客数量",
+    "numberOfVisitors": "今日访客数",
     "commonlyUsedFunction": "常用功能",
     "articleList": "文章列表",
     "memberManagement": "会员管理",

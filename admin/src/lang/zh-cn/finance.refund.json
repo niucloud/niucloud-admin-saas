@@ -1,0 +1,14 @@
+{
+      "refundNumber":"退款单号",
+      "userInfo":"用户信息",
+      "sourceNumber":"来源单号",
+      "refundAmount":"退款金额",
+      "refundTime":"退款时间",
+      "detail": "详情",
+	  "statusName": "状态",
+	  "memberInfo": "会员",
+	  "refundSource": "退款来源",
+	  "startDate":"开始时间",
+	  "endDate":"结束时间",
+	  "refundStatus": "退款状态"
+}

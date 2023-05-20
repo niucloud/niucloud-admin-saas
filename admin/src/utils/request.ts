@@ -52,7 +52,7 @@ class Request {
         this.instance.interceptors.response.use(
             (response: requestResponse) => {
                 const res = response.data
-                if (res.code != 200) {
+                if (res.code != 1) {
                     this.handleAuthError(res.code)
                     if (response.config.showErrorMessage) ElMessage({ message: res.msg, type: 'error' })
                     return Promise.reject(new Error(res.msg || 'Error'))

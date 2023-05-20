@@ -1,9 +1,9 @@
 <template>
-    <el-dialog v-model="showDialog" :title="t('qiniuStorage')" width="580px"
-        :destroy-on-close="true" >
-        <el-form :model="formData" label-width="140px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
+    <el-dialog v-model="showDialog" :title="t('qiniuStorage')" width="580px" :destroy-on-close="true">
+        <el-form :model="formData" label-width="140px" ref="formRef" :rules="formRules" class="page-form"
+            v-loading="loading">
             <el-form-item :label="t('isUse')">
-                <el-radio-group v-model="formData.is_use" >
+                <el-radio-group v-model="formData.is_use">
                     <el-radio label="1">{{ t('startUsing') }}</el-radio>
                     <el-radio label="0">{{ t('statusDeactivate') }}</el-radio>
                 </el-radio-group>
@@ -11,16 +11,18 @@
 
             <el-form-item :label="t('qiniuBucket')" prop="bucket">
                 <el-input v-model="formData.bucket" :placeholder="t('qiniuBucketPlaceholder')" class="input-width"
-                     show-word-limit clearable />
+                    show-word-limit clearable />
                 <div class="form-tip">{{ t('qiniuBucketTips') }}</div>
             </el-form-item>
 
             <el-form-item :label="t('qiniuAccessKey')" prop="access_key">
-                <el-input v-model="formData.access_key" :placeholder="t('qiniuAccessKeyPlaceholder')" class="input-width" clearable />
+                <el-input v-model="formData.access_key" :placeholder="t('qiniuAccessKeyPlaceholder')" class="input-width"
+                    clearable />
             </el-form-item>
 
             <el-form-item :label="t('qiniuSecretKey')" prop="secret_key">
-                <el-input v-model="formData.secret_key" :placeholder="t('qiniuSecretKeyPlaceholder')" class="input-width" clearable />
+                <el-input v-model="formData.secret_key" :placeholder="t('qiniuSecretKeyPlaceholder')" class="input-width"
+                    clearable />
             </el-form-item>
 
             <el-form-item :label="t('domain')" prop="domain">
@@ -44,7 +46,7 @@
 import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import { getStorageInfo,updateStorage } from '@/api/sys'
+import { getStorageInfo, editStorage } from '@/api/sys'
 
 let showDialog = ref(false)
 const loading = ref(true)
@@ -52,13 +54,13 @@ const loading = ref(true)
 /**
  * 表单数据
  */
- const initialFormData = {
+const initialFormData = {
     storage_type: '',
     bucket: '',
     access_key: '',
     secret_key: '',
     domain: '',
-    is_use:''
+    is_use: ''
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 
@@ -82,7 +84,7 @@ const formRules = computed(() => {
         domain: [
             { required: true, message: t('domainPlaceholder'), trigger: 'blur' }
         ],
-        
+
     }
 })
 
@@ -101,7 +103,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
 
             let data = formData
 
-            updateStorage(data).then(res => {
+            editStorage(data).then(res => {
                 loading.value = false
                 showDialog.value = false
                 emit('complete')
@@ -122,7 +124,7 @@ const setFormData = async (row: any = null) => {
             if (data[key] != undefined) formData[key] = data[key]
             if (data.params[key] != undefined) formData[key] = data.params[key].value
         })
-       
+
     }
     loading.value = false
 

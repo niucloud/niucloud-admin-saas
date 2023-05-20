@@ -1,36 +1,29 @@
 <template>
-    <el-dialog v-model="showDialog" :title="t('messageSetting')" width="550px" :destroy-on-close="true">
+    <el-dialog v-model="showDialog" :title="t('noticeSetting')" width="550px" :destroy-on-close="true">
         <el-form :model="formData" label-width="110px" ref="formRef" :rules="formRules" class="page-form"
             v-loading="loading">
             <el-form-item :label="t('status')">
-                <el-radio-group v-model="formData.status">
+                <el-radio-group v-model="formData.is_sms">
                     <el-radio :label="1">{{ t('startUsing') }}</el-radio>
                     <el-radio :label="0">{{ t('statusDeactivate') }}</el-radio>
                 </el-radio-group>
             </el-form-item>
 
-            <el-form-item :label="t('name')" >
+            <el-form-item :label="t('name')">
                 <div class="input-width"> {{ formData.name }} </div>
             </el-form-item>
 
-            <el-form-item :label="t('tempKey')" >
-                <div class="input-width"> {{ formData.temp_key }} </div>
+            <el-form-item :label="t('title')">
+                <div class="input-width"> {{ formData.title }} </div>
             </el-form-item>
 
-            <el-form-item :label="t('first')" prop="first">
-                <el-input v-model="formData.wechat_first" :placeholder="t('firstPlaceholder')" class="input-width"
-                     show-word-limit clearable />
+            <el-form-item :label="t('smsId')" prop="sms_id">
+                <el-input v-model="formData.sms_id" :placeholder="t('smsIdPlaceholder')" class="input-width" show-word-limit
+                    clearable />
             </el-form-item>
 
-            <el-form-item :label="t('content')" >
-                <div class="input-width"> 
-                    <div v-for="(item, index) in formData.content">{{ item[0] }}：{{ item[1] }} </div>    
-                </div>
-            </el-form-item>
-
-            <el-form-item :label="t('remark')" prop="remark">
-                <el-input v-model="formData.wechat_remark" :placeholder="t('remarkPlaceholder')" class="input-width"
-                     show-word-limit clearable />
+            <el-form-item :label="t('smsContent')">
+                <div class="input-width"> {{ formData.content }} </div>
             </el-form-item>
 
         </el-form>
@@ -50,7 +43,7 @@
 import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import { updateMessage } from '@/api/message'
+import { editNotice } from '@/api/notice'
 
 const showDialog = ref(false)
 const loading = ref(true)
@@ -59,17 +52,13 @@ const loading = ref(true)
  * 表单数据
  */
 const initialFormData = {
-    status: 0,
-    key:'',
-    name:'',
-    title:'',
-    type:'',
-    content:[],
-    first:'',
-    remark:'',
-    temp_key:'',
-    wechat_first:'',
-    wechat_remark:''
+    is_sms: 0,
+    key: '',
+    name: '',
+    sms_default_content: '',
+    title: '',
+    type: '',
+    sms_id: ''
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 
@@ -78,7 +67,9 @@ const formRef = ref<FormInstance>()
 // 表单验证规则
 const formRules = computed(() => {
     return {
-
+        sms_id: [
+            { required: true, message: t('smsIdPlaceholder'), trigger: 'blur' }
+        ],
     }
 })
 
@@ -97,7 +88,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
 
             const data = formData
 
-            updateMessage(data).then(res => {
+            editNotice(data).then(res => {
                 loading.value = false
                 showDialog.value = false
                 emit('complete')
@@ -110,18 +101,15 @@ const confirm = async (formEl: FormInstance | undefined) => {
 }
 
 const setFormData = async (row: any = null) => {
-    loading.value = true
+    loading.value = true;
     Object.assign(formData, initialFormData)
-    
+
     if (row) {
         Object.keys(formData).forEach((key: string) => {
             if (row[key] != undefined) formData[key] = row[key]
-            if (row.wechat_json[key] != undefined) formData[key] = row.wechat_json[key]
         })
-        if(!formData.wechat_first) formData['wechat_first'] = formData['first']
-        if(!formData.wechat_remark) formData['wechat_remark'] = formData['remark']
     }
-    
+
     loading.value = false
 }
 

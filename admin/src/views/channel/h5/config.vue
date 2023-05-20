@@ -18,6 +18,7 @@
                             <div class="cursor-pointer" @click="copyEvent(formData.request_url)">{{ t('copy') }}</div>
                         </template>
                     </el-input>
+                    <span class="ml-2 cursor-pointer visit-btn" @click="visitFn">{{t('clickVisit')}}</span>
                 </el-form-item>
 
             </el-card>
@@ -35,7 +36,7 @@
 import { reactive, ref, watch } from 'vue'
 import { t } from '@/lang'
 import { setH5Config, getH5Config } from '@/api/h5'
-import { getSceneDomain } from '@/api/sys'
+import { getUrl } from '@/api/sys'
 import { useClipboard } from '@vueuse/core'
 import { ElMessage, FormInstance } from 'element-plus'
 
@@ -60,8 +61,8 @@ getH5Config().then(res => {
 /**
  * 获取h5域名
  */
-getSceneDomain().then(res => {
-    formData.request_url = res.data.wap_domain
+ getUrl().then(res => {
+    formData.request_url = res.data.wap_url
 })
 
 
@@ -89,6 +90,11 @@ watch(copied, () => {
     }
 })
 
+// 点击访问
+const visitFn = ()=>{
+    window.open(formData.request_url);
+}
+
 /**
  * 保存
  */
@@ -111,4 +117,8 @@ const save = async (formEl: FormInstance | undefined) => {
 
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.visit-btn{
+    color:var(--el-color-primary);
+}
+</style>

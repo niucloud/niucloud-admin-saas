@@ -8,7 +8,7 @@
                         <el-input v-model="recordsTableData.searchParam.receiver" :placeholder="t('receiverPlaceholder')" />
                     </el-form-item>
 
-                    <el-form-item :label="t('messageKey')" prop="key">
+                    <el-form-item :label="t('noticeKey')" prop="key">
                         <el-select v-model="recordsTableData.searchParam.key" clearable
                             :placeholder="t('groupIdPlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')" value="" />
@@ -26,7 +26,7 @@
                     </el-form-item>
 
                     <el-form-item>
-                        <el-button type="primary" @click="loadMessageLogList()">{{ t('search') }}</el-button>
+                        <el-button type="primary" @click="loadNoticeLogList()">{{ t('search') }}</el-button>
                         <el-button @click="searchFormRef?.resetFields()">{{ t('reset') }}</el-button>
                     </el-form-item>
                 </el-form>
@@ -39,12 +39,12 @@
                         <span>{{ !recordsTableData.loading ? t('emptyData') : '' }}</span>
                     </template>
 
-                    <el-table-column prop="name" :label="t('messageKey')" min-width="120" />
-                    <el-table-column prop="message_type" :label="t('messageType')" min-width="120">
+                    <el-table-column prop="name" :label="t('noticeKey')" min-width="120" />
+                    <el-table-column prop="notice_type" :label="t('noticeType')" min-width="120">
                         <template #default="{ row }">
-                            <div v-if="row.message_type == 'sms'">{{ t('sms') }}</div>
-                            <div v-if="row.message_type == 'wechat'">{{ t('wechat') }}</div>
-                            <div v-if="row.message_type == 'weapp'">{{ t('weapp') }}</div>
+                            <div v-if="row.notice_type == 'sms'">{{ t('sms') }}</div>
+                            <div v-if="row.notice_type == 'wechat'">{{ t('wechat') }}</div>
+                            <div v-if="row.notice_type == 'weapp'">{{ t('weapp') }}</div>
                         </template>
                     </el-table-column>
 
@@ -62,11 +62,11 @@
                 <div class="mt-[16px] flex justify-end">
                     <el-pagination v-model:current-page="recordsTableData.page" v-model:page-size="recordsTableData.limit"
                         layout="total, sizes, prev, pager, next, jumper" :total="recordsTableData.total"
-                        @size-change="loadMessageLogList()" @current-change="loadMessageLogList" />
+                        @size-change="loadNoticeLogList()" @current-change="loadNoticeLogList" />
                 </div>
             </div>
 
-            <records-info ref="recordsDialog" @complete="loadMessageLogList" />
+            <records-info ref="recordsDialog" @complete="loadNoticeLogList" />
         </el-card>
     </div>
 </template>
@@ -74,8 +74,8 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import { t } from '@/lang'
-import { getMessageLog, getMessageList } from '@/api/message'
-import RecordsInfo from '@/views/setting/components/message-records-info.vue'
+import { getNoticeLog, getNoticeList } from '@/api/notice'
+import RecordsInfo from '@/views/setting/components/notice-records-info.vue'
 import { FormInstance } from 'element-plus'
 
 const recordsTableData = reactive({
@@ -93,17 +93,17 @@ const recordsTableData = reactive({
 
 const templateList = reactive<Record<string, any>>({
     buyer: {
-        label: t('buyerMessage'),
+        label: t('buyerNotice'),
         list: []
     },
     seller: {
-        label: t('sellerMessage'),
+        label: t('sellerNotice'),
         list: []
     }
 })
 
 const setTemplateList = async () => {
-    await getMessageList().then(res => {
+    await getNoticeList().then(res => {
         Object.keys(res.data).forEach(key => {
             const item = res.data[key]
             const value = { value: key, name: item.name }
@@ -121,11 +121,11 @@ const searchFormRef = ref<FormInstance>()
 /**
  * 获取通知记录列表
  */
-const loadMessageLogList = (page: number = 1) => {
+const loadNoticeLogList = (page: number = 1) => {
     recordsTableData.loading = true
     recordsTableData.page = page
 
-    getMessageLog({
+    getNoticeList({
         page: recordsTableData.page,
         limit: recordsTableData.limit,
         ...recordsTableData.searchParam
@@ -137,7 +137,7 @@ const loadMessageLogList = (page: number = 1) => {
         recordsTableData.loading = false
     })
 }
-loadMessageLogList()
+loadNoticeLogList()
 
 const recordsDialog: Record<string, any> | null = ref(null)
 

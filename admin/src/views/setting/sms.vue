@@ -34,7 +34,7 @@
 <script lang="ts" setup>
 import { reactive, ref, watch } from 'vue'
 import { t } from '@/lang'
-import { getSmsList,getSmsInfo } from '@/api/message'
+import { getSmsList,getSmsInfo } from '@/api/notice'
 import Ali from '@/views/setting/components/sms-ali.vue'
 import Tencent from '@/views/setting/components/sms-tencent.vue'
 

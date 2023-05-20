@@ -31,5 +31,6 @@
       "isShowNumber":"是否显示必须是数字",
       "isShowBetween":"是否显示只能是0或者1",
       "sortNumber":"排序号必须是数字",
-      "sortBetween":"排序号需要在0-10000之间"
+      "sortBetween":"排序号需要在0-10000之间",
+      "articleNull":"未读取到文章信息!"
 }

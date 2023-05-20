@@ -76,6 +76,7 @@
     import {cloneDeep} from 'lodash-es'
     import {getLink} from '@/api/diy';
     import {ElMessage} from 'element-plus'
+import { CollectionTag } from '@element-plus/icons-vue';
 
     const prop = defineProps({
         modelValue: {
@@ -115,18 +116,17 @@
     }
 
     getLink({}).then((res: any) => {
-        if (res.code == 200) {
-            link.value = res.data;
-            childList.value = link.value[0].child_list;
-            if (value.value.name != '') {
-                selectLink.value = cloneDeep(value.value);
-            } else {
-                selectLink.value = {
-                    parent: link.value[0].name
-                };
-            }
-            parentLinkName.value = selectLink.value.parent;
+        link.value = res.data;
+        
+        childList.value = link.value[0].child_list;
+        if (value.value.name != '') {
+            selectLink.value = cloneDeep(value.value);
+        } else {
+            selectLink.value = {
+                parent: link.value[0].name
+            };
         }
+        parentLinkName.value = selectLink.value.parent;
     });
 
     // 选择父级链接

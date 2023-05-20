@@ -38,9 +38,15 @@
         <div class="attachment-list-wrap flex flex-col p-[15px] flex-1">
             <el-row :gutter="15" class="h-[32px]">
                 <el-col :span="12">
-                    <el-upload v-bind="upload" ref="uploadRef">
-                        <el-button type="primary">{{ t('upload.upload' + type) }}</el-button>
-                    </el-upload>
+                    <div class="flex">
+                        <el-upload v-bind="upload" ref="uploadRef">
+                            <el-button type="primary">{{ t('upload.upload' + type) }}</el-button>
+                        </el-upload>
+                        <el-button v-if="operate === false" class="ml-[10px]" type="primary" @click="operate = true">{{
+                            t('edit') }}</el-button>
+                        <el-button v-else class="ml-[10px]" type="primary" @click="operate = false">{{ t('complete')
+                        }}</el-button>
+                    </div>
                 </el-col>
                 <el-col :span="12" class="text-right">
                     <el-input v-model="attachmentParam.real_name" class="m-0 w-[200px]"
@@ -50,7 +56,7 @@
             </el-row>
             <div class="flex-1 my-[15px] h-0" v-loading="attachment.loading">
                 <el-scrollbar>
-                    <div class="flex flex-wrap" v-if="attachment.data.length">
+                    <div class="flex flex-wrap" v-if="attachment.data.length && operate === true">
                         <div class="attachment-item mr-[10px]" :class="scene == 'select' ? 'w-[100px]' : 'w-[120px]'"
                             v-for="(item, index) in attachment.data" :key="index">
                             <div class="attachment-wrap w-full rounded cursor-pointer overflow-hidden relative flex items-center justify-center"
@@ -94,13 +100,32 @@
                             </div>
                         </div>
                     </div>
+                    <div class="flex flex-wrap" v-else-if="attachment.data.length && operate === false">
+                        <div class="attachment-item mr-[10px] w-[120px]" v-for="(item, index) in attachment.data"
+                            :key="index">
+                            <div
+                                class="attachment-wrap w-full rounded cursor-pointer overflow-hidden relative flex items-center justify-center h-[120px]">
+                                <el-image :src="img(item.url)" fit="contain" v-if="type == 'image'"
+                                    :preview-src-list="item.image_list"></el-image>
+                                <video :src="img(item.url)" v-else></video>
+                            </div>
+                            <div class="flex items-center">
+                                <el-tooltip placement="top">
+                                    <template #content>{{ item.real_name }}</template>
+                                    <div class="truncate my-[10px] cursor-pointer text-base flex-1 ">
+                                        {{ item.real_name }}
+                                    </div>
+                                </el-tooltip>
+                            </div>
+                        </div>
+                    </div>
                     <div class="flex items-center justify-center" v-else>
-                        <el-empty :description="t('upload.attachmentEmpty')" :image-size="100" />
+                        <el-empty v-if="!attachment.loading" :description="t('upload.attachmentEmpty')" :image-size="100" />
                     </div>
                 </el-scrollbar>
             </div>
             <el-row :gutter="20">
-                <el-col :span="8" v-if="scene == 'attachment'">
+                <el-col :span="8" v-if="scene == 'attachment' && operate === true">
                     <div class="flex items-center">
                         <el-checkbox v-model="selectAll" :label="t('selectAll')" size="large" />
                         <el-button class="ml-[15px]" :disabled="batchOperateDisabled" @click="deleteAttachmentEvent()">{{
@@ -163,7 +188,7 @@ import {
     getAttachmentCategoryList as attachmentCategoryList,
     getAttachmentList as attachmentList,
     addAttachmentCategory as addCategory,
-    updateAttachmentCategory as updateCategory,
+    editAttachmentCategory as updateCategory,
     deleteAttachmentCategory as deleteCategory,
     deleteAttachment,
     moveAttachment
@@ -172,6 +197,7 @@ import { debounce, img, getToken } from '@/utils/common'
 import { ElMessage, UploadFile, UploadFiles, ElMessageBox } from 'element-plus'
 import storage from '@/utils/storage'
 
+const operate = ref(false)
 const prop = defineProps({
     // 选择数量限制
     limit: {
@@ -196,7 +222,7 @@ const attachmentCategory: Record<string, any> = reactive({
     data: []
 })
 const attachment: Record<string, any> = reactive({
-    loading: false,
+    loading: true,
     page: 1,
     total: 0,
     limit: prop.scene == 'select' ? 10 : 20,
@@ -241,6 +267,13 @@ const getAttachmentList = debounce((page: number = 1) => {
         attachment.total = res.data.total
         attachment.loading = false
         prop.scene == 'attachment' && clearSelected()
+		
+        for (let i = 0; i < attachment.data.length; i++) {
+			attachment.data[i]['image_list'] = []
+            attachment.data[i]['image_list'].push(img(res.data.data[i]['url']))
+        }
+
+
     }).catch(() => {
         attachment.loading = false
     })
@@ -508,5 +541,4 @@ defineExpose({
         background: #fff !important;
         box-shadow: var(--el-box-shadow-light);
     }
-}
-</style>
+}</style>

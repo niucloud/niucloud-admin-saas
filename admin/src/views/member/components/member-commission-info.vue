@@ -1,30 +1,40 @@
 <template>
-    <el-dialog v-model="showDialog" :title="t('messageInfo')" width="550px" :destroy-on-close="true">
+    <el-dialog v-model="showDialog" :title="t('moneyInfo')" width="550px" :destroy-on-close="true">
         <el-form :model="formData" label-width="110px" ref="formRef" :rules="formRules" class="page-form"
             v-loading="loading">
  
-            <el-form-item :label="t('messageKey')" >
-                <div class="input-width"> {{ formData.name }} </div>
+            <el-form-item :label="t('headimg')" >
+                <div class="flex items-center">
+                    
+
+                    <img class="w-[50px] h-[50px] mr-[10px]" v-if="formData.headimg" :src="img(formData.headimg)" alt="" >
+                    <img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/assets/images/default_headimg.png" alt="" >
+
+                </div>
             </el-form-item>
 
-            <el-form-item :label="t('messageType')" >
-                <div v-if="formData.message_type == 'sms'">{{ t('sms') }}</div>
-                <div v-if="formData.message_type == 'wechat'">{{ t('wechat') }}</div>
-                <div v-if="formData.message_type == 'weapp'">{{ t('weapp') }}</div>
-            </el-form-item>
 
-            <el-form-item :label="t('messageData')" >
-                <div class="input-width"> {{ formData.message_data }} </div>
-            </el-form-item>
-
-            <el-form-item :label="t('nickname')" >
+            <el-form-item :label="t('nickName')" >
                 <div class="input-width"> {{ formData.nickname }} </div>
             </el-form-item>
- 
-            <el-form-item :label="t('receiver')" >
-                <div class="input-width"> {{ formData.receiver }} </div>
+
+
+            <el-form-item :label="t('mobile')" >
+                <div class="input-width"> {{ formData.mobile }} </div>
             </el-form-item>
 
+            <el-form-item :label="t('accountData')" >
+                <div class="input-width"> {{ formData.account_data }} </div>
+            </el-form-item>
+ 
+            <el-form-item :label="t('fromType')" >
+                <div class="input-width"> {{ formData.from_type_name }} </div>
+            </el-form-item>
+
+            <el-form-item :label="t('memo')" >
+                <div class="input-width"> {{ formData.memo }} </div>
+            </el-form-item>
+ 
             <el-form-item :label="t('createTime')" >
                 <div class="input-width"> {{ formData.create_time }} </div>
             </el-form-item>
@@ -43,7 +53,7 @@
 import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import { updateMessageStatus } from '@/api/message'
+import { img } from '@/utils/common'
 
 const showDialog = ref(false)
 const loading = ref(true)
@@ -52,13 +62,19 @@ const loading = ref(true)
  * 表单数据
  */
 const initialFormData = {
-    create_time: 0,
-    message_data:'',
-    message_key:'',
-    message_type:'',
-    name:'',
+    account_data: 0,
+    account_type:'',
+    create_time:'',
+    from_type:'',
+    from_type_name:"",
+    headimg:'',
+    member_id:'',
+    memo:'',
+    mobile:'',
     nickname:'',
-    receiver:'',
+    related_id:'',
+    username:''
+
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 

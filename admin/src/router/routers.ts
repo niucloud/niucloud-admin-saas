@@ -5,49 +5,83 @@ import Decorate from '@/layout/decorate/index.vue'
 // 静态路由
 export const STATIC_ROUTES: Array<RouteRecordRaw> = [
     {
-        path: `${import.meta.env.BASE_URL}`,
-        component: Default,
-        name: 'root'
-    },
-    {
         path: '/:pathMatch(.*)*',
         component: () => import('@/views/error/404.vue')
-    },
-    {
-        path: '/403',
-        component: () => import('@/views/error/403.vue')
-    },
-    {
-        path: '/login',
-        component: () => import('@/views/login/index.vue')
-    },
-    {
-        path: '/user',
-        component: Default,
-        children: [
-            {
-                path: 'center',
-                meta: {
-                    type: 1,
-                    title: '个人中心'
-                },
-                component: () => import('@/views/index/personal.vue')
-            }
-        ]
     }
 ]
 
 // 免登录路由
 export const NO_LOGIN_ROUTES: string[] = [
-    '/403',
     '/404'
 ]
 
-// 首页路由
-export const INDEX_ROUTE: RouteRecordRaw = {
+// 根路由
+export const ROOT_ROUTER: RouteRecordRaw = {
     path: '/',
     component: Default,
     name: Symbol()
+}
+
+// 平台端根路由
+export const ADMIN_ROUTE: RouteRecordRaw = {
+    path: '/admin',
+    name: Symbol('admin'),
+    children: [
+        {
+            path: '',
+            name: Symbol('adminRoot'),
+            component: Default
+        },
+        {
+            path: 'login',
+            component: () => import('@/views/login/index.vue')
+        },
+        {
+            path: 'user',
+            component: Default,
+            children: [
+                {
+                    path: 'center',
+                    meta: {
+                        type: 1,
+                        title: '个人中心'
+                    },
+                    component: () => import('@/views/index/personal.vue')
+                }
+            ]
+        }
+    ]
+}
+
+// 站点端路由
+export const SITE_ROUTE: RouteRecordRaw = {
+    path: '/site',
+    name: Symbol('site'),
+    children: [
+        {
+            path: '',
+            name: Symbol('siteRoot'),
+            component: Default
+        },
+        {
+            path: 'login',
+            component: () => import('@/views/login/index.vue')
+        },
+        {
+            path: 'user',
+            component: Default,
+            children: [
+                {
+                    path: 'center',
+                    meta: {
+                        type: 1,
+                        title: '个人中心'
+                    },
+                    component: () => import('@/views/index/personal.vue')
+                }
+            ]
+        }
+    ]
 }
 
 // 装修路由
@@ -70,7 +104,8 @@ interface Route {
         type: string
     },
     children?: [],
-    is_show: boolean
+    is_show: boolean,
+    app_type: string
 }
 
 /**
@@ -80,13 +115,14 @@ interface Route {
  */
 const createRoute = function (route: Route, parentRoute: RouteRecordRaw | null = null): RouteRecordRaw {
     const record: RouteRecordRaw = {
-        path: parentRoute ? route.router_path : '/' + route.router_path,
+        path: parentRoute ? route.router_path : route.router_path != 'decorate' ? `/${route.app_type}/${route.router_path}` : `/${route.router_path}`,
         name: parentRoute ? Symbol(`${parentRoute.path}/${route.router_path}`) : Symbol(`/${route.router_path}`),
         meta: {
             title: route.menu_name,
             icon: route.icon,
             type: route.menu_type,
-            show: route.is_show
+            show: route.is_show,
+            app: route.app_type
         }
     }
     if (route.menu_type == 0) {

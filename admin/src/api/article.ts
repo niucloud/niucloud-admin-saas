@@ -35,7 +35,7 @@ export function addArticle(params: Record<string, any>) {
  * @param params
  * @returns
  */
-export function updateArticle(params: Record<string, any>) {
+export function editArticle(params: Record<string, any>) {
     return request.put(`article/article/${params.id}`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
@@ -91,7 +91,7 @@ export function addArticleCategory(params: Record<string, any>) {
  * @param params 
  * @returns 
  */
-export function updateArticleCategory(params: Record<string, any>) {
+export function editArticleCategory(params: Record<string, any>) {
     return request.put(`article/category/${params.category_id}`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 

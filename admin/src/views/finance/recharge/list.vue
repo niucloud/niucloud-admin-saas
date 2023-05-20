@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
 
-            <el-card class="box-card !border-none my-[16px] table-search-wrap" shadow="never">
+            <el-card class="box-card !border-none mb-[16px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="orderTableData.searchParam" ref="searchFormRef">
                     <!-- <el-form-item :label="t('orderNo')" prop="order_no">
                         <el-input v-model="orderTableData.searchParam.order_no" :placeholder="t('orderNoPlaceholder')" />
@@ -73,9 +73,10 @@
                         <template #default="{ row }">
                             <el-button type="primary" link @click="infoEvent(row)">{{ t('info') }}</el-button>
 
+                            <el-button v-if="[1, 10].includes(row.order_status_info.status)" type="primary" link @click="refundBtnFn(row)">{{ t('refundBtn') }}</el-button>
+
                             <template v-for="(item, index) in row.order_status_info.action">
-                                <el-button type="danger" link @click="orderEvent(row, item.class)">{{ item.name
-                                }}</el-button>
+                                <el-button type="danger" link @click="orderEvent(row, item.class)">{{ item.name }}</el-button>
                             </template>
                         </template>
                     </el-table-column>
@@ -87,20 +88,28 @@
                         @size-change="loadOrderList()" @current-change="loadOrderList" />
                 </div>
             </div>
-
         </el-card>
+
+        <!-- 是否退款 -->
+        <el-dialog v-model="refundShowDialog" :title="t('refundBtn')" width="500px" :destroy-on-close="true">
+            <p>{{t('refundContent')}}</p>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="refundShowDialog = false">{{ t('cancel') }}</el-button>
+                    <el-button type="primary" @click="confirm(formRef)">{{ t('confirm') }}</el-button>
+                </span>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import { t } from '@/lang'
-import { getRechargeOrderStatusList, getRechargeOrderList } from '@/api/order'
+import { getRechargeOrderStatusList, getRechargeOrderList, rechargeRefund } from '@/api/order'
 import { getChannelType } from '@/api/sys'
-import { img } from '@/utils/common'
-import { ElMessageBox } from 'element-plus'
-import { data } from 'dom7'
 import { useRouter, useRoute } from 'vue-router'
+
 const route = useRoute()
 const router = useRouter()
 const member_id: number = parseInt(route.query.id || 0)
@@ -168,6 +177,32 @@ const infoEvent = (data: any) => {
  */
 const orderEvent = (data: any, type: string) => {
 
+}
+/**
+ * 退款操作
+ */
+let refundShowDialog = ref(false);
+const refundFn = (data) => {
+    console.log("退款操作",data);
+    refundShowDialog.value = true;
+    rechargeRefund(data.order_id).then(res => {
+        refundShowDialog.value = false;
+    }).catch(() => {
+
+    })
+
+
+    // getRechargeOrderList({
+    //     page: orderTableData.page,
+    //     limit: orderTableData.limit,
+    //     ...orderTableData.searchParam
+    // }).then(res => {
+    //     orderTableData.loading = false
+    //     orderTableData.data = res.data.data
+    //     orderTableData.total = res.data.total
+    // }).catch(() => {
+    //     orderTableData.loading = false
+    // })
 }
 
 /**

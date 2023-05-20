@@ -14,8 +14,10 @@
                     </div>
                     <!-- 返回上一页 -->
                     <div class="flex items-center cursor-pointer" v-if="appStore.pageReturn" @click="backFn">
-                        <el-icon class="mr-1"><Back /></el-icon>
-                        <span class="text-base mr-3">{{t('returnToPreviousPage')}}</span>
+                        <el-icon class="mr-1">
+                            <Back />
+                        </el-icon>
+                        <span class="text-base mr-3">{{ t('returnToPreviousPage') }}</span>
                         <span class=" text-gray-300">|</span>
                     </div>
                     <!-- 面包屑导航 -->
@@ -30,8 +32,9 @@
             </el-col>
             <el-col :span="12">
                 <div class="right-panel h-full flex items-center justify-end">
-                    <!-- 预览 -->
-                    <img class="w-[16px] h-[16px] mr-1" src="@/assets/images/icon_preview.png" :alt="t('preview')" :title="t('preview')">
+                    <!-- 预览 只有站点时展示-->
+                    <img class="w-[16px] h-[16px] mr-1" v-if="appType == 'site'" src="@/assets/images/icon_preview.png"
+                        :alt="t('preview')" :title="t('preview')">
                     <!-- 切换语言 -->
                     <div class="navbar-item flex items-center h-full cursor-pointer">
                         <switch-lang />
@@ -52,6 +55,18 @@
                 </div>
             </el-col>
         </el-row>
+        <input type="hidden" v-model="comparisonToken">
+        <input type="hidden" v-model="comparisonSiteId">
+
+        <el-dialog v-model="detectionLoginDialog" :title="t('layout.detectionLoginTip')" width="30%"
+            :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
+            <span>{{ t('layout.detectionLoginContent') }}</span>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="detectionLoginFn">{{ t('layout.detectionLoginOperation') }}</el-button>
+                </span>
+            </template>
+        </el-dialog>
     </el-container>
 </template>
 
@@ -65,17 +80,43 @@ import useSystemStore from '@/stores/modules/system'
 import useAppStore from '@/stores/modules/app'
 import { useRoute, useRouter } from 'vue-router'
 import { t } from '@/lang'
+import storage from '@/utils/storage'
+import useUserStore from '@/stores/modules/user'
 const router = useRouter()
-
+const appType = storage.get('app_type')
 const { toggle: toggleFullscreen, isFullscreen } = useFullscreen()
 const systemStore = useSystemStore()
 const appStore = useAppStore()
 const route = useRoute()
 const screenWidth = ref(window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth)
 
+// 检测登录 start
+const detectionLoginDialog = ref(false)
+const comparisonToken = ref('')
+const comparisonSiteId = ref('')
+if (storage.get('comparisonTokenStorage')) {
+    comparisonToken.value = storage.get('comparisonTokenStorage')
+    // storage.remove(['comparisonTokenStorage']);
+}
+if (storage.get('comparisonSiteIdStorage')) {
+    comparisonSiteId.value = storage.get('comparisonSiteIdStorage')
+    // storage.remove(['comparisonSiteIdStorage']);
+}
+// 监听标签页面切换
+document.addEventListener('visibilitychange', e => {
+    if (document.visibilityState === 'visible' && (comparisonSiteId.value != storage.get('siteId') || comparisonToken.value != storage.get('token'))) {
+        detectionLoginDialog.value = true
+    }
+})
 
-// 监听窗体宽度变化
+const detectionLoginFn = () => {
+    detectionLoginDialog.value = false
+    location.reload();
+}
+// 检测登录 end
+
 onMounted(() => {
+    // 监听窗体宽度变化
     window.onresize = () => {
         return (() => {
             screenWidth.value = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
@@ -111,15 +152,15 @@ const refreshRouter = () => {
 
 // 面包屑导航
 const breadcrumb = computed(() => {
-    const matched = route.matched
+    const matched = route.matched.filter(item => { return item.meta.title })
     if (matched[0] && matched[0].path == '/') matched.splice(0, 1)
     return matched
 })
 
 // 返回上一页
-const backFn = ()=>{
-    router.go(-1);
-};
+const backFn = () => {
+    router.go(-1)
+}
 </script>
 
 <style lang="scss" scoped>
@@ -129,5 +170,4 @@ const backFn = ()=>{
     &:hover {
         background-color: var(--el-bg-color-page);
     }
-}
-</style>
+}</style>

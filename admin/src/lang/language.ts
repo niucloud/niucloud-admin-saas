@@ -30,12 +30,7 @@ class Language {
      */
     public async loadLocaleMessages(path: string, locale: string) {
         try {
-            const file = path == '/' ? 'index' : path.replace('/', '').replaceAll('/', '.')
-
-            if (this.loadLocale.includes(`${locale}/${file}`)) {
-                return nextTick()
-            }
-            this.loadLocale.push(`${locale}/${file}`)
+            const file = path == '/' ? 'index' : path.replace(/^(\/admin\/|\/site\/|\/)/, '').replaceAll('/', '.')
 
             // 引入语言包文件
             const messages = await import(`./${locale}/${file}.json`)
@@ -48,7 +43,8 @@ class Language {
             this.i18n.global.mergeLocaleMessage(locale, data)
             this.setI18nLanguage(locale)
             return nextTick()
-        } catch {
+        } catch (e) {
+            console.log(e)
             this.setI18nLanguage(locale)
             return nextTick()
         }

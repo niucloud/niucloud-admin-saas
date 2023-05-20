@@ -37,7 +37,7 @@ export function addUser(params: Record<string, any>) {
  * @param params 
  * @returns 
  */
-export function updateUser(params: Record<string, any>) {
+export function editUser(params: Record<string, any>) {
     return request.put(`user/user/${params.uid}`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 

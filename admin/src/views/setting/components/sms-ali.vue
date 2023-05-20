@@ -1,25 +1,27 @@
 <template>
-    <el-dialog v-model="showDialog" :title="t('aliSms')" width="580px"
-        :destroy-on-close="true" >
-        <el-form :model="formData" label-width="140px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
+    <el-dialog v-model="showDialog" :title="t('aliSms')" width="580px" :destroy-on-close="true">
+        <el-form :model="formData" label-width="140px" ref="formRef" :rules="formRules" class="page-form"
+            v-loading="loading">
             <el-form-item :label="t('isUse')">
-                <el-radio-group v-model="formData.is_use" >
+                <el-radio-group v-model="formData.is_use">
                     <el-radio :label="1">{{ t('startUsing') }}</el-radio>
                     <el-radio :label="0">{{ t('statusDeactivate') }}</el-radio>
                 </el-radio-group>
             </el-form-item>
 
             <el-form-item :label="t('aliSign')" prop="sign">
-                <el-input v-model="formData.sign" :placeholder="t('aliSignPlaceholder')" class="input-width"
-                     show-word-limit clearable />
+                <el-input v-model="formData.sign" :placeholder="t('aliSignPlaceholder')" class="input-width" show-word-limit
+                    clearable />
             </el-form-item>
 
             <el-form-item :label="t('aliAppKey')" prop="app_key">
-                <el-input v-model="formData.app_key" :placeholder="t('aliAppKeyPlaceholder')" class="input-width" clearable />
+                <el-input v-model="formData.app_key" :placeholder="t('aliAppKeyPlaceholder')" class="input-width"
+                    clearable />
             </el-form-item>
 
             <el-form-item :label="t('aliSecretKey')" prop="secret_key">
-                <el-input v-model="formData.secret_key" :placeholder="t('aliSecretKeyPlaceholder')" class="input-width" clearable />
+                <el-input v-model="formData.secret_key" :placeholder="t('aliSecretKeyPlaceholder')" class="input-width"
+                    clearable />
             </el-form-item>
 
         </el-form>
@@ -39,7 +41,7 @@
 import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import { getSmsInfo,updateSms } from '@/api/message'
+import { getSmsInfo, editSms } from '@/api/notice'
 
 let showDialog = ref(false)
 const loading = ref(true)
@@ -47,12 +49,12 @@ const loading = ref(true)
 /**
  * 表单数据
  */
- const initialFormData = {
+const initialFormData = {
     sms_type: '',
     sign: '',
     app_key: '',
     secret_key: '',
-    is_use:''
+    is_use: ''
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 
@@ -88,7 +90,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
 
             let data = formData
 
-            updateSms(data).then(res => {
+            editSms(data).then(res => {
                 loading.value = false
                 showDialog.value = false
                 emit('complete')

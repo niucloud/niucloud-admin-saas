@@ -26,7 +26,7 @@
 import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import { getStorageInfo, updateStorage } from '@/api/sys'
+import { getStorageInfo, editStorage } from '@/api/sys'
 
 const showDialog = ref(false)
 const loading = ref(true)
@@ -65,7 +65,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
 
             const data = formData
 
-            updateStorage(data).then(res => {
+            editStorage(data).then(res => {
                 loading.value = false
                 showDialog.value = false
                 emit('complete')

@@ -37,8 +37,8 @@
 import { computed, ref } from 'vue'
 import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
-let type = ref('element')
-let visible = ref('false')
+const type = ref('element')
+const visible = ref('false')
 
 // element 图标
 const element = computed(() => {
@@ -47,8 +47,8 @@ const element = computed(() => {
 
 // iconfont 图标
 const iconfont = computed(() => {
-    let iconfile = import.meta.globEager('@/styles/iconfont.css')['/src/styles/iconfont.css'].default
-    let icons = Array.from(iconfile.matchAll(/(icon.*)\:before/g))
+    const iconfile = import.meta.globEager('@/styles/icon/iconfont.css')['/src/styles/iconfont.css'].default
+    const icons = Array.from(iconfile.matchAll(/(icon.*)\:before/g))
 
     return icons.map(item => {
         return item[1]

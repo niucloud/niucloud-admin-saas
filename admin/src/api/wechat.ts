@@ -22,7 +22,7 @@ export function getWechatStatic() {
  * @param params 
  * @returns 
  */
-export function updateWechatConfig(params: Record<string, any>) {
+export function editWechatConfig(params: Record<string, any>) {
     return request.put('wechat/config', params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
@@ -39,7 +39,7 @@ export function getWechatMenu() {
  * @param params 
  * @returns 
  */
-export function updateWechatMenu(params: Record<string, any>) {
+export function editWechatMenu(params: Record<string, any>) {
     return request.put('wechat/menu', params, { showErrorMessage: true, showSuccessMessage: true })
 }
 

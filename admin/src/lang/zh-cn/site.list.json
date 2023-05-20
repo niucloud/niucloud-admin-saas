@@ -5,7 +5,7 @@
       "status":"状态",
       "businessHours":"营业时间",
       "createTime":"创建时间",
-      "expireTime":"过期时间",
+      "expireTime":"到期时间",
       "siteNamePlaceholder":"请输入站点名称",
       "createTimePlaceholder":"请输入创建时间",
       "addSite":"添加站点",
@@ -24,5 +24,7 @@
       "confirmPasswordPlaceholder": "请再次确认密码",
       "userRealNamePlaceholder": "请输入名称",
       "expireTimePlaceholder":"请选择到期时间",
-      "confirmPasswordError": "两次输入的密码不一致"
+      "confirmPasswordError": "两次输入的密码不一致",
+      "operationTip": "温馨提示：站点登录页面"
+      
 }

@@ -1,7 +1,7 @@
 <template>
-    <el-dialog v-model="showDialog" :title="popTitle" width="500px"
-        :destroy-on-close="true">
-        <el-form :model="formData" label-width="90px" class="page-form" ref="formRef" :rules="formRules" v-loading="loading">
+    <el-dialog v-model="showDialog" :title="popTitle" width="500px" :destroy-on-close="true">
+        <el-form :model="formData" label-width="90px" class="page-form" ref="formRef" :rules="formRules"
+            v-loading="loading">
             <el-form-item :label="t('menuName')" prop="menu_name">
                 <el-input v-model="formData.menu_name" :placeholder="t('menuNamePlaceholder')" class="input-width" />
             </el-form-item>
@@ -98,12 +98,12 @@ import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
 import selectMenuItem from './select-menu-item.vue'
-import { addMenu, updateMenu, getMenuInfo } from '@/api/sys'
+import { addMenu, editMenu, getMenuInfo } from '@/api/sys'
 
 const showDialog = ref(false)
 const method = ref('post')
 const loading = ref(false)
-let popTitle:string = '';
+let popTitle: string = '';
 
 /**
  * 表单数据
@@ -121,8 +121,8 @@ const initialFormData = {
     sort: '',
     status: 1,
     is_show: 1,
-    menu_key:'',
-    app_type:''
+    menu_key: '',
+    app_type: ''
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 
@@ -147,12 +147,12 @@ const formRules = computed(() => {
         ],
         menu_key: [
             { required: true, message: t('menuKeyPlaceholder'), trigger: 'blur' },
-                {
+            {
                 validator: (rule: any, value: string, callback: any) => {
-                    if(!validataMenuKey(value)){
+                    if (!validataMenuKey(value)) {
                         callback(new Error(t('menuKeyValidata')))
                     }
-                
+
                     callback()
                 },
                 trigger: 'blur'
@@ -188,7 +188,7 @@ const emit = defineEmits(['complete'])
  */
 const confirm = async (formEl: FormInstance | undefined) => {
     if (loading.value || !formEl) return
-    const save = formData.id ? updateMenu : addMenu
+    const save = formData.id ? editMenu : addMenu
 
     await formEl.validate(async (valid, fields) => {
         if (valid) {
@@ -219,7 +219,7 @@ const setFormData = async (row: any = null) => {
         Object.keys(formData).forEach((key: string) => {
             if (data[key] != undefined) formData[key] = data[key]
         })
-    }else{
+    } else {
         Object.keys(formData).forEach((key: string) => {
             if (row[key] != undefined) formData[key] = row[key]
         })

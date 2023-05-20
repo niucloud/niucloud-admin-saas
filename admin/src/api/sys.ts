@@ -9,6 +9,14 @@ import request from '@/utils/request'
 export function getInfo() {
     return request.get('sys/role')
 }
+
+/**
+ * 系统信息
+ * @returns 
+ */
+export function getUrl() {
+    return request.get('sys/url')
+}
 /***************************************************** 用户组 ****************************************************/
 
 /**
@@ -43,7 +51,7 @@ export function addRole(params: Record<string, any>) {
  * @param params 
  * @returns 
  */
-export function updateRole(params: Record<string, any>) {
+export function editRole(params: Record<string, any>) {
     return request.put(`sys/role/${params.role_id}`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
@@ -70,7 +78,7 @@ export function allRole() {
  * 获取全部菜单
  * @returns 
  */
-export function getMenus(type:string) {
+export function getMenus(type: string) {
     return request.get(`sys/menu/${type}`)
 }
 
@@ -98,7 +106,7 @@ export function addMenu(params: Record<string, any>) {
  * @param params 
  * @returns 
  */
-export function updateMenu(params: Record<string, any>) {
+export function editMenu(params: Record<string, any>) {
     return request.put(`sys/menu/${params.menu_key}`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
@@ -180,7 +188,7 @@ export function addAttachmentCategory(params: Record<string, any>) {
  * @param params 
  * @returns 
  */
-export function updateAttachmentCategory(params: Record<string, any>) {
+export function editAttachmentCategory(params: Record<string, any>) {
     return request.put(`sys/attachment/category/${params.id}`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
@@ -208,7 +216,7 @@ export function getAttachmentList(params: Record<string, any>) {
  * @returns 
  */
 export function deleteAttachment(params: Record<string, any>) {
-    return request.delete(`sys/attachment/del`, { data: params, showErrorMessage: true, showSuccessMessage: true})
+    return request.delete(`sys/attachment/del`, { data: params, showErrorMessage: true, showSuccessMessage: true })
 }
 
 /**
@@ -266,7 +274,7 @@ export function getStorageInfo(type: string) {
  * @param params 
  * @returns 
  */
-export function updateStorage(params: Record<string, any>) {
+export function editStorage(params: Record<string, any>) {
     return request.put(`sys/storage/${params.storage_type}`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
@@ -276,7 +284,7 @@ export function updateStorage(params: Record<string, any>) {
  * 获取支付设置
  * @returns 
  */
-export function getPayConfig(type:string) {
+export function getPayConfig(type: string) {
     return request.get(`pay/config/${type}`)
 }
 
@@ -296,13 +304,31 @@ export function getPayList() {
     return request.get(`pay/lists`)
 }
 
+/***************************************************** 打款设置 ****************************************************/
+/**
+ * 获取打款设置配置
+ * @returns channel 渠道
+ * @returns  
+ */
+export function getTransferInfo(channel) {
+    return request.get(`pay/channel/lists/${channel}`)
+}
+
+/**
+ * 设置打款配置
+ * @param params 
+ * @returns
+ */
+export function setTransferInfo(params: Record<string, any>) {
+    return request.post(`pay/channel/set/transfer`, params)
+}
 /***************************************************** 定时任务 ****************************************************/
 
 /**
  * 获取任务列表
  * @returns 
  */
-export function getCronList(params:any) {
+export function getCronList(params: any) {
     return request.get(`sys/cron`, { params })
 }
 
@@ -310,7 +336,7 @@ export function getCronList(params:any) {
  * 任务详情
  * @returns 
  */
-export function getCronInfo(id:string) {
+export function getCronInfo(id: string) {
     return request.get(`sys/cron/${id}`);
 }
 
@@ -336,7 +362,7 @@ export function getAgreementList() {
  * 协议详情
  * @returns 
  */
-export function getAgreementInfo(key:string) {
+export function getAgreementInfo(key: string) {
     return request.get(`sys/agreement/${key}`);
 }
 
@@ -344,7 +370,7 @@ export function getAgreementInfo(key:string) {
  * 更新协议
  * @returns 
  */
-export function updateAgreement(params: Record<string, any>) {
+export function editAgreement(params: Record<string, any>) {
     return request.put(`sys/agreement/${params.key}`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
@@ -363,5 +389,56 @@ export function getChannelType() {
  */
 export function getSceneDomain() {
     return request.get(`sys/scene_domain`);
+}
+
+/***************************************************** 登录注册配置 ****************************************************/
+
+/**
+ * 管理端登录注册配置
+ * @param params 
+ * @returns 
+ */
+export function getConfigLogin() {
+    return request.get(`sys/config/login`)
+}
+
+/**
+ * 设置管理端登录注册配置
+ * @param params 
+ * @returns 
+ */
+export function setConfigLogin(params: Record<string, any>) {
+    return request.put(`sys/config/login`, params, { showErrorMessage: true, showSuccessMessage: true })
+}
+
+/**
+ * 获取支付设置
+ */
+export function getPayConfigList() {
+    return request.get(`pay/channel/lists`)
+}
+
+/**
+ * 设置支付配置
+ */
+export function setPatConfig(params: Record<string, any>) {
+    return request.post(`pay/channel/set/all`, params, { showErrorMessage: true, showSuccessMessage: true })
+}
+
+
+/***************************************************** 刷新菜单 ****************************************************/
+/**
+ * 刷新菜单
+ */
+export function menuRefresh(params: Record<string, any>) {
+    return request.post(`sys/menu/refresh`,{},{ showErrorMessage: true, showSuccessMessage: true })
+}
+
+/***************************************************** 获取应用 ****************************************************/
+/**
+ * 获取应用
+ */
+export function getAppMange() {
+    return request.get(`sys/applist`)
 }
 

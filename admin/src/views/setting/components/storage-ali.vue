@@ -1,9 +1,9 @@
 <template>
-    <el-dialog v-model="showDialog" :title="t('aliStorage')" width="580px"
-        :destroy-on-close="true" >
-        <el-form :model="formData" label-width="140px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
+    <el-dialog v-model="showDialog" :title="t('aliStorage')" width="580px" :destroy-on-close="true">
+        <el-form :model="formData" label-width="140px" ref="formRef" :rules="formRules" class="page-form"
+            v-loading="loading">
             <el-form-item :label="t('isUse')">
-                <el-radio-group v-model="formData.is_use" >
+                <el-radio-group v-model="formData.is_use">
                     <el-radio label="1">{{ t('startUsing') }}</el-radio>
                     <el-radio label="0">{{ t('statusDeactivate') }}</el-radio>
                 </el-radio-group>
@@ -11,20 +11,23 @@
 
             <el-form-item :label="t('aliBucket')" prop="bucket">
                 <el-input v-model="formData.bucket" :placeholder="t('aliBucketPlaceholder')" class="input-width"
-                     show-word-limit clearable />
+                    show-word-limit clearable />
                 <div class="form-tip">{{ t('aliBucketTips') }}</div>
             </el-form-item>
 
             <el-form-item :label="t('aliAccessKey')" prop="access_key">
-                <el-input v-model="formData.access_key" :placeholder="t('aliAccessKeyPlaceholder')" class="input-width" clearable />
+                <el-input v-model="formData.access_key" :placeholder="t('aliAccessKeyPlaceholder')" class="input-width"
+                    clearable />
             </el-form-item>
 
             <el-form-item :label="t('aliSecretKey')" prop="secret_key">
-                <el-input v-model="formData.secret_key" :placeholder="t('aliSecretKeyPlaceholder')" class="input-width" clearable />
+                <el-input v-model="formData.secret_key" :placeholder="t('aliSecretKeyPlaceholder')" class="input-width"
+                    clearable />
             </el-form-item>
 
             <el-form-item :label="t('aliEndpoint')" prop="endpoint">
-                <el-input v-model="formData.endpoint" :placeholder="t('aliEndpointPlaceholder')" class="input-width" clearable />
+                <el-input v-model="formData.endpoint" :placeholder="t('aliEndpointPlaceholder')" class="input-width"
+                    clearable />
                 <div class="form-tip">{{ t('aliEndpointTips') }}</div>
             </el-form-item>
 
@@ -49,7 +52,7 @@
 import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import { getStorageInfo,updateStorage } from '@/api/sys'
+import { getStorageInfo, editStorage } from '@/api/sys'
 
 let showDialog = ref(false)
 const loading = ref(true)
@@ -57,14 +60,14 @@ const loading = ref(true)
 /**
  * 表单数据
  */
- const initialFormData = {
+const initialFormData = {
     storage_type: '',
     bucket: '',
     access_key: '',
     secret_key: '',
     endpoint: '',
     domain: '',
-    is_use:''
+    is_use: ''
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 
@@ -106,7 +109,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
 
             let data = formData
 
-            updateStorage(data).then(res => {
+            editStorage(data).then(res => {
                 loading.value = false
                 showDialog.value = false
                 emit('complete')
@@ -127,7 +130,7 @@ const setFormData = async (row: any = null) => {
             if (data[key] != undefined) formData[key] = data[key]
             if (data.params[key] != undefined) formData[key] = data.params[key].value
         })
-       
+
     }
     loading.value = false
 

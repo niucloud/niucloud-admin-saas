@@ -10,5 +10,9 @@
       "payTypeName":"支付方式",
       "startDate":"开始时间",
       "endDate":"结束时间",
-      "namePlaceholder":"请选择"
+      "namePlaceholder":"请选择",
+      "refundBtn":"退款",
+      "refundContent":"是否确认退款"
+      
+
 }

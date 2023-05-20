@@ -36,21 +36,21 @@
 
                 <el-form-item :label="t('publicKey')">
                     <div class="input-width">
-                        <upload-file v-model="formData.public_key_crt" api="upload/cert/aliapp" />
+                        <upload-file v-model="formData.public_key_crt" api="sys/document/aliyun" />
                     </div>
                     <div class="form-tip">{{ t('publicKeyTips') }}</div>
                 </el-form-item>
                 
                 <el-form-item :label="t('alipayPublicKey')">
                     <div class="input-width">
-                        <upload-file v-model="formData.alipay_public_key_crt" api="upload/cert/aliapp" />
+                        <upload-file v-model="formData.alipay_public_key_crt" api="sys/document/aliyun" />
                     </div>
                     <div class="form-tip">{{ t('alipayPublicKeyTips') }}</div>
                 </el-form-item>
                 
                 <el-form-item :label="t('alipayWithCrt')">
                     <div class="input-width">
-                        <upload-file v-model="formData.alipay_with_crt" api="upload/cert/aliapp" />
+                        <upload-file v-model="formData.alipay_with_crt" api="sys/document/aliyun" />
                     </div>
                     <div class="form-tip">{{ t('alipayWithCrtTips') }}</div>
                 </el-form-item>

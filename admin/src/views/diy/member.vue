@@ -5,9 +5,6 @@
 <script lang="ts" setup>
     import {ref} from 'vue'
     import {useRouter} from 'vue-router'
-    import {getWapDomain} from '@/utils/common'
-
-    const wapDomain = ref(getWapDomain() + '/pages/member/index')
 
     const router = useRouter()
     const url = router.resolve({

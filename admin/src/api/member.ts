@@ -9,7 +9,7 @@ import request from '@/utils/request'
  * @returns 
  */
 export function getMemberList(params: Record<string, any>) {
-return request.get(`member/member`, {params})
+    return request.get(`member/member`, { params })
 }
 
 /**
@@ -39,6 +39,15 @@ export function getRegisterType(params: Record<string, any>) {
     return request.get(`member/registertype`, params)
 }
 
+/**
+ * 会员注册渠道
+ * @param params 
+ * @returns 
+ */
+export function getRegisterChannelType(params: Record<string, any>) {
+    return request.get(`member/register/channel`, params)
+}
+
 
 
 /***************************************************** 会员标签 ****************************************************/
@@ -49,7 +58,7 @@ export function getRegisterType(params: Record<string, any>) {
  * @returns
  */
 export function getMemberLabelList(params: Record<string, any>) {
-    return request.get(`member/label`, {params})
+    return request.get(`member/label`, { params })
 }
 
 /**
@@ -104,20 +113,13 @@ export function getMemberLabelAll() {
  * @param params 
  * @returns 
  */
-export function updateMemberDetail(params: Record<string, any>) {
+export function editMemberDetail(params: Record<string, any>) {
     return request.put(`member/member/modify/${params.member_id}/${params.field}`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
 /***************************************************** 会员零钱 ****************************************************/
 
-/**
- * 获取会员零钱列表
- * @param params 
- * @returns 
- */
-export function getMoneyList(params: Record<string, any>) {
-    return request.get(`member/account/money`, {params})
-}
+
 
 
 /***************************************************** 会员账户 ****************************************************/
@@ -146,7 +148,23 @@ export function getPointList(params: Record<string, any>) {
  */
 export function getBalanceList(params: Record<string, any>) {
     return request.get(`member/account/balance`, { params })
-    }
+}
+/**
+ * 获取会员可提现余额列表
+ * @param params 
+ * @returns 
+ */
+export function getMoneyList(params: Record<string, any>) {
+    return request.get(`member/account/money`, { params })
+}
+/**
+ * 获取会员佣金列表
+ * @param params 
+ * @returns 
+ */
+export function getCommissionList(params: Record<string, any>) {
+    return request.get(`member/account/commission`, { params })
+}
 /**
  * 会员积分调整
  * @param params 
@@ -154,7 +172,7 @@ export function getBalanceList(params: Record<string, any>) {
  */
 export function adjustPoint(params: Record<string, any>) {
     return request.post(`member/account/point`, params, { showErrorMessage: true, showSuccessMessage: true })
-    }
+}
 /**
  * 会员余额调整
  * @param params 
@@ -162,9 +180,9 @@ export function adjustPoint(params: Record<string, any>) {
  */
 export function adjustBalance(params: Record<string, any>) {
     return request.post(`member/account/balance`, params, { showErrorMessage: true, showSuccessMessage: true })
-    }
+}
 
-/***************************************************** 会员相关设置 ****************************************************/    
+/***************************************************** 会员相关设置 ****************************************************/
 
 /**
  * 获取登录设置
@@ -173,7 +191,7 @@ export function adjustBalance(params: Record<string, any>) {
  */
 export function getLoginConfig(params: Record<string, any>) {
     return request.get(`member/config/login`, params)
-    }
+}
 /**
  * 注册登录设置
  * @param params 
@@ -184,20 +202,57 @@ export function setLoginConfig(params: Record<string, any>) {
 }
 
 /**
+ * 获取会员转账方式
+ * @param params 
+ * @returns 
+ */
+export function getTransfertype() {
+    return request.get(`member/cash_out/transfertype`)
+}
+
+/**
+ * 余额统计
+ * @param params 
+ * @returns 
+ */
+export function getBalanceSum(params: Record<string, any>) {
+    return request.get(`member/account/sum_balance`, { params })
+}
+
+/**
+ * 余额类型
+ * @param params 
+ * @returns 
+ */
+export function getBalanceStatus() {
+    return request.get(`member/account/type`)
+}
+
+/**
+ * 获取余额变动类型
+ */
+export function getAccountType(params: Record<string, any>) {
+    return request.get(`member/account/change_type/${params.account_type}`)
+}
+
+
+/***************************************************** 会员提现 ****************************************************/
+
+/**
  * 获取提现设置
  * @param params 
  * @returns 
  */
 export function getWithdrawConfig() {
-    return request.get(`member/config/withdraw`)
-    }
+    return request.get(`member/config/cash_out`)
+}
 /**
  * 设置提现设置
  * @param params 
  * @returns 
  */
 export function setWithdrawConfig(params: Record<string, any>) {
-    return request.post(`member/config/withdraw`, params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.post(`member/config/cash_out`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
 /**
@@ -206,14 +261,53 @@ export function setWithdrawConfig(params: Record<string, any>) {
  * @returns 
  */
 export function getWithdrawList(params: Record<string, any>) {
-    return request.get(`member/withdraw`, {params})
+    return request.get(`member/cash_out`, { params })
 }
 
 /**
- * 获取会员转账方式
+ * 会员提现详情
+ * @param params 
+ * @returns id
+ */
+export function getWithdrawDetail(id: number) {
+    return request.get(`member/cash_out/${id}`, {})
+}
+
+/**
+ * 会员提现审核
+ * @param id
+ * @param params
+ * @returns
+ */
+export function memberAudit(params: Record<string, any>) {
+    return request.put(`member/cash_out/audit/${params.id}/${params.action}`, params, { showErrorMessage: true, showSuccessMessage: true })
+}
+
+/**
+ * 会员提现转账
+ * @param id
+ * @param params
+ * @returns
+ */
+export function memberTransfer(params: Record<string, any>) {
+    return request.put(`member/cash_out/transfer/${params.id}`, params, { showErrorMessage: true, showSuccessMessage: true })
+}
+
+/**
+ * 会员状态变更
+ * @param id 
  * @param params 
  * @returns 
  */
-export function getTransfertype() {
-    return request.get(`member/withdraw/transfertype`)
+export function editMemberStatus(params: Record<string, any>) {
+    return request.put(`member/setstatus/${params.status}`, params, { showErrorMessage: true, showSuccessMessage: true })
+}
+
+/**
+ * 会员提现状态
+ * @param params 
+ * @returns
+ */
+export function getWithdrawStatusList() {
+    return request.get(`member/cash_out/status`)
 }

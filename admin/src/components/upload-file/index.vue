@@ -22,7 +22,7 @@ const prop = defineProps({
     },
     api: {
         type: String,
-        default: 'sys/document'
+        default: 'sys/document/document'
     }
 })
 
@@ -41,7 +41,7 @@ const upload: Record<string, any> = {
     action: `${import.meta.env.VITE_APP_BASE_URL}/${prop.api}`,
     showFileList: false,
     headers: {},
-    accept: '.doc,.docx,.xml,.txt,.pem,.zip,.rar,.7z',
+    accept: '.doc,.docx,.xml,.txt,.pem,.zip,.rar,.7z,.crt',
     onSuccess: (response: any, uploadFile: UploadFile) => {
         value.value = response.data.url
         ElMessage({

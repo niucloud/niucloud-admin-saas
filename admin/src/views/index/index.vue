@@ -4,31 +4,39 @@
             <el-card class="box-card !border-none" shadow="never">
                 <template #header>
                     <div class="card-header">
-                        <span class="text-[14px]">{{t('todayData')}}</span>
+                        <span class="text-[14px]">{{t('dataSummarize')}}</span>
                     </div>
                 </template>
-                <el-row>
-                    <el-col :span="8">
-                        <el-statistic :value="statInfo.today_data.total_member_count">
-                            <template #title>
-                                <div class="text-[14px] mb-[9px]">{{t('memberNumb')}}</div>
-                            </template>
-                        </el-statistic>
-                    </el-col>
-                    <el-col :span="8">
+				
+                <el-row :gutter="20">
+                    <el-col :span="6" >
                         <el-statistic :value="statInfo.today_data.total_site_count">
                             <template #title>
-                                <div class="text-[14px] mb-[9px]">{{t('numberOfSites')}}</div>
+                                <div class="text-[14px] mb-[9px]">{{t('siteSum')}}</div>
                             </template>
                         </el-statistic>
                     </el-col>
-                    <el-col :span="8">
-                        <el-statistic :value="statInfo.today_data.total_visit_count">
+                    <el-col :span="6">
+                        <el-statistic :value="statInfo.today_data.total_member_count">
                             <template #title>
-                                <div class="text-[14px] mb-[9px]">{{t('numberOfVisitors')}}</div>
+                                <div class="text-[14px] mb-[9px]">{{t('memberSum')}}</div>
                             </template>
                         </el-statistic>
                     </el-col>
+					<el-col :span="6" >
+					    <el-statistic :value="statInfo.app.app_count">
+					        <template #title>
+					            <div class="text-[14px] mb-[9px]">{{t('appSum')}}</div>
+					        </template>
+					    </el-statistic>
+					</el-col>
+					<el-col :span="6">
+					    <el-statistic :value="statInfo.app.app_installed_count">
+					        <template #title>
+					            <div class="text-[14px] mb-[9px]">{{t('installAppSun')}}</div>
+					        </template>
+					    </el-statistic>
+					</el-col>
                 </el-row>
             </el-card>
 
@@ -40,21 +48,21 @@
                 </template>
                 <el-row :gutter="20" justify="space-between">
                     <el-col :span="4">
-                        <div class="flex justify-center flex-col items-center cursor-pointer" @click="toLink('/article/list')">
+                        <div class="flex justify-center flex-col items-center cursor-pointer" @click="toLink('/site/list')">
                             <img class="w-[40px] h-[40px]" src="@/assets/images/index/article_list.png" alt="">
-                            <span class="mt-[10px] text-[14px]">{{t('articleList')}}</span>
+                            <span class="mt-[10px] text-[14px]">{{t('siteList')}}</span>
                         </div>
                     </el-col>
                     <el-col :span="4">
-                        <div class="flex justify-center flex-col items-center cursor-pointer" @click="toLink('/member/member')">
+                        <div class="flex justify-center flex-col items-center cursor-pointer" @click="toLink('/site/group')">
                             <img class="w-[40px] h-[40px]" src="@/assets/images/index/member.png" alt="">
-                            <span class="mt-[10px] text-[14px]">{{t('memberManagement')}}</span>
+                            <span class="mt-[10px] text-[14px]">{{t('sitePackage')}}</span>
                         </div>
                     </el-col>
                     <el-col :span="4">
-                        <div class="flex justify-center flex-col items-center cursor-pointer" @click="toLink('/member/balance')">
+                        <div class="flex justify-center flex-col items-center cursor-pointer" @click="toLink('/site/list')">
                             <img class="w-[40px] h-[40px]" src="@/assets/images/index/balance.png" alt="">
-                            <span class="mt-[10px] text-[14px]">{{t('balanceAccount')}}</span>
+                            <span class="mt-[10px] text-[14px]">{{t('newSite')}}</span>
                         </div>
                     </el-col>
                     <el-col :span="4">
@@ -64,9 +72,9 @@
                         </div>
                     </el-col>
                     <el-col :span="4">
-                        <div class="flex justify-center flex-col items-center cursor-pointer" @click="toLink('/diy/index')">
+                        <div class="flex justify-center flex-col items-center cursor-pointer" @click="toLink('/tools/app_store')">
                             <img class="w-[40px] h-[40px]" src="@/assets/images/index/fitment.png" alt="">
-                            <span class="mt-[10px] text-[14px]">{{t('WebDecoration')}}</span>
+                            <span class="mt-[10px] text-[14px]">{{t('appMarketplace')}}</span>
                         </div>
                     </el-col>
                 </el-row>
@@ -76,18 +84,18 @@
                 <el-card class="box-card !border-none flex-1 mr-[15px]" shadow="never">
                     <template #header>
                         <div class="card-header">
-                            <span class="text-[14px]">{{t('accessMessage')}}</span>
+                            <span class="text-[14px]">{{t('newSite')}}</span>
                         </div>
                     </template>
-                    <div ref="visitStat" :style="{ width: '100%', height: '300px' }"></div>
+                    <div ref="newSiteStat" :style="{ width: '100%', height: '300px' }"></div>
                 </el-card>
                 <el-card class="box-card !border-none flex-1" shadow="never">
                     <template #header>
                         <div class="card-header">
-                            <span class="text-[14px]">{{t('memberDistribution')}}</span>
+                            <span class="text-[14px]">{{t('siteDistribution')}}</span>
                         </div>
                     </template>
-                    <div ref="memberStat" :style="{ width: '100%', height: '300px' }"></div>
+                    <div ref="siteStat" :style="{ width: '100%', height: '300px' }"></div>
                 </el-card>
             </div>
 
@@ -104,7 +112,7 @@
                 </el-descriptions>
             </el-card>
         </div>
-        <div class="main-aside w-[300px]">
+        <div class="main-aside w-[305px]">
             <el-card class="box-card !border-none" shadow="never">
                 <template #header>
                     <div class="card-header">
@@ -113,8 +121,11 @@
                 </template>
                 <el-descriptions :column="1">
                     <el-descriptions-item :label="t('versions')">{{statInfo.version.version}}</el-descriptions-item>
-                    <el-descriptions-item :label="t('frame')">vue3.x、ElementUI、MySQL</el-descriptions-item>
-                    <el-descriptions-item :label="t('channel')">{{t('officialWbsite')}}、Gitee</el-descriptions-item>
+                    <el-descriptions-item :label="t('frame')">Thinkphp6,Elementplus,mysql</el-descriptions-item>
+                    <el-descriptions-item :label="t('channel')">
+						<el-link class="text-color" href="https://www.niushop.com" target="_blank" :underline="false">{{t('officialWbsite')}}</el-link> 
+						<el-link class="ml-2 text-color" href="" target="_blank" :underline="false">Gitee</el-link>
+					</el-descriptions-item>
                 </el-descriptions>
             </el-card>
             <el-card class="box-card !border-none mt-[15px]" shadow="never">
@@ -148,11 +159,15 @@ const loading = ref(true)
 const visitStat = ref<any>(null)
 const memberStat = ref<any>(null)
 
+const newSiteStat = ref<any>(null)
+const siteStat = ref<any>(null)
+
 const systemStore = useSystemStore()
 
-let statInfo = ref({'today_data':{},system:{},version:{},about:[],visit_stat:{},member_stat:{}})
+let statInfo = ref({'today_data':{},system:{},version:{},about:[],site_stat:{},site_group_stat:{}, app:{}})
 const getStatInfoFn = async (id: number = 0) => {
     statInfo.value = await (await getStatInfo()).data
+	console.log(statInfo.value)
     loading.value = false;
     setTimeout(() => {
         drawChart()
@@ -163,8 +178,8 @@ getStatInfoFn()
 // 绘制折线图
 const drawChart = () => {
     //访问消息
-    const visitStatChart = echarts.init(visitStat.value);
-    const visitStatOption = ref({
+    const newSiteStatChart = echarts.init(newSiteStat.value);
+    const newSiteStatOption = ref({
         
         legend: {},
         xAxis: {
@@ -176,19 +191,19 @@ const drawChart = () => {
         },
         series: [
             {
-            name: t('pageView'),
+            name: t('newSite'),
             type: 'line',
             data: []
             }
         ]
     });
-    visitStatOption.value.xAxis.data = statInfo.value.visit_stat.date;
-    visitStatOption.value.series[0].data = statInfo.value.visit_stat.value;
-    visitStatChart.setOption(visitStatOption.value);
+    newSiteStatOption.value.xAxis.data = statInfo.value.site_stat.date;
+    newSiteStatOption.value.series[0].data = statInfo.value.site_stat.value;
+    newSiteStatChart.setOption(newSiteStatOption.value);
 
     // 会员分布 
-    const memberStatChart = echarts.init(memberStat.value);
-    const memberStatOption = ref({
+    const siteStatChart = echarts.init(siteStat.value);
+    const siteStatOption = ref({
         legend: {},
         tooltip: {},
         series: [
@@ -199,18 +214,18 @@ const drawChart = () => {
         ]
     });
 
-    const len = statInfo.value.member_stat.type.length;
+    const len = statInfo.value.site_group_stat.type.length;
     for(let i = 0; i < len; i++){
         let obj = {};
-        obj.name = statInfo.value.member_stat.type[i];
-        obj.value = statInfo.value.member_stat.value[i];
-        memberStatOption.value.series[0].data.push(obj);
+        obj.name = statInfo.value.site_group_stat.type[i];
+        obj.value = statInfo.value.site_group_stat.value[i];
+        siteStatOption.value.series[0].data.push(obj);
     }
-    memberStatChart.setOption(memberStatOption.value);
+    siteStatChart.setOption(siteStatOption.value);
     window.addEventListener("resize", () => {
     //页面大小变化后Echarts也更改大小
-        visitStatChart.resize();
-        memberStatChart.resize();
+        newSiteStatChart.resize();
+        siteStatChart.resize();
     })
 }
 
@@ -226,5 +241,8 @@ const toLink = (link) => {
 <style lang="scss" scoped>
 .card-header > span{
     line-height: 21px;
+}
+.text-color{
+    color: var(--el-menu-active-color);
 }
 </style>

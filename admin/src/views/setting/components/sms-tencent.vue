@@ -1,9 +1,9 @@
 <template>
-    <el-dialog v-model="showDialog" :title="t('tencentSms')" width="580px"
-        :destroy-on-close="true" >
-        <el-form :model="formData" label-width="140px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
+    <el-dialog v-model="showDialog" :title="t('tencentSms')" width="580px" :destroy-on-close="true">
+        <el-form :model="formData" label-width="140px" ref="formRef" :rules="formRules" class="page-form"
+            v-loading="loading">
             <el-form-item :label="t('isUse')">
-                <el-radio-group v-model="formData.is_use" >
+                <el-radio-group v-model="formData.is_use">
                     <el-radio :label="1">{{ t('startUsing') }}</el-radio>
                     <el-radio :label="0">{{ t('statusDeactivate') }}</el-radio>
                 </el-radio-group>
@@ -11,20 +11,22 @@
 
             <el-form-item :label="t('tencentSign')" prop="sign">
                 <el-input v-model="formData.sign" :placeholder="t('tencentSignPlaceholder')" class="input-width"
-                     show-word-limit clearable />
+                    show-word-limit clearable />
             </el-form-item>
 
             <el-form-item :label="t('tencentAppId')" prop="app_id">
                 <el-input v-model="formData.app_id" :placeholder="t('tencentAppIdPlaceholder')" class="input-width"
-                     show-word-limit clearable />
+                    show-word-limit clearable />
             </el-form-item>
 
             <el-form-item :label="t('tencentSecretId')" prop="secret_id">
-                <el-input v-model="formData.secret_id" :placeholder="t('tencentSecretIdPlaceholder')" class="input-width" clearable />
+                <el-input v-model="formData.secret_id" :placeholder="t('tencentSecretIdPlaceholder')" class="input-width"
+                    clearable />
             </el-form-item>
 
             <el-form-item :label="t('tencentSecretKey')" prop="secret_key">
-                <el-input v-model="formData.secret_key" :placeholder="t('tencentSecretKeyPlaceholder')" class="input-width" clearable />
+                <el-input v-model="formData.secret_key" :placeholder="t('tencentSecretKeyPlaceholder')" class="input-width"
+                    clearable />
             </el-form-item>
 
         </el-form>
@@ -44,7 +46,7 @@
 import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import { getSmsInfo,updateSms } from '@/api/message'
+import { getSmsInfo, editSms } from '@/api/notice'
 
 let showDialog = ref(false)
 const loading = ref(true)
@@ -52,12 +54,12 @@ const loading = ref(true)
 /**
  * 表单数据
  */
- const initialFormData = {
+const initialFormData = {
     sms_type: '',
     sign: '',
     access_key: '',
     secret_key: '',
-    is_use:''
+    is_use: ''
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 
@@ -96,7 +98,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
 
             let data = formData
 
-            updateSms(data).then(res => {
+            editSms(data).then(res => {
                 loading.value = false
                 showDialog.value = false
                 emit('complete')

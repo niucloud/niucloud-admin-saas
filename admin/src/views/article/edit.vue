@@ -1,7 +1,8 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-            <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
+            <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form"
+                v-loading="loading">
                 <el-form-item :label="t('title')" prop="title">
                     <el-input v-model="formData.title" clearable :placeholder="t('titlePlaceholder')" class="input-width"
                         maxlength="20" />
@@ -62,10 +63,11 @@
 import { ref, reactive, computed, watch } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance, ElNotification } from 'element-plus'
-import { getArticleInfo, getArticleCategoryAll, addArticle, updateArticle } from '@/api/article'
+import { getArticleInfo, getArticleCategoryAll, addArticle, editArticle } from '@/api/article'
 import { useRoute, useRouter } from 'vue-router'
 import useTabbarStore from '@/stores/modules/tabbar'
 import useAppStore from '@/stores/modules/app'
+import { ElMessage } from 'element-plus'
 
 const route = useRoute()
 const router = useRouter()
@@ -77,7 +79,7 @@ const appStore = useAppStore()
 
 // 页面返回按钮
 appStore.pageReturn = true;
-watch(route, (newX,oldX) => {
+watch(route, (newX, oldX) => {
     appStore.pageReturn = false;
 });
 
@@ -104,16 +106,23 @@ const formData: Record<string, any> = reactive({ ...initialFormData })
 const setFormData = async (id: number = 0) => {
     loading.value = true;
     Object.assign(formData, initialFormData)
-    if(id){
+    if (id) {
         const data = await (await getArticleInfo(id)).data
+        if (!data || Object.keys(data).length == 0) {
+            ElMessage.error(t('articleNull'))
+            setTimeout(() => {
+                router.go(-1);
+            }, 2000)
+            return false;
+        }
         Object.keys(formData).forEach((key: string) => {
             if (data[key] != undefined) formData[key] = data[key]
         })
         loading.value = false;
-    }else{
+    } else {
         loading.value = false;
     }
-    
+
 }
 if (id) setFormData(id)
 
@@ -139,9 +148,9 @@ const formRules = computed(() => {
             {
                 validator: (rule: any, value: string, callback: any) => {
                     let content = value.replace(/<[^<>]+>/g, "").replace(/&nbsp;/gi, "")
-                    if(!content && value.indexOf('img') === -1){
+                    if (!content && value.indexOf('img') === -1) {
                         callback(new Error(t('contentPlaceholder')))
-                    }else callback()
+                    } else callback()
                 },
                 trigger: ['blur', 'change']
             }
@@ -155,7 +164,7 @@ const onSave = async (formEl: FormInstance | undefined) => {
         if (valid) {
             loading.value = true
             const data = formData
-            const save = id ? updateArticle : addArticle
+            const save = id ? editArticle : addArticle
             save(data).then(res => {
                 loading.value = false
                 back();

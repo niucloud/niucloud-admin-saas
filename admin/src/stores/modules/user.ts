@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
-import { getToken, setToken, removeToken } from '@/utils/common'
+import { getToken, setToken, removeToken, getAppType } from '@/utils/common'
 import { login, getAuthMenus } from '@/api/auth'
 import storage from '@/utils/storage'
 import router from '@/router'
-import { formatRouters, INDEX_ROUTE } from '@/router/routers'
+import { formatRouters } from '@/router/routers'
 import useTabbarStore from './tabbar'
 
 interface User {
@@ -25,9 +25,9 @@ const useSystemStore = defineStore('user', {
         }
     },
     actions: {
-        login(form: object) {
+        login(form: object, app_type: any) {
             return new Promise((resolve, reject) => {
-                login(form)
+                login(form, app_type)
                     .then((res) => {
                         this.token = res.data.token
                         this.userInfo = res.data.userinfo
@@ -35,6 +35,8 @@ const useSystemStore = defineStore('user', {
                         storage.set({ key: 'userinfo', data: res.data.userinfo })
                         storage.set({ key: 'siteId', data: res.data.site_id })
                         storage.set({ key: 'siteInfo', data: res.data.site_info })
+                        storage.set({ key: 'comparisonSiteIdStorage', data: res.data.site_id })
+                        storage.set({ key: 'comparisonTokenStorage', data: res.data.token })
                         resolve(res)
                     })
                     .catch((error) => {
@@ -48,15 +50,10 @@ const useSystemStore = defineStore('user', {
             this.siteInfo = {}
             removeToken()
             storage.remove(['userinfo', 'siteId', 'siteInfo'])
-            // 清除路由
-            this.routers.forEach(item => {
-                router.removeRoute(item.name)
-            })
-            router.removeRoute(INDEX_ROUTE.name)
             this.routers = []
             // 清除tabbar
             useTabbarStore().clearTab()
-            router.push('/login')
+            router.push(`/${getAppType()}/login`)
         },
         getAuthMenus() {
             return new Promise((resolve, reject) => {

@@ -3,7 +3,7 @@
         <el-card class="box-card !border-none" shadow="never">
             <el-alert class="warm-prompt" type="info">
                 <template #default>
-                    <p class="text-base">{{t('operationTip')}} 1、{{ t('operationTipOne') }}</p>
+                    <p class="text-base">{{ t('operationTip') }} 1、{{ t('operationTipOne') }}</p>
                     <p class="text-base">2、{{ t('operationTipTwo') }}</p>
                 </template>
             </el-alert>
@@ -51,7 +51,7 @@
 import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getTemplateList, getBatchAcquisition } from '@/api/weapp'
-import { updateMessageStatus } from '@/api/message'
+import { editMessageStatus } from '@/api/notice'
 import { ElLoading } from 'element-plus'
 
 const cronTableData = reactive({
@@ -105,7 +105,7 @@ const infoSwitch = (res) => {
     data.value.key = res.key
     data.value.type = 'weapp'
     cronTableData.loading = true
-    updateMessageStatus(data.value).then(res => {
+    editMessageStatus(data.value).then(res => {
         loadCronList()
     }).catch(() => {
         cronTableData.loading = false
@@ -115,13 +115,15 @@ const infoSwitch = (res) => {
 </script>
 
 <style lang="scss" scoped>
-    ::v-deep .warm-prompt{
-        background-color: var(--el-color-primary-light-9);
-    }
-    ::v-deep .warm-prompt .el-icon{
-        color: var(--el-color-primary);
-    }
-    ::v-deep .warm-prompt p{
-        color: var(--el-color-primary);
-    }
+::v-deep .warm-prompt {
+    background-color: var(--el-color-primary-light-9);
+}
+
+::v-deep .warm-prompt .el-icon {
+    color: var(--el-color-primary);
+}
+
+::v-deep .warm-prompt p {
+    color: var(--el-color-primary);
+}
 </style>

@@ -1,7 +1,7 @@
 <template>
-    <el-dialog v-model="showDialog" :title="popTitle" width="500px"
-        :destroy-on-close="true">
-        <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
+    <el-dialog v-model="showDialog" :title="popTitle" width="500px" :destroy-on-close="true">
+        <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form"
+            v-loading="loading">
             <el-form-item :label="t('groupName')" prop="group_name">
                 <el-input v-model="formData.group_name" :placeholder="t('groupNamePlaceholder')" clearable
                     :disabled="formData.uid" class="input-width" maxlength="20" :show-word-limit="true" />
@@ -10,7 +10,7 @@
                 <el-input v-model="formData.group_desc" type="textarea" rows="4" clearable
                     :placeholder="t('groupDescPlaceholder')" class="input-width" maxlength="100" />
             </el-form-item>
-      
+
             <el-form-item :label="t('permission')" prop="group_roles">
                 <div>
                     <el-checkbox v-model="selectAll" :label="t('selectAll')" />
@@ -40,12 +40,12 @@ import { ref, reactive, computed, watch, toRaw } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
 import { getMenus } from '@/api/sys'
-import { addSiteGroup,updateSiteGroup,getSiteGroupInfo } from '@/api/site'
+import { addSiteGroup, editSiteGroup, getSiteGroupInfo } from '@/api/site'
 import { debounce } from '@/utils/common'
 
 const showDialog = ref(false)
 const loading = ref(false)
-let popTitle:string = '';
+let popTitle: string = '';
 
 // 获取权限数据
 const menus = ref<Record<string, any>[]>([])
@@ -90,6 +90,7 @@ const formRules = computed(() => {
         ],
         group_roles: [
             {
+                required: true,
                 validator: (rule: any, value: string, callback: any) => {
                     if (!value.length) callback(new Error(t('groupRolesPlaceholder')))
                     else callback()
@@ -108,7 +109,7 @@ const emit = defineEmits(['complete'])
  */
 const confirm = async (formEl: FormInstance | undefined) => {
     if (loading.value || !formEl) return
-    const save = formData.group_id ? updateSiteGroup : addSiteGroup
+    const save = formData.group_id ? editSiteGroup : addSiteGroup
 
     await formEl.validate(async (valid) => {
         if (valid) {

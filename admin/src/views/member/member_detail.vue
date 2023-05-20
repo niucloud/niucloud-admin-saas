@@ -16,7 +16,7 @@
                 <el-descriptions-item :label="t('wxUnionid')">{{formData.wx_unionid || t('notAvailable')}}</el-descriptions-item>
                 <el-descriptions-item :label="t('weappOpenid')">{{formData.weapp_openid || t('notAvailable')}}</el-descriptions-item>
                 <el-descriptions-item :label="t('wxOpenid')">{{formData.wx_openid || t('notAvailable')}}</el-descriptions-item>
-                <el-descriptions-item :label="t('registeredSource')">{{formData.channel_name || t('notAvailable')}}</el-descriptions-item>
+                <el-descriptions-item :label="t('registeredSource')">{{formData.register_channel_name || t('notAvailable')}}</el-descriptions-item>
                 <el-descriptions-item :label="t('createTime')">{{formData.create_time || t('notAvailable')}}</el-descriptions-item>
                 <el-descriptions-item :label="t('lastVisitTime')">{{formData.last_visit_time || t('notAvailable')}}</el-descriptions-item>
             </el-descriptions>
@@ -27,7 +27,7 @@
                 <span class="font-bold">{{t('accountInfo')}}</span>
             </div>
             <el-row :gutter="16">
-                <el-col :span="8">
+                <el-col :span="6">
                     <div class="statistic-card">
                         <el-statistic :value="formData.point">
                             <template #title>
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6">
                     <div class="statistic-card">
                         <el-statistic :value="formData.balance">
                             <template #title>
@@ -93,12 +93,19 @@
                         </div>
                     </div>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="6">
                     <div class="statistic-card">
                         <el-statistic :value="formData.money" title="New transactions today">
                             <template #title>
                                 <div style="display: inline-flex; align-items: center">
-                                {{t("looseChange")}}
+                                {{t("money")}}
+                                <el-tooltip
+                                        effect="dark"
+                                        :content="t('detail')"
+                                        placement="top"
+                                    >
+                                        <el-icon @click="infoBalance(formData)" class="ml-2" :size="12"><View /></el-icon>
+                                </el-tooltip>
                                 </div>
                             </template>
                         </el-statistic>
@@ -107,6 +114,32 @@
                                 <span>{{t('accumulative')}}</span>
                                 <span class="green ml-1">
                                     {{formData.money_get}}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </el-col>
+                <el-col :span="6">
+                    <div class="statistic-card">
+                        <el-statistic :value="formData.commission" title="New transactions today">
+                            <template #title>
+                                <div style="display: inline-flex; align-items: center">
+                                {{t("commission")}}
+                                <el-tooltip
+                                        effect="dark"
+                                        :content="t('detail')"
+                                        placement="top"
+                                    >
+                                        <el-icon @click="infoCommission(formData)" class="ml-2" :size="12"><View /></el-icon>
+                                </el-tooltip>
+                                </div>
+                            </template>
+                        </el-statistic>
+                        <div class="statistic-footer">
+                            <div class="footer-item">
+                                <span>{{t('accumulative')}}</span>
+                                <span class="green ml-1">
+                                    {{formData.commission_get}}
                                 </span>
                             </div>
                         </div>
@@ -125,7 +158,7 @@
 import { reactive, ref, watch } from 'vue'
 import { t } from '@/lang'
 import { getMemberInfo } from '@/api/member'
-import { ElMessageBox, FormInstance } from 'element-plus'
+import { ElMessageBox, FormInstance, ElMessage } from 'element-plus'
 import { useRouter,useRoute } from 'vue-router'
 import { img } from '@/utils/common'
 import PointEdit from '@/views/member/components/member-point-edit.vue'
@@ -153,6 +186,14 @@ const getMemberInfoFn = async () => {
     loading.value = true;    
     if(id) {
         let data = await (await getMemberInfo(id)).data;
+        if(!data || Object.keys(data).length == 0){
+            ElMessage.error(t('memberNull'))
+            setTimeout(()=>{
+                router.go(-1);
+            },2000)
+            return false;
+        }
+
         Object.keys(data).forEach((item)=>{
             formData[item] = data[item];
         })
@@ -223,6 +264,13 @@ const infoPoint = () => {
  */
  const infoBalance = () => {
     router.push(`/member/balance?id=${id}`)
+}
+
+/**
+ * 佣金详情 
+ */
+ const infoCommission = () => {
+    router.push(`/member/commission?id=${id}`)
 }
 
 </script>
