@@ -14,13 +14,12 @@ namespace think;
 if (version_compare(PHP_VERSION, '8.0.0', '<'))
     die('require PHP > 8.0.0 !');
 require __DIR__ . '/../vendor/autoload.php';
-
-if (file_exists(__DIR__ . '/../install.lock')) {
-    header("location:/index.php");
-    exit;
-}
+//if (file_exists(__DIR__ .'/../install.lock')) {
+//    header("location:/index.php");
+//    exit;
+//}
 // 执行HTTP应用并响应
-$http = ( new App() )->http;
+$http = (new App())->http;
 
 $response = $http->run();
 
