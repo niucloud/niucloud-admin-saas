@@ -48,13 +48,6 @@ export function getWechatSkdConfig(data: AnyObject) {
 }
 
 /**
- * 上传图片
- */
-export function uploadImage(data: AnyObject) {
-    return request.upload('file/image', data, { showErrorMessage: true })
-}
-
-/**
  * 拉取图片
  */
 export function fetchImage(data: AnyObject) {

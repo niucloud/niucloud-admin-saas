@@ -73,6 +73,7 @@ captcha.refresh()
 const sendSms = useSendSms()
 
 const send = () => {
+    formData.mobile = prop.mobile
     if (sendSms.canGetCode.value) {
         captchaDialog.value = true
     }
@@ -87,8 +88,10 @@ const confirm = async () => {
             if (sendRes) {
                 value.value = sendRes
                 captchaDialog.value = false
+                loading.value = false
             } else if (sendRes === false) {
                 captcha.refresh()
+                loading.value = false
             }
         }
     })

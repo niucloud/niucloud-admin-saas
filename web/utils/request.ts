@@ -14,14 +14,16 @@ interface FetchOptions {
     onRequest?: (data: any) => void,
     onResponse?: (data: any) => void,
     onResponseError?: (data: any) => void,
-    showMessageConfig?: ShowMessageConfig
+    showMessageConfig?: ShowMessageConfig,
+    watch: boolean
 }
 
 class Http {
     private options: FetchOptions = {
         baseURL: '',
         method: '',
-        headers: {}
+        headers: {},
+        watch: false
     }
 
     public constructor() {
@@ -32,7 +34,7 @@ class Http {
             const runtimeConfig = useRuntimeConfig()
 
             this.options.baseURL = runtimeConfig.public.VITE_APP_BASE_URL || `${location.origin}/api/`
-            this.options.headers[runtimeConfig.public.VITE_REQUEST_HEADER_SITEID_KEY] = runtimeConfig.public.VITE_SITE_ID
+            this.options.headers[runtimeConfig.public.VITE_REQUEST_HEADER_SITEID_KEY] = useCookie('siteId').value || runtimeConfig.public.VITE_SITE_ID
             this.options.headers[runtimeConfig.public.VITE_REQUEST_HEADER_CHANNEL_KEY] = 'pc'
             if (getToken()) this.options.headers[runtimeConfig.public.VITE_REQUEST_HEADER_TOKEN_KEY] = getToken()
 
@@ -46,7 +48,7 @@ class Http {
         this.options.onResponse = ({ response, options }) => {
             const { _data: data } = response
 
-            if (data.code == 200) {
+            if (data.code == 1) {
                 if (options.showMessageConfig.showSuccessMessage) ElMessage({ message: data.msg, type: 'success' })
             } else {
                 if (options.showMessageConfig.showErrorMessage) ElMessage({ message: data.msg, type: 'error' })
@@ -89,7 +91,7 @@ class Http {
                 const { data: { value }, error } = response
 
                 if (value) {
-                    if (value.code == 200) {
+                    if (value.code == 1) {
                         resolve(value)
                     } else {
                         reject(value)

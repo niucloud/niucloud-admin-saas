@@ -194,9 +194,6 @@ const formRules = computed(() => {
         }
     }
 })
-console.log(
-    "memberStore.setToken", memberStore
-)
 
 const handleLogin = async () => {
     await formRef.value?.validate(async (valid, fields) => {

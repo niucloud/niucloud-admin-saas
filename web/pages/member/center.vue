@@ -5,28 +5,26 @@
             <el-card class="box-card flex-1 ml-4" v-loading="loading" shadow="never">
                 <template #header>
                     <div class="card-header">
-                        <span>{{t('personageInfo')}}</span>
+                        <span>{{ t('personageInfo') }}</span>
                     </div>
                 </template>
-                <div class="pr-15"  v-if="info">
+                <div class="pr-15" v-if="info">
                     <el-form :model="info" class="form-wrap" label-width="120px">
                         <el-form-item :label="t('memberHeadimg')">
                             <div class="w-full flex justify-between content-center items-center">
-                                <img v-if="!info.headimg" class="w-[80px] h-[80px]" src="@/assets/images/default_headimg.png" alt="">
+                                <img v-if="!info.headimg" class="w-[80px] h-[80px]"
+                                    src="@/assets/images/default_headimg.png" alt="">
                                 <img v-else :src="img(info.headimg)" class="w-[80px] h-[80px]" alt="">
-                                <el-upload
-                                    class="avatar-uploader"
-                                    :show-file-list="false"
-                                    v-bind="upload"
-                                >
-                                    <span class="cursor-pointer text-color">{{t('edit')}}</span>
+                                <el-upload class="avatar-uploader" :show-file-list="false" v-bind="upload">
+                                    <span class="cursor-pointer text-color">{{ t('edit') }}</span>
                                 </el-upload>
                             </div>
                         </el-form-item>
                         <el-form-item :label="t('nickname')">
                             <div class="w-full flex justify-between content-center">
-                                <span>{{updateNickname.value}}</span>
-                                <span class="cursor-pointer text-color" @click="updateNickname.modal = true">{{t('edit')}}</span>
+                                <span>{{ updateNickname.value }}</span>
+                                <span class="cursor-pointer text-color" @click="updateNickname.modal = true">{{ t('edit')
+                                }}</span>
                             </div>
                         </el-form-item>
                     </el-form>
@@ -41,8 +39,8 @@
                 </el-form>
                 <template #footer>
                     <span class="dialog-footer">
-                        <el-button @click="updateNickname.modal = false">{{t('cancel')}}</el-button>
-                        <el-button type="primary" @click="updateNicknameConfirm">{{t('confirm')}}</el-button>
+                        <el-button @click="updateNickname.modal = false">{{ t('cancel') }}</el-button>
+                        <el-button type="primary" @click="updateNicknameConfirm">{{ t('confirm') }}</el-button>
                     </span>
                 </template>
             </el-dialog>
@@ -54,9 +52,7 @@
 import { reactive, ref, computed } from 'vue'
 import useMemberStore from '@/stores/member'
 import useAppStore from '@/stores/app'
-import { updateMember } from '@/api/member'
-import { uploadImage } from '@/api/system'
-import type { UploadProps } from 'element-plus'
+import { modifyMember } from '@/api/member'
 import { ElMessage, UploadFile, UploadFiles } from 'element-plus'
 import request from '@/utils/request'
 import storage from '@/utils/storage'
@@ -72,9 +68,9 @@ const updateNickname = reactive({
     value: ''
 })
 
-const info = computed(() =>{
+const info = computed(() => {
     updateNickname.value = memberStore.info?.nickname;
-    if(memberStore.info) loading.value = false;
+    if (memberStore.info) loading.value = false;
     return memberStore.info;
 })
 const appStore = useAppStore()
@@ -89,13 +85,14 @@ const upload = computed(() => {
         limit: 1,
         headers,
         onSuccess: (response: any, uploadFile: UploadFile, uploadFiles: UploadFiles) => {
+            console.log('uploadFile',);
             let img = uploadFile?.response?.data?.url;
             if (response.code == 200) {
-                updateMember({
+                modifyMember({
                     field: 'headimg',
                     value: img
                 }).then(() => {
-                    info.headimg = img
+                    memberStore.info.headimg = img
                 })
             } else {
                 uploadFile.status = 'fail'
@@ -107,22 +104,23 @@ const upload = computed(() => {
 
 // 修改会员名称
 const updateNicknameConfirm = () => {
-        if (!updateNickname.value) { ElMessage.error('会员昵称不能为空'); return }
+    if (!updateNickname.value) { ElMessage.error('会员昵称不能为空'); return }
 
-        updateMember({
-            field: 'nickname',
-            value: updateNickname.value
-        }).then(res => {
-            updateNickname.modal = false
-        })
+    modifyMember({
+        field: 'nickname',
+        value: updateNickname.value
+    }).then(res => {
+        updateNickname.modal = false
+    })
 }
 </script>
 
 <style lang="scss" scoped>
-.box-card{
+.box-card {
     border: none !important;
 }
-::v-deep .form-wrap .el-form-item{
+
+::v-deep .form-wrap .el-form-item {
     align-items: center;
 }
 </style>

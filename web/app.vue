@@ -18,6 +18,12 @@ import useMemberStore from '@/stores/member'
 // 引入全局样式
 import '@/assets/styles/index.scss'
 
+if (process.client) {
+	const match = location.href.match(/\/s(\d*)\//)
+	const cookie = useCookie('siteId')
+	match ? cookie.value = match[1] : cookie.value = null
+}
+
 // 初始化设置语言
 const systemStore = useSystemStore()
 const locale = computed(() => (systemStore.lang === 'zh-cn' ? zhCn : en))
@@ -37,8 +43,10 @@ watch(route, (nval, oval) => {
 
 	// 设置页面title
 	let path = route.path == '/' ? '/index' : route.path
+	// 处理部署后不知道为什么url会自动拼接上 / 的问题
+	if (path.slice(-1) == '/') path = path.slice(0, -1)
 	path = !path.lastIndexOf('/') ? `${path}/index` : path
-	const key = path.replace('/', '').replaceAll('/', '.')
+	let key = path.replace('/', '').replaceAll('/', '.')
 
 	setTimeout(() => {
 		useHead({
