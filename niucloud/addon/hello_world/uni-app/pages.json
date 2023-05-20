@@ -1,0 +1,43 @@
+{
+   "pages" : [ // pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+       {
+           "path": "pages/hello_world/index",
+           "style": {
+               // #ifdef H5
+               "navigationStyle": "custom",
+               // #endif
+               "navigationBarTitleText": "%pages.hello_world.index%"
+           }
+       }
+   ],
+   "globalStyle": {
+       "navigationBarTextStyle": "black",
+       "navigationBarTitleText": "",
+       "navigationBarBackgroundColor": "#ffffff",
+       "backgroundColor": "#F8F8F8",
+       "backgroundColorTop": "#F8F8F8",
+       "backgroundColorBottom": "#F8F8F8"
+   },
+   "tabBar": {
+       "list": [
+           {
+               "pagePath": "pages/index/index"
+           },
+           {
+               "pagePath": "pages/article/list"
+           },
+           {
+               "pagePath": "pages/member/index"
+           }
+       ]
+   },
+   "uniIdRouter": {},
+   "easycom": {
+       "custom": {
+           "^u-(.*)": "uview-plus/components/u-$1/u-$1.vue",
+           "diy-system-(\W.*)": "@/components/diy/system/$1/index.vue",
+           "diy-core-(\W.*)": "@/components/diy/core/$1/index.vue",
+           "diy-(\W.*)": "@/components/diy/$1/index.vue"
+       }
+   }
+}
