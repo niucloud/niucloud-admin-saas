@@ -48,7 +48,8 @@
         "php-di/php-di": "^7.0",
         "guzzlehttp/guzzle": "7.5",
         "yansongda/pay": "~3.2.14",
-        "symfony/psr-http-message-bridge": "^2.1"
+        "symfony/psr-http-message-bridge": "^2.1",
+        "fastknife/ajcaptcha": "^1.2"
 
     },
     "require-dev": {
@@ -57,8 +58,9 @@
     },
     "autoload": {
         "psr-4": {
+            "addon\\": "addon",
             "app\\": "app",
-            "extend\\": "extend"
+            "core\\": "core"
         },
         "psr-0": {
             "": "extend/"
@@ -75,5 +77,11 @@
             "@php think service:discover",
             "@php think vendor:publish"
         ]
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://mirrors.aliyun.com/composer"
+        }
     }
 }
