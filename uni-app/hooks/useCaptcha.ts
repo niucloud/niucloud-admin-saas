@@ -12,11 +12,9 @@ export function useCaptcha(formData: formData) {
     const refresh = async ()=> {
         try {
             const res:AnyObject = await getCaptcha()
-            if (res.code == 200) {
-                formData.captcha_key = res.data.captcha_key
-                formData.captcha_code = ''
-                image.value = res.data.img.replace(/\r\n/g, '')
-            }
+            formData.captcha_key = res.data.captcha_key
+            formData.captcha_code = ''
+            image.value = res.data.img.replace(/\r\n/g, '')
         } catch (e) {
         }
     }

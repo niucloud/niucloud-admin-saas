@@ -6,35 +6,41 @@
 
 			<!-- 标题 -->
 			<template v-if="component.componentName == 'Text'">
-				<diy-text :component="component" :index="index"></diy-text>
+				<diy-system-text :component="component" :index="index"></diy-system-text>
 			</template>
 
 			<!-- 图片广告 -->
 			<template v-if="component.componentName == 'ImageAds'">
-				<diy-image-ads :component="component" :index="index"></diy-image-ads>
+				<diy-system-image-ads :component="component" :index="index"></diy-system-image-ads>
 			</template>
 
 			<!-- 图文导航 -->
 			<template v-if="component.componentName == 'GraphicNav'">
-				<diy-graphic-nav :component="component" :index="index"></diy-graphic-nav>
+				<diy-system-graphic-nav :component="component" :index="index"></diy-system-graphic-nav>
 			</template>
 
 			<!-- 文章 -->
 			<template v-if="component.componentName == 'Article'">
-				<diy-article :component="component" :index="index"></diy-article>
+				<diy-system-article :component="component" :index="index"></diy-system-article>
 			</template>
 
 			<!-- 辅助空白 -->
 			<template v-if="component.componentName == 'HorzBlank'">
-				<diy-horz-blank :component="component" :index="index"></diy-horz-blank>
+				<diy-system-horz-blank :component="component" :index="index"></diy-system-horz-blank>
 			</template>
 
 			<!-- 会员信息 -->
 			<template v-if="component.componentName == 'MemberInfo'">
-				<diy-member-info :component="component" :index="index"></diy-member-info>
+				<diy-system-member-info :component="component" :index="index"></diy-system-member-info>
+			</template>
+
+			<!-- 自定义扩展组件 -->
+			<template v-if="systemComponent.indexOf(component.componentName) == -1">
+				<diy-comp-extend :component="component" :index="index"></diy-comp-extend>
 			</template>
 		</view>
 		<template v-if="diyStore.mode == ''">
+			<view class="pt-[20rpx]"></view>
 			<tabbar />
 		</template>
 	</view>
@@ -43,7 +49,7 @@
 
 <script lang="ts" setup>
 	import useDiyStore from '@/stores/diy';
-	import { onMounted, nextTick, computed } from 'vue';
+	import { onMounted, nextTick, computed, ref } from 'vue';
 	import Sortable from 'sortablejs';
 	import { range } from 'lodash-es';
 
@@ -58,6 +64,9 @@
 			return props.data;
 		}
 	})
+
+	// 系统组件
+	const systemComponent = ref(['Text', 'ImageAds', 'GraphicNav', 'Article', 'HorzBlank', 'MemberInfo'])
 
 	onMounted(() => {
 		// #ifdef H5

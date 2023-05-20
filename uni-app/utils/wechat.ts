@@ -1,12 +1,15 @@
 import wx from 'weixin-js-sdk'
 import { getWechatSkdConfig } from '@/api/system'
+import { isWeixinBrowser } from '@/utils/common'
 
 class Wechat {
 	constructor() {
-		this.init()
+		// #ifdef H5
+		// isWeixinBrowser() && this.init()
+		// #endif
 	}
 
-	private init() {
+	public init() {
 		getWechatSkdConfig({
 			url: uni.getSystemInfoSync().platform == 'ios' ? uni.getStorageSync('initUrl') : location.href
 		}).then((res : responseResult) => {

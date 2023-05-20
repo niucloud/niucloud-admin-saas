@@ -67,7 +67,7 @@
     import { t } from '@/locale'
     import useMemberStore from '@/stores/member'
     import { img, mobileConceal } from '@/utils/common'
-    import { updateMember } from '@/api/member'
+    import { modifyMember } from '@/api/member'
     import { fetchBase64Image, uploadImage } from '@/api/system'
 
     const memberStore = useMemberStore()
@@ -86,7 +86,7 @@
     const updateNicknameConfirm = () => {
         if (uni.$u.test.isEmpty(updateNickname.value)) { uni.showToast({ title: t('nicknamePlaceholder'), icon: 'none' }); return }
 
-        updateMember({
+        modifyMember({
             field: 'nickname',
             value: updateNickname.value
         }).then(res => {
@@ -106,7 +106,7 @@
         ]
     })
     const updateSex = (e) => {
-        updateMember({
+        modifyMember({
             field: 'sex',
             value: e.value
         }).then(res => {
@@ -123,7 +123,7 @@
             encoding: 'base64', //编码格式
             success: res => {
                 fetchBase64Image({ content: res.data }).then(uploadRes => {
-                    updateMember({
+                    modifyMember({
                         field: 'headimg',
                         value: uploadRes.data.url
                     }).then(res => {
@@ -139,7 +139,7 @@
             filePath: event.file.url,
             name: 'file'
         }).then(res => {
-            updateMember({
+            modifyMember({
                 field: 'headimg',
                 value: res.data.url
             }).then(() => {
@@ -154,7 +154,7 @@
      */
     const birthdayPicker = ref(false)
     const updateBirthday = (e) => {
-        updateMember({
+        modifyMember({
             field: 'birthday',
             value: uni.$u.date(e.value, 'yyyy-mm-dd')
         }).then(() => {

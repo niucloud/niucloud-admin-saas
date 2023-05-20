@@ -27,7 +27,7 @@ class Request {
         this.config.header[import.meta.env.VITE_REQUEST_HEADER_SITEID_KEY] = import.meta.env.VITE_SITE_ID
         // #endif
         // #ifdef H5
-        this.config.header[import.meta.env.VITE_REQUEST_HEADER_SITEID_KEY] = uni.getStorageSync('site_id') || import.meta.env.VITE_SITE_ID
+        this.config.header[import.meta.env.VITE_REQUEST_HEADER_SITEID_KEY] = uni.getStorageSync('wap_site_id') || import.meta.env.VITE_SITE_ID
         // #endif    
 
         this.config.header[import.meta.env.VITE_REQUEST_HEADER_CHANNEL_KEY] = getAppChannel()
@@ -66,18 +66,18 @@ class Request {
      */
     public upload(url : string, data : AnyObject = {}, config : RequestConfig = {}) {
         this.requestInterceptors()
-
-        Object.assign(this.config, {
+        
+        const params = Object.assign(uni.$u.deepClone(this.config), {
             url: this.baseUrl + url,
             ...data
         })
-
+        
         return new Promise((resolve, reject) => {
             uni.uploadFile({
-                ...this.config,
+                ...params,
                 success: res => {
                     const data = JSON.parse(res.data)
-                    if (data.code == 200) {
+                    if (data.code == 1) {
                         this.config.showSuccessMessage && uni.showToast({ title: data.msg, icon: 'none' })
                         resolve(data)
                     } else {
@@ -99,7 +99,7 @@ class Request {
     private request(method : string, url : string, data ?: AnyObject) {
         this.requestInterceptors()
 
-        Object.assign(this.config, {
+        const params = Object.assign(uni.$u.deepClone(this.config), {
             url: this.baseUrl + url,
             method,
             data
@@ -107,10 +107,10 @@ class Request {
 
         return new Promise((resolve, reject) => {
             uni.request({
-                ...this.config,
+                ...params,
                 success: res => {
                     const data = res.data
-                    if (data.code == 200) {
+                    if (data.code == 1) {
                         this.config.showSuccessMessage && uni.showToast({ title: data.msg, icon: 'none' })
                         resolve(data)
                     } else {

@@ -48,15 +48,15 @@
 			getDiyInfo({
 				name: 'DIY_MEMBER_INDEX'
 			}).then((res : any) => {
-				if (res.code == 200) {
-					let sources = JSON.parse(res.data.value);
-					diyData.global = sources.global;
-					diyData.value = sources.value;
-					uni.setNavigationBarTitle({
-						title: diyData.global.title
-					})
-					loading.value = false;
-				}
+                if (res.data.value) {
+                    let sources = JSON.parse(res.data.value);
+                    diyData.global = sources.global;
+                    diyData.value = sources.value;
+                    uni.setNavigationBarTitle({
+                        title: diyData.global.title
+                    })
+                }
+                loading.value = false;
 			});
 		}
 		useMemberStore().getMemberInfo()

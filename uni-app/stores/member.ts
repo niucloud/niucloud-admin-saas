@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getToken, setToken, removeToken, redirect } from '@/utils/common'
+import { setToken, removeToken, redirect } from '@/utils/common'
 import { getMemberInfo } from '@/api/member'
 import { logout } from '@/api/auth'
 
@@ -11,7 +11,7 @@ interface Member {
 const useMemberStore = defineStore('member', {
     state: () : Member => {
         return {
-            token: getToken(),
+            token: uni.getStorageSync(import.meta.env.VITE_REQUEST_STORAGE_TOKEN_KEY),
             info: null
         }
     },
@@ -26,12 +26,12 @@ const useMemberStore = defineStore('member', {
                 .then((res : any) => {
                     this.info = res.data
                 })
-                .catch(() => {
-                    this.logout()
+                .catch(async () => {
+                    await this.logout()
                 })
         },
-        logout(isRedirect : boolean = false) {
-            logout().then(() => {
+        async logout(isRedirect : boolean = false) {
+            await logout().then(() => {
                 this.$reset()
                 removeToken()
                 isRedirect && redirect({ url: '/pages/index/index' })

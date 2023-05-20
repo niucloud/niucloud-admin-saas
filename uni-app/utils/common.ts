@@ -1,5 +1,6 @@
 import { getTabbarPages } from './pages'
 import useDiyStore from '@/stores/diy'
+import useMemberStore from '@/stores/member'
 
 /**
 	* 跳转页面
@@ -105,17 +106,14 @@ export const currShareRoute = () => {
 	// #endif
 
 	// 拼接参数
-	let params = [];
+	let params = {};
 	for (let key in currentParam) {
-		params.push(key + '=' + currentParam[key])
+		params[key] = currentParam[key]
 	}
 	let currentPath = '/' + currentRoute;
-	let currentQuery = params.join('&');
-	if (currentQuery) currentPath += '?' + currentQuery;
 
 	return {
 		path: currentPath,
-		query: currentQuery,
 		params: params
 	}
 }
@@ -125,7 +123,7 @@ export const currShareRoute = () => {
 * @returns
 */
 export function getToken() : null | string {
-	return uni.getStorageSync(import.meta.env.VITE_REQUEST_STORAGE_TOKEN_KEY)
+    return useMemberStore().token
 }
 
 /**

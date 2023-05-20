@@ -62,3 +62,10 @@ export function weappLogin(data : AnyObject) {
 export function bind(data : AnyObject) {
     return request.post('bind', data, { showErrorMessage: true })
 }
+
+/**
+ * 记录会员访问日志
+ */
+export function memberLog(data : AnyObject) {
+    return request.post('member/log', data)
+}

@@ -35,7 +35,7 @@
     import { t } from '@/locale'
     import useMemberStore from '@/stores/member'
     import { img } from '@/utils/common'
-    import { updateMember } from '@/api/member'
+    import { modifyMember } from '@/api/member'
     import { fetchBase64Image } from '@/api/system'
 
     const show = ref(false)
@@ -92,7 +92,7 @@
             loading.value = true
 
             // 修改头像
-            await updateMember({ field: 'headimg', value: formData.headimg })
+            await modifyMember({ field: 'headimg', value: formData.headimg })
                 .then(() => {
                     memberStore.info.headimg = formData.headimg
                 })
@@ -102,7 +102,7 @@
             if (!loading.value) return
 
             // 修改昵称
-            updateMember({ field: 'nickname', value: formData.nickname })
+            modifyMember({ field: 'nickname', value: formData.nickname })
                 .then(() => {
                     memberStore.info.nickname = formData.nickname
                     loading.value = false

@@ -1,13 +1,18 @@
 {
-    // pages.json 中文标题
-    "pages.index.index": "",
-    "pages.article.list": "资讯中心",
-    "pages.article.detail": "文章详情",
-    "pages.member.index": "",
-    "pages.auth.login": "登录",
-    "pages.auth.register": "注册",
-    "pages.auth.resetpwd": "找回密码",
-    "pages.setting.index": "设置",
-    "pages.auth.bind": "绑定手机号",
-    "pages.member.personal": "个人资料"
+	// pages.json 中文标题
+	"pages.index.index": "",
+	"pages.article.list": "资讯中心",
+	"pages.article.detail": "文章详情",
+	"pages.member.index": "",
+	"pages.auth.login": "登录",
+	"pages.auth.register": "注册",
+	"pages.auth.resetpwd": "找回密码",
+	"pages.setting.index": "设置",
+	"pages.auth.bind": "绑定手机号",
+	"pages.member.personal": "个人资料",
+	"pages.member.balance": "我的余额",
+	"pages.member.detailed_account": "流水明细",
+	"pages.member.apply_cash_out": "申请提现",
+	"pages.member.cash_out": "提现记录",
+	"pages.member.cash_out_detail": "提现详情"
 }

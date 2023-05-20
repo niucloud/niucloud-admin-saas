@@ -21,7 +21,7 @@ export function useSendSms(smsRef: AnyObject | null) {
         
         let result: string | boolean = false
         await sendSms(param).then(res=>{
-            if (res.code == 200) {
+            if (res.code == 1) {
                 result = res.data.key
             } else {
                 smsRef.value.reset()
@@ -29,6 +29,7 @@ export function useSendSms(smsRef: AnyObject | null) {
             }
         }).catch(err=>{
             result = false
+            smsRef.value.reset()
         })
         return result
     }

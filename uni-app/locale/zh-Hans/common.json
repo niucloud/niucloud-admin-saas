@@ -5,6 +5,8 @@
     "captchaTitle": "请完成验证",
     "confirm": "确认",
     "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
     "captchaPlaceholder": "请输入验证码",
     "mobilePlaceholder": "请输入手机号码",
     "mobileError": "请输入正确的手机号",
@@ -36,5 +38,9 @@
         "completePay": "已完成支付",
         "incompletePay": "未完成支付",
         "getting": "获取支付结果中"
-    }
+    },
+	"memberLanguage": "与你分享我的观点，共享真实世界",
+	"myBalance": "我的余额",
+	"myPoint": "我的积分",
+	"customerService": "联系客服"
 }

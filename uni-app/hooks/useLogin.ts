@@ -1,4 +1,4 @@
-import { redirect, isWeixinBrowser } from '@/utils/common'
+import { redirect, isWeixinBrowser, urlDeconstruction } from '@/utils/common'
 import { weappLogin, wechatLogin } from '@/api/auth'
 import { getWechatAuthCode } from '@/api/system'
 import useMemberStore from '@/stores/member'
@@ -14,18 +14,18 @@ export function useLogin() {
             const config = useConfigStore()
             // #ifdef MP-WEIXIN
             if (uni.getStorageSync('openid') && config.login.is_bind_mobile) {
-                redirect({ url: '/pages/auth/bind' })
+                redirect({ url: '/pages/auth/bind', mode: 'redirectTo' })
                 return
             }
             // #endif
 
             // #ifdef H5
             if (isWeixinBrowser() && uni.getStorageSync('openid') && config.login.is_bind_mobile) {
-                redirect({ url: '/pages/auth/bind' })
+                redirect({ url: '/pages/auth/bind', mode: 'redirectTo' })
                 return
             }
             // #endif
-            redirect({ url: '/pages/auth/login' })
+            redirect({ url: '/pages/auth/login', mode: 'redirectTo' })
         })
     }
 
@@ -83,8 +83,13 @@ export function useLogin() {
         // #endif
 
         // #ifdef H5
+        let url = `${location.origin}${location.pathname}`
+        let query = urlDeconstruction(location.href).query
+        query.code && (delete query.code)
+        Object.keys(query).length && (url += uni.$u.queryParams(query))
+        
         getWechatAuthCode({
-            url: `${location.origin}${location.pathname}`,
+            url,
             scopes
         }).then((res : AnyObject) => {
             location.href = res.data.url

@@ -1,12 +1,12 @@
 <template>
-	<view class="bg-white">
-		<view v-if="diyComponent.layout == 'vertical'" class="graphic-nav py-[20rpx] px-[30rpx] box-border relative">
-			<div v-if="diyComponent.navTitle"
+	<view class="bg-[#F5F6F8]">
+		<view v-if="diyComponent.layout == 'vertical'" class="graphic-nav px-[32rpx] bg-white rounded-[20rpx] box-border relative m-[30rpx]">
+			<!-- <div v-if="diyComponent.navTitle"
 				class="py-2 border-solid border-b border-t-0 border-l-0 border-r-0 border-gray-200">
 				{{diyComponent.navTitle}}
-			</div>
+			</div> -->
 			<view
-				class="graphic-nav-item flex items-center justify-between py-2 border-solid border-l-0 border-r-0 border-b-0 border-gray-200"
+				class="graphic-nav-item flex items-center justify-between py-2 border-gray-200"
 				v-for=" (item, index) in diyComponent.list" :key="item.id"
 				:class="[index == 0 ? 'border-t-0':'border-t']" @click="redirectTo(item.link)">
 

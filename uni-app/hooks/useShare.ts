@@ -8,14 +8,19 @@ import wechat from '@/utils/wechat'
 // #endif
 
 export const useShare = () => {
-	let wechatOptions : WeixinJsSdk.OnMenuShareAppMessageOptions = {
+	var wechatOptions : WeixinJsSdk.OnMenuShareAppMessageOptions = {
 		title: '',
 		link: ''
 	};
 
-	let weappOptions = {};
+	var weappOptions = {};
 
 	// #ifdef H5
+	const wechatInit = async () => {
+		if (!isWeixinBrowser()) return;
+		await wechat.init();
+	}
+
 	// 微信公众号分享
 	const wechatShare = () => {
 		if (!isWeixinBrowser()) return;
@@ -23,17 +28,26 @@ export const useShare = () => {
 	}
 	// #endif
 
-	const setShare = (options : any = {}) => {
+	const setShare = async (options : any = {}) => {
 		let memberStore = useMemberStore();
+
+		// 初始化sdk
+		await wechatInit();
 
 		if (options && options.wechat && options.weapp) {
 			let query = currShareRoute().params;
+
 			if (memberStore.info) {
-				query.push('mid=' + memberStore.info.member_id);
+				query.mid = memberStore.info.member_id;
+			}
+
+			let str = [];
+			for (let key in query) {
+				str.push(key + '=' + query[key]);
 			}
 
 			// #ifdef H5
-			let link = location.origin + location.pathname + (query.length > 0 ? '?' + query.join('&') : '');
+			let link = location.origin + location.pathname + (str.length > 0 ? '?' + str.join('&') : '');
 			wechatOptions = {
 				title: options.wechat.title || '',
 				link: options.wechat.link || link,
@@ -45,37 +59,35 @@ export const useShare = () => {
 
 			weappOptions = {
 				title: options.weapp.title || '',
-				query: options.weapp.path || '/' + currRoute() + (query.length > 0 ? '?' + query.join('&') : ''),
+				query: options.weapp.path || '/' + currRoute() + (str.length > 0 ? '?' + str.join('&') : ''),
 				imageUrl: options.weapp.url ? img(options.weapp.url) : ''
 			}
 		} else {
-			getShareInfo({ route: '/' + currRoute(), params: currShareRoute().params.toString() }).then((res : any) => {
-				if (res.code == 200) {
-					let data = res.data;
+			getShareInfo({ route: '/' + currRoute(), params: JSON.stringify(currShareRoute().params) }).then((res : any) => {
+                let data = res.data;
 
-					// #ifdef H5
-					let wechat = data.wechat;
-					if (wechat) {
-						let link = location.origin + location.pathname + (data.query ? '?' + data.query : '');
-						wechatOptions = {
-							link: link,
-							title: wechat.title,
-							desc: wechat.desc,
-							imgUrl: wechat.url ? img(wechat.url) : ''
-						}
-					}
-					wechatShare()
-					// #endif
+                // #ifdef H5
+                let wechat = data.wechat;
+                if (wechat) {
+                    let link = location.origin + location.pathname + (data.query ? '?' + data.query : '');
+                    wechatOptions = {
+                        link: link,
+                        title: wechat.title,
+                        desc: wechat.desc,
+                        imgUrl: wechat.url ? img(wechat.url) : ''
+                    }
+                }
+                wechatShare()
+                // #endif
 
-					let weapp = data.weapp;
-					if (weapp) {
-						weappOptions = {
-							query: data.url,
-							title: weapp.title,
-							imageUrl: weapp.url ? img(weapp.url) : ''
-						}
-					}
-				}
+                let weapp = data.weapp;
+                if (weapp) {
+                    weappOptions = {
+                        query: data.url,
+                        title: weapp.title,
+                        imageUrl: weapp.url ? img(weapp.url) : ''
+                    }
+                }
 			})
 		}
 

@@ -58,19 +58,19 @@
 				id: id.value,
 				name: name.value
 			}).then((res : any) => {
-				if (res.code == 200) {
-					let sources = JSON.parse(res.data.value);
-					diyData.global = sources.global;
-					diyData.value = sources.value;
-					uni.setNavigationBarTitle({
-						title: diyData.global.title
-					})
+                if (res.data.value) {
+                    let sources = JSON.parse(res.data.value);
+                    diyData.global = sources.global;
+                    diyData.value = sources.value;
+                    uni.setNavigationBarTitle({
+                        title: diyData.global.title
+                    })
+                }
 
-					let share = res.data.share ? JSON.parse(res.data.share) : null;
-					setShare(share);
+                let share = res.data.share ? JSON.parse(res.data.share) : null;
+                setShare(share);
 
-					loading.value = false;
-				}
+                loading.value = false;
 			});
 		}
 	});
