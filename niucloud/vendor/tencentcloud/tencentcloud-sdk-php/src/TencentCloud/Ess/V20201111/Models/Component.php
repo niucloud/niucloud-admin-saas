@@ -26,10 +26,10 @@ MULTI_LINE_TEXT - 多行文本控件，输入文本字符串；
 CHECK_BOX - 勾选框控件，若选中填写ComponentValue 填写 true或者 false 字符串；
 FILL_IMAGE - 图片控件，ComponentValue 填写图片的资源 ID；
 DYNAMIC_TABLE - 动态表格控件；
-ATTACHMENT - 附件控件,ComponentValue 填写福建图片的资源 ID列表，以逗号分割；
+ATTACHMENT - 附件控件,ComponentValue 填写附件图片的资源 ID列表，以逗号分割；
 SELECTOR - 选择器控件，ComponentValue填写选择的字符串内容；
 DATE - 日期控件；默认是格式化为xxxx年xx月xx日字符串；
-DISTRICT - 省市区行政区划控件，ComponentValue填写省市区行政区划字符串内容；
+DISTRICT - 省市区行政区控件，ComponentValue填写省市区行政区字符串内容；
 
 如果是SignComponent控件类型，则可选的字段为
 SIGN_SEAL - 签署印章控件；
@@ -47,10 +47,10 @@ MULTI_LINE_TEXT - 多行文本控件，输入文本字符串；
 CHECK_BOX - 勾选框控件，若选中填写ComponentValue 填写 true或者 false 字符串；
 FILL_IMAGE - 图片控件，ComponentValue 填写图片的资源 ID；
 DYNAMIC_TABLE - 动态表格控件；
-ATTACHMENT - 附件控件,ComponentValue 填写福建图片的资源 ID列表，以逗号分割；
+ATTACHMENT - 附件控件,ComponentValue 填写附件图片的资源 ID列表，以逗号分割；
 SELECTOR - 选择器控件，ComponentValue填写选择的字符串内容；
 DATE - 日期控件；默认是格式化为xxxx年xx月xx日字符串；
-DISTRICT - 省市区行政区划控件，ComponentValue填写省市区行政区划字符串内容；
+DISTRICT - 省市区行政区控件，ComponentValue填写省市区行政区字符串内容；
 
 如果是SignComponent控件类型，则可选的字段为
 SIGN_SEAL - 签署印章控件；
@@ -97,6 +97,16 @@ BORDERLESS_ESIGN – 自动生成无边框腾讯体
 OCR_ESIGN -- AI智能识别手写签名
 ESIGN -- 个人印章类型
 如：{“ComponentTypeLimit”: [“BORDERLESS_ESIGN”]}
+
+ComponentType为SIGN_DATE时，支持以下参数：
+1 Font：字符串类型目前只支持"黑体"、"宋体"，如果不填默认为"黑体"
+2 FontSize： 数字类型，范围6-72，默认值为12
+3 FontAlign： 字符串类型，可取Left/Right/Center，对应左对齐/居中/右对齐
+4 Format： 字符串类型，日期格式，必须是以下五种之一 “yyyy m d”，”yyyy年m月d日”，”yyyy/m/d”，”yyyy-m-d”，”yyyy.m.d”。
+5 Gaps:： 字符串类型，仅在Format为“yyyy m d”时起作用，格式为用逗号分开的两个整数，例如”2,2”，两个数字分别是日期格式的前后两个空隙钟的空格个数
+如果extra参数为空，默认为”yyyy年m月d日”格式的居中日期
+特别地，如果extra中Format字段为空或无法被识别，则extra参数会被当作默认值处理（Font，FontSize，Gaps和FontAlign都不会起效）
+参数样例：    "ComponentExtra": "{\"Format\":“yyyy m d”,\"FontSize\":12,\"Gaps\":\"2,2\", \"FontAlign\":\"Right\"}",
  * @method void setComponentExtra(string $ComponentExtra) 设置扩展参数：
 为JSON格式。
 
@@ -112,6 +122,16 @@ BORDERLESS_ESIGN – 自动生成无边框腾讯体
 OCR_ESIGN -- AI智能识别手写签名
 ESIGN -- 个人印章类型
 如：{“ComponentTypeLimit”: [“BORDERLESS_ESIGN”]}
+
+ComponentType为SIGN_DATE时，支持以下参数：
+1 Font：字符串类型目前只支持"黑体"、"宋体"，如果不填默认为"黑体"
+2 FontSize： 数字类型，范围6-72，默认值为12
+3 FontAlign： 字符串类型，可取Left/Right/Center，对应左对齐/居中/右对齐
+4 Format： 字符串类型，日期格式，必须是以下五种之一 “yyyy m d”，”yyyy年m月d日”，”yyyy/m/d”，”yyyy-m-d”，”yyyy.m.d”。
+5 Gaps:： 字符串类型，仅在Format为“yyyy m d”时起作用，格式为用逗号分开的两个整数，例如”2,2”，两个数字分别是日期格式的前后两个空隙钟的空格个数
+如果extra参数为空，默认为”yyyy年m月d日”格式的居中日期
+特别地，如果extra中Format字段为空或无法被识别，则extra参数会被当作默认值处理（Font，FontSize，Gaps和FontAlign都不会起效）
+参数样例：    "ComponentExtra": "{\"Format\":“yyyy m d”,\"FontSize\":12,\"Gaps\":\"2,2\", \"FontAlign\":\"Right\"}",
  * @method boolean getIsFormType() 获取是否是表单域类型，默认不存在
  * @method void setIsFormType(boolean $IsFormType) 设置是否是表单域类型，默认不存在
  * @method string getComponentValue() 获取控件填充vaule，ComponentType和传入值类型对应关系：
@@ -274,14 +294,14 @@ FIELD 表单域，需使用ComponentName指定表单域名称
 KEYWORD 关键字，使用ComponentId指定关键字
  * @method integer getComponentDateFontSize() 获取日期签署控件的字号，默认为 12
  * @method void setComponentDateFontSize(integer $ComponentDateFontSize) 设置日期签署控件的字号，默认为 12
- * @method string getChannelComponentId() 获取渠道版控件 id 标识
- * @method void setChannelComponentId(string $ChannelComponentId) 设置渠道版控件 id 标识
+ * @method string getChannelComponentId() 获取平台模板控件 id 标识
+ * @method void setChannelComponentId(string $ChannelComponentId) 设置平台模板控件 id 标识
  * @method float getOffsetX() 获取指定关键字时横坐标偏移量，单位pt
  * @method void setOffsetX(float $OffsetX) 设置指定关键字时横坐标偏移量，单位pt
  * @method float getOffsetY() 获取指定关键字时纵坐标偏移量，单位pt
  * @method void setOffsetY(float $OffsetY) 设置指定关键字时纵坐标偏移量，单位pt
- * @method integer getChannelComponentSource() 获取//渠道子客控件来源。0-渠道指定；1-用户自定义
- * @method void setChannelComponentSource(integer $ChannelComponentSource) 设置//渠道子客控件来源。0-渠道指定；1-用户自定义
+ * @method integer getChannelComponentSource() 获取//子客控件来源。0-平台指定；1-用户自定义
+ * @method void setChannelComponentSource(integer $ChannelComponentSource) 设置//子客控件来源。0-平台指定；1-用户自定义
  * @method string getKeywordOrder() 获取指定关键字排序规则，Positive-正序，Reverse-倒序。传入Positive时会根据关键字在PDF文件内的顺序进行排列。在指定KeywordIndexes时，0代表在PDF内查找内容时，查找到的第一个关键字。
 传入Reverse时会根据关键字在PDF文件内的反序进行排列。在指定KeywordIndexes时，0代表在PDF内查找内容时，查找到的最后一个关键字。
  * @method void setKeywordOrder(string $KeywordOrder) 设置指定关键字排序规则，Positive-正序，Reverse-倒序。传入Positive时会根据关键字在PDF文件内的顺序进行排列。在指定KeywordIndexes时，0代表在PDF内查找内容时，查找到的第一个关键字。
@@ -302,10 +322,10 @@ MULTI_LINE_TEXT - 多行文本控件，输入文本字符串；
 CHECK_BOX - 勾选框控件，若选中填写ComponentValue 填写 true或者 false 字符串；
 FILL_IMAGE - 图片控件，ComponentValue 填写图片的资源 ID；
 DYNAMIC_TABLE - 动态表格控件；
-ATTACHMENT - 附件控件,ComponentValue 填写福建图片的资源 ID列表，以逗号分割；
+ATTACHMENT - 附件控件,ComponentValue 填写附件图片的资源 ID列表，以逗号分割；
 SELECTOR - 选择器控件，ComponentValue填写选择的字符串内容；
 DATE - 日期控件；默认是格式化为xxxx年xx月xx日字符串；
-DISTRICT - 省市区行政区划控件，ComponentValue填写省市区行政区划字符串内容；
+DISTRICT - 省市区行政区控件，ComponentValue填写省市区行政区字符串内容；
 
 如果是SignComponent控件类型，则可选的字段为
 SIGN_SEAL - 签署印章控件；
@@ -386,6 +406,16 @@ BORDERLESS_ESIGN – 自动生成无边框腾讯体
 OCR_ESIGN -- AI智能识别手写签名
 ESIGN -- 个人印章类型
 如：{“ComponentTypeLimit”: [“BORDERLESS_ESIGN”]}
+
+ComponentType为SIGN_DATE时，支持以下参数：
+1 Font：字符串类型目前只支持"黑体"、"宋体"，如果不填默认为"黑体"
+2 FontSize： 数字类型，范围6-72，默认值为12
+3 FontAlign： 字符串类型，可取Left/Right/Center，对应左对齐/居中/右对齐
+4 Format： 字符串类型，日期格式，必须是以下五种之一 “yyyy m d”，”yyyy年m月d日”，”yyyy/m/d”，”yyyy-m-d”，”yyyy.m.d”。
+5 Gaps:： 字符串类型，仅在Format为“yyyy m d”时起作用，格式为用逗号分开的两个整数，例如”2,2”，两个数字分别是日期格式的前后两个空隙钟的空格个数
+如果extra参数为空，默认为”yyyy年m月d日”格式的居中日期
+特别地，如果extra中Format字段为空或无法被识别，则extra参数会被当作默认值处理（Font，FontSize，Gaps和FontAlign都不会起效）
+参数样例：    "ComponentExtra": "{\"Format\":“yyyy m d”,\"FontSize\":12,\"Gaps\":\"2,2\", \"FontAlign\":\"Right\"}",
      */
     public $ComponentExtra;
 
@@ -487,7 +517,7 @@ KEYWORD 关键字，使用ComponentId指定关键字
     public $ComponentDateFontSize;
 
     /**
-     * @var string 渠道版控件 id 标识
+     * @var string 平台模板控件 id 标识
      */
     public $ChannelComponentId;
 
@@ -502,7 +532,7 @@ KEYWORD 关键字，使用ComponentId指定关键字
     public $OffsetY;
 
     /**
-     * @var integer //渠道子客控件来源。0-渠道指定；1-用户自定义
+     * @var integer //子客控件来源。0-平台指定；1-用户自定义
      */
     public $ChannelComponentSource;
 
@@ -534,10 +564,10 @@ MULTI_LINE_TEXT - 多行文本控件，输入文本字符串；
 CHECK_BOX - 勾选框控件，若选中填写ComponentValue 填写 true或者 false 字符串；
 FILL_IMAGE - 图片控件，ComponentValue 填写图片的资源 ID；
 DYNAMIC_TABLE - 动态表格控件；
-ATTACHMENT - 附件控件,ComponentValue 填写福建图片的资源 ID列表，以逗号分割；
+ATTACHMENT - 附件控件,ComponentValue 填写附件图片的资源 ID列表，以逗号分割；
 SELECTOR - 选择器控件，ComponentValue填写选择的字符串内容；
 DATE - 日期控件；默认是格式化为xxxx年xx月xx日字符串；
-DISTRICT - 省市区行政区划控件，ComponentValue填写省市区行政区划字符串内容；
+DISTRICT - 省市区行政区控件，ComponentValue填写省市区行政区字符串内容；
 
 如果是SignComponent控件类型，则可选的字段为
 SIGN_SEAL - 签署印章控件；
@@ -574,6 +604,16 @@ BORDERLESS_ESIGN – 自动生成无边框腾讯体
 OCR_ESIGN -- AI智能识别手写签名
 ESIGN -- 个人印章类型
 如：{“ComponentTypeLimit”: [“BORDERLESS_ESIGN”]}
+
+ComponentType为SIGN_DATE时，支持以下参数：
+1 Font：字符串类型目前只支持"黑体"、"宋体"，如果不填默认为"黑体"
+2 FontSize： 数字类型，范围6-72，默认值为12
+3 FontAlign： 字符串类型，可取Left/Right/Center，对应左对齐/居中/右对齐
+4 Format： 字符串类型，日期格式，必须是以下五种之一 “yyyy m d”，”yyyy年m月d日”，”yyyy/m/d”，”yyyy-m-d”，”yyyy.m.d”。
+5 Gaps:： 字符串类型，仅在Format为“yyyy m d”时起作用，格式为用逗号分开的两个整数，例如”2,2”，两个数字分别是日期格式的前后两个空隙钟的空格个数
+如果extra参数为空，默认为”yyyy年m月d日”格式的居中日期
+特别地，如果extra中Format字段为空或无法被识别，则extra参数会被当作默认值处理（Font，FontSize，Gaps和FontAlign都不会起效）
+参数样例：    "ComponentExtra": "{\"Format\":“yyyy m d”,\"FontSize\":12,\"Gaps\":\"2,2\", \"FontAlign\":\"Right\"}",
      * @param boolean $IsFormType 是否是表单域类型，默认不存在
      * @param string $ComponentValue 控件填充vaule，ComponentType和传入值类型对应关系：
 TEXT - 文本内容
@@ -655,10 +695,10 @@ SIGN_PAGING_SEAL - 可以指定印章ID，于控制台查询获取
 FIELD 表单域，需使用ComponentName指定表单域名称
 KEYWORD 关键字，使用ComponentId指定关键字
      * @param integer $ComponentDateFontSize 日期签署控件的字号，默认为 12
-     * @param string $ChannelComponentId 渠道版控件 id 标识
+     * @param string $ChannelComponentId 平台模板控件 id 标识
      * @param float $OffsetX 指定关键字时横坐标偏移量，单位pt
      * @param float $OffsetY 指定关键字时纵坐标偏移量，单位pt
-     * @param integer $ChannelComponentSource //渠道子客控件来源。0-渠道指定；1-用户自定义
+     * @param integer $ChannelComponentSource //子客控件来源。0-平台指定；1-用户自定义
      * @param string $KeywordOrder 指定关键字排序规则，Positive-正序，Reverse-倒序。传入Positive时会根据关键字在PDF文件内的顺序进行排列。在指定KeywordIndexes时，0代表在PDF内查找内容时，查找到的第一个关键字。
 传入Reverse时会根据关键字在PDF文件内的反序进行排列。在指定KeywordIndexes时，0代表在PDF内查找内容时，查找到的最后一个关键字。
      * @param integer $KeywordPage 指定关键字页码，可选参数，指定页码后，将只在指定的页码内查找关键字，非该页码的关键字将不会查询出来

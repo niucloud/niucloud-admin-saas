@@ -72,7 +72,6 @@ use TencentCloud\Cbs\V20170312\Models as Models;
 
 * 可以根据定期快照策略ID、名称或者状态等信息来查询定期快照策略的详细信息，不同条件之间为与(AND)的关系，过滤信息详细请见过滤器`Filter`。
 * 如果参数为空，返回当前用户一定数量（`Limit`所指定的数量，默认为20）的定期快照策略表。
-
  * @method Models\DescribeDiskAssociatedAutoSnapshotPolicyResponse DescribeDiskAssociatedAutoSnapshotPolicy(Models\DescribeDiskAssociatedAutoSnapshotPolicyRequest $req) 本接口（DescribeDiskAssociatedAutoSnapshotPolicy）用于查询云盘绑定的定期快照策略。
  * @method Models\DescribeDiskBackupsResponse DescribeDiskBackups(Models\DescribeDiskBackupsRequest $req) 本接口（DescribeDiskBackups）用于查询备份点的详细信息。
 
@@ -123,8 +122,6 @@ use TencentCloud\Cbs\V20170312\Models as Models;
 * 支持与挂载实例一起续费的场景，需要在[DiskChargePrepaid](/document/product/362/15669#DiskChargePrepaid)参数中指定CurInstanceDeadline，此时会按对齐到实例续费后的到期时间来续费询价。
 * 支持为多块云盘指定不同的续费时长，此时返回的价格为多块云盘续费的总价格。
  * @method Models\InquiryPriceResizeDiskResponse InquiryPriceResizeDisk(Models\InquiryPriceResizeDiskRequest $req) 本接口（InquiryPriceResizeDisk）用于扩容云硬盘询价。
-
-* 只支持预付费模式的云硬盘扩容询价。
  * @method Models\ModifyAutoSnapshotPolicyAttributeResponse ModifyAutoSnapshotPolicyAttribute(Models\ModifyAutoSnapshotPolicyAttributeRequest $req) 本接口（ModifyAutoSnapshotPolicyAttribute）用于修改定期快照策略属性。
 
 * 可通过该接口修改定期快照策略的执行策略、名称、是否激活等属性。
@@ -135,14 +132,11 @@ use TencentCloud\Cbs\V20170312\Models as Models;
  * @method Models\ModifyDiskBackupQuotaResponse ModifyDiskBackupQuota(Models\ModifyDiskBackupQuotaRequest $req) 此接口 (ModifyDiskBackupQuota) 用于修改云硬盘备份点配额。
  * @method Models\ModifyDiskExtraPerformanceResponse ModifyDiskExtraPerformance(Models\ModifyDiskExtraPerformanceRequest $req) 本接口（ModifyDiskExtraPerformance）用于调整云硬盘额外的性能。
 
-* 目前仅支持极速型SSD云硬盘（CLOUD_TSSD）和高性能SSD云硬盘(CLOUD_HSSD)。
- * @method Models\ModifyDisksChargeTypeResponse ModifyDisksChargeType(Models\ModifyDisksChargeTypeRequest $req) 接口请求域名： cbs.tencentcloudapi.com 。
+* 目前仅支持增强型SSD云硬盘(CLOUD_HSSD)和极速型SSD云硬盘（CLOUD_TSSD）。
+ * @method Models\ModifyDisksChargeTypeResponse ModifyDisksChargeType(Models\ModifyDisksChargeTypeRequest $req) 本接口 (ModifyDisksChargeType) 用于切换云硬盘的计费模式。
 
-本接口 (ModifyDisksChargeType) 用于切换云盘的计费模式。
-
-非弹性云盘不支持此接口，请通过修改实例计费模式接口将实例连同非弹性云盘一起转换。
+非弹性云硬盘不支持此接口，请通过修改实例计费模式接口将实例连同非弹性云硬盘一起转换。
 默认接口请求频率限制：10次/秒。
-
  * @method Models\ModifyDisksRenewFlagResponse ModifyDisksRenewFlag(Models\ModifyDisksRenewFlagRequest $req) 本接口（ModifyDisksRenewFlag）用于修改云硬盘续费标识，支持批量修改。
  * @method Models\ModifySnapshotAttributeResponse ModifySnapshotAttribute(Models\ModifySnapshotAttributeRequest $req) 本接口（ModifySnapshotAttribute）用于修改指定快照的属性。
 
@@ -162,7 +156,7 @@ use TencentCloud\Cbs\V20170312\Models as Models;
  * @method Models\ResizeDiskResponse ResizeDisk(Models\ResizeDiskRequest $req) 本接口（ResizeDisk）用于扩容云硬盘。
 
 * 只支持扩容弹性云盘。云硬盘类型可以通过[DescribeDisks](/document/product/362/16315)接口查询，见输出参数中Portable字段解释。非弹性云硬盘需通过[ResizeInstanceDisks](/document/product/213/15731)接口扩容。
-* 本接口为异步接口，接口成功返回时，云盘并未立即扩容到指定大小，可通过接口[DescribeDisks](/document/product/362/16315)来查询对应云盘的状态，如果云盘的状态为“EXPANDING”，表示正在扩容中。 
+* 本接口为异步接口，接口成功返回时，云盘并未立即扩容到指定大小，可通过接口[DescribeDisks](/document/product/362/16315)来查询对应云盘的状态，如果云盘的状态为“EXPANDING”，表示正在扩容中。
  * @method Models\TerminateDisksResponse TerminateDisks(Models\TerminateDisksRequest $req) 本接口（TerminateDisks）用于退还云硬盘。
 
 * 不再使用的云盘，可通过本接口主动退还。

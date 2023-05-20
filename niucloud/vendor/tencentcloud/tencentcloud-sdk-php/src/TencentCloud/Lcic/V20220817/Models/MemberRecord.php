@@ -48,6 +48,24 @@ use TencentCloud\Common\AbstractModel;
  * @method void setLocation(string $Location) 设置用户位置信息。
  * @method integer getDevice() 获取用户设备平台信息。0:unknown  1:windows  2:mac  3:android  4:ios  5:web   6:h5   7:miniprogram （小程序）
  * @method void setDevice(integer $Device) 设置用户设备平台信息。0:unknown  1:windows  2:mac  3:android  4:ios  5:web   6:h5   7:miniprogram （小程序）
+ * @method integer getPerMemberMicCount() 获取每个成员上麦次数。
+ * @method void setPerMemberMicCount(integer $PerMemberMicCount) 设置每个成员上麦次数。
+ * @method integer getPerMemberMessageCount() 获取每个成员发送消息数量。
+
+ * @method void setPerMemberMessageCount(integer $PerMemberMessageCount) 设置每个成员发送消息数量。
+
+ * @method integer getRole() 获取用户角色。0代表学生；1代表老师； 2助教；3巡课。
+ * @method void setRole(integer $Role) 设置用户角色。0代表学生；1代表老师； 2助教；3巡课。
+ * @method string getGroupId() 获取上课班号
+ * @method void setGroupId(string $GroupId) 设置上课班号
+ * @method array getSubGroupId() 获取子上课班号
+注意：此字段可能返回 null，表示取不到有效值。
+ * @method void setSubGroupId(array $SubGroupId) 设置子上课班号
+注意：此字段可能返回 null，表示取不到有效值。
+ * @method integer getStage() 获取用户的上台状态
+注意：此字段可能返回 null，表示取不到有效值。
+ * @method void setStage(integer $Stage) 设置用户的上台状态
+注意：此字段可能返回 null，表示取不到有效值。
  */
 class MemberRecord extends AbstractModel
 {
@@ -122,6 +140,39 @@ class MemberRecord extends AbstractModel
     public $Device;
 
     /**
+     * @var integer 每个成员上麦次数。
+     */
+    public $PerMemberMicCount;
+
+    /**
+     * @var integer 每个成员发送消息数量。
+
+     */
+    public $PerMemberMessageCount;
+
+    /**
+     * @var integer 用户角色。0代表学生；1代表老师； 2助教；3巡课。
+     */
+    public $Role;
+
+    /**
+     * @var string 上课班号
+     */
+    public $GroupId;
+
+    /**
+     * @var array 子上课班号
+注意：此字段可能返回 null，表示取不到有效值。
+     */
+    public $SubGroupId;
+
+    /**
+     * @var integer 用户的上台状态
+注意：此字段可能返回 null，表示取不到有效值。
+     */
+    public $Stage;
+
+    /**
      * @param string $UserId 用户ID。
      * @param string $UserName 用户名称。
      * @param integer $PresentTime 在线时长，单位秒。
@@ -136,6 +187,15 @@ class MemberRecord extends AbstractModel
      * @param string $IPAddress 用户IP。
      * @param string $Location 用户位置信息。
      * @param integer $Device 用户设备平台信息。0:unknown  1:windows  2:mac  3:android  4:ios  5:web   6:h5   7:miniprogram （小程序）
+     * @param integer $PerMemberMicCount 每个成员上麦次数。
+     * @param integer $PerMemberMessageCount 每个成员发送消息数量。
+
+     * @param integer $Role 用户角色。0代表学生；1代表老师； 2助教；3巡课。
+     * @param string $GroupId 上课班号
+     * @param array $SubGroupId 子上课班号
+注意：此字段可能返回 null，表示取不到有效值。
+     * @param integer $Stage 用户的上台状态
+注意：此字段可能返回 null，表示取不到有效值。
      */
     function __construct()
     {
@@ -204,6 +264,30 @@ class MemberRecord extends AbstractModel
 
         if (array_key_exists("Device",$param) and $param["Device"] !== null) {
             $this->Device = $param["Device"];
+        }
+
+        if (array_key_exists("PerMemberMicCount",$param) and $param["PerMemberMicCount"] !== null) {
+            $this->PerMemberMicCount = $param["PerMemberMicCount"];
+        }
+
+        if (array_key_exists("PerMemberMessageCount",$param) and $param["PerMemberMessageCount"] !== null) {
+            $this->PerMemberMessageCount = $param["PerMemberMessageCount"];
+        }
+
+        if (array_key_exists("Role",$param) and $param["Role"] !== null) {
+            $this->Role = $param["Role"];
+        }
+
+        if (array_key_exists("GroupId",$param) and $param["GroupId"] !== null) {
+            $this->GroupId = $param["GroupId"];
+        }
+
+        if (array_key_exists("SubGroupId",$param) and $param["SubGroupId"] !== null) {
+            $this->SubGroupId = $param["SubGroupId"];
+        }
+
+        if (array_key_exists("Stage",$param) and $param["Stage"] !== null) {
+            $this->Stage = $param["Stage"];
         }
     }
 }

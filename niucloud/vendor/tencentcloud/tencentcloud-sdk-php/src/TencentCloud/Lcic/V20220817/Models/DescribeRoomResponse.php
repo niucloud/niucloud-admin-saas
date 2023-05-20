@@ -70,9 +70,9 @@ video 纯视频
 注意：此字段可能返回 null，表示取不到有效值。
  * @method void setAssistants(array $Assistants) 设置助教UserId列表。
 注意：此字段可能返回 null，表示取不到有效值。
- * @method string getRecordUrl() 获取录制地址。仅在房间结束后存在。
+ * @method string getRecordUrl() 获取录制地址（协议为https)。仅在房间结束后存在。
 注意：此字段可能返回 null，表示取不到有效值。
- * @method void setRecordUrl(string $RecordUrl) 设置录制地址。仅在房间结束后存在。
+ * @method void setRecordUrl(string $RecordUrl) 设置录制地址（协议为https)。仅在房间结束后存在。
 注意：此字段可能返回 null，表示取不到有效值。
  * @method integer getStatus() 获取课堂状态。0为未开始，1为已开始，2为已结束，3为已过期。
 注意：此字段可能返回 null，表示取不到有效值。
@@ -82,6 +82,8 @@ video 纯视频
 注意：此字段可能返回 null，表示取不到有效值。
  * @method void setGroupId(string $GroupId) 设置房间绑定的群组ID
 注意：此字段可能返回 null，表示取不到有效值。
+ * @method integer getEnableDirectControl() 获取打开学生麦克风/摄像头的授权开关
+ * @method void setEnableDirectControl(integer $EnableDirectControl) 设置打开学生麦克风/摄像头的授权开关
  * @method string getRequestId() 获取唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
  * @method void setRequestId(string $RequestId) 设置唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
  */
@@ -161,7 +163,7 @@ video 纯视频
     public $Assistants;
 
     /**
-     * @var string 录制地址。仅在房间结束后存在。
+     * @var string 录制地址（协议为https)。仅在房间结束后存在。
 注意：此字段可能返回 null，表示取不到有效值。
      */
     public $RecordUrl;
@@ -177,6 +179,11 @@ video 纯视频
 注意：此字段可能返回 null，表示取不到有效值。
      */
     public $GroupId;
+
+    /**
+     * @var integer 打开学生麦克风/摄像头的授权开关
+     */
+    public $EnableDirectControl;
 
     /**
      * @var string 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
@@ -209,12 +216,13 @@ video 纯视频
 注：如果该配置取值为0，录制将从上课后开始，课堂结束后停止。
      * @param array $Assistants 助教UserId列表。
 注意：此字段可能返回 null，表示取不到有效值。
-     * @param string $RecordUrl 录制地址。仅在房间结束后存在。
+     * @param string $RecordUrl 录制地址（协议为https)。仅在房间结束后存在。
 注意：此字段可能返回 null，表示取不到有效值。
      * @param integer $Status 课堂状态。0为未开始，1为已开始，2为已结束，3为已过期。
 注意：此字段可能返回 null，表示取不到有效值。
      * @param string $GroupId 房间绑定的群组ID
 注意：此字段可能返回 null，表示取不到有效值。
+     * @param integer $EnableDirectControl 打开学生麦克风/摄像头的授权开关
      * @param string $RequestId 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
      */
     function __construct()
@@ -288,6 +296,10 @@ video 纯视频
 
         if (array_key_exists("GroupId",$param) and $param["GroupId"] !== null) {
             $this->GroupId = $param["GroupId"];
+        }
+
+        if (array_key_exists("EnableDirectControl",$param) and $param["EnableDirectControl"] !== null) {
+            $this->EnableDirectControl = $param["EnableDirectControl"];
         }
 
         if (array_key_exists("RequestId",$param) and $param["RequestId"] !== null) {

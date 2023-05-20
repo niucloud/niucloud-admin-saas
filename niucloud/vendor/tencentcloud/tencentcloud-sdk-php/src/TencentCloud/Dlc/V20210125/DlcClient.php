@@ -37,6 +37,7 @@ use TencentCloud\Dlc\V20210125\Models as Models;
  * @method Models\CheckLockMetaDataResponse CheckLockMetaData(Models\CheckLockMetaDataRequest $req) 元数据锁检查
  * @method Models\CreateDMSDatabaseResponse CreateDMSDatabase(Models\CreateDMSDatabaseRequest $req) DMS元数据创建库
  * @method Models\CreateDMSTableResponse CreateDMSTable(Models\CreateDMSTableRequest $req) DMS元数据创建表
+ * @method Models\CreateDataEngineResponse CreateDataEngine(Models\CreateDataEngineRequest $req) 为用户创建数据引擎
  * @method Models\CreateDatabaseResponse CreateDatabase(Models\CreateDatabaseRequest $req) 本接口（CreateDatabase）用于生成建库SQL语句。
  * @method Models\CreateExportTaskResponse CreateExportTask(Models\CreateExportTaskRequest $req) 该接口（CreateExportTask）用于创建导出任务
  * @method Models\CreateImportTaskResponse CreateImportTask(Models\CreateImportTaskRequest $req) 该接口（CreateImportTask）用于创建导入任务
@@ -67,6 +68,10 @@ use TencentCloud\Dlc\V20210125\Models as Models;
  * @method Models\DescribeDMSTablesResponse DescribeDMSTables(Models\DescribeDMSTablesRequest $req) DMS元数据获取表列表
  * @method Models\DescribeDataEnginesResponse DescribeDataEngines(Models\DescribeDataEnginesRequest $req) 本接口（DescribeDataEngines）用于获取DataEngines信息列表
  * @method Models\DescribeDatabasesResponse DescribeDatabases(Models\DescribeDatabasesRequest $req) 本接口（DescribeDatabases）用于查询数据库列表。
+ * @method Models\DescribeEngineUsageInfoResponse DescribeEngineUsageInfo(Models\DescribeEngineUsageInfoRequest $req) 本接口根据引擎ID获取数据引擎资源使用情况
+ * @method Models\DescribeForbiddenTableProResponse DescribeForbiddenTablePro(Models\DescribeForbiddenTableProRequest $req) 本接口（DescribeForbiddenTablePro）用于获取被禁用的表属性列表
+ * @method Models\DescribeLakeFsDirSummaryResponse DescribeLakeFsDirSummary(Models\DescribeLakeFsDirSummaryRequest $req) 查询托管存储指定目录的Summary
+ * @method Models\DescribeLakeFsInfoResponse DescribeLakeFsInfo(Models\DescribeLakeFsInfoRequest $req) 查询用户的托管存储信息
  * @method Models\DescribeNotebookSessionResponse DescribeNotebookSession(Models\DescribeNotebookSessionRequest $req) 本接口（DescribeNotebookSession）用于获取notebook livy session详情信息
  * @method Models\DescribeNotebookSessionLogResponse DescribeNotebookSessionLog(Models\DescribeNotebookSessionLogRequest $req) 本接口（DescribeNotebookSessionLog）用于获取notebook livy session日志
  * @method Models\DescribeNotebookSessionStatementResponse DescribeNotebookSessionStatement(Models\DescribeNotebookSessionStatementRequest $req) 本接口（DescribeNotebookSessionStatement）用于获取session statement信息
@@ -76,7 +81,7 @@ use TencentCloud\Dlc\V20210125\Models as Models;
  * @method Models\DescribeResultDownloadResponse DescribeResultDownload(Models\DescribeResultDownloadRequest $req) 查询结果下载任务
  * @method Models\DescribeScriptsResponse DescribeScripts(Models\DescribeScriptsRequest $req) 该接口（DescribeScripts）用于获取所有SQL查询。
  * @method Models\DescribeSparkAppJobResponse DescribeSparkAppJob(Models\DescribeSparkAppJobRequest $req) 查询具体的spark应用
- * @method Models\DescribeSparkAppJobsResponse DescribeSparkAppJobs(Models\DescribeSparkAppJobsRequest $req) 获取spark应用列表
+ * @method Models\DescribeSparkAppJobsResponse DescribeSparkAppJobs(Models\DescribeSparkAppJobsRequest $req) 获取spark应用列表。
  * @method Models\DescribeSparkAppTasksResponse DescribeSparkAppTasks(Models\DescribeSparkAppTasksRequest $req) 查询spark应用的运行任务实例列表
  * @method Models\DescribeStoreLocationResponse DescribeStoreLocation(Models\DescribeStoreLocationRequest $req) 查询计算结果存储位置。
  * @method Models\DescribeTableResponse DescribeTable(Models\DescribeTableRequest $req) 本接口（DescribeTable），用于查询单个表的详细信息。
@@ -100,8 +105,10 @@ use TencentCloud\Dlc\V20210125\Models as Models;
  * @method Models\ModifyWorkGroupResponse ModifyWorkGroup(Models\ModifyWorkGroupRequest $req) 修改工作组信息
  * @method Models\ReportHeartbeatMetaDataResponse ReportHeartbeatMetaData(Models\ReportHeartbeatMetaDataRequest $req) 上报元数据心跳
  * @method Models\SuspendResumeDataEngineResponse SuspendResumeDataEngine(Models\SuspendResumeDataEngineRequest $req) 本接口用于控制暂停或恢复数据引擎
+ * @method Models\SwitchDataEngineResponse SwitchDataEngine(Models\SwitchDataEngineRequest $req) 切换主备集群
  * @method Models\UnbindWorkGroupsFromUserResponse UnbindWorkGroupsFromUser(Models\UnbindWorkGroupsFromUserRequest $req) 解绑用户上的用户组
  * @method Models\UnlockMetaDataResponse UnlockMetaData(Models\UnlockMetaDataRequest $req) 元数据解锁
+ * @method Models\UpdateRowFilterResponse UpdateRowFilter(Models\UpdateRowFilterRequest $req) 此接口用于更新行过滤规则。注意只能更新过滤规则，不能更新规格对象catalog，database和table。
  */
 
 class DlcClient extends AbstractClient

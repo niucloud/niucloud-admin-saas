@@ -22,8 +22,8 @@ use TencentCloud\Common\AbstractModel;
  *
  * @method integer getId() 获取数据ID
  * @method void setId(integer $Id) 设置数据ID
- * @method string getUuid() 获取云镜ID
- * @method void setUuid(string $Uuid) 设置云镜ID
+ * @method string getUuid() 获取主机安全ID
+ * @method void setUuid(string $Uuid) 设置主机安全ID
  * @method string getQuuid() 获取主机ID
  * @method void setQuuid(string $Quuid) 设置主机ID
  * @method string getHostip() 获取主机内网IP
@@ -60,6 +60,10 @@ use TencentCloud\Common\AbstractModel;
 注意：此字段可能返回 null，表示取不到有效值。
  * @method void setMachineExtraInfo(MachineExtraInfo $MachineExtraInfo) 设置附加信息
 注意：此字段可能返回 null，表示取不到有效值。
+ * @method integer getPid() 获取进程id
+注意：此字段可能返回 null，表示取不到有效值。
+ * @method void setPid(integer $Pid) 设置进程id
+注意：此字段可能返回 null，表示取不到有效值。
  */
 class PrivilegeEscalationProcess extends AbstractModel
 {
@@ -69,7 +73,7 @@ class PrivilegeEscalationProcess extends AbstractModel
     public $Id;
 
     /**
-     * @var string 云镜ID
+     * @var string 主机安全ID
      */
     public $Uuid;
 
@@ -160,8 +164,14 @@ class PrivilegeEscalationProcess extends AbstractModel
     public $MachineExtraInfo;
 
     /**
+     * @var integer 进程id
+注意：此字段可能返回 null，表示取不到有效值。
+     */
+    public $Pid;
+
+    /**
      * @param integer $Id 数据ID
-     * @param string $Uuid 云镜ID
+     * @param string $Uuid 主机安全ID
      * @param string $Quuid 主机ID
      * @param string $Hostip 主机内网IP
      * @param string $ProcessName 进程名
@@ -179,6 +189,8 @@ class PrivilegeEscalationProcess extends AbstractModel
      * @param string $CreateTime 发生时间
      * @param string $MachineName 机器名
      * @param MachineExtraInfo $MachineExtraInfo 附加信息
+注意：此字段可能返回 null，表示取不到有效值。
+     * @param integer $Pid 进程id
 注意：此字段可能返回 null，表示取不到有效值。
      */
     function __construct()
@@ -269,6 +281,10 @@ class PrivilegeEscalationProcess extends AbstractModel
         if (array_key_exists("MachineExtraInfo",$param) and $param["MachineExtraInfo"] !== null) {
             $this->MachineExtraInfo = new MachineExtraInfo();
             $this->MachineExtraInfo->deserialize($param["MachineExtraInfo"]);
+        }
+
+        if (array_key_exists("Pid",$param) and $param["Pid"] !== null) {
+            $this->Pid = $param["Pid"];
         }
     }
 }

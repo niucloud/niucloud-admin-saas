@@ -37,11 +37,5 @@
     "scripts": {
         "phpstan": "./vendor/bin/phpstan analyze",
         "test": "phpunit"
-    },
-    "config": {
-        "allow-plugins": {
-            "ocramius/package-versions": true,
-            "phpstan/extension-installer": true
-        }
     }
 }

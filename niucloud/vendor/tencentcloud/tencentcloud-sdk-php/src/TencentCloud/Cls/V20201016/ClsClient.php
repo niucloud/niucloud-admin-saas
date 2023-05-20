@@ -31,6 +31,7 @@ use TencentCloud\Cls\V20201016\Models as Models;
  * @method Models\CreateConfigResponse CreateConfig(Models\CreateConfigRequest $req) 创建采集规则配置
  * @method Models\CreateConfigExtraResponse CreateConfigExtra(Models\CreateConfigExtraRequest $req) 本接口用于创建特殊采集配置任务，特殊采集配置应用于自建K8S环境的采集Agent
  * @method Models\CreateConsumerResponse CreateConsumer(Models\CreateConsumerRequest $req) 本接口用于创建投递任务
+ * @method Models\CreateCosRechargeResponse CreateCosRecharge(Models\CreateCosRechargeRequest $req) 本接口用于创建cos导入任务
  * @method Models\CreateExportResponse CreateExport(Models\CreateExportRequest $req) 本接口仅创建下载任务，任务返回的下载地址，请用户调用DescribeExports查看任务列表。其中有下载地址CosPath参数。参考文档https://cloud.tencent.com/document/product/614/56449
  * @method Models\CreateIndexResponse CreateIndex(Models\CreateIndexRequest $req) 本接口用于创建索引
  * @method Models\CreateLogsetResponse CreateLogset(Models\CreateLogsetRequest $req) 本接口用于创建日志集，返回新创建的日志集的 ID。
@@ -52,10 +53,12 @@ use TencentCloud\Cls\V20201016\Models as Models;
  * @method Models\DeleteTopicResponse DeleteTopic(Models\DeleteTopicRequest $req) 本接口用于删除日志主题。
  * @method Models\DescribeAlarmNoticesResponse DescribeAlarmNotices(Models\DescribeAlarmNoticesRequest $req) 该接口用于获取通知渠道组列表
  * @method Models\DescribeAlarmsResponse DescribeAlarms(Models\DescribeAlarmsRequest $req) 本接口用于获取告警策略列表。
+ * @method Models\DescribeAlertRecordHistoryResponse DescribeAlertRecordHistory(Models\DescribeAlertRecordHistoryRequest $req) 获取告警历史，例如今天未恢复的告警
  * @method Models\DescribeConfigExtrasResponse DescribeConfigExtras(Models\DescribeConfigExtrasRequest $req) 本接口用于获取特殊采集配置，特殊采集配置应用于自建K8S环境的采集Agent
  * @method Models\DescribeConfigMachineGroupsResponse DescribeConfigMachineGroups(Models\DescribeConfigMachineGroupsRequest $req) 获取采集规则配置所绑定的机器组
  * @method Models\DescribeConfigsResponse DescribeConfigs(Models\DescribeConfigsRequest $req) 获取采集规则配置
  * @method Models\DescribeConsumerResponse DescribeConsumer(Models\DescribeConsumerRequest $req) 本接口用于获取投递配置
+ * @method Models\DescribeCosRechargesResponse DescribeCosRecharges(Models\DescribeCosRechargesRequest $req) 本接口用于获取cos导入配置
  * @method Models\DescribeExportsResponse DescribeExports(Models\DescribeExportsRequest $req) 本接口用于获取日志下载任务列表
  * @method Models\DescribeIndexResponse DescribeIndex(Models\DescribeIndexRequest $req) 本接口用于获取索引配置信息
  * @method Models\DescribeLogContextResponse DescribeLogContext(Models\DescribeLogContextRequest $req) 本接口用于搜索日志上下文附近的内容
@@ -75,6 +78,7 @@ use TencentCloud\Cls\V20201016\Models as Models;
  * @method Models\ModifyConfigResponse ModifyConfig(Models\ModifyConfigRequest $req) 修改采集规则配置
  * @method Models\ModifyConfigExtraResponse ModifyConfigExtra(Models\ModifyConfigExtraRequest $req) 本接口用于修改特殊采集配置任务，特殊采集配置应用于自建K8S环境的采集Agent
  * @method Models\ModifyConsumerResponse ModifyConsumer(Models\ModifyConsumerRequest $req) 本接口用于修改投递任务
+ * @method Models\ModifyCosRechargeResponse ModifyCosRecharge(Models\ModifyCosRechargeRequest $req) 本接口用于修改cos导入任务
  * @method Models\ModifyIndexResponse ModifyIndex(Models\ModifyIndexRequest $req) 本接口用于修改索引配置，该接口除受默认接口请求频率限制外，针对单个日志主题，并发数不能超过1，即同一时间同一个日志主题只能有一个正在执行的索引配置修改操作。
 
  * @method Models\ModifyLogsetResponse ModifyLogset(Models\ModifyLogsetRequest $req) 本接口用于修改日志集信息
@@ -90,7 +94,7 @@ use TencentCloud\Cls\V20201016\Models as Models;
 
 同时我们给此接口专门优化定制了多个语言版本的SDK供您选择，SDK提供统一的异步发送、资源控制、自动重试、优雅关闭、感知上报等功能，使上报日志功能更完善，详情请参考[SDK采集](https://cloud.tencent.com/document/product/614/67157)。
 
-同时云API上传日志接口也支持同步上传日志数据，如果您选继续使用此接口请参考下文。
+同时云API上传日志接口也支持同步上传日志数据，如果您选择继续使用此接口请参考下文。
 
 ## 功能描述
 

@@ -51,21 +51,19 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
             'think\\app\\' => 10,
             'think\\' => 6,
         ),
-        'e' => 
-        array (
-            'extend\\' => 7,
-        ),
         'd' => 
         array (
             'dh2y\\qrcode\\' => 12,
         ),
         'c' => 
         array (
+            'core\\' => 5,
             'clagiordano\\weblibs\\configmanager\\' => 34,
         ),
         'a' => 
         array (
             'app\\' => 4,
+            'addon\\' => 6,
         ),
         'Z' => 
         array (
@@ -143,6 +141,7 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
         'I' => 
         array (
             'Invoker\\' => 8,
+            'Intervention\\Image\\' => 19,
         ),
         'G' => 
         array (
@@ -156,6 +155,7 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
         'F' => 
         array (
             'Firebase\\JWT\\' => 13,
+            'Fastknife\\' => 10,
         ),
         'E' => 
         array (
@@ -209,13 +209,13 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
             4 => __DIR__ . '/..' . '/topthink/think-queue/src',
             5 => __DIR__ . '/..' . '/topthink/think-template/src',
         ),
-        'extend\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/extend',
-        ),
         'dh2y\\qrcode\\' => 
         array (
             0 => __DIR__ . '/..' . '/dh2y/think-qrcode/src',
+        ),
+        'core\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/core',
         ),
         'clagiordano\\weblibs\\configmanager\\' => 
         array (
@@ -224,6 +224,10 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
         'app\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
+        ),
+        'addon\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/addon',
         ),
         'ZipStream\\' => 
         array (
@@ -390,6 +394,10 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
         array (
             0 => __DIR__ . '/..' . '/php-di/invoker/src',
         ),
+        'Intervention\\Image\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/intervention/image/src/Intervention/Image',
+        ),
         'GuzzleHttp\\UriTemplate\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/uri-template/src',
@@ -417,6 +425,10 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
         'Firebase\\JWT\\' => 
         array (
             0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
+        ),
+        'Fastknife\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/fastknife/ajcaptcha/src',
         ),
         'EasyWeChat\\' => 
         array (
@@ -480,7 +492,7 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
         'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
         'QcloudApi' => __DIR__ . '/..' . '/tencentcloud/tencentcloud-sdk-php/src/QcloudApi/QcloudApi.php',
         'Requests' => __DIR__ . '/..' . '/rmccue/requests/library/Requests.php',
-        'Stringable' => __DIR__ . '/..' . '/myclabs/php-enum/stubs/Stringable.php',
+        'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     );

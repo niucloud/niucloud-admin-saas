@@ -149,8 +149,8 @@ trait RedisTrait
 
         if (isset($params['host']) || isset($params['path'])) {
             if (!isset($params['dbindex']) && isset($params['path'])) {
-                if (preg_match('#/(\d+)$#', $params['path'], $m)) {
-                    $params['dbindex'] = $m[1];
+                if (preg_match('#/(\d+)?$#', $params['path'], $m)) {
+                    $params['dbindex'] = $m[1] ?? '0';
                     $params['path'] = substr($params['path'], 0, -\strlen($m[0]));
                 } elseif (isset($params['host'])) {
                     throw new InvalidArgumentException(sprintf('Invalid Redis DSN: "%s", the "dbindex" parameter must be a number.', $dsn));
@@ -332,6 +332,15 @@ trait RedisTrait
             if (null !== $auth) {
                 $params['parameters']['password'] = $auth;
             }
+
+            if (isset($params['ssl'])) {
+                foreach ($hosts as $i => $host) {
+                    if (!isset($host['ssl'])) {
+                        $hosts[$i]['ssl'] = $params['ssl'];
+                    }
+                }
+            }
+
             if (1 === \count($hosts) && !($params['redis_cluster'] || $params['redis_sentinel'])) {
                 $hosts = $hosts[0];
             } elseif (\in_array($params['failover'], ['slaves', 'distribute'], true) && !isset($params['replication'])) {
@@ -340,7 +349,7 @@ trait RedisTrait
             }
             $params['exceptions'] = false;
 
-            $redis = new $class($hosts, array_diff_key($params, array_diff_key(self::$defaultConnectionOptions, ['ssl' => null])));
+            $redis = new $class($hosts, array_diff_key($params, self::$defaultConnectionOptions));
             if (isset($params['redis_sentinel'])) {
                 $redis->getConnection()->setSentinelTimeout($params['timeout']);
             }

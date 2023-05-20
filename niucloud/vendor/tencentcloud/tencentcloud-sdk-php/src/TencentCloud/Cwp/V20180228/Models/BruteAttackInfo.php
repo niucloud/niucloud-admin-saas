@@ -22,9 +22,9 @@ use TencentCloud\Common\AbstractModel;
  *
  * @method integer getId() 获取唯一Id
  * @method void setId(integer $Id) 设置唯一Id
- * @method string getUuid() 获取云镜客户端唯一标识UUID
+ * @method string getUuid() 获取主机安全客户端唯一标识UUID
 注意：此字段可能返回 null，表示取不到有效值。
- * @method void setUuid(string $Uuid) 设置云镜客户端唯一标识UUID
+ * @method void setUuid(string $Uuid) 设置主机安全客户端唯一标识UUID
 注意：此字段可能返回 null，表示取不到有效值。
  * @method string getMachineIp() 获取主机ip
 注意：此字段可能返回 null，表示取不到有效值。
@@ -106,6 +106,10 @@ use TencentCloud\Common\AbstractModel;
 注意：此字段可能返回 null，表示取不到有效值。
  * @method void setMachineExtraInfo(MachineExtraInfo $MachineExtraInfo) 设置附加信息
 注意：此字段可能返回 null，表示取不到有效值。
+ * @method string getLocation() 获取地理位置中文名
+注意：此字段可能返回 null，表示取不到有效值。
+ * @method void setLocation(string $Location) 设置地理位置中文名
+注意：此字段可能返回 null，表示取不到有效值。
  */
 class BruteAttackInfo extends AbstractModel
 {
@@ -115,7 +119,7 @@ class BruteAttackInfo extends AbstractModel
     public $Id;
 
     /**
-     * @var string 云镜客户端唯一标识UUID
+     * @var string 主机安全客户端唯一标识UUID
 注意：此字段可能返回 null，表示取不到有效值。
      */
     public $Uuid;
@@ -241,8 +245,14 @@ class BruteAttackInfo extends AbstractModel
     public $MachineExtraInfo;
 
     /**
+     * @var string 地理位置中文名
+注意：此字段可能返回 null，表示取不到有效值。
+     */
+    public $Location;
+
+    /**
      * @param integer $Id 唯一Id
-     * @param string $Uuid 云镜客户端唯一标识UUID
+     * @param string $Uuid 主机安全客户端唯一标识UUID
 注意：此字段可能返回 null，表示取不到有效值。
      * @param string $MachineIp 主机ip
 注意：此字段可能返回 null，表示取不到有效值。
@@ -283,6 +293,8 @@ class BruteAttackInfo extends AbstractModel
      * @param integer $DataStatus 0：待处理，1：忽略，5：已处理，6：加入白名单
 注意：此字段可能返回 null，表示取不到有效值。
      * @param MachineExtraInfo $MachineExtraInfo 附加信息
+注意：此字段可能返回 null，表示取不到有效值。
+     * @param string $Location 地理位置中文名
 注意：此字段可能返回 null，表示取不到有效值。
      */
     function __construct()
@@ -385,6 +397,10 @@ class BruteAttackInfo extends AbstractModel
         if (array_key_exists("MachineExtraInfo",$param) and $param["MachineExtraInfo"] !== null) {
             $this->MachineExtraInfo = new MachineExtraInfo();
             $this->MachineExtraInfo->deserialize($param["MachineExtraInfo"]);
+        }
+
+        if (array_key_exists("Location",$param) and $param["Location"] !== null) {
+            $this->Location = $param["Location"];
         }
     }
 }

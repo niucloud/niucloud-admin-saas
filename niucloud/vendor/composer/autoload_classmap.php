@@ -12,7 +12,7 @@ return array(
     'PhpToken' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
     'QcloudApi' => $vendorDir . '/tencentcloud/tencentcloud-sdk-php/src/QcloudApi/QcloudApi.php',
     'Requests' => $vendorDir . '/rmccue/requests/library/Requests.php',
-    'Stringable' => $vendorDir . '/myclabs/php-enum/stubs/Stringable.php',
+    'Stringable' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
     'UnhandledMatchError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
     'ValueError' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
 );

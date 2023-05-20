@@ -25,15 +25,23 @@ use TencentCloud\Common\AbstractModel;
  * @method string getEndTime() 获取结束时间。
  * @method void setEndTime(string $EndTime) 设置结束时间。
  * @method array getMetricNames() 获取查询的指标，取值有：
-<li>l7Flow_outFlux: 访问流量；</li>
+<li>l7Flow_outFlux: Edegone响应流量；</li>
+<li>l7Flow_inFlux: Edgeone请求流量；</li>
+<li>l7Flow_outBandwidth: Edegone响应带宽；</li>
+<li>l7Flow_inBandwidth: Edegone请求带宽；</li>
+<li>l7Flow_hit_outFlux: 缓存命中流量；</li>
 <li>l7Flow_request: 访问请求数；</li>
-<li>l7Flow_outBandwidth: 访问带宽；</li>
-<li>l7Flow_hit_outFlux: 缓存命中流量。</li>
+<li>l7Flow_flux: 访问请求上行+下行流量；</li>
+<li>l7Flow_bandwidth：访问请求上行+下行带宽。</li>
  * @method void setMetricNames(array $MetricNames) 设置查询的指标，取值有：
-<li>l7Flow_outFlux: 访问流量；</li>
+<li>l7Flow_outFlux: Edegone响应流量；</li>
+<li>l7Flow_inFlux: Edgeone请求流量；</li>
+<li>l7Flow_outBandwidth: Edegone响应带宽；</li>
+<li>l7Flow_inBandwidth: Edegone请求带宽；</li>
+<li>l7Flow_hit_outFlux: 缓存命中流量；</li>
 <li>l7Flow_request: 访问请求数；</li>
-<li>l7Flow_outBandwidth: 访问带宽；</li>
-<li>l7Flow_hit_outFlux: 缓存命中流量。</li>
+<li>l7Flow_flux: 访问请求上行+下行流量；</li>
+<li>l7Flow_bandwidth：访问请求上行+下行带宽。</li>
  * @method array getZoneIds() 获取站点集合。
 若不填写，默认选择全部站点，且最多只能查询近30天的数据；若填写，则可查询站点绑定套餐支持的<a href="https://cloud.tencent.com/document/product/1552/77380#edgeone-.E5.A5.97.E9.A4.90">数据分析最大查询范围</a>。
  * @method void setZoneIds(array $ZoneIds) 设置站点集合。
@@ -61,9 +69,11 @@ use TencentCloud\Common\AbstractModel;
 <li>hour：1小时；</li>
 <li>day：1天。</li>不填将根据开始时间跟结束时间的间距自动推算粒度，具体为：1小时范围内以min粒度查询，2天范围内以5min粒度查询，7天范围内以hour粒度查询，超过7天以day粒度查询。
  * @method array getFilters() 获取过滤条件，详细的过滤条件Key值如下：
+<li>socket<br>   按照【<strong>HTTP协议类型</strong>】进行过滤。<br>   对应的Value可选项如下：<br>   HTTP：HTTP 协议；<br>   HTTPS：HTTPS协议；<br>   QUIC：QUIC协议。</li>
 <li>tagKey<br>   按照【<strong>标签Key</strong>】进行过滤。</li>
 <li>tagValue<br>   按照【<strong>标签Value</strong>】进行过滤。</li>
  * @method void setFilters(array $Filters) 设置过滤条件，详细的过滤条件Key值如下：
+<li>socket<br>   按照【<strong>HTTP协议类型</strong>】进行过滤。<br>   对应的Value可选项如下：<br>   HTTP：HTTP 协议；<br>   HTTPS：HTTPS协议；<br>   QUIC：QUIC协议。</li>
 <li>tagKey<br>   按照【<strong>标签Key</strong>】进行过滤。</li>
 <li>tagValue<br>   按照【<strong>标签Value</strong>】进行过滤。</li>
  * @method string getArea() 获取数据归属地区，取值有：
@@ -89,10 +99,14 @@ class DescribeOverviewL7DataRequest extends AbstractModel
 
     /**
      * @var array 查询的指标，取值有：
-<li>l7Flow_outFlux: 访问流量；</li>
+<li>l7Flow_outFlux: Edegone响应流量；</li>
+<li>l7Flow_inFlux: Edgeone请求流量；</li>
+<li>l7Flow_outBandwidth: Edegone响应带宽；</li>
+<li>l7Flow_inBandwidth: Edegone请求带宽；</li>
+<li>l7Flow_hit_outFlux: 缓存命中流量；</li>
 <li>l7Flow_request: 访问请求数；</li>
-<li>l7Flow_outBandwidth: 访问带宽；</li>
-<li>l7Flow_hit_outFlux: 缓存命中流量。</li>
+<li>l7Flow_flux: 访问请求上行+下行流量；</li>
+<li>l7Flow_bandwidth：访问请求上行+下行带宽。</li>
      */
     public $MetricNames;
 
@@ -127,6 +141,7 @@ class DescribeOverviewL7DataRequest extends AbstractModel
 
     /**
      * @var array 过滤条件，详细的过滤条件Key值如下：
+<li>socket<br>   按照【<strong>HTTP协议类型</strong>】进行过滤。<br>   对应的Value可选项如下：<br>   HTTP：HTTP 协议；<br>   HTTPS：HTTPS协议；<br>   QUIC：QUIC协议。</li>
 <li>tagKey<br>   按照【<strong>标签Key</strong>】进行过滤。</li>
 <li>tagValue<br>   按照【<strong>标签Value</strong>】进行过滤。</li>
      */
@@ -144,10 +159,14 @@ class DescribeOverviewL7DataRequest extends AbstractModel
      * @param string $StartTime 开始时间。
      * @param string $EndTime 结束时间。
      * @param array $MetricNames 查询的指标，取值有：
-<li>l7Flow_outFlux: 访问流量；</li>
+<li>l7Flow_outFlux: Edegone响应流量；</li>
+<li>l7Flow_inFlux: Edgeone请求流量；</li>
+<li>l7Flow_outBandwidth: Edegone响应带宽；</li>
+<li>l7Flow_inBandwidth: Edegone请求带宽；</li>
+<li>l7Flow_hit_outFlux: 缓存命中流量；</li>
 <li>l7Flow_request: 访问请求数；</li>
-<li>l7Flow_outBandwidth: 访问带宽；</li>
-<li>l7Flow_hit_outFlux: 缓存命中流量。</li>
+<li>l7Flow_flux: 访问请求上行+下行流量；</li>
+<li>l7Flow_bandwidth：访问请求上行+下行带宽。</li>
      * @param array $ZoneIds 站点集合。
 若不填写，默认选择全部站点，且最多只能查询近30天的数据；若填写，则可查询站点绑定套餐支持的<a href="https://cloud.tencent.com/document/product/1552/77380#edgeone-.E5.A5.97.E9.A4.90">数据分析最大查询范围</a>。
      * @param array $Domains 查询的域名集合，不填默认查询所有子域名。
@@ -162,6 +181,7 @@ class DescribeOverviewL7DataRequest extends AbstractModel
 <li>hour：1小时；</li>
 <li>day：1天。</li>不填将根据开始时间跟结束时间的间距自动推算粒度，具体为：1小时范围内以min粒度查询，2天范围内以5min粒度查询，7天范围内以hour粒度查询，超过7天以day粒度查询。
      * @param array $Filters 过滤条件，详细的过滤条件Key值如下：
+<li>socket<br>   按照【<strong>HTTP协议类型</strong>】进行过滤。<br>   对应的Value可选项如下：<br>   HTTP：HTTP 协议；<br>   HTTPS：HTTPS协议；<br>   QUIC：QUIC协议。</li>
 <li>tagKey<br>   按照【<strong>标签Key</strong>】进行过滤。</li>
 <li>tagValue<br>   按照【<strong>标签Value</strong>】进行过滤。</li>
      * @param string $Area 数据归属地区，取值有：

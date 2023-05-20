@@ -19,7 +19,7 @@ namespace EasyWeChat\Kernel\Messages;
  * @description 专门为回复 InteractiveTaskCard 类型任务卡片消息而创建的类型
  * @author      xyj2156
  *
- * @package     App\Extend\EnterpriseApplication\BusinessWX\Message
+ * @package     App\extend\EnterpriseApplication\BusinessWX\Message
  */
 class ReplyInteractiveTaskCard extends Message
 {

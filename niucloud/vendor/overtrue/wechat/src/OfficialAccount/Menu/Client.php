@@ -63,6 +63,7 @@ class Client extends BaseClient
                 'matchrule' => $matchRule,
             ]);
         }
+
         return $this->httpPostJson('cgi-bin/menu/create', ['button' => $buttons]);
     }
 
