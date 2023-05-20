@@ -29,7 +29,7 @@ Route::group('generator', function () {
     //添加代码生成
     Route::post('generator', 'generator.generator/add');
     //编辑代码生成
-    Route::put('generator/:id', 'generator.generator/update');
+    Route::put('generator/:id', 'generator.generator/edit');
     //删除代码生成
     Route::delete('generator/:id', 'generator.generator/del');
     //代码生成

@@ -11,6 +11,8 @@
 
 namespace app\enum\diy;
 
+use core\addon\AddonLoader;
+
 /**
  * 自定义链接
  * Class PageEnum
@@ -24,7 +26,7 @@ class LinkEnum
      */
     public static function getLink()
     {
-        $data = [
+        $system_links = [
             [
                 'name' => 'SYSTEM_LINK',
                 'title' => get_lang('enum_diy.system_link'),
@@ -72,6 +74,12 @@ class LinkEnum
                         'url' => '/pages/member/point',
                         'is_share' => 0
                     ],
+                    [
+                        'name' => 'MEMBER_COMMISSION',
+                        'title' => get_lang('enum_diy.member_my_commission'),
+                        'url' => '/pages/member/commission',
+                        'is_share' => 0
+                    ]
                 ]
             ],
             [
@@ -87,7 +95,7 @@ class LinkEnum
                 'child_list' => []
             ]
         ];
-        return $data;
+        return (new AddonLoader("UniappLink"))->load($system_links);;
     }
 
 }

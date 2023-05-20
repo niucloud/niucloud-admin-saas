@@ -18,14 +18,4 @@
  * 扩展开发相关plugin
  *
  */
-use extend\util\ConfigUtil;
-
-/**
- * 初始化语言
- */
-$lang_data = [
-
-];
-$config_util = new ConfigUtil(root_path().str_replace('/', DIRECTORY_SEPARATOR, "app/lang/en"), $lang_data, true);
-$lang = $config_util->loadConfig();
-return $lang;
+return (new \core\addon\AddonLoader("Lang"))->load(["lang_type" =>"en"]);

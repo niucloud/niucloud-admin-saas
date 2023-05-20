@@ -13,8 +13,8 @@ namespace app\service\admin\sys;
 
 
 use app\enum\sys\AgreementEnum;
-use app\service\admin\BaseAdminService;
 use app\service\core\sys\CoreAgreementService;
+use core\base\BaseAdminService;
 
 /**
  * 协议服务类

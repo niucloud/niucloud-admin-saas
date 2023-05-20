@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\sys;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\sys\SystemService;
+use core\base\BaseAdminController;
 
 /**
  * 系统信息查询
@@ -28,6 +28,23 @@ class System extends BaseAdminController
     public function info()
     {
         return success((new SystemService())->getInfo());
+    }
+
+    /**
+     * 获取当前url配置
+     * @return array|mixed
+     */
+    public function url()
+    {
+        return success((new SystemService())->getUrl());
+    }
+
+    /**
+     * 获取系统环境配置
+     * @return \think\Response
+     */
+    public function getSystemInfo(){
+        return success((new SystemService())->getSystemInfo());
     }
 
 }

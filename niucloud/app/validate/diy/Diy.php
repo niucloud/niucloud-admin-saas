@@ -33,7 +33,7 @@ class Diy extends \think\Validate
 
     protected $scene = [
         "add" => [ 'title', 'name', 'type', 'value', 'is_default' ],
-        "update" => [ 'title', 'name', 'value', 'is_default' ],
+        "edit" => [ 'title', 'name', 'value', 'is_default' ],
     ];
 
     /**

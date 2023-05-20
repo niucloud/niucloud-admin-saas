@@ -11,11 +11,9 @@
 
 namespace app\adminapi\controller\channel;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\channel\H5Service;
-use app\service\admin\file\UploadService;
 use app\service\admin\site\WebSiteConfigService;
-use app\service\admin\wechat\WechatConfigService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class H5 extends BaseAdminController
@@ -38,6 +36,6 @@ class H5 extends BaseAdminController
         ]);
 
         (new H5Service())->setH5($data);
-        return success(100016);
+        return success('SET_SUCCESS');
     }
 }

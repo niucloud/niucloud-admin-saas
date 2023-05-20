@@ -12,7 +12,7 @@
 namespace app\service\core\member;
 
 use app\model\member\MemberLabel;
-use app\service\core\BaseCoreService;
+use core\base\BaseCoreService;
 use think\facade\Cache;
 
 /**

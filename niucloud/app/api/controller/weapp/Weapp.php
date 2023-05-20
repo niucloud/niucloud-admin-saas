@@ -11,9 +11,8 @@
 
 namespace app\api\controller\weapp;
 
-use app\api\controller\BaseApiController;
-use app\BaseController;
 use app\service\api\weapp\WeappAuthService;
+use core\base\BaseApiController;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
 use think\Response;
 

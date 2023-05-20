@@ -13,8 +13,7 @@ namespace app\model\sys;
 
 use app\enum\sys\MenuEnum;
 use app\enum\sys\MenuTypeEnum;
-use app\model\BaseModel;
-use think\model\concern\SoftDelete;
+use core\base\BaseModel;
 
 /**
  * 菜单模型

@@ -11,12 +11,12 @@
 
 namespace app\adminapi\controller\sys;
 
-use app\adminapi\controller\BaseAdminController;
 use app\enum\sys\MenuEnum;
 use app\enum\sys\MenuTypeEnum;
 use app\enum\sys\MethodEnum;
 use app\service\admin\install\InstallSystemService;
 use app\service\admin\sys\MenuService;
+use core\base\BaseAdminController;
 use think\Exception;
 use think\Response;
 
@@ -65,13 +65,13 @@ class Menu extends BaseAdminController
         ]);
         $this->validate($data, 'app\validate\sys\Menu.add');
         (new MenuService())->add($data);
-        return success(100011);
+        return success('ADD_SUCCESS');
     }
 
     /**
      * 菜单或接口更新
      */
-    public function update($menu_key){
+    public function edit($menu_key){
         $data = $this->request->params([
             ['menu_name', ''],
             ['parent_key', ''],
@@ -89,8 +89,8 @@ class Menu extends BaseAdminController
             ['is_show', 0],
         ]);
         $this->validate($data, 'app\validate\sys\Menu.edit');
-        (new MenuService())->update($menu_key, $data);
-        return success(100004);
+        (new MenuService())->edit($menu_key, $data);
+        return success('EDIT_SUCCESS');
     }
 
 
@@ -118,11 +118,11 @@ class Menu extends BaseAdminController
      */
     public function del($menu_key){
         (new MenuService())->del($menu_key);
-        return success(100003);
+        return success('DELETE_SUCCESS');
     }
 
     public function refreshMenu(){
         (new InstallSystemService())->install();
-        return success(100019);
+        return success('REFRESH_SUCCESS');
     }
 }

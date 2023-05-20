@@ -2,8 +2,7 @@
 
 namespace app\install\controller;
 
-use app\BaseController;
-use extend\exception\CommonException;
+use core\base\BaseController;
 use think\App;
 use think\facade\View;
 

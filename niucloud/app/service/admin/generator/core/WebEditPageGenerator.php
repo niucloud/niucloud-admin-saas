@@ -245,7 +245,7 @@ class WebEditPageGenerator extends BaseGenerator
         if($this->table['edit_type'] != 2) {
             return '';
         }
-        $dir = $this->outDir . 'vue/src/views/' . $this->moduleName . '/';
+        $dir = $this->outDir . 'admin/src/views/' . $this->moduleName . '/';
 
         $this->checkDir($dir);
 

@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 
 return [
-    'default'     => 'redis',
+    'default'     => 'database',
     'connections' => [
         'sync'     => [
             'type' => 'sync',
@@ -47,7 +47,7 @@ return [
         ],
     ],
     'failed'      => [
-        'type'  => 'none',
-        'table' => 'failed_jobs',
+        'type'  => 'none',// none  不记录失败任务  database  将失败任务迁移到失败任务表
+        'table' => 'jobs_failed',
     ],
 ];

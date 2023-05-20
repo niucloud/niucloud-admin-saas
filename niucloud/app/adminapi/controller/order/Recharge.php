@@ -11,8 +11,9 @@
 
 namespace app\adminapi\controller\order;
 
-use app\adminapi\controller\BaseAdminController;
+use app\service\admin\order\RechargeOrderRefundService;
 use app\service\admin\order\RechargeOrderService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class Recharge extends BaseAdminController
@@ -45,6 +46,13 @@ class Recharge extends BaseAdminController
     public function status()
     {
         return success((new RechargeOrderService())->getStatus());
+    }
+
+    public function refund($order_id)
+    {
+        $res = (new RechargeOrderRefundService())->create($order_id);
+        if ($res === true) return success();
+        return fail($res);
     }
 
 }

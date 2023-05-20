@@ -15,9 +15,9 @@ namespace app\service\admin\user;
 use app\enum\sys\UserEnum;
 use app\model\sys\SysUser;
 use app\service\admin\auth\LoginService;
-use app\service\admin\BaseAdminService;
+use core\base\BaseAdminService;
+use core\exception\AdminException;
 use Exception;
-use extend\exception\AdminException;
 use think\facade\Db;
 
 /**
@@ -141,16 +141,16 @@ class UserService extends BaseAdminService
      * @param $site_id
      * @return true
      */
-    public function updateSiteUser($uid, $data, $site_id)
+    public function editSiteUser($uid, $data, $site_id)
     {
         Db::startTrans();
         try {
             //添加用户
-            $this->update($uid, $data);
+            $this->edit($uid, $data);
             $role_ids = $data['role_ids'] ?? [];
             $is_admin = $data['is_admin'] ?? 0;
             //创建用户站点管理权限
-            (new UserRoleService())->update($site_id, $uid, $role_ids);
+            (new UserRoleService())->edit($site_id, $uid, $role_ids);
             Db::commit();
             return true;
         } catch ( Exception $e) {
@@ -184,7 +184,7 @@ class UserService extends BaseAdminService
 
         $user = $this->model->findOrEmpty($uid);
         if ($user->isEmpty())
-            throw new AdminException(201001);
+            throw new AdminException('USER_NOT_EXIST');
         return $user;
     }
 
@@ -194,7 +194,7 @@ class UserService extends BaseAdminService
      * @param array $data
      * @return true
      */
-    public function update(int $uid, array $data){
+    public function edit(int $uid, array $data){
         $user = $this->find($uid);
         $user_data = [
         ];

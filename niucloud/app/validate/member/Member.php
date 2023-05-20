@@ -12,6 +12,7 @@
 namespace app\validate\member;
 
 use app\enum\common\CommonEnum;
+use app\enum\member\MemberEnum;
 use think\Validate;
 
 /**
@@ -30,6 +31,7 @@ class Member extends Validate
         'birthday' => 'date',
         'username'  => 'require',
         'password' => 'require',
+        'status' =>  'require|checkStatus',
     ];
 
     protected $message  =   [
@@ -42,14 +44,18 @@ class Member extends Validate
         'username.require' => 'validate_member.username_require',
         'username.unique' => 'validate_member.username_is_exist',
         'password.require' => 'validate_member.password_require',
+
+        'status.require' => 'validate_member.status_require',
+
     ];
 
     protected $scene = [
         'add'  =>  ['nickname', 'birthday', 'username', 'password'],
-        'update'  =>  ['nickname', 'sex', 'birthday'],
+        'edit'  =>  ['nickname', 'sex', 'birthday'],
         'modify'  =>  ['nickname', 'sex', 'birthday'],
         'account_register'  =>  ['username', 'password', 'mobile'],
         'reset_password' => ['password', 'mobile'],
+        'set_status' => ['status']
     ];
 
     /**
@@ -62,5 +68,10 @@ class Member extends Validate
     protected function checkSex($value, $rule, $data = [])
     {
         return isset(CommonEnum::getSexType()[$value]) ? true : get_lang("validate_member.sex_bot_exist");
+    }
+
+    protected function checkStatus($value, $rule, $data = [])
+    {
+        return isset(MemberEnum::getStatus()[$value]) ? true : get_lang("validate_member.not_exit_status");
     }
 }

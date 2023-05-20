@@ -11,21 +11,11 @@
 /**
  * 语言包说明:
  * 系统相关system:
- * 返回值语言文件： exception.php
+ * 返回值语言文件： api.php
  * 枚举相关文件：enum.php
  * 验证语言文件:validate.php
  *
- * 扩展开发相关plugin
+ * 扩展开发相关addon
  *
  */
-
-use extend\util\ConfigUtil;
-
-/**
- * 初始化语言
- */
-$lang_data = [
-];
-$config_util = new ConfigUtil(root_path().str_replace('/', DIRECTORY_SEPARATOR, "app/lang/zh-cn"), $lang_data, true);
-$lang = $config_util->loadConfig();
-return $lang;
+return (new \core\addon\AddonLoader("Lang"))->load(["lang_type" =>"zh-cn"]);

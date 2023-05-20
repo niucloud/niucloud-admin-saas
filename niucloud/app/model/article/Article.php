@@ -11,7 +11,7 @@
 
 namespace app\model\article;
 
-use app\model\BaseModel;
+use core\base\BaseModel;
 use think\db\Query;
 use think\model\relation\HasOne;
 

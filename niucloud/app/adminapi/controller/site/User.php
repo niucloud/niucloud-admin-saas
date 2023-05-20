@@ -11,10 +11,10 @@
 
 namespace app\adminapi\controller\site;
 
-use app\adminapi\controller\BaseAdminController;
 use app\enum\sys\UserEnum;
 use app\service\admin\site\SiteUserService;
 use app\service\admin\user\UserService;
+use core\base\BaseAdminController;
 use think\Response;
 
 /**
@@ -60,14 +60,14 @@ class User extends BaseAdminController
         ]);
         $this->validate($data, 'app\validate\sys\User.add');
         $uid = (new SiteUserService())->add($data);
-        return success(100011, ['uid' => $uid]);
+        return success('ADD_SUCCESS', ['uid' => $uid]);
     }
 
 
     /**
      * 更新用户
      */
-    public function update($uid){
+    public function edit($uid){
         $data = $this->request->params([
             ['real_name', ''],
             ['head_img', ''],
@@ -75,9 +75,8 @@ class User extends BaseAdminController
             ['role_ids', []],
             ['password', '']
         ]);
-//        $this->validate($data, 'app\validate\sys\User.update');
-        (new SiteUserService())->update($uid, $data);
-        return success(100004);
+        (new SiteUserService())->edit($uid, $data);
+        return success('MODIFY_SUCCESS');
     }
 
     /**
@@ -94,7 +93,7 @@ class User extends BaseAdminController
         $data[$field] = $data['value'];
 //        $this->validate($data, 'app\validate\sys\User.modify');
         (new SiteUserService())->modify($uid, $field, $data['value']);
-        return success(100004);
+        return success('MODIFY_SUCCESS');
     }
 
     /**
@@ -103,7 +102,7 @@ class User extends BaseAdminController
      */
     public function del($uid){
         (new UserService())->del($uid);
-        return success(100003);
+        return success('DELETE_SUCCESS');
     }
 
     /**
@@ -112,7 +111,7 @@ class User extends BaseAdminController
     public function lock($uid){
 
         (new SiteUserService())->lock($uid);
-        return success(100004);
+        return success('MODIFY_SUCCESS');
     }
 
     /**
@@ -121,7 +120,7 @@ class User extends BaseAdminController
     public function unlock($uid){
 
         (new SiteUserService())->unlock($uid);
-        return success(100004);
+        return success('MODIFY_SUCCESS');
     }
 
 

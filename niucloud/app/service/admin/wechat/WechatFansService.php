@@ -11,7 +11,7 @@
 
 namespace app\service\admin\wechat;
 
-use app\service\admin\BaseAdminService;
+use core\base\BaseAdminService;
 
 /**
  * 微信粉丝

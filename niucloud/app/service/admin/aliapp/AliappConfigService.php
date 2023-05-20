@@ -11,9 +11,8 @@
 
 namespace app\service\admin\aliapp;
 
-use app\service\admin\BaseAdminService;
-
 use app\service\core\aliapp\CoreAliappConfigService;
+use core\base\BaseAdminService;
 
 /**
  * 支付宝小程序设置

@@ -11,8 +11,8 @@
 
 namespace app\api\controller\wechat;
 
-use app\BaseController;
 use app\service\api\wechat\WechatAuthService;
+use core\base\BaseController;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
 use think\Response;
 

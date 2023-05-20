@@ -28,7 +28,7 @@ Route::group('article', function () {
     //添加文章
     Route::post('article', 'article.Article/add');
     //编辑文章
-    Route::put('article/:id', 'article.Article/update');
+    Route::put('article/:id', 'article.Article/edit');
     //删除文章
     Route::delete('article/:id', 'article.Article/del');
     /***************************************************** 文章分类管理 ****************************************************/
@@ -41,7 +41,7 @@ Route::group('article', function () {
     //添加文章分类
     Route::post('category', 'article.ArticleCategory/add');
     //编辑文章分类
-    Route::put('category/:id', 'article.ArticleCategory/update');
+    Route::put('category/:id', 'article.ArticleCategory/edit');
     //删除文章分类
     Route::delete('category/:category_id', 'article.ArticleCategory/del');
 

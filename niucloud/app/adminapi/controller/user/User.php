@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\user;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\user\UserService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class User extends BaseAdminController

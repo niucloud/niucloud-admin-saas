@@ -11,12 +11,12 @@
 
 namespace app\service\admin\member;
 
-use app\enum\common\ChannelEnum;
+use app\enum\member\MemberRegisterChannelEnum;
 use app\enum\member\MemberRegisterTypeEnum;
 use app\model\member\Member;
-use app\service\admin\BaseAdminService;
 use app\service\core\member\CoreMemberService;
-use extend\exception\AdminException;
+use core\base\BaseAdminService;
+use core\exception\AdminException;
 use think\db\exception\DbException;
 
 /**
@@ -40,8 +40,8 @@ class MemberService extends BaseAdminService
     public function getPage(array $where = [])
     {
 
-        $field = 'member_id, site_id, username, mobile, password, register_channel, register_type, nickname, headimg, member_level, member_label, wx_openid, weapp_openid, wx_unionid, ali_openid, douyin_openid, login_ip, login_type, login_channel, login_count, login_time, create_time, last_visit_time, last_consum_time, sex, status, birthday, point, point_get, balance, balance_get, growth, growth_get, is_member, member_time, is_del, province_id, city_id, district_id, address, location, delete_time, money, money_get';
-        $search_model = $this->model->where([['site_id', '=', $this->site_id]])->withSearch(['keyword','register_type', 'create_time', 'is_del', 'member_label'],$where)->field($field)->order('member_id desc')->append(['register_channel_name', 'register_type_name', 'sex_name', 'login_channel_name', 'login_type_name']);
+        $field = 'member_id, site_id, username, mobile, password, register_channel, register_type, nickname, headimg, member_level, member_label, wx_openid, weapp_openid, wx_unionid, ali_openid, douyin_openid, login_ip, login_type, login_channel, login_count, login_time, create_time, last_visit_time, last_consum_time, sex, status, birthday, point, point_get, balance, balance_get, growth, growth_get, is_member, member_time, is_del, province_id, city_id, district_id, address, location, delete_time, money, money_get, commission, commission_get, commission_cash_outing';
+        $search_model = $this->model->where([['site_id', '=', $this->site_id]])->withSearch(['keyword','register_type', 'create_time', 'is_del', 'member_label', 'register_channel'],$where)->field($field)->order('member_id desc')->append(['register_channel_name', 'register_type_name', 'sex_name', 'login_channel_name', 'login_type_name', 'status_name']);
         $data = $this->pageQuery($search_model, function ($item, $key) {
             $item = $this->makeUp($item);
         });
@@ -68,8 +68,8 @@ class MemberService extends BaseAdminService
      */
     public function getInfo(int $member_id)
     {
-        $field = 'member_id, site_id, username, mobile, password, register_channel, register_type, nickname, headimg, member_level, member_label, wx_openid, weapp_openid, wx_unionid, ali_openid, douyin_openid, login_ip, login_type, login_channel, login_count, login_time, create_time, last_visit_time, last_consum_time, sex, status, birthday, point, point_get, balance, balance_get, growth, growth_get, is_member, member_time, is_del, province_id, city_id, district_id, address, location, delete_time, money, money_get';
-        return $this->makeUp($this->model->where([['member_id', '=', $member_id], ['site_id', '=', $this->site_id]])->field($field)->append(['register_channel_name', 'register_type_name', 'sex_name', 'login_channel_name', 'login_type_name'])->findOrEmpty()->toArray());
+        $field = 'member_id, site_id, username, mobile, password, register_channel, register_type, nickname, headimg, member_level, member_label, wx_openid, weapp_openid, wx_unionid, ali_openid, douyin_openid, login_ip, login_type, login_channel, login_count, login_time, create_time, last_visit_time, last_consum_time, sex, status, birthday, point, point_get, balance, balance_get, growth, growth_get, is_member, member_time, is_del, province_id, city_id, district_id, address, location, delete_time, money, money_get, commission, commission_get, commission_cash_outing';
+        return $this->makeUp($this->model->where([['member_id', '=', $member_id], ['site_id', '=', $this->site_id]])->field($field)->append(['register_channel_name', 'register_type_name', 'sex_name', 'login_channel_name', 'login_type_name', 'status_name'])->findOrEmpty()->toArray());
     }
 
     /**
@@ -82,17 +82,17 @@ class MemberService extends BaseAdminService
         //检测手机是否重复
         if(!empty($data['mobile'])){
             if(!$this->model->where([['site_id', '=', $this->site_id], ['mobile', '=', $data['mobile']]])->findOrEmpty()->isEmpty())
-                throw new AdminException(301001);
+                throw new AdminException('MOBILE_IS_EXIST');
         }
         if(!empty($data['username'])){
             if(!$this->model->where([['site_id', '=', $this->site_id], ['username', '=', $data['username']]])->findOrEmpty()->isEmpty())
-                throw new AdminException(301008);
+                throw new AdminException('MEMBER_IS_EXIST');
         }
         $data['site_id'] = $this->site_id;
         $password_hash = create_password($data['password']);
         $data['password'] = $password_hash;
         $data['register_type'] = MemberRegisterTypeEnum::MANUAL;
-        $data['register_channel'] = ChannelEnum::PC;//todo 公共化渠道
+        $data['register_channel'] = MemberRegisterChannelEnum::MANUAL;//todo 公共化渠道
         $member = $this->model->create($data);
         $data['member_id'] = $member->member_id;
         event("memberRegister", $data);
@@ -105,7 +105,7 @@ class MemberService extends BaseAdminService
      * @param array $data
      * @return true
      */
-    public function update(int $member_id, array $data)
+    public function edit(int $member_id, array $data)
     {
         $where = array(
             ['site_id', '=', $this->site_id],
@@ -154,7 +154,21 @@ class MemberService extends BaseAdminService
         return $this->model->where($where)->count();
     }
 
-
-
-
+    /**
+     * 设置状态
+     * @param array $member_ids
+     * @param int $status
+     * @return true
+     */
+    public function setStatus(array $member_ids, int $status){
+        $where = array(
+            ['site_id', '=', $this->site_id],
+            ['member_id', 'in', $member_ids],
+        );
+        $data = array(
+            'status' => $status
+        );
+        $this->model->where($where)->update($data);
+        return true;
+    }
 }

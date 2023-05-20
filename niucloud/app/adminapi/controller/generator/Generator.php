@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\generator;
 
-use app\BaseController;
 use app\service\admin\generator\GenerateService;
+use core\base\BaseController;
 use think\Response;
 
 /**
@@ -55,9 +55,9 @@ class Generator extends BaseController
         $data = $this->request->params([
             [ "table_name", "" ],
         ], false);
-        $this->validate($data, 'app\validate\generator\Generator.add');
+        $this->validate($data, 'app\validate\generator\generator.add');
         $id = ( new GenerateService() )->add($data);
-        return success(100011, [ 'id' => $id ]);
+        return success('ADD_SUCCESS', [ 'id' => $id ]);
     }
 
     /**
@@ -65,7 +65,7 @@ class Generator extends BaseController
      * @param $id
      * @return Response
      */
-    public function update($id)
+    public function edit($id)
     {
         $data = $this->request->params([
             [ "table_name", "" ],
@@ -75,9 +75,9 @@ class Generator extends BaseController
             [ "edit_type", "1" ],
             [ "table_column", "" ],
         ], false);
-        $this->validate($data, 'app\validate\generator\Generator.update');
-        ( new GenerateService() )->update($id, $data);
-        return success(100004);
+        $this->validate($data, 'app\validate\generator\generator.edit');
+        ( new GenerateService() )->edit($id, $data);
+        return success('MODIFY_SUCCESS');
     }
 
     /**
@@ -88,7 +88,7 @@ class Generator extends BaseController
     public function del(int $id)
     {
         ( new GenerateService() )->del($id);
-        return success(100003);
+        return success('DELETE_SUCCESS');
     }
 
     /**
@@ -102,7 +102,7 @@ class Generator extends BaseController
         ]);
 
         $data = ( new GenerateService() )->generate($data);
-        return success(100011, $data);
+        return success('ADD_SUCCESS', $data);
     }
 
     /**
@@ -116,7 +116,7 @@ class Generator extends BaseController
             [ "comment", "" ],
         ]);
         $list = ( new GenerateService() )->tableList($data);
-        return success(100011, $list);
+        return success('ADD_SUCCESS', $list);
     }
 
 }

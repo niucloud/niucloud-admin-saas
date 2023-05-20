@@ -11,7 +11,7 @@
 
 namespace app\model\generator;
 
-use app\model\BaseModel;
+use core\base\BaseModel;
 
 
 /**

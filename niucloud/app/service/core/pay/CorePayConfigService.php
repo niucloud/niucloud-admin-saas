@@ -14,11 +14,11 @@ namespace app\service\core\pay;
 use app\enum\pay\PayEnum;
 use app\enum\sys\ConfigKeyEnum;
 use app\model\sys\SysConfig;
-use app\service\core\BaseCoreService;
 use app\service\core\sys\CoreConfigService;
 use app\service\core\weapp\CoreWeappConfigService;
 use app\service\core\wechat\CoreWechatConfigService;
-use extend\exception\CommonException;
+use core\base\BaseCoreService;
+use core\exception\CommonException;
 use think\Model;
 
 
@@ -166,7 +166,7 @@ class CorePayConfigService extends BaseCoreService
                 break;
         }
         if($config['status'] != PayEnum::ON)
-            throw new CommonException(700005);
+            throw new CommonException('PAYMENT_METHOD_NOT_EXIST');
 
         return $config;
     }

@@ -11,12 +11,12 @@
 
 namespace app\service\admin\diy;
 
-use app\enum\diy\ComponentBasicsEnum;
-use app\enum\diy\ComponentTypeEnum;
+use app\enum\diy\ComponentEnum;
 use app\enum\diy\LinkEnum;
 use app\enum\diy\PageEnum;
 use app\model\diy\Diy;
-use app\service\admin\BaseAdminService;
+use app\service\admin\sys\SystemService;
+use core\base\BaseAdminService;
 use Exception;
 use think\facade\Db;
 
@@ -113,7 +113,7 @@ class DiyService extends BaseAdminService
      * @param array $data
      * @return bool
      */
-    public function update(int $id, array $data)
+    public function edit(int $id, array $data)
     {
         $data[ 'update_time' ] = time();
         $this->model->where([ [ 'id', '=', $id ], [ 'site_id', '=', $this->site_id ] ])->update($data);
@@ -175,7 +175,7 @@ class DiyService extends BaseAdminService
         if (!empty($data)) {
             if (isset($page_type[ $data[ 'type' ] ])) {
                 $page = $page_type[ $data[ 'type' ] ];
-                $data[ 'type_name' ] = $page[ 'type_name' ];
+                $data[ 'type_name' ] = $page[ 'title' ];
                 $data[ 'page' ] = $page[ 'page' ];
             }
         } else {
@@ -186,9 +186,9 @@ class DiyService extends BaseAdminService
             $page_route = '';
             if (isset($page_type[ $params[ 'type' ] ])) {
                 $page = $page_type[ $params[ 'type' ] ];
-                $name = $page[ 'type' ] == 'DIY_PAGE' ? 'DIY_PAGE_RANDOM_' . $time : $page[ 'type' ];
-                $type = $page[ 'type' ];
-                $type_name = $page[ 'type_name' ];
+                $name = $params[ 'type' ] == 'DIY_PAGE' ? 'DIY_PAGE_RANDOM_' . $time : $params[ 'type' ];
+                $type = $params[ 'type' ];
+                $type_name = $page[ 'title' ];
                 $page_route = $page[ 'page' ];
             }
             $data = [
@@ -202,13 +202,14 @@ class DiyService extends BaseAdminService
 
             if (isset($page_type[ $params[ 'name' ] ])) {
                 $page = $page_type[ $params[ 'name' ] ];
-                $data[ 'name' ] = $page[ 'type' ];
-                $data[ 'title' ] = $page[ 'type_name' ];
-                $data[ 'type_name' ] = $page[ 'type_name' ];
+                $data[ 'name' ] = $params[ 'type' ];
+                $data[ 'title' ] = $page[ 'title' ];
+                $data[ 'type_name' ] = $page[ 'title' ];
                 $data[ 'page' ] = $page[ 'page' ];
             }
         }
         $data[ 'component' ] = $this->getComponentList($data[ 'name' ]);
+        $data[ 'domain_url' ] = ( new SystemService() )->getUrl();
         return $data;
     }
 
@@ -219,35 +220,25 @@ class DiyService extends BaseAdminService
      */
     public function getComponentList(string $name = '')
     {
-        $type_list = ComponentTypeEnum::getType();
-        $diy_view_utils = [];
-        foreach ($type_list as $k => $v) {
-            $value = [
-                'type' => $k,
-                'type_name' => $v,
-                'list' => []
-            ];
-            if ($k == 'BASICS') {
-                $list = ComponentBasicsEnum::getComponent();
-                if (!empty($list)) {
-                    $sort_arr = [];
-                    foreach ($list as $ck => $cv) {
-                        // 查询组件支持的页面
-                        if (count($cv[ 'support_page' ]) == 0 || in_array($name, $cv[ 'support_page' ])) {
-                            $sort_arr [] = $cv[ 'sort' ];
-                            unset($cv[ 'sort' ]);
-                            unset($cv[ 'support_page' ]);
-                            $value[ 'list' ][] = $cv;
-                        }
-                    }
-
-                    array_multisort($sort_arr, SORT_ASC, $value[ 'list' ]); //排序，根据num 排序
+        $data = ComponentEnum::getComponent();
+        foreach ($data as $k => $v) {
+            // 查询组件支持的页面
+            $sort_arr = [];
+            foreach ($v[ 'list' ] as $ck => $cv) {
+                $support_page = $cv[ 'support_page' ];
+                if (!( count($support_page) == 0 || in_array($name, $support_page) )) {
+                    unset($data[ $k ][ 'list' ][ $ck ]);
+                    continue;
                 }
+
+                $sort_arr [] = $cv[ 'sort' ];
+                unset($data[ $k ][ 'list' ][ $ck ][ 'sort' ]);
+                unset($data[ $k ][ 'list' ][ $ck ][ 'support_page' ]);
             }
-            $diy_view_utils[] = $value;
+            array_multisort($sort_arr, SORT_ASC, $data[ $k ][ 'list' ]); //排序，根据 sort 排序
         }
 
-        return $diy_view_utils;
+        return $data;
     }
 
     /**

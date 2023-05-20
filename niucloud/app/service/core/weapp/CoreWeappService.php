@@ -11,9 +11,9 @@
 
 namespace app\service\core\weapp;
 
-use app\service\core\BaseCoreService;
+use core\base\BaseCoreService;
+use core\exception\WechatException;
 use EasyWeChat\Factory;
-use extend\exception\WechatException;
 
 
 /**
@@ -33,7 +33,7 @@ class CoreWeappService extends BaseCoreService
         $core_weapp_service = new CoreWeappConfigService();
         $weapp_config = $core_weapp_service->getWeappConfig($site_id);
         if(empty($weapp_config['app_id']) || empty($weapp_config['app_secret']))
-            throw new WechatException(410000);//公众号未配置
+            throw new WechatException('WEAPP_NOT_EXIST');//公众号未配置
         $config = array(
             'app_id' => $weapp_config['app_id'],
             'secret' => $weapp_config['app_secret'],

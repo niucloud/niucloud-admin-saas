@@ -12,7 +12,7 @@
 namespace app\model\diy;
 
 use app\enum\diy\PageEnum;
-use app\model\BaseModel;
+use core\base\BaseModel;
 
 
 /**
@@ -47,7 +47,7 @@ class Diy extends BaseModel
      */
     public function getTypeNameAttr($value, $data)
     {
-        return PageEnum::getPageType($data[ 'type' ] ?? '')[ 'type_name' ] ?? '';
+        return PageEnum::getPageType($data[ 'type' ] ?? '')[ 'title' ] ?? '';
     }
 
     /**

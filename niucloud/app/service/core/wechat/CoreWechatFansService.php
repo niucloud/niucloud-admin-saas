@@ -12,8 +12,8 @@
 namespace app\service\core\wechat;
 
 use app\model\wechat\WechatFans;
-use app\service\core\BaseCoreService;
-use extend\exception\CommonException;
+use core\base\BaseCoreService;
+use core\exception\CommonException;
 
 /**
  * 微信粉丝
@@ -58,7 +58,7 @@ class CoreWechatFansService extends BaseCoreService
      * @param $data
      * @return void
      */
-    public function update(int $site_id, string $open_id, array $data)
+    public function edit(int $site_id, string $open_id, array $data)
     {
         $condition = [
             ['site_id', '=', $site_id],
@@ -68,7 +68,7 @@ class CoreWechatFansService extends BaseCoreService
         $core_wechat_api_service = new CoreWechatApiService();
         $userinfo = $core_wechat_api_service->userInfo($site_id, $open_id);
         if (empty($userinfo))
-            throw new CommonException(400002);
+            throw new CommonException('WECHAT_EMPOWER_NOT_EXIST');
 
         $save_data = array(
             'site_id' => $site_id,
@@ -103,7 +103,7 @@ class CoreWechatFansService extends BaseCoreService
         }
         // todo  qr_scene  qr_scene_str  这两个二维码自定义开发功能
         if (!$fans->isEmpty()) {
-            $fans->update($save_data);
+            $fans->edit($save_data);
         } else {
             $this->model->create($save_data);
         }
@@ -131,7 +131,7 @@ class CoreWechatFansService extends BaseCoreService
             'subscribe_scene' => $user_info['subscribe_scene'],
             'language' => $user_info['language'],
         );
-        $this->update($site_id, $from_user_name, $data);
+        $this->edit($site_id, $from_user_name, $data);
         return true;
     }
 
@@ -147,7 +147,7 @@ class CoreWechatFansService extends BaseCoreService
             'subscribe' => 0,
             'unsubscribe_time' => time(),
         );
-        $this->update($site_id, $from_user_name, $data);
+        $this->edit($site_id, $from_user_name, $data);
         return true;
     }
 

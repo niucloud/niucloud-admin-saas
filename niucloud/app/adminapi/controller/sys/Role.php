@@ -11,9 +11,9 @@
 
 namespace app\adminapi\controller\sys;
 
-use app\adminapi\controller\BaseAdminController;
 use app\enum\sys\RoleStatusEnum;
 use app\service\admin\sys\RoleService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class Role extends BaseAdminController
@@ -55,22 +55,22 @@ class Role extends BaseAdminController
         ]);
         $this->validate($data, 'app\validate\sys\Role.add');
         (new RoleService())->add($data);
-        return success(100011);
+        return success('ADD_SUCCESS');
     }
 
 
     /**
      * 更新用户组
      */
-    public function update($role_id){
+    public function edit($role_id){
         $data = $this->request->params([
             ['role_name', ''],
             ['rules', []],
             ['status', RoleStatusEnum::ON],
         ]);
-        $this->validate($data, 'app\validate\sys\Role.update');
-        (new RoleService())->update($role_id, $data);
-        return success(100004);
+        $this->validate($data, 'app\validate\sys\Role.edit');
+        (new RoleService())->edit($role_id, $data);
+        return success('EDIT_SUCCESS');
     }
 
 
@@ -80,7 +80,7 @@ class Role extends BaseAdminController
      */
     public function del($role_id){
         (new RoleService())->del($role_id);
-        return success(100003);
+        return success('DELETE_SUCCESS');
     }
 
 }

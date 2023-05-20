@@ -55,6 +55,7 @@ class Index extends BaseInstall
             $root_path = str_replace("\\", DIRECTORY_SEPARATOR, dirname(dirname(dirname(dirname(__FILE__)))));
             $root_path = str_replace("../", DIRECTORY_SEPARATOR, $root_path);
             $dirs_list = [
+                [ "path" => $root_path . DIRECTORY_SEPARATOR, "path_name" => "niucloud/", "name" => "网站目录" ],
                 [ "path" => $root_path . DIRECTORY_SEPARATOR . ".env", "path_name" => "niucloud/.env", "name" => "env" ],
                 [ "path" => $root_path . DIRECTORY_SEPARATOR . ".example.env", "path_name" => "niucloud/.example_env", "name" => "env" ],
                 [ "path" => $root_path . DIRECTORY_SEPARATOR . 'runtime'.DIRECTORY_SEPARATOR, "path_name" => "niucloud/runtime", "name" => "runtime" ],
@@ -464,8 +465,8 @@ class Index extends BaseInstall
         if ($data[ 1 ] == 'error') {
             Cache::set('install_status', -1);
         }
-        $time = microtime(true) * 10000;
-        $data[] = date('Y-m-d H:i:s', $time / 10000);
+        $time = @(int)microtime(true);
+        $data[] = date('Y-m-d H:i:s', $time);
         $install_data = Cache::get('install_data') ?? [];
         $install_data[] = $data;
         Cache::set('install_data', $install_data);

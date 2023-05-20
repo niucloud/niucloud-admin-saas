@@ -11,8 +11,7 @@
 
 namespace app\service\core\sys;
 
-use app\model\sys\SysConfig;
-use app\service\core\BaseCoreService;
+use core\base\BaseCoreService;
 
 /**
  * 配置服务层

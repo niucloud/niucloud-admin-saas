@@ -33,7 +33,7 @@ Route::group('wechat', function () {
     //获取微信菜单
     Route::get('menu', 'wechat.Menu/info');
     //设置微信菜单
-    Route::put('menu', 'wechat.Menu/update');
+    Route::put('menu', 'wechat.Menu/edit');
     /***************************************************** 关键词回复 ****************************************************/
     //关键词回复详情
     Route::get('reply/keywords/lists', 'wechat.Reply/keyword');
@@ -42,26 +42,26 @@ Route::group('wechat', function () {
     //新增关键词回复
     Route::post('reply/keywords', 'wechat.Reply/addKeyword');
     //更新关键词回复
-    Route::put('reply/keywords/:id', 'wechat.Reply/updateKeyword');
+    Route::put('reply/keywords/:id', 'wechat.Reply/editKeyword');
     //删除关键词回复
     Route::delete('reply/keywords/:id', 'wechat.Reply/deleteKeyword');
     /***************************************************** 默认回复 ****************************************************/
     //默认回复
     Route::get('reply/default', 'wechat.Reply/default');
     //更新默认默认回复
-    Route::put('reply/default', 'wechat.Reply/updateDefault');
+    Route::put('reply/default', 'wechat.Reply/editDefault');
     /***************************************************** 关注回复 ****************************************************/
     //关注回复
     Route::get('reply/subscribe', 'wechat.Reply/subscribe');
     //更新关注回复
-    Route::put('reply/subscribe', 'wechat.Reply/updateSubscribe');
+    Route::put('reply/subscribe', 'wechat.Reply/editSubscribe');
     /***************************************************** 图文素材回复 ****************************************************/
     //图文素材列表
     Route::get('media', 'wechat.Media/lists');
     //新增图文素材
     Route::post('media', 'wechat.Media/add');
     //更新图文素材
-    Route::put('media/:id', 'wechat.Media/update');
+    Route::put('media/:id', 'wechat.Media/edit');
     /***************************************************** 消息模板 ****************************************************/
     //同步全部消息模板
     Route::put('template/sync', 'wechat.Template/sync');

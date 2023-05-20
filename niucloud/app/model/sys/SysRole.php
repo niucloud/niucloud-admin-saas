@@ -12,7 +12,7 @@
 namespace app\model\sys;
 
 use app\enum\sys\RoleStatusEnum;
-use app\model\BaseModel;
+use core\base\BaseModel;
 
 /**
  * 系统角色模型

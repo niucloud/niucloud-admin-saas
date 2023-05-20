@@ -15,18 +15,17 @@ namespace app\service\api\wechat;
 use app\enum\member\MemberLoginTypeEnum;
 use app\enum\member\MemberRegisterTypeEnum;
 use app\enum\scan\ScanEnum;
-use app\service\api\BaseApiService;
 use app\service\api\login\LoginService;
 use app\service\api\login\RegisterService;
 use app\service\api\member\MemberConfigService;
 use app\service\api\member\MemberService;
 use app\service\core\scan\CoreScanService;
-use app\service\core\sys\CoreSysConfigService;
 use app\service\core\wechat\CoreWechatFansService;
 use app\service\core\wechat\CoreWechatServeService;
+use core\base\BaseApiService;
+use core\exception\ApiException;
+use core\exception\AuthException;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
-use extend\exception\ApiException;
-use extend\exception\AuthException;
 
 
 /**
@@ -67,9 +66,9 @@ class WechatAuthService extends BaseApiService
     public function userFromCode(string $code)
     {
         $userinfo = $this->core_wechat_serve_service->userFromCode($this->site_id, $code);
-        if (empty($userinfo)) throw new ApiException(400002);
+        if (empty($userinfo)) throw new ApiException('WECHAT_EMPOWER_NOT_EXIST');
         $token_response = $userinfo->getTokenResponse();
-        if (empty($token_response)) throw new ApiException(400002);
+        if (empty($token_response)) throw new ApiException('WECHAT_EMPOWER_NOT_EXIST');
         $scope = $token_response['scope'];
         if ($scope == 'snsapi_base') {//静默授权
             $openid = $token_response['openid'] ?? '';
@@ -78,7 +77,7 @@ class WechatAuthService extends BaseApiService
             $nickname = $userinfo->getNickname();//对应微信的 nickname
             $avatar = $userinfo->getAvatar();//对应微信的 头像地址
         }
-        if (empty($openid)) throw new ApiException(400002);
+        if (empty($openid)) throw new ApiException('WECHAT_EMPOWER_NOT_EXIST');
         //todo 这儿还可能会获取用户昵称 头像  性别 ....用以更新会员信息
         return [$avatar ?? '', $nickname ?? '', $openid];
         //todo  业务落地
@@ -133,11 +132,11 @@ class WechatAuthService extends BaseApiService
         //更新粉丝
         $core_wechat_fans_service = new CoreWechatFansService();
         //这儿或许可以异步
-        $core_wechat_fans_service->update($this->site_id, $openid, ['avatar' => $avatar, 'nickname' => $nickname]);
+        $core_wechat_fans_service->edit($this->site_id, $openid, ['avatar' => $avatar, 'nickname' => $nickname]);
         $member_service = new MemberService();
         $member_info = $member_service->findMemberInfo(['wx_openid' => $openid, 'site_id' => $this->site_id]);
-        if ($member_info->isEmpty()) throw new AuthException(301005);//账号不存在
-        $member_service->updateByFind($member_info, ['headimg' => $avatar, 'nickname' => $nickname]);
+        if ($member_info->isEmpty()) throw new AuthException('MEMBER_NOT_EXIST');//账号不存在
+        $member_service->editByFind($member_info, ['headimg' => $avatar, 'nickname' => $nickname]);
         return true;
     }
 
@@ -151,7 +150,7 @@ class WechatAuthService extends BaseApiService
     {
         $member_service = new MemberService();
         $member_info = $member_service->findMemberInfo(['wx_openid' => $openid, 'site_id' => $this->site_id]);
-        if (!$member_info->isEmpty()) throw new AuthException(301008);//账号已存在, 不能在注册
+        if (!$member_info->isEmpty()) throw new AuthException('MEMBER_IS_EXIST');//账号已存在, 不能在注册
         $register_service = new RegisterService();
         $result = $register_service->register($mobile,
             [

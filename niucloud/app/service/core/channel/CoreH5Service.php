@@ -13,15 +13,8 @@ namespace app\service\core\channel;
 
 use app\enum\sys\ConfigKeyEnum;
 use app\model\sys\SysAttachment;
-use app\service\core\BaseCoreService;
-use app\service\core\file\CoreStorageService;
 use app\service\core\sys\CoreConfigService;
-use extend\driver\file\FileDriver;
-use extend\exception\AdminException;
-use extend\exception\UploadFileException;
-use think\db\exception\DataNotFoundException;
-use think\db\exception\DbException;
-use think\db\exception\ModelNotFoundException;
+use core\base\BaseCoreService;
 
 /**
  * 素材管理服务层

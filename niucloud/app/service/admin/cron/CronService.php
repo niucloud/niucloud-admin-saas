@@ -11,11 +11,8 @@
 
 namespace app\service\admin\cron;
 
-use app\model\site\Site;
-use app\model\site\SiteGroup;
-use app\service\admin\BaseAdminService;
 use app\service\core\cron\CoreCronService;
-use extend\exception\AdminException;
+use core\base\BaseAdminService;
 
 /**
  * 自动任务服务层

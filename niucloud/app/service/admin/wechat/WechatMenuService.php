@@ -12,12 +12,11 @@
 namespace app\service\admin\wechat;
 
 use app\model\sys\SysConfig;
-use app\service\admin\BaseAdminService;
-
 use app\service\core\sys\CoreConfigService;
 use app\service\core\wechat\CoreWechatApiService;
+use core\base\BaseAdminService;
+use core\exception\WechatException;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
-use extend\exception\WechatException;
 use think\Model;
 
 /**
@@ -44,7 +43,7 @@ class WechatMenuService extends BaseAdminService
      * @return SysConfig|bool|Model
      * @throws InvalidArgumentException
      */
-    public function update(array $data){
+    public function edit(array $data){
         $core_wechat_api_service = new CoreWechatApiService();
         $menu_result = $core_wechat_api_service->menuCreate($this->site_id, $data);
         if(!empty($menu_result['errcode']) && $menu_result['errcode'] != 0)

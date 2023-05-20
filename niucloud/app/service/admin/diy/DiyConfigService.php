@@ -11,8 +11,8 @@
 
 namespace app\service\admin\diy;
 
-use app\service\admin\BaseAdminService;
 use app\service\core\diy\CoreDiyConfigService;
+use core\base\BaseAdminService;
 
 /**
  * 自定义页面相关配置服务层

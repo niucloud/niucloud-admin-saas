@@ -13,8 +13,8 @@ namespace app\service\admin\sys;
 
 use app\enum\sys\MenuTypeEnum;
 use app\model\sys\SysMenu;
-use app\service\admin\BaseAdminService;
-use extend\exception\AdminException;
+use core\base\BaseAdminService;
+use core\exception\AdminException;
 use think\Exception;
 use think\facade\Cache;
 
@@ -43,7 +43,7 @@ class MenuService extends BaseAdminService
         if(!$menu->isEmpty()) throw new AdminException('validate_menu.exit_menu_key');//创建失败
 
         $res = $this->model->create($data);
-        if(!$res) throw new AdminException(100010);//创建失败
+        if(!$res) throw new AdminException('ADD_FAIL');//创建失败
 
         Cache::tag(self::$cache_tag_name)->clear();
         return $res;
@@ -56,7 +56,7 @@ class MenuService extends BaseAdminService
      * @param array $data
      * @return SysMenu
      */
-    public function update(string $menu_key, array $data)
+    public function edit(string $menu_key, array $data)
     {
         $where = array(
             ['menu_key', '=', $menu_key]
@@ -88,7 +88,7 @@ class MenuService extends BaseAdminService
         }
         $menu = $this->model->where($where)->findOrEmpty();
         if ($menu->isEmpty())
-            throw new AdminException(200001);
+            throw new AdminException('MENU_NOT_EXIST');
         return $menu;
     }
     /**
@@ -100,7 +100,7 @@ class MenuService extends BaseAdminService
         //查询是否有下级菜单或按钮
         $menu = $this->find($menu_key);
         if($this->model::where([['parent_key', '=', $menu_key]])->count() > 0)
-            throw new AdminException(200002);
+            throw new AdminException('MENU_NOT_ALLOW_DELETE');
 
         $res = $menu->delete();
         Cache::tag(self::$cache_tag_name)->clear();

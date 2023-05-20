@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\article;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\article\ArticleCategoryService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class ArticleCategory extends BaseAdminController
@@ -56,7 +56,7 @@ class ArticleCategory extends BaseAdminController
         ]);
         $this->validate($data, 'app\validate\article\ArticleCategory.add');
         $id = (new ArticleCategoryService())->add($data);
-        return success(100011, ['id' => $id]);
+        return success('ADD_SUCCESS', ['id' => $id]);
     }
 
     /**
@@ -64,15 +64,15 @@ class ArticleCategory extends BaseAdminController
      * @param int $category_id  //分类id
      * @return Response
      */
-    public function update(int $category_id){
+    public function edit(int $category_id){
         $data = $this->request->params([
             ['name', ''],
             ['is_show', 1],
             ['sort', 0],
         ]);
-        $this->validate($data, 'app\validate\article\ArticleCategory.update');
-        (new ArticleCategoryService())->update($category_id, $data);
-        return success(100004);
+        $this->validate($data, 'app\validate\article\ArticleCategory.edit');
+        (new ArticleCategoryService())->edit($category_id, $data);
+        return success('EDIT_SUCCESS');
     }
 
     /**
@@ -81,7 +81,7 @@ class ArticleCategory extends BaseAdminController
      */
     public function del(int $category_id){
         (new ArticleCategoryService())->del($category_id);
-        return success(100003);
+        return success('DELETE_SUCCESS');
     }
 
 }

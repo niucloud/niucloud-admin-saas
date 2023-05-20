@@ -11,8 +11,9 @@
 
 namespace app\adminapi\controller\login;
 
-use app\adminapi\controller\BaseAdminController;
+use app\service\admin\auth\ConfigService;
 use app\service\admin\auth\LoginService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class Login extends BaseAdminController
@@ -21,7 +22,7 @@ class Login extends BaseAdminController
      * 登录
      * @return Response
      */
-    public function login()
+    public function login($app_type)
     {
 
         $data = $this->request->params([
@@ -30,10 +31,10 @@ class Login extends BaseAdminController
         ]);
         //参数验证
         //验证码验证
-        $result = ( new LoginService() )->login($data[ 'username' ], $data[ 'password' ]);
+        $result = ( new LoginService() )->login($data[ 'username' ], $data[ 'password' ], $app_type);
         if (!$result) {
             //账号密码错误...., 重置验证码
-            return fail(101005);
+            return fail('USER_ERROR');
         }
         return success($result);
 
@@ -46,7 +47,17 @@ class Login extends BaseAdminController
     public function logout()
     {
         ( new LoginService )->logout();
-        return success(102008);
+        return success('LOGOUT');
     }
 
+
+
+    /**
+     * 获取登录设置
+     * @return Response
+     */
+    public function getConfig()
+    {
+        return success(( new ConfigService() )->getConfig());
+    }
 }

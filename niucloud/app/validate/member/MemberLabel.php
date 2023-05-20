@@ -38,6 +38,6 @@ class MemberLabel extends Validate
 
     protected $scene = [
         'add'  =>  ['label_name', 'memo', 'sort'],
-        'update'  =>  ['label_name', 'memo', 'sort'],
+        'edit'  =>  ['label_name', 'memo', 'sort'],
     ];
 }

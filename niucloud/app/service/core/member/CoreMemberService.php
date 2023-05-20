@@ -12,7 +12,8 @@
 namespace app\service\core\member;
 
 use app\model\member\Member;
-use app\service\core\BaseCoreService;
+use core\base\BaseCoreService;
+use think\db\exception\DbException;
 
 /**
  * 会员信息服务层
@@ -42,7 +43,7 @@ class CoreMemberService extends BaseCoreService
             'headimg' => 'headimg',
             'member_label' => 'member_label',
             'birthday' => 'birthday',
-            'sex' => 'sex'
+            'sex' => 'sex',
         };
         $where = array(
             ['site_id', '=', $site_id],
@@ -79,4 +80,25 @@ class CoreMemberService extends BaseCoreService
         return $this->model->where($where)->findOrEmpty();
     }
 
+    /**
+     * 会员数量
+     * @return int
+     * @throws DbException
+     */
+    public function getCount(array $where = []){
+        $condition = array();
+        if(!empty($where['site_id'])){
+            $condition[] = ['site_id', '=', $where['site_id']];
+        }
+        if(!empty($where['create_time'])){
+            $condition[] = ['create_time', 'between', $where['create_time']];
+        }
+        if(!empty($where['sex'])){
+            $condition[] = ['sex', '=', $where['sex']];
+        }
+        if(!empty($where['last_visit_time'])){
+            $condition[] = ['last_visit_time', 'between', $where['last_visit_time']];
+        }
+        return $this->model->where($condition)->count();
+    }
 }

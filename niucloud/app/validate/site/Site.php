@@ -40,6 +40,6 @@ class Site extends Validate
 
     protected $scene = [
         'add'  =>  ['site_name', 'group_id', 'expire_time'],
-        "update" => ['site_name']
+        "edit" => ['site_name']
     ];
 }

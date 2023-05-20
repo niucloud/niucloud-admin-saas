@@ -54,6 +54,6 @@ class Article extends Validate
 
     protected $scene = [
         'add' => ['title','intro', 'summary', 'image', 'author', 'is_show', 'sort', 'content', 'category_id'],
-        'update' => ['title','intro', 'summary', 'image', 'author', 'is_show', 'sort', 'content', 'category_id'],
+        'edit' => ['title','intro', 'summary', 'image', 'author', 'is_show', 'sort', 'content', 'category_id'],
     ];
 }

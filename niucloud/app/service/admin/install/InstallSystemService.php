@@ -11,13 +11,11 @@
 
 namespace app\service\admin\install;
 
-use app\enum\install\InstallAdminMenuEnum;
-use app\enum\install\InstallSiteMenuEnum;
 use app\enum\sys\AppTypeEnum;
 use app\model\sys\SysMenu;
-use app\service\admin\BaseAdminService;
 use app\service\admin\sys\MenuService;
-use extend\util\ConfigUtil;
+use app\service\core\menu\CoreMenuService;
+use core\base\BaseAdminService;
 use think\facade\Cache;
 
 /**
@@ -46,13 +44,14 @@ class InstallSystemService extends BaseAdminService
     {
         $sys_menu = new SysMenu();
 
-        //平台菜单
+        //系统菜单
         $admin_menus = $this->loadMenu(AppTypeEnum::ADMIN);
         $site_menus = $this->loadMenu(AppTypeEnum::SITE);
         $menus = array_merge($admin_menus, $site_menus);
-        $sys_menu->where([['id', '>', 0]])->delete();
+        $sys_menu->where([ [ 'id', '>', 0 ] ])->delete();
         $sys_menu->replace()->insertAll($menus);
-
+        //插件菜单
+        (new CoreMenuService())->refreshAllAddonMenu();
         // 清除缓存
         Cache::tag(MenuService::$cache_tag_name)->clear();
         return true;
@@ -65,11 +64,8 @@ class InstallSystemService extends BaseAdminService
     public function loadMenu($app_type)
     {
         //加载系统
-        $system_tree = include root_path().str_replace('/', DIRECTORY_SEPARATOR, "app/enum/install/menu/system/".$app_type.".php");
-        //加载扩展插件菜单
-        $config_util = new ConfigUtil(root_path().str_replace('/', DIRECTORY_SEPARATOR, "app/enum/install/menu/plugin/".$app_type), $system_tree);
-        $tree = $config_util->loadConfig();
-        $this->menuTreeToList($tree, '',$app_type);
+        $system_tree = include root_path() . str_replace('/', DIRECTORY_SEPARATOR, "app/enum/menu/" . $app_type . ".php");
+        $this->menuTreeToList($system_tree, '', $app_type);
         $menu_list = $this->menu_list;
         $this->menu_list = [];
         return $menu_list;
@@ -86,27 +82,27 @@ class InstallSystemService extends BaseAdminService
         if (is_array($tree)) {
             foreach ($tree as $key => $value) {
                 $item = [
-                    'menu_name' => $value['menu_name'],
-                    'menu_key' => $value['menu_key'],
+                    'menu_name' => $value[ 'menu_name' ],
+                    'menu_key' => $value[ 'menu_key' ],
                     'app_type' => $app_type,
-                    'parent_key' => $value['parent_key'] ?? $parent_key,
-                    'menu_type' => $value['menu_type'],
-                    'icon' => $value['icon'] ?? '',
-                    'api_url' => $value['api_url'] ?? '',
-                    'router_path' => $value['router_path'] ?? '',
-                    'view_path' => $value['view_path'] ?? '',
-                    'methods' => $value['methods'] ?? '',
-                    'sort' => $value['sort'] ?? '',
+                    'parent_key' => $value[ 'parent_key' ] ?? $parent_key,
+                    'menu_type' => $value[ 'menu_type' ],
+                    'icon' => $value[ 'icon' ] ?? '',
+                    'api_url' => $value[ 'api_url' ] ?? '',
+                    'router_path' => $value[ 'router_path' ] ?? '',
+                    'view_path' => $value[ 'view_path' ] ?? '',
+                    'methods' => $value[ 'methods' ] ?? '',
+                    'sort' => $value[ 'sort' ] ?? '',
                     'status' => 1,
-                    'is_show' => $value['is_show'] ?? 1,
-                    'en_menu_name' => $value['en_menu_name'] ?? '',
+                    'is_show' => $value[ 'is_show' ] ?? 1,
+                    'en_menu_name' => $value[ 'en_menu_name' ] ?? '',
                 ];
                 $refer = $value;
                 if (isset($refer[ 'children' ])) {
                     unset($refer[ 'children' ]);
                     array_push($this->menu_list, $item);
                     $p_key = $refer[ 'menu_key' ];
-                    $this->menuTreeToList($value[ 'children' ],$p_key, $app_type);
+                    $this->menuTreeToList($value[ 'children' ], $p_key, $app_type);
                 } else {
                     array_push($this->menu_list, $item);
                 }

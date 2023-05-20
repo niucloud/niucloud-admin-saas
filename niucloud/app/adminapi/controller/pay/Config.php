@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\pay;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\pay\PayConfigService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class Config extends BaseAdminController
@@ -58,6 +58,7 @@ class Config extends BaseAdminController
     public function lists(){
          return success((new PayConfigService())->getPayConfigList());
     }
+
 
 
 }

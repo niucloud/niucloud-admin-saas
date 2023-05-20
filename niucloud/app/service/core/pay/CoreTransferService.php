@@ -11,18 +11,11 @@
 
 namespace app\service\core\pay;
 
-use app\enum\common\ChannelEnum;
-use app\enum\order\OrderTypeEnum;
-use app\enum\pay\OnlinePayEnum;
-use app\enum\pay\PayEnum;
 use app\enum\pay\TransferEnum;
-use app\job\pay\PayReturnTo;
 use app\model\pay\Pay;
 use app\model\pay\Transfer;
-use app\service\core\BaseCoreService;
-use app\service\core\member\CoreMemberService;
-use extend\exception\PayException;
-use think\facade\Log;
+use core\base\BaseCoreService;
+use core\exception\PayException;
 use think\facade\Db;
 
 /**
@@ -59,14 +52,10 @@ class CoreTransferService extends BaseCoreService
             'transfer_no' => $transfer_no,
             'main_id' => $main_id,
             'main_type' => $main_type,
-
             'transfer_status' => TransferEnum::WAIT,
-
             'remark' => $remark,
         );
         $this->model->create($transfer_data);
-
-
         return $transfer_no;
     }
 
@@ -81,8 +70,8 @@ class CoreTransferService extends BaseCoreService
     public function transfer(int $site_id, string $transfer_no, string $transfer_type, array $data){
         $transfer = $this->findTransferByTransferNo($site_id, $transfer_no);
 
-        if($transfer->isEmpty()) throw new PayException(700009);
-        if(!in_array($transfer['transfer_status'], [TransferEnum::WAIT, TransferEnum::FAIL]))  throw new PayException(700008);
+        if($transfer->isEmpty()) throw new PayException('TRANSFER_ORDER_INVALID');
+        if(!in_array($transfer['transfer_status'], [TransferEnum::WAIT, TransferEnum::FAIL]))  throw new PayException('TRANFER_STATUS_NOT_IN_WAIT_TANSFER');
 
         $transfer_account = $data['transfer_account'] ?? '';
         $transfer_realname = $data['transfer_realname'] ?? '';
@@ -94,7 +83,8 @@ class CoreTransferService extends BaseCoreService
             'transfer_bank' => $data['transfer_bank'] ?? '',//转账银行
             'transfer_account' => $transfer_account,//转账账号
             'openid' => $data['openid'] ?? '',
-
+            'transfer_voucher' => $data['transfer_voucher'] ?? '',
+            'transfer_remark' => $data['transfer_remark'] ?? '',
         );
         $transfer->save($transfer_data);
 
@@ -106,7 +96,7 @@ class CoreTransferService extends BaseCoreService
         $params = [];
         if(TransferEnum::getTransferType()[$transfer_type]['is_online']){
             try {
-                $result = $this->pay_event->transfer($site_id, $transfer_type, $transfer['money'], $transfer_no, $transfer_account, $transfer_realname, $transfer['remark']);
+                $result = $this->pay_event->init($site_id, 'transfer', $transfer_type)->transfer($transfer['money'], $transfer_no, $transfer_account, $transfer_realname, $transfer['remark']);
                 $params['batch_id'] = $result['batch_id'];
                 $params['out_batch_no'] = $result['out_batch_no'];
             }catch(\Throwable $e){
@@ -144,8 +134,8 @@ class CoreTransferService extends BaseCoreService
     public function success(int $site_id, string $transfer_no, string $transfer_type, array $params = []){
         $transfer = $this->findTransferByTransferNo($site_id, $transfer_no);
 
-        if($transfer->isEmpty()) throw new PayException(700009);
-        if(!in_array($transfer['transfer_status'], [TransferEnum::WAIT, TransferEnum::FAIL]))  throw new PayException(700008);
+        if($transfer->isEmpty()) throw new PayException('TRANSFER_ORDER_INVALID');
+        if(!in_array($transfer['transfer_status'], [TransferEnum::WAIT, TransferEnum::FAIL]))  throw new PayException('TRANFER_STATUS_NOT_IN_WAIT_TANSFER');
 
         $trade_type = $transfer->trade_type;
         $data = array(
@@ -185,8 +175,8 @@ class CoreTransferService extends BaseCoreService
     public function fail(int $site_id, string $transfer_no, string $transfer_type, array $params = []){
         $transfer = $this->findTransferByTransferNo($site_id, $transfer_no);
 
-        if($transfer->isEmpty()) throw new PayException(700009);
-        if(!in_array($transfer['transfer_status'], [TransferEnum::WAIT, TransferEnum::FAIL]))  throw new PayException(700008);
+        if($transfer->isEmpty()) throw new PayException('TRANSFER_ORDER_INVALID');
+        if(!in_array($transfer['transfer_status'], [TransferEnum::WAIT, TransferEnum::FAIL]))  throw new PayException('TRANFER_STATUS_NOT_IN_WAIT_TANSFER');
         $data = array(
             'transfer_time' => time(),
             'transfer_status' => TransferEnum::FAIL,

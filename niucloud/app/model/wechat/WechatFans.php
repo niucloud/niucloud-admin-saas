@@ -11,7 +11,7 @@
 
 namespace app\model\wechat;
 
-use app\model\BaseModel;
+use core\base\BaseModel;
 
 /**
  * 微信粉丝模型

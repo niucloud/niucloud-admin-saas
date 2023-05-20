@@ -11,10 +11,10 @@
 
 namespace app\service\core\wechat;
 
-use app\service\core\BaseCoreService;
+use core\base\BaseCoreService;
+use core\exception\WechatException;
 use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
-use extend\exception\WechatException;
 
 /**
  * easywechat主体提供
@@ -34,7 +34,7 @@ class CoreWechatService extends BaseCoreService
         $core_wechat_service = new CoreWechatConfigService();
         $wechat_config = $core_wechat_service->getWechatConfig($site_id);
         if(empty($wechat_config['app_id']) || empty($wechat_config['app_secret']))
-            throw new WechatException(400000);//公众号未配置
+            throw new WechatException('WECHAT_NOT_EXIST');//公众号未配置
         $config = array(
             'app_id' => $wechat_config['app_id'],
             'secret' => $wechat_config['app_secret'],

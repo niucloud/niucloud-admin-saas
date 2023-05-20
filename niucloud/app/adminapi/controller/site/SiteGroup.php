@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\site;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\site\SiteGroupService;
+use core\base\BaseAdminController;
 use think\Response;
 
 /**
@@ -55,7 +55,7 @@ class SiteGroup extends BaseAdminController
         ]);
         $this->validate($data, 'app\validate\site\SiteGroup.add');
         $group_id = (new SiteGroupService())->add($data);
-        return success(100011, ['group_id' => $group_id]);
+        return success('ADD_SUCCESS', ['group_id' => $group_id]);
     }
 
     /**
@@ -63,15 +63,15 @@ class SiteGroup extends BaseAdminController
      * @param $group_id
      * @return Response
      */
-    public function update($group_id){
+    public function edit($group_id){
         $data = $this->request->params([
             ['group_name', ''],
             ['group_desc', ''],
             ['group_roles', ''],
         ]);
         $this->validate($data, 'app\validate\site\SiteGroup.add');
-        (new SiteGroupService())->update($group_id, $data);
-        return success(100004);
+        (new SiteGroupService())->edit($group_id, $data);
+        return success('EDIT_SUCCESS');
     }
 
     /**
@@ -82,7 +82,7 @@ class SiteGroup extends BaseAdminController
     public function del($group_id){
 
         (new SiteGroupService())->del($group_id);
-        return success(100004);
+        return success('DELETE_SUCCESS');
     }
 
     /**

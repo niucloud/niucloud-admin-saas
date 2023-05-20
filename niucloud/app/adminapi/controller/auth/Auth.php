@@ -11,10 +11,9 @@
 
 namespace app\adminapi\controller\auth;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\auth\AuthService;
 use app\service\admin\auth\AuthSiteService;
-use app\service\admin\site\SiteUserService;
+use core\base\BaseAdminController;
 
 
 class Auth extends BaseAdminController
@@ -48,23 +47,22 @@ class Auth extends BaseAdminController
         ]);
 //        $this->validate($data, 'app\validate\sys\User.modify');
         (new AuthService())->modifyAuth($field, $data['value']);
-        return success(100004);
+        return success('MODIFY_SUCCESS');
     }
 
 
     /**
      * 更新用户
      */
-    public function update(){
+    public function edit(){
         $data = $this->request->params([
             ['real_name', ''],
             ['head_img', ''],
             ['password', ''],
             ['original_password', '']
         ]);
-//        $this->validate($data, 'app\validate\sys\User.update');
-        (new AuthService())->updateAuth($data);
-        return success(100004);
+        (new AuthService())->editAuth($data);
+        return success('MODIFY_SUCCESS');
     }
 
     /**

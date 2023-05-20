@@ -155,7 +155,7 @@ class ControllerGenerator extends BaseGenerator
      */
     public function getUse()
     {
-        $tpl = "use app\\adminapi\\controller\\BaseAdminController;" . PHP_EOL;
+        $tpl = "use core\\base\\BaseAdminController;" . PHP_EOL;
         if (!empty($this->moduleName)) {
             $tpl .= "use app\\service\\admin\\" . $this->moduleName . "\\" . $this->getUCaseName() . "Service;" . PHP_EOL ;
         } else {
@@ -212,7 +212,7 @@ class ControllerGenerator extends BaseGenerator
      */
     public function getRuntimeOutDir()
     {
-        $dir = $this->outDir . 'php/app/adminapi/controller/';
+        $dir = $this->outDir . 'niucloud/app/adminapi/controller/';
         $this->checkDir($dir);
         if (!empty($this->moduleName)) {
             $dir .= $this->moduleName . '/';

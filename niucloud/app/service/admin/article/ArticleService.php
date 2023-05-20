@@ -12,7 +12,7 @@
 namespace app\service\admin\article;
 
 use app\model\article\Article;
-use app\service\admin\BaseAdminService;
+use core\base\BaseAdminService;
 
 /**
  * 文章服务层
@@ -73,7 +73,7 @@ class ArticleService extends BaseAdminService
      * @param int $id
      * @param array $data
      */
-    public function update(int $id, array $data)
+    public function edit(int $id, array $data)
     {
         $data[ 'update_time' ] = time();
         $this->model->where([ [ 'id', '=', $id ], [ 'site_id', '=', $this->site_id ] ])->update($data);

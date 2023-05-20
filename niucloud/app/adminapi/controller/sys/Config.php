@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\sys;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\sys\ConfigService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class Config extends BaseAdminController
@@ -45,7 +45,7 @@ class Config extends BaseAdminController
             ["phone",""],
             ["business_hours",""],
         ]);
-        $this->validate($data, 'app\validate\site\site.update');
+        $this->validate($data, 'app\validate\site\site.edit');
         (new ConfigService())->setWebSite($data);
         return success();
     }

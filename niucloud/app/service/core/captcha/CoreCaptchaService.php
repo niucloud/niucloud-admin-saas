@@ -12,8 +12,8 @@
 namespace app\service\core\captcha;
 
 use app\Request;
-use app\service\core\BaseCoreService;
-use extend\exception\CaptchaException;
+use core\base\BaseCoreService;
+use core\exception\CaptchaException;
 use think\captcha\facade\Captcha;
 use think\facade\Cache;
 
@@ -55,11 +55,11 @@ class CoreCaptchaService extends BaseCoreService
     public function check(){
         $captcha_key = request()->param('captcha_key', '');
         $captcha_code = request()->param('captcha_code', '');
-        if(empty($captcha_key) || empty($captcha_code)) throw new CaptchaException(100020);
+        if(empty($captcha_key) || empty($captcha_code)) throw new CaptchaException('CAPTCHA_ERROR');
         $captcha = Cache::pull($captcha_key);
-        if (empty($captcha)) throw new CaptchaException(100020);
+        if (empty($captcha)) throw new CaptchaException('CAPTCHA_ERROR');
 
-        if ($captcha_code != $captcha) throw new CaptchaException(100020);
+        if ($captcha_code != $captcha) throw new CaptchaException('CAPTCHA_ERROR');
 
         return true;
     }

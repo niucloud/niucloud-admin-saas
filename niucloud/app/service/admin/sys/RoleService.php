@@ -14,8 +14,8 @@ namespace app\service\admin\sys;
 use app\enum\sys\RoleStatusEnum;
 use app\model\sys\SysRole;
 use app\model\sys\SysUserRole;
-use app\service\admin\BaseAdminService;
-use extend\exception\AdminException;
+use core\base\BaseAdminService;
+use core\exception\AdminException;
 use think\facade\Cache;
 
 /**
@@ -87,7 +87,7 @@ class RoleService extends BaseAdminService
      * @param int $role_id
      * @param array $data
      */
-    public function update(int $role_id, array $data){
+    public function edit(int $role_id, array $data){
         $where = array(
             ['role_id', '=', $role_id],
             ['site_id', '=', $this->site_id],
@@ -110,7 +110,7 @@ class RoleService extends BaseAdminService
         );
         $role = $this->model->where($where)->findOrEmpty();
         if ($role->isEmpty())
-            throw new AdminException(202001);
+            throw new AdminException('USER_ROLE_NOT_EXIST');
         return $role;
     }
 
@@ -123,7 +123,7 @@ class RoleService extends BaseAdminService
     public function del(int $role_id){
         $role = $this->find($this->site_id, $role_id);
         if(SysUserRole::where([['role_ids', 'like',['%"'.$role_id.'"%']]])->count() > 0)
-            throw new AdminException(202002);
+            throw new AdminException('USER_ROLE_NOT_ALLOW_DELETE');
         $res = $role->delete();
         Cache::tag(self::$cache_tag_name.$this->site_id)->clear();
         return $res;
@@ -155,8 +155,15 @@ class RoleService extends BaseAdminService
         sort($role_ids);
         $cache_name = 'user_role_'.$site_id.'_'.md5(implode('_', $role_ids));
         return Cache::tag([MenuService::$cache_tag_name, self::$cache_tag_name.$site_id])->remember($cache_name,  function() use($role_ids) {
-            $rules = $this->model::where([['role_id', 'IN', $role_ids], ['status', '=', RoleStatusEnum::ON]])->column('rules');
-            return array_unique(explode(',', implode(',', $rules)));
+            $rules = $this->model::where([['role_id', 'IN', $role_ids], ['status', '=', RoleStatusEnum::ON]])->field('rules')->select()->toArray();
+            if(!empty($rules)){
+                $temp = [];
+                foreach($rules as $k => $v){
+                    $temp = array_merge($temp, $v['rules']);
+                }
+                return array_unique($temp);
+            }
+            return [];
         });
     }
 }

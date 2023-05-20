@@ -11,11 +11,10 @@
 
 namespace app\adminapi\controller\upload;
 
-use app\adminapi\controller\BaseAdminController;
 use app\adminapi\controller\sys\AdminException;
-use app\enum\sys\StorageEnum;
 use app\service\admin\file\UploadConfigService;
 use app\service\admin\file\UploadService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class Upload extends BaseAdminController
@@ -53,12 +52,12 @@ class Upload extends BaseAdminController
      * 文件上传(默认不上云)
      * @return Response
      */
-    public function document(){
+    public function document($type){
         $data = $this->request->params([
             ['file', 'file'],
         ], true);
         $upload_service = new UploadService();
-        return success($upload_service->document($data['file'], true));
+        return success($upload_service->document($data['file'], $type, true));
     }
 
 
@@ -78,7 +77,7 @@ class Upload extends BaseAdminController
             ]
         );
         (new UploadConfigService())->setUploadConfig($data);
-        return success(100016);
+        return success('SET_SUCCESS');
     }
 
     /**
@@ -88,19 +87,6 @@ class Upload extends BaseAdminController
     public function getUploadConfig()
     {
         return success((new UploadConfigService())->getUploadConfig());
-    }
-
-    /**
-     * 证书上传
-     * @param $type
-     * @return void
-     */
-    public function cert($type){
-        $data = $this->request->params([
-            ['file', 'file'],
-        ], true);
-        $upload_service = new UploadService();
-        return success($upload_service->cert($data['file'], $type));
     }
 
 }

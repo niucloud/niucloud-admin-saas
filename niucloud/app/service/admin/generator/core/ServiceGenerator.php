@@ -154,7 +154,7 @@ class ServiceGenerator extends BaseGenerator
      */
     public function getRuntimeOutDir()
     {
-        $dir = $this->outDir . 'php/app/service/admin/';
+        $dir = $this->outDir . 'niucloud/app/service/admin/';
         $this->checkDir($dir);
         if (!empty($this->moduleName)) {
             $dir .= $this->moduleName . '/';

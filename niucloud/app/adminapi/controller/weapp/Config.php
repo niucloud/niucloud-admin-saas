@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\weapp;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\weapp\WeappConfigService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class Config extends BaseAdminController
@@ -42,7 +42,7 @@ class Config extends BaseAdminController
         ]);
         $this->validate($data, 'app\validate\channel\Weapp.set');
         (new WeappConfigService())->setWeappConfig($data);
-        return success(100016);
+        return success('SET_SUCCESS');
     }
 
 

@@ -12,7 +12,7 @@
 namespace app\model\sys;
 
 use app\enum\sys\CronEnum;
-use app\model\BaseModel;
+use core\base\BaseModel;
 use think\db\Query;
 
 /**

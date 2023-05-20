@@ -14,9 +14,10 @@ namespace app\service\core\pay;
 use app\enum\common\ChannelEnum;
 use app\enum\pay\PayEnum;
 use app\enum\pay\TransferEnum;
-use app\service\core\BaseCoreService;
-use extend\driver\pay\PayDriver;
-use extend\exception\PayException;
+use core\base\BaseCoreService;
+use core\exception\PayException;
+use core\pay\PayDriver;
+use core\pay\PayLoader;
 use Yansongda\Supports\Collection;
 
 /**
@@ -27,87 +28,111 @@ use Yansongda\Supports\Collection;
 class CorePayEventService extends BaseCoreService
 {
 
+    private $site_id;//站点id
+    private $config;//支付配置
+    private $type;//支付类型
+    private $channel;//支付渠道  (特殊点,转账也算是一种)
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+
+    /**
+     * 支付引擎外置触点初始化
+     * @param int $site_id
+     * @param string $channel
+     * @param string $type
+     * @return $this
+     */
+    public function init(int $site_id, string $channel = '', string $type = ''){
+        $this->site_id = $site_id;
+        $this->channel = $channel;
+        $this->type = $type;
+        $this->config = (new CorePayChannelService())->getConfigByChannelAndType($this->site_id, $this->channel, $this->type);
+        return $this;
+    }
     /**
      * 获取实例化应用
      * @param $site_id
-     * @return PayDriver
+     * @return \core\pay\PayDriver
      */
-    public function app(int $site_id, string $type, string $action = '')
+    public function app(string $action = 'query')
     {
-        $notify_url = (string)url("/api/pay/notify/$type/$site_id/$action", [], '', true);//异步回调通知地址
-        $config = (new CorePayConfigService)->getPayConfigByType($site_id, $type);
-        $config['notify_url'] = $notify_url;
-        return new PayDriver($config, $type);
-
+        $notify_url = (string)url("/api/pay/notify/$this->site_id/$this->channel/$this->type/$action", [], '', true);//异步回调通知地址
+        $this->config['notify_url'] = $notify_url;
+        return new PayLoader($this->type, $this->config);
     }
+
 
     /**
      * 去支付
-     * @param $site_id
-     * @param $type
      * @param $out_trade_no
      * @param $money
      * @param $boby
-     * @param $channel
      * @param $refund_url
      * @param $quit_url
      * @param $buyer_id
      * @return mixed
      */
-    public function pay(int $site_id, string $type, string $out_trade_no, float $money, string $boby, string $channel, string $refund_url = '', string $quit_url = '', string $buyer_id = '', string $openid = '')
+    public function pay(string $out_trade_no, float $money, string $boby, string $refund_url = '', string $quit_url = '', string $buyer_id = '', string $openid = '')
     {
-        $pay_scene = '';
+        $pay_fun = '';
 
         $params = array(
             'out_trade_no' => $out_trade_no,
             'money' => $money,
             'boby' => $boby,
-            'channel' => $channel,
+            'channel' => $this->channel,
             'refund_url' => $refund_url,
             'quit_url' => $quit_url,
             'buyer_id' => $buyer_id,
             'openid' => $openid
         );
-        switch($type){
+        switch($this->type){
             case PayEnum::WECHATPAY:
                 $params['money'] = $params['money'] * 100;
 
-                switch ($channel) {
+                switch ($this->channel) {
                     case ChannelEnum::H5://h5
-                        $pay_scene = 'wap';
+                        $pay_fun = 'wap';
                         break;
                     case ChannelEnum::WECHAT://公众号
-                        $pay_scene = 'mp';
+                        $pay_fun = 'mp';
 
                         break;
                     case ChannelEnum::WEAPP://微信小程序
-                        $pay_scene = 'mini';
+                        $pay_fun = 'mini';
                         break;
 
                     case ChannelEnum::PC://pc
-                        $pay_scene = 'scan';//扫码支付
+                        $pay_fun = 'scan';//扫码支付
                         break;
-                    case ChannelEnum::APP://pc
-                        $pay_scene = 'app';
+                    case ChannelEnum::APP://app
+                        $pay_fun = 'app';
                         break;
                 }
 
                 break;
             case PayEnum::ALIPAY:
-                switch ($channel) {
+                switch ($this->channel) {
                     case ChannelEnum::H5://h5
-                        $pay_scene = 'wap';
+                        $pay_fun = 'wap';
                         break;
                     case ChannelEnum::PC://pc
-                        $pay_scene = 'web';
+                        $pay_fun = 'web';
                         break;
-                    case ChannelEnum::APP://pc
-                        $pay_scene = 'app';
+                    case ChannelEnum::APP://app
+                        $pay_fun = 'app';
+                        break;
+                    case ChannelEnum::WECHAT://wap
+                        $pay_fun = 'wap';
                         break;
                 }
         }
-        if(empty($pay_scene)) throw new PayException(700006);
-        return $this->app($site_id, $type, 'pay')->$pay_scene($params);
+        if(empty($pay_fun)) throw new PayException('PAYMENT_METHOD_NOT_SCENE');
+        return $this->app('pay')->$pay_fun($params);
     }
 
 
@@ -122,9 +147,9 @@ class CorePayEventService extends BaseCoreService
      * @param $to_name
      * @return mixed|Collection
      */
-    public function transfer(int $site_id, string $type, float $money, string $transfer_no,string  $to_no, string $to_name, string $remark, array $transfer_list = [], string $to_type = '', string $product_code = '', string $scene = '')
+    public function transfer(float $money, string $transfer_no,string  $to_no, string $to_name, string $remark, array $transfer_list = [], string $to_type = '', string $product_code = '', string $scene = '')
     {
-        $transfer_type = TransferEnum::getPayTypeByTransfer($type);
+        $transfer_type = TransferEnum::getPayTypeByTransfer($this->type);
         switch($transfer_type){
             case PayEnum::WECHATPAY:
                 $money = $money * 100;
@@ -132,7 +157,7 @@ class CorePayEventService extends BaseCoreService
             case PayEnum::ALIPAY:
 
         }
-        return $this->app($site_id, $transfer_type)->transfer([
+        return $this->app('transfer')->transfer([
             'transfer_no' => $transfer_no,
             'money' => $money,
             'product_code' => $product_code,
@@ -147,14 +172,12 @@ class CorePayEventService extends BaseCoreService
 
     /**
      * 关闭支付
-     * @param int $site_id
-     * @param string $type
      * @param string $out_trade_no
      * @return null
      */
-    public function close(int $site_id, string $type, string $out_trade_no)
+    public function close(string $out_trade_no)
     {
-        return $this->app($site_id, $type)->close($out_trade_no);
+        return $this->app('close')->close($out_trade_no);
     }
 
     /**
@@ -164,57 +187,54 @@ class CorePayEventService extends BaseCoreService
      * @param $money
      * @return void
      */
-    public function refund(int $site_id, string $type, string $out_trade_no, float $money)
+    public function refund(string $out_trade_no, float $money, float $total, string $refund_no)
     {
-        return $this->app($site_id, $type, 'refund')->refund($out_trade_no, $money);
+        return $this->app('refund')->refund([
+            'out_trade_no' => $out_trade_no,
+            'out_trade_no' => $money,
+            'out_trade_no' => $total,
+            'out_trade_no' => $refund_no
+        ]);
     }
 
     /**
      * 支付异步通知
-     * @param $site_id
-     * @param $type
      * @return void
      */
-    public function notify(int $site_id, string $type, Callable $callback)
+    public function notify(Callable $callback)
     {
-        return $this->app($site_id, $type)->notify($callback);
+        return $this->app()->notify($callback);
     }
 
     /**
      * 查询普通支付订单
-     * @param $site_id
-     * @param $type
      * @param $out_trade_no
      * @return null
      */
-    public function getOrder(int $site_id, string $type, string $out_trade_no)
+    public function getOrder(string $out_trade_no)
     {
-        return $this->app($site_id, $type, __FUNCTION__)->getOrder($out_trade_no);
+        return $this->app()->getOrder(['out_trade_no' => $out_trade_no]);
     }
 
     /**
      * 查询退款订单
-     * @param $site_id
-     * @param $type
      * @param $out_trade_no
      * @param $refund_no
      * @return null
      */
-    public function getRefund(int $site_id, string $type, string $out_trade_no, string $refund_no)
+    public function getRefund(string $out_trade_no, string $refund_no)
     {
-        return $this->app($site_id, $type)->getRefund($out_trade_no, $refund_no);
+        return $this->app()->getRefund($out_trade_no, $refund_no);
     }
 
     /**
      * 查询转账订单
-     * @param $site_id
-     * @param $type
      * @param $transfer_no
      * @return null
      */
-    public function getTransfer(int $site_id, string $type, string $transfer_no)
+    public function getTransfer(string $transfer_no)
     {
-        return $this->app($site_id, $type)->getTransfer($transfer_no);
+        return $this->app()->getTransfer($transfer_no);
     }
 
 

@@ -47,4 +47,21 @@ class FileEnum
             self::QCLOUD  => get_lang('enum_file.storage_type_qcloud'),//腾讯云
         ];
     }
+
+
+    const WECHAT = 'wechat';//微信支付
+
+
+    /**
+     * 获取上传的场景
+     * @return array
+     */
+    public static function getSceneType(){
+        return [
+            self::WECHAT,//微信相关上传
+            self::ALIYUN,//阿里云相关上传
+            self::IMAGE,//图片上传
+            self::VIDEO,//视频上传
+        ];
+    }
 }

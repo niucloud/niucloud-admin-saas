@@ -11,6 +11,8 @@
 
 namespace app\enum\member;
 
+use core\util\ConfigUtil;
+
 /**
  * 会员账户类型
  * Class MemberAccountEnum
@@ -19,12 +21,15 @@ namespace app\enum\member;
 class MemberAccountEnum
 {
     //会员积分
-    const POINT   = 'point';
+    const POINT = 'point';
     //会员余额
-    const BALANCE  = 'balance';
+    const BALANCE = 'balance';
 
-    //会员零钱
-    const MONEY  = 'money';
+    //会员可提现余额
+    const MONEY = 'money';
+
+    //会员佣金
+    const COMMISSION = 'commission';
 
     //账户增加
     const INC = 'inc';
@@ -38,84 +43,32 @@ class MemberAccountEnum
             self::POINT => get_lang('enum_member.account_point'),
             self::BALANCE => get_lang('enum_member.account_balance'),
             self::MONEY => get_lang('enum_member.account_money'),
+            self::COMMISSION => get_lang('enum_member.account_commission'),
         ];
         if (empty($type)) {
             return $data;
         }
-        return $data[$type] ?? '';
+        return $data[ $type ] ?? '';
     }
 
-
-    public static function getFromType($type = ''){
-
-        $data = [
-            self::POINT => [
-                //调整
-                'adjust' => [
-                    //名称
-                    'name' => get_lang('enum_member.account_point_adjust'),
-                    //是否增加
-                    self::INC => 1,
-                    //是否减少
-                    self::DEC => 1,
-                ],
-                //充值赠送
-                'recharge_give' => [
-                    //名称
-                    'name' => get_lang('enum_member.account_point_recharge_give'),
-                    //是否增加
-                    self::INC => 1,
-                    //是否减少
-                    self::DEC => 0,
-                ],
-
-            ],
-            self::BALANCE => [
-                //调整
-                'adjust' => [
-                    //名称
-                    'name' => get_lang('enum_member.account_balance_adjust'),
-                    //是否增加
-                    self::INC => 1,
-                    //是否减少
-                    self::DEC => 1,
-                ],
-                //充值
-                'recharge' => [
-                    //名称
-                    'name' => get_lang('enum_member.account_balance_recharge'),
-                    //是否增加
-                    self::INC => 1,
-                    //是否减少
-                    self::DEC => 0,
-                ],
-            ],
-            self::MONEY => [
-
-                //活动奖励
-                'award' => [
-                    //名称
-                    'name' => get_lang('enum_member.account_money_award'),
-                    //是否增加
-                    self::INC => 1,
-                    //是否减少
-                    self::DEC => 0,
-                ],
-                //提现
-                'withdraw' => [
-                    //名称
-                    'name' => get_lang('enum_member.account_money_withdraw'),
-                    //是否增加
-                    self::INC => 1,
-                    //是否减少
-                    self::DEC => 0,
-                ],
-            ],
-        ];
-        if (empty($type)) {
-            return $data;
+    /**
+     * 获取账户变动方式
+     * @param string $type
+     * @return array|mixed|string
+     */
+    public static function getFromType($type = '')
+    {
+        $type_util = new ConfigUtil(root_path() . str_replace('/', DIRECTORY_SEPARATOR, "app/enum/member/fromtypes"));
+        $file_data = $type_util->loadFiles();
+        $types = [];
+        foreach ($file_data as $data) {
+            $types = empty($types) ? $data : array_merge2($types, $data);
         }
-        return $data[$type] ?? '';
+
+        if (empty($type)) {
+            return $types;
+        }
+        return $types[ $type ] ?? '';
     }
 
 }

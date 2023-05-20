@@ -13,9 +13,11 @@ namespace app\model\member;
 
 use app\enum\common\ChannelEnum;
 use app\enum\common\CommonEnum;
+use app\enum\member\MemberEnum;
 use app\enum\member\MemberLoginTypeEnum;
+use app\enum\member\MemberRegisterChannelEnum;
 use app\enum\member\MemberRegisterTypeEnum;
-use app\model\BaseModel;
+use core\base\BaseModel;
 use think\db\Query;
 use think\model\concern\SoftDelete;
 
@@ -29,6 +31,11 @@ class Member extends BaseModel
 
 
     use SoftDelete;
+    protected $type = [
+        'last_visit_time' =>  'timestamp',
+        'login_time' => 'timestamp',
+        'last_consum_time' => 'timestamp',
+    ];
     /**
      * 数据表主键
      * @var string
@@ -59,13 +66,22 @@ class Member extends BaseModel
     protected $jsonAssoc = true;
 
     /**
+     * 状态字段转化
+     * @param $value
+     * @return mixed
+     */
+    public function getStatusNameAttr($value, $data)
+    {
+        return MemberEnum::getStatus()[$data['status'] ?? ''] ?? '';
+    }
+    /**
      * 注册来源字段转化
      * @param $value
      * @return mixed
      */
     public function getRegisterChannelNameAttr($value, $data)
     {
-        return ChannelEnum::getType()[ $data[ 'register_channel' ] ?? '' ] ?? '';
+        return MemberRegisterChannelEnum::getType()[ $data[ 'register_channel' ] ?? '' ] ?? '';
     }
 
     /**
@@ -110,17 +126,6 @@ class Member extends BaseModel
     }
 
     /**
-     * 手机号加密
-     * @param $value
-     * @param $data
-     * @return mixed|string
-     */
-    public function getMobileAttr($value, $data)
-    {
-        return $data[ 'mobile' ] ? substr($data[ 'mobile' ], 0, 3) . '****' . substr($data[ 'mobile' ], 7) : '';
-    }
-
-    /**
      * 是否删除搜索器
      * @param $value
      */
@@ -153,6 +158,18 @@ class Member extends BaseModel
     {
         if ($value) {
             $query->where('register_type', '=', $value);
+        }
+    }
+    /**
+     * 注册渠道搜索
+     * @param $query
+     * @param $value
+     * @param $data
+     */
+    public function searchRegisterChannelAttr($query, $value, $data)
+    {
+        if ($value) {
+            $query->where('register_channel', '=', $value);
         }
     }
 

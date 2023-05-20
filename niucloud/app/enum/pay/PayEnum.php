@@ -50,12 +50,12 @@ class PayEnum
             self::WECHATPAY => [
                 'name' => get_lang('enum_pay.type_wechatpay'),
                 'key' => self::WECHATPAY,
-                'icon' => self::WECHATPAY_ICON
+                'icon' => self::WECHATPAY_ICON,
             ],//微信支付
             self::ALIPAY => [
                 'name' => get_lang('enum_pay.type_alipay'),
                 'key' => self::ALIPAY,
-                'icon' => self::ALIPAY_ICON
+                'icon' => self::ALIPAY_ICON,
             ],//支付宝支付
 //            self::UNIPAY => [
 //                'name' => get_lang('enum_pay.type_unipay'),
@@ -70,7 +70,7 @@ class PayEnum
             self::BALANCEPAY => [
                 'name' => get_lang('enum_pay.type_balancepay'),
                 'key' => self::BALANCEPAY,
-                'icon' => self::BALANCEPAY_ICON
+                'icon' => self::BALANCEPAY_ICON,
             ],//微信支付
 //            self::ALIPAY => get_lang('enum_pay.type_alipay'),//支付宝支付
 //            self::UNIPAY => get_lang('enum_pay.type_unipay'),//银联

@@ -22,6 +22,7 @@ Route::group('sys', function () {
     /***************************************************** 系统整体信息 *************************************************/
     //系统信息
     Route::get('info', 'sys.System/info');
+    Route::get('url', 'sys.System/url');
     /***************************************************** 用户组 ****************************************************/
     //用户组列表
     Route::get('role', 'sys.Role/lists');
@@ -32,14 +33,14 @@ Route::group('sys', function () {
     //用户组新增
     Route::post('role', 'sys.Role/add');
     //编辑用户组
-    Route::put('role/:role_id', 'sys.Role/update');
+    Route::put('role/:role_id', 'sys.Role/edit');
     //删除用户组
     Route::delete('role/:role_id', 'sys.Role/del');
     /***************************************************** 菜单 ****************************************************/
     //菜单新增
     Route::post('menu', 'sys.Menu/add');
     //菜单更新
-    Route::put('menu/:menu_key', 'sys.Menu/update');
+    Route::put('menu/:menu_key', 'sys.Menu/edit');
     //菜单列表
     Route::get('menu/:app_type', 'sys.Menu/lists');
     //删除单个菜单
@@ -64,14 +65,17 @@ Route::group('sys', function () {
     //版权设置
     Route::put('config/copyright', 'sys.Config/setCopyright');
 
-
+    //登录注册设置
+    Route::get('config/login', 'login.Config/getConfig');
+    //登录注册设置
+    Route::put('config/login', 'login.Config/setConfig');
     /***************************************************** 图片上传 ****************************************************/
     //附件图片上传
     Route::post('image', 'upload.Upload/image');
     //附件视频上传
     Route::post('video', 'upload.Upload/video');
     //附件上传
-    Route::post('document', 'upload.Upload/document');
+    Route::post('document/:type', 'upload.Upload/document');
     //附件列表
     Route::get('attachment', 'sys.Attachment/lists');
     //附件列表
@@ -86,7 +90,7 @@ Route::group('sys', function () {
     //附件组新增
     Route::post('attachment/category', 'sys.Attachment/addCategory');
     //附件组更新
-    Route::put('attachment/category/:id', 'sys.Attachment/updateCategory');
+    Route::put('attachment/category/:id', 'sys.Attachment/editCategory');
     //附件组列表
     Route::get('attachment/category', 'sys.Attachment/categoryLists');
     //删除单个附件组
@@ -96,7 +100,7 @@ Route::group('sys', function () {
     //存储详情
     Route::get('storage/:storage_type', 'upload.Storage/storageConfig');
     //存储修改
-    Route::put('storage/:storage_type', 'upload.Storage/updateStorage');
+    Route::put('storage/:storage_type', 'upload.Storage/editStorage');
     //上传设置
     Route::put('upload/config', 'upload.Upload/setUploadConfig');
     //获取上传设置
@@ -107,7 +111,7 @@ Route::group('sys', function () {
     //消息详情
     Route::get('agreement/:key', 'sys.Agreement/info');
     //短信配置修改
-    Route::put('agreement/:key', 'sys.Agreement/update');
+    Route::put('agreement/:key', 'sys.Agreement/edit');
     // 刷新菜单
     Route::put('menu/refresh', 'sys.Menu/refreshMenu');
     /***************************************************** 地区管理 ****************************************************/
@@ -127,6 +131,11 @@ Route::group('sys', function () {
     Route::get('channel', 'sys.Channel/getChannelType');
     //场景域名
     Route::get('scene_domain', 'sys.Config/getSceneDomain');
+    /***************************************************** 系统环境 ****************************************************/
+    Route::get('system', 'sys.System/getSystemInfo');
+    /***************************************************** 应用管理 ****************************************************/
+    Route::get('applist', 'sys.App/getAppList');
+
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,

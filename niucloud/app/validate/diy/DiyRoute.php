@@ -30,7 +30,7 @@ class DiyRoute extends \think\Validate
 
     protected $scene = [
         "add" => [ 'title', 'name', 'page' ],
-        "update" => [ 'title', 'name', 'page' ]
+        "edit" => [ 'title', 'name', 'page' ]
     ];
 
 }

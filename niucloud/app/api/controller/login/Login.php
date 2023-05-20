@@ -11,10 +11,9 @@
 
 namespace app\api\controller\login;
 
-use app\BaseController;
 use app\service\api\captcha\CaptchaService;
 use app\service\api\login\LoginService;
-use app\service\api\scan\ScanService;
+use core\base\BaseController;
 use think\Response;
 
 class Login extends BaseController
@@ -34,7 +33,7 @@ class Login extends BaseController
         $result = (new LoginService())->account($data['username'], $data['password']);
         if(!$result){
             //账号密码错误...., 重置验证码
-            return fail(301003);
+            return fail('ACCOUNT_OR_PASSWORD_ERROR');
         }
         return success($result);
 
@@ -46,7 +45,7 @@ class Login extends BaseController
      */
     public function logout(){
         (new LoginService)->logout();
-        return success(301006);
+        return success('MEMBER_LOGOUT');
     }
 
     /**
@@ -91,6 +90,6 @@ class Login extends BaseController
         //参数验证
         $this->validate($data, 'app\validate\member\Member.reset_password');
         (new LoginService())->resetPassword($data['mobile'], $data['password']);
-        return success(301017);
+        return success('PASSWORD_RESET_SUCCESS');
     }
 }

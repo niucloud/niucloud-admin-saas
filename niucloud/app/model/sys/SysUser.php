@@ -12,8 +12,7 @@
 namespace app\model\sys;
 
 use app\enum\sys\UserEnum;
-use app\model\BaseModel;
-use think\db\Query;
+use core\base\BaseModel;
 use think\model\concern\SoftDelete;
 
 /**

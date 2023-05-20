@@ -31,7 +31,7 @@ Route::group('diy', function() {
     Route::post('diy', 'diy.Diy/add');
 
     //编辑自定义页面
-    Route::put('diy/:id', 'diy.Diy/update');
+    Route::put('diy/:id', 'diy.Diy/edit');
 
     //删除自定义页面
     Route::delete('diy/:id', 'diy.Diy/del');
@@ -50,6 +50,9 @@ Route::group('diy', function() {
 
     // 自定义路由列表
     Route::get('route', 'diy.DiyRoute/lists');
+
+    // 获取自定义路由分享内容
+    Route::get('route/info', 'diy.DiyRoute/getInfoByName');
 
     // 编辑自定义路由分享内容
     Route::put('route/share', 'diy.DiyRoute/modifyShare');

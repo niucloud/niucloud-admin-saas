@@ -11,11 +11,8 @@
 
 namespace app\service\api\sys;
 
-use app\service\admin\BaseAdminService;
-use app\service\admin\site\SiteService;
-use app\service\api\BaseApiService;
-use app\service\core\sys\CoreConfigService;
 use app\service\core\sys\CoreSysConfigService;
+use core\base\BaseApiService;
 
 /**
  * 配置服务层

@@ -11,10 +11,10 @@
 
 namespace app\service\admin\file;
 
-use app\enum\channel\CertEnum;
-use app\service\admin\BaseAdminService;
-use app\service\core\file\CoreUploadService;
-use extend\exception\UploadFileException;
+use app\enum\sys\FileEnum;
+use app\service\core\upload\CoreUploadService;
+use core\base\BaseAdminService;
+use core\exception\UploadFileException;
 
 /**
  * 用户服务层
@@ -57,60 +57,11 @@ class UploadService extends BaseAdminService
      * @param bool $is_local
      * @return array
      */
-    public function document($file,bool $is_local = false){
-        $dir = $this->root_path.'/'.'document'.'/'.$this->site_id.'/'.date('Ym').'/'.date('d');
+    public function document($file, string $type,bool $is_local = false){
+        if(!in_array($type, FileEnum::getSceneType()))
+            throw new UploadFileException('CERT_TYPE_ERROR');
+        $dir = $this->root_path.'/document/'.$type.'/'.$this->site_id.'/'.date('Ym').'/'.date('d');
         $core_upload_service = new CoreUploadService();
-        return $core_upload_service->document($file, $this->site_id, $dir, $is_local);
+        return $core_upload_service->document($file, $this->site_id, $type, $dir, true, true);
     }
-
-
-    /**
-     * 微信相关证书
-     * @param $file
-     * @param bool $is_local
-     * @return array
-     */
-    public function cert($file, string $type){
-        if(!in_array($type, CertEnum::getCertType()))
-            throw new UploadFileException(203008);
-        $dir = $this->root_path.'/cert/'.$type.'/'.$this->site_id.'/'.date('Ym').'/'.date('d');
-        $core_upload_service = new CoreUploadService();
-        return $core_upload_service->document($file, $this->site_id, $dir, true, false);
-    }
-
-    /**
-     * 小程序证书
-     * @param $file
-     * @return array
-     */
-    public function weapp($file){
-        $dir = $this->root_path.'/cert/'.'weapp'.'/'.$this->site_id.'/'.date('Ym').'/'.date('d');
-        $core_upload_service = new CoreUploadService();
-        return $core_upload_service->document($file, $this->site_id, $dir, true, false);
-    }
-
-
-    /**
-     * 微信支付相关证书
-     * @param $file
-     * @return array
-     */
-    public function wechatpay($file){
-        $dir = $this->root_path.'/cert/'.'wechatpay'.'/'.$this->site_id.'/'.date('Ym').'/'.date('d');
-        $core_upload_service = new CoreUploadService();
-        return $core_upload_service->document($file, $this->site_id, $dir, true, false);
-    }
-
-    /**
-     * 阿里云相关证书
-     * @param $file
-     * @return array
-     */
-    public function aliyun($file){
-        $dir = $this->root_path.'/cert/'.'aliyun'.'/'.$this->site_id.'/'.date('Ym').'/'.date('d');
-        $core_upload_service = new CoreUploadService();
-        return $core_upload_service->document($file, $this->site_id, $dir, true, false);
-    }
-
-
 }

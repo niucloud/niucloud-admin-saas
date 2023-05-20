@@ -30,6 +30,15 @@ class RechargeOrderEnum
     //已关闭
     const CLOSE = -1;
 
+    // 退款相关状态
+    // 未申请
+    const NOT_APPLAY = 0;
+    // 退款中
+    const REFUNDING = 1;
+    // 退款完成
+    const REFUND_COMPLETED = 2;
+    // 退款失败
+    const REFUND_FAIL = -1;
 
     /**
      * 当前订单支持的支付方式
@@ -96,6 +105,33 @@ class RechargeOrderEnum
 
 
         ];
+        if ($status == '') {
+            return $data;
+        }
+        return $data[$status] ?? '';
+    }
+
+    /**
+     * 获取退款状态
+     * @param int|string $status
+     * @return array|array[]|string
+     */
+    public static function getRefundStatus(int|string $status = '') {
+        $data = [
+            self::REFUNDING => [
+                'name' => get_lang('enum_order_refund.refunding'),
+                'status' => self::REFUNDING
+            ],
+            self::REFUND_COMPLETED => [
+                'name' => get_lang('enum_order_refund.refund_complete'),
+                'status' => self::REFUND_COMPLETED
+            ],
+            self::REFUND_FAIL => [
+                'name' => get_lang('enum_order_refund.refund_fail'),
+                'status' => self::REFUND_FAIL
+            ]
+        ];
+
         if ($status == '') {
             return $data;
         }

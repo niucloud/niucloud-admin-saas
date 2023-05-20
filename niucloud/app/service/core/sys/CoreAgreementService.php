@@ -13,8 +13,8 @@ namespace app\service\core\sys;
 
 use app\enum\sys\AgreementEnum;
 use app\model\sys\SysAgreement;
-use app\service\core\BaseCoreService;
-use extend\exception\CommonException;
+use core\base\BaseCoreService;
+use core\exception\CommonException;
 
 /**
  * 配置服务层
@@ -37,7 +37,7 @@ class CoreAgreementService extends BaseCoreService
      */
     public function getAgreement(int $site_id, string $key)
     {
-        if(!array_key_exists($key, AgreementEnum::getType())) throw new CommonException(100017);
+        if(!array_key_exists($key, AgreementEnum::getType())) throw new CommonException('AGREEMENT_TYPE_NOT_EXIST');
         $where = array(
             ['agreement_key', '=', $key],
             ['site_id', '=', $site_id]
@@ -60,7 +60,7 @@ class CoreAgreementService extends BaseCoreService
 
     public function find(int $site_id, string $key)
     {
-        if(!array_key_exists($key, AgreementEnum::getType())) throw new CommonException(100017);
+        if(!array_key_exists($key, AgreementEnum::getType())) throw new CommonException('AGREEMENT_TYPE_NOT_EXIST');
         $where = array(
             ['agreement_key', '=', $key],
             ['site_id', '=', $site_id]
@@ -78,7 +78,7 @@ class CoreAgreementService extends BaseCoreService
      */
     public function setAgreement(int $site_id, string $key, string $title, string $content)
     {
-        if(!array_key_exists($key, AgreementEnum::getType())) throw new CommonException(100017);
+        if(!array_key_exists($key, AgreementEnum::getType())) throw new CommonException('AGREEMENT_TYPE_NOT_EXIST');
         $where = array(
             ['agreement_key', '=', $key],
             ['site_id', '=', $site_id]

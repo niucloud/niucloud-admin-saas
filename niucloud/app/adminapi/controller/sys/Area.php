@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\sys;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\sys\AreaService;
+use core\base\BaseAdminController;
 
 class Area extends BaseAdminController
 {

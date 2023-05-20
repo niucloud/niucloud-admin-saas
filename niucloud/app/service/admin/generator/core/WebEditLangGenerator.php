@@ -92,7 +92,7 @@ class WebEditLangGenerator extends BaseGenerator
         if($this->table['edit_type'] != 2) {
             return '';
         }
-        $dir = $this->outDir . 'vue/src/lang/zh-cn/';
+        $dir = $this->outDir . 'admin/src/lang/zh-cn/';
         $this->checkDir($dir);
         return $dir;
     }

@@ -45,7 +45,7 @@ class Menu extends Validate
 
     protected $scene = [
         'add' => ['menu_name', 'menu_type', 'menu_key', 'router_path', 'view_path', 'methods'],
-        'update' => ['menu_name', 'menu_type', 'router_path', 'view_path', 'methods'],//更新得时候因为key中有上下级关系,所以menu_key字段是不能更新得
+        'edit' => ['menu_name', 'menu_type', 'router_path', 'view_path', 'methods'],//更新得时候因为key中有上下级关系,所以menu_key字段是不能更新得
     ];
 
     /**

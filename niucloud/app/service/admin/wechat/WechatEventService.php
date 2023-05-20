@@ -12,9 +12,8 @@
 namespace app\service\admin\wechat;
 
 use app\enum\channel\WechatEnum;
-use app\service\admin\BaseAdminService;
-
 use Closure;
+use core\base\BaseAdminService;
 
 /**
  * 微信事件中间件类(用于中间件注册)

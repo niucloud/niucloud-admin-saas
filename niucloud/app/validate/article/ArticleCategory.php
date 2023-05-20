@@ -40,6 +40,6 @@ class ArticleCategory extends Validate
 
     protected $scene = [
         'add' => ['name', 'is_show', 'sort'],
-        'update' => ['name', 'is_show', 'sort'],
+        'edit' => ['name', 'is_show', 'sort'],
     ];
 }

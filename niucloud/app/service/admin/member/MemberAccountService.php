@@ -12,10 +12,11 @@
 namespace app\service\admin\member;
 
 use app\enum\member\MemberAccountEnum;
+use app\model\member\Member;
 use app\model\member\MemberAccountLog;
-use app\service\admin\BaseAdminService;
 use app\service\core\member\CoreMemberAccountService;
-use extend\exception\AdminException;
+use core\base\BaseAdminService;
+use core\exception\AdminException;
 
 /**
  * 会员账户流水服务层（会员个人账户通过会员服务层查询）
@@ -77,6 +78,11 @@ class MemberAccountService extends BaseAdminService
         return $res;
     }
 
+    public function adjustMoney(array $data)
+    {
+        $res = (new CoreMemberAccountService())->addLog($this->site_id, $data['member_id'], MemberAccountEnum::MONEY, $data['account_data'], 'adjust', $data['memo'], 0);
+        return $res;
+    }
     /**
      * 获取账户类型的变动方式
      * @param $account_type
@@ -84,11 +90,30 @@ class MemberAccountService extends BaseAdminService
      */
     public function getFromType($account_type)
     {
-        if(!array_key_exists($account_type, MemberAccountEnum::getType())) throw new AdminException(301007);
+        if(!array_key_exists($account_type, MemberAccountEnum::getType())) throw new AdminException('MEMBER_TYPE_NOT_EXIST');
         $res = MemberAccountEnum::getFromType($account_type);
         return $res;
     }
 
+    /**
+     * 获取账户数据和
+     * @param string $account_type  (注意查询对应账户)
+     */
+    public function getSumAccount(string $account_type)
+    {
+        $sum = $this->model->where([['site_id', '=', $this->site_id], ['account_type', '=', $account_type]])->sum('account_data');
+        return $sum;
+    }
+    /**
+     * 会员账户详情
+     * @param int $member_id
+     * @return array
+     */
+    public function getMemberAccountInfo(int $member_id)
+    {
+        $field = 'point, point_get, balance, balance_get, growth, growth_get, money, money_get, commission, commission_get';
+        return (new Member())->where([['member_id', '=', $member_id], ['site_id', '=', $this->site_id]])->field($field)->findOrEmpty()->toArray();
+    }
 
 
 

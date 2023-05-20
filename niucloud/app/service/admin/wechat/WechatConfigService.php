@@ -11,10 +11,8 @@
 
 namespace app\service\admin\wechat;
 
-use app\enum\channel\WechatEnum;
-use app\service\admin\BaseAdminService;
-
 use app\service\core\wechat\CoreWechatConfigService;
+use core\base\BaseAdminService;
 
 /**
  * 微信配置模型

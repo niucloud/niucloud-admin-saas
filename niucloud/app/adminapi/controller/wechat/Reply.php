@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\wechat;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\wechat\WechatReplyService;
+use core\base\BaseAdminController;
 use think\Response;
 
 /**
@@ -60,7 +60,7 @@ class Reply extends BaseAdminController
      * 更新关键词回复
      * @return void
      */
-    public function updateKeyword($id){
+    public function editKeyword($id){
         $wechat_reply_service = new WechatReplyService();
         $data = $this->request->params([
             ['name', ''],
@@ -71,7 +71,7 @@ class Reply extends BaseAdminController
             ['status', 0],
             ['sort', ''],
         ]);
-        return success($wechat_reply_service->updateKeyword($id, $data));
+        return success($wechat_reply_service->editKeyword($id, $data));
     }
 
     /**
@@ -96,14 +96,14 @@ class Reply extends BaseAdminController
      * 更新默认回复
      * @return Response
      */
-    public function updateDefault(){
+    public function editDefault(){
         $data = $this->request->params([
             ['content_type', ''],
             ['content', ''],
             ['status', 0],
         ]);
         $wechat_reply_service = new WechatReplyService();
-        return success($wechat_reply_service->updateDefault($data));
+        return success($wechat_reply_service->editDefault($data));
     }
 
     /**
@@ -119,14 +119,14 @@ class Reply extends BaseAdminController
      * 更新关注回复
      * @return Response
      */
-    public function updateSubscribe(){
+    public function editSubscribe(){
         $data = $this->request->params([
             ['content_type', ''],
             ['content', ''],
             ['status', 0],
         ]);
         $wechat_reply_service = new WechatReplyService();
-        return success($wechat_reply_service->updateSubscribe($data));
+        return success($wechat_reply_service->editSubscribe($data));
     }
 
 

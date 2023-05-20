@@ -11,13 +11,11 @@
 
 namespace app\service\api\captcha;
 
-use app\service\api\BaseApiService;
 use app\service\core\captcha\CoreCaptchaService;
+use core\base\BaseApiService;
 
 /**
- * 文章服务层
- * Class ArticleService
- * @package app\service\api\article
+ * 验证码服务层
  */
 class CaptchaService extends BaseApiService
 {
@@ -34,7 +32,7 @@ class CaptchaService extends BaseApiService
      * @return array|null
      */
     public function create(?array $data = []){
-        return (new CoreCaptchaService())->create($this->site_id);
+        return (new CoreCaptchaService())->create(0);
     }
 
     /**
@@ -42,7 +40,7 @@ class CaptchaService extends BaseApiService
      * @return true
      */
     public function check(){
-        return (new CoreCaptchaService())->check($this->site_id);
+        return (new CoreCaptchaService())->check(0);
     }
 
 }

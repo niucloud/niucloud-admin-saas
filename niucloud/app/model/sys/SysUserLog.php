@@ -11,7 +11,7 @@
 
 namespace app\model\sys;
 
-use app\model\BaseModel;
+use core\base\BaseModel;
 use think\db\Query;
 
 /**

@@ -11,9 +11,9 @@
 
 namespace app\adminapi\controller\sys;
 
-use app\adminapi\controller\BaseAdminController;
 use app\enum\sys\CronEnum;
 use app\service\admin\cron\CronService;
+use core\base\BaseAdminController;
 
 /**
  * 自动任务

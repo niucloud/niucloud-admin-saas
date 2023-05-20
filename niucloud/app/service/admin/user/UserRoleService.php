@@ -14,9 +14,9 @@ namespace app\service\admin\user;
 
 use app\model\sys\SysRole;
 use app\model\sys\SysUserRole;
-use app\service\admin\BaseAdminService;
 use app\service\admin\sys\RoleService;
-use extend\exception\AdminException;
+use core\base\BaseAdminService;
+use core\exception\AdminException;
 use think\facade\Cache;
 
 /**
@@ -64,14 +64,14 @@ class UserRoleService extends BaseAdminService
      * @param array $role_ids
      * @return bool
      */
-    public function update(int $site_id, int $uid, array $role_ids){
+    public function edit(int $site_id, int $uid, array $role_ids){
         $user_role = $this->model->where([['uid', '=', $uid], ['site_id', '=', $site_id]])->findOrEmpty();
         if ($user_role->isEmpty())
-            throw new AdminException(201002);
+            throw new AdminException('NO_SITE_USER_ROLE');
 
         $is_admin = $user_role->is_admin;
         if($is_admin)//超级管理员不允许改动权限
-            throw new AdminException(201003);
+            throw new AdminException('ADMIN_NOT_ALLOW_EDIT_ROLE');
         if (!empty(array_diff_assoc($role_ids, $user_role->role_ids))) {
             //校验权限越界
             $user_role->save(['role_ids' => $role_ids]);
@@ -101,13 +101,14 @@ class UserRoleService extends BaseAdminService
     }
 
     /**
-     * 获取用户默认站点
+     * 获取用户默认站点(切勿用于平台管理端)
      * @param int $uid
      * @return SysUserRole|array|mixed|\think\Model
      */
     public function getUserDefaultSiteId(int $uid){
         $user_role_model = new SysUserRole();
-        return $user_role_model->where([['uid', '=', $uid]])->findOrEmpty()?->site_id;
+        $default_site_id = $this->request->defaultSiteId();
+        return $user_role_model->where([['uid', '=', $uid], ['site_id', '<>', $default_site_id]])->findOrEmpty()?->site_id;
     }
 
     /**

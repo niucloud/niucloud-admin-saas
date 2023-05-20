@@ -56,7 +56,7 @@ class TransferEnum
             self::ALIPAY => [
                 'name' => get_lang('enum_transfer.type_ali'),
                 'key' => self::ALIPAY,
-                'is_online' => true
+                'is_online' => false
             ],//支付宝
             self::BANK => [
                 'name' => get_lang('enum_transfer.type_bank'),

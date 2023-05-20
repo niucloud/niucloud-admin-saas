@@ -11,8 +11,8 @@
 
 namespace app\service\api\member;
 
-use app\service\api\BaseApiService;
 use app\service\core\member\CoreMemberConfigService;
+use core\base\BaseApiService;
 
 /**
  * 会员配置服务层

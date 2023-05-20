@@ -11,8 +11,8 @@
 
 namespace app\service\api\scan;
 
-use app\service\api\BaseApiService;
 use app\service\core\scan\CoreScanService;
+use core\base\BaseApiService;
 
 
 /**

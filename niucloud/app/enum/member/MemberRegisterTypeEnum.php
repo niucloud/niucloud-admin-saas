@@ -22,12 +22,7 @@ class MemberRegisterTypeEnum
     const WEAPP   = 'weapp';
     //微信公众号
     const WECHAT  = 'wechat';
-    //手机端H5
-    const H5      = 'h5';
-    //电脑端PC
-    const PC      =  'pc';
-    //app端
-    const APP     =   'app';
+
     //用户名密码注册登录
     const USERNAME   = 'username';
     //手机验证码登录
@@ -39,9 +34,6 @@ class MemberRegisterTypeEnum
         $data = [
             self::WEAPP    => get_lang('enum_member.register_weapp'),//微信小程序
             self::WECHAT     => get_lang('enum_member.register_wechat'),//'微信公众号',
-            self::H5            => get_lang('enum_member.register_h5'),//'手机H5',
-            self::PC            => get_lang('enum_member.register_pc'),//'电脑PC',
-            self::APP           => get_lang('enum_member.register_app'),//'手机app',
             self::MANUAL       => get_lang('enum_member.register_manual'),//'手动添加',
             self::USERNAME    => get_lang('enum_member.register_username'),//用户名密码登录
             self::MOBILE     => get_lang('enum_member.register_mobile'),//手机号验证码登录,

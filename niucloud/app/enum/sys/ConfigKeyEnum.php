@@ -23,9 +23,9 @@ class ConfigKeyEnum
     const UPLOAD = 'upload';//上传配置
     const DIY_BOTTOM = 'diy_bottom';//底部导航配置
 
-    const MEMBER_WITHDRAW = 'member_withdraw';//会员提现
+    const MEMBER_CASH_OUT = 'member_cash_out';//会员提现
 
-
+    const ADMIN_LOGIN = 'admin_login';//管理端登录注册设置
     const ALIAPP = 'aliapp';//支付宝小程序
 
     const H5 = 'h5';//h5

@@ -11,7 +11,7 @@
 
 namespace app\model\order;
 
-use app\model\BaseModel;
+use core\base\BaseModel;
 
 /**
  * 订单操作日志表

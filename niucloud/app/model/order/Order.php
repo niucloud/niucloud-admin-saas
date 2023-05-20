@@ -12,11 +12,8 @@
 namespace app\model\order;
 
 use app\enum\common\ChannelEnum;
-use app\enum\order\OrderTypeEnum;
-use app\enum\order\RechargeOrderEnum;
-use app\model\BaseModel;
 use app\model\member\Member;
-use think\db\Query;
+use core\base\BaseModel;
 
 /**
  * 订单模型

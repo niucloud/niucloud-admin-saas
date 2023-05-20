@@ -13,7 +13,7 @@ namespace app\service\admin\install;
 
 use app\model\article\Article;
 use app\model\article\ArticleCategory;
-use app\service\admin\BaseAdminService;
+use core\base\BaseAdminService;
 
 /**
  * 系统安装

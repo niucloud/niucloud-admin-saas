@@ -13,15 +13,15 @@ namespace app\service\api\weapp;
 
 use app\enum\member\MemberLoginTypeEnum;
 use app\enum\member\MemberRegisterTypeEnum;
-use app\service\api\BaseApiService;
 use app\service\api\login\LoginService;
 use app\service\api\login\RegisterService;
 use app\service\api\member\MemberConfigService;
 use app\service\api\member\MemberService;
 use app\service\core\weapp\CoreWeappAuthService;
+use core\base\BaseApiService;
+use core\exception\ApiException;
+use core\exception\AuthException;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
-use extend\exception\ApiException;
-use extend\exception\AuthException;
 
 
 /**
@@ -51,11 +51,11 @@ class WeappAuthService extends BaseApiService
 //        $iv = $this->request->param('iv', '');
 //        $encrypted_data = $this->request->param('encrypted_data', '');
         $result = $this->core_weapp_serve_service->session($this->site_id, $code);
-//        if(empty($result)) throw new ApiException(400002);
+//        if(empty($result)) throw new ApiException('WECHAT_EMPOWER_NOT_EXIST');
 //        $userinfo = $this->core_weapp_serve_service->decryptData($result['session_key'], $iv, $encrypted_data);
         $openid = $result['openid'] ?? '';//对应微信的 openid
         $unionid = $result['unionid'] ?? '' ;//对应微信的 unionid
-        if(empty($openid)) throw new ApiException(400002);
+        if(empty($openid)) throw new ApiException('WECHAT_EMPOWER_NOT_EXIST');
         //todo 这儿还可能会获取用户昵称 头像  性别 ....用以更新会员信息
 //        $nickname = $userinfo['nickName'] ?? '';//对应微信的 nickname
 //        $avatar = $userinfo['avatarUrl'] ?? '';//对应微信的 头像地址
@@ -115,17 +115,17 @@ class WeappAuthService extends BaseApiService
      */
     public function register(string $openid, string|int $mobile, string $mobile_code){
 
-        if(empty($openid)) throw new AuthException(301016);
+        if(empty($openid)) throw new AuthException('AUTH_LOGIN_TAG_NOT_EXIST');
         //todo openid可能还需要合法性验证
         $config = (new MemberConfigService())->getLoginConfig();
         $is_bind_mobile = $config['is_bind_mobile'];
         if($is_bind_mobile == 1){
             if(empty($mobile)){
                 $result = $this->core_weapp_serve_service->getUserPhoneNumber($this->site_id, $mobile_code);
-                if(empty($result)) throw new ApiException(400002);
+                if(empty($result)) throw new ApiException('WECHAT_EMPOWER_NOT_EXIST');
                 $phone_info = $result['phone_info'];
                 $mobile = $phone_info['purePhoneNumber'];
-                if(empty($mobile)) throw new ApiException(400002);
+                if(empty($mobile)) throw new ApiException('WECHAT_EMPOWER_NOT_EXIST');
                 $is_verify_mobile = false;
             }else{
                 $is_verify_mobile = true;
@@ -134,7 +134,7 @@ class WeappAuthService extends BaseApiService
         $member_service = new MemberService();
         $member_info = $member_service->findMemberInfo(['weapp_openid' => $openid, 'site_id' => $this->site_id]);
 
-        if(!$member_info->isEmpty()) throw new AuthException(301008);//账号已存在, 不能在注册
+        if(!$member_info->isEmpty()) throw new AuthException('MEMBER_IS_EXIST');//账号已存在, 不能在注册
         $register_service = new RegisterService();
         $result = $register_service->register($mobile ?? '',
             [

@@ -11,8 +11,8 @@
 
 namespace app\api\controller\agreement;
 
-use app\api\controller\BaseApiController;
 use app\service\api\agreement\AgreementService;
+use core\base\BaseApiController;
 
 /**
  * 协议控制器

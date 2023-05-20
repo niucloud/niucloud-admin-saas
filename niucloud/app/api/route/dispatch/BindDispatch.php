@@ -3,10 +3,7 @@
 namespace app\api\route\dispatch;
 
 use app\enum\member\MemberLoginTypeEnum;
-use app\enum\common\ChannelEnum;
 use think\App;
-use think\helper\Str;
-use think\route\Dispatch;
 use think\route\dispatch\Controller;
 
 class BindDispatch extends Controller

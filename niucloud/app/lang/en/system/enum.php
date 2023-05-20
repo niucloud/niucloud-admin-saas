@@ -43,7 +43,7 @@ return [
         'status_experience' => 'experience',
         'status_expire' => 'expire'
     ],
-    'enum_message' => [
+    'enum_notice' => [
         'type_sms' => 'sms',
         'type_wechat' => 'wechat',
         'type_weapp' => 'weapp',

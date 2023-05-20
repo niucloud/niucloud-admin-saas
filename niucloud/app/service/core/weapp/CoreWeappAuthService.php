@@ -11,7 +11,7 @@
 
 namespace app\service\core\weapp;
 
-use app\service\core\BaseCoreService;
+use core\base\BaseCoreService;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 

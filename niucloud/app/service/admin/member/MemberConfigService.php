@@ -11,11 +11,8 @@
 
 namespace app\service\admin\member;
 
-use app\model\member\Member;
-use app\service\admin\BaseAdminService;
 use app\service\core\member\CoreMemberConfigService;
-use extend\exception\AdminException;
-use think\db\exception\DbException;
+use core\base\BaseAdminService;
 
 /**
  * 会员设置
@@ -42,16 +39,16 @@ class MemberConfigService extends BaseAdminService
     /**
      * 获取提现设置
      */
-    public function getWithdrawConfig(){
+    public function getCashOutConfig(){
 
-        return (new CoreMemberConfigService())->getWithdrawConfig($this->site_id);
+        return (new CoreMemberConfigService())->getCashOutConfig($this->site_id);
     }
 
     /**
      * 提现设置
      * @param $data
      */
-    public function setWithdrawConfig(array $data){
-        return (new CoreMemberConfigService())->setWithdrawConfig($this->site_id, $data);
+    public function setCashOutConfig(array $data){
+        return (new CoreMemberConfigService())->setCashOutConfig($this->site_id, $data);
     }
 }

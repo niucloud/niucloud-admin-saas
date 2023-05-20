@@ -11,9 +11,11 @@
 
 namespace app\adminapi\controller\member;
 
-use app\adminapi\controller\BaseAdminController;
+use app\enum\member\MemberEnum;
+use app\enum\member\MemberRegisterChannelEnum;
 use app\enum\member\MemberRegisterTypeEnum;
 use app\service\admin\member\MemberService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class Member extends BaseAdminController
@@ -25,12 +27,13 @@ class Member extends BaseAdminController
     public function lists()
     {
         $data = $this->request->params([
-            [ 'keyword', '' ],
-            [ 'register_type', '' ],
-            [ 'create_time', [] ],
-            [ 'member_label', 0 ],
+            ['keyword', ''],
+            ['register_type', ''],
+            ['register_channel', ''],
+            ['create_time', []],
+            ['member_label', 0],
         ]);
-        return success(( new MemberService() )->getPage($data));
+        return success((new MemberService())->getPage($data));
     }
 
     /**
@@ -40,7 +43,7 @@ class Member extends BaseAdminController
      */
     public function info(int $id)
     {
-        return success(( new MemberService() )->getInfo($id));
+        return success((new MemberService())->getInfo($id));
     }
 
     /**
@@ -50,18 +53,18 @@ class Member extends BaseAdminController
     public function add()
     {
         $data = $this->request->params([
-            [ 'nickname', '' ],
-            [ 'mobile', '' ],
-            [ 'username', '' ],
-            [ 'password', '' ],
-            [ 'headimg', '' ],
-            [ 'member_label', [] ],
-            [ 'sex', 0 ],
-            [ 'birthday', '' ],
+            ['nickname', ''],
+            ['mobile', ''],
+            ['username', ''],
+            ['password', ''],
+            ['headimg', ''],
+            ['member_label', []],
+            ['sex', 0],
+            ['birthday', ''],
         ]);
         $this->validate($data, 'app\validate\member\Member.add');
-        $res = ( new MemberService() )->add($data);
-        return success(100011, [ 'member_id' => $res ]);
+        $res = (new MemberService())->add($data);
+        return success('ADD_SUCCESS', ['member_id' => $res]);
     }
 
     /**
@@ -73,32 +76,32 @@ class Member extends BaseAdminController
     public function modify($member_id, $field)
     {
         $data = $this->request->params([
-            [ 'value', '' ],
-            [ 'field', $field ],
+            ['value', ''],
+            ['field', $field],
         ]);
-        $data[ $field ] = $data[ 'value' ];
+        $data[$field] = $data['value'];
         $this->validate($data, 'app\validate\member\Member.modify');
-        ( new MemberService() )->modify($member_id, $field, $data[ 'value' ]);
-        return success(100004);
+        (new MemberService())->modify($member_id, $field, $data['value']);
+        return success('MODIFY_SUCCESS');
     }
 
     /**
      * 更新
      * @return Response
      */
-    public function update($member_id)
+    public function edit($member_id)
     {
         $data = $this->request->params([
-            [ 'nickname', '' ],
-            [ 'headimg', '' ],
-            [ 'password', '' ],
-            [ 'member_label', [] ],
-            [ 'sex', 0 ],
-            [ 'birthday', '' ],
+            ['nickname', ''],
+            ['headimg', ''],
+            ['password', ''],
+            ['member_label', []],
+            ['sex', 0],
+            ['birthday', ''],
         ]);
-        $this->validate($data, 'app\validate\member\Member.update');
-        $res = ( new MemberService() )->update($member_id, $data);
-        return success(100002);
+        $this->validate($data, 'app\validate\member\Member.edit');
+        $res = (new MemberService())->edit($member_id, $data);
+        return success('EDIT_SUCCESS');
     }
 
     /**
@@ -114,10 +117,43 @@ class Member extends BaseAdminController
      * 会员列表
      * @return Response
      */
-    public function getMemberList(){
+    public function getMemberList()
+    {
         $data = $this->request->params([
-            [ 'keyword', '' ],
+            ['keyword', ''],
         ]);
-        return success(( new MemberService() )->getList($data));
+        return success((new MemberService())->getList($data));
+    }
+
+    /**
+     * 获取会员注册渠道
+     * @return Response
+     */
+    public function getMemberRegisterChannelType()
+    {
+        return success(MemberRegisterChannelEnum::getType());
+    }
+
+    /**
+     * 设置会员的状态
+     * @param $status
+     * @return void
+     */
+    public function setStatus($status){
+        $data = $this->request->params([
+            ['member_ids', []],
+
+        ]);
+        $this->validate(['status' => $status], 'app\validate\member\Member.set_status');
+        (new MemberService())->setStatus($data['member_ids'], $status);
+        return success('EDIT_SUCCESS');
+    }
+
+    /**
+     * 获取状态枚举
+     * @return Response
+     */
+    public function getStatusList(){
+        return success(MemberEnum::getStatus());
     }
 }

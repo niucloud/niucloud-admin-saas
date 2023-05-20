@@ -11,10 +11,8 @@
 
 namespace app\service\admin\install;
 
-use app\enum\diy\LinkEnum;
 use app\model\diy\Diy;
-use app\model\diy\DiyRoute;
-use app\service\admin\BaseAdminService;
+use core\base\BaseAdminService;
 
 /**
  * 系统安装
@@ -38,31 +36,6 @@ class InstallDiyService extends BaseAdminService
      */
     public function installDiy(array $params = [])
     {
-        $link = LinkEnum::getLink();
-
-        $diy_route_list = [];
-        $sort = 0;
-        foreach ($link as $k => $v) {
-            if (!empty($v[ 'child_list' ])) {
-                foreach ($v[ 'child_list' ] as $ck => $cv) {
-                    if (!empty($cv[ 'url' ])) {
-                        $diy_route_list[] = [
-                            'title' => $cv[ 'title' ],
-                            'name' => $cv[ 'name' ],
-                            'page' => $cv[ 'url' ],
-                            'is_share' => $cv[ 'is_share' ],
-                            'sort' => $sort
-                        ];
-                        $sort++;
-                    }
-                }
-            }
-        }
-
-        $diy_route = new DiyRoute();
-//        $diy_route->where([ [ 'id', '>', 0 ] ])->delete();
-        $diy_route->replace()->insertAll($diy_route_list);
-
         $diy = new Diy();
 
         $page_data = [
@@ -238,14 +211,6 @@ class InstallDiyService extends BaseAdminService
                             "id" => "67qv49qgxp00",
                             "componentName" => "MemberInfo",
                             "componentTitle" => "会员信息",
-                            "maxCount" => 0,
-                            "height" => 20
-                        ],
-                        [
-                            "path" => "edit-horz-blank",
-                            "id" => "39dehg9v8u00",
-                            "componentName" => "HorzBlank",
-                            "componentTitle" => "辅助空白",
                             "maxCount" => 0,
                             "height" => 20
                         ],

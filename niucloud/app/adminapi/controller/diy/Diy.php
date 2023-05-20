@@ -11,10 +11,9 @@
 
 namespace app\adminapi\controller\diy;
 
-use app\adminapi\controller\BaseAdminController;
-use app\enum\diy\LinkEnum;
 use app\enum\diy\PageEnum;
 use app\service\admin\diy\DiyService;
+use core\base\BaseAdminController;
 
 
 /**
@@ -63,7 +62,7 @@ class Diy extends BaseAdminController
 
         $this->validate($data, 'app\validate\diy\Diy.add');
         $id = ( new DiyService() )->add($data);
-        return success(100011, [ 'id' => $id ]);
+        return success('ADD_SUCCESS', [ 'id' => $id ]);
     }
 
     /**
@@ -71,16 +70,16 @@ class Diy extends BaseAdminController
      * @param $id  自定义页面id
      * @return \think\Response
      */
-    public function update($id)
+    public function edit($id)
     {
         $data = $this->request->params([
             [ "title", "" ],
             [ "name", "" ],
             [ "value", "" ],
         ]);
-        $this->validate($data, 'app\validate\diy\Diy.update');
-        ( new DiyService() )->update($id, $data);
-        return success(100004);
+        $this->validate($data, 'app\validate\diy\Diy.edit');
+        ( new DiyService() )->edit($id, $data);
+        return success('MODIFY_SUCCESS');
     }
 
     /**
@@ -91,7 +90,7 @@ class Diy extends BaseAdminController
     public function del(int $id)
     {
         ( new DiyService() )->del($id);
-        return success(100003);
+        return success('DELETE_SUCCESS');
     }
 
     /**
@@ -103,7 +102,7 @@ class Diy extends BaseAdminController
     public function setUse($id)
     {
         ( new DiyService() )->setUse($id);
-        return success(100004);
+        return success('MODIFY_SUCCESS');
     }
 
     /**
@@ -155,7 +154,7 @@ class Diy extends BaseAdminController
             [ "share", "" ],
         ]);
         ( new DiyService() )->modifyShare($id, $data);
-        return success(100004);
+        return success('MODIFY_SUCCESS');
     }
 
 }

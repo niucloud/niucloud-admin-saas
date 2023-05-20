@@ -12,8 +12,8 @@
 namespace app\service\api\agreement;
 
 
-use app\service\api\BaseApiService;
 use app\service\core\sys\CoreAgreementService;
+use core\base\BaseApiService;
 
 /**
  * 协议服务类

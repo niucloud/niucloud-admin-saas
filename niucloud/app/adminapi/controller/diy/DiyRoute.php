@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\diy;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\diy\DiyRouteService;
+use core\base\BaseAdminController;
 
 
 /**
@@ -30,11 +30,8 @@ class DiyRoute extends BaseAdminController
     {
         $data = $this->request->params([
             [ "title", "" ],
-            [ "name", "" ],
-            [ "page", "" ],
-            [ "sort", "" ]
         ]);
-        return success(( new DiyRouteService() )->getPage($data));
+        return success(( new DiyRouteService() )->getList($data));
     }
 
     /**
@@ -45,6 +42,15 @@ class DiyRoute extends BaseAdminController
     public function info(int $id)
     {
         return success(( new DiyRouteService() )->getInfo($id));
+    }
+
+    /**
+     * 自定义路由表详情
+     * @param string $name
+     */
+    public function getInfoByName(string $name)
+    {
+        return success(( new DiyRouteService() )->getInfoByName($name));
     }
 
     /**
@@ -62,7 +68,7 @@ class DiyRoute extends BaseAdminController
         ]);
         $this->validate($data, 'app\validate\diy\DiyRoute.add');
         $id = ( new DiyRouteService() )->add($data);
-        return success(100011, [ 'id' => $id ]);
+        return success('ADD_SUCCESS', [ 'id' => $id ]);
     }
 
     /**
@@ -70,7 +76,7 @@ class DiyRoute extends BaseAdminController
      * @param $id  自定义路由表id
      * @return \think\Response
      */
-    public function update($id)
+    public function edit($id)
     {
         $data = $this->request->params([
             [ "title", "" ],
@@ -79,9 +85,9 @@ class DiyRoute extends BaseAdminController
             [ "share", "" ],
             [ "is_share", "" ]
         ]);
-        $this->validate($data, 'app\validate\diy\DiyRoute.update');
-        ( new DiyRouteService() )->update($id, $data);
-        return success(100004);
+        $this->validate($data, 'app\validate\diy\DiyRoute.edit');
+        ( new DiyRouteService() )->edit($id, $data);
+        return success('MODIFY_SUCCESS');
     }
 
     /**
@@ -92,20 +98,24 @@ class DiyRoute extends BaseAdminController
     public function del(int $id)
     {
         ( new DiyRouteService() )->del($id);
-        return success(100003);
+        return success('DELETE_SUCCESS');
     }
 
     /**
      * 修改页面分享内容
-     * @param int $id
      */
-    public function modifyShare(int $id)
+    public function modifyShare()
     {
         $data = $this->request->params([
-            [ "share", "" ],
+            [ 'share', '' ],
+            [ 'title', '' ],
+            [ 'name', '' ],
+            [ 'page', '' ],
+            [ 'is_share', 0 ],
+            [ 'sort', 0 ]
         ]);
-        ( new DiyRouteService() )->modifyShare($id, $data);
-        return success(100004);
+        ( new DiyRouteService() )->modifyShare($data);
+        return success('MODIFY_SUCCESS');
     }
 
 }

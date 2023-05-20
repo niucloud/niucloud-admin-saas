@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\member;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\member\MemberConfigService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class Config extends BaseAdminController
@@ -40,23 +40,23 @@ class Config extends BaseAdminController
         ]);
         $this->validate($data, 'app\validate\member\LoginConfig.set');
         ( new MemberConfigService() )->setLoginConfig($data);
-        return success(100004);
+        return success('MODIFY_SUCCESS');
     }
 
     /**
      * 获取提现设置
      * @return Response
      */
-    public function getWithdrawConfig()
+    public function getCashOutConfig()
     {
-        return success(( new MemberConfigService() )->getWithdrawConfig());
+        return success(( new MemberConfigService() )->getCashOutConfig());
     }
 
     /**
      * 提现设置
      * @return Response
      */
-    public function setWithdrawConfig()
+    public function setCashOutConfig()
     {
         $data = $this->request->params([
             [ 'is_open', 0 ], //是否开启
@@ -66,9 +66,9 @@ class Config extends BaseAdminController
             [ 'is_auto_transfer', 0 ], //是否自动转账
             [ 'transfer_type', [] ]  //转账方式
         ]);
-        $this->validate($data, 'app\validate\member\WithdrawConfig.set');
-        ( new MemberConfigService() )->setWithdrawConfig($data);
-        return success(100016);
+        $this->validate($data, 'app\validate\member\CashOutConfig.set');
+        ( new MemberConfigService() )->setCashOutConfig($data);
+        return success('SET_SUCCESS');
     }
 
 }

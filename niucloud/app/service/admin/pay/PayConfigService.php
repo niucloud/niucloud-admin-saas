@@ -11,9 +11,8 @@
 
 namespace app\service\admin\pay;
 
-use app\service\admin\BaseAdminService;
-
 use app\service\core\pay\CorePayConfigService;
+use core\base\BaseAdminService;
 
 /**
  * 支付配置服务层

@@ -12,8 +12,8 @@
 namespace app\service\admin\file;
 
 use app\model\sys\SysConfig;
-use app\service\admin\BaseAdminService;
-use app\service\core\file\CoreUploadConfigService;
+use app\service\core\upload\CoreUploadConfigService;
+use core\base\BaseAdminService;
 use think\Model;
 use think\Response;
 

@@ -98,7 +98,7 @@ class ValidateGenerator extends BaseGenerator
         }
 
         $content .= '"add" => ['.implode(',', $add_arr).'],'.PHP_EOL;
-        $content .= '"update" => ['.implode(',', $update_arr).']';
+        $content .= '"edit" => ['.implode(',', $update_arr).']';
         $content = $this->setBlankSpace($content, "            ");
         return '['.PHP_EOL.$content.PHP_EOL.'        ]';
     }
@@ -163,7 +163,7 @@ class ValidateGenerator extends BaseGenerator
      */
     public function getRuntimeOutDir()
     {
-        $dir = $this->outDir . 'php/app/validate/';
+        $dir = $this->outDir . 'niucloud/app/validate/';
         $this->checkDir($dir);
         if (!empty($this->moduleName)) {
             $dir .= $this->moduleName . '/';

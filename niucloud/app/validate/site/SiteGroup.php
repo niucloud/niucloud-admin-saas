@@ -36,6 +36,6 @@ class SiteGroup extends Validate
 
     protected $scene = [
         'add'  =>  ['group_name', 'group_roles'],
-        'update'  =>  ['group_name', 'group_roles'],
+        'edit'  =>  ['group_name', 'group_roles'],
     ];
 }

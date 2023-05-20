@@ -12,11 +12,11 @@
 namespace app\service\core\sys;
 
 use app\model\sys\SysAttachment;
-use app\service\core\BaseCoreService;
-use app\service\core\file\CoreStorageService;
-use extend\driver\file\FileDriver;
-use extend\exception\AdminException;
-use extend\exception\UploadFileException;
+use app\service\core\upload\CoreStorageService;
+use core\base\BaseCoreService;
+use core\exception\AdminException;
+use core\exception\UploadFileException;
+use core\upload\FileDriver;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
@@ -42,7 +42,7 @@ class CoreAttachmentService extends BaseCoreService
         $data['site_id'] = $site_id;
         $attachment = $this->model->create($data);
         if(!$attachment->att_id)
-            throw new AdminException(100010);//创建失败
+            throw new AdminException('ADD_FAIL');//创建失败
         return $attachment->att_id;
     }
 
@@ -58,7 +58,7 @@ class CoreAttachmentService extends BaseCoreService
         );
         $user = $this->model->where($where)->findOrEmpty();
         if ($user->isEmpty())
-            throw new AdminException(201001);
+            throw new AdminException('USER_NOT_EXIST');
         return $user;
     }
 
@@ -86,7 +86,7 @@ class CoreAttachmentService extends BaseCoreService
      * @param array $data
      * @param $where
      */
-    public function update(int $site_id, int $att_id, array $data){
+    public function edit(int $site_id, int $att_id, array $data){
         $where = array(
             ['site_id', '=', $site_id],
             ['att_id', '=', $att_id]
@@ -123,7 +123,7 @@ class CoreAttachmentService extends BaseCoreService
         $core_attachment_service = new CoreAttachmentService();
         $list = $core_attachment_service->getList($site_id, compact('att_ids'));
         if(empty($list))
-            throw new UploadFileException(203007);
+            throw new UploadFileException('PLEACE_SELECT_IMAGE');
 
         $ids = array_column($list, 'att_id');
         foreach($list as $v){

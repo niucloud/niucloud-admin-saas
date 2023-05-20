@@ -13,7 +13,7 @@ namespace app\model\pay;
 
 use app\enum\order\OrderTypeEnum;
 use app\enum\pay\PayEnum;
-use app\model\BaseModel;
+use core\base\BaseModel;
 
 /**
  * 订单模型

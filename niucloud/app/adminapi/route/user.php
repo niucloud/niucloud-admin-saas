@@ -25,8 +25,6 @@ Route::group('user', function () {
     //用户详情
     Route::get('user/:uid', 'user.user/info');
 
-
-
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,

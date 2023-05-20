@@ -11,8 +11,8 @@
 
 namespace app\service\api\diy;
 
-use app\service\api\BaseApiService;
 use app\service\core\diy\CoreDiyConfigService;
+use core\base\BaseApiService;
 
 /**
  * 自定义页面相关配置服务层

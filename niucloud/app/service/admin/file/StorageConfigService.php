@@ -12,10 +12,10 @@
 namespace app\service\admin\file;
 
 use app\enum\sys\StorageEnum;
-use app\service\admin\BaseAdminService;
-use app\service\core\file\CoreStorageService;
+use app\service\core\upload\CoreStorageService;
 use app\service\core\sys\CoreConfigService;
-use extend\exception\AdminException;
+use core\base\BaseAdminService;
+use core\exception\AdminException;
 use think\Response;
 
 /**
@@ -47,7 +47,7 @@ class StorageConfigService extends BaseAdminService
     public function getStorageConfig(string $storage_type)
     {
         $storage_type_list = StorageEnum::getType();
-        if(!array_key_exists($storage_type, $storage_type_list)) throw new AdminException(203005);
+        if(!array_key_exists($storage_type, $storage_type_list)) throw new AdminException('OSS_TYPE_NOT_EXIST');
         $info = (new CoreConfigService())->getConfig($this->site_id, 'STORAGE');
         if(empty($info))
         {
@@ -80,7 +80,7 @@ class StorageConfigService extends BaseAdminService
     public function setStorageConfig(string $storage_type, array $data)
     {
         $storage_type_list = StorageEnum::getType();
-        if(!array_key_exists($storage_type, $storage_type_list)) throw new AdminException(203005);
+        if(!array_key_exists($storage_type, $storage_type_list)) throw new AdminException('OSS_TYPE_NOT_EXIST');
         $info = (new CoreConfigService())->getConfig($this->site_id, 'STORAGE');
         if(empty($info))
         {

@@ -11,7 +11,7 @@
 
 namespace app\model\article;
 
-use app\model\BaseModel;
+use core\base\BaseModel;
 
 /**
  * 文章栏目模型

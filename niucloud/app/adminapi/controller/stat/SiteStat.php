@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\stat;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\stat\SiteStatService;
+use core\base\BaseAdminController;
 
 /**
  * 统计数据

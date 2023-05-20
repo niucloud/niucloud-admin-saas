@@ -178,7 +178,7 @@ class ModelGenerator extends BaseGenerator
      */
     public function getRuntimeOutDir()
     {
-        $dir = $this->outDir . 'php/app/model/';
+        $dir = $this->outDir . 'niucloud/app/model/';
         $this->checkDir($dir);
         if (!empty($this->moduleName)) {
             $dir .= $this->moduleName . '/';

@@ -14,9 +14,9 @@ namespace app\service\admin\site;
 use app\enum\sys\UserEnum;
 use app\model\sys\SysUser;
 use app\model\sys\SysUserRole;
-use app\service\admin\BaseAdminService;
 use app\service\admin\user\UserRoleService;
 use app\service\admin\user\UserService;
+use core\base\BaseAdminService;
 use Exception;
 
 /**
@@ -105,9 +105,9 @@ class SiteUserService extends BaseAdminService
      * @param int $uid
      * @param array $data
      */
-    public function update(int $uid, array $data)
+    public function edit(int $uid, array $data)
     {
-        return (new UserService())->updateSiteUser($uid, $data, $this->site_id);
+        return (new UserService())->editSiteUser($uid, $data, $this->site_id);
     }
 
     /**
@@ -124,7 +124,7 @@ class SiteUserService extends BaseAdminService
             'real_name' => 'real_name',
             'head_img' => 'head_img',
         };
-        return (new UserService())->update($uid, [$field_name => $data]);
+        return (new UserService())->edit($uid, [$field_name => $data]);
     }
 
     /**
@@ -148,7 +148,7 @@ class SiteUserService extends BaseAdminService
      * @return bool|true
      */
     public function lock(int $uid){
-        return (new UserService())->update($uid, ['status' => UserEnum::OFF]);
+        return (new UserService())->edit($uid, ['status' => UserEnum::OFF]);
     }
 
     /**
@@ -157,6 +157,6 @@ class SiteUserService extends BaseAdminService
      * @return bool|true
      */
     public function unlock(int $uid){
-        return (new UserService())->update($uid, ['status' => UserEnum::ON]);
+        return (new UserService())->edit($uid, ['status' => UserEnum::ON]);
     }
 }

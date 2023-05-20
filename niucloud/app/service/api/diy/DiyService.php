@@ -12,7 +12,7 @@
 namespace app\service\api\diy;
 
 use app\model\diy\Diy;
-use app\service\api\BaseApiService;
+use core\base\BaseApiService;
 
 /**
  * 自定义页面服务层

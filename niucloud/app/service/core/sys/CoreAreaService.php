@@ -12,7 +12,7 @@
 namespace app\service\core\sys;
 
 use app\model\sys\SysArea;
-use app\service\core\BaseCoreService;
+use core\base\BaseCoreService;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;

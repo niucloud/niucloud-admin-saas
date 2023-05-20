@@ -28,7 +28,7 @@ Route::group('site', function () {
     //添加站点
     Route::post('site', 'site.Site/add');
     //更新站点
-    Route::put('site/:id', 'site.Site/update');
+    Route::put('site/:id', 'site.Site/edit');
     //站点状态
     Route::get('statuslist', 'site.Site/getStatuList');
     /***************************************************** 站点分组 *************************************************/
@@ -39,7 +39,7 @@ Route::group('site', function () {
     //站点分组新增
     Route::post('group', 'site.SiteGroup/add');
     //站点分组编辑
-    Route::put('group/:group_id', 'site.SiteGroup/update');
+    Route::put('group/:group_id', 'site.SiteGroup/edit');
     //站点分组删除
     Route::delete('group/:group_id', 'site.SiteGroup/del');
     //获取所有分组
@@ -56,7 +56,7 @@ Route::group('site', function () {
     //站点用户解锁
     Route::put('user/unlock/:uid', 'site.User/unlock');
     //站点编辑用户
-    Route::put('user/:uid', 'site.User/update');
+    Route::put('user/:uid', 'site.User/edit');
     //站点修改用户属性
     Route::put('user/:uid/:field', 'site.User/modify');
     /***************************************************** 操作日志 **************************************************/

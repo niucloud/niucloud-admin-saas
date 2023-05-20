@@ -11,9 +11,8 @@
 
 namespace app\model\pay;
 
-use app\enum\pay\PayEnum;
 use app\enum\pay\TransferEnum;
-use app\model\BaseModel;
+use core\base\BaseModel;
 
 /**
  * 订单模型

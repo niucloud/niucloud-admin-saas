@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\weapp;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\weapp\WeappTemplateService;
+use core\base\BaseAdminController;
 
 /**
  * 微信小程序订阅消息

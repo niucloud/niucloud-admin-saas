@@ -35,7 +35,7 @@ export function add{UCASE_NAME}(params: Record<string, any>) {
  * @param params
  * @returns
  */
-export function update{UCASE_NAME}(params: Record<string, any>) {
+export function edit{UCASE_NAME}(params: Record<string, any>) {
     return request.put(`{MODULE_NAME}/{LCASE_CLASS_NAME}/${params.{PK}}`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 

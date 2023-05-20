@@ -11,17 +11,17 @@
 
 namespace app\service\admin\generator;
 
-use think\facade\Db;
-use think\Model;
-use think\model\relation\HasOne;
 use app\model\generator\GenerateColumn;
 use app\model\generator\GenerateTable;
-use app\service\admin\BaseAdminService;
+use core\base\BaseAdminService;
+use core\exception\AdminException;
 use Exception;
-use extend\exception\AdminException;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
+use think\facade\Db;
+use think\Model;
+use think\model\relation\HasOne;
 
 
 /**
@@ -81,7 +81,7 @@ class GenerateService extends BaseAdminService
 
             $tables = Db::query($sql);
             $table_info = $tables[0] ?? [];
-            if(empty($table_info)) throw new AdminException(100014);
+            if(empty($table_info)) throw new AdminException('DATA_NOT_EXIST');
 
             $table_name = str_replace($tablePrefix, '', $table_info['Name']);
             $fields = Db::name($table_name)->getFields();
@@ -140,7 +140,7 @@ class GenerateService extends BaseAdminService
      * @param array $params
      * @return bool
      */
-    public function update(int $id, array $params)
+    public function edit(int $id, array $params)
     {
         Db::startTrans();
         try {

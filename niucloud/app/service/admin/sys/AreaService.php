@@ -12,7 +12,7 @@
 namespace app\service\admin\sys;
 
 use app\model\sys\SysArea;
-use app\service\admin\BaseAdminService;
+use core\base\BaseAdminService;
 use think\facade\Cache;
 
 /**

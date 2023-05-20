@@ -11,6 +11,8 @@
 
 namespace app\enum\diy;
 
+use core\addon\AddonLoader;
+
 /**
  * 自定义页面类型
  * Class PageEnum
@@ -18,45 +20,33 @@ namespace app\enum\diy;
  */
 class PageEnum
 {
-    // 首页
-    const INDEX = 'DIY_INDEX';
-    const INDEX_PAGE = 'pages/index/index';
-
-    // 个人中心
-    const MEMBER_INDEX = 'DIY_MEMBER_INDEX';
-    const MEMBER_PAGE = 'pages/member/index';
-
-    // 自定义页面
-    const DIY_PAGE = 'DIY_PAGE';
-    const DIY_PAGE_PAGE = 'pages/index/diy';
 
     /**
      * 获取页面类型
      * @param string $type
+     * @return array|string
      */
     public static function getPageType($type = '')
     {
-        $data = [
-            self::INDEX => [
-                'type' => self::INDEX,
-                'type_name' => get_lang('enum_diy.page_index'),
-                'page' => self::INDEX_PAGE,
+        $system_pages = [
+            'DIY_INDEX' => [
+                'title' => get_lang('enum_diy.page_index'),
+                'page' => 'pages/index/index',
             ],
-            self::MEMBER_INDEX => [
-                'type' => self::MEMBER_INDEX,
-                'type_name' => get_lang('enum_diy.page_member_index'),
-                'page' => self::MEMBER_PAGE,
+            'DIY_MEMBER_INDEX' => [
+                'title' => get_lang('enum_diy.page_member_index'),
+                'page' => 'pages/member/index',
             ],
-            self::DIY_PAGE => [
-                'type' => self::DIY_PAGE,
-                'type_name' => get_lang('enum_diy.page_diy'),
-                'page' => self::DIY_PAGE_PAGE,
+            'DIY_PAGE' => [
+                'title' => get_lang('enum_diy.page_diy'),
+                'page' => 'pages/index/diy',
             ]
         ];
+        $pages = (new AddonLoader("UniappPages"))->load($system_pages);
         if (empty($type)) {
-            return $data;
+            return $pages;
         }
-        return $data[ $type ] ?? '';
+        return $pages[ $type ] ?? '';
     }
 
 }

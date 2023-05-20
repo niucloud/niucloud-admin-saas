@@ -1,6 +1,10 @@
 ﻿
 SET NAMES 'utf8';
 
+DROP TABLE IF EXISTS addon;
+
+DROP TABLE IF EXISTS addon_log;
+
 DROP TABLE IF EXISTS article;
 
 DROP TABLE IF EXISTS article_category;
@@ -13,25 +17,37 @@ DROP TABLE IF EXISTS generate_column;
 
 DROP TABLE IF EXISTS generate_table;
 
+DROP TABLE IF EXISTS jobs;
+
+DROP TABLE IF EXISTS jobs_failed;
+
 DROP TABLE IF EXISTS member;
 
 DROP TABLE IF EXISTS member_account_log;
 
 DROP TABLE IF EXISTS member_address;
 
+DROP TABLE IF EXISTS member_cash_out;
+
+DROP TABLE IF EXISTS member_cash_out_account;
+
 DROP TABLE IF EXISTS member_label;
 
 DROP TABLE IF EXISTS member_level;
 
-DROP TABLE IF EXISTS member_withdraw;
-
-DROP TABLE IF EXISTS `order`;
+DROP TABLE IF EXISTS order;
 
 DROP TABLE IF EXISTS order_item;
+
+DROP TABLE IF EXISTS order_item_refund;
 
 DROP TABLE IF EXISTS order_log;
 
 DROP TABLE IF EXISTS pay;
+
+DROP TABLE IF EXISTS pay_channel;
+
+DROP TABLE IF EXISTS pay_refund;
 
 DROP TABLE IF EXISTS pay_transfer;
 
@@ -53,11 +69,11 @@ DROP TABLE IF EXISTS sys_cron_task;
 
 DROP TABLE IF EXISTS sys_menu;
 
-DROP TABLE IF EXISTS sys_message;
+DROP TABLE IF EXISTS sys_notice;
 
-DROP TABLE IF EXISTS sys_message_log;
+DROP TABLE IF EXISTS sys_notice_log;
 
-DROP TABLE IF EXISTS sys_message_sms_log;
+DROP TABLE IF EXISTS sys_notice_sms_log;
 
 DROP TABLE IF EXISTS sys_role;
 
@@ -80,11 +96,11 @@ CREATE TABLE wechat_reply (
   site_id int(11) NOT NULL DEFAULT 1 COMMENT '站点id',
   keyword varchar(64) NOT NULL DEFAULT '' COMMENT '关键词',
   reply_type tinyint(4) NOT NULL COMMENT '回复类型 subscribe-关注回复 keyword-关键字回复 default-默认回复',
-  matching_type tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '匹配方式：1-全匹配；2-模糊匹配',
-  content_type tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '内容类型：1-文本',
+  matching_type tinyint(4) UNSIGNED NOT NULL DEFAULT 1 COMMENT '匹配方式：1-全匹配；2-模糊匹配',
+  content_type tinyint(4) UNSIGNED NOT NULL DEFAULT 1 COMMENT '内容类型：1-文本',
   content text NOT NULL COMMENT '回复内容',
-  status tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '启动状态：1-启动；0-关闭',
-  sort int(10) UNSIGNED NOT NULL DEFAULT 50 COMMENT '排序',
+  status tinyint(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '启动状态：1-启动；0-关闭',
+  sort int(11) UNSIGNED NOT NULL DEFAULT 50 COMMENT '排序',
   create_time int(11) NOT NULL COMMENT '创建时间',
   update_time int(11) NOT NULL COMMENT '更新时间',
   delete_time int(11) NOT NULL COMMENT '删除时间',
@@ -175,12 +191,12 @@ CREATE TABLE sys_user_log (
   id int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '管理员操作记录ID',
   ip varchar(16) NOT NULL DEFAULT '' COMMENT '登录IP',
   site_id int(11) NOT NULL DEFAULT 1 COMMENT '站点id',
-  uid int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '管理员id',
+  uid int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '管理员id',
   username varchar(64) NOT NULL DEFAULT '' COMMENT '管理员姓名',
   url varchar(128) NOT NULL DEFAULT '' COMMENT '链接',
   params text DEFAULT NULL COMMENT '参数',
   type varchar(32) NOT NULL DEFAULT '' COMMENT '请求方式',
-  create_time int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '操作时间',
+  create_time int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '操作时间',
   PRIMARY KEY (id)
 )
 ENGINE = INNODB,
@@ -197,17 +213,17 @@ ALTER TABLE sys_user_log ADD INDEX uid (uid);
 
 
 CREATE TABLE sys_user (
-  uid smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '系统用户ID',
+  uid smallint(6) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '系统用户ID',
   username varchar(255) NOT NULL DEFAULT '' COMMENT '用户账号',
   head_img varchar(255) NOT NULL DEFAULT '',
   password varchar(100) NOT NULL DEFAULT '' COMMENT '用户密码',
   real_name varchar(16) NOT NULL DEFAULT '' COMMENT '实际姓名',
   last_ip varchar(16) NOT NULL DEFAULT '' COMMENT '最后一次登录ip',
-  last_time int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '最后一次登录时间',
-  create_time int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '添加时间',
-  login_count int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '登录次数',
-  status tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '后台管理员状态 1有效0无效',
-  is_del tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
+  last_time int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '最后一次登录时间',
+  create_time int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '添加时间',
+  login_count int(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '登录次数',
+  status tinyint(4) UNSIGNED NOT NULL DEFAULT 1 COMMENT '后台管理员状态 1有效0无效',
+  is_del tinyint(4) UNSIGNED NOT NULL DEFAULT 0,
   delete_time tinyint(4) NOT NULL DEFAULT 0 COMMENT '删除时间',
   update_time int(11) NOT NULL DEFAULT 0 COMMENT '更新时间',
   PRIMARY KEY (uid),
@@ -232,11 +248,11 @@ ALTER TABLE sys_user ADD INDEX username (username (191));
 
 
 CREATE TABLE sys_role (
-  role_id int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '角色id',
+  role_id int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '角色id',
   site_id int(11) NOT NULL DEFAULT 1 COMMENT '站点id',
   role_name varchar(255) NOT NULL DEFAULT '' COMMENT '角色名称',
   rules text DEFAULT NULL COMMENT '角色权限(menus_id)',
-  status tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态',
+  status tinyint(4) UNSIGNED NOT NULL DEFAULT 1 COMMENT '状态',
   create_time int(11) NOT NULL DEFAULT 0 COMMENT '添加时间',
   update_time int(11) NOT NULL DEFAULT 0 COMMENT '最后修改时间',
   PRIMARY KEY (role_id)
@@ -252,21 +268,21 @@ ALTER TABLE sys_role ADD INDEX site_id (site_id);
 ALTER TABLE sys_role ADD INDEX status (status);
 
 
-CREATE TABLE sys_message_sms_log (
-  id int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  site_id int(11) NOT NULL DEFAULT 1,
-  mobile varchar(11) NOT NULL DEFAULT '' COMMENT '手机号码',
-  sms_type varchar(32) NOT NULL DEFAULT '' COMMENT '发送关键字（注册、找回密码）',
-  `key` varchar(32) NOT NULL DEFAULT '' COMMENT '发送关键字（注册、找回密码）',
-  template_id varchar(50) NOT NULL DEFAULT '',
-  content varchar(255) NOT NULL DEFAULT '' COMMENT '发送内容',
-  params varchar(255) NOT NULL DEFAULT '' COMMENT '数据参数',
-  status varchar(32) NOT NULL DEFAULT 'sending' COMMENT '发送状态：sending-发送中；success-发送成功；fail-发送失败',
-  result text DEFAULT NULL COMMENT '短信结果',
-  create_time int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
-  send_time int(11) NOT NULL DEFAULT 0 COMMENT '发送时间',
-  update_time int(11) NOT NULL DEFAULT 0 COMMENT '更新时间',
-  delete_time int(11) NOT NULL DEFAULT 0 COMMENT '删除时间',
+CREATE TABLE sys_notice_sms_log (
+  id INT(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  site_id INT(11) NOT NULL DEFAULT 1,
+  mobile VARCHAR(11) NOT NULL DEFAULT '' COMMENT '手机号码',
+  sms_type VARCHAR(32) NOT NULL DEFAULT '' COMMENT '发送关键字（注册、找回密码）',
+  `key` VARCHAR(32) NOT NULL DEFAULT '' COMMENT '发送关键字（注册、找回密码）',
+  template_id VARCHAR(50) NOT NULL DEFAULT '',
+  content VARCHAR(255) NOT NULL DEFAULT '' COMMENT '发送内容',
+  params VARCHAR(255) NOT NULL DEFAULT '' COMMENT '数据参数',
+  status VARCHAR(32) NOT NULL DEFAULT 'sending' COMMENT '发送状态：sending-发送中；success-发送成功；fail-发送失败',
+  result TEXT DEFAULT NULL COMMENT '短信结果',
+  create_time INT(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  send_time INT(11) NOT NULL DEFAULT 0 COMMENT '发送时间',
+  update_time INT(11) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  delete_time INT(11) NOT NULL DEFAULT 0 COMMENT '删除时间',
   PRIMARY KEY (id)
 )
 ENGINE = INNODB,
@@ -275,64 +291,61 @@ COLLATE utf8mb4_general_ci,
 COMMENT = '短信发送表';
 
 
-CREATE TABLE sys_message_log (
-  id int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '通知记录ID',
-  site_id int(11) NOT NULL DEFAULT 1 COMMENT '站点id',
-  `key` varchar(255) DEFAULT '' COMMENT '消息key',
-  message_type varchar(50) DEFAULT 'sms' COMMENT '消息类型（sms,wechat.weapp）',
-  uid int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '通知的用户id',
-  member_id int(11) NOT NULL DEFAULT 0 COMMENT '消息的会员id',
-  nickname varchar(255) NOT NULL DEFAULT '' COMMENT '接收人用户昵称或姓名',
-  receiver varchar(255) NOT NULL DEFAULT '' COMMENT '接收人（对应手机号，openid）',
-  content text DEFAULT NULL COMMENT '消息数据',
-  is_click tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '点击次数',
-  is_visit tinyint(3) UNSIGNED NOT NULL DEFAULT 0 COMMENT '访问次数',
-  visit_time int(11) NOT NULL DEFAULT 0 COMMENT '访问时间',
-  create_time int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '消息时间',
-  result varchar(1000) NOT NULL DEFAULT '' COMMENT '结果',
-  params text DEFAULT NULL,
+CREATE TABLE sys_notice_log (
+  id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '通知记录ID',
+  site_id INT(11) NOT NULL DEFAULT 1 COMMENT '站点id',
+  `key` VARCHAR(255) DEFAULT '' COMMENT '消息key',
+  notice_type VARCHAR(50) DEFAULT 'sms' COMMENT '消息类型（sms,wechat.weapp）',
+  uid INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '通知的用户id',
+  member_id INT(11) NOT NULL DEFAULT 0 COMMENT '消息的会员id',
+  nickname VARCHAR(255) NOT NULL DEFAULT '' COMMENT '接收人用户昵称或姓名',
+  receiver VARCHAR(255) NOT NULL DEFAULT '' COMMENT '接收人（对应手机号，openid）',
+  content TEXT DEFAULT NULL COMMENT '消息数据',
+  is_click TINYINT(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '点击次数',
+  is_visit TINYINT(4) UNSIGNED NOT NULL DEFAULT 0 COMMENT '访问次数',
+  visit_time INT(11) NOT NULL DEFAULT 0 COMMENT '访问时间',
+  create_time INT(11) UNSIGNED NOT NULL DEFAULT 0 COMMENT '消息时间',
+  result VARCHAR(1000) NOT NULL DEFAULT '' COMMENT '结果',
+  params TEXT DEFAULT NULL,
   PRIMARY KEY (id)
 )
 ENGINE = INNODB,
 CHARACTER SET utf8mb4,
 COLLATE utf8mb4_general_ci,
-COMMENT = '通知记录表',
-ROW_FORMAT = COMPACT;
+COMMENT = '通知记录表';
 
-ALTER TABLE sys_message_log ADD INDEX member_id (member_id);
+ALTER TABLE sys_notice_log ADD INDEX member_id(member_id);
 
-ALTER TABLE sys_message_log ADD INDEX message_key (`key` (191));
+ALTER TABLE sys_notice_log ADD INDEX message_key(`key`(191));
 
-ALTER TABLE sys_message_log ADD INDEX uid (uid);
+ALTER TABLE sys_notice_log ADD INDEX uid(uid);
 
 
-CREATE TABLE sys_message (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  site_id int(11) NOT NULL DEFAULT 1 COMMENT '站点ID',
-  `key` varchar(50) NOT NULL DEFAULT '' COMMENT '标识',
-  sms_content text DEFAULT NULL COMMENT '短信配置参数',
-  is_wechat tinyint(4) NOT NULL DEFAULT 0 COMMENT '公众号模板消息（0：关闭，1：开启）',
-  is_weapp tinyint(4) NOT NULL DEFAULT 0 COMMENT '小程序订阅消息（0：关闭，1：开启）',
-  is_sms tinyint(4) NOT NULL DEFAULT 0 COMMENT '发送短信（0：关闭，1：开启）',
-  wechat_template_id varchar(255) NOT NULL DEFAULT '' COMMENT '微信模版消息id',
-  weapp_template_id varchar(255) NOT NULL DEFAULT '' COMMENT '微信小程序订阅消息id',
-  sms_id varchar(255) NOT NULL DEFAULT '' COMMENT '短信id（对应短信配置）',
-  create_time int(11) NOT NULL DEFAULT 0 COMMENT '添加时间',
-  wechat_first varchar(255) NOT NULL DEFAULT '' COMMENT '微信头部',
-  wechat_remark varchar(255) NOT NULL DEFAULT '' COMMENT '微信说明',
+CREATE TABLE sys_notice (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  site_id INT(11) NOT NULL DEFAULT 1 COMMENT '站点ID',
+  `key` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '标识',
+  sms_content TEXT DEFAULT NULL COMMENT '短信配置参数',
+  is_wechat TINYINT(4) NOT NULL DEFAULT 0 COMMENT '公众号模板消息（0：关闭，1：开启）',
+  is_weapp TINYINT(4) NOT NULL DEFAULT 0 COMMENT '小程序订阅消息（0：关闭，1：开启）',
+  is_sms TINYINT(4) NOT NULL DEFAULT 0 COMMENT '发送短信（0：关闭，1：开启）',
+  wechat_template_id VARCHAR(255) NOT NULL DEFAULT '' COMMENT '微信模版消息id',
+  weapp_template_id VARCHAR(255) NOT NULL DEFAULT '' COMMENT '微信小程序订阅消息id',
+  sms_id VARCHAR(255) NOT NULL DEFAULT '' COMMENT '短信id（对应短信配置）',
+  create_time INT(11) NOT NULL DEFAULT 0 COMMENT '添加时间',
+  wechat_first VARCHAR(255) NOT NULL DEFAULT '' COMMENT '微信头部',
+  wechat_remark VARCHAR(255) NOT NULL DEFAULT '' COMMENT '微信说明',
   PRIMARY KEY (id)
 )
 ENGINE = INNODB,
 CHARACTER SET utf8mb4,
 COLLATE utf8mb4_general_ci,
-COMMENT = '通知模型',
-ROW_FORMAT = COMPACT;
+COMMENT = '通知模型';
 
-ALTER TABLE sys_message ADD INDEX message_key (`key`, site_id);
-
+ALTER TABLE sys_notice ADD INDEX message_key(`key`, site_id);
 
 CREATE TABLE sys_menu (
-  id int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '菜单ID',
+  id int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '菜单ID',
   app_type varchar(255) NOT NULL DEFAULT 'admin' COMMENT '应用类型',
   menu_name varchar(32) NOT NULL DEFAULT '' COMMENT '菜单名称',
   menu_key varchar(255) NOT NULL DEFAULT '' COMMENT '菜单标识（菜单输入，接口自动生成）',
@@ -344,11 +357,12 @@ CREATE TABLE sys_menu (
   view_path varchar(255) NOT NULL DEFAULT '' COMMENT '菜单文件地址',
   methods varchar(10) NOT NULL DEFAULT '' COMMENT '提交方式POST GET PUT DELETE',
   sort tinyint(4) NOT NULL DEFAULT 1 COMMENT '排序',
-  status tinyint(3) UNSIGNED NOT NULL DEFAULT 1 COMMENT '正常，禁用（禁用后不允许访问）',
+  status tinyint(4) UNSIGNED NOT NULL DEFAULT 1 COMMENT '正常，禁用（禁用后不允许访问）',
   is_show tinyint(4) NOT NULL DEFAULT 1 COMMENT '是否显示',
   create_time int(11) NOT NULL DEFAULT 0,
   en_menu_name varchar(255) NOT NULL DEFAULT '' COMMENT '菜单英文名',
   delete_time int(11) NOT NULL DEFAULT 0,
+  addon VARCHAR(255) NOT NULL DEFAULT '' COMMENT '所属插件',
   PRIMARY KEY (id)
 )
 ENGINE = INNODB,
@@ -391,13 +405,14 @@ COMMENT = ' 系统任务';
 
 
 CREATE TABLE sys_config (
-  id int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  id int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   site_id int(11) NOT NULL DEFAULT 1 COMMENT '站点id',
   config_key varchar(255) NOT NULL DEFAULT '' COMMENT '配置项关键字',
   value text DEFAULT NULL COMMENT '配置值json',
   status tinyint(4) NOT NULL DEFAULT 1 COMMENT '是否启用 1启用 0不启用',
   create_time int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
   update_time int(11) NOT NULL DEFAULT 0 COMMENT '修改时间',
+  addon VARCHAR(255) NOT NULL DEFAULT '' COMMENT '所属插件',
   PRIMARY KEY (id)
 )
 ENGINE = INNODB,
@@ -461,7 +476,7 @@ ALTER TABLE sys_attachment ADD INDEX site_id (site_id);
 
 
 CREATE TABLE sys_area (
-  id int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  id int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   pid int(11) NOT NULL DEFAULT 0 COMMENT '父级',
   name varchar(50) NOT NULL DEFAULT '' COMMENT '名称',
   shortname varchar(30) NOT NULL DEFAULT '' COMMENT '简称',
@@ -4137,7 +4152,7 @@ INSERT INTO sys_area VALUES
 
 
 CREATE TABLE sys_agreement (
-  id int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  id int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   site_id int(11) NOT NULL DEFAULT 1 COMMENT '站点id',
   agreement_key varchar(255) NOT NULL DEFAULT '' COMMENT '协议关键字',
   title varchar(255) NOT NULL DEFAULT '' COMMENT '协议标题',
@@ -4245,8 +4260,46 @@ ALTER TABLE pay_transfer ADD INDEX member_withdraw_site_id (site_id, main_id);
 ALTER TABLE pay_transfer ADD INDEX member_withdraw_status (transfer_status);
 
 
+CREATE TABLE pay_refund (
+  id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  site_id INT(11) NOT NULL DEFAULT 1 COMMENT '站点id',
+  refund_no VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '退款单号',
+  out_trade_no VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '支付流水号',
+  type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '支付方式',
+  channel VARCHAR(50) NOT NULL DEFAULT '' COMMENT '支付渠道',
+  money DECIMAL(10, 2) NOT NULL COMMENT '支付金额',
+  reason VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '退款原因',
+  status VARCHAR(255) NOT NULL DEFAULT '0' COMMENT '支付状态（0.待退款 1. 退款中中 2. 已退款 -1已关闭）',
+  create_time INT(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  refund_time INT(11) NOT NULL DEFAULT 0 COMMENT '支付时间',
+  close_time INT(11) NOT NULL DEFAULT 0 COMMENT '关闭时间',
+  PRIMARY KEY (id)
+)
+ENGINE = INNODB,
+CHARACTER SET utf8mb4,
+COLLATE utf8mb4_general_ci,
+COMMENT = '支付记录表';
+
+
+CREATE TABLE pay_channel (
+  id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  site_id INT(11) NOT NULL DEFAULT 1 COMMENT '站点id',
+  type VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '支付类型',
+  channel VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '支付渠道',
+  config TEXT NOT NULL COMMENT '支付配置',
+  create_time INT(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  update_time INT(11) NOT NULL DEFAULT 0 COMMENT '修改时间',
+  status INT(11) NOT NULL DEFAULT 0 COMMENT '是否启用',
+  sort INT(11) NOT NULL DEFAULT 0 COMMENT '排序',
+  PRIMARY KEY (id)
+)
+ENGINE = INNODB,
+CHARACTER SET utf8mb4,
+COLLATE utf8mb4_general_ci,
+COMMENT = '支付渠道配置表';
+
 CREATE TABLE pay (
-  id int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  id int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   site_id int(11) NOT NULL DEFAULT 1 COMMENT '站点id',
   main_id int(11) NOT NULL DEFAULT 0 COMMENT '支付会员id',
   out_trade_no varchar(255) NOT NULL DEFAULT '' COMMENT '支付流水号',
@@ -4263,6 +4316,7 @@ CREATE TABLE pay (
   type varchar(255) NOT NULL DEFAULT '' COMMENT '支付方式',
   mch_id varchar(50) NOT NULL DEFAULT '' COMMENT '商户收款账号',
   main_type varchar(255) NOT NULL DEFAULT '',
+  channel varchar(50) NOT NULL DEFAULT '' COMMENT '支付渠道',
   PRIMARY KEY (id)
 )
 ENGINE = INNODB,
@@ -4294,20 +4348,41 @@ COMMENT = '订单操作记录表',
 ROW_FORMAT = COMPACT;
 
 
+CREATE TABLE order_item_refund (
+  refund_id INT(11) NOT NULL AUTO_INCREMENT,
+  order_item_id INT(11) NOT NULL DEFAULT 0 COMMENT '订单id',
+  order_id INT(11) NOT NULL DEFAULT 0 COMMENT '订单id',
+  site_id INT(11) NOT NULL DEFAULT 1 COMMENT '站点id',
+  member_id INT(11) NOT NULL DEFAULT 0 COMMENT '会员id',
+  num DECIMAL(10, 3) NOT NULL DEFAULT 0.000 COMMENT '退货数量',
+  money DECIMAL(10, 2) NOT NULL DEFAULT 0.00 COMMENT '总退款',
+  refund_no VARCHAR(255) NOT NULL DEFAULT '0' COMMENT '退款单号',
+  status INT(11) NOT NULL DEFAULT 0 COMMENT '退款状态',
+  create_time INT(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  audit_time INT(11) NOT NULL DEFAULT 0 COMMENT '审核时间',
+  transfer_time INT(11) NOT NULL DEFAULT 0 COMMENT '转账时间',
+  item_type VARCHAR(255) NOT NULL DEFAULT '' COMMENT '项目类型',
+  PRIMARY KEY (refund_id)
+)
+ENGINE = INNODB,
+CHARACTER SET utf8mb4,
+COLLATE utf8mb4_general_ci,
+COMMENT = '订单退款表';
+
 CREATE TABLE order_item (
   order_item_id int(11) NOT NULL AUTO_INCREMENT,
   order_id int(11) NOT NULL DEFAULT 0 COMMENT '订单id',
   site_id int(11) NOT NULL DEFAULT 1 COMMENT '站点id',
   member_id int(11) NOT NULL DEFAULT 0 COMMENT '购买会员id',
   item_id int(11) NOT NULL DEFAULT 0 COMMENT '项目id',
-  item_type varchar(255) NOT NULL DEFAULT '0' COMMENT '项目类型',
+  item_type VARCHAR(255) NOT NULL DEFAULT '' COMMENT '项目类型',
   item_name varchar(400) NOT NULL DEFAULT '' COMMENT '项目名称',
   item_image varchar(2000) NOT NULL DEFAULT '' COMMENT '项目图片',
   price decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '项目单价',
   num decimal(10, 3) NOT NULL DEFAULT 0.000 COMMENT '购买数量',
   item_money decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '项目总价',
   is_refund int(11) NOT NULL DEFAULT 0 COMMENT '是否退款',
-  refund_id int(11) NOT NULL DEFAULT 0 COMMENT '退款id',
+  refund_no VARCHAR(255) NOT NULL DEFAULT '' COMMENT '退款编号',
   refund_status int(11) NOT NULL DEFAULT 0 COMMENT '退款状态',
   create_time int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (order_item_id)
@@ -4351,53 +4426,8 @@ COMMENT = '订单表',
 ROW_FORMAT = COMPACT;
 
 
-CREATE TABLE member_withdraw (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  site_id int(11) NOT NULL DEFAULT 1 COMMENT '站点id',
-  withdraw_no varchar(50) NOT NULL DEFAULT '' COMMENT '提现交易号',
-  member_id int(11) NOT NULL DEFAULT 0 COMMENT '会员id',
-  transfer_type varchar(20) NOT NULL DEFAULT '0' COMMENT '转账提现类型',
-  transfer_realname varchar(50) NOT NULL DEFAULT '' COMMENT '联系人名称',
-  transfer_mobile varchar(11) NOT NULL DEFAULT '' COMMENT '手机号',
-  transfer_bank varchar(255) NOT NULL DEFAULT '' COMMENT '银行名称',
-  transfer_account varchar(255) NOT NULL DEFAULT '' COMMENT '收款账号',
-  transfer_voucher varchar(255) NOT NULL DEFAULT '' COMMENT '凭证',
-  transfer_remark varchar(255) NOT NULL DEFAULT '' COMMENT '凭证说明',
-  transfer_fail_reason varchar(255) NOT NULL DEFAULT '' COMMENT '失败原因',
-  transfer_status varchar(20) NOT NULL DEFAULT '' COMMENT '转账状态',
-  transfer_time int(11) NOT NULL DEFAULT 0 COMMENT '转账时间',
-  apply_money decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '提现申请金额',
-  rate decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '提现手续费比率',
-  service_money decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '提现手续费',
-  money decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '提现到账金额',
-  audit_time int(11) NOT NULL DEFAULT 0 COMMENT '审核时间',
-  status int(11) NOT NULL DEFAULT 0 COMMENT '状态0待审核1.待转账2已转账 -1拒绝',
-  remark varchar(100) NOT NULL DEFAULT '' COMMENT '备注',
-  create_time int(11) NOT NULL DEFAULT 0 COMMENT '申请时间',
-  refuse_reason varchar(100) NOT NULL DEFAULT '' COMMENT '拒绝理由',
-  update_time int(11) NOT NULL DEFAULT 0,
-  transfer_no varchar(50) NOT NULL DEFAULT '' COMMENT '转账单号',
-  cancel_time int(11) NOT NULL DEFAULT 0 COMMENT '取消时间',
-  PRIMARY KEY (id)
-)
-ENGINE = INNODB,
-CHARACTER SET utf8mb4,
-COLLATE utf8mb4_general_ci,
-COMMENT = '会员提现表';
-
-ALTER TABLE member_withdraw ADD INDEX member_withdraw_apply_time (create_time);
-
-ALTER TABLE member_withdraw ADD INDEX member_withdraw_audit_time (audit_time);
-
-ALTER TABLE member_withdraw ADD INDEX member_withdraw_site_id (site_id, member_id);
-
-ALTER TABLE member_withdraw ADD INDEX member_withdraw_status (status);
-
-ALTER TABLE member_withdraw ADD INDEX member_withdraw_withdraw_no (withdraw_no);
-
-
 CREATE TABLE member_level (
-  level_id int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '会员等级',
+  level_id int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '会员等级',
   site_id int(11) NOT NULL DEFAULT 1 COMMENT '站点id',
   level_name varchar(50) NOT NULL DEFAULT '' COMMENT '等级名称',
   growth decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '所需成长值',
@@ -4419,7 +4449,7 @@ ALTER TABLE member_level ADD INDEX status (status);
 
 
 CREATE TABLE member_label (
-  label_id int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '标签id',
+  label_id int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '标签id',
   site_id int(11) NOT NULL DEFAULT 1 COMMENT '站点id',
   label_name varchar(50) NOT NULL DEFAULT '' COMMENT '标签名称',
   memo varchar(1000) NOT NULL DEFAULT '' COMMENT '备注',
@@ -4440,8 +4470,70 @@ ALTER TABLE member_label ADD INDEX site_id (site_id);
 ALTER TABLE member_label ADD INDEX sort (sort);
 
 
+CREATE TABLE member_cash_out_account (
+  account_id INT(11) NOT NULL AUTO_INCREMENT,
+  site_id INT(11) NOT NULL COMMENT '站点id',
+  member_id INT(11) NOT NULL COMMENT '会员id',
+  account_type VARCHAR(255) NOT NULL DEFAULT '' COMMENT '账户类型',
+  bank_name VARCHAR(255) NOT NULL DEFAULT '' COMMENT '银行名称',
+  realname VARCHAR(255) NOT NULL DEFAULT '' COMMENT '真实名称',
+  create_time INT(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  update_time INT(11) NOT NULL DEFAULT 0 COMMENT '修改时间',
+  account_no VARCHAR(255) NOT NULL DEFAULT '' COMMENT '提现账户',
+  PRIMARY KEY (account_id)
+)
+ENGINE = INNODB,
+CHARACTER SET utf8mb4,
+COLLATE utf8mb4_general_ci,
+COMMENT = '会员提现账户';
+
+
+CREATE TABLE member_cash_out (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  site_id INT(11) NOT NULL DEFAULT 1 COMMENT '站点id',
+  cash_out_no VARCHAR(50) NOT NULL DEFAULT '' COMMENT '提现交易号',
+  member_id INT(11) NOT NULL DEFAULT 0 COMMENT '会员id',
+  account_type VARCHAR(255) NOT NULL DEFAULT 'money' COMMENT '提现账户类型',
+  transfer_type VARCHAR(20) NOT NULL DEFAULT '0' COMMENT '转账提现类型',
+  transfer_realname VARCHAR(50) NOT NULL DEFAULT '' COMMENT '联系人名称',
+  transfer_mobile VARCHAR(11) NOT NULL DEFAULT '' COMMENT '手机号',
+  transfer_bank VARCHAR(255) NOT NULL DEFAULT '' COMMENT '银行名称',
+  transfer_account VARCHAR(255) NOT NULL DEFAULT '' COMMENT '收款账号',
+  transfer_fail_reason VARCHAR(255) NOT NULL DEFAULT '' COMMENT '失败原因',
+  transfer_status VARCHAR(20) NOT NULL DEFAULT '' COMMENT '转账状态',
+  transfer_time INT(11) NOT NULL DEFAULT 0 COMMENT '转账时间',
+  apply_money DECIMAL(10, 2) NOT NULL DEFAULT 0.00 COMMENT '提现申请金额',
+  rate DECIMAL(10, 2) NOT NULL DEFAULT 0.00 COMMENT '提现手续费比率',
+  service_money DECIMAL(10, 2) NOT NULL DEFAULT 0.00 COMMENT '提现手续费',
+  money DECIMAL(10, 2) NOT NULL DEFAULT 0.00 COMMENT '提现到账金额',
+  audit_time INT(11) NOT NULL DEFAULT 0 COMMENT '审核时间',
+  status INT(11) NOT NULL DEFAULT 0 COMMENT '状态1待审核2.待转账3已转账 -1拒绝 -2 已取消',
+  remark VARCHAR(100) NOT NULL DEFAULT '' COMMENT '备注',
+  create_time INT(11) NOT NULL DEFAULT 0 COMMENT '申请时间',
+  refuse_reason VARCHAR(100) NOT NULL DEFAULT '' COMMENT '拒绝理由',
+  update_time INT(11) NOT NULL DEFAULT 0,
+  transfer_no VARCHAR(50) NOT NULL DEFAULT '' COMMENT '转账单号',
+  cancel_time INT(11) NOT NULL DEFAULT 0 COMMENT '取消时间',
+  final_transfer_type VARCHAR(255) NOT NULL DEFAULT '' COMMENT '转账方式',
+  PRIMARY KEY (id)
+)
+ENGINE = INNODB,
+CHARACTER SET utf8mb4,
+COLLATE utf8mb4_general_ci,
+COMMENT = '会员提现表';
+
+ALTER TABLE member_cash_out ADD INDEX member_withdraw_apply_time(create_time);
+
+ALTER TABLE member_cash_out ADD INDEX member_withdraw_audit_time(audit_time);
+
+ALTER TABLE member_cash_out ADD INDEX member_withdraw_site_id(site_id, member_id);
+
+ALTER TABLE member_cash_out ADD INDEX member_withdraw_status(status);
+
+ALTER TABLE member_cash_out ADD INDEX member_withdraw_withdraw_no(cash_out_no);
+
 CREATE TABLE member_address (
-  id int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  id int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   member_id int(11) NOT NULL DEFAULT 0 COMMENT '会员id',
   site_id int(11) NOT NULL DEFAULT 1 COMMENT '站点id',
   name varchar(255) NOT NULL DEFAULT '' COMMENT '用户姓名',
@@ -4469,7 +4561,7 @@ ALTER TABLE member_address ADD INDEX IDX_member_address (member_id, site_id);
 
 
 CREATE TABLE member_account_log (
-  id int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  id int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   member_id int(11) NOT NULL DEFAULT 0 COMMENT '用户id',
   site_id int(11) NOT NULL DEFAULT 1 COMMENT '站点id',
   account_type varchar(255) NOT NULL DEFAULT 'point' COMMENT '账户类型',
@@ -4496,7 +4588,7 @@ ALTER TABLE member_account_log ADD INDEX member_id (member_id);
 
 
 CREATE TABLE member (
-  member_id int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  member_id int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   pid int(11) NOT NULL DEFAULT 0 COMMENT '推广会员id',
   site_id int(11) NOT NULL DEFAULT 1 COMMENT '站点id',
   username varchar(255) DEFAULT '' COMMENT '会员用户名',
@@ -4528,11 +4620,14 @@ CREATE TABLE member (
   point_get int(11) NOT NULL DEFAULT 0 COMMENT '累计获取积分',
   balance decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '可用余额',
   balance_get decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '累计获取余额',
-  money decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '可用零钱',
-  money_get decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '累计获取零钱',
-  money_withdrawing decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '提现中零钱',
+  money DECIMAL(10, 2) NOT NULL DEFAULT 0.00 COMMENT '可用余额（可提现）',
+  money_get DECIMAL(10, 2) NOT NULL DEFAULT 0.00 COMMENT '累计获取余额（可提现）',
+  money_cash_outing DECIMAL(10, 2) NOT NULL COMMENT '提现中余额（可提现）',
   growth int(11) NOT NULL DEFAULT 0 COMMENT '成长值',
   growth_get int(11) NOT NULL DEFAULT 0 COMMENT '累计获得成长值',
+  commission DECIMAL(10, 2) NOT NULL DEFAULT 0.00 COMMENT '当前佣金',
+  commission_get DECIMAL(10, 2) NOT NULL DEFAULT 0.00 COMMENT '佣金获取',
+  commission_cash_outing DECIMAL(10, 2) NOT NULL COMMENT '提现中佣金',
   is_member tinyint(4) NOT NULL DEFAULT 0 COMMENT '是否是会员',
   member_time int(11) NOT NULL DEFAULT 0 COMMENT '成为会员时间',
   is_del tinyint(4) NOT NULL DEFAULT 0 COMMENT '0正常  1已删除',
@@ -4542,7 +4637,7 @@ CREATE TABLE member (
   address varchar(255) NOT NULL DEFAULT '' COMMENT '详细地址',
   location varchar(255) NOT NULL DEFAULT '' COMMENT '定位地址',
   delete_time int(11) NOT NULL DEFAULT 0 COMMENT '删除时间',
-  update_time int(11) NOT NULL DEFAULT 0,
+  update_time INT(11) NOT NULL DEFAULT 0 COMMENT '修改时间',
   PRIMARY KEY (member_id)
 )
 ENGINE = INNODB,
@@ -4566,6 +4661,36 @@ ALTER TABLE member ADD INDEX wx_openid (wx_openid (191));
 ALTER TABLE member ADD INDEX wx_unionid (wx_unionid (191));
 
 
+CREATE TABLE jobs_failed (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  `connection` TEXT NOT NULL,
+  queue TEXT NOT NULL,
+  payload LONGTEXT NOT NULL,
+  exception LONGTEXT NOT NULL,
+  fail_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+)
+ENGINE = INNODB,
+CHARACTER SET utf8mb4,
+COLLATE utf8mb4_general_ci,
+COMMENT = '消息队列任务失败记录表';
+
+CREATE TABLE jobs (
+  id INT(11) NOT NULL AUTO_INCREMENT,
+  queue VARCHAR(255) NOT NULL,
+  payload LONGTEXT NOT NULL,
+  attempts TINYINT(4) UNSIGNED NOT NULL,
+  reserved TINYINT(4) UNSIGNED NOT NULL,
+  reserve_time INT(11) UNSIGNED DEFAULT NULL,
+  available_time INT(11) UNSIGNED NOT NULL,
+  create_time INT(11) UNSIGNED NOT NULL,
+  PRIMARY KEY (id)
+)
+ENGINE = INNODB,
+CHARACTER SET utf8mb4,
+COLLATE utf8mb4_general_ci,
+COMMENT = '消息队列任务表';
+
 CREATE TABLE generate_table (
   id int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
   table_name varchar(255) NOT NULL DEFAULT '' COMMENT '表名',
@@ -4588,13 +4713,13 @@ CREATE TABLE generate_column (
   column_name varchar(100) NOT NULL DEFAULT '' COMMENT '字段名称',
   column_comment varchar(300) NOT NULL DEFAULT '' COMMENT '字段描述',
   column_type varchar(100) NOT NULL DEFAULT '' COMMENT '字段类型',
-  is_required tinyint(4) DEFAULT 0 COMMENT '是否必填 0-非必填 1-必填',
-  is_pk tinyint(4) DEFAULT 0 COMMENT '是否为主键 0-不是 1-是',
-  is_insert tinyint(4) DEFAULT 0 COMMENT '是否为插入字段 0-不是 1-是',
-  is_update tinyint(4) DEFAULT 0 COMMENT '是否为更新字段 0-不是 1-是',
-  is_lists tinyint(4) DEFAULT 1 COMMENT '是否为列表字段 0-不是 1-是',
-  is_query tinyint(4) DEFAULT 1 COMMENT '是否为查询字段 0-不是 1-是',
-  is_search tinyint(4) DEFAULT 1 COMMENT '是否搜索字段',
+  is_required tinyint(1) DEFAULT 0 COMMENT '是否必填 0-非必填 1-必填',
+  is_pk tinyint(1) DEFAULT 0 COMMENT '是否为主键 0-不是 1-是',
+  is_insert tinyint(1) DEFAULT 0 COMMENT '是否为插入字段 0-不是 1-是',
+  is_update tinyint(1) DEFAULT 0 COMMENT '是否为更新字段 0-不是 1-是',
+  is_lists tinyint(1) DEFAULT 1 COMMENT '是否为列表字段 0-不是 1-是',
+  is_query tinyint(1) DEFAULT 1 COMMENT '是否为查询字段 0-不是 1-是',
+  is_search tinyint(1) DEFAULT 1 COMMENT '是否搜索字段',
   query_type varchar(100) DEFAULT '=' COMMENT '查询类型',
   view_type varchar(100) DEFAULT 'input' COMMENT '显示类型',
   dict_type varchar(255) DEFAULT '' COMMENT '字典类型',
@@ -4620,8 +4745,8 @@ CREATE TABLE diy_route (
   PRIMARY KEY (id)
 )
 ENGINE = INNODB,
-CHARACTER SET utf8,
-COLLATE utf8_general_ci,
+CHARACTER SET utf8mb4,
+COLLATE utf8mb4_general_ci,
 COMMENT = '自定义路由';
 
 
@@ -4671,7 +4796,7 @@ ALTER TABLE article_category ADD INDEX sort (sort);
 
 CREATE TABLE article (
   id int(11) NOT NULL AUTO_INCREMENT COMMENT '文章id',
-  category_id int(11) NOT NULL DEFAULT 0 COMMENT '文章分类',
+  category_id int(11) NOT NULL COMMENT '文章分类',
   site_id int(11) NOT NULL DEFAULT 1 COMMENT '站点ID',
   title varchar(255) NOT NULL COMMENT '文章标题',
   intro varchar(255) NOT NULL DEFAULT '' COMMENT '简介',
@@ -4701,6 +4826,42 @@ ALTER TABLE article ADD INDEX IDX_article_is_show (is_show);
 ALTER TABLE article ADD INDEX IDX_article_site_id (site_id);
 
 ALTER TABLE article ADD INDEX IDX_ns_article_sort (sort);
+
+
+CREATE TABLE addon_log (
+  id INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  action VARCHAR(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '操作类型   install 安装 uninstall 卸载 update 更新',
+  `key` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '插件标识',
+  from_version VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '升级前的版本号',
+  to_version VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '升级后的版本号',
+  create_time INT(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  PRIMARY KEY (id)
+)
+ENGINE = INNODB,
+CHARACTER SET utf8mb4,
+COLLATE utf8mb4_general_ci,
+COMMENT = '插件日志表';
+
+CREATE TABLE addon (
+  id INT(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  title VARCHAR(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '插件名称',
+  icon VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '插件图标',
+  `key` VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '插件标识',
+  `desc` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '插件描述',
+  status TINYINT(4) NOT NULL DEFAULT 1 COMMENT '状态',
+  author VARCHAR(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '作者',
+  version VARCHAR(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '版本号',
+  create_time INT(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
+  install_time INT(11) NOT NULL DEFAULT 0 COMMENT '安装时间',
+  update_time INT(11) NOT NULL DEFAULT 0 COMMENT '更新时间',
+  PRIMARY KEY (id)
+)
+ENGINE = INNODB,
+CHARACTER SET utf8mb4,
+COLLATE utf8mb4_general_ci,
+COMMENT = '插件表';
+
+ALTER TABLE addon ADD UNIQUE INDEX UK_title(title);
 
 INSERT INTO sys_user_role VALUES
 (1, 1, 1, '', 0, 1);

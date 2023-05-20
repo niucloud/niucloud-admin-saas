@@ -15,14 +15,8 @@ use app\api\middleware\ApiLog;
 use think\facade\Route;
 
 //支付异步回调
-Route::any('pay/notify/:type/:site_id/:action', 'pay.Pay/notify')
+Route::any('pay/notify/:site_id/:channel/:type/:action', 'pay.Pay/notify')
     ->middleware(ApiChannel::class)
-    ->middleware(ApiCheckToken::class)
-    ->middleware(ApiLog::class);
-
-
-
-Route::any('pay/test', 'pay.Pay/test')->middleware(ApiChannel::class)
     ->middleware(ApiCheckToken::class)
     ->middleware(ApiLog::class);
 /**

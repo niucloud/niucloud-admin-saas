@@ -15,10 +15,9 @@ use app\enum\sys\AppTypeEnum;
 use app\Request;
 use app\service\api\login\AuthService;
 use app\service\api\login\LoginService;
-use app\services\user\UserAuthServices;
 use Closure;
 use Exception;
-use extend\exception\AuthException;
+use core\exception\AuthException;
 
 
 /**
@@ -31,7 +30,7 @@ class ApiCheckToken
     /**
      * @param Request $request
      * @param Closure $next
-     * @param bool $exception  是否把错误抛出
+     * @param bool $exception 是否把错误抛出
      * @return mixed
      * @throws Exception
      */
@@ -41,17 +40,17 @@ class ApiCheckToken
         //通过配置来设置系统header参数
         try {
             $token = $request->apiToken();
-            $token_info = (new LoginService())->parseToken($token);
+            $token_info = ( new LoginService() )->parseToken($token);
         } catch (AuthException $e) {
             //是否将登录错误抛出
             if ($exception)
                 return fail($e->getMessage());
         }
-        if(!empty($token_info)){
-            $request->memberId($token_info['member_id']);
+        if (!empty($token_info)) {
+            $request->memberId($token_info[ 'member_id' ]);
         }
         //校验会员和站点
-        (new AuthService())->checkSiteAuth($request);
+        ( new AuthService() )->checkSiteAuth($request);
         return $next($request);
     }
 }

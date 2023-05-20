@@ -12,9 +12,9 @@
 namespace app\service\api\pay;
 
 use app\enum\common\ChannelEnum;
-use app\service\api\BaseApiService;
 use app\service\core\member\CoreMemberService;
 use app\service\core\pay\CorePayService;
+use core\base\BaseApiService;
 use Yansongda\Supports\Collection;
 
 /**
@@ -107,8 +107,8 @@ class PayService extends BaseApiService
      * @param $type
      * @return void
      */
-    public function notify(string $type, string $action){
-        return $this->core_pay_service->notify($this->site_id, $type, $action);
+    public function notify(string $channel, string $type, string $action){
+        return $this->core_pay_service->notify($this->site_id, $channel, $type, $action);
     }
 
     /**

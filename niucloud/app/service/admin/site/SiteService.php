@@ -13,11 +13,13 @@ namespace app\service\admin\site;
 
 use app\enum\sys\AppTypeEnum;
 use app\model\site\Site;
-use app\service\admin\BaseAdminService;
+use app\service\admin\install\InstallArticleService;
+use app\service\admin\install\InstallDiyService;
 use app\service\admin\sys\MenuService;
 use app\service\admin\user\UserService;
+use core\base\BaseAdminService;
+use core\exception\AdminException;
 use Exception;
-use extend\exception\AdminException;
 use think\facade\Cache;
 use think\facade\Db;
 
@@ -29,6 +31,7 @@ use think\facade\Db;
 class SiteService extends BaseAdminService
 {
     public static $cache_tag_name = 'site_cash';
+
     public function __construct()
     {
         parent::__construct();
@@ -45,7 +48,7 @@ class SiteService extends BaseAdminService
     {
         $field = 'site_id, site_name, app_type, keywords, logo, `desc`, status, latitude, longitude, province_id, city_id, 
         district_id, address, full_address, phone, business_hours, create_time, expire_time, group_id';
-        $search_model = $this->model->where([['app_type', '<>', 'admin']])->withSearch(['keywords','status', 'group_id'],$where)->with('groupName')->field($field)->append(['status_name'])->order('create_time desc');
+        $search_model = $this->model->where([ [ 'app_type', '<>', 'admin' ] ])->withSearch([ 'keywords', 'status', 'group_id' ], $where)->with('groupName')->field($field)->append([ 'status_name' ])->order('create_time desc');
         $list = $this->pageQuery($search_model);
         return $list;
     }
@@ -59,7 +62,7 @@ class SiteService extends BaseAdminService
     {
         $field = 'site_id, site_name, app_type, keywords, logo, `desc`, status, latitude, longitude, province_id, city_id, 
         district_id, address, full_address, phone, business_hours, create_time, expire_time, group_id';
-        return $this->model->where([['site_id', '=', $site_id]])->with('groupName')->field($field)->append(['status_name'])->findOrEmpty()->toArray();
+        return $this->model->where([ [ 'site_id', '=', $site_id ] ])->with('groupName')->field($field)->append([ 'status_name' ])->findOrEmpty()->toArray();
 
     }
 
@@ -72,15 +75,15 @@ class SiteService extends BaseAdminService
     public function add(array $data)
     {
         $user_service = new UserService();
-        if($user_service->checkUsername($data['username'])) throw new AdminException(201004);
-        $data['app_type'] = 'site';
+        if ($user_service->checkUsername($data[ 'username' ])) throw new AdminException('USERNAME_REPEAT');
+        $data[ 'app_type' ] = 'site';
         //添加站点
         $data_site = [
-            'site_name' => $data['site_name'],
-            'app_type' => $data['app_type'],
-            'group_id' => $data['group_id'],
+            'site_name' => $data[ 'site_name' ],
+            'app_type' => $data[ 'app_type' ],
+            'group_id' => $data[ 'group_id' ],
             'create_time' => time(),
-            'expire_time' => $data['expire_time']
+            'expire_time' => $data[ 'expire_time' ]
         ];
         Db::startTrans();
         try {
@@ -88,18 +91,24 @@ class SiteService extends BaseAdminService
             $site_id = $site->site_id;
             //添加用户
             $data_user = [
-                'username' => $data['username'],
-                'head_img' => $data['head_img'] ?? '',
-                'status' => $data['status'] ?? 1,
-                'real_name' => $data['real_name'] ?? '',
-                'password' => $data['password'],
+                'username' => $data[ 'username' ],
+                'head_img' => $data[ 'head_img' ] ?? '',
+                'status' => $data[ 'status' ] ?? 1,
+                'real_name' => $data[ 'real_name' ] ?? '',
+                'password' => $data[ 'password' ],
                 'role_ids' => '',
                 'is_admin' => 1
             ];
-            (new UserService())->addSiteUser($data_user, $site_id);
+            ( new UserService() )->addSiteUser($data_user, $site_id);
+
+            // 初始化自定义页面数据
+            ( new InstallDiyService() )->install([ 'site_id' => $site_id ]);
+
+            // 初始化文章数据
+            ( new InstallArticleService() )->install([ 'site_id' => $site_id ]);
             Db::commit();
             return $site_id;
-        } catch ( Exception $e) {
+        } catch (Exception $e) {
             Db::rollback();
             throw new Exception($e->getMessage());
         }
@@ -111,8 +120,9 @@ class SiteService extends BaseAdminService
      * @param array $data
      * @return bool
      */
-    public function update(int $site_id, array $data){
-        $this->model->update($data, [['site_id', '=', $site_id]]);
+    public function edit(int $site_id, array $data)
+    {
+        $this->model->update($data, [ [ 'site_id', '=', $site_id ] ]);
         Cache::tag(self::$cache_tag_name)->clear();
         return true;
     }
@@ -123,8 +133,9 @@ class SiteService extends BaseAdminService
      * @return int
      * @throws \think\db\exception\DbException
      */
-    public function getCount(array $where = []){
-        return $this->model->where($where)->count();
+    public function getCount(array $where = [])
+    {
+        return $this->model->where($where)->withSearch([ 'create_time', 'group_id' ], $where)->count();
     }
 
 
@@ -132,14 +143,18 @@ class SiteService extends BaseAdminService
      * 获取授权当前站点信息(用做缓存)
      * @return mixed
      */
-    public function getSiteCache(int $site_id){
+    public function getSiteCache(int $site_id)
+    {
         $cache_name = 'site_info_cache';
-        return Cache::tag(self::$cache_tag_name.$site_id)->remember($cache_name.$site_id, function () use ($site_id) {
+        return Cache::tag(self::$cache_tag_name . $site_id)->remember($cache_name . $site_id, function() use ($site_id) {
             $where = [
-                ['site_id', '=', $site_id],
+                [ 'site_id', '=', $site_id ],
             ];
-            $menu_list = $this->model->where($where)->field('app_type,site_name,logo,group_id, status, expire_time')->findOrEmpty()->append(['status_name'])->toArray();
-            return $menu_list;
+            $site = $this->model->where($where)->field('app_type,site_name,logo,group_id, status, expire_time')->findOrEmpty();
+            if (!$site->isEmpty()) {
+                $site->append([ 'status_name' ]);
+            }
+            return $site->toArray();
         });
     }
 
@@ -149,19 +164,20 @@ class SiteService extends BaseAdminService
      * @param int $site_id
      * @return mixed
      */
-    public function getMenuList(int $site_id, $is_tree, $status){
+    public function getMenuList(int $site_id, $is_tree, $status)
+    {
         $site_info = $this->getSiteCache($site_id);
-        if(empty($site_info))
+        if (empty($site_info))
             return [];
-        $app_type = $site_info['app_type'];
-        if($app_type == AppTypeEnum::ADMIN){
-            return (new MenuService())->getAllMenuList($app_type, $status, $is_tree, 1);
-        }else{
-            $group_id = $site_info['group_id'] ?? 0;
-            if($group_id > 0){
-                $menu_keys = (new SiteGroupService())->getMenuIdsByGroupId($group_id);
-                return (new MenuService())->getMenuListByMenuKeys($menu_keys, $this->app_type, $is_tree);
-            }else{
+        $app_type = $site_info[ 'app_type' ];
+        if ($app_type == AppTypeEnum::ADMIN) {
+            return ( new MenuService() )->getAllMenuList($app_type, $status, $is_tree, 1);
+        } else {
+            $group_id = $site_info[ 'group_id' ] ?? 0;
+            if ($group_id > 0) {
+                $menu_keys = ( new SiteGroupService() )->getMenuIdsByGroupId($group_id);
+                return ( new MenuService() )->getMenuListByMenuKeys($menu_keys, $this->app_type, $is_tree);
+            } else {
                 return [];
             }
         }
@@ -174,19 +190,20 @@ class SiteService extends BaseAdminService
      * @param int $site_id
      * @return mixed
      */
-    public function getApiList(int $site_id, $status){
+    public function getApiList(int $site_id, $status)
+    {
         $site_info = $this->getSiteCache($site_id);
-        if(empty($site_info))
+        if (empty($site_info))
             return [];
-        $app_type = $site_info['app_type'];
-        if($app_type == AppTypeEnum::ADMIN){
-            return (new MenuService())->getAllApiList($app_type, $status);
-        }else{
-            $group_id = $site_info['group_id'] ?? 0;
-            if($group_id > 0){
-                $menu_keys = (new SiteGroupService())->getMenuIdsByGroupId($group_id);
-                return (new MenuService())->getApiListByMenuKeys($menu_keys, $app_type);
-            }else{
+        $app_type = $site_info[ 'app_type' ];
+        if ($app_type == AppTypeEnum::ADMIN) {
+            return ( new MenuService() )->getAllApiList($app_type, $status);
+        } else {
+            $group_id = $site_info[ 'group_id' ] ?? 0;
+            if ($group_id > 0) {
+                $menu_keys = ( new SiteGroupService() )->getMenuIdsByGroupId($group_id);
+                return ( new MenuService() )->getApiListByMenuKeys($menu_keys, $app_type);
+            } else {
                 return [];
             }
         }
@@ -200,7 +217,7 @@ class SiteService extends BaseAdminService
     public function getExpireTime(int $site_id)
     {
         $field = 'expire_time';
-        return $this->model->where([['site_id', '=', $site_id]])->field($field)->findOrEmpty()->toArray();
+        return $this->model->where([ [ 'site_id', '=', $site_id ] ])->field($field)->findOrEmpty()->toArray();
 
     }
 

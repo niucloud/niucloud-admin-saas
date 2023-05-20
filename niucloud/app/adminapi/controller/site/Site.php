@@ -11,10 +11,10 @@
 
 namespace app\adminapi\controller\site;
 
-use app\adminapi\controller\BaseAdminController;
 use app\enum\site\SiteEnum;
 use app\service\admin\auth\AuthSiteService;
 use app\service\admin\site\SiteService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class Site extends BaseAdminController
@@ -60,22 +60,22 @@ class Site extends BaseAdminController
         $this->validate($data, 'app\validate\site\Site.add');
         $this->validate($data, 'app\validate\sys\User.add');
         $site_id = (new SiteService())->add($data);
-        return success(100011, ['site_id' => $site_id]);
+        return success('ADD_SUCCESS', ['site_id' => $site_id]);
     }
 
     /**
      * 菜单或接口更新
      */
-    public function update($id)
+    public function edit($id)
     {
         $data = $this->request->params([
             ['site_name', ''],
             ['group_id', 0],
             ['expire_time', 0]
         ]);
-        $this->validate($data, 'app\validate\site\Site.update');
-        (new SiteService())->update($id, $data);
-        return success(100004);
+        $this->validate($data, 'app\validate\site\Site.edit');
+        (new SiteService())->edit($id, $data);
+         return success('MODIFY_SUCCESS');
     }
 
     /**

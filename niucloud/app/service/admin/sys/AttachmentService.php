@@ -13,9 +13,9 @@ namespace app\service\admin\sys;
 
 use app\model\sys\SysAttachment;
 use app\model\sys\SysAttachmentCategory;
-use app\service\admin\BaseAdminService;
 use app\service\core\sys\CoreAttachmentService;
-use extend\exception\AdminException;
+use core\base\BaseAdminService;
+use core\exception\AdminException;
 
 /**
  * 附件服务层
@@ -50,9 +50,9 @@ class AttachmentService extends BaseAdminService
      * @param array $data
      * @param $where
      */
-    public function update(int $att_id, array $data)
+    public function edit(int $att_id, array $data)
     {
-        return $this->core_attachment_service->update($this->site_id, $att_id, $data);
+        return $this->core_attachment_service->edit($this->site_id, $att_id, $data);
     }
 
     /**
@@ -140,7 +140,7 @@ class AttachmentService extends BaseAdminService
         $category_model = new SysAttachmentCategory();
         $attachment = $category_model->create($data);
         if (!$attachment->id)
-            throw new AdminException(100010);//创建失败
+            throw new AdminException('ADD_FAIL');//创建失败
         return $attachment->att_id;
     }
 
@@ -158,7 +158,7 @@ class AttachmentService extends BaseAdminService
         $category_model = new SysAttachmentCategory();
         $category = $category_model->where($where)->findOrEmpty();
         if ($category->isEmpty())
-            throw new AdminException(203001);
+            throw new AdminException('ATTACHMENT_GROUP_NOT_EXIST');
         return $category;
     }
 
@@ -167,14 +167,14 @@ class AttachmentService extends BaseAdminService
      * @param array $data
      * @param $where
      */
-    public function updateCategory(int $id, array $data)
+    public function editCategory(int $id, array $data)
     {
         $where = array(
             ['site_id', '=', $this->site_id],
             ['id', '=', $id]
         );
         $category_model = new SysAttachmentCategory();
-        $res = $category_model->update($data, $where);
+        $res = $category_model->edit($data, $where);
         return $res;
     }
 
@@ -188,7 +188,7 @@ class AttachmentService extends BaseAdminService
         //查询是否有下级菜单或按钮
         $category = $this->findCategory($this->site_id, $id);
         if ($this->model->where([['cate_id', '=', $id]])->count() > 0)
-            throw new AdminException(203004);
+            throw new AdminException('ATTACHMENT_GROUP_HAS_IMAGE');
 
         //下级存在图片不能删除
         $res = $category->delete();

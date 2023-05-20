@@ -11,7 +11,7 @@
 
 namespace app\model\order;
 
-use app\model\BaseModel;
+use core\base\BaseModel;
 
 /**
  * 订单项目模型
@@ -44,8 +44,13 @@ class OrderItem extends BaseModel
         {
             return number_format($data['num'], 0);
         }
-
     }
 
-
+    /**
+     * 关联订单主表
+     * @return void
+     */
+    public function ordermain(){
+        return $this->hasOne(Order::class, 'order_id')->joinType('inner');
+    }
 }

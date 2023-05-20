@@ -11,10 +11,10 @@
 
 namespace app\service\admin\sys;
 
-use app\service\admin\BaseAdminService;
 use app\service\admin\site\SiteService;
 use app\service\core\sys\CoreConfigService;
 use app\service\core\sys\CoreSysConfigService;
+use core\base\BaseAdminService;
 
 /**
  * 配置服务层
@@ -78,7 +78,7 @@ class ConfigService extends BaseAdminService
     public function setWebSite($data)
     {
 
-        return (new SiteService())->update($this->site_id, $data);
+        return (new SiteService())->edit($this->site_id, $data);
 
     }
     /**

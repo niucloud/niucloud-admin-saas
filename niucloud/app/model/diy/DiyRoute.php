@@ -11,7 +11,7 @@
 
 namespace app\model\diy;
 
-use app\model\BaseModel;
+use core\base\BaseModel;
 
 
 /**
@@ -104,19 +104,5 @@ class DiyRoute extends BaseModel
             $query->where("is_share", $value);
         }
     }
-
-
-    /**
-     * 搜索器:自定义路由表排序
-     * @param $value
-     * @param $data
-     */
-    public function searchSortAttr($query, $value, $data)
-    {
-        if ($value) {
-            $query->where("sort", $value);
-        }
-    }
-
 
 }

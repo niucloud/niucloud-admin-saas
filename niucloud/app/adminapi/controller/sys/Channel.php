@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\sys;
 
-use app\adminapi\controller\BaseAdminController;
 use app\enum\common\ChannelEnum;
+use core\base\BaseAdminController;
 
 class Channel extends BaseAdminController
 {

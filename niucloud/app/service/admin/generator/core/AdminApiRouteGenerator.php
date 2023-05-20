@@ -117,7 +117,7 @@ class AdminApiRouteGenerator extends BaseGenerator
      */
     public function getRuntimeOutDir()
     {
-        $dir = $this->outDir . 'php/app/adminapi/route/';
+        $dir = $this->outDir . 'niucloud/app/adminapi/route/';
         $this->checkDir($dir);
         return $dir;
     }

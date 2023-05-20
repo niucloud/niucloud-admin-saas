@@ -12,8 +12,8 @@
 namespace app\service\admin\member;
 
 use app\model\member\MemberLabel;
-use app\service\admin\BaseAdminService;
 use app\service\core\member\CoreMemberLabelService;
+use core\base\BaseAdminService;
 
 /**
  * 会员标签
@@ -86,7 +86,7 @@ class MemberLabelService extends BaseAdminService
      * @param int $label_id
      * @param array $data
      */
-    public function update(int $label_id, array $data)
+    public function edit(int $label_id, array $data)
     {
         $data['update_time'] = time();
         $this->model->where([['label_id', '=', $label_id], ['site_id', '=', $this->site_id]])->save($data);

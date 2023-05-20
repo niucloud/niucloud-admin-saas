@@ -33,6 +33,6 @@ class Role extends Validate
 
     protected $scene = [
         'add'  =>  ['role_name'],
-        'update' => ['role_name']
+        'edit' => ['role_name']
     ];
 }

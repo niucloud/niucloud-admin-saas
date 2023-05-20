@@ -48,7 +48,7 @@ class {UCASE_CLASS_NAME} extends BaseAdminController
         $data = $this->request->params({ADD_FILED_NOTE});
         $this->validate($data, '{VALIDATE}.add');
         $id = (new {UCASE_NAME}Service())->add($data);
-        return success(100011, ['id' => $id]);
+        return success('ADD_SUCCESS', ['id' => $id]);
     }
 
     /**
@@ -56,11 +56,11 @@ class {UCASE_CLASS_NAME} extends BaseAdminController
      * @param $id  {NOTES}id
      * @return \think\Response
      */
-    public function update($id){
+    public function edit($id){
         $data = $this->request->params({EDIT_FILED_NOTE});
-        $this->validate($data, '{VALIDATE}.update');
-        (new {UCASE_NAME}Service())->update($id, $data);
-        return success(100004);
+        $this->validate($data, '{VALIDATE}.edit');
+        (new {UCASE_NAME}Service())->edit($id, $data);
+        return success('EDIT_SUCCESS');
     }
 
     /**
@@ -70,7 +70,7 @@ class {UCASE_CLASS_NAME} extends BaseAdminController
      */
     public function del(int $id){
         (new {UCASE_NAME}Service())->del($id);
-        return success(100003);
+        return success('DELETE_SUCCESS');
     }
 
 

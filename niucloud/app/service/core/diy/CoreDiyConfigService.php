@@ -13,8 +13,8 @@ namespace app\service\core\diy;
 
 use app\enum\sys\ConfigKeyEnum;
 use app\model\sys\SysConfig;
-use app\service\core\BaseCoreService;
 use app\service\core\sys\CoreConfigService;
+use core\base\BaseCoreService;
 use think\Model;
 
 /**

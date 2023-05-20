@@ -20,7 +20,7 @@
 import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import { add{UCASE_NAME}, update{UCASE_NAME}, get{UCASE_NAME}Info } from '@/api/{MODULE_NAME}'
+import { add{UCASE_NAME}, edit{UCASE_NAME}, get{UCASE_NAME}Info } from '@/api/{MODULE_NAME}'
 
 let showDialog = ref(false)
 const loading = ref(false)

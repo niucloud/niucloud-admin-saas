@@ -11,8 +11,8 @@
 
 namespace app\api\controller\order;
 
-use app\api\controller\BaseApiController;
 use app\service\api\order\RechargeOrderService;
+use core\base\BaseApiController;
 use think\Response;
 
 class Recharge extends BaseApiController
@@ -32,4 +32,21 @@ class Recharge extends BaseApiController
         return success($res);
     }
 
+    public function lists(){
+        $data = $this->request->params([
+            ['order_status', '']
+        ]);
+        $res = (new RechargeOrderService())->getPage($data);
+        return success($res);
+    }
+
+    /**
+     * 查询充值订单详情
+     * @param int $order_id
+     * @return Response
+     */
+    public function detail(int $order_id){
+        $res = (new RechargeOrderService())->getDetail($order_id);
+        return success($res);
+    }
 }

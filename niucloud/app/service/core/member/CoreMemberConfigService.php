@@ -14,9 +14,9 @@ namespace app\service\core\member;
 use app\enum\pay\TransferEnum;
 use app\enum\sys\ConfigKeyEnum;
 use app\model\sys\SysConfig;
-use app\service\core\BaseCoreService;
 use app\service\core\sys\CoreConfigService;
-use extend\exception\CommonException;
+use core\base\BaseCoreService;
+use core\exception\CommonException;
 use think\Model;
 
 /**
@@ -65,21 +65,17 @@ class CoreMemberConfigService extends BaseCoreService
      * @param int $site_id
      * @return array
      */
-    public function getWithdrawConfig(int $site_id){
-        $config = (new CoreConfigService())->getConfig($site_id, ConfigKeyEnum::MEMBER_WITHDRAW)['value'] ?? [];
-        if(empty($config)){
-            $config = [
-                'is_open' => 0,//是否启用提现
-                'transfer_type' => [],//提现方式
-                'min' => '0',//最低提现金额
+    public function getCashOutConfig(int $site_id){
+        $config = (new CoreConfigService())->getConfig($site_id, ConfigKeyEnum::MEMBER_CASH_OUT)['value'] ?? [];
+        return [
+            'is_open' => $config['is_open'] ?? '0',//是否启用提现
+            'transfer_type' => $config['transfer_type'] ?? [],//提现方式
+            'min' => $config['min'] ?? '0',//最低提现金额
 //            'max'            => '0',//最高提现金额
-                'rate'        => '0',//手续费比率
-
-                'is_auto_verify' => '0',  //是否自动审核
-                'is_auto_transfer' => '0',  //是否自动转账
-            ];
-        }
-        return $config;
+            'rate'        => $config['rate'] ?? '0',//手续费比率
+            'is_auto_verify' => $config['is_auto_verify'] ?? '0',  //是否自动审核
+            'is_auto_transfer' => $config['is_auto_transfer'] ?? '0',  //是否自动转账
+        ];
     }
 
     /**
@@ -88,10 +84,10 @@ class CoreMemberConfigService extends BaseCoreService
      * @param $data
      * @return SysConfig|bool|Model
      */
-    public function setWithdrawConfig(int $site_id, array $data){
+    public function setCashOutConfig(int $site_id, array $data){
         //校验转账方式是否合法
         $transfer_type_list = array_keys(TransferEnum::getTransferType());
-        if(array_diff(array_diff($data['transfer_type'], $transfer_type_list), $transfer_type_list)) throw new CommonException(302006);
+        if(array_diff(array_diff($data['transfer_type'], $transfer_type_list), $transfer_type_list)) throw new CommonException('TRANSFER_TYPE_NOT_EXIST');
         $config = [
             'is_open' => $data['is_open'],//是否启用提现
             'transfer_type' => $data['transfer_type'] ?? [],//提现方式
@@ -101,8 +97,9 @@ class CoreMemberConfigService extends BaseCoreService
 //            'max'            => $data['max'] ?? '',//最高提现金额
             'rate'        => $data['rate'] ?? '',//手续费比率
         ];
-        (new CoreConfigService())->setConfig($site_id, ConfigKeyEnum::MEMBER_WITHDRAW, $config);
+        (new CoreConfigService())->setConfig($site_id, ConfigKeyEnum::MEMBER_CASH_OUT, $config);
         return true;
     }
+
 
 }

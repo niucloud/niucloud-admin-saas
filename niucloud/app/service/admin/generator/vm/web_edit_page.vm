@@ -18,7 +18,7 @@
 import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import { get{UCASE_NAME}Info,add{UCASE_NAME},update{UCASE_NAME} } from '@/api/{MODULE_NAME}';
+import { get{UCASE_NAME}Info,add{UCASE_NAME},edit{UCASE_NAME} } from '@/api/{MODULE_NAME}';
 import { useRoute } from 'vue-router'
 
 const router = useRoute()

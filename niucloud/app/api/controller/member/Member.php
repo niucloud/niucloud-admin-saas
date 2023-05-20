@@ -11,9 +11,10 @@
 
 namespace app\api\controller\member;
 
-use app\api\controller\BaseApiController;
 use app\service\api\login\AuthService;
+use app\service\api\member\MemberLogService;
 use app\service\api\member\MemberService;
+use core\base\BaseApiController;
 use think\Response;
 
 class Member extends BaseApiController
@@ -49,19 +50,19 @@ class Member extends BaseApiController
         $data[$field] = $data['value'];
         $this->validate($data, 'app\validate\member\Member.modify');
         (new MemberService())->modify($field, $data['value']);
-        return success(100004);
+        return success('MODIFY_SUCCESS');
     }
 
     /**
      * 编辑会员
      * @return Response
      */
-    public function update(){
+    public function edit(){
         $data = $this->request->params([
             ['data', []],
         ]);
-        (new MemberService())->update($data['data']);
-        return success(100004);
+        (new MemberService())->edit($data['data']);
+        return success('MODIFY_SUCCESS');
     }
 
     /**
@@ -74,5 +75,19 @@ class Member extends BaseApiController
             ['mobile_code', ''],
         ]);
         return success((new AuthService())->bindMobile($data['mobile'], $data['mobile_code']));
+    }
+
+    /**
+     * 会员日志
+     * @return Response
+     */
+    public function log(){
+        $data = $this->request->params([
+            ['route', ''],
+            ['params', ''],
+            ['pre_route', '']
+        ]);
+        (new MemberLogService())->log($data);
+        return success('SUCCESS');
     }
 }

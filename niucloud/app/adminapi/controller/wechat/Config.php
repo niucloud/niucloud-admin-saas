@@ -11,10 +11,9 @@
 
 namespace app\adminapi\controller\wechat;
 
-use app\adminapi\controller\BaseAdminController;
-use app\service\admin\file\UploadService;
 use app\service\admin\site\WebSiteConfigService;
 use app\service\admin\wechat\WechatConfigService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class Config extends BaseAdminController
@@ -44,7 +43,7 @@ class Config extends BaseAdminController
         ]);
         $this->validate($data, 'app\validate\channel\Wechat.set');
         (new WechatConfigService())->setWechatConfig($data);
-        return success(100016);
+        return success('SET_SUCCESS');
     }
 
     /**
@@ -53,18 +52,6 @@ class Config extends BaseAdminController
      */
     public function static(){
         return success((new WechatConfigService())->getWechatStaticInfo());
-    }
-
-    /**
-     * 文件上传(默认不上云)
-     * @return Response
-     */
-    public function document(){
-        $data = $this->request->params([
-            ['file', 'file'],
-        ], true);
-        $upload_service = new UploadService();
-        return success($upload_service->document($data['file'], true));
     }
 
 }

@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\member;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\member\MemberLabelService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class MemberLabel extends BaseAdminController
@@ -50,21 +50,21 @@ class MemberLabel extends BaseAdminController
         ]);
         $this->validate($data, 'app\validate\member\MemberLabel.add');
         $id = (new MemberLabelService())->add($data);
-        return success(100011, ['label_id' => $id]);
+        return success('ADD_SUCCESS', ['label_id' => $id]);
     }
 
     /**
      * 菜单或接口更新
      */
-    public function update($id){
+    public function edit($id){
         $data = $this->request->params([
             ['label_name', ''],
             ['memo', ''],
             ['sort', 0],
         ]);
-        $this->validate($data, 'app\validate\member\MemberLabel.update');
-        (new MemberLabelService())->update($id, $data);
-        return success(100004);
+        $this->validate($data, 'app\validate\member\MemberLabel.edit');
+        (new MemberLabelService())->edit($id, $data);
+        return success('EDIT_SUCCESS');
     }
 
     /**
@@ -74,7 +74,7 @@ class MemberLabel extends BaseAdminController
     public function del(int $id){
 
         (new MemberLabelService())->del($id);
-        return success(100003);
+        return success('DELETE_SUCCESS');
     }
 
     /**

@@ -12,7 +12,7 @@
 {NAMESPACE}
 
 {USE}
-use app\service\admin\BaseAdminService;
+use core\base\BaseAdminService;
 
 /**
  * {NOTES}服务层
@@ -75,7 +75,7 @@ class {UCASE_NAME}Service extends BaseAdminService
      * @param array $data
      * @return bool
      */
-    public function update(int $id, array $data)
+    public function edit(int $id, array $data)
     {
 
         $this->model->where([['{PK}', '=', $id], ['site_id', '=', $this->site_id]])->update($data);

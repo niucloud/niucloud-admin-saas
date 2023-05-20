@@ -11,8 +11,9 @@
 
 namespace app\service\admin\diy;
 
+use app\enum\diy\LinkEnum;
 use app\model\diy\DiyRoute;
-use app\service\admin\BaseAdminService;
+use core\base\BaseAdminService;
 
 /**
  * 自定义路由表服务层
@@ -26,6 +27,36 @@ class DiyRouteService extends BaseAdminService
     {
         parent::__construct();
         $this->model = new DiyRoute();
+    }
+
+    /**
+     * 获取自定义路由列表
+     * @param array $where
+     * @return array
+     */
+    public function getList(array $where = [])
+    {
+        $link = LinkEnum::getLink();
+        $diy_route_list = [];
+        $sort = 0;
+        foreach ($link as $k => $v) {
+            if (!empty($v[ 'child_list' ])) {
+                foreach ($v[ 'child_list' ] as $ck => $cv) {
+                    if (!empty($cv[ 'url' ])) {
+                        if (empty($where[ 'title' ]) || ( !empty($where[ 'title' ]) && strpos($cv[ 'title' ], $where[ 'title' ]) !== false )) {
+                            $diy_route_list[] = [
+                                'title' => $cv[ 'title' ],
+                                'name' => $cv[ 'name' ],
+                                'page' => $cv[ 'url' ],
+                                'is_share' => $cv[ 'is_share' ],
+                                'sort' => ++$sort
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+        return $diy_route_list;
     }
 
     /**
@@ -58,6 +89,18 @@ class DiyRouteService extends BaseAdminService
     }
 
     /**
+     * 获取自定义路由表信息
+     * @param string $name
+     * @return array
+     */
+    public function getInfoByName(string $name)
+    {
+        $field = 'id,title,name,page,share,is_share,sort';
+        $info = $this->model->field($field)->where([ [ 'name', '=', $name ], [ 'site_id', '=', $this->site_id ] ])->findOrEmpty()->toArray();
+        return $info;
+    }
+
+    /**
      * 添加自定义路由表
      * @param array $data
      * @return mixed
@@ -67,7 +110,6 @@ class DiyRouteService extends BaseAdminService
         $data[ 'site_id' ] = $this->site_id;
         $res = $this->model->create($data);
         return $res->id;
-
     }
 
     /**
@@ -76,7 +118,7 @@ class DiyRouteService extends BaseAdminService
      * @param array $data
      * @return bool
      */
-    public function update(int $id, array $data)
+    public function edit(int $id, array $data)
     {
         $this->model->where([ [ 'id', '=', $id ], [ 'site_id', '=', $this->site_id ] ])->update($data);
         return true;
@@ -95,13 +137,18 @@ class DiyRouteService extends BaseAdminService
 
     /**
      * 修改分享内容
-     * @param int $id
      * @param $data
      * @return bool
      */
-    public function modifyShare(int $id, $data)
+    public function modifyShare($data)
     {
-        $this->model->where([ [ 'id', '=', $id ], [ 'site_id', '=', $this->site_id ] ])->update([ 'share' => $data[ 'share' ] ]);
+        $field = 'id';
+        $info = $this->model->field($field)->where([ [ 'name', '=', $data[ 'name' ] ], [ 'site_id', '=', $this->site_id ] ])->findOrEmpty()->toArray();
+        if (!empty($info)) {
+            $this->model->where([ [ 'id', '=', $info[ 'id' ] ], [ 'site_id', '=', $this->site_id ] ])->update([ 'share' => $data[ 'share' ] ]);
+        } else {
+            $this->model->create($data);
+        }
         return true;
     }
 

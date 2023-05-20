@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\site;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\site\UserLogService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class UserLog extends BaseAdminController

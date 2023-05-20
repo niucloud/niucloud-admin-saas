@@ -11,9 +11,9 @@
 
 namespace app\job\sys;
 
-use app\job\BaseJob;
 use app\model\system\Cron;
 use app\service\core\cron\CoreCronService;
+use core\base\BaseJob;
 use think\queue\Job;
 
 /**

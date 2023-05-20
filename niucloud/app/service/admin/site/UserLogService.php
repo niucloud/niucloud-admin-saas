@@ -14,8 +14,7 @@ namespace app\service\admin\site;
 
 
 use app\model\sys\SysUserLog;
-
-use app\service\admin\BaseAdminService;
+use core\base\BaseAdminService;
 use Exception;
 
 /**

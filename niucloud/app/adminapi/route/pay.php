@@ -26,6 +26,17 @@ Route::group('pay', function () {
     Route::get('config/:type', 'pay.Config/get');
     //获取支付方式列表
     Route::get('lists', 'pay.Config/lists');
+    /***************************************************** 支付渠道 *************************************************/
+    //渠道列表
+    Route::get('channel/lists', 'pay.PayChannel/lists');
+    //渠道设置
+    Route::post('channel/set/:channel/:type', 'pay.PayChannel/set');
+    //通过渠道获取支付配置
+    Route::get('channel/lists/:channel', 'pay.PayChannel/getListByChannel');
+    //转账设置
+    Route::post('channel/set/transfer', 'pay.PayChannel/setTransfer');
+    //多渠道设置
+    Route::post('channel/set/all', 'pay.PayChannel/setAll');
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,

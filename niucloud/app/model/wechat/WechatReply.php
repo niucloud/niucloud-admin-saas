@@ -12,7 +12,7 @@
 namespace app\model\wechat;
 
 use app\enum\channel\ReplyEnum;
-use app\model\BaseModel;
+use core\base\BaseModel;
 
 /**
  * 微信回复模型

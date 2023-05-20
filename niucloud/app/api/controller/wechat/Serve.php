@@ -11,8 +11,8 @@
 
 namespace app\api\controller\wechat;
 
-use app\BaseController;
 use app\service\api\wechat\WechatServeService;
+use core\base\BaseController;
 
 /**
  * 微信服务端通信以及网页授权

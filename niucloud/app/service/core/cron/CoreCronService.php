@@ -12,7 +12,7 @@
 namespace app\service\core\cron;
 
 use app\model\sys\SysCronTask;
-use app\service\core\BaseCoreService;
+use core\base\BaseCoreService;
 
 /**
  * 计划任务服务层
@@ -50,7 +50,7 @@ class CoreCronService extends BaseCoreService
      * @param $data
      * @return SysCronTask
      */
-    public function update(int $site_id, int $id, array $data){
+    public function edit(int $site_id, int $id, array $data){
         $where = array(
             ['site_id', '=', $site_id],
             ['id', '=', $id]
@@ -71,14 +71,14 @@ class CoreCronService extends BaseCoreService
         );
         $list = self::$model->where($where)->select()->toArray();
         if(!empty($list)){
-            $job_handler_classname = 'sys\CronTaskJob';
+            $job_handler_classname = 'app\job\sys\Cronexecute';
 
             foreach($list as $k => $v){
                 $next_time = $v['next_time'];
                 if($next_time < $now){
-                    create_queue($job_handler_classname, $v ?? []);
+                    create_job($job_handler_classname, $v ?? []);
                 }else{
-                    create_queue($job_handler_classname, $v ?? [], $next_time - time());
+                    create_job($job_handler_classname, $v ?? [], $next_time - time());
                 }
             }
         }
@@ -126,7 +126,7 @@ class CoreCronService extends BaseCoreService
         }else{
             $update_data['delete_time'] = $now;
         }
-        $this->update($site_id, $id, $update_data);
+        $this->edit($site_id, $id, $update_data);
     }
 
 

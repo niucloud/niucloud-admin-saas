@@ -11,9 +11,8 @@
 
 namespace app\api\controller\sys;
 
-use app\api\controller\BaseApiController;
 use app\service\api\sys\ConfigService;
-use app\service\api\scan\ScanService;
+use core\base\BaseApiController;
 use think\Response;
 
 class Config extends BaseApiController

@@ -12,9 +12,9 @@
 namespace app\service\api\member;
 
 use app\model\member\Member;
-use app\service\api\BaseApiService;
 use app\service\core\member\CoreMemberService;
-use extend\exception\ApiException;
+use core\base\BaseApiService;
+use core\exception\ApiException;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
@@ -48,12 +48,12 @@ class MemberService extends BaseApiService
      * @param array $data
      * @return true
      */
-    public function update(array $data)
+    public function edit(array $data)
     {
         $member = $this->findMemberInfo(['member_id' => $this->member_id, 'site_id' => $this->site_id]);
 
-        if($member->isEmpty()) throw new ApiException(301005);
-        $member->allowField(['nickname', 'headimg', 'birthday', 'sex'])->save($data);
+        if($member->isEmpty()) throw new ApiException('MEMBER_NOT_EXIST');
+        $member->allowField(['nickname', 'headimg', 'birthday', 'sex', 'last_visit_time'])->save($data);
         return true;
     }
 
@@ -66,7 +66,7 @@ class MemberService extends BaseApiService
      */
     public function getInfo()
     {
-        $field = 'member_id, site_id, username, mobile, register_channel, nickname, headimg, member_level, member_label, login_ip, login_type, login_time, create_time, last_visit_time, last_consum_time, sex, status, birthday, point, balance, growth, is_member, member_time, is_del, province_id, city_id, district_id, address, location, money, money_get';
+        $field = 'member_id, site_id, username, mobile, register_channel, nickname, headimg, member_level, member_label, login_ip, login_type, login_time, create_time, last_visit_time, last_consum_time, sex, status, birthday, point, balance, growth, is_member, member_time, is_del, province_id, city_id, district_id, address, location, money, money_get, wx_openid, weapp_openid, commission, commission_get, commission_cash_outing';
         return $this->model->where([['member_id', '=', $this->member_id]])->field($field)->findOrEmpty()->append(['sex_name'])->toArray();
     }
 
@@ -75,7 +75,7 @@ class MemberService extends BaseApiService
      */
     public function center()
     {
-        $field = 'member_id, site_id, username, mobile, register_channel, nickname, headimg, member_level, member_label, login_ip, login_type, login_time, create_time, last_visit_time, last_consum_time, sex, status, birthday, point, balance, growth, is_member, member_time, is_del, province_id, city_id, district_id, address, location, money, money_get';
+        $field = 'member_id, site_id, username, mobile, register_channel, nickname, headimg, member_level, member_label, login_ip, login_type, login_time, create_time, last_visit_time, last_consum_time, sex, status, birthday, point, balance, growth, is_member, member_time, is_del, province_id, city_id, district_id, address, location, money, money_get, commission, commission_get, commission_cash_outing';
         return $this->model->where([['member_id', '=', $this->member_id]])->field($field)->findOrEmpty()->append(['sex_name'])->toArray();
     }
 
@@ -116,7 +116,7 @@ class MemberService extends BaseApiService
      * @param $data
      * @return void
      */
-    public function updateByFind($member, $data){
+    public function editByFind($member, $data){
         return $member->save($data);
     }
     /**

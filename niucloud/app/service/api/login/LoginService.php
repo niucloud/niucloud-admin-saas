@@ -15,15 +15,15 @@ use app\enum\member\MemberLoginTypeEnum;
 use app\enum\sys\AppTypeEnum;
 use app\enum\sys\SmsEnum;
 use app\model\member\Member;
-use app\service\api\BaseApiService;
 use app\service\api\captcha\CaptchaService;
 use app\service\api\member\MemberConfigService;
 use app\service\api\member\MemberService;
-use app\service\api\message\MessageService;
+use app\service\api\notice\NoticeService;
+use core\base\BaseApiService;
+use core\exception\ApiException;
+use core\exception\AuthException;
+use core\util\TokenAuth;
 use Exception;
-use extend\exception\ApiException;
-use extend\exception\AuthException;
-use extend\util\TokenUtil;
 use think\facade\Cache;
 use think\facade\Log;
 
@@ -53,7 +53,7 @@ class LoginService extends BaseApiService
     }
 
     /**
-     * 陆操作
+     * 登录操作
      * @param Member $member_info
      * @param string $type  登录的操作终端类型
      * @return array
@@ -62,7 +62,7 @@ class LoginService extends BaseApiService
     {
         //绑定第三方授权
         $this->bingOpenid($member_info);
-        if (!$member_info->status) throw new ApiException(301004);
+        if (!$member_info->status) throw new ApiException('MEMBER_LOCK');
         $member_info->login_time = time();
         $member_info->login_ip = $this->request->ip();
         $member_info->login_channel = $this->channel;
@@ -89,7 +89,7 @@ class LoginService extends BaseApiService
     {
         $member_service = new MemberService();
         $member_info = $member_service->findMemberInfo(['username' => $username, 'site_id' => $this->site_id]);
-        if ($member_info->isEmpty()) throw new AuthException(301005);//账号不存在
+        if ($member_info->isEmpty()) throw new AuthException('MEMBER_NOT_EXIST');//账号不存在
         if (!check_password($password, $member_info->password)) return false;//密码与账号不匹配
         return $this->login($member_info, MemberLoginTypeEnum::USERNAME);
     }
@@ -106,10 +106,10 @@ class LoginService extends BaseApiService
         //登录注册配置
         $config = (new MemberConfigService())->getLoginConfig();
         $is_mobile = $config['is_mobile'];
-        if($is_mobile != 1) throw new AuthException(102010);
+        if($is_mobile != 1) throw new AuthException('MOBILE_LOGIN_UNOPENED');
         $member_service = new MemberService();
         $member_info = $member_service->findMemberInfo(['mobile' => $mobile, 'site_id' => $this->site_id]);
-        if ($member_info->isEmpty()) throw new AuthException(301005);//账号不存在
+        if ($member_info->isEmpty()) throw new AuthException('MEMBER_NOT_EXIST');//账号不存在
 
         return $this->login($member_info, MemberLoginTypeEnum::MOBILE);
     }
@@ -121,7 +121,7 @@ class LoginService extends BaseApiService
     public function createToken($member_info): ?array
     {
         $expire_time = env('system.api_token_expire_time') ?? 3600;//todo  不一定和管理端合用这个token时限
-        $token_info = TokenUtil::createToken($member_info->member_id, AppTypeEnum::API, ['member_id' => $member_info->member_id, 'username' => $member_info->username, 'site_id' => $member_info->site_id], $expire_time);
+        $token_info = TokenAuth::createToken($member_info->member_id, AppTypeEnum::API, ['member_id' => $member_info->member_id, 'username' => $member_info->username, 'site_id' => $member_info->site_id], $expire_time);
         return $token_info;
     }
 
@@ -140,7 +140,7 @@ class LoginService extends BaseApiService
      */
     public static function clearToken(int $member_id, ?string $token = ''): ?bool
     {
-        TokenUtil::clearToken($member_id, AppTypeEnum::API, $token);
+        TokenAuth::clearToken($member_id, AppTypeEnum::API, $token);
         return true;
     }
 
@@ -155,21 +155,21 @@ class LoginService extends BaseApiService
         if(empty($token))
         {
             //定义专属于授权认证机制的错误响应, 定义专属语言包
-            throw new AuthException(101001, 401);
+            throw new AuthException('MUST_LOGIN', 401);
         }
 
         try {
-            $token_info = TokenUtil::parseToken($token, AppTypeEnum::API);
+            $token_info = TokenAuth::parseToken($token, AppTypeEnum::API);
         } catch ( \Throwable $e ) {
 //            if(env('app_debug', false)){
 //                throw new AuthException($e->getMessage(), 401);
 //            }else{
-                throw new AuthException(101002, 401);
+                throw new AuthException('LOGIN_EXPIRE', 401);
 //            }
         }
         if(!$token_info)
         {
-            throw new AuthException(101001, 401);
+            throw new AuthException('MUST_LOGIN', 401);
         }
         //验证有效次数或过期时间
         return $token_info;
@@ -184,11 +184,11 @@ class LoginService extends BaseApiService
      */
     public function sendMobileCode($mobile, string $type = ''){
         (new CaptchaService())->check();
-        if(empty($mobile)) throw new AuthException(301012);
+        if(empty($mobile)) throw new AuthException('MOBILE_NEEDED');
         //发送
-        if(!in_array($type, SmsEnum::SCENE_TYPE)) throw new AuthException(301015);
+        if(!in_array($type, SmsEnum::SCENE_TYPE)) throw new AuthException('MEMBER_MOBILE_CAPTCHA_ERROR');
         $code = str_pad(random_int(1, 9999), 4, 0, STR_PAD_LEFT);// 生成4位随机数，左侧补0
-        (new MessageService())->send('member_verify_code', ['code' => $code, 'mobile' => $mobile], false);
+        (new NoticeService())->send('member_verify_code', ['code' => $code, 'mobile' => $mobile]);
         //将验证码存入缓存
         $key = md5(uniqid(null, true));
         $cache_tag_name = "mobile_key".$mobile.$type;
@@ -213,16 +213,16 @@ class LoginService extends BaseApiService
      * @return void
      */
     public function checkMobileCode(string|int $mobile){
-        if(empty($mobile)) throw new AuthException(301012);
+        if(empty($mobile)) throw new AuthException('MOBILE_NEEDED');
         $mobile_key = request()->param('mobile_key', '');
         $mobile_code = request()->param('mobile_code', '');
-        if(empty($mobile_key) || empty($mobile_code)) throw new AuthException(301013);
+        if(empty($mobile_key) || empty($mobile_code)) throw new AuthException('MOBILE_CAPTCHA_ERROR');
         $cache = Cache::get($mobile_key);
-        if(empty($cache)) throw new AuthException(301013);
+        if(empty($cache)) throw new AuthException('MOBILE_CAPTCHA_ERROR');
         $temp_mobile = $cache['mobile'];
         $temp_code = $cache['code'];
         $temp_type = $cache['type'];
-        if($temp_mobile != $mobile || $temp_code != $mobile_code) throw new AuthException(301013);
+        if($temp_mobile != $mobile || $temp_code != $mobile_code) throw new AuthException('MOBILE_CAPTCHA_ERROR');
         $this->clearMobileCode($temp_mobile, $temp_type);
         return true;
 
@@ -256,7 +256,7 @@ class LoginService extends BaseApiService
                             $member->save();
                         }else{
                             if( $member->$openid_field != $open_id){
-                                throw new AuthException(301014);
+                                throw new AuthException('MEMBER_IS_BIND_AUTH');
                             }
                         }
                     }
@@ -277,13 +277,13 @@ class LoginService extends BaseApiService
         //校验手机验证码
         $this->checkMobileCode($mobile);
         $member_info = $member_service->findMemberInfo(['mobile' => $mobile, 'site_id' => $this->site_id]);
-        if ($member_info->isEmpty()) throw new AuthException(301019);//账号不存在
+        if ($member_info->isEmpty()) throw new AuthException('MOBILE_NOT_EXIST_MEMBER');//账号不存在
         //todo  需要考虑一下,新的密码和原密码一样能否通过验证
         $password_hash = create_password($password);
         $data = array(
             'password' => $password_hash,
         );
-        return $member_service->updateByFind($member_info, $data);
+        return $member_service->editByFind($member_info, $data);
     }
 
     public function loginScanCode(){

@@ -11,9 +11,8 @@
 
 namespace app\api\controller\login;
 
-use app\BaseController;
-use app\service\api\login\LoginService;
 use app\service\api\member\MemberConfigService;
+use core\base\BaseController;
 use think\Response;
 
 class Config extends BaseController

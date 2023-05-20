@@ -12,11 +12,9 @@
 namespace app\service\admin\channel;
 
 use app\enum\sys\ConfigKeyEnum;
-use app\service\admin\BaseAdminService;
-use app\service\admin\site\SiteService;
 use app\service\core\channel\CoreH5Service;
 use app\service\core\sys\CoreConfigService;
-use app\service\core\sys\CoreSysConfigService;
+use core\base\BaseAdminService;
 
 /**
  * 配置服务层

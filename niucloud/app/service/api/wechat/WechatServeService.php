@@ -11,8 +11,8 @@
 
 namespace app\service\api\wechat;
 
-use app\service\api\BaseApiService;
 use app\service\core\wechat\CoreWechatServeService;
+use core\base\BaseApiService;
 use EasyWeChat\Kernel\Exceptions\BadRequestException;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
 use EasyWeChat\Kernel\Exceptions\RuntimeException;

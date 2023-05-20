@@ -11,8 +11,9 @@
 
 namespace app\api\controller\member;
 
-use app\api\controller\BaseApiController;
+use app\enum\member\MemberAccountEnum;
 use app\service\api\member\MemberAccountService;
+use core\base\BaseApiController;
 use think\Response;
 
 /**
@@ -28,8 +29,9 @@ class Account extends BaseApiController
      */
     public function point(){
         $data = $this->request->params([
+            ['from_type', '']
         ]);
-        $data[] = ['account_type', '=', 'point'];
+        $data['account_type'] = MemberAccountEnum::POINT;
         return success((new MemberAccountService())->getPage($data));
     }
 
@@ -39,10 +41,56 @@ class Account extends BaseApiController
      */
     public function balance(){
         $data = $this->request->params([
+            ['from_type', '']
         ]);
-        $data[] = ['account_type', '=', 'balance'];
+        $data['account_type'] = MemberAccountEnum::BALANCE;
         return success((new MemberAccountService())->getPage($data));
     }
 
+    /**
+     * 零钱流水
+     * @return Response
+     */
+    public function money(){
+        $data = $this->request->params([
+            ['from_type', '']
+        ]);
+        $data['account_type'] = MemberAccountEnum::MONEY;
+        return success((new MemberAccountService())->getPage($data));
+    }
+
+    /**
+     * 账户记录数量
+     * @return Response
+     */
+    public function count(){
+        $data = $this->request->params([
+            ['from_type', ''],
+            ['account_type', '']
+        ]);
+        return success(data:(new MemberAccountService())->getCount($data));
+    }
+
+    /**
+     * 佣金流水
+     * @return Response
+     */
+    public function commission(){
+        $data = $this->request->params([
+            ['from_type', '']
+        ]);
+        $data['account_type'] = MemberAccountEnum::COMMISSION;
+        return success((new MemberAccountService())->getPage($data));
+    }
+
+    /**
+     * 账户来源
+     * @param $account_type
+     * @return Response
+     */
+    public function getFromType($account_type){
+
+        return success(MemberAccountEnum::getFromType($account_type));
+    }
 
 }

@@ -13,9 +13,10 @@ namespace app\service\api\login;
 
 use app\model\member\Member;
 use app\Request;
-use app\service\api\BaseApiService;
 use app\service\api\member\MemberService;
-use extend\exception\AuthException;
+use app\service\core\site\CoreSiteService;
+use core\base\BaseApiService;
+use core\exception\AuthException;
 
 /**
  * 登录服务层
@@ -33,12 +34,13 @@ class AuthService extends BaseApiService
 
     public function checkSiteAuth(Request $request){
         $site_id = $request->apiSiteId();//todo  可以是依赖传值,也可以通过domain域名来获取site_id
+        if(empty((new CoreSiteService())->getSiteCache($site_id))) throw new AuthException('SITE_NOT_EXIST');
         //如果登录信息非法就报错
         if($this->member_id > 0){
             $member_service = new MemberService();
             $member_info = $member_service->findMemberInfo(['member_id' => $this->member_id, 'site_id' => $site_id]);
             if($member_info->isEmpty())
-                throw new AuthException(301005);
+                throw new AuthException('MEMBER_NOT_EXIST');
         }
         $request->siteId($site_id);
 
@@ -54,22 +56,22 @@ class AuthService extends BaseApiService
 
         if(empty($mobile)){
             $result = (new CoreWeappAuthService())->getUserPhoneNumber($this->site_id, $mobile_code);
-            if(empty($result)) throw new ApiException(400002);
+            if(empty($result)) throw new ApiException('WECHAT_EMPOWER_NOT_EXIST');
             $phone_info = $result['phone_info'];
             $mobile = $phone_info['purePhoneNumber'];
-            if(empty($mobile)) throw new ApiException(400002);
+            if(empty($mobile)) throw new ApiException('WECHAT_EMPOWER_NOT_EXIST');
         }
         $member_service = new MemberService();
         $member = $member_service->findMemberInfo(['member_id' => $this->member_id, 'site_id' => $this->site_id]);
-        if($member->isEmpty()) throw new AuthException(301005);
+        if($member->isEmpty()) throw new AuthException('MEMBER_NOT_EXIST');
 
         $o_mobile = $member['mobile'];//原始手机号
-        if(!empty($o_mobile)) throw new AuthException(301020);
+        if(!empty($o_mobile)) throw new AuthException('MOBILE_IS_BIND_MEMBER');
 
         $mobile_member = $member_service->findMemberInfo(['mobile' => $mobile, 'site_id' => $this->site_id]);
-        if(!$mobile_member->isEmpty()) throw new AuthException(301001);
+        if(!$mobile_member->isEmpty()) throw new AuthException('MOBILE_IS_EXIST');
 
-        if(empty($mobile)) throw new AuthException(301012);//必须填写
+        if(empty($mobile)) throw new AuthException('MOBILE_NEEDED');//必须填写
         //todo  校验手机号验证码
         (new LoginService())->checkMobileCode($mobile);
         $member->save([

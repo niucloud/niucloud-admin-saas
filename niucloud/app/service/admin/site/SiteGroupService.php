@@ -13,9 +13,9 @@ namespace app\service\admin\site;
 
 use app\model\site\Site;
 use app\model\site\SiteGroup;
-use app\service\admin\BaseAdminService;
 use app\service\admin\sys\MenuService;
-use extend\exception\AdminException;
+use core\base\BaseAdminService;
+use core\exception\AdminException;
 use think\facade\Cache;
 
 /**
@@ -86,7 +86,7 @@ class SiteGroupService extends BaseAdminService
      * @param array $data
      * @return SiteGroup
      */
-    public function update(int $group_id, array $data){
+    public function edit(int $group_id, array $data){
         $this->model->update($data, [['group_id', '=', $group_id]]);
         //删除缓存
         $cache_name = self::$cache_name . $group_id;
@@ -104,7 +104,7 @@ class SiteGroupService extends BaseAdminService
         $count = (new Site())->where([['group_id', '=', $group_id]])->count();
         if($count > 0)
         {
-            throw new AdminException(600001);
+            throw new AdminException('SITE_GROUP_IS_EXIST');
         }
         $res = $this->model->where([['group_id', '=', $group_id]])->delete();
 

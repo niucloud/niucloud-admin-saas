@@ -11,16 +11,14 @@
 
 namespace app\service\admin\wechat;
 
-use app\service\admin\BaseAdminService;
-use app\service\admin\message\MessageService;
-use app\service\core\BaseCoreService;
-use app\service\core\message\CoreMessageService;
-use app\service\core\wechat\CoreWechatService;
+use app\enum\notice\NoticeTypeEnum;
+use app\service\admin\notice\NoticeService;
+use app\service\core\notice\CoreNoticeService;
 use app\service\core\wechat\CoreWechatTemplateService;
-use EasyWeChat\Factory;
+use core\base\BaseAdminService;
+use core\exception\NoticeException;
+use core\template\TemplateLoader;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
-use extend\exception\MessageException;
-use extend\exception\WechatException;
 
 /**
  * easywechat主体提供
@@ -38,9 +36,9 @@ class WechatTemplateService extends BaseAdminService
      */
     public function syncAll(array $keys = []){
         $site_id = $this->site_id;
-        $core_message_service = new CoreMessageService();
-        $list = $core_message_service->getList($site_id, $keys);
-        if(empty($list)) throw new MessageException(204009);
+        $core_notice_service = new CoreNoticeService();
+        $list = $core_notice_service->getList($site_id, $keys);
+        if(empty($list)) throw new NoticeException('NOTICE_TEMPLATE_NOT_EXIST');
 
         foreach($list as $v){
             $this->syncItem($v);
@@ -59,18 +57,21 @@ class WechatTemplateService extends BaseAdminService
         $key = $item['key'];
         $wechat_json = $item['wechat_json'];
         $temp_key = $wechat_json['temp_key'] ?? '';
-        if(empty($temp_key)) $error = 204010;
+        if(empty($temp_key)) $error = 'WECHAT_TEMPLATE_NEED_NO';
         $wechat_template_id = $item['wechat_template_id'];
         //删除原来的消息模板
-        (new CoreWechatTemplateService())->deletePrivateTemplate($this->site_id, $wechat_template_id);
+//        (new CoreWechatTemplateService())->deletePrivateTemplate($this->site_id, $wechat_template_id);
+        $template_loader = new TemplateLoader('wechat', ['site_id' => $this->site_id]);
+        $template_loader->delete(['templateId' => $wechat_template_id]);
         //新的消息模板
-        $res = (new CoreWechatTemplateService())->addTemplate($this->site_id, $temp_key);
-        $message_service = new MessageService();
+//        $res = (new CoreWechatTemplateService())->addTemplate($this->site_id, $temp_key);
+        $res = $template_loader->add(['shortId' => $temp_key]);
+        $notice_service = new NoticeService();
         if (isset($res[ 'errcode' ]) && $res[ 'errcode' ] == 0) {
             //修改
-            $message_service->modify($key, 'wechat_template_id', $res[ 'template_id' ]);
+            $notice_service->modify($key, 'wechat_template_id', $res[ 'template_id' ]);
         } else {
-            throw new MessageException($res[ 'errmsg' ]);
+            throw new NoticeException($res[ 'errmsg' ]);
         }
         return true;
     }
@@ -82,11 +83,11 @@ class WechatTemplateService extends BaseAdminService
     public function getList()
     {
         $site_id = $this->site_id;
-        $core_message_service = new CoreMessageService();
-        $list = $core_message_service->getList($site_id);
+        $core_notice_service = new CoreNoticeService();
+        $list = $core_notice_service->getList($site_id);
         $template = [];
         foreach ($list as $k => $v){
-            if(in_array('wechat', $v['support_type'])) $template[] = $v;
+            if(in_array(NoticeTypeEnum::WECHAT, $v['support_type'])) $template[] = $v;
         }
         return $template;
     }

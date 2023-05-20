@@ -11,22 +11,9 @@
 
 namespace app\service\core\scan;
 
-use app\enum\member\MemberLoginTypeEnum;
 use app\enum\scan\ScanEnum;
-use app\enum\sys\AppTypeEnum;
-use app\enum\sys\SmsEnum;
-use app\model\member\Member;
-use app\service\api\BaseApiService;
-use app\service\api\captcha\CaptchaService;
-use app\service\api\member\MemberConfigService;
-use app\service\api\member\MemberService;
-use app\service\api\message\MessageService;
-use app\service\core\BaseCoreService;
-use Exception;
-use extend\exception\ApiException;
-use extend\exception\AuthException;
-use extend\exception\CommonException;
-use extend\util\TokenUtil;
+use core\base\BaseCoreService;
+use core\exception\CommonException;
 use think\facade\Cache;
 use think\facade\Log;
 
@@ -90,7 +77,7 @@ class CoreScanService extends BaseCoreService
     public function checkScan(int $site_id, string $key){
         $cache_name = self::$cache_name.$key;
         $cache =  Cache::get($cache_name);
-        if(empty($cache)) throw new CommonException(301021);
+        if(empty($cache)) throw new CommonException('QRCODE_EXPIRE');
         return $cache;
     }
 

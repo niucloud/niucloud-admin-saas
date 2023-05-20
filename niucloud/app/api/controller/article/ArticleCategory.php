@@ -11,8 +11,8 @@
 
 namespace app\api\controller\article;
 
-use app\api\controller\BaseApiController;
 use app\service\api\article\ArticleCategoryService;
+use core\base\BaseApiController;
 use think\Response;
 
 /**

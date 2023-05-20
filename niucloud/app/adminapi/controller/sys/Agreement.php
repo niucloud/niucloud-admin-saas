@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\sys;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\sys\AgreementService;
+use core\base\BaseAdminController;
 use think\Response;
 
 /**
@@ -48,14 +48,14 @@ class Agreement extends BaseAdminController
      * @param string $key
      * @return Response
      */
-    public function update(string $key){
+    public function edit(string $key){
         $data = $this->request->params([
             ['title', ''],
             ['content', ''],
         ], false);
-        $this->validate($data, 'app\validate\sys\Agreement.update');
+        $this->validate($data, 'app\validate\sys\Agreement.edit');
         (new AgreementService())->setAgreement($key, $data['title'], $data['content']);
-        return success(100004);
+        return success('EDIT_SUCCESS');
     }
 
 

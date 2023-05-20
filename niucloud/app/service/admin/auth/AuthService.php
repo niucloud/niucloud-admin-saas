@@ -12,15 +12,15 @@
 namespace app\service\admin\auth;
 
 use app\Request;
-use app\service\admin\BaseAdminService;
 use app\service\admin\site\SiteService;
 use app\service\admin\site\SiteUserService;
 use app\service\admin\sys\MenuService;
 use app\service\admin\sys\RoleService;
 use app\service\admin\user\UserRoleService;
 use app\service\admin\user\UserService;
+use core\base\BaseAdminService;
+use core\exception\AuthException;
 use Exception;
-use extend\exception\AuthException;
 
 /**
  * 用户服务层
@@ -38,7 +38,7 @@ class AuthService extends BaseAdminService
         //没有当前站点的信息
         if(!$this->getAuthRole($site_id))
         {
-            throw new AuthException(102006);
+            throw new AuthException('NO_SITE_PERMISSION');
         }
 
         //查询站点信息并返回
@@ -47,7 +47,7 @@ class AuthService extends BaseAdminService
         //站点不存在
         if(empty($site_info))
         {
-            throw new AuthException(102007);
+            throw new AuthException('SITE_NOT_EXIST');
         }
         $request->siteId($site_id);
         $request->appType($site_info['app_type']);
@@ -77,7 +77,7 @@ class AuthService extends BaseAdminService
         if(!empty($auth_role_list[$method]) && in_array($rule, $auth_role_list[$method]))
             return true;
 
-        throw new Exception(102000);
+        throw new Exception('NO_PERMISSION');
 
     }
 
@@ -157,15 +157,15 @@ class AuthService extends BaseAdminService
      * @param array $data
      * @return true
      */
-    public function updateAuth(array $data){
+    public function editAuth(array $data){
         if(!empty($data['password'])){
             //检测原始密码是否正确
             $user = (new UserService())->find($this->uid);
             if(!check_password($data['original_password'], $user->password))
-                throw new AuthException(102009);
+                throw new AuthException('OLD_PASSWORD_ERROR');
 
         }
-        return (new UserService())->update($this->uid, $data);
+        return (new UserService())->edit($this->uid, $data);
     }
 
 }

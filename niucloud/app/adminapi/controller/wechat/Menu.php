@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\wechat;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\wechat\WechatMenuService;
+use core\base\BaseAdminController;
 
 /**
  * 微信公众号管理菜单
@@ -33,12 +33,12 @@ class Menu extends BaseAdminController
      * 设置菜单
      * @return void
      */
-    public function update(){
+    public function edit(){
         $wechat_menu_service = new WechatMenuService();
         $data = $this->request->params([
             ['button', []]
         ]);
-        $wechat_menu_service->update($data['button']);
-        return success(100004);
+        $wechat_menu_service->edit($data['button']);
+        return success('EDIT_SUCCESS');
     }
 }

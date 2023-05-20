@@ -34,7 +34,7 @@ class AttachmentCategory extends Validate
 
     protected $scene = [
         'add' => ['name', 'type'],
-        'update' => ['name'],
+        'edit' => ['name'],
     ];
 
     /**

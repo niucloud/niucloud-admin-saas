@@ -14,9 +14,9 @@ namespace app\service\core\wechat;
 use app\enum\channel\ReplyEnum;
 use app\enum\channel\WechatEnum;
 use app\model\wechat\WechatReply;
-use app\service\core\BaseCoreService;
+use core\base\BaseCoreService;
+use core\exception\AdminException;
 use EasyWeChat\Kernel\Messages\Text;
-use extend\exception\AdminException;
 use think\Model;
 
 
@@ -123,7 +123,7 @@ class CoreWechatReplyService extends BaseCoreService
      * @param $data
      * @return void
      */
-    public function updateKeyword(int $site_id, int $id, array $data)
+    public function editKeyword(int $site_id, int $id, array $data)
     {
         $where = [
             ['site_id', '=', $site_id],
@@ -146,7 +146,7 @@ class CoreWechatReplyService extends BaseCoreService
         );
         $reply = $this->find($where);
         if ($reply->isEmpty())
-            throw new AdminException(400001);
+            throw new AdminException('KEYWORDS_NOT_EXIST');
         return $reply->delete();
     }
 
@@ -183,7 +183,7 @@ class CoreWechatReplyService extends BaseCoreService
      * @param $data
      * @return void
      */
-    public function updateDefault(int $site_id, array $data)
+    public function editDefault(int $site_id, array $data)
     {
         $where = [
             ['site_id', '=', $site_id],
@@ -196,7 +196,7 @@ class CoreWechatReplyService extends BaseCoreService
             $data['site_id'] = $site_id;
             return $this->model->create($data);
         } else {
-            return $reply->update($data);
+            return $reply->edit($data);
         }
     }
 
@@ -221,7 +221,7 @@ class CoreWechatReplyService extends BaseCoreService
      * @param $data
      * @return void
      */
-    public function updateSubscribe(int $site_id, array $data)
+    public function editSubscribe(int $site_id, array $data)
     {
         $where = [
             ['site_id', '=', $site_id],
@@ -234,7 +234,7 @@ class CoreWechatReplyService extends BaseCoreService
             $data['site_id'] = $site_id;
             return $this->model->create($data);
         } else {
-            return $reply->update($data);
+            return $reply->edit($data);
         }
 
 

@@ -11,8 +11,9 @@
 
 namespace app\adminapi\controller\member;
 
-use app\adminapi\controller\BaseAdminController;
+use app\enum\member\MemberAccountEnum;
 use app\service\admin\member\MemberAccountService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class Account extends BaseAdminController
@@ -48,7 +49,7 @@ class Account extends BaseAdminController
     }
 
     /**
-     * 零钱流水
+     * 可提现余额流水
      * @return Response
      */
     public function money()
@@ -73,7 +74,7 @@ class Account extends BaseAdminController
             [ 'memo', '' ],
         ]);
         $res = ( new MemberAccountService() )->adjustPoint($data);
-        return success(100011, [ 'id' => $res ]);
+        return success('ADD_SUCCESS', [ 'id' => $res ]);
     }
 
     /**
@@ -87,7 +88,59 @@ class Account extends BaseAdminController
             [ 'memo', '' ],
         ]);
         $res = ( new MemberAccountService() )->adjustBalance($data);
-        return success(100011, [ 'id' => $res ]);
+        return success('ADD_SUCCESS', [ 'id' => $res ]);
+    }
+
+    /**
+     * 零钱调整
+     * @return Response
+     */
+    public function adjustMoney()
+    {
+        $data = $this->request->params([
+            [ 'member_id', '' ],
+            [ 'account_data', 0 ],
+            [ 'memo', '' ],
+        ]);
+        $res = ( new MemberAccountService() )->adjustMoney($data);
+        return success('ADD_SUCCESS', [ 'id' => $res ]);
+    }
+
+    /**
+     * 会员佣金
+     * @return Response
+     */
+    public function commission()
+    {
+        $data = $this->request->params([
+            [ 'member_id', '' ],
+            [ 'from_type', '' ],
+            [ 'create_time', [] ],
+        ]);
+        $data[ 'account_type' ] = 'commission';
+        return success(( new MemberAccountService() )->getPage($data));
+    }
+
+    /**
+     * 会员余额统计（用于会员账户统计窗口）
+     */
+    public function sumBalance()
+    {
+        $data = $this->request->params([
+            [ 'member_id', '' ],
+        ]);
+        $member_account_service = new MemberAccountService();
+        if(empty($data['member_id']))
+        {
+
+            $balance_data = [
+                MemberAccountEnum::BALANCE => $member_account_service->getSumAccount(MemberAccountEnum::BALANCE),
+                MemberAccountEnum::MONEY => $member_account_service->getSumAccount(MemberAccountEnum::MONEY),
+            ];
+            return success($balance_data);
+        }else{
+            return success($member_account_service->getMemberAccountInfo($data['member_id']));
+        }
     }
 
     /**
@@ -98,6 +151,14 @@ class Account extends BaseAdminController
     {
         $res = ( new MemberAccountService() )->getFromType($account_type);
         return success($res);
+    }
+
+    /**
+     * 账户类型
+     */
+    public function accountType()
+    {
+        return success(MemberAccountEnum::getType());
     }
 
 

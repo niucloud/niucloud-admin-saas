@@ -23,7 +23,10 @@ Route::group('order', function () {
     /***************************************************** 充值订单相关 *************************************************/
     //充值订单创建
     Route::post('recharge', 'order.Recharge/create');
-
+    // 充值订单列表
+    Route::get('recharge', 'order.Recharge/lists');
+    // 充值订单详情
+    Route::get('recharge/:order_id', 'order.Recharge/detail');
 })->middleware(ApiChannel::class)
     ->middleware(ApiCheckToken::class, true)
     ->middleware(ApiLog::class);

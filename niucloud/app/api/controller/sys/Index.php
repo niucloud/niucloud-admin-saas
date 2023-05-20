@@ -11,7 +11,7 @@
 
 namespace app\controller;
 
-use app\BaseController;
+use core\base\BaseController;
 use think\facade\App;
 
 class Index extends BaseController

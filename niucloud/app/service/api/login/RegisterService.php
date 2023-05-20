@@ -14,11 +14,11 @@ namespace app\service\api\login;
 use app\enum\member\MemberLoginTypeEnum;
 use app\enum\member\MemberRegisterTypeEnum;
 use app\model\member\Member;
-use app\service\api\BaseApiService;
 use app\service\api\captcha\CaptchaService;
 use app\service\api\member\MemberConfigService;
 use app\service\api\member\MemberService;
-use extend\exception\AuthException;
+use core\base\BaseApiService;
+use core\exception\AuthException;
 
 /**
  * 登录服务层
@@ -42,7 +42,7 @@ class RegisterService extends BaseApiService
     {
         //校验注册方式
         if(empty(MemberRegisterTypeEnum::getType()[$type]))
-            throw new AuthException(301009);
+            throw new AuthException('REG_CHANNEL_NOT_EXIST');
         $data = $this->bindByMobile($mobile, $data, $type, $is_verify_mobile);
         $member_service = new MemberService();
         if(!is_array($data)){
@@ -53,6 +53,7 @@ class RegisterService extends BaseApiService
             }
             $data['register_channel'] = $this->channel;
             $data['register_type'] = $type;
+            $data['site_id'] = $this->site_id;
             $pid = $this->request->get('pid');
             if($pid > 0){
                 $p_member_info = $member_service->findMemberInfo(['member_id' => $pid, 'site_id' => $this->site_id]);
@@ -63,7 +64,7 @@ class RegisterService extends BaseApiService
             event('memberRegister', $data);
         }
         $member_info = $member_service->findMemberInfo(['member_id' => $member_id, 'site_id' => $this->site_id]);
-        if ($member_info->isEmpty()) throw new AuthException(301005);//账号已存在
+        if ($member_info->isEmpty()) throw new AuthException('MEMBER_NOT_EXIST');//账号已存在
         $result = (new LoginService())->login($member_info, $type);
         return $result;
     }
@@ -98,10 +99,10 @@ class RegisterService extends BaseApiService
         $config = (new MemberConfigService())->getLoginConfig();
         $is_username = $config['is_username'];
         //未开启账号密码登录注册
-        if($is_username != 1) throw new AuthException(301010);
+        if($is_username != 1) throw new AuthException('MEMBER_USERNAME_LOGIN_NOT_OPEN');
         $member_service = new MemberService();
         $member_info = $member_service->findMemberInfo(['username' => $username, 'site_id' => $this->site_id]);
-        if (!$member_info->isEmpty()) throw new AuthException(301008);//账号已存在
+        if (!$member_info->isEmpty()) throw new AuthException('MEMBER_IS_EXIST');//账号已存在
 
         $password_hash = create_password($password);
         $data = array(
@@ -122,10 +123,10 @@ class RegisterService extends BaseApiService
         $config = (new MemberConfigService())->getLoginConfig();
         $is_mobile = $config['is_mobile'];
         //未开启账号密码登录注册
-        if($is_mobile != 1) throw new AuthException(301010);
+        if($is_mobile != 1) throw new AuthException('MEMBER_USERNAME_LOGIN_NOT_OPEN');
         $member_service = new MemberService();
         $member_info = $member_service->findMemberInfo(['mobile' => $mobile, 'site_id' => $this->site_id]);
-        if (!$member_info->isEmpty()) throw new AuthException(301008);//账号已存在
+        if (!$member_info->isEmpty()) throw new AuthException('MEMBER_IS_EXIST');//账号已存在
 
         $data = array(
             'mobile' => $mobile,
@@ -141,7 +142,7 @@ class RegisterService extends BaseApiService
     public function checkAuth(){
         $config = (new MemberConfigService())->getLoginConfig();
         $is_auth_register = $config['is_auth_register'];
-        if($is_auth_register != 1) throw new AuthException(301011);//手机号已存在
+        if($is_auth_register != 1) throw new AuthException('AUTH_LOGIN_NOT_OPEN');//手机号已存在
         return true;
     }
 
@@ -164,7 +165,7 @@ class RegisterService extends BaseApiService
             MemberLoginTypeEnum::WEAPP => 'weapp_openid',
         };
         if($type == MemberLoginTypeEnum::MOBILE || $is_bind_mobile == 1){
-            if(empty($mobile)) throw new AuthException(301012);//必须填写
+            if(empty($mobile)) throw new AuthException('MOBILE_NEEDED');//必须填写
             //todo  校验手机号验证码
             if($is_verify){
                 (new LoginService())->checkMobileCode($mobile);
@@ -174,9 +175,9 @@ class RegisterService extends BaseApiService
                 $member = $member_service->findMemberInfo(['mobile' => $mobile, 'site_id' => $this->site_id]);
                 if(!$member->isEmpty()){
                     if($type == MemberLoginTypeEnum::MOBILE){
-                        throw new AuthException(301001);//手机号注册时发现手机号已存在账号
+                        throw new AuthException('MOBILE_IS_EXIST');//手机号注册时发现手机号已存在账号
                     } else{
-                        if($member->$with_field != '') throw new AuthException(301001);//手机号已存在
+                        if($member->$with_field != '') throw new AuthException('MOBILE_IS_EXIST');//手机号已存在
                         foreach($data as $k => $v){
                             $member->$k = $v;
                         }

@@ -11,7 +11,7 @@
 
 namespace app\model\site;
 
-use app\model\BaseModel;
+use core\base\BaseModel;
 
 /**
  * 站点分组模型

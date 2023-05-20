@@ -13,8 +13,8 @@ namespace app\service\admin\auth;
 
 
 use app\model\site\Site;
-use app\service\admin\BaseAdminService;
 use app\service\admin\site\SiteService;
+use core\base\BaseAdminService;
 use think\facade\Cache;
 
 /**

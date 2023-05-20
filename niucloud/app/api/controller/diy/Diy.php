@@ -11,10 +11,10 @@
 
 namespace app\api\controller\diy;
 
-use app\api\controller\BaseApiController;
+use app\service\api\diy\DiyConfigService;
 use app\service\api\diy\DiyRouteService;
 use app\service\api\diy\DiyService;
-use app\service\api\diy\DiyConfigService;
+use core\base\BaseApiController;
 use think\Response;
 
 class Diy extends BaseApiController
@@ -48,10 +48,10 @@ class Diy extends BaseApiController
      */
     public function share()
     {
-        $params = $this->request->params([
+        $data = $this->request->params([
             [ 'route', '' ],
             [ 'params', '' ]
         ]);
-        return success(( new DiyRouteService() )->getShare($params));
+        return success(( new DiyRouteService() )->getShare($data));
     }
 }

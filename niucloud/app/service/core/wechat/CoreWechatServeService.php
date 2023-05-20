@@ -11,11 +11,10 @@
 
 namespace app\service\core\wechat;
 
-use app\service\core\BaseCoreService;
+use core\base\BaseCoreService;
 use EasyWeChat\Kernel\Exceptions\BadRequestException;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
 use EasyWeChat\Kernel\Exceptions\RuntimeException;
-use extend\exception\WechatException;
 use Overtrue\Socialite\Contracts\UserInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;

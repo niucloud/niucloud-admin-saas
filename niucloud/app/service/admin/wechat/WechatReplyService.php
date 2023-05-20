@@ -12,10 +12,8 @@
 namespace app\service\admin\wechat;
 
 use app\model\wechat\WechatReply;
-use app\service\admin\BaseAdminService;
-
-
 use app\service\core\wechat\CoreWechatReplyService;
+use core\base\BaseAdminService;
 
 
 /**
@@ -64,8 +62,8 @@ class WechatReplyService extends BaseAdminService
      * @param $data
      * @return void
      */
-    public function updateKeyword(int $id, array $data){
-        return $this->core_wechat_reply_service->updateKeyword($this->site_id, $id, $data);
+    public function editKeyword(int $id, array $data){
+        return $this->core_wechat_reply_service->editKeyword($this->site_id, $id, $data);
     }
 
     /**
@@ -89,8 +87,8 @@ class WechatReplyService extends BaseAdminService
      * @param $data
      * @return void
      */
-    public function updateDefault(array $data){
-        return $this->core_wechat_reply_service->updateDefault($this->site_id, $data);
+    public function editDefault(array $data){
+        return $this->core_wechat_reply_service->editDefault($this->site_id, $data);
     }
 
 
@@ -108,7 +106,7 @@ class WechatReplyService extends BaseAdminService
      * @param $data
      * @return void
      */
-    public function updateSubscribe(array $data){
-        return $this->core_wechat_reply_service->updateSubscribe($this->site_id, $data);
+    public function editSubscribe(array $data){
+        return $this->core_wechat_reply_service->editSubscribe($this->site_id, $data);
     }
 }

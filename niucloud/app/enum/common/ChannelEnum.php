@@ -12,7 +12,7 @@
 namespace app\enum\common;
 
 use app\enum\pay\PayEnum;
-use extend\exception\PayException;
+use core\exception\PayException;
 
 /**
  * 渠道枚举类
@@ -46,45 +46,4 @@ class ChannelEnum
         }
         return $data[$type] ?? '';
     }
-
-    /**
-     * 使用场景对支付方式的影响
-     * @param $channel
-     * @return array
-     */
-    public static function getAllowPayType($channel){
-        $list = array(
-            self::WEAPP => [
-                PayEnum::WECHATPAY,
-                PayEnum::OFFLINEPAY,
-                PayEnum::BALANCEPAY,
-            ],
-            self::WECHAT => [
-                PayEnum::WECHATPAY,
-                PayEnum::BALANCEPAY,
-                PayEnum::OFFLINEPAY,
-            ],
-            self::H5 => [
-                PayEnum::WECHATPAY,
-                PayEnum::ALIPAY,
-                PayEnum::OFFLINEPAY,
-                PayEnum::BALANCEPAY,
-            ],
-            self::PC => [
-                PayEnum::WECHATPAY,
-                PayEnum::ALIPAY,
-                PayEnum::OFFLINEPAY,
-                PayEnum::BALANCEPAY,
-            ],
-            self::APP => [
-                PayEnum::WECHATPAY,
-                PayEnum::ALIPAY,
-                PayEnum::OFFLINEPAY,
-                PayEnum::BALANCEPAY,
-            ],
-        );
-
-        return $list[$channel] ?? [];
-    }
-
 }

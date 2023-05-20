@@ -11,11 +11,12 @@
 
 namespace app\service\admin\stat;
 
-use app\service\admin\BaseAdminService;
-use app\service\admin\member\MemberService;
+use app\service\admin\site\SiteGroupService;
 use app\service\admin\site\SiteService;
 use app\service\admin\sys\SystemService;
-use think\db\exception\DbException;
+use app\service\core\addon\CoreAddonService;
+use app\service\core\member\CoreMemberService;
+use core\base\BaseAdminService;
 
 
 /**
@@ -35,7 +36,8 @@ class StatService extends BaseAdminService
      * 获取统计数据
      * @return int[]
      */
-    public function getIndexData(){
+    public function getIndexData()
+    {
         $data = [
             'today_data' => [
                 'member_count' => 1,
@@ -47,12 +49,20 @@ class StatService extends BaseAdminService
             ],
             'system' => [],
             'version' => [],
-            'visit_stat' => [
+//            'visit_stat' => [
+//                'date' => [],
+//                'value' => [980, 1323, 882, 762, 865, 923, 1105]
+//            ],
+            'site_stat' => [
                 'date' => [],
-                'value' => [980,1323,882,762,865,923,1105]
+                'value' => []
             ],
             'member_stat' => [
-                'type' => ['男','女','未知'],
+                'type' => ['男', '女', '未知'],
+                'value' => []
+            ],
+            'site_group_stat' => [
+                'type' => [],
                 'value' => []
             ],
             'about' => [
@@ -68,17 +78,40 @@ class StatService extends BaseAdminService
                 ]
             ]
         ];
-        $data['today_data']['total_member_count'] = (new MemberService())->getCount();
+
+        $day_start_time = strtotime(date('Y-m-d', time()));
+        //当天结束之间
+        $day_end_time = $day_start_time + 86400;
+        $data['today_data']['total_member_count'] = (new CoreMemberService())->getCount();
+        $data['today_data']['today_member_count'] = (new CoreMemberService())->getCount(['create_time' => get_start_and_end_time_by_day()]);
         $data['today_data']['total_site_count'] = (new SiteService())->getCount();
+        $data['today_data']['today_site_count'] = (new SiteService())->getCount(['create_time' => [$day_start_time, $day_end_time]]);
+
         $data['system'] = (new SystemService())->getInfo();
         $data['version'] = $data['system']['version'] ?? [];
         $time = time();
-        for ($i=1; $i<=7; $i++) $data['visit_stat']['date'][] = date('Y-m-d', strtotime( '+' . $i-7 .' days', $time));
-
-        $man_count = (new MemberService())->getCount([ ['sex', '=', '1'] ]);
-        $woman_count = (new MemberService())->getCount([ ['sex', '=', '2'] ]);
+        for ($i = 1; $i <= 7; $i++){
+            $item_day = date('Y-m-d', strtotime('+' . $i - 7 . ' days', $time));
+            $data['site_stat']['date'][] = $item_day;
+            $data['site_stat']['value'][] = (new SiteService())->getCount(['create_time' => get_start_and_end_time_by_day($item_day)]);
+        }
+        $man_count = (new CoreMemberService())->getCount(['sex' => '1']);
+        $woman_count = (new CoreMemberService())->getCount(['sex' => '2']);
         $data['member_stat']['value'] = [$man_count, $woman_count, (int)($data['today_data']['total_member_count'] - $man_count - $woman_count)];
 
+        $site_group_list = (new SiteGroupService())->getAll();
+
+        if(!empty($site_group_list)){
+            foreach($site_group_list as $v){
+                $data['site_group_stat']['type'][] = $v['group_name'];
+                $data['site_group_stat']['value'][] = (new SiteService())->getCount(['group_id' => $v['group_id']]);
+            }
+        }
+        $app = [
+            'app_count' => (new CoreAddonService())->getLocalAddonCount(),
+            'app_installed_count' => (new CoreAddonService())->getCount(),
+        ];
+        $data['app'] = $app;
         return $data;
     }
 

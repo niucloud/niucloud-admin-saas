@@ -12,7 +12,7 @@
 namespace app\service\api\article;
 
 use app\model\article\Article;
-use app\service\api\BaseApiService;
+use core\base\BaseApiService;
 
 /**
  * 文章服务层

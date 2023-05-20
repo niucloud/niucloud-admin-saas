@@ -11,8 +11,8 @@
 
 namespace app\model\sys;
 
-use app\model\BaseModel;
 use app\model\site\Site;
+use core\base\BaseModel;
 
 /**
  * 用户角色模型

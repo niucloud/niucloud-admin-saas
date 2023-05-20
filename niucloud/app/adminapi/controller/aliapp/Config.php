@@ -11,9 +11,9 @@
 
 namespace app\adminapi\controller\aliapp;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\aliapp\AliappConfigService;
 use app\service\admin\site\WebSiteConfigService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class Config extends BaseAdminController
@@ -43,7 +43,7 @@ class Config extends BaseAdminController
         ]);
 //        $this->validate($data, 'app\validate\channel\Aliapp.set');
         (new AliappConfigService())->setAliappConfig($data);
-        return success(100016);
+        return success('SET_SUCCESS');
     }
 
     /**

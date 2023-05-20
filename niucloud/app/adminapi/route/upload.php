@@ -14,17 +14,3 @@ use app\adminapi\middleware\AdminCheckToken;
 use app\adminapi\middleware\AdminLog;
 use think\facade\Route;
 
-
-/**
- * 路由
- */
-Route::group('upload', function () {
-    /***************************************************** 上传 ****************************************************/
-    //证书上传
-    Route::post('cert/:type', 'upload.Upload/cert');
-
-})->middleware([
-    AdminCheckToken::class,
-    AdminCheckRole::class,
-    AdminLog::class
-]);

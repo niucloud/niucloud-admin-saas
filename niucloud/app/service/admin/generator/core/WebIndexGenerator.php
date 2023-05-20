@@ -312,7 +312,7 @@ class WebIndexGenerator extends BaseGenerator
      */
     public function getRuntimeOutDir()
     {
-        $dir = $this->outDir . 'vue/src/views/' . $this->moduleName . '/';
+        $dir = $this->outDir . 'admin/src/views/' . $this->moduleName . '/';
         $this->checkDir($dir);
 
         return $dir;

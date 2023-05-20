@@ -73,7 +73,7 @@ class WebApiGenerator extends BaseGenerator
      */
     public function getRuntimeOutDir()
     {
-        $dir = $this->outDir . 'vue/src/api/';
+        $dir = $this->outDir . 'admin/src/api/';
         $this->checkDir($dir);
         return $dir;
     }

@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\diy;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\diy\DiyConfigService;
+use core\base\BaseAdminController;
 
 
 /**
@@ -41,7 +41,7 @@ class Config extends BaseAdminController
             [ 'menu', [] ]
         ]);
         ( new DiyConfigService() )->setBottomConfig($data[ 'menu' ]);
-        return success(100000);
+        return success('SUCCESS');
     }
 
 }

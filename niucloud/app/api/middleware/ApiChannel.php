@@ -12,7 +12,6 @@
 namespace app\api\middleware;
 
 use app\Request;
-use app\services\user\UserAuthServices;
 use Closure;
 use Exception;
 
@@ -27,7 +26,7 @@ class ApiChannel
     /**
      * @param Request $request
      * @param Closure $next
-     * @param bool $exception  是否把错误抛出
+     * @param bool $exception 是否把错误抛出
      * @return mixed
      * @throws Exception
      */
@@ -36,8 +35,8 @@ class ApiChannel
         //微信或支付宝
         if (preg_match('~micromessenger~i', $request->header('user-agent')) || preg_match('~alipay~i', $request->header('user-agent'))) {
             $site_id = $request->param('site_id', -1);
-            if($site_id != -1){
-                $request->pushHeader([system_name('api_site_id_name') => $request->param('site_id')]);
+            if ($site_id != -1) {
+                $request->pushHeader([ system_name('api_site_id_name') => $request->param('site_id') ]);
             }
         }
         return $next($request);

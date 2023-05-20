@@ -29,7 +29,7 @@ Route::group('auth', function () {
     //授权用户菜单
     Route::put('modify/:field', 'auth.Auth/modify');
     //授权用户菜单
-    Route::put('update', 'auth.Auth/update');
+    Route::put('edit', 'auth.Auth/edit');
     //授权站点信息
     Route::get('site', 'auth.Auth/site');
 

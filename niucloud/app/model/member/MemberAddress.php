@@ -11,7 +11,7 @@
 
 namespace app\model\member;
 
-use app\model\BaseModel;
+use core\base\BaseModel;
 
 /**
  * 会员收货地址模型

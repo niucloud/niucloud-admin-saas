@@ -76,3 +76,5 @@ Route::group(function () {
 })->middleware(ApiChannel::class)
 ->middleware(ApiCheckToken::class)
 ->middleware(ApiLog::class);
+//加载插件路由
+(new \core\addon\AddonLoader("Route"))->load(['app_type' => 'api']);

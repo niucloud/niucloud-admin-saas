@@ -2,8 +2,8 @@
 namespace app;
 
 use app\enum\sys\AppTypeEnum;
-use extend\exception\AdminException;
-use extend\exception\AuthException;
+use core\exception\AdminException;
+use core\exception\AuthException;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
@@ -90,7 +90,13 @@ class ExceptionHandle extends Handle
         // 添加自定义异常处理机制
 
         if ($e instanceof DbException) {
-            return fail('数据获取失败', $massageData);
+            return fail('DATA_GET_FAIL', [
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+                'message' => $e->getMessage(),
+                'trace' => $e->getTrace(),
+                'previous' => $e->getPrevious(),
+            ]);
         } elseif ($e instanceof ValidateException) {
             return fail($e->getMessage(), []);
         } else if($e instanceof UnexpectedValueException){

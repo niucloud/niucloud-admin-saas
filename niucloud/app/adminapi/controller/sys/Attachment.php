@@ -11,9 +11,9 @@
 
 namespace app\adminapi\controller\sys;
 
-use app\adminapi\controller\BaseAdminController;
 use app\enum\sys\FileEnum;
 use app\service\admin\sys\AttachmentService;
+use core\base\BaseAdminController;
 use think\Response;
 
 class Attachment extends BaseAdminController
@@ -53,7 +53,7 @@ class Attachment extends BaseAdminController
             ['att_ids', []],
         ]);
         (new AttachmentService())->delAll($data['att_ids']);
-        return success(100003);
+        return success('DELETE_SUCCESS');
     }
 
     /**
@@ -68,7 +68,7 @@ class Attachment extends BaseAdminController
         ]);
         $this->validate($data, 'app\validate\sys\AttachmentCategory.add');
         (new AttachmentService())->addCategory($data);
-        return success(100011);
+        return success('ADD_SUCCESS');
     }
 
     /**
@@ -87,14 +87,14 @@ class Attachment extends BaseAdminController
      * 更新附件分组
      * @return Response
      */
-    public function updateCategory($id)
+    public function editCategory($id)
     {
         $data = $this->request->params([
             ['name', '']
         ]);
-        $this->validate($data, 'app\validate\sys\AttachmentCategory.update');
-        (new AttachmentService())->updateCategory($id, $data);
-        return success(100004);
+        $this->validate($data, 'app\validate\sys\AttachmentCategory.edit');
+        (new AttachmentService())->editCategory($id, $data);
+        return success('EDIT_SUCCESS');
     }
 
     /**
@@ -105,7 +105,7 @@ class Attachment extends BaseAdminController
     public function deleteCategory($id)
     {
         (new AttachmentService())->delCategory($id);
-        return success(100003);
+        return success('DELETE_SUCCESS');
     }
 
     /**
@@ -118,7 +118,7 @@ class Attachment extends BaseAdminController
             ['cate_id', '']
         ]);
         (new AttachmentService())->modifyCategory($att_id, $data['cate_id']);
-        return success(100000);
+        return success('SUCCESS');
     }
 
     /**
@@ -133,7 +133,7 @@ class Attachment extends BaseAdminController
             ['att_ids', []]
         ]);
         (new AttachmentService())->batchModifyCategory($data['att_ids'], $data['cate_id']);
-        return success(100000);
+        return success('SUCCESS');
     }
 
 }

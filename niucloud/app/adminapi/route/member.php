@@ -27,12 +27,18 @@ Route::group('member', function () {
     //会员添加
     Route::post('member', 'member.Member/add');
     //会员添加
-    Route::put('member/:member_id', 'member.Member/update');//会员添加
+    Route::put('member/:member_id', 'member.Member/edit');//会员添加
     Route::put('member/modify/:member_id/:field', 'member.Member/modify');
-    //会员使用场景
+    //会员注册方式
     Route::get('registertype', 'member.Member/getMemberRegisterType');
+    //会员注册渠道
+    Route::get('register/channel', 'member.Member/getMemberRegisterChannelType');
     //会员列表(不分页)
     Route::get('member/list', 'member.Member/getMemberList');
+    //获取会员状态枚举
+    Route::get('status/list', 'member.Member/getStatusList');
+    //会员设置状态
+    Route::put('setstatus/:status', 'member.Member/setStatus');
     /***************************************************** 会员标签 ****************************************************/
     //会员标签列表
     Route::get('label', 'member.MemberLabel/lists');
@@ -41,44 +47,54 @@ Route::group('member', function () {
     //会员标签添加
     Route::post('label', 'member.MemberLabel/add');
     //会员标签编辑
-    Route::put('label/:id', 'member.MemberLabel/update');
+    Route::put('label/:id', 'member.MemberLabel/edit');
     //会员标签删除
     Route::delete('label/:id', 'member.MemberLabel/del');
     //会员标签
     Route::get('label/all', 'member.MemberLabel/getAll');
     /***************************************************** 会员账户 ****************************************************/
+    //会员账户类型变动方式
+    Route::get('account/type', 'member.Account/accountType');
     //会员积分流水
     Route::get('account/point', 'member.Account/point');
     //会员余额流水
     Route::get('account/balance', 'member.Account/balance');
-    //会员零钱流水
+    //会员可提现余额流水
     Route::get('account/money', 'member.Account/money');
+    //会员佣金流水
+    Route::get('account/commission', 'member.Account/commission');
     //会员积分调整
     Route::post('account/point', 'member.Account/adjustPoint');
     //会员余额调整
     Route::post('account/balance', 'member.Account/adjustBalance');
+    //会员零钱调整
+    Route::post('account/money', 'member.Account/adjustMoney');
     //会员账户类型变动方式
     Route::get('account/change_type/:account_type', 'member.Account/changeType');
+    //会员账户类型变动方式
+    Route::get('account/sum_balance', 'member.Account/sumBalance');
     /***************************************************** 会员相关设置**************************************************/
     //获取注册与登录设置
     Route::get('config/login', 'member.Config/getLoginConfig');
     //更新注册与登录设置
     Route::post('config/login', 'member.Config/setLoginConfig');
     //获取会员提现设置
-    Route::get('config/withdraw', 'member.Config/getWithdrawConfig');
+    Route::get('config/cash_out', 'member.Config/getCashOutConfig');
     //更新提现设置
-    Route::post('config/withdraw', 'member.Config/setWithdrawConfig');
+    Route::post('config/cash_out', 'member.Config/setCashOutConfig');
     /***************************************************** 会员体现**************************************************/
     //会员提现列表
-    Route::get('withdraw', 'member.Withdraw/lists');
+    Route::get('cash_out', 'member.CashOut/lists');
     //会员提现详情
-    Route::get('withdraw/:id', 'member.Withdraw/info');
+    Route::get('cash_out/:id', 'member.CashOut/info');
     //会员提现审核
-    Route::put('withdraw/audit/:id/:action', 'member.Withdraw/audit');
+    Route::put('cash_out/audit/:id/:action', 'member.CashOut/audit');
     //转账方式
-    Route::get('withdraw/transfertype', 'member.Withdraw/getTransferType');
+    Route::get('cash_out/transfertype', 'member.CashOut/getTransferType');
     //转账方式
-    Route::put('withdraw/transfer/:id', 'member.Withdraw/transfer');
+    Route::put('cash_out/transfer/:id', 'member.CashOut/transfer');
+    //提现状态
+    Route::get('cash_out/status', 'member.CashOut/getStatusList');
 
 })->middleware([
     AdminCheckToken::class,

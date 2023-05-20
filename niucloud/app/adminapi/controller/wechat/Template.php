@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\wechat;
 
-use app\adminapi\controller\BaseAdminController;
 use app\service\admin\wechat\WechatTemplateService;
+use core\base\BaseAdminController;
 
 /**
  * 微信公众号管理菜单

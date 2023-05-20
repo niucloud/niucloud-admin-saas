@@ -35,7 +35,7 @@ class Agreement extends Validate
     ];
 
     protected $scene = [
-        'update' => ['title', 'content'],
+        'edit' => ['title', 'content'],
     ];
 
 }

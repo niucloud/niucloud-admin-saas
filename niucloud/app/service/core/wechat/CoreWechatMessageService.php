@@ -12,11 +12,10 @@
 namespace app\service\core\wechat;
 
 use app\enum\channel\WechatEnum;
-use app\service\core\BaseCoreService;
 use app\service\core\scan\CoreScanService;
 use Closure;
+use core\base\BaseCoreService;
 use EasyWeChat\Kernel\Messages\Text;
-use think\facade\Log;
 
 /**
  * 微信事件中间件类(用于中间件注册)
@@ -95,7 +94,7 @@ class CoreWechatMessageService extends BaseCoreService
         $key = str_replace('qrscene_', '', $message['EventKey']);
         $core_scan_service = new CoreScanService();
         $core_scan_service->actionByScan($site_id, $key, ['openid' => $message['FromUserName']]);
-        return get_lang(400003);
+        return get_lang('SCAN_SUCCESS');
     }
 
     /**

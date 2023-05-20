@@ -13,10 +13,10 @@ namespace app\service\core\order\recharge;
 
 use app\enum\order\RechargeOrderEnum;
 use app\model\order\Order;
-use app\service\core\BaseCoreService;
 use app\service\core\member\CoreMemberAccountService;
 use app\service\core\order\CoreOrderCreateService;
-use extend\exception\CommonException;
+use core\base\BaseCoreService;
+use core\exception\CommonException;
 
 /**
  * 充值订单流程
@@ -49,6 +49,7 @@ class CoreRechargeOrderService extends BaseCoreService
         ];
         $order_items = [
             [
+                'site_id' => $data['site_id'],
                 'member_id' => $data['member_id'],
                 'item_id' => 0,
                 'item_type' => 'recharge', //项目类型 recharge, goods
@@ -74,10 +75,11 @@ class CoreRechargeOrderService extends BaseCoreService
             $order_model = new Order();
             $order_info = $order_model->where([['site_id', '=', $pay_info['site_id']], ['out_trade_no', '=', $pay_info['out_trade_no']]])->findOrEmpty()->toArray();
             if (empty($order_info))
-                throw new CommonException(800000);
+                throw new CommonException('ORDER_NOT_EXIST');
             $order_data = [
                 'pay_time' => time(),
                 'order_status' => RechargeOrderEnum::FINISH,
+                'is_enable_refund' => 1 // 是否允许退款
             ];
             $order_model->where([['site_id', '=', $pay_info['site_id']], ['out_trade_no', '=', $pay_info['out_trade_no']]])->update($order_data);
             //会员余额
@@ -89,6 +91,18 @@ class CoreRechargeOrderService extends BaseCoreService
         }
     }
 
+    /**
+     * 关闭订单
+     * @param $order_id
+     * @return void
+     */
+    public function close(int $site_id, int $order_id){
+        $order = (new Order())->where([ ['site_id', '=', $site_id ],['order_id', '=', $order_id ], ])->find();
+        if ($order->isEmpty()) throw new CommonException('ORDER_NOT_EXIST');
+        if ($order->order_status == RechargeOrderEnum::CLOSE) throw new CommonException('ORDER_CLOSED');
 
+        $order->save(['order_status' => RechargeOrderEnum::CLOSE]);
+        return true;
+    }
 }
 

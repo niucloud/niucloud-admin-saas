@@ -12,7 +12,7 @@
 namespace app\service\api\diy;
 
 use app\model\diy\DiyRoute;
-use app\service\api\BaseApiService;
+use core\base\BaseApiService;
 
 /**
  * 自定义路由表服务层
@@ -30,13 +30,13 @@ class DiyRouteService extends BaseApiService
 
     /**
      * 获取页面分享信息
-     * @param array $params
+     * @param array $data
      * @return array|void
      */
-    public function getShare(array $params = [])
+    public function getShare(array $data = [])
     {
         $field = 'id,title,name,page,share,is_share';
-        $info = $this->model->field($field)->where([ [ 'page', '=', $params[ 'route' ] ], [ 'site_id', '=', $this->site_id ] ])->findOrEmpty()->toArray();
+        $info = $this->model->field($field)->where([ [ 'page', '=', $data[ 'route' ] ], [ 'site_id', '=', $this->site_id ] ])->findOrEmpty()->toArray();
         $share = [];
         if (!empty($info[ 'share' ])) {
             $share = json_decode($info[ 'share' ], true);
@@ -44,19 +44,20 @@ class DiyRouteService extends BaseApiService
             $share[ 'query' ] = '';
             $query = [];
 
-            if (!empty($params[ 'params' ])) {
-                $param = explode(',', $params[ 'params' ]);
-                foreach ($param as $k => $v) {
-                    $query[] = $v;
-                }
+            if (!empty($data[ 'params' ])) {
+                $query = json_decode($data[ 'params' ], true);
             }
 
             if ($this->member_id > 0) {
-                $query[] = 'mid=' . $this->member_id;
+                $query[ 'mid' ] = $this->member_id;
             }
 
             if (!empty($query)) {
-                $share[ 'query' ] = implode('&', $query);
+                $str = [];
+                foreach ($query as $k => $v) {
+                    $str[] = $k . '=' . $v;
+                }
+                $share[ 'query' ] = implode('&', $str);
             }
 
             $share[ 'url' ] = $share[ 'route' ] . ( $share[ 'query' ] ? '?' . $share[ 'query' ] : '' );

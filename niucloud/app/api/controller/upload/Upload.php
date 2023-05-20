@@ -11,14 +11,10 @@
 
 namespace app\api\controller\upload;
 
-use app\api\controller\BaseApiController;
-use app\BaseController;
-use app\service\api\file\Base64Service;
-use app\service\api\file\FetchService;
-use app\service\api\file\UploadService;
-use app\service\api\weapp\WeappAuthService;
-use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
-use think\Response;
+use app\service\api\upload\Base64Service;
+use app\service\api\upload\FetchService;
+use app\service\api\upload\UploadService;
+use core\base\BaseApiController;
 
 class Upload extends BaseApiController
 {

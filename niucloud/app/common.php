@@ -12,11 +12,11 @@ use think\facade\Cache;
  * @param int $msg
  * @param array $
  */
-function success($msg = 100000, array|string|null $data = [], int $code = 200, int $http_code = 200): Response
+function success($msg = 'SUCCESS', array|string|null $data = [], int $code = 1, int $http_code = 200): Response
 {
     if (is_array($msg)) {
         $data = $msg;
-        $msg = 100000;
+        $msg = 'SUCCESS';
     }
     return Response::create(['data' => $data, 'msg' => get_lang($msg), 'code' => $code], 'json', $http_code);
 
@@ -25,11 +25,11 @@ function success($msg = 100000, array|string|null $data = [], int $code = 200, i
 /**
  * 接口操作失败，返回信息
  */
-function fail($msg = 100005, ?array $data = [], int $code = 400, int $http_code = 200): Response
+function fail($msg = 'FAIL', ?array $data = [], int $code = 0, int $http_code = 200): Response
 {
     if (is_array($msg)) {
         $data = $msg;
-        $msg = 100005;
+        $msg = 'FAIL';
     }
     return Response::create(['data' => $data, 'msg' => get_lang($msg), 'code' => $code], 'json', $http_code);
 }
@@ -238,6 +238,14 @@ function get_date_by_time(?int $time = null)
     return date('Y-m-d h:i:s', time());
 }
 
+function get_start_and_end_time_by_day($day = '')
+{
+    $date = $day ?: date('Y-m-d', time());
+    $day_start_time = strtotime($date);
+    //当天结束之间
+    $day_end_time = $day_start_time + 86400;
+    return [$day_start_time, $day_end_time];
+}
 
 /**
  * 路径转链接
@@ -268,15 +276,29 @@ function url_to_path($url)
  * @param $queue
  * @return void
  */
-function create_queue($job, $data = '', $delay = 0, $queue = null)
+function create_job($job, $data = '', $delay = 0, $queue = null)
 {
     if ($delay > 0) {
-        Queue::later($delay, $job, $data, $queue);
+        $is_success = Queue::later($delay, $job, $data, $queue);
     } else {
-        Queue::push($job, $data, $queue);
+        $is_success = Queue::push($job, $data, $queue);
+    }
+    if ($is_success !== false) {
+        return true;
+    } else {
+        return false;
     }
 }
 
+/**
+ * 获取插件对应资源文件(插件安装后获取)
+ * @param $addon  //插件名称
+ * @param $file_name  //文件名称（包含resource文件路径）
+ */
+function addon_resource($addon, $file_name)
+{
+    return "addon/". $addon. "/". $file_name;
+}
 /**
  * 判断 文件/目录 是否可写（取代系统自带的 is_writeable 函数）
  *
@@ -406,12 +428,16 @@ function array_merge2(array $array1, array $array2)
         if (array_key_exists($array2_k, $array1)) {
             foreach ($array2_v as $array2_kk => $array2_vv) {
                 if (array_key_exists($array2_kk, $array1[$array2_k])) {
-                    $array1[$array2_k][$array2_kk] = array_merge($array1[$array2_k][$array2_kk], $array2_vv);
-                } else
+                    if (gettype($array2_vv) == 'array') {
+                        $array1[$array2_k][$array2_kk] = array_merge($array1[$array2_k][$array2_kk], $array2_vv);
+                    }
+                } else {
                     $array1[$array2_k][$array2_kk] = $array2_vv;
+                }
             }
-        } else
+        } else {
             $array1[$array2_k] = $array2_v;
+        }
     }
     return $array1;
 }
@@ -442,9 +468,10 @@ function get_files_by_dir($dir)
  * 文件夹文件拷贝
  * @param string $src 来源文件夹
  * @param string $dst 目的地文件夹
+ * @param array $files 文件夹集合
  * @return bool
  */
-function dir_copy(string $src = '', string $dst = '')
+function dir_copy(string $src = '', string $dst = '', &$files = [])
 {
     if (empty($src) || empty($dst)) {
         return false;
@@ -454,9 +481,10 @@ function dir_copy(string $src = '', string $dst = '')
     while (false !== ($file = readdir($dir))) {
         if (($file != '.') && ($file != '..')) {
             if (is_dir($src . '/' . $file)) {
-                dir_copy($src . '/' . $file, $dst . '/' . $file);
+                dir_copy($src . '/' . $file, $dst . '/' . $file, $files);
             } else {
                 copy($src . '/' . $file, $dst . '/' . $file);
+                $files[] = $dst . '/' . $file;
             }
         }
     }
@@ -475,8 +503,8 @@ function dir_remove(string $dst = '', array $dirs = [])
     if (empty($dirs) || empty($dst)) {
         return false;
     }
-    foreach($dirs as $v){
-        @unlink($dst.$v);
+    foreach ($dirs as $v) {
+        @unlink($dst . $v);
     }
     return true;
 }
@@ -493,7 +521,7 @@ function dir_mkdir($path = '', $mode = 0777, $recursive = true)
 {
     clearstatcache();
     if (!is_dir($path)) {
-        mkdir($path, $mode, $recursive);
+        @mkdir($path, $mode, $recursive);
         return chmod($path, $mode);
     }
     return true;
@@ -591,7 +619,37 @@ function search_dir($path, &$data, $search = '')
         $fp->close();
     }
     if (is_file($path)) {
-        if($search) $path = str_replace($search, '', $path);
+        if ($search) $path = str_replace($search, '', $path);
         $data[] = $path;
+    }
+}
+
+function remove_empty_dir($dirs)
+{
+
+}
+
+/**
+ * 获取文件地图
+ * @param $path
+ * @param array $arr
+ * @return array
+ */
+function getFileMap($path, $arr = [])
+{
+    if (is_dir($path)) {
+        $dir = scandir($path);
+        foreach ($dir as $file_path) {
+            if ($file_path != '.' && $file_path != '..') {
+                $temp_path = $path . '/' . $file_path;
+                if (is_dir($temp_path)) {
+                    $arr[$temp_path] = $file_path;
+                    $arr = getFileMap($temp_path, $arr);
+                } else {
+                    $arr[$temp_path] = $file_path;
+                }
+            }
+        }
+        return $arr;
     }
 }

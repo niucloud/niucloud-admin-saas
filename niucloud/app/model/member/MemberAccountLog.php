@@ -12,7 +12,7 @@
 namespace app\model\member;
 
 use app\enum\member\MemberAccountEnum;
-use app\model\BaseModel;
+use core\base\BaseModel;
 
 /**
  * 会员账户流水（账单）模型
