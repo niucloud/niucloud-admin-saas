@@ -1,1 +1,0 @@
-import{d as t,e as a,f as e,w as s,S as n,N as o,m as r}from"./index-b8ec63bc.js";const p=t({__name:"app-link",props:{url:String,data:{type:Object,default:()=>({})},mode:{type:String,default:"navigateTo"}},setup(t){const p=t,d=()=>{o(p)};return(t,o)=>{const p=r;return a(),e(p,{onClick:d},{default:s((()=>[n(t.$slots,"default")])),_:3})}}});export{p as _};
