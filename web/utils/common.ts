@@ -23,5 +23,6 @@ export function isUrl(str: string): boolean {
 * @returns 
 */
 export function img(path: string): string {
-    return isUrl(path) ? path : `${import.meta.env.VITE_IMG_DOMAIN || location.origin}/${path}`
+    const runtimeConfig = useRuntimeConfig()
+    return isUrl(path) ? path : `${runtimeConfig.public.VITE_IMG_DOMAIN || location.origin}/${path}`
 }

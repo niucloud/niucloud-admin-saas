@@ -13,7 +13,7 @@ export function useSendSms() {
 
         let result: string | boolean = false
         await sendSms(param).then((res: responseResult) => {
-            if (res.code == 200) {
+            if (res.code == 1) {
                 start()
                 result = res.data.key
             } else {

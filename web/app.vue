@@ -32,6 +32,9 @@ const locale = computed(() => (systemStore.lang === 'zh-cn' ? zhCn : en))
 const configStore = useConfigStore()
 configStore.getLoginConfig()
 
+// 查询站点信息
+systemStore.getSitenfo()
+
 // 如果已登录
 getToken() && useMemberStore().setToken(getToken())
 
@@ -63,8 +66,8 @@ language.loadLocaleMessages(route.path, useSystemStore().lang)
 useHead({
 	titleTemplate: (productCategory) => {
 		return productCategory
-			? `${productCategory} - NIUCLOUD-ADMIN 一款快速开发SAAS通用管理系统后台框架`
-			: 'NIUCLOUD-ADMIN 一款快速开发SAAS通用管理系统后台框架'
+			? `${productCategory} - ${systemStore.site.front_end_name || systemStore.site.site_name}`
+			: systemStore.site.front_end_name
 	}
 })
 </script>

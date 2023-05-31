@@ -2,7 +2,7 @@
  * 获取验证码
  */
 export function getCaptcha() {
-    return request.get('captcha', {}, { showErrorMessage: true })
+    return request.get('captcha', {})
 }
 
 /**
@@ -30,14 +30,14 @@ export function getAgreementInfo(key: string) {
  * 重置密码
  */
 export function resetPassword(data: AnyObject) {
-    return request.post(`/password/reset`, data, { showErrorMessage: true })
+    return request.post(`password/reset`, data)
 }
 
 /**
  * 发送短信验证码
  */
 export function sendSms(data: AnyObject) {
-    return request.post(`send/mobile/${data.type}`, data, { showErrorMessage: true })
+    return request.post(`send/mobile/${data.type}`, data)
 }
 
 /**
@@ -66,4 +66,11 @@ export function fetchBase64Image(data: AnyObject) {
  */
 export function getCopyRight(data: AnyObject) {
     return request.get('copyright', data)
+}
+
+/**
+ * 获取站点信息
+ */
+export function getSiteInfo() {
+    return request.get('site')
 }

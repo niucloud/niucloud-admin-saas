@@ -85,7 +85,6 @@ const upload = computed(() => {
         limit: 1,
         headers,
         onSuccess: (response: any, uploadFile: UploadFile, uploadFiles: UploadFiles) => {
-            console.log('uploadFile',);
             let img = uploadFile?.response?.data?.url;
             if (response.code == 200) {
                 modifyMember({

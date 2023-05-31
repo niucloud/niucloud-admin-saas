@@ -33,7 +33,6 @@ onMounted(() => {
 
 const obtainArricleInfo = (id) => {
 	getArticleDetail(id).then(res => {
-		console.log(res)
 		articleDeatail.value = res.data;
     })
 }

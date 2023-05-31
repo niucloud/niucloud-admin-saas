@@ -15,6 +15,10 @@
 		"article": {
 		    "list": "文章",
 		    "detail": "文章"
-		}
+		},
+        "site": {
+            "close": "站点已关闭",
+            "nonexistence": "站点不存在"
+        }
     }
 }

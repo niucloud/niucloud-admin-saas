@@ -64,6 +64,18 @@
                         <el-button type="primary" class="mt-[20px] w-full" size="large" @click="handleLogin"
                             :loading="loading">{{ loading ? t('logining') : t('login') }}</el-button>
                     </el-form-item>
+
+                    <div class="text-xs py-[50rpx] flex justify-center w-full" v-if="configStore.login.agreement_show">
+                        {{ t('agreeTips') }}
+                        <NuxtLink to="/auth/agreement?key=service">
+                            <span class="text-primary">{{ t('userAgreement') }}</span>
+                        </NuxtLink>
+                        {{ t('and') }}
+                        <NuxtLink to="/auth/agreement?key=privacy">
+                            <span class="text-primary">{{ t('privacyAgreement') }}</span>
+                        </NuxtLink>
+                    </div>
+
                 </el-form>
             </div>
         </div>
