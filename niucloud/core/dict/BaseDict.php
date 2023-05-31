@@ -37,6 +37,11 @@ abstract class BaseDict extends Storage
      */
     protected function getLocalAddons()
     {
+        if(!file_exists("../install.lock"))
+        {
+            //尚未安装不加载插件
+            return [];
+        }
         $cache_name = "local_install_addons";
         return cache_remember(
             $cache_name,

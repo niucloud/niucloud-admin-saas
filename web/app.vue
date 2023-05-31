@@ -64,10 +64,9 @@ language.loadLocaleMessages(route.path, useSystemStore().lang)
 
 // 设置title模板
 useHead({
-	titleTemplate: (productCategory) => {
-		return productCategory
-			? `${productCategory} - ${systemStore.site.front_end_name || systemStore.site.site_name}`
-			: systemStore.site.front_end_name
+	titleTemplate: (title) => {
+		const siteTitle = systemStore.site.front_end_name || systemStore.site.site_name
+		return title ? `${title} - ${siteTitle}` : siteTitle
 	}
 })
 </script>
