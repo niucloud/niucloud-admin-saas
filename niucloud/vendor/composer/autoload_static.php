@@ -11,9 +11,9 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
-        '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
-        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
+        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
         '35fab96057f1bf5e7aba31a8a6d5fdde' => __DIR__ . '/..' . '/topthink/think-orm/stubs/load_stubs.php',
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
         '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
@@ -39,10 +39,6 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
     );
 
     public static $prefixLengthsPsr4 = array (
-        'y' => 
-        array (
-            'yunwuxin\\cron\\' => 14,
-        ),
         't' => 
         array (
             'think\\view\\driver\\' => 18,
@@ -50,6 +46,10 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
             'think\\captcha\\' => 14,
             'think\\app\\' => 10,
             'think\\' => 6,
+        ),
+        's' => 
+        array (
+            'schedule\\' => 9,
         ),
         'd' => 
         array (
@@ -180,10 +180,6 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
     );
 
     public static $prefixDirsPsr4 = array (
-        'yunwuxin\\cron\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/yunwuxin/think-cron/src/cron',
-        ),
         'think\\view\\driver\\' => 
         array (
             0 => __DIR__ . '/..' . '/topthink/think-view/src',
@@ -208,6 +204,10 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
             3 => __DIR__ . '/..' . '/topthink/think-orm/src',
             4 => __DIR__ . '/..' . '/topthink/think-queue/src',
             5 => __DIR__ . '/..' . '/topthink/think-template/src',
+        ),
+        'schedule\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yzh52521/schedule/src',
         ),
         'dh2y\\qrcode\\' => 
         array (
