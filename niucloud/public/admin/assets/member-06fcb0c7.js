@@ -1,0 +1,1 @@
+import{a as t}from"./vue-router-79053937.js";import{d as o,b as r,e as a}from"./runtime-core.esm-bundler-dc7a07d7.js";const n={class:"main-container"},p=o({__name:"member",setup(s){const e=t();return e.resolve({path:"/decorate/edit",query:{name:"DIY_MEMBER_INDEX"}}),e.push("/decorate/edit?name=DIY_MEMBER_INDEX"),(c,_)=>(r(),a("div",n))}});export{p as default};
