@@ -62,7 +62,6 @@ const formRules = computed(() => {
 })
 
 const sortVerify = (rule: any, value: any, callback: any) => {
-    console.log("sortVerify",value.toString());
     if (value < 0) {
         callback(new Error(t('sortVerifyOne')))
     } else if (value.toString().indexOf(".") != -1) {
@@ -94,7 +93,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
                 emit('complete')
             }).catch(err => {
                 loading.value = false
-                showDialog.value = false
+                // showDialog.value = false
             })
         }
     })

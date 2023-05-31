@@ -14,7 +14,7 @@ export function getWeappConfig() {
  * @returns 
  */
 export function setWeappConfig(params: Record<string, any>) {
-    return request.put('weapp/config', params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put('weapp/config', params, { showSuccessMessage: true })
 }
 
 /**
@@ -31,5 +31,5 @@ export function getTemplateList() {
  * @returns 
  */
 export function getBatchAcquisition(params: Record<string, any>) {
-    return request.put('weapp/template/sync', params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put('weapp/template/sync', params, { showSuccessMessage: true })
 }

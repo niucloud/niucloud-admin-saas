@@ -4,29 +4,29 @@
             <el-card class="box-card !border-none" shadow="never">
                 <template #header>
                     <div class="card-header">
-                        <span class="text-[14px]">{{t('dataSummarize')}}</span>
+                        <span class="text-[15px]">{{t('dataSummarize')}}</span>
                     </div>
                 </template>
 				
                 <el-row :gutter="20">
                     <el-col :span="6" >
-                        <el-statistic :value="statInfo.today_data.total_site_count">
+                        <el-statistic :value="statInfo.today_data.norma_site_count">
                             <template #title>
-                                <div class="text-[14px] mb-[9px]">{{t('siteSum')}}</div>
+                                <div class="text-[14px] mb-[9px]">{{t('normalSiteSum')}}</div>
                             </template>
                         </el-statistic>
                     </el-col>
                     <el-col :span="6">
-                        <el-statistic :value="statInfo.today_data.total_member_count">
+                        <el-statistic :value="statInfo.today_data.expire_site_count">
                             <template #title>
-                                <div class="text-[14px] mb-[9px]">{{t('memberSum')}}</div>
+                                <div class="text-[14px] mb-[9px]">{{t('expireSiteSum')}}</div>
                             </template>
                         </el-statistic>
                     </el-col>
 					<el-col :span="6" >
-					    <el-statistic :value="statInfo.app.app_count">
+					    <el-statistic :value="statInfo.app.app_no_installed_count">
 					        <template #title>
-					            <div class="text-[14px] mb-[9px]">{{t('appSum')}}</div>
+					            <div class="text-[14px] mb-[9px]">{{t('noInstallAppSun')}}</div>
 					        </template>
 					    </el-statistic>
 					</el-col>
@@ -41,42 +41,37 @@
             </el-card>
 
             <el-card class="box-card !border-none mt-[15px]" shadow="never">
-                <template #header>
-                    <div class="card-header">
-                        <span class="text-[14px]">{{t('commonlyUsedFunction')}}</span>
-                    </div>
-                </template>
-                <el-row :gutter="20" justify="space-between">
-                    <el-col :span="4">
-                        <div class="flex justify-center flex-col items-center cursor-pointer" @click="toLink('/site/list')">
-                            <img class="w-[40px] h-[40px]" src="@/assets/images/index/article_list.png" alt="">
-                            <span class="mt-[10px] text-[14px]">{{t('siteList')}}</span>
-                        </div>
-                    </el-col>
-                    <el-col :span="4">
-                        <div class="flex justify-center flex-col items-center cursor-pointer" @click="toLink('/site/group')">
-                            <img class="w-[40px] h-[40px]" src="@/assets/images/index/member.png" alt="">
-                            <span class="mt-[10px] text-[14px]">{{t('sitePackage')}}</span>
-                        </div>
-                    </el-col>
-                    <el-col :span="4">
-                        <div class="flex justify-center flex-col items-center cursor-pointer" @click="toLink('/site/list')">
-                            <img class="w-[40px] h-[40px]" src="@/assets/images/index/balance.png" alt="">
-                            <span class="mt-[10px] text-[14px]">{{t('newSite')}}</span>
-                        </div>
-                    </el-col>
-                    <el-col :span="4">
-                        <div class="flex justify-center flex-col items-center cursor-pointer" @click="toLink('/auth/user')">
-                            <img class="w-[40px] h-[40px]" src="@/assets/images/index/administrator.png" alt="">
-                            <span class="mt-[10px] text-[14px]">{{t('administrator')}}</span>
-                        </div>
-                    </el-col>
-                    <el-col :span="4">
-                        <div class="flex justify-center flex-col items-center cursor-pointer" @click="toLink('/tools/app_store')">
-                            <img class="w-[40px] h-[40px]" src="@/assets/images/index/fitment.png" alt="">
-                            <span class="mt-[10px] text-[14px]">{{t('appMarketplace')}}</span>
-                        </div>
-                    </el-col>
+                <el-row justify="space-between">
+					<el-col :span="4">
+					    <div class="w-[120px] 2xl:w-[200px]  py-[15px] rounded-[10px] flex justify-center items-center cursor-pointer border-[1px] border-[#E5E8EE]" @click="toLink('site/list')">
+							<img class="w-[33px]" src="@/assets/images/index/site.png"/>
+					        <span class="ml-[10px] text-[16px] text-[#666]">{{t('siteList')}}</span>
+					    </div>
+					</el-col>
+					<el-col :span="4">
+						<div class="w-[120px] 2xl:w-[200px] py-[15px] rounded-[10px] flex justify-center items-center cursor-pointer border-[1px] border-[#E5E8EE]" @click="toLink('site/group')">
+							<img class="w-[33px]" src="@/assets/images/index/site_class.png"/>
+						    <span class="ml-[10px] text-[16px] text-[#666]">{{t('sitePackage')}}</span>
+						</div>
+					</el-col>
+					<el-col :span="4">
+						<div class="w-[120px] 2xl:w-[200px] py-[15px] rounded-[10px] flex justify-center items-center cursor-pointer border-[1px] border-[#E5E8EE]" @click="toLink('site/list')">
+							<img class="w-[33px]" src="@/assets/images/index/new_site.png"/>
+						    <span class="ml-[10px] text-[16px] text-[#666]">{{t('newSite')}}</span>
+						</div>
+					</el-col>
+					<el-col :span="4">
+						<div class="w-[120px] 2xl:w-[200px] py-[15px] rounded-[10px] flex justify-center items-center cursor-pointer border-[1px] border-[#E5E8EE]" @click="toLink('/auth/user')">
+							<img class="w-[33px]" src="@/assets/images/index/auth.png"/>
+						    <span class="ml-[10px] text-[16px] text-[#666]">{{t('administrator')}}</span>
+						</div>
+					</el-col>
+					<el-col :span="4">
+						<div class="w-[120px] 2xl:w-[200px] py-[15px] rounded-[10px] flex justify-center items-center cursor-pointer border-[1px] border-[#E5E8EE]" @click="toLink('/tools/app_store')">
+							<img class="w-[33px]" src="@/assets/images/index/app.png"/>
+						    <span class="ml-[10px] text-[16px] text-[#666]">{{t('appMarketplace')}}</span>
+						</div>
+					</el-col>
                 </el-row>
             </el-card>
             
@@ -84,7 +79,7 @@
                 <el-card class="box-card !border-none flex-1 mr-[15px]" shadow="never">
                     <template #header>
                         <div class="card-header">
-                            <span class="text-[14px]">{{t('newSite')}}</span>
+                            <span class="text-[15px]">{{t('newSite')}}</span>
                         </div>
                     </template>
                     <div ref="newSiteStat" :style="{ width: '100%', height: '300px' }"></div>
@@ -92,7 +87,7 @@
                 <el-card class="box-card !border-none flex-1" shadow="never">
                     <template #header>
                         <div class="card-header">
-                            <span class="text-[14px]">{{t('siteDistribution')}}</span>
+                            <span class="text-[15px]">{{t('siteDistribution')}}</span>
                         </div>
                     </template>
                     <div ref="siteStat" :style="{ width: '100%', height: '300px' }"></div>
@@ -102,7 +97,7 @@
             <el-card class="box-card !border-none mt-[15px]" shadow="never">
                 <template #header>
                     <div class="card-header">
-                        <span class="text-[14px]">{{t('systemInfo')}}</span>
+                        <span class="text-[15px]">{{t('systemInfo')}}</span>
                     </div>
                 </template>
                 <el-descriptions>
@@ -116,31 +111,49 @@
             <el-card class="box-card !border-none" shadow="never">
                 <template #header>
                     <div class="card-header">
-                        <span class="text-[14px]">{{t('versionsInfo')}}</span>
+                        <span class="text-[15px]">{{t('versionsInfo')}}</span>
                     </div>
                 </template>
                 <el-descriptions :column="1">
                     <el-descriptions-item :label="t('versions')">{{statInfo.version.version}}</el-descriptions-item>
                     <el-descriptions-item :label="t('frame')">Thinkphp6,Elementplus,mysql</el-descriptions-item>
                     <el-descriptions-item :label="t('channel')">
-						<el-link class="text-color" href="https://www.niushop.com" target="_blank" :underline="false">{{t('officialWbsite')}}</el-link> 
-						<el-link class="ml-2 text-color" href="" target="_blank" :underline="false">Gitee</el-link>
+						<el-link class="text-color" href="https://www.niucloud.com/" target="_blank" :underline="false">{{t('officialWbsite')}}</el-link> 
+						<el-link class="ml-2 text-color" href="https://gitee.com/niucloud-team/niucloud-admin" target="_blank" :underline="false">Gitee</el-link>
 					</el-descriptions-item>
                 </el-descriptions>
             </el-card>
             <el-card class="box-card !border-none mt-[15px]" shadow="never">
                 <template #header>
                     <div class="card-header">
-                        <span class="text-[14px]">{{t('serviceSupport')}}</span>
+                        <span class="text-[15px]">{{t('serviceSupport')}}</span>
                     </div>
                 </template>
-                <div v-for="(item,index) in statInfo.about" :class="['flex', 'items-center', 'pt-[40px]', 'pb-[40px]',{'border-gray-300 border-b-[1px]': index==0}] ">
-                    <img class="w-[120px] h-[120px] mr-[8px]" :src="img(item.image)" alt="">
-                    <div>
-                        <p class="text-[14px]">{{item.name}}</p>
-                        <p class="text-[12px] mt-[8px] text-gray-400">{{item.desc}}</p>
-                    </div>
-                </div>
+				<div>
+					<div class="flex items-center pt-[10px] pb-[25px]">
+						<img class="w-[120px] h-[120px] mr-[8px]" src="@/assets/images/index/wx_qrcode.jpg" alt="">
+						<div>
+							<p class="text-[14px]">{{ t('officialAccount') }}</p>
+							<p class="text-[14px] text-gray-400">{{ t('officialAccountDesc') }}</p>
+						</div>
+					</div>
+					<div class="flex items-center pt-[25px] pb-[30px] border-gray-300 border-b-[1px]">
+						<img class="w-[120px] h-[120px] mr-[8px]" src="@/assets/images/index/wework_qrcode.png" alt="">
+						<div>
+							<p class="text-[14px]">{{ t('WeCom') }}</p>
+							<p class="text-[14px] text-gray-400">{{ t('WeComDesc') }}</p>
+						</div>
+					</div>
+					<div class="flex items-center mt-3">
+						<div class="mr-[30px] flex">
+							<icon name="iconfont-icondianhua" class="leading-[1]" size="20px" color="#000"></icon>
+							<p class="text-[14px] ml-2">{{ t('tel') }}</p>
+						</div>
+						<div>
+							<p class="text-[14px]">400-886-7993</p>
+						</div>
+					</div>
+				</div>
             </el-card>
         </div>
     </div>
@@ -167,7 +180,6 @@ const systemStore = useSystemStore()
 let statInfo = ref({'today_data':{},system:{},version:{},about:[],site_stat:{},site_group_stat:{}, app:{}})
 const getStatInfoFn = async (id: number = 0) => {
     statInfo.value = await (await getStatInfo()).data
-	console.log(statInfo.value)
     loading.value = false;
     setTimeout(() => {
         drawChart()
@@ -177,7 +189,7 @@ getStatInfoFn()
 
 // 绘制折线图
 const drawChart = () => {
-    //访问消息
+    //新增站点
     const newSiteStatChart = echarts.init(newSiteStat.value);
     const newSiteStatOption = ref({
         
@@ -201,10 +213,12 @@ const drawChart = () => {
     newSiteStatOption.value.series[0].data = statInfo.value.site_stat.value;
     newSiteStatChart.setOption(newSiteStatOption.value);
 
-    // 会员分布 
+    // 站点分布 
     const siteStatChart = echarts.init(siteStat.value);
     const siteStatOption = ref({
-        legend: {},
+        legend: {
+			bottom:"bottom"
+		},
         tooltip: {},
         series: [
             {

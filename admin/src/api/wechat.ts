@@ -23,7 +23,7 @@ export function getWechatStatic() {
  * @returns 
  */
 export function editWechatConfig(params: Record<string, any>) {
-    return request.put('wechat/config', params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put('wechat/config', params, { showSuccessMessage: true })
 }
 
 /**
@@ -40,7 +40,7 @@ export function getWechatMenu() {
  * @returns 
  */
 export function editWechatMenu(params: Record<string, any>) {
-    return request.put('wechat/menu', params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put('wechat/menu', params, { showSuccessMessage: true })
 }
 
 /**
@@ -58,7 +58,7 @@ export function getTemplateList() {
  * @returns 
  */
 export function getBatchAcquisition(params: Record<string, any>) {
-    return request.put('wechat/template/sync', params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put('wechat/template/sync', params, { showSuccessMessage: true })
 }
 
 

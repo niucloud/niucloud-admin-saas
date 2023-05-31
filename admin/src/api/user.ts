@@ -28,7 +28,7 @@ export function getUserInfo(uid: number) {
  * @returns 
  */
 export function addUser(params: Record<string, any>) {
-    return request.post('user/user', params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.post('user/user', params, { showSuccessMessage: true })
 }
 
 /**
@@ -38,6 +38,6 @@ export function addUser(params: Record<string, any>) {
  * @returns 
  */
 export function editUser(params: Record<string, any>) {
-    return request.put(`user/user/${params.uid}`, params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put(`user/user/${params.uid}`, params, { showSuccessMessage: true })
 }
 

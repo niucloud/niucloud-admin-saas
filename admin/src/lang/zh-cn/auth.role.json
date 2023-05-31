@@ -6,5 +6,6 @@
     "roleNamePlaceholder": "请输入角色名称",
     "rulesPlaceholder": "请选择权限",
     "checkStrictly": "父子级不关联",
-    "permission": "权限"
+    "permission": "权限",
+    "foldText":"展开/折叠"
 }

@@ -14,5 +14,6 @@
       "sortNumber":"排序号必须是数字",
       "sortBetween":"排序号不能超过10000",
       "show":"显示",
-      "hide":"不显示"
+      "hide":"不显示",
+	  "articleNumber": "文章数量"
 }

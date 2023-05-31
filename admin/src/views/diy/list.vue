@@ -1,43 +1,41 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-            <div class="flex">
-                <el-button type="primary" @click="dialogVisible = true">
+            <div class="flex justify-between items-center">
+                <span class="text-[24px]">{{pageName}}</span>
+                <el-button type="primary" class="w-[100px]" @click="dialogVisible = true">
                     {{ t('addDiyPage') }}
                 </el-button>
             </div>
 
-            <el-card class="box-card !border-none my-[16px] table-search-wrap" shadow="never">
-                <el-form :inline="true" :model="diyPageTableData.searchParam" ref="searchFormDiyPageRef"
-                    v-if="tabValue == 'diy'">
+            <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
+                <el-form :inline="true" :model="diyPageTableData.searchParam" ref="searchFormDiyPageRef" v-if="tabValue == 'diy'">
                     <el-form-item :label="t('title')" prop="title">
                         <el-input v-model="diyPageTableData.searchParam.title" :placeholder="t('titlePlaceholder')" />
                     </el-form-item>
                     <el-form-item :label="t('typeName')" prop="type">
-                        <el-select v-model="diyPageTableData.searchParam.type" :placeholder="t('pageTypePlaceholder')">
+                        <el-select v-model="diyPageTableData.searchParam.type" :placeholder="t('pageTemplatePlaceholder')">
                             <el-option :label="t('all')" value="" />
-                            <el-option v-for="(item, key) in pageType" :label="item.title" :value="key" />
+                            <el-option v-for="(item, key) in pageTemplate" :label="item.title" :value="key" />
                         </el-select>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="loadDiyPageList()">{{ t('search') }}</el-button>
-                        <el-button @click="searchFormDiyPageRef?.resetFields()">{{ t('reset') }}</el-button>
+                        <el-button @click="resetForm(searchFormDiyPageRef)">{{ t('reset') }}</el-button>
                     </el-form-item>
                 </el-form>
-                <el-form :inline="true" :model="diyRouteTableData.searchParam" ref="searchFormDiyRouteRef"
-                    v-if="tabValue == 'route'">
+                <el-form :inline="true" :model="diyRouteTableData.searchParam" ref="searchFormDiyRouteRef" v-if="tabValue == 'route'">
                     <el-form-item :label="t('title')" prop="title">
                         <el-input v-model="diyRouteTableData.searchParam.title" :placeholder="t('titlePlaceholder')" />
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="loadDiyRouteList()">{{ t('search') }}</el-button>
-                        <el-button @click="searchFormDiyRouteRef?.resetFields()">{{ t('reset') }}</el-button>
+                        <el-button @click="resetForm(searchFormDiyRouteRef)">{{ t('reset') }}</el-button>
                     </el-form-item>
                 </el-form>
             </el-card>
 
-            <div class="mt-[16px]">
-
+            <div>
                 <el-tabs v-model="tabValue" class="demo-tabs" @tab-click="handleClick">
                     <el-tab-pane :label="t('diyPage')" name="diy">
 
@@ -63,22 +61,16 @@
                             <el-table-column :label="t('operation')" fixed="right" align="right" min-width="160">
                                 <template #default="{ row }">
                                     <el-button type="primary" link @click="promoteEvent(row)">{{ t('promote') }}</el-button>
-                                    <el-button v-if="row.type != 'DIY_PAGE' && row.is_default == 0" type="primary" link
-                                        @click="setUse(row)">{{ t('use') }}</el-button>
-                                    <el-button v-if="row.type == 'DIY_PAGE'" type="primary" link @click="openShare(row)">{{
-                                        t('shareSet') }}</el-button>
+                                    <el-button v-if="row.type != 'DIY_PAGE' && row.is_default == 0" type="primary" link @click="setUse(row)">{{ t('use') }}</el-button>
+                                    <el-button v-if="row.type == 'DIY_PAGE'" type="primary" link @click="openShare(row)">{{ t('shareSet') }}</el-button>
                                     <el-button type="primary" link @click="editEvent(row)">{{ t('edit') }}</el-button>
-                                    <el-button v-if="row.type == 'DIY_PAGE' || row.is_default == 0" type="danger" link
-                                        @click="deleteEvent(row.id)">{{ t('delete') }}</el-button>
+                                    <el-button v-if="row.type == 'DIY_PAGE' || row.is_default == 0" type="danger" link @click="deleteEvent(row.id)">{{ t('delete') }}</el-button>
                                 </template>
                             </el-table-column>
 
                         </el-table>
                         <div class="mt-[16px] flex justify-end">
-                            <el-pagination v-model:current-page="diyPageTableData.page"
-                                v-model:page-size="diyPageTableData.limit" layout="total, sizes, prev, pager, next, jumper"
-                                :total="diyPageTableData.total" @size-change="loadDiyPageList()"
-                                @current-change="loadDiyPageList" />
+                            <el-pagination v-model:current-page="diyPageTableData.page" v-model:page-size="diyPageTableData.limit" layout="total, sizes, prev, pager, next, jumper" :total="diyPageTableData.total" @size-change="loadDiyPageList()" @current-change="loadDiyPageList" />
                         </div>
                     </el-tab-pane>
                     <!-- 基础页面路径 -->
@@ -87,12 +79,11 @@
                             <template #empty>
                                 <span>{{ !diyRouteTableData.loading ? t('emptyData') : '' }}</span>
                             </template>
-                            <el-table-column prop="title" :label="t('title')" min-width="120" />
-                            <el-table-column prop="page" :label="t('wapUrl')" min-width="120">
+                            <el-table-column prop="title" :label="t('title')" min-width="70" />
+                            <el-table-column prop="page" :label="t('wapUrl')" min-width="170">
                                 <template #default="{ row }">
                                     <span class="mr-[10px]">{{ wapDomain + row.page }}</span>
-                                    <el-button type="primary" link @click="copyEvent(wapDomain + row.page)">{{ t('copy')
-                                    }}</el-button>
+                                    <el-button type="primary" link @click="copyEvent(wapDomain + row.page)">{{ t('copy') }}</el-button>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="page" :label="t('weappUrl')" min-width="120">
@@ -103,8 +94,7 @@
                             </el-table-column>
                             <el-table-column :label="t('share')" fixed="right" min-width="80">
                                 <template #default="{ row }">
-                                    <el-button v-if="row.is_share == 1" type="primary" link @click="openShare(row)">{{
-                                        t('shareSet') }}</el-button>
+                                    <el-button v-if="row.is_share == 1" type="primary" link @click="openShare(row)">{{ t('shareSet') }}</el-button>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -117,17 +107,22 @@
         </el-card>
 
         <!--添加页面-->
-        <el-dialog v-model="dialogVisible" :title="t('addPageTips')" width="20%">
+        <el-dialog v-model="dialogVisible" :title="t('addPageTips')" width="25%">
 
             <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules">
-                <el-form-item :label="t('typeName')" prop="type">
-                    <el-select v-model="formData.type" :placeholder="t('pageTypePlaceholder')">
-                        <el-option v-for="(item, key) in pageType" :label="item.title" :value="key" />
+                <el-form-item :label="t('title')" prop="title">
+                    <el-input v-model="formData.title" :placeholder="t('titlePlaceholder')" clearable maxlength="12" show-word-limit class="w-full" />
+                </el-form-item>
+                <el-form-item :label="t('typeName')" prop="template">
+                    <el-select v-model="formData.template" :placeholder="t('pageTemplatePlaceholder')" class="w-full">
+                        <el-option v-for="(item, key) in pageTemplate" :label="item.title" :value="key" />
                     </el-select>
                 </el-form-item>
-                <el-form-item :label="t('title')" prop="title">
-                    <el-input v-model="formData.title" :placeholder="t('titlePlaceholder')" clearable maxlength="12"
-                        show-word-limit />
+                <el-form-item :label="t('templateName')" prop="template_name" v-show="pageTemplateData">
+                    <el-radio-group v-model="formData.template_name">
+                        <el-radio label="">{{ t('empty') }}</el-radio>
+                        <el-radio v-for="(item,key) in pageTemplateData" :label="key">{{item.title}}</el-radio>
+                    </el-radio-group>
                 </el-form-item>
             </el-form>
 
@@ -151,12 +146,10 @@
                     <span>{{ sharePage }}</span>
                 </el-form-item>
                 <el-form-item :label="t('shareTitle')" prop="title">
-                    <el-input v-model="shareFormData[tabShareType].title" :placeholder="t('shareTitlePlaceholder')"
-                        clearable maxlength="30" show-word-limit />
+                    <el-input v-model="shareFormData[tabShareType].title" :placeholder="t('shareTitlePlaceholder')" clearable maxlength="30" show-word-limit />
                 </el-form-item>
                 <el-form-item :label="t('shareDesc')" prop="desc" v-if="tabShareType == 'wechat'">
-                    <el-input v-model="shareFormData[tabShareType].desc" :placeholder="t('shareDescPlaceholder')"
-                        type="textarea" rows="4" clearable maxlength="100" show-word-limit />
+                    <el-input v-model="shareFormData[tabShareType].desc" :placeholder="t('shareDescPlaceholder')" type="textarea" rows="4" clearable maxlength="100" show-word-limit />
                 </el-form-item>
                 <el-form-item :label="t('shareImageUrl')" prop="url">
                     <upload-image v-model="shareFormData[tabShareType].url" :limit="1" />
@@ -177,8 +170,7 @@
                 <el-form-item :label="t('shareLink')">
                     <el-input readonly :value="promoteWapDomain">
                         <template #append>
-                            <el-button @click="copyEvent(promoteWapDomain)" class="bg-primary copy">{{ t('copy')
-                            }}</el-button>
+                            <el-button @click="copyEvent(promoteWapDomain)" class="bg-primary copy">{{ t('copy') }}</el-button>
                         </template>
                     </el-input>
                 </el-form-item>
@@ -200,33 +192,47 @@
 <script lang="ts" setup>
 import { reactive, ref, watch, computed } from 'vue'
 import { t } from '@/lang'
-import { getDiyPageList, deleteDiyPage, setUseDiyPage, getDiyPageType, getDiyRouteList, getDiyRouteInfo, editDiyPageShare, editDiyRouteShare } from '@/api/diy'
+import { getDiyPageList, deleteDiyPage, setUseDiyPage, getDiyTemplate, getDiyRouteList, getDiyRouteInfo, editDiyPageShare, editDiyRouteShare } from '@/api/diy'
 import { TabsPaneContext, ElMessage, ElMessageBox, FormInstance } from 'element-plus'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useClipboard } from '@vueuse/core'
 import QRCode from "qrcode";
 import { getUrl } from '@/api/sys'
 
-const pageType: any = reactive({})
+const pageTemplate: any = reactive({})
 
 const router = useRouter()
+const route = useRoute()
+const pageName = route.meta.title;
 
 // 添加自定义页面
 const formData = reactive({
-    type: '',
-    title: ''
+    title: '',
+    template: '',
+    template_name:''
 })
 
 // 表单验证规则
 const formRules = computed(() => {
     return {
-        type: [
-            { required: true, message: t('pageTypePlaceholder'), trigger: 'blur' },
+        template: [
+            { required: true, message: t('pageTemplatePlaceholder'), trigger: 'blur' },
         ],
         title: [
             { required: true, message: t('titlePlaceholder'), trigger: 'blur' },
         ]
     }
+})
+
+const pageTemplateData = computed(()=>{
+    let data:any = '';
+    formData.template_name = '';
+    if(formData.template){
+        data = pageTemplate[formData.template].template;
+        // 默认选中第一个
+        // if(Object.keys(data).length) formData.template_name =Object.keys(data)[0];
+    }
+    return data;
 })
 
 const formRef = ref<FormInstance>()
@@ -237,7 +243,7 @@ const addEvent = async (formEl: FormInstance | undefined) => {
     await formEl.validate(async (valid) => {
         if (valid) {
             dialogVisible.value = false;
-            router.push('/decorate/edit?type=' + formData.type + '&title=' + formData.title);
+            router.push(`/decorate/edit?template=${formData.template}&template_name=${formData.template_name}&title=${formData.title}`);
         }
     })
 }
@@ -247,6 +253,7 @@ let diyRouteTableData = reactive({
     data: [],
     searchParam: {
         "title": "",
+        "type":""
     }
 })
 
@@ -273,10 +280,10 @@ const loadDiyRouteList = () => {
 }
 loadDiyRouteList()
 
-// 获取自定义页面类型
-getDiyPageType({}).then(res => {
+// 获取自定义页面模板
+getDiyTemplate({}).then(res => {
     for (let key in res.data) {
-        pageType[key] = res.data[key]
+        pageTemplate[key] = res.data[key]
     }
 })
 
@@ -288,7 +295,7 @@ let diyPageTableData: any = reactive({
     data: [],
     searchParam: {
         "title": "",
-        "type": '',
+        "template": '',
     }
 })
 
@@ -404,21 +411,7 @@ const shareFormData = reactive({
 })
 const shareDialogVisible = ref(false)
 const shareFormRules = computed(() => {
-    return {
-        // title: [
-        //     { required: true, message: t('shareTitlePlaceholder'), trigger: 'blur' },
-        //     // {
-        //     //     validator: (rule: any, value: string, callback: any) => {
-        //     //         console.log('validator',value,tabShareType)
-        //     //         // let content = value.replace(/<[^<>]+>/g, "").replace(/&nbsp;/gi, "")
-        //     //         // if(!content && value.indexOf('img') === -1){
-        //     //         //     callback(new Error(t('shareTitlePlaceholder')))
-        //     //         // }else callback()
-        //     //     },
-        //     //     trigger: ['blur', 'change']
-        //     // }
-        // ],
-    }
+    return {}
 })
 
 const shareFormRef = ref<FormInstance>()
@@ -496,6 +489,15 @@ const promoteEvent = (data: any) => {
     promoteDialogVisible.value = true;
     console.log('promoteEvent', data)
 }
+
+
+const resetForm = (formEl: FormInstance | undefined)=>{
+    if (!formEl) return
+    formEl.resetFields();
+    loadDiyPageList();
+}
+
+
 </script>
 
 <style lang="scss">

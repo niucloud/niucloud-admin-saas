@@ -1,5 +1,5 @@
 {
-	"dataSummarize": "数据概括",
+	"dataSummarize": "数据概况",
     "todayData": "今日数据",
     "memberNumb": "新增会员数",
     "orderMoney": "订单金额",
@@ -38,8 +38,14 @@
 	"newSite": "新增站点",
 	"appMarketplace": "应用市场",
 	"siteDistribution": "站点分布",
-	"siteSum": "站点数",
-	"memberSum": "用户数",
-	"appSum": "应用数",
-	"installAppSun": "安装应用数"
+	"normalSiteSum": "正常站点（个）",
+	"expireSiteSum": "过期站点（个）",
+	"noInstallAppSun": "未安装应用（个）",
+	"installAppSun": "已安装应用（个）",
+	"officialAccount": "Niucloud官方公众号",
+	"officialAccountDesc": "微信扫码关注",
+	"WeCom": "客服二维码",
+	"WeComDesc": "扫码联系客服",
+	"tel": "服务热线："
+	
 }

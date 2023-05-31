@@ -16,6 +16,7 @@
       "content": "模板内容",
       "weappTempKey" : "模板编号",
       "smsId":"短信模版ID",
-      "smsIdPlaceholder":"短信模版ID"
+      "smsIdPlaceholder":"短信模版ID",
+	  "noticeType":"消息类型"
       
 }

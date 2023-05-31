@@ -1,6 +1,7 @@
 {
     "registerChannel":"注册来源",
     "nickname":"会员名称",
+    "memberNo":"会员编号",
     "mobile":"手机号",
     "createTime":"注册时间",
     "lastVisitTime":"最后访问时间",
@@ -9,9 +10,11 @@
     "nickNamePlaceholder":"请输入会员名称",
     "mobilePlaceholder":"请输入手机号",
     "channelPlaceholder":"请选择注册类型",
+    "memberNoPlaceholder":"请选择会员编号",
     "memberDeleteTips" : "确定要删除该会员吗？",
     "detail": "详情",
     "edit": "编辑",
+    "memberDelete":"删除",
     "adjust":"调整",
     "startDate": "开始时间",
     "endDate": "结束时间",
@@ -37,13 +40,14 @@
     "passwordCopy": "确认密码",
     "passwordPlaceholder": "请输入密码",
     "doubleCipherHint": "输入的两次密码不一致",
+    "memberNoHint":"会员编号只能输入字母和数字",
     "mobileHint": "请输入正确的手机号!",
     "lable": "标签",
     "setLable": "标签",
     "notAvailable": "暂无",
     "memberLabelPlaceholder": "请选择会员标签",
     "memberInfo":"会员信息",
-    "memberInfoPlaceholder":"请输入会员名称/会员昵称/手机号",
+    "memberInfoPlaceholder":"请输入会员编号/昵称/手机号",
 	"lock": "锁定",
-	"scrubLock": "取消锁定"
+	"normal": "正常"
 }

@@ -5,6 +5,9 @@
                 <el-form-item :label="t('headImg')">
                     <upload-image v-model="saveInfo.head_img" :limit="1" />
                 </el-form-item>
+				<el-form-item :label="t('userName')">
+				    <el-input v-model="saveInfo.username" clearable class="input-width" :readonly="true"/>
+				</el-form-item>
                 <el-form-item :label="t('realName')">
                     <el-input v-model="saveInfo.real_name" :placeholder="t('realNamePlaceholder')" clearable class="input-width" />
                 </el-form-item>
@@ -42,7 +45,8 @@ let saveInfo = reactive({
         real_name: '',
         original_password: '',
         password: '',
-        password_copy: ''
+        password_copy: '',
+		username: ''
     });
 
 const formRef = ref<FormInstance>();
@@ -62,6 +66,7 @@ const getUserInfoFn = () => {
         saveInfo.original_password = data.original_password;
         saveInfo.password = data.password;
         saveInfo.password_copy = data.password;
+		saveInfo.username = data.username;
     }).catch(() => {
         loading.value = false;  
     })
@@ -104,7 +109,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .personal-body{
+:deep(.personal-body){
     background-color: #fff;
     .el-form-item__content{
         .el-input{

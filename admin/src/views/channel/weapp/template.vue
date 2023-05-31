@@ -1,15 +1,23 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-            <el-alert class="warm-prompt" type="info">
+            <div class="flex justify-between items-center">
+                <span class="text-[24px]">{{pageName}}</span>
+                <el-button type="primary" class="w-[100px]" @click="batchAcquisitionFn">{{ t('batchAcquisition') }}</el-button>
+            </div>
+            <el-alert class="warm-prompt !my-[20px]" type="info">
                 <template #default>
-                    <p class="text-base">{{ t('operationTip') }} 1、{{ t('operationTipOne') }}</p>
-                    <p class="text-base">2、{{ t('operationTipTwo') }}</p>
+                     <div class="flex">
+                        <el-icon class="mr-2 mt-[2px]" size="18"><Warning /></el-icon>
+                        <div>
+                            <p class="text-base">{{ t('operationTip') }} 1、{{ t('operationTipOne') }}</p>
+                            <p class="text-base">2、{{ t('operationTipTwo') }}</p>
+                        </div>
+                    </div>
                 </template>
             </el-alert>
 
-            <div class="mt-[16px]">
-                <el-button class="mb-[15px]" @click="batchAcquisitionFn">{{ t('batchAcquisition') }}</el-button>
+            <div>
                 <el-table :data="cronTableData.data" size="large" v-loading="cronTableData.loading">
 
                     <template #empty>
@@ -20,7 +28,7 @@
 
                     <el-table-column :label="t('response')" min-width="180">
                         <template #default="{ row }">
-                            <div v-for="(item, index) in row.weapp_json.content" :key="'a' + index" class="text-left">{{
+                            <div v-for="(item, index) in row.weapp.content" :key="'a' + index" class="text-left">{{
                                 item.join(":") }}</div>
                         </template>
                     </el-table-column>
@@ -33,7 +41,7 @@
 
                     <el-table-column prop="weapp_template_id" :label="t('serialNumber')" min-width="180" />
 
-                    <el-table-column :label="t('operation')" fixed="right" width="140">
+                    <el-table-column :label="t('operation')" fixed="right" width="200">
                         <template #default="{ row }">
                             <el-button type="primary" link @click="infoSwitch(row)">{{ row.is_weapp == 1 ? t('close') :
                                 t('open') }}</el-button>
@@ -51,8 +59,12 @@
 import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getTemplateList, getBatchAcquisition } from '@/api/weapp'
-import { editMessageStatus } from '@/api/notice'
+import { editNoticeStatus } from '@/api/notice'
 import { ElLoading } from 'element-plus'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+const pageName = route.meta.title;
 
 const cronTableData = reactive({
     loading: true,
@@ -105,7 +117,7 @@ const infoSwitch = (res) => {
     data.value.key = res.key
     data.value.type = 'weapp'
     cronTableData.loading = true
-    editMessageStatus(data.value).then(res => {
+    editNoticeStatus(data.value).then(res => {
         loadCronList()
     }).catch(() => {
         cronTableData.loading = false
@@ -115,15 +127,13 @@ const infoSwitch = (res) => {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .warm-prompt {
-    background-color: var(--el-color-primary-light-9);
-}
-
-::v-deep .warm-prompt .el-icon {
-    color: var(--el-color-primary);
-}
-
-::v-deep .warm-prompt p {
-    color: var(--el-color-primary);
+:deep(.warm-prompt) {
+    background-color: var(--el-color-primary-light-9) !important;
+    .el-icon, p {
+        color: var(--el-color-primary-light-3);
+    }
+    .el-alert__content{
+        padding: 0;
+    }
 }
 </style>

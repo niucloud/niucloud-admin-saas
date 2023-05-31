@@ -14,6 +14,8 @@
     "userRoleName": "角色",
     "isAdmin":"超级管理员",
     "siteName":"站点名称",
+	"siteId": "站点ID",
+	"enterSite": "访问站点",
     "userRolePlaceholder": "请选择角色",
     "siteNamePlaceholder":"请输入站点名称"
 }

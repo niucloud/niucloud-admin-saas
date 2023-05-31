@@ -35,7 +35,7 @@ export function getNoticeLog(params: any) {
  * @returns 
  */
 export function editNoticeStatus(params: Record<string, any>) {
-    return request.post(`notice/notice/editstatus`, params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.post(`notice/notice/editstatus`, params, { showSuccessMessage: true })
 }
 
 /**
@@ -44,7 +44,7 @@ export function editNoticeStatus(params: Record<string, any>) {
  * @returns 
  */
 export function editNotice(params: Record<string, any>) {
-    return request.post(`notice/notice/edit`, params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.post(`notice/notice/edit`, params, { showSuccessMessage: true })
 }
 
 /**
@@ -71,7 +71,7 @@ export function getSmsInfo(sms_type: string) {
  * @returns 
  */
 export function editSms(params: Record<string, any>) {
-    return request.put(`notice/notice/sms/${params.sms_type}`, params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put(`notice/notice/sms/${params.sms_type}`, params, { showSuccessMessage: true })
 }
 
 /**
@@ -81,5 +81,5 @@ export function editSms(params: Record<string, any>) {
  * @returns 
  */
 export function getSmsLog(params: Record<string, any>) {
-    return request.put(`notice/sms/log`, params)
+    return request.get(`notice/sms/log`, params)
 }

@@ -5,22 +5,22 @@
  
             <el-form-item :label="t('headimg')" >
                 <div class="flex items-center">
-                    
-
-                    <img class="w-[50px] h-[50px] mr-[10px]" v-if="formData.headimg" :src="img(formData.headimg)" alt="" >
+                    <img class="w-[50px] h-[50px] mr-[10px]" v-if="formData.member.headimg" :src="img(formData.member.headimg)" alt="" >
                     <img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/assets/images/default_headimg.png" alt="" >
-
                 </div>
             </el-form-item>
 
-
+			<el-form-item :label="t('memberId')" >
+			    <div class="input-width"> {{ formData.member.member_no }} </div>
+			</el-form-item>
+			
             <el-form-item :label="t('nickName')" >
-                <div class="input-width"> {{ formData.nickname }} </div>
+                <div class="input-width"> {{ formData.member.nickname }} </div>
             </el-form-item>
 
 
             <el-form-item :label="t('mobile')" >
-                <div class="input-width"> {{ formData.mobile }} </div>
+                <div class="input-width"> {{ formData.member.mobile }} </div>
             </el-form-item>
 
             <el-form-item :label="t('accountData')" >
@@ -67,14 +67,16 @@ const initialFormData = {
     create_time:'',
     from_type:'',
     from_type_name:"",
-    headimg:'',
     member_id:'',
     memo:'',
-    mobile:'',
-    nickname:'',
     related_id:'',
-    username:''
-
+	member: {
+		headimg:'',
+		mobile:'',
+		member_no: '',
+		username:'',
+		nickname:'',
+	}
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 

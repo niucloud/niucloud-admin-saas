@@ -48,7 +48,7 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import { t } from '@/lang' 
-import { getWithdrawConfig, setWithdrawConfig, getTransfertype } from '@/api/member'
+import { getCashOutConfig, setCashOutConfig, getTransfertype } from '@/api/member'
 import { ElMessage, FormRules, FormInstance } from 'element-plus'
 
 const loading = ref(true),
@@ -72,7 +72,7 @@ getTransfertypeFn()
 
 // 获取会员的配置信息
 const setFormData = async (id: number = 0) => {
-    const data = await (await getWithdrawConfig()).data
+    const data = await (await getCashOutConfig()).data
     Object.keys(formData).forEach((key: string) => {
         if (data[key] != undefined) formData[key] = data[key];
     })
@@ -117,7 +117,7 @@ const onSave = async (formEl: FormInstance | undefined) => {
             let save = {...formData};
             save.is_open = Number(save.is_open).toString();
 
-            setWithdrawConfig(save).then(() => {
+            setCashOutConfig(save).then(() => {
                 loading.value = false
             }).catch(() => {
                 loading.value = false

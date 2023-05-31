@@ -1,21 +1,22 @@
 <template>
-    <div class="main-container" v-loading="payLoading">
+    <el-card class="box-card !border-none" shadow="never"  v-loading="payLoading">
 		<!-- 设置支付配置 -->
-		<div class="flex justify-between" v-if="!payLoading">
+		<div class="flex justify-between items-center" v-if="!payLoading">
+			<span class="text-[24px]">{{pageName}}</span>
 			<el-button type="primary" @click="isEdit = true" ref="setConfigBtn">
 				{{ t('setConfig') }}
 			</el-button>
 		</div>
-        <el-card class="box-card !border-none mt-3" shadow="never" v-for="(payItems, payKey) in payConfigData" :key="payKey">
+        <el-card class="box-card box-pay-card !border-none mt-[20px]" shadow="never" v-for="(payItems, payKey) in payConfigData" :key="payKey">
 			<div class="flex mb-3">
 				<span class="text-base">{{payItems.name }}</span>
 			</div>
 			<div class="pay-table">
-				<div class="flex items-center pay-table-head bg-[#f5f7fa] table-item-pd table-item-border justify-between">
-					<span class="text-base font-bold text-[#999] w-[150px]">{{t('payType')}}</span>
+				<div class="flex items-center pay-table-head bg-[#fbfbfb] table-item-pd table-item-border justify-between">
+					<span class="text-base text-[#999] w-[150px]">{{t('payType')}}</span>
 					<!-- <span class="text-base font-bold text-[#999] w-[110px]">{{t('settingDefaultPay')}}</span> -->
-					<span class="text-base font-bold text-[#999] w-[110px] text-center">{{t('onState')}}</span>
-					<span class="text-base font-bold text-[#999] w-[80px] text-center" v-if="isEdit">{{t('templateName')}}</span>
+					<span class="text-base text-[#999] w-[110px] text-center">{{t('onState')}}</span>
+					<span class="text-base text-[#999] w-[80px] text-center" v-if="isEdit">{{t('templateName')}}</span>
 				</div>
 				<div ref="fieldBoxRefs" :data-key="payKey">
 					<div v-for="(childrenItem,childrenIndex) in payItems.pay_type" :key="childrenItem.redio_key" class="flex table-item-border table-item-pd justify-between" :id="payKey+'_'+childrenIndex">
@@ -31,7 +32,10 @@
 						</div> -->
 						<div class="table-item-flex w-[110px] justify-center select-none">
 							<el-switch v-if="isEdit" v-model="childrenItem.status" :active-text="t('isEnable')" @change="enablePaymentMode(childrenItem)"/>
-							<span class="text-base text-[#666]" v-else>{{childrenItem.status ? t('open') : t('notOpen')}}</span>
+							<div v-else>
+								<el-tag v-if="childrenItem.status" class="ml-2" type="success">{{t('open')}}</el-tag>
+  								<el-tag v-else class="ml-2" type="info">{{t('notOpen')}}</el-tag>
+							</div>
 						</div>
 						<div class="table-item-flex w-[80px]  justify-center select-none" v-if="isEdit">
 							<button @click="configPayFn(childrenItem)" class="text-base" v-if="childrenItem.key !='balancepay'">{{t('clickConfigure')}}</button>
@@ -49,7 +53,7 @@
         </div>
 		<wechatpay ref="wechatpayDialog" @complete="setConfigInfo" />
 		<alipay ref="alipayDialog" @complete="setConfigInfo" />
-    </div>
+    </el-card>
 </template>
 
 <script lang="ts" setup>
@@ -65,6 +69,9 @@ import Sortable, { SortableEvent } from 'sortablejs'
 import { cloneDeep, range, isEmpty } from 'lodash-es'
 import { set } from '@vueuse/core'
 import { CollectionTag } from '@element-plus/icons-vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title;
 
 const wechatpayDialog: Record<string, any> | null = ref(null)        
 const alipayDialog: Record<string, any> | null = ref(null)
@@ -208,5 +215,9 @@ const cancelFn = ()=>{
 .table-item-flex{
 	display: flex;
     align-items: center;
+}
+
+:deep(.box-pay-card) .el-card__body{
+	padding: 0;
 }
 </style>

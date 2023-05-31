@@ -10,7 +10,7 @@ import storage from '@/utils/storage'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
-    routes: [...STATIC_ROUTES, ADMIN_ROUTE, SITE_ROUTE]
+    routes: [ADMIN_ROUTE, SITE_ROUTE, ...STATIC_ROUTES]
 })
 
 /**
@@ -33,14 +33,23 @@ router.beforeEach(async (to, from, next) => {
 
     const userStore = useUserStore()
     const siteInfo = storage.get('siteInfo') || false
-    let title = (to.meta?.title || '') + (siteInfo.site_name ? ('-' + siteInfo.site_name) : '')
+    let title = (to.meta.title ? (to.meta.title + ' - ') : '') + (siteInfo.site_name ? siteInfo.site_name : '')
 
     // 设置网站标题
     setWindowTitle(title)
+
     // 加载语言包
     await language.loadLocaleMessages(to.path, useSystemStore().lang);
 
-    const loginPath = to.path == '/' ? '/admin/login' : `${to.matched[0].path}/login`
+    let matched: any = to.matched;
+
+    if (matched && matched.length && matched[0].path != '/:pathMatch(.*)*') {
+        matched = matched[0].path;
+    } else {
+        matched = 'site';
+    }
+
+    const loginPath = to.path == '/' ? '/admin/login' : `${matched}/login`
 
     // 判断是否需登录
     if (NO_LOGIN_ROUTES.includes(to.path)) {

@@ -96,14 +96,14 @@ const confirm = async (formEl: FormInstance | undefined) => {
             loading.value = true
 
             const data = formData
-
+			data.status = data.is_wechat;
             editNotice(data).then(res => {
                 loading.value = false
                 showDialog.value = false
                 emit('complete')
             }).catch(() => {
                 loading.value = false
-                showDialog.value = false
+                // showDialog.value = false
             })
         }
     })

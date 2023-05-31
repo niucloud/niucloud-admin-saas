@@ -16,5 +16,6 @@
     "checkStrictly": "父子级不关联",
     "remark": "套餐说明",
     "reset": "重置",
-    "search": "搜索"
+    "search": "搜索",
+    "foldText":"展开/折叠"
 }

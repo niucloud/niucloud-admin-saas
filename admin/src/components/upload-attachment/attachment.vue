@@ -2,7 +2,8 @@
     <div class="flex border-t border-b main-wrap border-color w-full" :class="scene == 'select' ? 'h-[40vh]' : 'h-full'">
         <!-- 分组 -->
         <div class="group-wrap w-[180px] p-[15px] h-full border-r border-color flex flex-col">
-            <el-input v-model="categoryParam.name" class="m-0" :placeholder="t('upload.attachmentCategoryPlaceholder')"
+        
+            <el-input v-model="categoryParam.name" class="m-0" :placeholder="t('upload.attachmentCategoryPlaceholder')" clearable 
                 prefix-icon="Search" @input="getAttachmentCategoryList()" />
             <div class="group-list flex-1 my-[10px]">
                 <el-scrollbar>
@@ -40,23 +41,26 @@
                 <el-col :span="12">
                     <div class="flex">
                         <el-upload v-bind="upload" ref="uploadRef">
-                            <el-button type="primary">{{ t('upload.upload' + type) }}</el-button>
+                            <el-button type="primary">{{ t('upload.upload' + type) }} {{ isOpen }}</el-button>
                         </el-upload>
-                        <el-button v-if="operate === false" class="ml-[10px]" type="primary" @click="operate = true">{{
-                            t('edit') }}</el-button>
-                        <el-button v-else class="ml-[10px]" type="primary" @click="operate = false">{{ t('complete')
-                        }}</el-button>
+						<div v-if="scene == 'attachment'">
+							<el-button v-if="operate === false" class="ml-[10px]" type="primary" @click="operate = true">{{
+							    t('edit') }}</el-button>
+							<el-button v-else class="ml-[10px]" type="primary" @click="operate = false">{{ t('complete')
+							}}</el-button>
+						</div>
+                        
                     </div>
                 </el-col>
                 <el-col :span="12" class="text-right">
-                    <el-input v-model="attachmentParam.real_name" class="m-0 w-[200px]"
+                    <el-input v-model="attachmentParam.real_name" class="m-0 w-[200px]" clearable 
                         :placeholder="t('upload.placeholder' + type + 'Name')" prefix-icon="Search"
                         @input="getAttachmentList()" />
                 </el-col>
             </el-row>
             <div class="flex-1 my-[15px] h-0" v-loading="attachment.loading">
                 <el-scrollbar>
-                    <div class="flex flex-wrap" v-if="attachment.data.length && operate === true">
+                    <div class="flex flex-wrap" v-if="attachment.data.length && (operate === true || scene != 'attachment')">
                         <div class="attachment-item mr-[10px]" :class="scene == 'select' ? 'w-[100px]' : 'w-[120px]'"
                             v-for="(item, index) in attachment.data" :key="index">
                             <div class="attachment-wrap w-full rounded cursor-pointer overflow-hidden relative flex items-center justify-center"
@@ -348,7 +352,7 @@ const upload = computed(() => {
         },
         headers,
         onSuccess: (response: any, uploadFile: UploadFile, uploadFiles: UploadFiles) => {
-            if (response.code == 200) {
+            if (response.code >= 1) {
                 getAttachmentList()
                 uploadRef.value?.handleRemove(uploadFile)
             } else {

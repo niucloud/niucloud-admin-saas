@@ -4,40 +4,91 @@ import {toRaw, watch} from 'vue'
 import {ElMessage, ElMessageBox} from 'element-plus'
 import {cloneDeep, range, isEmpty} from 'lodash-es'
 
-interface Diy {
-    // 全局属性
-    id: number
-    load: boolean,
-    currentIndex: number,
-    currentComponent: string, // 当前正在编辑的组件
-    name: string, // 页面标识
-    type: string, // 页面类型
-    typeName: string,  // 页面类型名称
-    components: any[], // 组件集合
-    global: {
-        title: string,
-        pageBgColor: string, // 页面背景颜色
-        tabbarSwitch: boolean, // 底部导航开关
-    },
-    // 组件集合
-    value: any[]
-}
-
 const useDiyStore = defineStore('diy', {
-    state: (): Diy => {
+    state: () => {
         return {
             id: 0,
             load: false, // 加载状态
-            currentIndex: -99,
-            currentComponent: 'edit-page',
-            name: '',
-            type: '',
-            typeName: '',
-            components: [],
+            currentIndex: -99, // 当前正在编辑的组件下标
+            currentComponent: 'edit-page', // 当前正在编辑的组件名称
+            editTab: 'content',// 编辑页面
+            name: '', // 页面标识
+            type: '', // 页面模板
+            typeName: '',  // 页面模板名称
+            isDefault: 0, // 是否默认页面
+            predefineColors: [
+                '#F4391c',
+                '#ff4500',
+                '#ff8c00',
+                '#FFD009',
+                '#ffd700',
+                '#19C650',
+                '#90ee90',
+                '#00ced1',
+                '#1e90ff',
+                '#c71585',
+                '#FF407E',
+                '#CFAF70',
+                '#A253FF',
+                'rgba(255, 69, 0, 0.68)',
+                'rgb(255, 120, 0)',
+                'hsl(181, 100%, 37%)',
+                'hsla(209, 100%, 56%, 0.73)',
+                '#c7158577'
+            ],
+            components: [], // 组件集合
             global: {
-                title: "页面",
+                title: "页面", // 页面标题
+
                 pageBgColor: "", // 页面背景颜色
-                tabbarSwitch: true
+                bgUrl: '', // 页面背景图片
+                imgWidth: '',  // 页面背景图片宽度
+                imgHeight: '', // 页面背景图片高度
+
+                // 顶部状态栏
+                topStatusBar: {
+                    bgColor: "#ffffff", // 背景颜色
+                    isTransparent: false, // 是否透明
+                    isShow: true, // 是否显示
+                    style: 'style-1', // 风格样式
+                    textColor: "#333333", // 文字颜色
+                    textAlign: 'center', // 文字对齐方式
+                },
+
+                bottomTabBarSwitch: true, // 底部导航开关
+
+                // 弹框 count：不弹出 -1，首次弹出 1，每次弹出 0
+                popWindow: {
+                    imgUrl: "",
+                    imgWidth: '',
+                    imgHeight: '',
+                    count: -1,
+                    show: 0,
+                    link: {
+                        name: ""
+                    },
+                },
+
+                // 公共模板属性，所有组件都继承，无需重复定义，组件内部根据业务自行调用
+                template: {
+                    textColor: "#303133", // 文字颜色
+                    pageBgColor: '', // 底部背景颜色
+
+                    componentBgColor: '', // 组件背景颜色
+                    topRounded: 0, // 组件上圆角
+                    bottomRounded: 0, // 组件下圆角
+
+                    elementBgColor: '', // 元素背景颜色
+                    topElementRounded: 0, // 元素上圆角
+                    bottomElementRounded: 0, // 元素下圆角
+
+                    margin: {
+                        top: 0, // 上边距
+                        bottom: 0, // 下边距
+                        both: 0, // 左右边距
+                    }
+                }
+
             },
             // 组件集合
             value: []
@@ -45,10 +96,71 @@ const useDiyStore = defineStore('diy', {
     },
     getters: {
         editComponent: (state) => {
-            return state.value[state.currentIndex];
+            if (state.currentIndex == -99) {
+                return state.global;
+            } else {
+                return state.value[state.currentIndex];
+            }
         },
     },
     actions: {
+        // 初始化数据
+        init() {
+            this.global = {
+                title: "页面", // 页面标题
+
+                pageBgColor: "", // 页面背景颜色
+                bgUrl: '', // 页面背景图片
+                imgWidth: '',  // 页面背景图片宽度
+                imgHeight: '', // 页面背景图片高度
+
+                // 顶部状态栏
+                topStatusBar: {
+                    bgColor: "#ffffff", // 背景颜色
+                    isTransparent: false, // 是否透明
+                    isShow: true, // 是否显示
+                    style: 'style-1', // 风格样式
+                    textColor: "#333333", // 文字颜色
+                    textAlign: 'center', // 文字对齐方式
+                },
+
+                bottomTabBarSwitch: true, // 底部导航开关
+
+                // 弹框 count：不弹出 -1，首次弹出 1，每次弹出 0
+                popWindow: {
+                    imgUrl: "",
+                    imgWidth: '',
+                    imgHeight: '',
+                    count: -1,
+                    show: 0,
+                    link: {
+                        name: ""
+                    },
+                },
+
+                // 公共模板属性，所有组件都继承，无需重复定义，组件内部根据业务自行调用
+                template: {
+                    textColor: "#303133", // 文字颜色
+                    pageBgColor: '', // 底部背景颜色
+
+                    componentBgColor: '', // 组件背景颜色
+                    topRounded: 0, // 组件上圆角
+                    bottomRounded: 0, // 组件下圆角
+
+                    elementBgColor: '', // 元素背景颜色
+                    topElementRounded: 0, // 元素上圆角
+                    bottomElementRounded: 0, // 元素下圆角
+
+                    margin: {
+                        top: 0, // 上边距
+                        bottom: 0, // 下边距
+                        both: 0, // 左右边距
+                    }
+                }
+
+            };
+            this.value = [];
+        },
         // 添加组件
         addComponent(key: string, data: any) {
             // 加载完才能添加组件
@@ -60,14 +172,17 @@ const useDiyStore = defineStore('diy', {
             component.id = this.generateRandom();
             component.componentName = key;
             component.componentTitle = component.title;
-            component.maxCount = component.max_count;
+            component.ignore = []; // 忽略公共属性
 
             Object.assign(component, component.value);
             delete component.title;
             delete component.value;
             delete component.type;
             delete component.icon;
-            delete component.max_count;
+
+            // 继承全局属性
+            let template = cloneDeep(this.global.template);
+            Object.assign(component, template);
 
             if (!this.checkComponentIsAdd(component)) return;
 
@@ -180,7 +295,7 @@ const useDiyStore = defineStore('diy', {
             if (!this.checkComponentIsAdd(component)) {
                 ElMessage({
                     type: 'warning',
-                    message: `${t('notCopy')}，${component.componentTitle}${t('componentCanOnlyAdd')}${component.maxCount}${t('piece')}`,
+                    message: `${t('notCopy')}，${component.componentTitle}${t('componentCanOnlyAdd')}${component.uses}${t('piece')}`,
                 });
                 return;
             }
@@ -194,15 +309,15 @@ const useDiyStore = defineStore('diy', {
         // 检测组件是否允许添加，true：允许 false：不允许
         checkComponentIsAdd(component: any) {
 
-            //maxCount为0时不处理
-            if (component.maxCount === 0) return true;
+            //为0时不处理
+            if (component.uses === 0) return true;
 
             var count = 0;
 
             //遍历已添加的自定义组件，检测是否超出数量
             for (var i in this.value) if (this.value[i].componentName === component.componentName) count++;
 
-            if (count >= component.maxCount) return false;
+            if (count >= component.uses) return false;
             else return true;
         },
         // 重置当前组件数据

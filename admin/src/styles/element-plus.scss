@@ -5,16 +5,27 @@
     --el-header-height: 64px !important;
 }
 
+.el-table {
+    --el-table-header-bg-color: #F5F7F9!important;
+    --el-table-header-text-color:#333!important;
+}
+
+.dark {
+    .el-table {
+        --el-table-header-text-color: var(--el-text-color-secondary)!important;
+    }
+}
+
+.el-table thead, .el-table thead th {
+    font-weight: normal !important;
+}
+
 .el-button {
     background-color: var(--el-button-bg-color, var(--el-color-white));
 }
 
 .el-dialog {
     max-width: calc(100vw - 50px);
-}
-
-.el-table {
-    --el-table-header-bg-color: #f5f7fa!important
 }
 
 .el-date-editor--daterange, .el-date-editor--timerange, .el-date-editor.el-input, .el-date-editor .el-input__wrapper {

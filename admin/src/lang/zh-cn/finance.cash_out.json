@@ -4,6 +4,10 @@
       "orderNoPlaceholder":"请输入订单编号",
       "createTime":"创建时间",
       "rechargeMoney":"充值金额",
+      "totalTransfered":"累计提现（元）",
+      "totalCashOuting":"提现中（元）",
+      "transfered":"累计提现",
+      "cashOuting":"提现中",
       "orderMoney":"订单金额",
       "member":"买家",
       "orderFromName":"订单来源",
@@ -34,6 +38,11 @@
       "nickname":"会员名称",
       "headimg":"会员头像",
       "cashOutDetail":"提现详情",
-      "cashOutMoney": "转账金额"
+      "cashOutMoney": "转账金额",
+	"auditTime": "审核时间",
+	"transferTime": "转账时间",
+	"memberInfoPlaceholder":"请输入会员名称/会员昵称/手机号",
+	"cashOutNumber": "提现单号",
+	"cashOutNumberPlaceholder": "请输入提现单号"
       
 }

@@ -1,13 +1,14 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-            <div class="flex">
-                <el-button type="primary" @click="addEvent">
+            <div class="flex justify-between items-center">
+                <span class="text-[24px]">{{pageName}}</span>
+                <el-button type="primary" class="w-[100px]" @click="addEvent">
                     {{ t('addCode') }}
                 </el-button>
             </div>
 
-            <el-card class="box-card !border-none my-[16px] table-search-wrap" shadow="never">
+            <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="codeTableData.searchParam" ref="searchFormRef">
                     <el-form-item :label="t('tableName')" prop="table_name">
                         <el-input v-model="codeTableData.searchParam.table_name" :placeholder="t('tableNamePlaceholder')" />
@@ -17,12 +18,12 @@
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="loadGenerateTableList()">{{ t('search') }}</el-button>
-                        <el-button @click="searchFormRef?.resetFields()">{{ t('reset') }}</el-button>
+                        <el-button @click="resetForm(searchFormRef)">{{ t('reset') }}</el-button>
                     </el-form-item>
                 </el-form>
             </el-card>
  
-            <div class="mt-[16px]">
+            <div>
                 <el-table :data="codeTableData.data" size="large" v-loading="codeTableData.loading">
 
                     <template #empty>
@@ -73,7 +74,9 @@ import { img } from '@/utils/common'
 import { ElMessageBox } from 'element-plus'
 import AddTable from '@/views/tools/code/components/add-table.vue'
 import type { FormInstance } from 'element-plus'
-import { useRouter } from 'vue-router'
+import { useRouter,useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title;
 
 const router = useRouter()
 
@@ -91,6 +94,12 @@ let codeTableData = reactive({
 
 const searchFormRef = ref<FormInstance>()
 
+const resetForm = (formEl: FormInstance | undefined)=>{
+    if (!formEl) return
+    
+    formEl.resetFields();
+    loadGenerateTableList();
+}
 /**
  * 获取代码生成列表
  */

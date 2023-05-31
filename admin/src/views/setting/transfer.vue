@@ -2,7 +2,10 @@
     <div class="main-container">
         <el-alert class="warm-prompt" type="info">
             <template #default>
-                <p class="text-base">{{t('operationTip')}}</p>
+                <div class="flex items-center">
+                    <el-icon class="mr-2" size="18"><Warning /></el-icon>
+                    <p class="text-base">{{t('operationTip')}}</p>
+                </div>
             </template>
         </el-alert>
         <el-form :model="formData" label-width="200px" ref="formRef" :rules="formRules" class="page-form mt-2" v-loading="loading">
@@ -179,13 +182,16 @@ const save = async (formEl: FormInstance | undefined) => {
 </script>
 
 <style lang="scss" scoped>
-::v-deep .warm-prompt{
-        background-color: var(--el-color-primary-light-9);
+:deep(.warm-prompt) {
+    background-color: var(--el-color-primary-light-9) !important;
+    .el-icon, p {
+        color: var(--el-color-primary-light-3);
     }
-    ::v-deep .warm-prompt .el-icon{
-        color: var(--el-color-primary);
+    .el-alert__content{
+        padding: 0;
+        .el-alert__description{
+            margin: 0;
+        }
     }
-    ::v-deep .warm-prompt p{
-        color: var(--el-color-primary);
-    }
+}
 </style>

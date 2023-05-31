@@ -1,5 +1,6 @@
 {
     "labelName":"标签名称",
+    "memberNumber":"会员数量",
     "memo":"备注",
     "sort":"排序",
     "siteIdPlaceholder":"请输入站点id",

@@ -13,6 +13,6 @@ declare module '@wangeditor/editor' {
     }
 }
 
-interface AnyObject {
+declare interface AnyObject {
     [key: string]: any;
 }

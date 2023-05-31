@@ -248,7 +248,7 @@
                             "captcha_key":backToken.value
                         }
                         reqCheck(data).then(res=>{
-                            if (res.code == "200") {
+                            if (res.code == 1) {
                                 moveBlockBackgroundColor.value = '#5cb85c'
                                 leftBarBorderColor.value = '#5cb85c'
                                 iconColor.value = '#fff'
@@ -319,7 +319,7 @@
                         captchaType:captchaType.value
                     }
                     reqGet(data).then(res=>{
-                        if (res.code == "200") {
+                        if (res.code == 1) {
                             backImgBase.value = res.data.originalImageBase64
                             blockBackImgBase.value = res.data.jigsawImageBase64
                             backToken.value = res.data.token

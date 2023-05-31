@@ -1,9 +1,11 @@
 {
   "title": "页面名称",
-  "typeName": "页面类型",
+  "typeName": "页面模板",
   "addPageTips": "创建新页面",
-  "pageTypePlaceholder": "请选择页面类型",
+  "pageTemplatePlaceholder": "请选择页面模板",
   "nameMax": "名称不能超过12个字符",
+  "templateName": "模板名称",
+  "empty": "空白",
   "status": "状态",
   "updateTime": "更新时间",
   "use": "使用",

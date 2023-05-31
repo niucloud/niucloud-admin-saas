@@ -14,8 +14,7 @@
             <el-scrollbar>
                 <el-menu :default-active="menuActive" :router="true" class="aside-menu h-full" unique-opened="true"
                     :collapse="systemStore.menuIsCollapse">
-                    <menu-item v-for="(route, index) in userStore.routers" :routes="route" :route-path="route.path"
-                        :key="index" />
+                    <menu-item v-for="(route, index) in userStore.routers" :routes="route" :route-path="route.path" :key="index" />
                 </el-menu>
             </el-scrollbar>
         </el-main>
@@ -38,9 +37,23 @@ const route = useRoute()
 const siteInfo = storage.get('siteInfo') || false
 
 const menuActive = computed(() => String(route.name))
+
+userStore.routers.forEach((item,index) => {
+    item.meta.class = 1;
+    if(item.children){
+        item.children.forEach((subItem,subIndex) => {
+            subItem.meta.class = 2;
+            if(subItem.children){
+                subItem.children.forEach((threeItem,threeIndex) => {
+                    threeItem.meta.class = 3;
+                })
+            }
+        })
+    }
+});
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .aside-menu:not(.el-menu--collapse) {
     width: var(--aside-width);
 }
@@ -66,15 +79,15 @@ const menuActive = computed(() => String(route.name))
 }
 
 .menu-wrap {
-    flex: 1;
-    height: 0;
-    padding: 0;
+    flex: 1 !important;
+    height: 0 !important;
+    padding: 0 !important;
 
-    :deep(.el-menu) {
+    .el-menu {
         border-right: 0 !important;
     }
 }
-::v-deep.sidebar-dark-mode{
+.sidebar-dark-mode{
     background-color: #191a23;
     & > .logo-wrap{
         .logo>i{
@@ -84,23 +97,29 @@ const menuActive = computed(() => String(route.name))
     }
     .el-menu{
         background-color: #191a23;
-        ul.el-menu--inline{
-            background-color: #101117;
+        .el-sub-menu{
+            background: transparent !important;
         }
         .el-sub-menu__title, .el-menu-item{
+            background: transparent !important;
             color: #B7B7ba;
             &:hover{
-                background-color: transparent;
-                color: #fff;
+                background-color: transparent !important;
+                color: #fff !important;
             }
         }
         .el-menu-item.is-active{
-            color: #fff;
-            background-color: var(--el-color-primary);
+            color: #fff !important;
+            background-color: var(--el-color-primary) !important;
+        }
+        li::after{
+            content: "";
+            width: 0;
+            height: 0;
         }
     }
 }
-::v-deep.sidebar-brightness-mode{
+.sidebar-brightness-mode{
     & > .logo-wrap{
         .logo>i{
             font-size: 20px;

@@ -26,7 +26,7 @@ export function getDiyPageInfo(id: number) {
  * @returns
  */
 export function addDiyPage(params: Record<string, any>) {
-    return request.post('diy/diy', params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.post('diy/diy', params, { showSuccessMessage: true })
 }
 
 /**
@@ -34,7 +34,7 @@ export function addDiyPage(params: Record<string, any>) {
  * @param params
  */
 export function editDiyPage(params: Record<string, any>) {
-    return request.put(`diy/diy/${params.id}`, params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put(`diy/diy/${params.id}`, params, { showSuccessMessage: true })
 }
 
 /**
@@ -42,7 +42,7 @@ export function editDiyPage(params: Record<string, any>) {
  * @param params
  */
 export function setUseDiyPage(params: Record<string, any>) {
-    return request.put(`diy/use`, params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put(`diy/use`, params, { showSuccessMessage: true })
 }
 
 /**
@@ -50,7 +50,7 @@ export function setUseDiyPage(params: Record<string, any>) {
  * @param params
  */
 export function editDiyPageShare(params: Record<string, any>) {
-    return request.put(`diy/diy/share`, params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put(`diy/diy/share`, params, { showSuccessMessage: true })
 }
 
 /**
@@ -59,7 +59,7 @@ export function editDiyPageShare(params: Record<string, any>) {
  * @returns
  */
 export function deleteDiyPage(id: number) {
-    return request.delete(`diy/diy/${id}`, { showErrorMessage: true, showSuccessMessage: true })
+    return request.delete(`diy/diy/${id}`, { showSuccessMessage: true })
 }
 
 /**
@@ -89,14 +89,14 @@ export function getDiyBottom(params: Record<string, any>) {
  * @returns
  */
 export function setDiyBottom(params: Record<string, any>) {
-    return request.post('diy/bottom', params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.post('diy/bottom', params, { showSuccessMessage: true })
 }
 
 /**
- * 获取页面类型
+ * 获取页面模板
  */
-export function getDiyPageType(params: Record<string, any>) {
-    return request.get(`diy/type`, { params })
+export function getDiyTemplate(params: Record<string, any>) {
+    return request.get(`diy/template`, { params })
 }
 
 /**
@@ -121,5 +121,5 @@ export function getDiyRouteInfo(params: Record<string, any>) {
  * @param params
  */
 export function editDiyRouteShare(params: Record<string, any>) {
-    return request.put(`diy/route/share`, params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put(`diy/route/share`, params, { showSuccessMessage: true })
 }

@@ -14,7 +14,7 @@ export function getAliappConfig() {
  * @returns 
  */
 export function setAliappConfig(params: Record<string, any>) {
-    return request.put('aliapp/config', params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put('aliapp/config', params, { showSuccessMessage: true })
 }
 
 /**

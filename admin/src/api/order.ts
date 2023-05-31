@@ -12,6 +12,15 @@ export function getRechargeOrderList(params: Record<string, any>) {
 }
 
 /**
+ * 获取充值订单统计
+ * @param params
+ * @returns
+ */
+export function getRechargeStat(params: Record<string, any>) {
+    return request.get(`order/recharge/stat`, { params })
+}
+
+/**
  * 获取充值订单详情
  * @param order_id
  * @returns
@@ -19,7 +28,7 @@ export function getRechargeOrderList(params: Record<string, any>) {
 export function getRechargeOrderInfo(order_id: number) {
     return request.get(`order/recharge/${order_id}`);
 }
- 
+
 /**
  * 获取充值订单状态列表
  * @returns
@@ -48,6 +57,14 @@ export function getRefundStatus() {
 * 充值订单发起退款
  * @returns
  */
-export function rechargeRefund(id) {
-    return request.get(`order/recharge/refund/${id}`);
+export function rechargeRefund(id: number) {
+    return request.put(`order/recharge/refund/${id}`, {}, { showSuccessMessage: true });
+}
+
+/**
+* 获取退款统计
+ * @returns
+ */
+export function getRefundStat() {
+    return request.get(`refund/stat`);
 }

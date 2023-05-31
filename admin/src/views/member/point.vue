@@ -1,9 +1,40 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-            <el-card class="box-card !border-none my-[16px] table-search-wrap" shadow="never">
+            <div class="flex justify-between items-center mb-[5px]">
+                <span class="text-[24px]">{{pageName}}</span>
+            </div>
+            <el-card class="box-card !border-none base-bg !px-[35px]" shadow="never">
+			    <el-row class="flex">
+			        <el-col :span="12" class="min-w-[100px]">
+                        <div class="statistic-card">
+                            <el-statistic :value="pointStatistics.point_get ? Number.parseInt(pointStatistics.point_get) : '0'"></el-statistic>
+                            <div class="statistic-footer">
+                                <div class="footer-item text-[14px] text-[#666]">
+                                    <span>{{ t('pointGet') }}</span>
+                                </div>
+                            </div>
+                        </div>
+			        </el-col>
+					<el-col :span="12" class="min-w-[100px]">
+                        <div class="statistic-card">
+                            <el-statistic :value="pointStatistics.point_use ? Number.parseInt(pointStatistics.point_use) : '0'"></el-statistic>
+                            <div class="statistic-footer">
+                                <div class="footer-item text-[14px] text-[#666]">
+                                    <span>{{ t('pointUse') }}</span>
+                                </div>
+                            </div>
+                        </div>
+			        </el-col>
+			      
+			    </el-row>
+			</el-card>
+            <el-card class="box-card !border-none mb-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="memberAccountLogTableData.searchParam" ref="searchFormRef">
-                     
+                    <el-form-item :label="t('memberInfo')" prop="keywords">
+                        <el-input v-model="memberAccountLogTableData.searchParam.keywords" class="w-[240px]"
+                            :placeholder="t('memberInfoPlaceholder')" />
+                    </el-form-item>
                     <el-form-item :label="t('fromType')" prop="from_type">
                         <el-select v-model="memberAccountLogTableData.searchParam.from_type" clearable :placeholder="t('fromTypePlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')" value="" />
@@ -21,7 +52,7 @@
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="loadMemberAccountLogList()">{{ t('search') }}</el-button>
-                        <el-button @click="searchFormRef?.resetFields()">{{ t('reset') }}</el-button>
+                        <el-button @click="resetForm(searchFormRef)">{{ t('reset') }}</el-button>
                     </el-form-item>
                 </el-form>
             </el-card>
@@ -33,22 +64,39 @@
                         <span>{{ !memberAccountLogTableData.loading ? t('emptyData') : '' }}</span>
                     </template>
 
-                    <el-table-column  :label="t('nickName')" min-width="140" :show-overflow-tooltip="true">
+                    <el-table-column prop="member_id" :label="t('memberId')" min-width="80" :show-overflow-tooltip="true">
                         <template #default="{ row }">
-                            <div class="flex items-center cursor-pointer " @click="toMember(row.member_id)">
-                                <img class="w-[50px] h-[50px] mr-[10px]" v-if="row.headimg" :src="img(row.headimg)" alt="" >
+                            {{ row.member.member_no }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column  :label="t('memberInfo')" min-width="150" :show-overflow-tooltip="true">
+                        <template #default="{ row }">
+                            <div class="flex items-center cursor-pointer" @click="toMember(row.member_id)">
+                                <img class="w-[50px] h-[50px] mr-[10px]" v-if="row.member.headimg" :src="img(row.member.headimg)" alt="" >
                                 <img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/assets/images/default_headimg.png" alt="" >
                                 <div class="flex flex flex-col">
-                                    <span class="text-blue-700">{{ row.nickname || '' }}</span>
-                                    <span class="text-blue-700">{{ row.mobile || '' }}</span>
+                                    <span class="">{{ row.member.nickname || '' }}</span>
                                 </div>
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="account_data" :label="t('accountData')" min-width="120" />
-                    <el-table-column prop="from_type_name" :label="t('fromType')" min-width="120" />
+					<el-table-column prop="mobile" :label="t('mobile')" min-width="100">
+						<template #default="{ row }">
+							{{ row.member.mobile || '' }}
+                        </template>
+					</el-table-column>
+
+                    <el-table-column prop="account_data" :label="t('accountData')" min-width="80" align="right">
+						<template #default="{ row }">
+							<span v-if="row.account_data >= 0">+{{ row.account_data }}</span>
+							<span v-else>{{ row.account_data }}</span>
+                        </template>
+					</el-table-column>
+
+                    <el-table-column prop="account_sum" :label="t('accountSum')" min-width="120" align="right"/>
+ 
+                    <el-table-column prop="from_type_name" :label="t('fromType')" min-width="180" align="center"/>
                     <el-table-column prop="create_time" :show-overflow-tooltip="true" :label="t('createTime')" min-width="150" />
-                    <el-table-column prop="memo" :label="t('memo')" min-width="120" />
 
                     <el-table-column :label="t('operation')" fixed="right" width="100">
                        <template #default="{ row }">
@@ -71,12 +119,14 @@
 <script lang="ts" setup>
 import { reactive, ref, watch } from 'vue'
 import { t } from '@/lang'
-import { getChangeTypeList,getPointList } from '@/api/member'
+import { getChangeTypeList,getPointList,getPointSum } from '@/api/member'
+import { ElMessageBox, FormInstance } from 'element-plus'
 import { img } from '@/utils/common'
 import pointInfo from '@/views/member/components/member-point-info.vue'
 import { useRouter,useRoute } from 'vue-router'
 const route = useRoute()
 const member_id: number = parseInt(route.query.id || 0)
+const pageName = route.meta.title;
 
 let memberAccountLogTableData = reactive({
     page: 1,
@@ -85,6 +135,7 @@ let memberAccountLogTableData = reactive({
     loading: true,
     data: [],
     searchParam:{
+      keywords:"",
       from_type:"",
       create_time:"",
       mobile:"",
@@ -92,6 +143,18 @@ let memberAccountLogTableData = reactive({
     }
 })
 
+/**
+ * 获取积分总计
+ */
+ const pointStatistics = ref([])
+const checkPointInfo = () => {
+	getPointSum({
+		member_id
+	 }).then(res => {
+		pointStatistics.value = res.data;
+	 })
+}
+checkPointInfo()
 
 let fromTypeList = ref([])
 
@@ -103,7 +166,17 @@ setFromTypeList();
 
 const searchFormRef = ref<FormInstance>()
 
+
+
+const resetForm = (formEl: FormInstance | undefined)=>{
+    if (!formEl) return
+    formEl.resetFields();
+    loadMemberAccountLogList();
+}
+
+
 /**
+ * 
  * 获取会员账单表列表
  */
 const loadMemberAccountLogList = (page: number = 1) => {

@@ -1,8 +1,10 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-
-            <el-card class="box-card !border-none my-[16px] table-search-wrap" shadow="never">
+            <div class="flex justify-between items-center">
+                <span class="text-[24px]">{{pageName}}</span>
+            </div>
+            <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="sysUserLogTableData.searchParam" ref="searchFormRef">
                     <el-form-item :label="t('ip')" prop="ip">
                         <el-input v-model="sysUserLogTableData.searchParam.ip" :placeholder="t('ipPlaceholder')" />
@@ -17,20 +19,20 @@
 
                     <el-form-item>
                         <el-button type="primary" @click="loadSysUserLogList()">{{ t('search') }}</el-button>
-                        <el-button @click="searchFormRef?.resetFields()">{{ t('reset') }}</el-button>
+                        <el-button @click="resetForm(searchFormRef)">{{ t('reset') }}</el-button>
                     </el-form-item>
                 </el-form>
             </el-card>
 
-            <div class="mt-[16px]">
+            <div>
                 <el-table :data="sysUserLogTableData.data" size="large" v-loading="sysUserLogTableData.loading">
                     <template #empty>
                         <span>{{ !sysUserLogTableData.loading ? t('emptyData') : '' }}</span>
                     </template>
                     <el-table-column prop="username" :label="t('username')" min-width="120" />
-                    <el-table-column prop="ip" :label="t('ip')" min-width="120" />
-                    <el-table-column prop="url" :label="t('url')" min-width="120" />
-                    <el-table-column prop="type" :label="t('type')" min-width="120" align="center"/>
+                    <el-table-column prop="ip" :label="t('ip')" min-width="100" align="left"/>
+                    <el-table-column prop="url" :label="t('url')" min-width="180" />
+                    <el-table-column prop="type" :label="t('type')" min-width="100" align="center"/>
                      <el-table-column :label="t('createTime')" min-width="180" align="center">
                         <template #default="{ row }">
                             {{ row.create_time || '' }}
@@ -59,6 +61,10 @@ import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getLogList } from '@/api/site'
 import UserLogDetail from '@/views/auth/components/user-log-detail.vue'
+import { useRoute } from 'vue-router'
+import { FormInstance } from 'element-plus'
+const route = useRoute()
+const pageName = route.meta.title;
 
 let sysUserLogTableData = reactive({
     page: 1,
@@ -73,7 +79,12 @@ let sysUserLogTableData = reactive({
 })
 
 const searchFormRef = ref<FormInstance>()
-
+const resetForm = (formEl: FormInstance | undefined)=>{
+    if (!formEl) return
+    
+    formEl.resetFields();
+    loadSysUserLogList();
+}
 /**
  * 获取管理员操作记录表列表
  */

@@ -1,8 +1,10 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-           
-            <div class="mt-[16px]">
+           <div class="flex justify-between items-center">
+                <span class="text-[24px]">{{pageName}}</span>
+            </div>
+            <div class="mt-[20px]">
                 <el-table :data="agreementTableData.data" size="large" v-loading="agreementTableData.loading">
 
                     <template #empty>
@@ -36,7 +38,9 @@
 import { reactive, ref, watch } from 'vue'
 import { t } from '@/lang'
 import { getAgreementList } from '@/api/sys'
-import { useRouter } from 'vue-router'
+import { useRouter,useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title;
  
 let agreementTableData = reactive({
     loading: true,

@@ -6,7 +6,7 @@ import request from '@/utils/request'
  * @returns 
  */
 export function login(params: Record<string, any>, app_type: string) {
-    return request.get(`login/${app_type}`, { params, showErrorMessage: true })
+    return request.get(`login/${app_type}`, { params })
 }
 
 /**

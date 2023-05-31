@@ -26,7 +26,7 @@ export function getArticleInfo(id: number) {
  * @returns
  */
 export function addArticle(params: Record<string, any>) {
-    return request.post('article/article', params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.post('article/article', params, { showSuccessMessage: true })
 }
 
 /**
@@ -36,7 +36,7 @@ export function addArticle(params: Record<string, any>) {
  * @returns
  */
 export function editArticle(params: Record<string, any>) {
-    return request.put(`article/article/${params.id}`, params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put(`article/article/${params.id}`, params, { showSuccessMessage: true })
 }
 
 /**
@@ -45,7 +45,7 @@ export function editArticle(params: Record<string, any>) {
  * @returns
  */
 export function deleteArticle(id: number) {
-    return request.delete(`article/article/${id}`, { showErrorMessage: true, showSuccessMessage: true })
+    return request.delete(`article/article/${id}`, { showSuccessMessage: true })
 }
 /***************************************************** 文章分类管理 ****************************************************/
 
@@ -83,7 +83,7 @@ export function getArticleCategoryInfo(category_id: number) {
  * @returns 
  */
 export function addArticleCategory(params: Record<string, any>) {
-    return request.post('article/category', params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.post('article/category', params, { showSuccessMessage: true })
 }
 
 /**
@@ -92,7 +92,7 @@ export function addArticleCategory(params: Record<string, any>) {
  * @returns 
  */
 export function editArticleCategory(params: Record<string, any>) {
-    return request.put(`article/category/${params.category_id}`, params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put(`article/category/${params.category_id}`, params, { showSuccessMessage: true })
 }
 
 /**
@@ -101,5 +101,5 @@ export function editArticleCategory(params: Record<string, any>) {
  * @returns 
  */
 export function deleteArticleCategory(category_id: number) {
-    return request.delete(`article/category/${category_id}`, { showErrorMessage: true, showSuccessMessage: true });
+    return request.delete(`article/category/${category_id}`, { showSuccessMessage: true });
 }

@@ -1,6 +1,7 @@
 <template>
-	<div class="edit-graphic-nav">
-		<div class="border-solid border-b-4 border-gray-200 mb-[20px]">
+	<!-- 内容 -->
+	<div class="content-wrap" v-show="diyStore.editTab == 'content'">
+		<div class="edit-attr-item-wrap">
 			<h3 class="mb-[10px]">{{ t('graphicNavModeTitle') }}</h3>
 			<el-form label-width="80px" class="px-[10px]">
 
@@ -11,10 +12,8 @@
 					</el-radio-group>
 				</el-form-item>
 
-				<el-form-item v-show="diyStore.editComponent.layout == 'vertical'" :label="t('graphicNavTitle')">
-					<el-input v-model="diyStore.editComponent.navTitle" :placeholder="t('graphicNavTitlePlaceholder')"
-					          clearable
-					          maxlength="20" show-word-limit/>
+				<el-form-item :label="t('graphicNavTitle')">
+					<el-input v-model="diyStore.editComponent.navTitle" :placeholder="t('graphicNavTitlePlaceholder')" clearable maxlength="20" show-word-limit/>
 				</el-form-item>
 
 				<el-form-item :label="t('graphicNavSelectMode')">
@@ -53,44 +52,23 @@
 
 			</el-form>
 		</div>
-		<div class="border-solid border-b-4 border-gray-200 mb-[20px]"
-		     v-show="['graphic','img'].includes(diyStore.editComponent.mode)">
-			<h3 class="mb-[10px]">{{ t('graphicNavImageSet') }}</h3>
-			<el-form label-width="80px" class="px-[10px]">
-				<el-form-item :label="t('graphicNavImageSize')">
-					<el-slider v-model="diyStore.editComponent.imageSize" show-input size="small"
-					           class="ml-[10px] graphic-nav-slider" :min="30" :max="60"/>
-				</el-form-item>
-
-				<el-form-item :label="t('graphicNavAroundRadius')">
-					<el-slider v-model="diyStore.editComponent.aroundRadius" show-input size="small"
-					           class="ml-[10px] graphic-nav-slider" :max="50"/>
-				</el-form-item>
-			</el-form>
-		</div>
-		<div>
+		<div class="edit-attr-item-wrap">
 			<h3 class="mb-[10px]">{{ t('graphicNavSetLabel') }}</h3>
 			<el-form label-width="80px" class="px-[10px]">
 
 				<p class="text-sm text-gray-400 mb-[10px]">{{ t('graphicNavTips') }}</p>
 
 				<div ref="imageBoxRef">
-					<div v-for="(item,index) in diyStore.editComponent.list" :key="item.id"
-					     class="item-wrap p-[10px] pb-0 relative border border-dashed border-gray-300 mb-[16px]">
-						<el-form-item :label="t('image')"
-						              v-show="diyStore.editComponent.mode === 'graphic' || diyStore.editComponent.mode === 'img'">
+					<div v-for="(item,index) in diyStore.editComponent.list" :key="item.id" class="item-wrap p-[10px] pb-0 relative border border-dashed border-gray-300 mb-[16px]">
+						<el-form-item :label="t('image')" v-show="diyStore.editComponent.mode === 'graphic' || diyStore.editComponent.mode === 'img'">
 							<upload-image v-model="item.imageUrl" :limit="1"/>
 						</el-form-item>
 
-						<el-form-item :label="t('graphicNavTitle')"
-						              v-show="diyStore.editComponent.mode === 'graphic' || diyStore.editComponent.mode === 'text'">
-							<el-input v-model="item.title" :placeholder="t('graphicNavTitlePlaceholder')" clearable
-							          maxlength="20" show-word-limit/>
+						<el-form-item :label="t('graphicNavTitle')" v-show="diyStore.editComponent.mode === 'graphic' || diyStore.editComponent.mode === 'text'">
+							<el-input v-model="item.title" :placeholder="t('graphicNavTitlePlaceholder')" clearable maxlength="20" show-word-limit/>
 						</el-form-item>
 
-						<div class="del absolute cursor-pointer z-[2] top-[-8px] right-[-8px]"
-						     v-show="diyStore.editComponent.list.length > 1"
-						     @click="diyStore.editComponent.list.splice(index,1)">
+						<div class="del absolute cursor-pointer z-[2] top-[-8px] right-[-8px]" v-show="diyStore.editComponent.list.length > 1" @click="diyStore.editComponent.list.splice(index,1)">
 							<icon name="element-CircleCloseFilled" color="#bbb" size="20px"/>
 						</div>
 
@@ -100,12 +78,47 @@
 					</div>
 				</div>
 
-				<el-button v-show="diyStore.editComponent.list.length < 10" class="w-full" @click="addGraphicNav">
-					{{t('addGraphicNav')}}
-				</el-button>
+				<el-button v-show="diyStore.editComponent.list.length < 10" class="w-full" @click="addGraphicNav">{{ t('addGraphicNav') }}</el-button>
 
 			</el-form>
 		</div>
+	</div>
+
+	<!-- 样式 -->
+	<div class="style-wrap" v-show="diyStore.editTab == 'style'">
+		<div class="edit-attr-item-wrap" v-show="['graphic','img'].includes(diyStore.editComponent.mode)">
+			<h3 class="mb-[10px]">{{ t('graphicNavImageSet') }}</h3>
+			<el-form label-width="80px" class="px-[10px]">
+				<el-form-item :label="t('graphicNavImageSize')">
+					<el-slider v-model="diyStore.editComponent.imageSize" show-input size="small" class="ml-[10px] graphic-nav-slider" :min="20" :max="60"/>
+				</el-form-item>
+				<el-form-item :label="t('graphicNavAroundRadius')">
+					<el-slider v-model="diyStore.editComponent.aroundRadius" show-input size="small" class="ml-[10px] graphic-nav-slider" :max="50"/>
+				</el-form-item>
+			</el-form>
+		</div>
+		<div class="edit-attr-item-wrap" v-show="['graphic','text'].includes(diyStore.editComponent.mode)">
+			<h3 class="mb-[10px]">{{ t('textSet') }}</h3>
+			<el-form label-width="80px" class="px-[10px]">
+				<el-form-item :label="t('textFontSize')">
+					<el-slider v-model="diyStore.editComponent.font.size" show-input size="small" class="ml-[10px] graphic-nav-slider" :min="12" :max="16"/>
+				</el-form-item>
+				<el-form-item :label="t('textFontWeight')">
+					<el-radio-group v-model="diyStore.editComponent.font.weight">
+						<el-radio :label="'normal'">{{t('fontWeightNormal')}}</el-radio>
+						<el-radio :label="'bold'">{{t('fontWeightBold')}}</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item :label="t('textColor')">
+					<el-color-picker v-model="diyStore.editComponent.font.color" show-alpha :predefine="diyStore.predefineColors"/>
+				</el-form-item>
+
+			</el-form>
+		</div>
+
+		<!-- 组件样式 -->
+		<slot name="style"></slot>
+
 	</div>
 
 </template>
@@ -120,17 +133,11 @@
     import useDiyStore from '@/stores/modules/diy'
 
     const diyStore = useDiyStore()
+    diyStore.editComponent.ignore = []; // 忽略公共属性
 
     // 组件验证
     diyStore.editComponent.verify = (index: number) => {
         var res = {code: true, message: ''};
-        if (diyStore.value[index].layout == 'vertical') {
-            if (diyStore.value[index].navTitle == '') {
-                res.code = false;
-                res.message = t('graphicNavTitlePlaceholder');
-                return res;
-            }
-        }
 
         diyStore.value[index].list.forEach((item: any) => {
             if ((diyStore.value[index].mode === 'graphic' || diyStore.value[index].mode === 'img') && item.imageUrl === '') {
@@ -189,22 +196,22 @@
     const imageBoxRef = ref()
 
     onMounted(() => {
-        const sortable = Sortable.create(imageBoxRef.value, {
-            group: 'item-wrap',
-            animation: 200,
-            onEnd: event => {
-                const temp = diyStore.editComponent.list[event.oldIndex!];
-                diyStore.editComponent.list.splice(event.oldIndex!, 1);
-                diyStore.editComponent.list.splice(event.newIndex!, 0, temp);
-                nextTick(() => {
+        nextTick(() => {
+            const sortable = Sortable.create(imageBoxRef.value, {
+                group: 'item-wrap',
+                animation: 200,
+                onEnd: event => {
+                    const temp = diyStore.editComponent.list[event.oldIndex!];
+                    diyStore.editComponent.list.splice(event.oldIndex!, 1);
+                    diyStore.editComponent.list.splice(event.newIndex!, 0, temp);
                     sortable.sort(
                         range(diyStore.editComponent.list.length).map(value => {
                             return value.toString();
                         })
                     );
-                });
-            }
-        })
+                }
+            })
+        });
     })
 
     defineExpose({})

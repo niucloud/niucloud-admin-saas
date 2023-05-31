@@ -1,7 +1,10 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-            <div class="mt-[16px]">
+            <div class="flex justify-between items-center">
+                <span class="text-[24px]">{{pageName}}</span>
+            </div>
+            <div class="mt-[20px]">
                 <el-table :data="smsTableData.data" size="large" v-loading="smsTableData.loading">
                     <template #empty>
                         <span>{{ !smsTableData.loading ? t('emptyData') : '' }}</span>
@@ -37,6 +40,9 @@ import { t } from '@/lang'
 import { getSmsList,getSmsInfo } from '@/api/notice'
 import Ali from '@/views/setting/components/sms-ali.vue'
 import Tencent from '@/views/setting/components/sms-tencent.vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title;
 
 const aliDialog: Record<string, any> | null = ref(null)
 const tencentDialog: Record<string, any> | null = ref(null)

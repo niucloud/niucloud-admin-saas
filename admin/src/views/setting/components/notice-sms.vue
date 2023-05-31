@@ -58,7 +58,8 @@ const initialFormData = {
     sms_default_content: '',
     title: '',
     type: '',
-    sms_id: ''
+    sms_id: '',
+	content: ''
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 
@@ -87,6 +88,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
             loading.value = true
 
             const data = formData
+			data.status = data.is_sms;
 
             editNotice(data).then(res => {
                 loading.value = false
@@ -94,7 +96,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
                 emit('complete')
             }).catch(() => {
                 loading.value = false
-                showDialog.value = false
+                // showDialog.value = false
             })
         }
     })
@@ -106,7 +108,8 @@ const setFormData = async (row: any = null) => {
 
     if (row) {
         Object.keys(formData).forEach((key: string) => {
-            if (row[key] != undefined) formData[key] = row[key]
+            if (row[key] != undefined) formData[key] = row[key];
+			if (row.sms && row.sms[key] != undefined) formData[key] = row.sms[key]
         })
     }
 

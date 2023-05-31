@@ -2,13 +2,14 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
 
-            <div class="flex justify-between">
-                <el-button type="primary" @click="addEvent">
+            <div class="flex justify-between items-center">
+                <span class="text-[24px]">{{ pageName }}</span>
+                <el-button type="primary" class="w-[100px]" @click="addEvent">
                     {{ t('addArticle') }}
                 </el-button>
             </div>
 
-            <el-card class="box-card !border-none my-[16px] table-search-wrap" shadow="never">
+            <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="articleTableData.searchParam" ref="searchFormRef">
                     <el-form-item :label="t('title')" prop="title">
                         <el-input v-model="articleTableData.searchParam.title" :placeholder="t('titlePlaceholder')" />
@@ -22,18 +23,26 @@
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="loadArticleList()">{{ t('search') }}</el-button>
-                        <el-button @click="searchFormRef?.resetFields()">{{ t('reset') }}</el-button>
+                        <el-button @click="resetForm(searchFormRef)">{{ t('reset') }}</el-button>
                     </el-form-item>
                 </el-form>
             </el-card>
 
-            <div class="mt-[16px]">
+            <div class="mt-[10px]">
                 <el-table :data="articleTableData.data" size="large" v-loading="articleTableData.loading">
                     <template #empty>
                         <span>{{ !articleTableData.loading ? t('emptyData') : '' }}</span>
                     </template>
 
-                    <el-table-column prop="title" :show-overflow-tooltip="true" :label="t('title')" width="140" />
+                    <el-table-column prop="id" :show-overflow-tooltip="true" :label="t('ID')" width="100" />
+
+                    <el-table-column prop="category_name" :label="t('categoryName')" width="120" />
+
+                    <el-table-column prop="title" :show-overflow-tooltip="true" :label="t('title')" width="180">
+                        <template #default="{ row }">
+                            <a :href="row.article_url.web_url" target="_blank">{{ row.title }}</a>
+                        </template>
+                    </el-table-column>
 
                     <el-table-column :label="t('image')" min-width="120" align="center">
                         <template #default="{ row }">
@@ -42,9 +51,11 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column prop="category_name" :label="t('categoryName')" align="center" min-width="140" />
-
-                    <el-table-column prop="summary" :label="t('summary')" width="180" :show-overflow-tooltip="true" />
+                    <el-table-column prop="visit" :label="t('visit')" width="120" align="center">
+                        <template #default="{ row }">
+                            <span>{{ parseInt(row.visit + row.visit_virtual) }}</span>
+                        </template>
+                    </el-table-column>
 
                     <el-table-column :label="t('isShow')" min-width="120" align="center">
                         <template #default="{ row }">
@@ -54,6 +65,8 @@
                             }}</span>
                         </template>
                     </el-table-column>
+
+                    <el-table-column prop="sort" :label="t('sort')" width="100" align="center" />
 
                     <el-table-column :label="t('createTime')" min-width="180" align="center">
                         <template #default="{ row }">
@@ -81,12 +94,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getArticleList, deleteArticle, getArticleCategoryAll } from '@/api/article'
-import { img, getAppType } from '@/utils/common'
-import { ElMessageBox } from 'element-plus'
-import { useRouter } from 'vue-router'
+import { img } from '@/utils/common'
+import { ElMessageBox, FormInstance } from 'element-plus'
+import { useRouter, useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title
 
 const articleTableData = reactive({
     page: 1,
@@ -162,6 +177,12 @@ const deleteEvent = (id: number) => {
         }).catch(() => {
         })
     })
+}
+
+const resetForm = (formEl: FormInstance | undefined) => {
+    if (!formEl) return
+    formEl.resetFields()
+    loadArticleList()
 }
 </script>
 

@@ -1,20 +1,33 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-            <div class="flex justify-between">
+            <div class="flex justify-between items-center">
+                <span class="text-[24px]">{{ pageName }}</span>
                 <el-button type="primary" @click="addEvent">
                     {{ t('addArticleCategory') }}
                 </el-button>
-                <el-input v-model="seach" :placeholder="t('namePlaceholder')" class="w-[190px]" prefix-icon="Search"
-                    @input="loadCategoryList()" clearable />
             </div>
 
-            <div class="mt-[16px]">
+            <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
+                <el-form :inline="true" :model="categoryTableData.searchParam" ref="searchFormRef">
+                    <el-form-item :label="t('name')" prop="name">
+                        <el-input v-model="categoryTableData.searchParam.name" :placeholder="t('namePlaceholder')"
+                            class="w-[190px]" prefix-icon="Search" clearable />
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="loadCategoryList()">{{ t('search') }}</el-button>
+                        <el-button @click="resetForm(searchFormRef)">{{ t('reset') }}</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-card>
+
+            <div class="mt-[10px]">
                 <el-table :data="categoryTableData.data" size="large" v-loading="categoryTableData.loading">
                     <template #empty>
                         <span>{{ !categoryTableData.loading ? t('emptyData') : '' }}</span>
                     </template>
                     <el-table-column prop="name" :label="t('name')" min-width="150" />
+                    <el-table-column prop="article_num" :label="t('articleNumber')" min-width="140" />
                     <el-table-column prop="is_show" :label="t('isShow')" min-width="150">
                         <template #default="{ row }">
                             {{ row.is_show == 1 ? t('show') : t('hide') }}
@@ -48,19 +61,31 @@
 import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getArticleCategoryList, deleteArticleCategory } from '@/api/article'
-import { ElMessageBox } from 'element-plus'
+import { ElMessageBox, FormInstance } from 'element-plus'
 import EditCategory from '@/views/article/components/edit-category.vue'
 import { debounce } from '@/utils/common'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title
 
 const categoryTableData = reactive({
     page: 1,
     limit: 10,
     total: 0,
     loading: true,
-    data: []
+    data: [],
+    searchParam: {
+        name: ''
+    }
 })
 
-const seach = ref<string>('')
+const searchFormRef = ref<FormInstance>()
+
+const resetForm = (formEl: FormInstance | undefined)=>{
+    if (!formEl) return
+    formEl.resetFields();
+    loadCategoryList();
+}
 
 /**
  * 获取文章分类列表
@@ -72,7 +97,7 @@ const loadCategoryList = debounce((page: number = 1) => {
     getArticleCategoryList({
         page: categoryTableData.page,
         limit: categoryTableData.limit,
-        name: seach.value
+        ...categoryTableData.searchParam
     }).then(res => {
         categoryTableData.loading = false
         categoryTableData.data = res.data.data

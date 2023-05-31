@@ -28,7 +28,7 @@ export function getSiteInfo(site_id: number) {
  * @returns 
  */
 export function addSite(params: Record<string, any>) {
-    return request.post('site/site', params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.post('site/site', params, { showSuccessMessage: true })
 }
 
 /**
@@ -38,7 +38,27 @@ export function addSite(params: Record<string, any>) {
  * @returns 
  */
 export function editSite(params: Record<string, any>) {
-    return request.put(`site/site/${params.site_id}`, params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put(`site/site/${params.site_id}`, params, { showSuccessMessage: true })
+}
+
+/**
+ * 关闭站点
+ * @param id 
+ * @param params 
+ * @returns 
+ */
+export function closeSite(params: Record<string, any>) {
+    return request.put(`site/closesite/${params.site_id}`, params, { showSuccessMessage: true })
+}
+
+/**
+ * 关闭站点
+ * @param id 
+ * @param params 
+ * @returns 
+ */
+export function openSite(params: Record<string, any>) {
+    return request.put(`site/opensite/${params.site_id}`, params, { showSuccessMessage: true })
 }
 
 /**
@@ -77,7 +97,7 @@ export function getSiteGroupInfo(site_id: number) {
  * @returns 
  */
 export function addSiteGroup(params: Record<string, any>) {
-    return request.post('site/group', params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.post('site/group', params, { showSuccessMessage: true })
 }
 
 /**
@@ -87,7 +107,7 @@ export function addSiteGroup(params: Record<string, any>) {
  * @returns 
  */
 export function editSiteGroup(params: Record<string, any>) {
-    return request.put(`site/group/${params.group_id}`, params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put(`site/group/${params.group_id}`, params, { showSuccessMessage: true })
 }
 
 /**
@@ -97,7 +117,7 @@ export function editSiteGroup(params: Record<string, any>) {
  * @returns 
  */
 export function deleteSiteGroup(group_id: number) {
-    return request.delete(`site/group/${group_id}`, { showErrorMessage: true, showSuccessMessage: true });
+    return request.delete(`site/group/${group_id}`, { showSuccessMessage: true });
 }
 
 /**
@@ -135,7 +155,7 @@ export function getUserInfo(uid: number) {
  * @returns 
  */
 export function addUser(params: Record<string, any>) {
-    return request.post('site/user', params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.post('site/user', params, { showSuccessMessage: true })
 }
 
 /**
@@ -145,7 +165,7 @@ export function addUser(params: Record<string, any>) {
  * @returns 
  */
 export function editUser(params: Record<string, any>) {
-    return request.put(`site/user/${params.uid}`, params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put(`site/user/${params.uid}`, params, { showSuccessMessage: true })
 }
 
 /**
@@ -154,7 +174,7 @@ export function editUser(params: Record<string, any>) {
  * @returns 
  */
 export function deleteUser(uid: number) {
-    return request.delete(`site/user/${uid}`, { showErrorMessage: true, showSuccessMessage: true })
+    return request.delete(`site/user/${uid}`, { showSuccessMessage: true })
 }
 
 

@@ -1,97 +1,93 @@
 <template>
-    <div class="main-container attachment-container" v-if="systemService">
-		<div class="bg-[#fff] pb-[20px] mb-3">
-			<p class="pt-[20px] pb-[10px] pl-[20px] ">{{ t('serverInformation') }}</p>
-			<div class="px-[20px] text-[14px]">
-				<el-row class="py-[10px] items" v-for="(serverItems, serverIndex) in systemService.server">
-				    <el-col :span="12" class="pl-[10px]">
-						<span > {{ serverItems.name }}</span>
-					</el-col>
-					<el-col :span="12" class="pl-[10px]">
-						<span>{{ serverItems.server }}</span>
-					</el-col>
-				</el-row>
+	<div class="main-container attachment-container" v-if="systemService">
+		<el-card class="box-card !border-none" shadow="never">
+			<div class="flex justify-between items-center">
+				<span class="text-[24px]">{{ pageName }}</span>
 			</div>
-		</div>
-		<div class="bg-[#fff] pb-[20px] mb-3">
-			<p class="py-[20px] pl-[20px] ">{{ t('systemDemand') }}</p>
-			<div class="px-[20px] text-[14px]">
-				<el-row class="pb-[10px] items">
-				    <el-col :span="8" class="pl-[10px]">
-						<span >{{ t('environment') }}</span>
-					</el-col>
-					<el-col :span="8" class="pl-[10px]">
-						<span>{{ t('demand') }}</span>
-					</el-col>
-					<el-col :span="8" class="pl-[10px]">
-						<span>{{ t('version') }}</span>
-					</el-col>
-				</el-row>
-				<el-row class="pb-[10px] items" v-for="(versionItems, versionIndex) in systemService.server_version">
-				    <el-col :span="8" class="pl-[10px]">
-						<span >{{ versionItems.name }}</span>
-					</el-col>
-					<el-col :span="8" class="pl-[10px]">
-						<span >{{ versionItems.demand }}</span>
-					</el-col>
-					<el-col :span="8" class="pl-[10px]">
-						<span >{{ versionItems.server }}</span>
-					</el-col>
-				</el-row>
+			<div class="bg-[#fff] pb-[20px] mb-3">
+				<p class="pt-[20px] pb-[10px]">{{ t('serverInformation') }}</p>
+				<div class="text-[14px]">
+					<el-table :data="systemService.server" size="large" v-loading="loadingArr.server_load">
+						<el-table-column prop="name" :label="t('environment')" align="left" min-width="200" />
+						<el-table-column prop="server" :label="t('version')" align="left" min-width="140" />
+					</el-table>
+				</div>
 			</div>
-		</div>
-		<div class="bg-[#fff] pb-[20px] mb-3">
-			<p class="py-[20px] pl-[20px] ">{{ t('authorityStatus') }}</p>
-			<div class="px-[20px] text-[14px]">
-				<el-row class="py-[10px] items" >
-				    <el-col :span="8" class="pl-[10px]">
-						<span>{{ t('name') }}</span>
-					</el-col>
-					<el-col :span="8" class="pl-[10px]">
-						<span>{{ t('demand') }}</span>
-					</el-col>
-					<el-col :span="8" class="pl-[10px]">
-						<span>{{ t('status') }}</span>
-					</el-col>
-				</el-row>
-				<el-row class="py-[10px] items" v-for="(variablesItems, variablesIndex) in systemService.system_variables">
-				    <el-col :span="8" class="pl-[10px]">
-						<span >{{ variablesItems.name }}</span>
-					</el-col>
-					<el-col :span="8" class="pl-[10px]">
-						<span >{{ variablesItems.need }}</span>
-					</el-col>
-					<el-col :span="8" class="pl-[10px]">
-						<span v-if="variablesItems.status"><el-icon color="green"><Select /></el-icon></span>
-						<span v-else><el-icon color="red"><CloseBold /></el-icon></span>
-					</el-col>
-				</el-row>
-				<el-row class="py-[10px] items" v-for="(dirsItems, dirsIndex) in systemService.dirs_list">
-				    <el-col :span="8" class="pl-[10px]">
-						<span>{{ dirsItems.name }}</span>
-					</el-col>
-					<el-col :span="8" class="pl-[10px]">
-						<span>{{ dirsItems.demand }}</span>
-					</el-col>
-					<el-col :span="8" class="pl-[10px]">
-						<span v-if="dirsItems.is_readable && dirsItems.is_write"><el-icon color="green"><Select /></el-icon></span>
-						<span v-else><el-icon color="red"><CloseBold /></el-icon></span>
-					</el-col>
-				</el-row>
+			<div class="bg-[#fff] pb-[20px] mb-3">
+				<p class="py-[20px]">{{ t('systemDemand') }}</p>
+				<div class="text-[14px]">
+					<el-table :data="systemService.server_version" size="large" v-loading="loadingArr.server_version_load">
+						<el-table-column prop="name" :label="t('environment')" align="left" min-width="200" />
+						<el-table-column prop="demand" :label="t('demand')" align="left" min-width="140" />
+						<el-table-column prop="server" :label="t('version')" align="left" min-width="140" />
+					</el-table>
+				</div>
 			</div>
-		</div>
-    </div>
+			<div class="bg-[#fff] pb-[20px] mb-3">
+				<p class="py-[20px]">{{ t('authorityStatus') }}</p>
+				<div class="text-[14px]">
+					<el-table :data="systemService.system_variables" size="large" v-loading="loadingArr.system_variables_load">
+						<el-table-column prop="name" :label="t('name')" align="left" min-width="200" />
+						<el-table-column prop="need" :label="t('demand')" align="left" min-width="140" />
+						<el-table-column :label="t('status')" align="left" min-width="140">
+							<template #default="{ row }">
+								<span v-if="row.status"><el-icon color="green"><Select /></el-icon></span>
+								<span v-else><el-icon color="red">
+										<CloseBold />
+									</el-icon></span>
+							</template>
+						</el-table-column>
+					</el-table>
+				</div>
+			</div>
+
+			<div class="bg-[#fff] pb-[20px] mb-3">
+				<p class="py-[20px]">{{ t('process') }}</p>
+				<div class="text-[14px]">
+					<el-table :data="systemService.process" size="large" v-loading="loadingArr.process_load">
+						<el-table-column prop="name" :label="t('name')" align="left" min-width="200" />
+						<el-table-column prop="need" :label="t('demand')" align="left" min-width="140" />
+						<el-table-column :label="t('status')" align="left" min-width="140">
+							<template #default="{ row }">
+								<span v-if="row.status"><el-icon color="green"><Select /></el-icon></span>
+								<span v-else><el-icon color="red">
+										<CloseBold />
+									</el-icon></span>
+							</template>
+						</el-table-column>
+					</el-table>
+				</div>
+			</div>
+		</el-card>
+	</div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { t } from '@/lang'
 import { getSystem } from '@/api/tools'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title
 
 const systemService = ref([])
+let loadingArr = reactive({
+	"server_load": true,
+	"server_version_load": true,
+	"system_variables_load": true,
+	"process_load": true
+})
 const getSystemService = () => {
-	getSystem().then(res=>{
-		systemService.value = res.data;
+	loadingArr.server_load = true;
+	loadingArr.server_version_load = true;
+	loadingArr.system_variables_load = true;
+	loadingArr.process_load = true;
+	getSystem().then(res => {
+		systemService.value = res.data
+		loadingArr.server_load = false;
+		loadingArr.server_version_load = false;
+		loadingArr.system_variables_load = false;
+		loadingArr.process_load = false;
 	})
 }
 getSystemService()

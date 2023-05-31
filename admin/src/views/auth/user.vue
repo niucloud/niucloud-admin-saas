@@ -1,16 +1,27 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-            <div class="flex justify-between">
-                <el-button type="primary" @click="addEvent">
+            <div class="flex justify-between items-center">
+                <span class="text-[24px]">{{pageName}}</span>
+                <el-button type="primary" class="w-[100px]" @click="addEvent">
                     {{ t('addUser') }}
                 </el-button>
-                <el-input v-model="seach" :placeholder="t('accountNumberPlaceholder')" class="w-[190px]" prefix-icon="Search"
-                    @input="loadUserList()" clearable />
             </div>
 
+            <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
+                <el-form :inline="true" :model="userTableData.searchParam" ref="searchFormRef">
+                    <el-form-item :label="t('accountNumber')" prop="seach">
+                        <el-input v-model="userTableData.searchParam.seach" class="w-[240px]"
+                            :placeholder="t('accountNumberPlaceholder')" />
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="loadUserList()">{{ t('search') }}</el-button>
+                        <el-button @click="resetForm(searchFormRef)">{{ t('reset') }}</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-card>
 
-            <div class="mt-[16px]">
+            <div>
                 <el-table :data="userTableData.data" size="large" v-loading="userTableData.loading">
                     <template #empty>
                         <span>{{ !userTableData.loading ? t('emptyData') : '' }}</span>
@@ -18,7 +29,9 @@
                     <el-table-column :label="t('headImg')" width="100" align="left">
                         <template #default="{ row }">
                             <el-avatar v-if="row.head_img" :src="img(row.head_img)" />
-                            <el-avatar v-else icon="UserFilled" />
+							<el-avatar v-else>
+								<img src="@/assets/images/member_head.png"/>
+							</el-avatar>
                         </template>
                     </el-table-column>
                     <el-table-column prop="username" :label="t('accountNumber')" min-width="120" show-overflow-tooltip />
@@ -47,11 +60,16 @@
                             {{ row.last_ip || '' }}
                         </template>
                     </el-table-column>
-                    <el-table-column :label="t('operation')" fixed="right" width="130">
+                    <el-table-column :label="t('operation')" fixed="right" width="160">
                         <template #default="{ row }">
-                            <el-button type="primary" link @click="editEvent(row)">{{ t('edit') }}</el-button>
-                            <el-button type="danger" link @click="lockEvent(row.uid)" v-if="row.status">{{ t('lock') }}</el-button>
-                            <el-button type="danger" link @click="unlockEvent(row.uid)" v-else>{{ t('unlock') }}</el-button>
+							<div v-if="row.userrole.is_admin != 1">
+								<el-button type="primary" link @click="editEvent(row)">{{ t('edit') }}</el-button>
+								<el-button type="danger" link @click="lockEvent(row.uid)" v-if="row.status">{{ t('lock') }}</el-button>
+								<el-button type="danger" link @click="unlockEvent(row.uid)" v-else>{{ t('unlock') }}</el-button>
+							</div>
+                            <div v-else>
+                                <el-button link disabled >{{ t('adminDisabled') }}</el-button>
+                            </div>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -76,17 +94,30 @@ import EditUser from '@/views/auth/components/edit-user.vue'
 import { img } from '@/utils/common'
 import { ElMessageBox } from 'element-plus'
 import type { FormInstance } from 'element-plus'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title;
 
 const userTableData = reactive({
     page: 1,
     limit: 10,
     total: 0,
     loading: true,
-    data: []
+    data: [],
+    searchParam:{
+        seach: ''
+    }
 })
-const seach = ref<string>('')
 
 const searchFormRef = ref<FormInstance>()
+
+
+const resetForm = (formEl: FormInstance | undefined)=>{
+    if (!formEl) return
+    
+    formEl.resetFields();
+    loadUserList();
+}
 
 /**
  * 获取用户列表
@@ -98,7 +129,7 @@ const loadUserList = (page: number = 1) => {
     getUserList({
         page: userTableData.page,
         limit: userTableData.limit,
-        username: seach.value
+        username: userTableData.searchParam.seach
 
     }).then(res => {
         userTableData.loading = false

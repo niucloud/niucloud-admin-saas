@@ -1,5 +1,5 @@
 <template>
-    <el-container class="layout-header h-full border-b border-color px-[10px]">
+    <el-container :class="['h-full px-[10px]',{'layout-header border-b border-color': !dark}]" >
         <el-row class="w-100 h-full w-full">
             <el-col :span="12">
                 <div class="left-panel h-full flex items-center">
@@ -33,8 +33,7 @@
             <el-col :span="12">
                 <div class="right-panel h-full flex items-center justify-end">
                     <!-- 预览 只有站点时展示-->
-                    <img class="w-[16px] h-[16px] mr-1" v-if="appType == 'site'" src="@/assets/images/icon_preview.png"
-                        :alt="t('preview')" :title="t('preview')">
+                    <i class="iconfont iconlingdang-xianxing cursor-pointer px-[8px]" :title="t('newInfo')" v-if="appType == 'site'"></i>
                     <!-- 切换语言 -->
                     <div class="navbar-item flex items-center h-full cursor-pointer">
                         <switch-lang />
@@ -89,6 +88,10 @@ const systemStore = useSystemStore()
 const appStore = useAppStore()
 const route = useRoute()
 const screenWidth = ref(window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth)
+
+const dark = computed(()=>{
+    return systemStore.dark
+})
 
 // 检测登录 start
 const detectionLoginDialog = ref(false)
@@ -164,6 +167,11 @@ const backFn = () => {
 </script>
 
 <style lang="scss" scoped>
+.layout-header{
+    position: relative;
+    z-index: 5;
+    box-shadow: 0px 0px 4px 0px rgba(0,145,255,0.1);
+}
 .navbar-item {
     padding: 0 8px;
 

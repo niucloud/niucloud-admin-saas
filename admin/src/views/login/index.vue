@@ -47,12 +47,14 @@
         <!-- 站点端登录 -->
         <el-main class="login-main items-center justify-evenly" v-else-if="!imgLoading && loginType == 'site'">
             <div>
-                <el-row class="items-end mb-[20px]">
+                <el-row class="items-end mb-[20px] h-[40px] w-[360px]">
                     <el-col :span="8">
-                        <img src="@/assets/images/site_login.png" alt="">
+						<img class="max-h-[40px]" :src="img(webSite.logo)" alt="" v-if="webSite.logo">
+                        <img src="@/assets/images/site_login.png" alt="" v-else>
                     </el-col>
-                    <el-col :span="8" class="ml-[20px]">
-                        <div>{{ t('manageAdminFramework') }}</div>
+                    <el-col :span="12" class="ml-[20px] text-[18px]">
+                        <div class="admin_name" v-if="webSite.site_name">{{ webSite.site_name }}</div>
+						<div class="admin_name" v-else>{{ t('manageAdminFramework') }}</div>
                     </el-col>
                 </el-row>
                 <div class="login flex flex-col w-[360px] p-[40px] rounded-md rounded-[10px]">
@@ -104,12 +106,21 @@ import storage from '@/utils/storage'
 import { getLoginConfig } from '@/api/auth'
 import useUserStore from '@/stores/modules/user'
 import { setWindowTitle, img, getAppType } from '@/utils/common'
+import { getWebConfig } from '@/api/sys'
 
 const loading = ref(false)
 const imgLoading = ref(false)
 const userStore = useUserStore()
 const route = useRoute()
 const router = useRouter()
+
+route.redirectedFrom && (route.query.redirect = route.redirectedFrom.path)
+
+const webSite = ref([])
+const setFormData = async (id: number = 0) => {
+    webSite.value = await (await getWebConfig()).data
+}
+setFormData()
 
 // 判断登录页面[平台或者站点]
 const loginType = ref(getAppType())
@@ -201,6 +212,13 @@ const loginFn = (data = {}) => {
 
 .login {
     background: var(--el-bg-color);
+}
+
+.admin_name{
+	overflow:hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	-o-text-overflow:ellipsis;
 }
 
 @media only screen and (max-width: 750px) {

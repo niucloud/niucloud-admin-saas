@@ -156,7 +156,7 @@
                                 "captcha_key":backToken.value
                             }
                             reqCheck(data).then(res=>{
-                                if (res.code == "200") {
+                                if (res.code == 1) {
                                     barAreaColor.value = '#4cae4c'
                                     barAreaBorderColor.value = '#5cb85c'
                                     text.value = '验证成功'
@@ -214,7 +214,7 @@
                         captchaType:captchaType.value
                     }
                     reqGet(data).then(res=>{
-                        if (res.code == "200") {
+                        if (res.code == 1) {
                             pointBackImgBase.value = res.data.originalImageBase64
                             backToken.value = res.data.token
                             secretKey.value = res.data.secretKey

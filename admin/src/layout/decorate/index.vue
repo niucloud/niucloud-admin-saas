@@ -1,5 +1,5 @@
 <template>
-	<el-container class="w-screen h-screen">
+	<el-container class="w-screen h-screen min-w-[1200px]">
 		<router-view></router-view>
 	</el-container>
 </template>

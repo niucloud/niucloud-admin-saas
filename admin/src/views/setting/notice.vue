@@ -3,72 +3,54 @@
         <el-card class="box-card !border-none" shadow="never">
             <h3 class="panel-title">{{ t('buyerNotice') }}</h3>
             <div class="flex flex-row flex-wrap m-[-4px]">
-               
-                <div class="sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/4 2xl:w-1/4 p-1" v-for="item in noticeTableData.buyer" >
-                    <div class="border rounded-sm	" >
-                        <div class="card-header flex items-center p-4 pb-3 pt-3 border-b text-base">
-                            <span class="mr-1">{{ item.name }}</span>
-                            <el-tooltip
-                                class="box-item"
-                                effect="dark"
-                                :content="item.title"
-                                placement="top"
-                            >
-                                <el-icon class="cursor-pointer"><Warning /></el-icon>
-                            </el-tooltip>
-                        </div>
-                        <div class="flex justify-around notice-type p-4 pb-6 pt-6 ">
-                            <div class="text-sm mr-1 flex items-center cursor-pointer" v-if="item.sms_type == 1" @click="setNotice(item, 'sms')">
-                                <el-icon :class="item.is_sms ? 'open' : ''"><CircleCheck /></el-icon>
-                                <span class="ml-0.5">{{ t('sms') }}</span>
-                            </div>
-                            <div class="text-sm  flex items-center cursor-pointer" v-if="item.wechat_type" @click="setNotice(item, 'wechat')">
-                                <el-icon :class="item.is_wechat ? 'open' : ''"><CircleCheck /></el-icon>
-                                <span class="ml-0.5">{{ t('wechat') }}</span>
-                            </div>
-                            <div class="text-sm  flex items-center cursor-pointer" v-if="item.weapp_type" @click="setNotice(item, 'weapp')">
-                                <el-icon :class="item.is_weapp ? 'open' : ''"><CircleCheck /></el-icon>
-                                <span class="ml-0.5">{{ t('weapp') }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                 
+				<el-table :data="noticeTableData.seller" size="large">
+				    <el-table-column prop="name" :label="t('noticeType')" min-width="120" />
+				    <el-table-column :label="t('operation')" fixed="right" min-width="300">
+				        <template #default="{ row }">
+				            <div class="flex">
+								<div class="text-sm mr-1 flex items-center cursor-pointer" v-if="row.sms_type == 1" @click="setNotice(row, 'sms')">
+								    <el-icon class="text-[15px] mr-[3px]" :class="row.is_sms ? 'open' : ''"><SuccessFilled /></el-icon>
+								    <span class="ml-0.5">{{ t('sms') }}</span>
+								</div>
+								<div class="text-sm  flex items-center cursor-pointer ml-[20px]" v-if="row.wechat_type" @click="setNotice(row, 'wechat')">
+								    <el-icon class="text-[15px] mr-[3px]" :class="row.is_wechat ? 'open' : ''"><SuccessFilled /></el-icon>
+								    <span class="ml-0.5">{{ t('wechat') }}</span>
+								</div>
+								<div class="text-sm  flex items-center cursor-pointer ml-[20px]" v-if="row.weapp_type" @click="setNotice(row, 'weapp')">
+								    <el-icon class="text-[15px] mr-[3px]" :class="row.is_weapp ? 'open' : ''"><SuccessFilled /></el-icon>
+								    <span class="ml-0.5">{{ t('weapp') }}</span>
+								</div>
+				            </div>
+				        </template>
+				    </el-table-column>
+				</el-table>	
             </div>
         </el-card>
         
         <el-card class="box-card !border-none mt-[16px]" shadow="never">
             <h3 class="panel-title">{{ t('sellerNotice') }}</h3>
             <div class="flex flex-row flex-wrap m-[-4px]">
-                <div class="sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/4 2xl:w-1/4 p-1" v-for="item in noticeTableData.seller">
-                    <div class="border rounded-sm	" >
-                        <div class="card-header flex items-center p-4 pb-3 pt-3 border-b text-base">
-                            <span class="mr-1">{{ item.name }}</span>
-                            <el-tooltip
-                                class="box-item"
-                                effect="dark"
-                                :content="item.title"
-                                placement="top"
-                            >
-                                <el-icon class="cursor-pointer"><Warning /></el-icon>
-                            </el-tooltip>
-                        </div>
-                        <div class="flex justify-around notice-type p-4 pb-6 pt-6 ">
-                            <div class="text-sm mr-1 flex items-center cursor-pointer" v-if="item.sms_type == 1" @click="setNotice(item, 'sms')">
-                                <el-icon :class="item.is_sms ? 'open' : ''"><CircleCheck /></el-icon>
-                                <span class="ml-0.5">{{ t('sms') }}</span>
-                            </div>
-                            <div class="text-sm  flex items-center cursor-pointer" v-if="item.wechat_type" @click="setNotice(item, 'wechat')">
-                                <el-icon :class="item.is_wechat ? 'open' : ''"><CircleCheck /></el-icon>
-                                <span class="ml-0.5">{{ t('wechat') }}</span>
-                            </div>
-                            <div class="text-sm  flex items-center cursor-pointer" v-if="item.weapp_type" @click="setNotice(item, 'weapp')">
-                                <el-icon :class="item.is_weapp ? 'open' : ''"><CircleCheck /></el-icon>
-                                <span class="ml-0.5">{{ t('weapp') }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+				<el-table :data="noticeTableData.buyer" size="large">
+				    <el-table-column prop="name" :label="t('noticeType')" min-width="120" />
+				    <el-table-column :label="t('operation')" fixed="right" min-width="300">
+				        <template #default="{ row }">
+				            <div class="flex">
+								<div class="text-sm mr-1 flex items-center cursor-pointer" v-if="row.sms_type == 1" @click="setNotice(row, 'sms')">
+								    <el-icon class="text-[15px] mr-[3px]" :class="row.is_sms ? 'open' : ''"><SuccessFilled /></el-icon>
+								    <span class="ml-0.5">{{ t('sms') }}</span>
+								</div>
+								<div class="text-sm  flex items-center cursor-pointer ml-[20px]" v-if="row.wechat_type" @click="setNotice(row, 'wechat')">
+								    <el-icon class="text-[15px] mr-[3px]" :class="row.is_wechat ? 'open' : ''"><SuccessFilled /></el-icon>
+								    <span class="ml-0.5">{{ t('wechat') }}</span>
+								</div>
+								<div class="text-sm  flex items-center cursor-pointer ml-[20px]" v-if="row.weapp_type" @click="setNotice(row, 'weapp')">
+								    <el-icon class="text-[15px] mr-[3px]" :class="row.is_weapp ? 'open' : ''"><SuccessFilled /></el-icon>
+								    <span class="ml-0.5">{{ t('weapp') }}</span>
+								</div>
+				            </div>
+				        </template>
+				    </el-table-column>
+				</el-table>	
             </div>
         </el-card>
 
@@ -131,9 +113,7 @@ const loadNoticeList = () => {
 loadNoticeList()
  
 const setNotice = (data: any, type: string) => {
-	
     data.type = type;
-	console.log(data)
     eval('data.status=data.is_'+type);
     eval(type+'Dialog.value.setFormData(data)');
     eval(type+'Dialog.value.showDialog = true;');

@@ -1,26 +1,51 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-			<el-card class="box-card !border-none table-search-wrap" shadow="never">
+			<div class="flex justify-between items-center mb-[5px]">
+                <span class="text-[24px]">{{pageName}}</span>
+            </div>
+			<el-card class="box-card !border-none base-bg !px-[35px]" shadow="never">
 			    <el-row class="flex">
-			        <el-col :span="12" class="min-w-[100px]">
-			            <el-statistic :value="balanceStatistics.money">
-			                <template #title>
-			                    <div class="text-[14px] mb-[9px]">{{ t('money') }}</div>
-			                </template> 
-			            </el-statistic>
+			        <el-col :span="8" class="min-w-[100px]">
+						<div class="statistic-card">
+                            <el-statistic :value="balanceStatistics.money ? Number.parseFloat(balanceStatistics.money+balanceStatistics.balance).toFixed(2) : '0.00'"></el-statistic>
+                            <div class="statistic-footer">
+                                <div class="footer-item text-[14px] text-[#666]">
+                                    <span>{{ t('totalAllBalance') }}</span>
+                                </div>
+                            </div>
+                        </div>
 			        </el-col>
-			        <el-col :span="12" class="min-w-[100px]">
-			            <el-statistic :precision="2" :value="balanceStatistics.balance">
-			                <template #title>
-			                    <div class="text-[14px] mb-[9px]">{{ t('balance') }}</div>
-			                </template>
-			            </el-statistic>
+					<el-col :span="8" class="min-w-[100px]">
+						<div class="statistic-card">
+                            <el-statistic :value="balanceStatistics.money"></el-statistic>
+                            <div class="statistic-footer">
+                                <div class="footer-item text-[14px] text-[#666]">
+                                    <span>{{ t('totalMoney') }}</span>
+                                </div>
+                            </div>
+                        </div>
+			        </el-col>
+			        <el-col :span="8" class="min-w-[100px]">
+						<div class="statistic-card">
+                            <el-statistic :value="balanceStatistics.balance"></el-statistic>
+                            <div class="statistic-footer">
+                                <div class="footer-item text-[14px] text-[#666]">
+                                    <span>{{ t('totalBalance') }}</span>
+                                </div>
+                            </div>
+                        </div>
 			        </el-col>
 			    </el-row>
 			</el-card>
-            <el-card class="box-card !border-none my-[16px] table-search-wrap" shadow="never">
+            <el-card class="box-card !border-none mb-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="memberAccountLogTableData.searchParam" ref="searchFormRef">
+
+					<el-form-item :label="t('memberInfo')" prop="keywords">
+                        <el-input v-model="memberAccountLogTableData.searchParam.keywords" class="w-[240px]"
+                            :placeholder="t('memberInfoPlaceholder')" />
+                    </el-form-item>
+
 					<el-form-item :label="t('balanceType')" prop="from_type">
 					    <el-select v-model="memberAccountLogTableData.balance_type" clearable :placeholder="t('fromTypePlaceholder')" class="input-width" @change="checkAccountType">
 					        <el-option :label="t('selectPlaceholder')" value="" />
@@ -45,37 +70,49 @@
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="loadMemberAccountLogList()">{{ t('search') }}</el-button>
-                        <el-button @click="searchFormRef?.resetFields()">{{ t('reset') }}</el-button>
+                        <el-button @click="resetForm(searchFormRef)">{{ t('reset') }}</el-button>
                     </el-form-item>
                 </el-form>
 				
             </el-card>
 
-            <div class="mt-[16px]">
+            <div class="mt-[10px]">
                 <el-table :data="memberAccountLogTableData.data" size="large" v-loading="memberAccountLogTableData.loading">
 
                     <template #empty>
                         <span>{{ !memberAccountLogTableData.loading ? t('emptyData') : '' }}</span>
                     </template>
-
-                    <el-table-column  :label="t('nickName')" min-width="140" :show-overflow-tooltip="true">
+					<el-table-column prop="member_id" :label="t('memberId')" min-width="80" :show-overflow-tooltip="true">
+                        <template #default="{ row }">
+                            {{ row.member.member_no }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column  :label="t('memberInfo')" min-width="140" :show-overflow-tooltip="true">
                         <template #default="{ row }">
                             <div class="flex items-center cursor-pointer" @click="toMember(row.member_id)">
-                                <img class="w-[50px] h-[50px] mr-[10px]" v-if="row.headimg" :src="img(row.headimg)" alt="" >
+                                <img class="w-[50px] h-[50px] mr-[10px]" v-if="row.member.headimg" :src="img(row.member.headimg)" alt="" >
                                 <img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/assets/images/default_headimg.png" alt="" >
                                 <div class="flex flex flex-col">
-                                    <span class="text-blue-700">{{ row.nickname || '' }}</span>
-                                    <span class="text-blue-700">{{ row.mobile || '' }}</span>
+                                    <span class="">{{ row.member.nickname || '' }}</span>
                                 </div>
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="account_data" :label="t('accountData')" min-width="120" />
-					<el-table-column prop="account_type_name" :label="t('balanceType')" min-width="120" />
-                    <el-table-column prop="from_type_name" :label="t('fromType')" min-width="120" />
+					<el-table-column prop="mobile" :label="t('mobile')" min-width="90">
+						<template #default="{ row }">
+							{{ row.member.mobile || '' }}
+                        </template>
+					</el-table-column>
+                    <el-table-column prop="account_data" :label="t('accountData')" min-width="70" align="right">
+						<template #default="{ row }">
+							<span v-if="row.account_data >= 0">+{{ row.account_data }}</span>
+							<span v-else>{{ row.account_data }}</span>
+                        </template>
+					</el-table-column>
+					<el-table-column prop="account_sum" :label="t('accountSum')" min-width="110" align="right"/>
+					<el-table-column prop="account_type_name" :label="t('balanceType')" min-width="150" align="center" />
+                    <el-table-column prop="from_type_name" :label="t('fromType')" min-width="120" align=""/>
                     <el-table-column prop="create_time" :show-overflow-tooltip="true" :label="t('createTime')" min-width="150" />
-                    <el-table-column prop="memo" :label="t('memo')" min-width="120" />
-
                     <el-table-column :label="t('operation')" fixed="right" width="100">
                        <template #default="{ row }">
                            <el-button type="primary" link @click="infoEvent(row)">{{ t('info') }}</el-button>
@@ -105,11 +142,13 @@ import {
 	getMoneyList,
 	getAccountType,
 } from '@/api/member'
+import { FormInstance } from 'element-plus'
 import { img } from '@/utils/common'
 import balanceInfo from '@/views/member/components/member-balance-info.vue'
 import { useRoute,useRouter } from 'vue-router'
 const route = useRoute()
 const member_id: number = parseInt(route.query.id || 0)
+const pageName = route.meta.title;
 
 let memberAccountLogTableData = reactive({
     page: 1,
@@ -118,6 +157,7 @@ let memberAccountLogTableData = reactive({
     loading: true,
     data: [],
     searchParam:{
+	  keywords:"",
       from_type:"",
       create_time:"",
       mobile:"",
@@ -131,12 +171,18 @@ let fromTypeList = ref([])
 
 const setFromTypeList = async () => {
     fromTypeList.value = await (await getChangeTypeList('balance')).data
-	console.log(fromTypeList.value)
 }
 
 setFromTypeList();
 
 const searchFormRef = ref<FormInstance>()
+
+
+const resetForm = (formEl: FormInstance | undefined)=>{
+    if (!formEl) return
+    formEl.resetFields();
+    loadMemberAccountLogList();
+}
 
 /**
  * 获取会员账单表列表
@@ -153,7 +199,6 @@ const loadMemberAccountLogList = (page: number = 1) => {
 		    memberAccountLogTableData.loading = false
 		    memberAccountLogTableData.data = res.data.data
 		    memberAccountLogTableData.total = res.data.total
-			console.log(memberAccountLogTableData.data)
 		}).catch(() => {
 		    memberAccountLogTableData.loading = false
 		})
@@ -209,8 +254,7 @@ checkBalanceInfo()
 //获取余额类型
 const balanceStatus = ref([])
 const checkBalanceStatus = () => {
-	 getBalanceStatus({
-	 }).then(res => {
+	 getBalanceStatus().then(res => {
 		for (var i in res.data) {
 			if(i == 'balance' || i == 'money'){
 				 balanceStatus.value.push({"name" : res.data[i], "type" : i})

@@ -128,7 +128,7 @@ if (id) setFormData(id)
 
 const setCategoryList = async () => {
     categoryList.value = await (await getArticleCategoryAll({})).data
-    if (!id && categoryList.value.length > 0) formData.category_id = categoryList.value[0].category_id
+    // if (!id && categoryList.value.length > 0) formData.category_id = categoryList.value[0].category_id
 }
 setCategoryList()
 

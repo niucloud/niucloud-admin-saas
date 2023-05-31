@@ -95,7 +95,7 @@ const emit = defineEmits(['complete'])
             showDialog.value = false
             emit('complete')
         }).catch(err => {
-            
+            loading.value = false
         })
 
     })

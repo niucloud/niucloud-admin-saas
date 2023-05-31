@@ -25,6 +25,17 @@
       "userRealNamePlaceholder": "请输入名称",
       "expireTimePlaceholder":"请选择到期时间",
       "confirmPasswordError": "两次输入的密码不一致",
-      "operationTip": "温馨提示：站点登录页面"
-      
-}
+      "operationTip": "温馨提示：站点登录页面",
+      "siteId": "站点ID",
+      "siteInfo": "站点信息",
+      "siteInlet": "站点入口",
+      "enterSite": "访问站点",
+      "siteList": "站点列表",
+	"openClose": "开启/停止",
+      "closeTxt":"停止",
+      "openTxt":"开启",
+      "siteUrlDevelopMessage": "站点域名功能正在开发中",
+      "url": "域名",
+      "startDate":"开始时间",
+      "endDate":"开始时间"
+}	

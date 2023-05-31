@@ -47,7 +47,7 @@ const element = computed(() => {
 
 // iconfont 图标
 const iconfont = computed(() => {
-    const iconfile = import.meta.globEager('@/styles/icon/iconfont.css')['/src/styles/iconfont.css'].default
+    const iconfile = import.meta.globEager('@/styles/iconfont.css')['/src/styles/iconfont.css'].default
     const icons = Array.from(iconfile.matchAll(/(icon.*)\:before/g))
 
     return icons.map(item => {

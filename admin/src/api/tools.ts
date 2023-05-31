@@ -26,7 +26,7 @@ export function getGenerateTableInfo(id: number) {
  * @returns
  */
 export function addGenerateTable(params: Record<string, any>) {
-    return request.post('generator/generator', params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.post('generator/generator', params, { showSuccessMessage: true })
 }
 
 /**
@@ -36,7 +36,7 @@ export function addGenerateTable(params: Record<string, any>) {
  * @returns
  */
 export function editGenerateTable(params: Record<string, any>) {
-    return request.put(`generator/generator/${params.id}`, params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put(`generator/generator/${params.id}`, params, { showSuccessMessage: true })
 }
 
 /**
@@ -45,7 +45,7 @@ export function editGenerateTable(params: Record<string, any>) {
  * @returns
  */
 export function deleteGenerateTable(id: number) {
-    return request.delete(`generator/generator/${id}`, { showErrorMessage: true, showSuccessMessage: true })
+    return request.delete(`generator/generator/${id}`, { showSuccessMessage: true })
 }
 
 /**

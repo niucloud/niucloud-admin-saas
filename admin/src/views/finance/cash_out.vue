@@ -1,28 +1,82 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
+            <div class="flex justify-between items-center mb-[5px]">
+                <span class="text-[24px]">{{pageName}}</span>
+            </div>
+            <el-card class="box-card !border-none base-bg !px-[35px]" shadow="never">
+			    <el-row class="flex">
+                    <el-col :span="12">
+						<div class="statistic-card">
+                            <el-statistic :value="statistics.transfered ? Number.parseFloat(statistics.transfered).toFixed(2) : '0.00'"></el-statistic>
+                            <div class="statistic-footer">
+                                <div class="footer-item text-[14px] text-[#666]">
+                                    <span>{{ t('totalTransfered') }}</span>
+                                </div>
+                            </div>
+                        </div>
+					</el-col>
+					<el-col :span="12">
+						<div class="statistic-card">
+                            <el-statistic :value="statistics.cash_outing ? Number.parseFloat(statistics.cash_outing).toFixed(2) : '0'"></el-statistic>
+                            <div class="statistic-footer">
+                                <div class="footer-item text-[14px] text-[#666]">
+                                    <span>{{ t('totalCashOuting') }}</span>
+                                </div>
+                            </div>
+                        </div>
+					</el-col>
+			    </el-row>
+			</el-card>
 
-            <el-card class="box-card !border-none my-[16px] table-search-wrap" shadow="never">
+            <el-card class="box-card !border-none mb-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="orderTableData.searchParam" ref="searchFormRef">
+                    <el-form-item :label="t('applyTime')" prop="create_time">
+                        <el-date-picker v-model="orderTableData.searchParam.create_time" type="datetimerange"
+                            value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')"
+                            :end-placeholder="t('endDate')" />
+                    </el-form-item>
+					<el-form-item :label="t('cashOutNumber')" prop="cash_out_no">
+					    <el-input v-model="orderTableData.searchParam.cash_out_no" class="w-[240px]"
+					        :placeholder="t('cashOutNumberPlaceholder')" />
+					</el-form-item>
+					
+					<el-form-item :label="t('memberInfo')" prop="keyword">
+					    <el-input v-model="orderTableData.searchParam.keyword" class="w-[240px]"
+					        :placeholder="t('memberInfoPlaceholder')" />
+					</el-form-item>
+					
+					<el-form-item :label="t('cashOutMethod')" prop="transfer_type">
+					    <el-select v-model="orderTableData.searchParam.transfer_type" clearable class="input-width">
+					        <el-option :label="t('selectPlaceholder')" value="" />
+					        <el-option :label="item.name" :value="key" v-for="(item, key) in Transfertype" />
+					    </el-select>
+					</el-form-item>
+					
 					<el-form-item :label="t('cashOutStatus')" prop="order_from">
 					    <el-select v-model="orderTableData.searchParam.status" clearable class="input-width">
 					        <el-option :label="t('selectPlaceholder')" value="" />
 					        <el-option :label="item" :value="key" v-for="(item, key) in cashOutStatusList" />
 					    </el-select>
 					</el-form-item>
-                    <el-form-item :label="t('createTime')" prop="create_time">
-                        <el-date-picker v-model="orderTableData.searchParam.create_time" type="datetimerange"
-                            value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')"
-                            :end-placeholder="t('endDate')" />
-                    </el-form-item>
+					<el-form-item :label="t('auditTime')" prop="audit_time">
+					    <el-date-picker v-model="orderTableData.searchParam.audit_time" type="datetimerange"
+					        value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')"
+					        :end-placeholder="t('endDate')" />
+					</el-form-item>
+					<el-form-item :label="t('transferTime')" prop="transfer_time">
+					    <el-date-picker v-model="orderTableData.searchParam.transfer_time" type="datetimerange"
+					        value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')"
+					        :end-placeholder="t('endDate')" />
+					</el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="loadOrderList()">{{ t('search') }}</el-button>
-                        <el-button @click="searchFormRef?.resetFields()">{{ t('reset') }}</el-button>
+                        <el-button @click="resetForm(searchFormRef)">{{ t('reset') }}</el-button>
                     </el-form-item>
                 </el-form>
             </el-card>
 
-            <div class="mt-[16px]">
+            <div class="mt-[10px]">
                 <el-table :data="orderTableData.data" size="large" v-loading="orderTableData.loading">
                     <template #empty>
                         <span>{{ !orderTableData.loading ? t('emptyData') : '' }}</span>
@@ -30,18 +84,16 @@
 
                     <el-table-column prop="order_no" :show-overflow-tooltip="true" :label="t('memberInfo')" align="center" min-width="140">
                         <template #default="{ row }">
-                            <div class="flex items-center cursor-pointer " @click="toMember(row.member_id)">
-                                <img class="w-[50px] h-[50px] mr-[10px]" v-if="row.headimg" :src="img(row.headimg)" alt="" >
+                            <div class="flex items-center cursor-pointer " @click="toMember(row.member.member_id)">
+                                <img class="w-[50px] h-[50px] mr-[10px]" v-if="row.member.headimg" :src="img(row.member.headimg)" alt="" >
                                 <img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/assets/images/default_headimg.png" alt="" >
                                 <div class="flex flex flex-col">
-                                    <span class="text-blue-700">{{ row.nickname || '' }}</span>
-                                    <span class="text-blue-700">{{ row.mobile || '' }}</span>
+                                    <span class="">{{ row.member.nickname || '' }}</span>
+                                    <span class="">{{ row.member.mobile || '' }}</span>
                                 </div>
                             </div>
                         </template>
                     </el-table-column>
-
-                    <el-table-column prop="account_type_name" :label="t('cashOutAccountType')" align="center" min-width="140" />
                     <el-table-column :label="t('cashOutMethod')" align="center" min-width="140" >
                         <template #default="{ row }">
                             {{ Transfertype[row.transfer_type].name }}
@@ -49,15 +101,10 @@
                     </el-table-column>
 
                     <el-table-column  prop="apply_money" :label="t('applicationForWithdrawalAmount')" min-width="140" align="center" />
-<!-- 
+
+                    <el-table-column prop="money" :label="t('actualTransferAmount')" min-width="200" align="center"/>
+					
                     <el-table-column prop="service_money" :label="t('cashOutCommission')" align="center" min-width="140" />
- -->
-                    <el-table-column prop="money" :label="t('cashOutMoney')" min-width="200" align="center">
-						<template #default="{ row }">
-							<div>{{ t('actualTransferAmount') }} ：{{ row.money }}</div>
-						    <div>{{ t('cashOutCommission') }} ：{{ row.service_money }}</div>
-						</template>
-					</el-table-column>
 
                     <el-table-column prop="status_name" :label="t('cashOutStatus')" align="center" min-width="100" />
 
@@ -66,6 +113,18 @@
                             {{ row.create_time || '' }}
                         </template>
                     </el-table-column>
+					
+					<el-table-column :label="t('auditTime')" min-width="180" align="center">
+					    <template #default="{ row }">
+					        {{ row.audit_time || '' }}
+					    </template>
+					</el-table-column>
+					
+					<el-table-column :label="t('transferTime')" min-width="180" align="center">
+					    <template #default="{ row }">
+					        {{ row.transfer_time || '' }}
+					    </template>
+					</el-table-column>
 
                     <el-table-column :label="t('operation')" fixed="right" width="230">
                         <template #default="{ row }">
@@ -150,20 +209,21 @@
 <script lang="ts" setup>
 import { reactive, ref, watch } from 'vue'
 import { t } from '@/lang'
-import { getWithdrawList, getTransfertype, memberTransfer, memberAudit, getWithdrawDetail, getWithdrawStatusList } from '@/api/member'
+import { getCashOutList, getTransfertype, memberTransfer, memberAudit, getCashOutDetail, getCashOutStatusList,getCashOutStat } from '@/api/member'
 import { img } from '@/utils/common'
-import { ElMessageBox } from 'element-plus'
+import { ElMessageBox, FormInstance } from 'element-plus'
 import { data } from 'dom7'
 import { useRouter, useRoute } from 'vue-router'
 
 const cashOutStatusList = ref([])
 const checkStatusList = async () => {
-    cashOutStatusList.value = await (await getWithdrawStatusList({})).data
+    cashOutStatusList.value = await (await getCashOutStatusList({})).data
 }
 checkStatusList()
 
 const route = useRoute()
 const router = useRouter()
+const pageName = route.meta.title;
 const member_id: number = parseInt(route.query.id || 0)
 const operationBtn = ref({
     "1": {
@@ -199,9 +259,23 @@ const orderTableData = reactive({
         order_no: '',
         member_id,
         create_time: [],
-        status: ''
+        status: '',
+		cash_out_no: '',
+		keyword: '',
+		audit_time: '',
+		transfer_time: '',
+		transfer_type: ''
     }
 })
+
+const statistics = ref([])
+const checkStatInfo = () => {
+	getCashOutStat().then(res => {
+		statistics.value = res.data;
+	 })
+}
+checkStatInfo()
+
 
 // 获取会员转账方式
 const Transfertype = ref<Array<Object>>([])
@@ -210,6 +284,15 @@ const getTransfertypeFn = async()=>{
 }
 getTransfertypeFn()
 
+
+const searchFormRef = ref<FormInstance>()
+const resetForm = (formEl: FormInstance | undefined)=>{
+    if (!formEl) return
+    
+    formEl.resetFields();
+    loadOrderList();
+}
+
 /**
  * 获取提现列表
  */
@@ -217,7 +300,7 @@ const loadOrderList = (page: number = 1) => {
     orderTableData.loading = true
     orderTableData.page = page
 
-    getWithdrawList({
+    getCashOutList({
         page: orderTableData.page,
         limit: orderTableData.limit,
         ...orderTableData.searchParam
@@ -279,7 +362,7 @@ let cashOutShowDialog = ref(false);
 let cashOutInfo = ref({});
 let cashOutLoading = ref(true);
 const detailFn = (id)=>{
-    getWithdrawDetail(id).then(res => {
+    getCashOutDetail(id).then(res => {
         cashOutInfo.value = res.data;
         cashOutShowDialog.value = true;
         cashOutLoading.value = false;

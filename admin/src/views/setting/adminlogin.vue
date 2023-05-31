@@ -12,7 +12,7 @@
 
                 <el-form-item :label="t('bgImg')">
                     <upload-image v-model="formData.bg" />
-                    <div class="form-tip">{{t('isBgImgTip')}}</div>
+                    <div class="form-tip">{{t('adminBgImgTip')}}</div>
                 </el-form-item>
 
             </el-card>
@@ -26,6 +26,7 @@
 
                 <el-form-item :label="t('bgImg')">
                     <upload-image v-model="formData.site_bg" />
+                    <div class="form-tip">{{t('siteBgImgTip')}}</div>
                 </el-form-item>
                 
             </el-card>

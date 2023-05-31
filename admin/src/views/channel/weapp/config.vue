@@ -184,7 +184,6 @@ const formRules = reactive<FormRules>({
 getWeappConfig().then(res => {
     Object.assign(formData, res.data)
     loading.value = false
-    console.log('formData',formData)
 })
 
 getWeappConfig().then(res => {

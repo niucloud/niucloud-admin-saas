@@ -140,7 +140,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
                 emit('complete')
             }).catch(() => {
                 loading.value = false
-                showDialog.value = false
+                // showDialog.value = false
             })
         }
     })

@@ -14,5 +14,5 @@ export function getH5Config() {
  * @returns 
  */
 export function setH5Config(params: Record<string, any>) {
-    return request.put('channel/h5/config', params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put('channel/h5/config', params, { showSuccessMessage: true })
 }

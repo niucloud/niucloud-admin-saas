@@ -1,13 +1,13 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-            <div class="flex">
-                <el-button type="primary" @click="addEvent">
+            <div class="flex justify-between items-center">
+                <span class="text-[24px]">{{pageName}}</span>
+                <el-button type="primary" class="w-[100px]" @click="addEvent">
                     {{ t('addSiteGroup') }}
                 </el-button>
             </div>
-
-             <el-card class="box-card !border-none my-[16px] table-search-wrap" shadow="never">
+             <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="siteGroupTableData.searchParam" ref="searchFormRef">
                     <el-form-item :label="t('groupName')" prop="keywords">
                         <el-input v-model="siteGroupTableData.searchParam.keywords" :placeholder="t('groupNamePlaceholder')" />
@@ -15,12 +15,12 @@
 
                     <el-form-item> 
                         <el-button type="primary" @click="loadSiteGroupList()">{{ t('search') }}</el-button>
-                        <el-button @click="searchFormRef?.resetFields()">{{ t('reset') }}</el-button>
+                        <el-button @click="resetForm(searchFormRef)">{{ t('reset') }}</el-button>
                     </el-form-item>
                 </el-form>
             </el-card>
 
-            <div class="mt-[16px]">
+            <div>
                 <el-table :data="siteGroupTableData.data" size="large" v-loading="siteGroupTableData.loading">
 
                     <template #empty>
@@ -57,6 +57,9 @@ import { t } from '@/lang'
 import { getSiteGroupList,deleteSiteGroup } from '@/api/site'
 import { ElMessageBox, FormInstance } from 'element-plus'
 import EditGroup from '@/views/site/components/edit-group.vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title;
 
 
 const searchFormRef = ref<FormInstance>();
@@ -71,6 +74,14 @@ const siteGroupTableData = reactive({
       keywords:''
     }
 })
+
+
+const resetForm = (formEl: FormInstance | undefined)=>{
+    if (!formEl) return
+    
+    formEl.resetFields();
+    loadSiteGroupList();
+}
 
 /**
  * 获取分组列表

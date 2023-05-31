@@ -1,19 +1,10 @@
 :root {
     --aside-width: 210px;
-    --el-mask-color: rgba(255,255,255,1)
+    --el-mask-color: rgba(255,255,255,1);
 }
 
 .border-color {
     border-color: var(--el-border-color-lighter);
-}
-
-.table-search-wrap {
-    background: #f5f7fa !important;
-    border-radius: 0!important;
-
-    .el-form {
-        margin-bottom: -18px;
-    }
 }
 
 .el-form {
@@ -96,4 +87,80 @@ html.dark {
 textarea:-webkit-autofill,
 select:-webkit-autofill {
     box-shadow: 0 0 50px 50px white inset;
+}
+
+// 表格
+.el-pager li.is-active{
+    font-weight: normal !important;
+}
+
+// 筛选框
+.table-search-wrap {
+    .el-card__body{
+        padding: 10px 0;
+    }
+    .el-form {
+        margin-bottom: -18px;
+    }
+}
+
+// 背景颜色
+.base-bg{
+    background-color: transparent !important;
+    // background-color: #F5F7F9 !important; 原来的颜色
+}
+
+// 数据展示面板
+.el-statistic {
+    --el-statistic-content-font-size: 28px !important;
+}
+
+.region-input {
+    --region-input-border-color: var(--el-border-color);
+    display: flex;
+    box-shadow: 0 0 0 1px var(--region-input-border-color) inset;
+    border-radius: var(--el-input-border-radius,var(--el-border-radius-base));
+    height: calc(var(--el-input-inner-height) - 2px);
+    line-height: calc(var(--el-input-inner-height) - 2px);
+    transition: var(--el-transition-box-shadow);
+
+    &:hover {
+        --region-input-border-color: var(--el-color-primary);
+    }
+
+    .separator {
+        flex: 1;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        padding: 0 5px;
+        margin: 0;
+        font-size: 14px;
+        word-break: keep-all;
+        color: var(--el-text-color-primary);
+    }
+
+    .el-form-item {
+        flex: 1;
+    }
+
+    input {
+        padding: 0 10px;
+        appearance: none;
+        border: none;
+        outline: 0;
+        display: inline-block;
+        height: 30px;
+        line-height: 30px;
+        margin: 0;
+        text-align: center;
+        font-size: var(--el-font-size-base);
+        color: var(--el-text-color-regular);
+        background-color: transparent;
+
+        &::placeholder {
+            color: var(--el-text-color-placeholder);
+        }
+    }
 }

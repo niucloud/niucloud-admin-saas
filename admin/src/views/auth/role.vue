@@ -1,15 +1,27 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-            <div class="flex justify-between">
-                <el-button type="primary" @click="addEvent">
+            <div class="flex justify-between items-center">
+                <span class="text-[24px]">{{pageName}}</span>
+                <el-button type="primary" class="w-[100px]" @click="addEvent">
                     {{ t('addRole') }}
                 </el-button>
-                <el-input v-model="seach" :placeholder="t('roleNamePlaceholder')" class="w-[190px]" prefix-icon="Search"
-                    @input="loadRoleList()" clearable />
             </div>
 
-            <div class="mt-[16px]">
+            <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
+                <el-form :inline="true" :model="roleTableData.searchParam" ref="searchFormRef">
+                    <el-form-item :label="t('roleName')" prop="seach">
+                        <el-input v-model="roleTableData.searchParam.seach" class="w-[240px]"
+                            :placeholder="t('roleNamePlaceholder')" />
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="loadRoleList()">{{ t('search') }}</el-button>
+                        <el-button @click="resetForm(searchFormRef)">{{ t('reset') }}</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-card>
+
+            <div>
                 <el-table :data="roleTableData.data" size="large" v-loading="roleTableData.loading">
                     <template #empty>
                         <span>{{ !roleTableData.loading ? t('emptyData') : '' }}</span>
@@ -46,8 +58,11 @@
 import { ref, reactive } from 'vue'
 import { t } from '@/lang'
 import { getRoleList, deleteRole } from '@/api/sys'
-import { ElMessageBox } from 'element-plus'
+import { ElMessageBox, FormInstance } from 'element-plus'
 import EditRole from '@/views/auth/components/edit-role.vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title;
 
 const roleTableData = reactive({
     page: 1,
@@ -55,9 +70,18 @@ const roleTableData = reactive({
     total: 0,
     loading: true,
     data: [],
+    searchParam:{
+        seach:''
+    }
 })
 
-const seach = ref<string>('')
+const searchFormRef = ref<FormInstance>()
+const resetForm = (formEl: FormInstance | undefined)=>{
+    if (!formEl) return
+    
+    formEl.resetFields();
+    loadRoleList();
+}
 /**
  * 获取角色列表
  */
@@ -68,7 +92,7 @@ const loadRoleList = (page: number = 1) => {
     getRoleList({
         page: roleTableData.page,
         limit: roleTableData.limit,
-        role_name: seach.value
+        role_name: roleTableData.searchParam.seach
     }).then(res => {
         roleTableData.loading = false
         roleTableData.data = res.data.data

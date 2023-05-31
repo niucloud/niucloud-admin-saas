@@ -1,8 +1,10 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-
-            <el-card class="box-card !border-none my-[16px] table-search-wrap" shadow="never">
+            <div class="flex justify-between items-center">
+                <span class="text-[24px]">{{pageName}}</span>
+            </div>
+            <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="recordsTableData.searchParam" ref="searchFormRef">
                     <el-form-item :label="t('searchReceiver')" prop="receiver">
                         <el-input v-model="recordsTableData.searchParam.receiver" :placeholder="t('receiverPlaceholder')" />
@@ -32,7 +34,7 @@
                 </el-form>
             </el-card>
 
-            <div class="mt-[16px]">
+            <div class="mt-[10px]">
                 <el-table :data="recordsTableData.data" size="large" v-loading="recordsTableData.loading">
 
                     <template #empty>
@@ -77,6 +79,9 @@ import { t } from '@/lang'
 import { getNoticeList, getSmsLog } from '@/api/notice'
 import RecordsInfo from '@/views/setting/components/notice-records-info.vue'
 import { FormInstance } from 'element-plus'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title;
 
 const recordsTableData = reactive({
     page: 1,

@@ -117,13 +117,13 @@ import { CollectionTag } from '@element-plus/icons-vue';
 
     getLink({}).then((res: any) => {
         link.value = res.data;
-        
-        childList.value = link.value[0].child_list;
+
+        childList.value = Object.values(link.value)[0].child_list;
         if (value.value.name != '') {
             selectLink.value = cloneDeep(value.value);
         } else {
             selectLink.value = {
-                parent: link.value[0].name
+                parent: Object.values(link.value)[0].name
             };
         }
         parentLinkName.value = selectLink.value.parent;

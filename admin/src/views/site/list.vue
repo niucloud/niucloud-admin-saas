@@ -1,22 +1,17 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-            <el-alert class="warm-prompt" type="info">
-                <template #default>
-                    <p class="text-base">{{ t('operationTip') }} <span class="cursor-pointer" @click="toSiteLink">{{
-                        siteLink }}</span> </p>
-                </template>
-            </el-alert>
 
-            <div class="flex justify-between mt-3">
-                <el-button type="primary" @click="addEvent">
+            <div class="flex justify-between items-center">
+                <span class="text-[24px]">{{pageName}}</span>
+                <el-button type="primary" class="w-[100px]" @click="addEvent">
                     {{ t('addSite') }}
                 </el-button>
             </div>
 
-            <el-card class="box-card !border-none my-[16px] table-search-wrap" shadow="never">
+            <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="siteTableData.searchParam" ref="searchFormRef">
-                    <el-form-item :label="t('siteName')" prop="site_name">
+                    <el-form-item :label="t('siteName')" prop="keywords">
                         <el-input v-model="siteTableData.searchParam.keywords" :placeholder="t('siteNamePlaceholder')" />
                     </el-form-item>
 
@@ -36,31 +31,66 @@
                         </el-select>
                     </el-form-item>
 
+                    <el-form-item :label="t('createTime')" prop="create_time">
+                        <el-date-picker v-model="siteTableData.searchParam.create_time" type="datetimerange"
+                            value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')"
+                            :end-placeholder="t('endDate')" />
+                    </el-form-item>
+
+                    <el-form-item :label="t('expireTime')" prop="expire_time">
+                        <el-date-picker v-model="siteTableData.searchParam.expire_time" type="datetimerange"
+                            value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')"
+                            :end-placeholder="t('endDate')" />
+                    </el-form-item>
+
                     <el-form-item>
                         <el-button type="primary" @click="loadSiteList()">{{ t('search') }}</el-button>
-                        <el-button @click="searchFormRef?.resetFields()">{{ t('reset') }}</el-button>
+                        <el-button @click="resetForm(searchFormRef)">{{ t('reset') }}</el-button>
                     </el-form-item>
                 </el-form>
             </el-card>
 
-            <div class="mt-[16px]">
+            <el-alert class="warm-prompt" type="info">
+                <template #default>
+                    <div class="flex items-center">
+                        <el-icon class="mr-2" size="18"><Warning /></el-icon>
+                        <p class="text-base">{{ t('operationTip') }} <span class="cursor-pointer" @click="toSiteLink">{{siteLink }}</span> </p>
+                    </div>
+                </template>
+            </el-alert>
+
+            <div class="mt-[20px]">
                 <el-table :data="siteTableData.data" size="large" v-loading="siteTableData.loading">
 
                     <template #empty>
                         <span>{{ !siteTableData.loading ? t('emptyData') : '' }}</span>
                     </template>
+					<el-table-column prop="site_id" :label="t('siteId')" min-width="80"
+                        :show-overflow-tooltip="true" />
 
-                    <el-table-column prop="site_name" :label="t('siteName')" min-width="120"
+					<el-table-column :label="t('siteInfo')" min-width="180" align="left">
+					    <template #default="{ row }">
+						   <div class="flex items-center">
+							   <img class="w-[50px] h-[50px] mr-[10px]" v-if="row.logo" :src="img(row.logo)" alt="" >
+							   <img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/assets/images/site_logo.png" alt="" >
+							   <div class="flex flex flex-col">
+								   <span>{{ row.site_name || '' }}</span>
+							   </div>
+						   </div>
+					    </template>
+					</el-table-column>
+							
+                    <el-table-column prop="group_name" :label="t('groupId')" min-width="80"
                         :show-overflow-tooltip="true" />
-                    <el-table-column prop="group_name" :label="t('groupId')" min-width="120"
-                        :show-overflow-tooltip="true" />
-                    <el-table-column :label="t('status')" min-width="120" align="center">
+                    <el-table-column :label="t('status')" min-width="80" align="center">
                         <template #default="{ row }">
                             <el-tag class="ml-2" type="success" v-if="row.status == 1">{{ row.status_name }}</el-tag>
-                            <el-tag class="ml-2" type="error" v-else>
+                            <el-tag class="ml-2" type="error" v-else-if="row.status == 3">
                                 {{ row.status_name }}
                             </el-tag>
-
+							<el-tag class="ml-2" type="error" v-else>
+							    {{ row.status_name }}
+							</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column prop="create_time" :label="t('createTime')" min-width="140"
@@ -73,12 +103,14 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column :label="t('operation')" fixed="right" width="100">
+                    <el-table-column :label="t('operation')" fixed="right" width="200">
                         <template #default="{ row }">
+                            <el-button type="primary" link @click="urlEvent(row)">{{ t('url') }}</el-button>
                             <el-button type="primary" link @click="infoEvent(row)">{{ t('info') }}</el-button>
+							<el-button type="primary" link @click="openClose(row.status, row.site_id)" v-if="row.status == 1 || row.status == 3">{{ row.status == 1 ? t('closeTxt') : t('openTxt') }}</el-button>
                         </template>
                     </el-table-column>
-
+					
                 </el-table>
                 <div class="mt-[16px] flex justify-end">
                     <el-pagination v-model:current-page="siteTableData.page" v-model:page-size="siteTableData.limit"
@@ -95,10 +127,12 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import { t } from '@/lang'
-import { getSiteList, getSiteGroupAll, getStatusList } from '@/api/site'
+import { getSiteList, getSiteGroupAll, getStatusList, closeSite, openSite } from '@/api/site'
 import { FormInstance } from 'element-plus'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import EditSite from '@/views/site/components/edit-site.vue'
+const route = useRoute()
+const pageName = route.meta.title;
 
 const siteLink = location.origin + '/site/login'
 
@@ -115,7 +149,10 @@ const siteTableData = reactive({
     searchParam: {
         keywords: '',
         group_id: '',
-        status: ''
+        status: '',
+        create_time: [],
+        expire_time: []
+
     }
 })
 
@@ -131,6 +168,13 @@ const setStatusList = async () => {
 setStatusList()
 
 const searchFormRef = ref<FormInstance>()
+
+const resetForm = (formEl: FormInstance | undefined)=>{
+    if (!formEl) return
+    
+    formEl.resetFields();
+    loadSiteList();
+}
 
 /**
  * 获取站点列表
@@ -172,6 +216,23 @@ const infoEvent = (data: any) => {
     router.push('/admin/site/info?id=' + data.site_id)
 }
 
+
+/**
+ * 站点域名
+ * @param data
+ */
+ const urlEvent = (data: any) => {
+    ElMessage({
+    message:  t('siteUrlDevelopMessage') ,
+    grouping: true,
+    type: 'success',
+  })
+}
+
+const toLink = (link) => {
+    router.push(link)
+}
+
 /**
  * 站点登录
  * @param data
@@ -180,18 +241,32 @@ const toSiteLink = () => {
     window.open(siteLink)
 }
 
+const openClose = (i, site_id) => {
+	if(i == 1) {
+		closeSite({site_id}).then(res=>{
+			loadSiteList()
+		})
+	}
+	if(i == 3) {
+		openSite({site_id}).then(res=>{
+			loadSiteList()
+		})
+	}
+}
+
 </script>
 
 <style lang="scss" scoped>
-::v-deep .warm-prompt {
+:deep(.warm-prompt) {
     background-color: var(--el-color-primary-light-9) !important;
-}
-
-::v-deep .warm-prompt .el-icon {
-    color: var(--el-color-primary);
-}
-
-::v-deep .warm-prompt p {
-    color: var(--el-color-primary);
+    .el-icon, p {
+        color: var(--el-color-primary-light-3);
+    }
+    .el-alert__content{
+        padding: 0;
+        .el-alert__description{
+            margin: 0;
+        }
+    }
 }
 </style>

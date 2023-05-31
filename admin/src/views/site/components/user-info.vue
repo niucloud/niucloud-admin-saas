@@ -6,7 +6,9 @@
             <el-form-item :label="t('headimg')" >
                 <div class="flex items-center">
                     <el-avatar v-if="formData.head_img" :src="img(formData.head_img)" />
-                    <el-avatar v-else icon="UserFilled" />
+                    <el-avatar v-else>
+                    	<img src="@/assets/images/member_head.png"/>
+                    </el-avatar>
                 </div>
             </el-form-item>
             
@@ -17,8 +19,16 @@
                 <div class="input-width"> {{ formData.username }} </div>
             </el-form-item>
 
+			<el-form-item :label="t('siteId')" >
+			    <div class="input-width"> {{ formData.roles[0].site_id }} </div>
+			</el-form-item>
+
             <el-form-item :label="t('siteName')" >
-                <div class="input-width"> {{ formData.roles[0].site_name }} </div>
+				<div class="flex">
+					<div class="max-w-[260px]"> {{ formData.roles[0].site_name }} </div>
+					<el-link class="ml-10 text-blue-700" href="/site/login" target="_blank" :underline="false">{{ t('enterSite') }}</el-link>
+				</div>
+                
             </el-form-item>
 
             <el-form-item :label="t('isAdmin')" >
@@ -38,12 +48,12 @@
                 <div class="input-width"> {{ formData.last_ip }} </div>
             </el-form-item>
             
-            <el-form-item :label="t('lastTime')" >
+            <el-form-item :label="t('lastTime')" v-if="parseFloat(formData.last_time)" >
                 <div class="input-width"> {{ formData.last_time }} </div>
             </el-form-item>
 
             
-            <el-form-item :label="t('createTime')" >
+            <el-form-item :label="t('createTime')"  v-if="parseFloat(formData.create_time)">
                 <div class="input-width"> {{ formData.create_time }} </div>
             </el-form-item>
 

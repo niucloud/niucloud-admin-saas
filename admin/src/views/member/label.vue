@@ -1,25 +1,26 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-            <div class="flex">
+            <div class="flex justify-between items-center">
+                <span class="text-[24px]">{{pageName}}</span>
                 <el-button type="primary" @click="addEvent">
                     {{ t('addMemberLabel') }}
                 </el-button>
             </div>
 
-            <el-card class="box-card !border-none my-[16px] table-search-wrap" shadow="never">
+            <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="memberLabelTableData.searchParam" ref="searchFormRef">
                     <el-form-item :label="t('labelName')" prop="label_name">
                         <el-input v-model="memberLabelTableData.searchParam.label_name" :placeholder="t('labelNamePlaceholder')" />
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="loadMemberLabelList()">{{ t('search') }}</el-button>
-                        <el-button @click="searchFormRef?.resetFields()">{{ t('reset') }}</el-button>
+                        <el-button @click="resetForm(searchFormRef)">{{ t('reset') }}</el-button>
                     </el-form-item>
                 </el-form>
             </el-card>
 
-            <div class="mt-[16px]">
+            <div class="mt-[10px]">
                 <el-table :data="memberLabelTableData.data" size="large" v-loading="memberLabelTableData.loading">
 
                     <template #empty>
@@ -27,6 +28,7 @@
                     </template>
 
                     <el-table-column prop="label_name" :label="t('labelName')" min-width="120" />
+                    <el-table-column prop="member_num" :label="t('memberNumber')" min-width="120" />
                     <el-table-column prop="memo" :label="t('memo')" min-width="120" />
                     <el-table-column prop="sort" :label="t('sort')" min-width="120" />
 
@@ -54,8 +56,11 @@
 import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getMemberLabelList, deleteMemberLabel } from '@/api/member'
-import { ElMessageBox } from 'element-plus'
+import { ElMessageBox, FormInstance } from 'element-plus'
 import EditMemberLabel from '@/views/member/components/edit-label.vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title;
 
 let memberLabelTableData = reactive({
     page: 1,
@@ -69,6 +74,14 @@ let memberLabelTableData = reactive({
 })
 
 const searchFormRef = ref<FormInstance>()
+
+
+
+const resetForm = (formEl: FormInstance | undefined)=>{
+    if (!formEl) return
+    formEl.resetFields();
+    loadMemberLabelList();
+}
 
 /**
  * 获取会员标签列表

@@ -46,7 +46,7 @@
     "enablePaymentMode": "请先开启该支付方式",
     "clickConfigure": "点击配置",
     "setConfig": "设置支付配置",
-    "open": "开启",
+    "open": "已开启",
     "notOpen": "未开启",
     "cancel": "取消"
     

@@ -2,7 +2,7 @@
 	<div class="main-container">
 
 		<div class="flex h-[700px] bg-body p-[20px]">
-			<iframe class="w-[375px] shadow" :src="wapDomain" frameborder="0"></iframe>
+			<iframe class="w-[375px] border border-slate-100" :src="wapDomain" frameborder="0"></iframe>
 			<div class="w-[500px] ml-[40px]">
 				<el-button type="primary" @click="toDecorate()">{{ t('decorate') }}</el-button>
 
@@ -77,7 +77,7 @@
      * 获取微信配置
      */
     getWeappConfig().then((res: any) => {
-        if (res.code == 200) {
+        if (res.code == 1) {
             let data = res.data;
             weappConfig.qr_code = data.qr_code;
         }
@@ -89,8 +89,7 @@
     });
 
     const toDecorate = () => {
-        router.push('/decorate/edit?name=DIY_INDEX')
-        // window.open(url.href);
+        router.push('/decorate/edit?name=DIY_INDEX&back=/diy/index')
     }
 
     /**

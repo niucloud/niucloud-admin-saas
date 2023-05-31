@@ -106,7 +106,7 @@ const formRules = computed(() => {
                 emit('complete')
             }).catch(err => {
                 loading.value = false
-                showDialog.value = false
+                // showDialog.value = false
             })
         }
     })
