@@ -11,7 +11,7 @@
 
 namespace app\model\sys;
 
-use app\enum\sys\SmsEnum;
+use app\dict\sys\SmsDict;
 use core\base\BaseModel;
 
 /**
@@ -65,7 +65,7 @@ class SysNoticeSmsLog extends BaseModel
      */
     public function getNameAttr($value,$data)
     {
-        $temp = \app\enum\notice\NoticeEnum::getNotice()[$data['key'] ?? ''];
+        $temp = \app\dict\notice\NoticeDict::getNotice()[$data['key'] ?? ''];
         return  $temp['name'] ?? '';
     }
 
@@ -77,7 +77,7 @@ class SysNoticeSmsLog extends BaseModel
      */
     public function getStatusNameAttr($value,$data)
     {
-        return SmsEnum::getStatusType()[$data['status'] ?? ''] ?? '';
+        return SmsDict::getStatusType()[$data['status'] ?? ''] ?? '';
     }
 
     /**
@@ -88,7 +88,7 @@ class SysNoticeSmsLog extends BaseModel
      */
     public function getSmsTypesNameAttr($value,$data)
     {
-        $temp = SmsEnum::getType()[$data['sms_type'] ?? ''] ?? [];
+        $temp = SmsDict::getType()[$data['sms_type'] ?? ''] ?? [];
         return $temp['name'] ?? '';
     }
     /**

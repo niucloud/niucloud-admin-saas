@@ -11,9 +11,12 @@
 
 namespace app\adminapi\controller\member;
 
-use app\enum\member\MemberAccountEnum;
+use app\dict\member\MemberAccountTypeDict;
 use app\service\admin\member\MemberAccountService;
+use app\service\admin\member\MemberCashOutService;
+use app\service\admin\member\MemberService;
 use core\base\BaseAdminController;
+use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use think\Response;
 
 class Account extends BaseAdminController
@@ -28,9 +31,38 @@ class Account extends BaseAdminController
             [ 'member_id', '' ],
             [ 'from_type', '' ],
             [ 'create_time', [] ],
+            [ 'keywords', '' ],
         ]);
         $data[ 'account_type' ] = 'point';
         return success(( new MemberAccountService() )->getPage($data));
+    }
+
+    /**
+     * 会员积分统计（用于会员积分统计窗口）
+     */
+    public function sumPoint()
+    {
+        $data = $this->request->params([
+            [ 'member_id', '' ],
+        ]);
+        $member_account_service = new MemberAccountService();
+        $member_service = new MemberService();
+
+        if(empty($data['member_id']))
+        {
+            $commission_data = [
+                'point_get' => $member_service->getSum('point_get'),//累计
+                'point_use' => abs($member_account_service->getExpensesSumAccount(MemberAccountTypeDict::POINT)),
+            ];
+            return success($commission_data);
+        }else{
+            $info = $member_account_service->getMemberAccountInfo($data['member_id']);
+            $commission_data = [
+                'point_get' => $info['point_get'],
+                'point_use' => abs($member_account_service->getExpensesSumAccount(MemberAccountTypeDict::POINT,$data['member_id'])),
+            ];
+            return success($commission_data);
+        }
     }
 
     /**
@@ -43,6 +75,7 @@ class Account extends BaseAdminController
             [ 'member_id', '' ],
             [ 'from_type', '' ],
             [ 'create_time', [] ],
+            [ 'keywords', '' ],
         ]);
         $data[ 'account_type' ] = 'balance';
         return success(( new MemberAccountService() )->getPage($data));
@@ -58,6 +91,7 @@ class Account extends BaseAdminController
             [ 'member_id', '' ],
             [ 'from_type', '' ],
             [ 'create_time', [] ],
+            [ 'keywords', '' ],
         ]);
         $data[ 'account_type' ] = 'money';
         return success(( new MemberAccountService() )->getPage($data));
@@ -74,7 +108,7 @@ class Account extends BaseAdminController
             [ 'memo', '' ],
         ]);
         $res = ( new MemberAccountService() )->adjustPoint($data);
-        return success('ADD_SUCCESS', [ 'id' => $res ]);
+        return success('SUCCESS', [ 'id' => $res ]);
     }
 
     /**
@@ -88,7 +122,7 @@ class Account extends BaseAdminController
             [ 'memo', '' ],
         ]);
         $res = ( new MemberAccountService() )->adjustBalance($data);
-        return success('ADD_SUCCESS', [ 'id' => $res ]);
+        return success('SUCCESS', [ 'id' => $res ]);
     }
 
     /**
@@ -103,7 +137,7 @@ class Account extends BaseAdminController
             [ 'memo', '' ],
         ]);
         $res = ( new MemberAccountService() )->adjustMoney($data);
-        return success('ADD_SUCCESS', [ 'id' => $res ]);
+        return success('SUCCESS', [ 'id' => $res ]);
     }
 
     /**
@@ -116,9 +150,42 @@ class Account extends BaseAdminController
             [ 'member_id', '' ],
             [ 'from_type', '' ],
             [ 'create_time', [] ],
+            [ 'keywords', '' ],
         ]);
         $data[ 'account_type' ] = 'commission';
         return success(( new MemberAccountService() )->getPage($data));
+    }
+
+    /**
+     * 会员佣金统计（用于会员账户统计窗口）
+     */
+    public function sumCommission()
+    {
+        $data = $this->request->params([
+            [ 'member_id', '' ],
+        ]);
+        $member_account_service = new MemberAccountService();
+        $member_service = new MemberService();
+
+        if(empty($data['member_id']))
+        {
+            $commission_data = [
+                'total_commission' => $member_service->getSum('commission_get'),//累计
+                'commission' => $member_service->getSum('commission'),//未提现
+                'withdrawn_commission' => $member_account_service->getWithdrawnCommission(),//已提现
+                'commission_cash_outing' => $member_service->getSum('commission_cash_outing'),//提现中
+            ];
+            return success($commission_data);
+        }else{
+            $info = $member_account_service->getMemberAccountInfo($data['member_id']);
+            $commission_data = [
+                'commission' => $info['commission'],
+                'commission_cash_outing' => $info['commission_cash_outing'],
+                'withdrawn_commission' => $member_account_service->getWithdrawnCommission($data['member_id']),//已提现
+                'total_commission' => $info['commission_get'],
+            ];
+            return success($commission_data);
+        }
     }
 
     /**
@@ -134,8 +201,8 @@ class Account extends BaseAdminController
         {
 
             $balance_data = [
-                MemberAccountEnum::BALANCE => $member_account_service->getSumAccount(MemberAccountEnum::BALANCE),
-                MemberAccountEnum::MONEY => $member_account_service->getSumAccount(MemberAccountEnum::MONEY),
+                MemberAccountTypeDict::BALANCE => number_format($member_account_service->getSumAccount(MemberAccountTypeDict::BALANCE), 2),
+                MemberAccountTypeDict::MONEY => number_format($member_account_service->getSumAccount(MemberAccountTypeDict::MONEY), 2),
             ];
             return success($balance_data);
         }else{
@@ -158,7 +225,7 @@ class Account extends BaseAdminController
      */
     public function accountType()
     {
-        return success(MemberAccountEnum::getType());
+        return success(MemberAccountTypeDict::getType());
     }
 
 

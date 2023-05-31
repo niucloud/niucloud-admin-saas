@@ -2,7 +2,7 @@
 
 namespace app\api\route\dispatch;
 
-use app\enum\member\MemberLoginTypeEnum;
+use app\dict\member\MemberLoginTypeDict;
 use think\App;
 use think\route\dispatch\Controller;
 
@@ -24,11 +24,11 @@ class BindDispatch extends Controller
         }
 
         switch ($channel) {
-            case MemberLoginTypeEnum::WECHAT:
+            case MemberLoginTypeDict::WECHAT:
                 $controller = 'wechat.Wechat';
                 $action = 'register';
                 break;
-            case MemberLoginTypeEnum::WEAPP:
+            case MemberLoginTypeDict::WEAPP:
                 $controller = 'weapp.Weapp';
                 $action = 'register';
                 break;

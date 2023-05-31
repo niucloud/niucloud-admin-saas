@@ -11,7 +11,7 @@
 
 namespace app\adminapi\controller\sys;
 
-use app\enum\sys\RoleStatusEnum;
+use app\dict\sys\RoleStatusDict;
 use app\service\admin\sys\RoleService;
 use core\base\BaseAdminController;
 use think\Response;
@@ -51,7 +51,7 @@ class Role extends BaseAdminController
         $data = $this->request->params([
             ['role_name', ''],
             ['rules', []],
-            ['status', RoleStatusEnum::ON],
+            ['status', RoleStatusDict::ON],
         ]);
         $this->validate($data, 'app\validate\sys\Role.add');
         (new RoleService())->add($data);
@@ -66,7 +66,7 @@ class Role extends BaseAdminController
         $data = $this->request->params([
             ['role_name', ''],
             ['rules', []],
-            ['status', RoleStatusEnum::ON],
+            ['status', RoleStatusDict::ON],
         ]);
         $this->validate($data, 'app\validate\sys\Role.edit');
         (new RoleService())->edit($role_id, $data);

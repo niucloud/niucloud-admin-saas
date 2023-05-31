@@ -11,8 +11,8 @@
 
 namespace app\api\controller\member;
 
-use app\enum\member\MemberAccountEnum;
-use app\enum\pay\TransferEnum;
+use app\dict\member\MemberAccountTypeDict;
+use app\dict\pay\TransferDict;
 use app\service\api\member\MemberCashOutService;
 use core\base\BaseApiController;
 use think\Response;
@@ -59,7 +59,7 @@ class MemberCashOut extends BaseApiController
      */
     public function getTransferType()
     {
-        return success(TransferEnum::getTransferType([], false));
+        return success(TransferDict::getTransferType([], false));
     }
 
     /**
@@ -70,7 +70,7 @@ class MemberCashOut extends BaseApiController
     {
         $data = $this->request->params([
             [ 'apply_money', 0 ],
-            [ 'account_type', MemberAccountEnum::MONEY ],
+            [ 'account_type', MemberAccountTypeDict::MONEY ],
             [ 'transfer_type', '' ],
             [ 'account_id', 0 ]
         ]);

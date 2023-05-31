@@ -11,7 +11,12 @@
 
 namespace app\service\core\paytype;
 
+use app\dict\member\MemberAccountChangeTypeDict;
+use app\dict\member\MemberAccountTypeDict;
+use app\dict\pay\PayDict;
+use app\service\core\member\CoreMemberAccountService;
 use app\service\core\member\CoreMemberService;
+use app\service\core\pay\CorePayService;
 use core\base\BaseCoreService;
 
 /**
@@ -34,13 +39,32 @@ class CoreBalanceService extends BaseCoreService
 
 
     public function pay($params){
-        $password = $params['password'];
-        if(empty($password)){
+//        $password = $params['password'];
+//        if(empty($password)){
+//
+//        }
+        $site_id = $params['site_id'];
+        $main_id = $params['main_id'];
+        $main_type = $params['main_type'];
+        $money = $params['money'];
+        $out_trade_no = $params['out_trade_no'];//交易流水号
+        switch($main_type){
+            case 'member':
 
+                //余额不足会抛出异常
+                (new CoreMemberAccountService())->addLog($site_id, $main_id, MemberAccountTypeDict::BALANCE,
+                    -$money, 'order', MemberAccountChangeTypeDict::getType('order')['name'] ?? '', $out_trade_no);
+
+                break;
+            case 'user':
+
+
+                break;
         }
-        $member_id = $params['main_id'];
-        $core_member_service = new CoreMemberService();
-//        $core_member_service->
+        return [
+            'status' => PayDict::STATUS_ED,
+            'out_trade_no' => $out_trade_no,
+        ];
         //业务主体id
         //查询一下余额是否足够
         //生成账户变动记录,
@@ -48,6 +72,38 @@ class CoreBalanceService extends BaseCoreService
 //
 //        }
         //可能会锁定一部分余额
+
+    }
+
+    /**
+     * 订单退款
+     * @param array $params
+     * @return true
+     */
+    public function refund(array $params){
+        $out_trade_no = $params['out_trade_no'];
+        $money = $params['money'];
+        $site_id = $params['site_id'];
+        $refund_no = $params['refund_no'];
+        $core_pay_service = new CorePayService();
+        $pay = $core_pay_service->getInfoByOutTradeNo($out_trade_no);
+
+        $main_id = $pay['main_id'];
+        $main_type = $pay['main_type'];
+
+        switch($main_type){
+            case 'member':
+                    //余额不足会抛出异常
+                    (new CoreMemberAccountService())->addLog($site_id, $main_id, MemberAccountTypeDict::BALANCE,
+                        $money, 'order_refund', MemberAccountChangeTypeDict::getType('order_refund')['name'] ?? '', $refund_no);
+
+                break;
+            case 'user':
+
+
+                break;
+        }
+        return true;
 
     }
 

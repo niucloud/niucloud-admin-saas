@@ -52,7 +52,7 @@ Route::group('sys', function () {
     // 获取菜单信息
     Route::get('menu/info/:menu_key', 'sys.Menu/info');
     // 初始化菜单
-    Route::get('menu/refresh', 'sys.Menu/refreshMenu');
+    Route::post('menu/refresh', 'sys.Menu/refreshMenu');
 
     Route::get('menu/mothod', 'sys.Menu/getMethodType');
     /***************************************************** 设置 ****************************************************/
@@ -60,6 +60,8 @@ Route::group('sys', function () {
     Route::get('config/website', 'sys.Config/getWebsite');
     //网站设置
     Route::put('config/website', 'sys.Config/setWebsite');
+    //服务信息设置
+    Route::get('config/service', 'sys.Config/getServiceInfo');
     //版权设置
     Route::get('config/copyright', 'sys.Config/getCopyright');
     //版权设置
@@ -133,11 +135,23 @@ Route::group('sys', function () {
     Route::get('scene_domain', 'sys.Config/getSceneDomain');
     /***************************************************** 系统环境 ****************************************************/
     Route::get('system', 'sys.System/getSystemInfo');
+    //校验消息队列
+    Route::get('job', 'sys.System/checkJob');
+    //校验计划任务
+    Route::get('schedule', 'sys.System/checkSchedule');
     /***************************************************** 应用管理 ****************************************************/
     Route::get('applist', 'sys.App/getAppList');
+
+    /***************************************************** 清理缓存-刷新菜单 ****************************************************/
+    Route::post('schema/clear', 'sys.System/schemaCache');
 
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,
     AdminLog::class
 ]);
+
+//系统环境（不效验登录状态）
+Route::group('sys', function () {
+    Route::get('web/website', 'sys.Config/getWebsite');
+});

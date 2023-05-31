@@ -11,7 +11,7 @@
 
 namespace app\service\core\upload;
 
-use app\enum\sys\FileEnum;
+use app\dict\sys\FileDict;
 use core\base\BaseCoreService;
 use core\upload\FileDriver;
 use core\upload\UploadLoader;
@@ -44,7 +44,7 @@ class CoreFileService extends BaseCoreService
      */
     public function driver(int $site_id, bool $is_local = false){
         if($is_local){
-            self::$storage_type = FileEnum::LOCAL;
+            self::$storage_type = FileDict::LOCAL;
         }else{
             $core_storage_service = new CoreStorageService();
             $storage_config = $core_storage_service->getDefaultStorage($this->request->defaultSiteId());

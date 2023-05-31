@@ -1,12 +1,12 @@
 <?php
 // +----------------------------------------------------------------------
-// | Niushop商城系统 - 团队十年电商经验汇集巨献!
+// | Niucloud-admin 企业快速开发的saas管理平台
 // +----------------------------------------------------------------------
-// | Copyright (c) 2022~2025 https://www.niushop.com All rights reserved.
+// | 官方网址：https://www.niucloud-admin.com
 // +----------------------------------------------------------------------
-// | Licensed Niushop并不是自由软件，未经许可不能去掉Niushop相关版权
+// | niucloud团队 版权所有 开源版本可自由商用
 // +----------------------------------------------------------------------
-// | Author: Niushop Team <niucloud@outlook.com>
+// | Author: Niucloud Team
 // +----------------------------------------------------------------------
 
 use app\adminapi\middleware\AdminCheckRole;
@@ -45,8 +45,8 @@ Route::group('diy', function() {
     // 设为使用
     Route::put('use', 'diy.Diy/setUse');
 
-    // 获取页面类型
-    Route::get('type', 'diy.Diy/getPageType');
+    // 获取页面模板
+    Route::get('template', 'diy.Diy/getTemplate');
 
     // 自定义路由列表
     Route::get('route', 'diy.DiyRoute/lists');

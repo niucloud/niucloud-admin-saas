@@ -12,7 +12,7 @@
 namespace app\service\core\pay;
 
 
-use app\enum\pay\PayEnum;
+use app\dict\pay\PayDict;
 use app\model\pay\PayChannel;
 use core\base\BaseCoreService;
 use think\Model;
@@ -54,7 +54,7 @@ class CorePayChannelService extends BaseCoreService
         if(!empty($channel_pay_list)){
             $temp_channel_pay_list = array_column($channel_pay_list, 'type');
             if($pay_type_limit_list) $temp_channel_pay_list = array_intersect($temp_channel_pay_list, $pay_type_limit_list);
-            $pay_type_list = PayEnum::getPayType($temp_channel_pay_list);
+            $pay_type_list = PayDict::getPayType($temp_channel_pay_list);
             $allow_pay_type_list = [];
             foreach($channel_pay_list as $v){
                 $allow_pay_type_list[] = $pay_type_list[$v['type']];

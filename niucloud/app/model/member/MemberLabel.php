@@ -33,4 +33,30 @@ class MemberLabel extends BaseModel
      */
     protected $name = 'member_label';
 
+    /**
+     * 获取对应标签的会员数量
+     * @param $value
+     * @return mixed
+     */
+    public function getMemberNumAttr($value, $data)
+    {
+        if(isset($data['label_id']))
+        {
+            return (new Member())->where([['member_label', 'like', '%"' . $data['label_id'] . '"%' ]])->count();
+        }else
+            return 0;
+    }
+
+    /**
+     * 会员标签
+     * @param $value
+     * @param $data
+     */
+    public function searchLabelNameAttr($query, $value, $data)
+    {
+        if ($value) {
+            $query->where('label_name','like', '%'.$value.'%');
+        }
+    }
+
 }

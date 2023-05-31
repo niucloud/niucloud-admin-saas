@@ -21,7 +21,7 @@ class PaySuccessListener
 {
     public function handle(array $pay_info)
     {
-        $class = "app\\enum\\order\\". $pay_info['trade_type']."\\".ucfirst($pay_info['trade_type']).'OrderService';
+        $class = "app\\dict\\order\\". $pay_info['trade_type']."\\".ucfirst($pay_info['trade_type']).'OrderService';
 
         return (new $class)->pay($pay_info);
     }

@@ -11,6 +11,7 @@
 
 namespace app\service\admin\stat;
 
+use app\dict\order\RechargeOrderDict;
 use app\model\order\Order;
 use app\service\admin\member\MemberService;
 use app\service\admin\site\SiteService;
@@ -47,6 +48,7 @@ class SiteStatService extends BaseAdminService
                 'total_member_count' => 0,
                 'total_order_money' => 13851.12,
                 'total_visit_count' => 6580,
+                'total_order_count' => 29
             ],
             'system' => [],
             'version' => [],
@@ -74,8 +76,15 @@ class SiteStatService extends BaseAdminService
         ];
         $data['today_data']['total_member_count'] = (new MemberService())->getCount([['create_time', '>=', Carbon::today()->timestamp]]);
         $data['today_data']['total_order_money'] = $this->orderMoney(Carbon::today()->timestamp, time());
+        $data['today_data']['total_order_count'] = $this->orderCount(Carbon::today()->timestamp, time());
         $data['today_data']['total_visit_count'] = (new MemberService())->getCount([['last_visit_time', '>=', Carbon::today()->timestamp]]);
         $data['today_data']['today_member_visit_count'] = (new CoreMemberService())->getCount(['site_id' => $this->site_id,'last_visit_time' => get_start_and_end_time_by_day()]);
+
+        $data['total_data']['total_member_count'] = (new MemberService())->getCount();
+        $data['total_data']['total_order_money'] = number_format($this->orderMoney(0, time()), 2);
+        $data['total_data']['total_order_count'] = $this->orderCount(0, time());
+        $data['total_data']['total_visit_count'] = (new MemberService())->getCount();
+
         $data['system'] = (new SystemService())->getInfo();
         $data['version'] = $data['system']['version'] ?? [];
         $time = time();
@@ -98,14 +107,30 @@ class SiteStatService extends BaseAdminService
     {
         $where[] = [
             ['site_id', '=', $this->site_id],
-            ['order_status', '=', 10],
+            ['order_status', '>', 0],
             ['create_time', 'between', [$start_time, $end_time]]
         ];
         $money = (new Order())->where($where)->sum('order_money');
         return $money;
     }
 
-    
+      /**
+     * 订单数量
+     * @param $start_time
+     * @param $end_time
+     */
+    public function orderCount($start_time, $end_time)
+    {
+        $where[] = [
+            ['site_id', '=', $this->site_id],
+            ['order_status', '>', 0],
+            ['create_time', 'between', [$start_time, $end_time]]
+        ];
+        $money = (new Order())->where($where)->count('order_id');
+        return $money;
+    }
+
+
 
 
 

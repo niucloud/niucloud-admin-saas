@@ -11,7 +11,7 @@
 
 namespace app\service\admin\site;
 
-use app\enum\sys\UserEnum;
+use app\dict\sys\UserDict;
 use app\model\sys\SysUser;
 use app\model\sys\SysUserRole;
 use app\service\admin\user\UserRoleService;
@@ -148,7 +148,7 @@ class SiteUserService extends BaseAdminService
      * @return bool|true
      */
     public function lock(int $uid){
-        return (new UserService())->edit($uid, ['status' => UserEnum::OFF]);
+        return (new UserService())->edit($uid, ['status' => UserDict::OFF]);
     }
 
     /**
@@ -157,6 +157,6 @@ class SiteUserService extends BaseAdminService
      * @return bool|true
      */
     public function unlock(int $uid){
-        return (new UserService())->edit($uid, ['status' => UserEnum::ON]);
+        return (new UserService())->edit($uid, ['status' => UserDict::ON]);
     }
 }

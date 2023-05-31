@@ -11,7 +11,7 @@
 
 namespace app\service\core\aliapp;
 
-use app\enum\sys\ConfigKeyEnum;
+use app\dict\sys\ConfigKeyDict;
 use app\model\sys\SysConfig;
 use app\service\core\sys\CoreConfigService;
 use core\base\BaseCoreService;
@@ -30,7 +30,7 @@ class  CoreAliappConfigService extends BaseCoreService
      * @return array
      */
     public function getAliappConfig(int $site_id){
-        $info = (new CoreConfigService())->getConfig($site_id, ConfigKeyEnum::ALIAPP)['value'] ?? [];
+        $info = (new CoreConfigService())->getConfig($site_id, ConfigKeyDict::ALIAPP)['value'] ?? [];
         $config = [
             'name' => $info['name'] ?? '',
             'app_id' => $info['app_id'] ?? '',
@@ -62,7 +62,7 @@ class  CoreAliappConfigService extends BaseCoreService
             'alipay_with_crt' =>  $data['alipay_with_crt'] ?? '',
             'qrcode' => $data['qrcode'] ?? ''
         ];
-        return (new CoreConfigService())->setConfig($site_id, ConfigKeyEnum::ALIAPP, $config);
+        return (new CoreConfigService())->setConfig($site_id, ConfigKeyDict::ALIAPP, $config);
     }
 
 

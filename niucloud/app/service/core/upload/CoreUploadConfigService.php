@@ -11,7 +11,7 @@
 
 namespace app\service\core\upload;
 
-use app\enum\sys\ConfigKeyEnum;
+use app\dict\sys\ConfigKeyDict;
 use app\model\sys\SysConfig;
 use app\service\core\sys\CoreConfigService;
 use core\base\BaseCoreService;
@@ -32,7 +32,7 @@ class CoreUploadConfigService extends BaseCoreService
      */
     public function getUploadConfig(int $site_id)
     {
-        $info = (new  CoreConfigService())->getConfig($site_id, ConfigKeyEnum::UPLOAD)['value'] ?? [];
+        $info = (new  CoreConfigService())->getConfig($site_id, ConfigKeyDict::UPLOAD)['value'] ?? [];
         if (empty($info)) {
             $info = [
                 'image_ext' => [
@@ -60,7 +60,7 @@ class CoreUploadConfigService extends BaseCoreService
      */
     public function setUploadConfig(int $site_id, array $data)
     {
-        return (new  CoreConfigService())->setConfig($site_id, ConfigKeyEnum::UPLOAD, $data);
+        return (new  CoreConfigService())->setConfig($site_id, ConfigKeyDict::UPLOAD, $data);
 
     }
 

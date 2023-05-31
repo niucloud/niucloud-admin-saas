@@ -11,7 +11,7 @@
 
 namespace app\service\core\notice;
 
-use app\enum\sys\SmsEnum;
+use app\dict\sys\SmsDict;
 use app\service\core\sys\CoreConfigService;
 use core\base\BaseCoreService;
 use core\sms\SmsDriver;
@@ -45,7 +45,7 @@ class CoreSmsService extends BaseCoreService
             'content' => $content,
             'template_id' => $template_id,
             'params' => $params,
-            'status' => SmsEnum::SENDING
+            'status' => SmsDict::SENDING
         ]);
 
         $sms_driver  = new SmsLoader($sms_type, $config);
@@ -56,14 +56,14 @@ class CoreSmsService extends BaseCoreService
             //失败修改短信记录
             $error = $sms_driver->getError();
             $core_notice_sms_log_service->edit($site_id, $log_id, [
-                'status' => SmsEnum::FAIL,
+                'status' => SmsDict::FAIL,
                 'result' => $sms_driver->getError()
             ]);
             throw new NoticeException($error);
         }
         //成功修改短信记录
         $core_notice_sms_log_service->edit($site_id, $log_id, [
-            'status' => SmsEnum::SUCCESS,
+            'status' => SmsDict::SUCCESS,
             'result' => $result
         ]);
         return true;
@@ -71,7 +71,7 @@ class CoreSmsService extends BaseCoreService
 
 
     public function makeUp($params, $content, $sms_type){
-        if($sms_type != SmsEnum::TENCENTSMS) return $params;
+        if($sms_type != SmsDict::TENCENTSMS) return $params;
         if(empty($params)) return [];
         $temp_array = [];
         foreach($params as $k => $v){

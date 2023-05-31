@@ -11,8 +11,8 @@
 
 namespace app\validate\member;
 
-use app\enum\member\MemberAccountEnum;
-use app\enum\pay\TransferEnum;
+use app\dict\member\MemberAccountTypeDict;
+use app\dict\pay\TransferDict;
 use think\Validate;
 
 /**
@@ -36,7 +36,7 @@ class CashOut extends Validate
     ];
 
     protected function checkAccountId($value, $rule, $data = []) {
-        if ($data['transfer_type'] == TransferEnum::WECHAT) {
+        if ($data['transfer_type'] == TransferDict::WECHAT) {
             return true;
         } else {
             return !empty($value) ? true : 'validate_member_cash_out.account_id_require';
@@ -44,12 +44,12 @@ class CashOut extends Validate
     }
 
     protected function checkTransferType($value){
-        $transfer_type = array_keys(TransferEnum::getTransferType());
+        $transfer_type = array_keys(TransferDict::getTransferType());
         return in_array($value, $transfer_type) ? true : 'validate_member_cash_out.not_support_transfer_type';
     }
 
     protected function checkAccountType($value) {
-        $account_type = [ MemberAccountEnum::MONEY, MemberAccountEnum::COMMISSION ];
+        $account_type = [ MemberAccountTypeDict::MONEY, MemberAccountTypeDict::COMMISSION ];
         return in_array($value, $account_type) ? true : 'validate_member_cash_out.not_support_account_type';
     }
 }

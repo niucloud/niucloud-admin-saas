@@ -11,7 +11,7 @@
 
 namespace app\service\admin\auth;
 
-use app\enum\sys\AppTypeEnum;
+use app\dict\sys\AppTypeDict;
 use app\model\sys\SysUser;
 use app\service\admin\captcha\CaptchaService;
 use app\service\admin\site\SiteService;
@@ -46,14 +46,14 @@ class LoginService extends BaseAdminService
     public function login(string $username, string $password, string $app_type)
     {
 
-        if(!in_array($app_type, array_keys(AppTypeEnum::getAppType()))) throw new AuthException('APP_TYPE_NOT_EXIST');
+        if(!in_array($app_type, array_keys(AppTypeDict::getAppType()))) throw new AuthException('APP_TYPE_NOT_EXIST');
 
         $config = (new ConfigService())->getConfig();
         switch($app_type){
-            case AppTypeEnum::SITE:
+            case AppTypeDict::SITE:
                 $is_captcha = $config['is_site_captcha'];
                 break;
-            case AppTypeEnum::ADMIN:
+            case AppTypeDict::ADMIN:
                 $is_captcha = $config['is_captcha'];
                 break;
         }
@@ -71,15 +71,14 @@ class LoginService extends BaseAdminService
         }
 
 
-        if($app_type == AppTypeEnum::ADMIN){
+        if($app_type == AppTypeDict::ADMIN){
             $default_site_id = $this->request->defaultSiteId();
             $userrole = (new UserRoleService())->getUserRole($default_site_id, $userinfo->uid);
             if(empty($userrole)) throw new AuthException('SITE_USER_CAN_NOT_LOGIN_IN_ADMIN');
-        }else if($app_type == AppTypeEnum::SITE){
+        }else if($app_type == AppTypeDict::SITE){
             $default_site_id = (new UserRoleService())->getUserDefaultSiteId($userinfo->uid);
-            if(!($default_site_id > 0)){
-                if(empty($userrole)) throw new AuthException('ADMIN_USER_CAN_NOT_LOGIN_IN_SITE');
-            }
+            if(!($default_site_id > 0)) throw new AuthException('ADMIN_USER_CAN_NOT_LOGIN_IN_SITE');
+
         }
         //修改用户登录信息
         $userinfo->last_time = time();
@@ -121,7 +120,7 @@ class LoginService extends BaseAdminService
     public function createToken(SysUser $userinfo, string $app_type)
     {
         $expire_time = env('system.admin_token_expire_time') ?? 3600;
-        $token_info = TokenAuth::createToken($userinfo->uid, AppTypeEnum::ADMIN, ['uid' => $userinfo->uid, 'username' => $userinfo->username], $expire_time);
+        $token_info = TokenAuth::createToken($userinfo->uid, AppTypeDict::ADMIN, ['uid' => $userinfo->uid, 'username' => $userinfo->username], $expire_time);
         return $token_info;
     }
 
@@ -133,8 +132,8 @@ class LoginService extends BaseAdminService
     public static function clearToken(int $uid, ?string $type = '', ?string $token = '')
     {
         if (empty($type)) {
-            TokenAuth::clearToken($uid, AppTypeEnum::ADMIN, $token);//清除平台管理端的token
-//            TokenAuth::clearToken($uid, AppTypeEnum::SITE, $token);//清除站点管理端的token
+            TokenAuth::clearToken($uid, AppTypeDict::ADMIN, $token);//清除平台管理端的token
+//            TokenAuth::clearToken($uid, AppTypeDict::SITE, $token);//清除站点管理端的token
         } else {
             TokenAuth::clearToken($uid, $type, $token);
         }
@@ -155,7 +154,7 @@ class LoginService extends BaseAdminService
         }
         //暴力操作,截停所有异常覆盖为token失效
         try {
-            $token_info = TokenAuth::parseToken($token, AppTypeEnum::ADMIN);
+            $token_info = TokenAuth::parseToken($token, AppTypeDict::ADMIN);
         } catch ( \Throwable $e ) {
 //            if(env('app_debug', false)){
 //                throw new AuthException($e->getMessage(), 401);

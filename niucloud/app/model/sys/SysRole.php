@@ -11,7 +11,7 @@
 
 namespace app\model\sys;
 
-use app\enum\sys\RoleStatusEnum;
+use app\dict\sys\RoleStatusDict;
 use core\base\BaseModel;
 
 /**
@@ -45,7 +45,7 @@ class SysRole extends BaseModel
      * @return string
      */
     public function getStatusNameAttr($value, $data){
-        return RoleStatusEnum::getStatus()[$data['status'] ?? ''] ?? '';
+        return RoleStatusDict::getStatus()[$data['status'] ?? ''] ?? '';
     }
 
 

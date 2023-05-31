@@ -11,7 +11,7 @@
 
 namespace app\service\admin\file;
 
-use app\enum\sys\StorageEnum;
+use app\dict\sys\StorageDict;
 use app\service\core\upload\CoreStorageService;
 use app\service\core\sys\CoreConfigService;
 use core\base\BaseAdminService;
@@ -46,7 +46,7 @@ class StorageConfigService extends BaseAdminService
      */
     public function getStorageConfig(string $storage_type)
     {
-        $storage_type_list = StorageEnum::getType();
+        $storage_type_list = StorageDict::getType();
         if(!array_key_exists($storage_type, $storage_type_list)) throw new AdminException('OSS_TYPE_NOT_EXIST');
         $info = (new CoreConfigService())->getConfig($this->site_id, 'STORAGE');
         if(empty($info))
@@ -57,7 +57,7 @@ class StorageConfigService extends BaseAdminService
 
         $data = [
             'storage_type' => $storage_type,
-            'is_use' => $storage_type == $config_type['default'] ? StorageEnum::ON : StorageEnum::OFF,
+            'is_use' => $storage_type == $config_type['default'] ? StorageDict::ON : StorageDict::OFF,
             'name'   => $storage_type_list[$storage_type]['name'],
         ];
         foreach ($storage_type_list[$storage_type]['params'] as $k_param => $v_param)
@@ -79,7 +79,7 @@ class StorageConfigService extends BaseAdminService
      */
     public function setStorageConfig(string $storage_type, array $data)
     {
-        $storage_type_list = StorageEnum::getType();
+        $storage_type_list = StorageDict::getType();
         if(!array_key_exists($storage_type, $storage_type_list)) throw new AdminException('OSS_TYPE_NOT_EXIST');
         $info = (new CoreConfigService())->getConfig($this->site_id, 'STORAGE');
         if(empty($info))

@@ -11,7 +11,7 @@
 
 namespace app\model\diy;
 
-use app\enum\diy\PageEnum;
+use app\dict\diy\TemplateDict;
 use core\base\BaseModel;
 
 
@@ -47,7 +47,7 @@ class Diy extends BaseModel
      */
     public function getTypeNameAttr($value, $data)
     {
-        return PageEnum::getPageType($data[ 'type' ] ?? '')[ 'title' ] ?? '';
+        return TemplateDict::getTemplate($data[ 'type' ] ?? '')[ 'title' ] ?? '';
     }
 
     /**
@@ -98,19 +98,19 @@ class Diy extends BaseModel
     }
 
     /**
-     * 搜索器:自定义页面页面名称
+     * 搜索器:自定义页面名称
      * @param $value
      * @param $data
      */
     public function searchTitleAttr($query, $value, $data)
     {
         if ($value) {
-            $query->where("title", $value);
+            $query->where("title", 'like', '%' . $value . '%');
         }
     }
 
     /**
-     * 搜索器:自定义页面页面标识
+     * 搜索器:自定义页面标识
      * @param $value
      * @param $data
      */
@@ -122,7 +122,7 @@ class Diy extends BaseModel
     }
 
     /**
-     * 搜索器:自定义页面页面类型
+     * 搜索器:自定义页面模板
      * @param $value
      * @param $data
      */
@@ -134,7 +134,7 @@ class Diy extends BaseModel
     }
 
     /**
-     * 搜索器:自定义页面页面数据，json格式
+     * 搜索器:自定义页面数据，json格式
      * @param $value
      * @param $data
      */

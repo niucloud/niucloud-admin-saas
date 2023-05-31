@@ -44,7 +44,36 @@ class AddonService extends BaseAdminService
      */
     public function install(string $addon)
     {
-        return CoreAddonInstallService::instance($addon)->install();
+        try {
+            $data = (new CoreAddonInstallService($addon))->install();
+            return success('SUCCESS', $data);
+        } catch (\Exception $e) {
+            return fail($e->getMessage());
+        }
+    }
+
+    /**
+     * 执行安装
+     * @param string $addon
+     * @return \think\Response
+     */
+    public function executeInstall(string $addon) {
+        try {
+            $data = (new CoreAddonInstallService($addon))->executeInstall();
+            return success('SUCCESS', $data);
+        } catch (\Exception $e) {
+            return fail($e->getMessage());
+        }
+    }
+
+    /**
+     * 安装插件检测安装环境
+     * @param string $addon
+     * @return \think\Response
+     */
+    public function installCheck(string $addon) {
+        $data = (new CoreAddonInstallService($addon))->installCheck();
+        return success('SUCCESS', $data);
     }
 
     /**
@@ -52,9 +81,9 @@ class AddonService extends BaseAdminService
      * @param string $addon
      * @return mixed
      */
-    public function getInstallState(string $addon)
+    public function getInstallState(string $addon, string $key)
     {
-        return CoreAddonInstallService::instance($addon)->getInstallState();
+        return CoreAddonInstallService::instance($addon)->getInstallState($key);
     }
 
     /**

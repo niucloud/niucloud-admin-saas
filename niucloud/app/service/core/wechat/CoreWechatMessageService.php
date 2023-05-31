@@ -11,7 +11,7 @@
 
 namespace app\service\core\wechat;
 
-use app\enum\channel\WechatEnum;
+use app\dict\channel\WechatDict;
 use app\service\core\scan\CoreScanService;
 use Closure;
 use core\base\BaseCoreService;
@@ -34,31 +34,31 @@ class CoreWechatMessageService extends BaseCoreService
     public function message(int $site_id, $message)
     {
         switch ($message['MsgType']) {
-            case WechatEnum::MESSAGE_TYPE_EVENT:
+            case WechatDict::MESSAGE_TYPE_EVENT:
                 return $this->event($site_id, $message);
                 return '收到事件消息';
                 break;
-            case WechatEnum::MESSAGE_TYPE_TEXT:
+            case WechatDict::MESSAGE_TYPE_TEXT:
                 //调用文本回复
                 return $this->text($site_id, $message);
                 return '收到文字消息';
                 break;
-            case WechatEnum::MESSAGE_TYPE_IMAGE:
+            case WechatDict::MESSAGE_TYPE_IMAGE:
                 return '收到图片消息';
                 break;
-            case WechatEnum::MESSAGE_TYPE_VOICE:
+            case WechatDict::MESSAGE_TYPE_VOICE:
                 return '收到语音消息';
                 break;
-            case WechatEnum::MESSAGE_TYPE_VIDEO:
+            case WechatDict::MESSAGE_TYPE_VIDEO:
                 return '收到视频消息';
                 break;
-            case WechatEnum::MESSAGE_TYPE_LOCATION:
+            case WechatDict::MESSAGE_TYPE_LOCATION:
                 return '收到坐标消息';
                 break;
-            case WechatEnum::MESSAGE_TYPE_LINK:
+            case WechatDict::MESSAGE_TYPE_LINK:
                 return '收到链接消息';
                 break;
-            case WechatEnum::MESSAGE_TYPE_FILE:
+            case WechatDict::MESSAGE_TYPE_FILE:
                 return '收到文件消息';
             // ... 其它消息
             default:
@@ -74,10 +74,10 @@ class CoreWechatMessageService extends BaseCoreService
     public function event(int $site_id, $message)
     {
         switch ($message['Event'] ) {
-            case WechatEnum::EVENT_SUBSCRIBE:
+            case WechatDict::EVENT_SUBSCRIBE:
                 return $this->subscribe($site_id, $message);
                 break;
-            case WechatEnum::EVENT_SCAN:
+            case WechatDict::EVENT_SCAN:
                 return $this->scan($site_id, $message);
                 break;
         }
@@ -114,7 +114,7 @@ class CoreWechatMessageService extends BaseCoreService
         }
         //如果配置了关注回复,返回关注消息
         $core_wechat_reply_service = new CoreWechatReplyService();
-        return $core_wechat_reply_service->reply($site_id, WechatEnum::REPLY_SUBSCRIBE) ?? false;
+        return $core_wechat_reply_service->reply($site_id, WechatDict::REPLY_SUBSCRIBE) ?? false;
     }
 
 
@@ -138,6 +138,6 @@ class CoreWechatMessageService extends BaseCoreService
     function text(int $site_id, $message)
     {
         $core_wechat_reply_service = new CoreWechatReplyService();
-        return $core_wechat_reply_service->reply($site_id, WechatEnum::REPLY_KEYWORD, $message['Content']) ?? false;
+        return $core_wechat_reply_service->reply($site_id, WechatDict::REPLY_KEYWORD, $message['Content']) ?? false;
     }
 }

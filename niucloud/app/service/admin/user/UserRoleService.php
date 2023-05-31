@@ -12,11 +12,15 @@
 namespace app\service\admin\user;
 
 
+use app\dict\site\SiteDict;
+use app\dict\sys\AppTypeDict;
 use app\model\sys\SysRole;
 use app\model\sys\SysUserRole;
+use app\service\admin\site\SiteService;
 use app\service\admin\sys\RoleService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
+use core\exception\AuthException;
 use think\facade\Cache;
 
 /**
@@ -90,14 +94,26 @@ class UserRoleService extends BaseAdminService
      */
     public function getUserRole(int $site_id, int $uid){
         $cache_name = 'user_role_'.$uid.'_'.$site_id;
-        return Cache::tag([self::$role_cache_name, RoleService::$cache_tag_name.$this->site_id])->remember($cache_name,  function() use($uid, $site_id) {
-            $user_role_model = new SysUserRole();
-            $where = array(
-                ['uid', '=', $uid],
-                ['site_id', '=', $site_id]
-            );
-            return $user_role_model::where($where)->findOrEmpty()->toArray();
-        });
+        return cache_remember(
+            $cache_name,
+            function() use($uid, $site_id) {
+                $user_role_model = new SysUserRole();
+                $where = array(
+                    ['uid', '=', $uid],
+                    ['site_id', '=', $site_id]
+                );
+                return $user_role_model::where($where)->findOrEmpty()->toArray();
+            },
+            [self::$role_cache_name, RoleService::$cache_tag_name.$this->site_id]
+        );
+//        return Cache::tag([self::$role_cache_name, RoleService::$cache_tag_name.$this->site_id])->remember($cache_name,  function() use($uid, $site_id) {
+//            $user_role_model = new SysUserRole();
+//            $where = array(
+//                ['uid', '=', $uid],
+//                ['site_id', '=', $site_id]
+//            );
+//            return $user_role_model::where($where)->findOrEmpty()->toArray();
+//        });
     }
 
     /**
@@ -120,12 +136,43 @@ class UserRoleService extends BaseAdminService
     public function getRoleByUserRoleIds(array $role_ids, int $site_id){
         sort($role_ids);
         $cache_name = 'role_by_ids_'.md5(implode(',', $role_ids)).'_'.$site_id;
-        return Cache::tag([self::$role_cache_name, RoleService::$cache_tag_name.$this->site_id])->remember($cache_name,  function() use($role_ids, $site_id) {
-            $where = array(
-                ['role_id', 'in', $role_ids],
-                ['site_id', '=', $site_id]
-            );
-            return SysRole::where($where)->column('role_name');
-        });
+        return cache_remember(
+            $cache_name,
+            function() use($role_ids, $site_id) {
+                $where = array(
+                    ['role_id', 'in', $role_ids],
+                    ['site_id', '=', $site_id]
+                );
+                return SysRole::where($where)->column('role_name');
+            },
+            [self::$role_cache_name, RoleService::$cache_tag_name.$this->site_id]
+        );
+//        return Cache::tag([self::$role_cache_name, RoleService::$cache_tag_name.$this->site_id])->remember($cache_name,  function() use($role_ids, $site_id) {
+//            $where = array(
+//                ['role_id', 'in', $role_ids],
+//                ['site_id', '=', $site_id]
+//            );
+//            return SysRole::where($where)->column('role_name');
+//        });
     }
+
+//    public function getFirstMenuByUser(int $site_id, int $uid){
+//        $role_service = (new RoleService())->getMenuIdsByRoleIds();
+//        $userrole = $this->getUserRole($site_id, $uid);
+//        $site_info = (new SiteService())->getSiteCache($site_id);
+//        if(empty($userrole)) throw new AuthException('SITE_USER_CAN_NOT_LOGIN_IN_ADMIN');
+//        if($userrole->is_admin){
+//            if($site_info->app_type == AppTypeDict::SITE){
+//
+//            }else if($site_info->app_type == AppTypeDict::ADMIN){
+//
+//            }
+//        }else{
+//            $user_role_ids = $userrole->role_ids;
+//            $menu_keys = (new RoleService())->getMenuIdsByRoleIds($site_id, $user_role_ids);
+//            if(in_array('siteindex', $menu_keys)){
+//
+//            }
+//        }
+//    }
 }

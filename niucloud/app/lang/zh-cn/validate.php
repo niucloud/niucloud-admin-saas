@@ -47,7 +47,9 @@ return [
         'expire_time_number' => '到期时间必须是时间戳',
         'group_name_require' => '站点分组名称必须填写',
         'group_name_max' => '站点分组名称不能超过20字符',
-        'group_roles_require' => '分组权限必须填写'
+        'group_roles_require' => '分组权限必须填写',
+        'front_end_name_require' => '前台名称必须填写',
+        'front_end_name_max' => '前台名称最多不能超过20个字符',
     ],
     //附件
     'validate_attachment' => [
@@ -84,6 +86,11 @@ return [
         'cash_out_is_auto_transfer_in' => '是否启用转账必须是0或1',
         'status_require' => '会员状态必须填写',
         'not_exit_status' => '不存在的会员状态'
+    ],
+    'validate_member_config' => [
+        'length_number' => '会员编码必须是整数',
+        'length_min' => '会员编码长度不能小于10',
+        'length_max' => '会员编码长度不能大于于20',
     ],
     'validate_article' => [
         'title_require' => '文章标题必须填写',
@@ -149,7 +156,7 @@ return [
     ],
     // 自定义
     'validate_diy' => [
-        'type_not_exist' => '不存在的页面类型',
+        'type_not_exist' => '不存在的页面模板',
     ],
     // 会员提现账号
     'validate_member_cash_out_account' => [

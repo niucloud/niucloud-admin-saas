@@ -12,10 +12,11 @@
  * 语言包说明:
  * 系统相关system:
  * 返回值语言文件： api.php
- * 枚举相关文件：enum.php
+ * 枚举相关文件：dict.php
  * 验证语言文件:validate.php
  *
  * 扩展开发相关addon
  *
  */
-return (new \core\addon\AddonLoader("Lang"))->load(["lang_type" =>"zh-cn"]);
+use core\dict\DictLoader;
+return (new DictLoader("Lang"))->load(["lang_type" =>"zh-cn"]);

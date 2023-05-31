@@ -15,7 +15,7 @@ use app\adminapi\middleware\AdminLog;
 use think\facade\Route;
 
 /**
- * 路由
+ * 应用插件相关路由
  */
 Route::group(function () {
     //获取本地插件
@@ -28,19 +28,21 @@ Route::group(function () {
     Route::put('addon/status/:id/:status', 'addon.Addon/setStatus');
     //安装插件
     Route::post('addon/install/:addon', 'addon.Addon/install');
+    //插件安装检测安装环境
+    Route::get('addon/install/check/:addon', 'addon.Addon/installCheck');
+    // 执行安装
+    Route::post('addon/install/execute/:addon', 'addon.Addon/execute');
+    //插件安装状态
+    Route::get('addon/install/:addon/status/:key', 'addon.Addon/getInstallState');
 
     //卸载插件
     Route::post('addon/uninstall/:addon', 'addon.Addon/uninstall');
-    //插件状态
-    Route::get('addon/install/status/:addon', 'addon.Addon/uninstall');
     //卸载插件
     Route::post('addon/edit/:addon', 'addon.Addon/edit');
-
-
     //应用列表(...)
     Route::get('app/list', 'addon.App/getAppList');
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,
     AdminLog::class
-]);;
+]);

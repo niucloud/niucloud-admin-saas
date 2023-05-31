@@ -11,7 +11,7 @@
 
 namespace app\service\core\pay;
 
-use app\enum\pay\TransferEnum;
+use app\dict\pay\TransferDict;
 use app\model\pay\Pay;
 use app\model\pay\Transfer;
 use core\base\BaseCoreService;
@@ -52,7 +52,7 @@ class CoreTransferService extends BaseCoreService
             'transfer_no' => $transfer_no,
             'main_id' => $main_id,
             'main_type' => $main_type,
-            'transfer_status' => TransferEnum::WAIT,
+            'transfer_status' => TransferDict::WAIT,
             'remark' => $remark,
         );
         $this->model->create($transfer_data);
@@ -71,11 +71,10 @@ class CoreTransferService extends BaseCoreService
         $transfer = $this->findTransferByTransferNo($site_id, $transfer_no);
 
         if($transfer->isEmpty()) throw new PayException('TRANSFER_ORDER_INVALID');
-        if(!in_array($transfer['transfer_status'], [TransferEnum::WAIT, TransferEnum::FAIL]))  throw new PayException('TRANFER_STATUS_NOT_IN_WAIT_TANSFER');
+        if(!in_array($transfer['transfer_status'], [TransferDict::WAIT, TransferDict::FAIL]))  throw new PayException('TRANFER_STATUS_NOT_IN_WAIT_TANSFER');
 
         $transfer_account = $data['transfer_account'] ?? '';
         $transfer_realname = $data['transfer_realname'] ?? '';
-
         $transfer_data = array(
             'transfer_type' => $transfer_type,//转账方式
             'transfer_realname' => $transfer_realname,//名称
@@ -87,26 +86,26 @@ class CoreTransferService extends BaseCoreService
             'transfer_remark' => $data['transfer_remark'] ?? '',
         );
         $transfer->save($transfer_data);
-
         switch($transfer_type){
-            case TransferEnum::WECHAT:
+            case TransferDict::WECHAT:
                 $transfer_account = $data['openid'];
                 break;
         }
         $params = [];
-        if(TransferEnum::getTransferType()[$transfer_type]['is_online']){
+        if(TransferDict::getTransferType()[$transfer_type]['is_online']){
             try {
                 $result = $this->pay_event->init($site_id, 'transfer', $transfer_type)->transfer($transfer['money'], $transfer_no, $transfer_account, $transfer_realname, $transfer['remark']);
-                $params['batch_id'] = $result['batch_id'];
-                $params['out_batch_no'] = $result['out_batch_no'];
+//                $params['batch_id'] = $result['batch_id'];
+//                $params['out_batch_no'] = $result['out_batch_no'];
+                //将返回的数据交给转账通知
+                $this->transferNotify($site_id, $transfer_no, $result);
+                return true;
             }catch(\Throwable $e){
                 $this->fail($site_id, $transfer_no, $transfer_type, ['reason' => get_lang($e->getMessage())]);
                 throw new PayException($e->getMessage());
             }
         }
-
         $this->success($site_id, $transfer_no, $transfer_type, $params);
-
         return true;
     }
     /**
@@ -123,6 +122,25 @@ class CoreTransferService extends BaseCoreService
         return $this->model->where($where)->findOrEmpty();
     }
 
+    public function transferNotify(int $site_id, string $transfer_no, $params){
+        $transfer = $this->findTransferByTransferNo($site_id, $transfer_no);
+
+        if($transfer->isEmpty()) throw new PayException('TRANSFER_ORDER_INVALID');
+        if(!in_array($transfer['transfer_status'], [TransferDict::WAIT, TransferDict::DEALING]))  throw new PayException('TRANFER_STATUS_NOT_IN_WAIT_TANSFER');
+        $status = $params['status'] ?? TransferDict::DEALING;
+        switch($status){
+            case TransferDict::SUCCESS:
+                $this->success($site_id, $transfer_no, $transfer->type);
+                break;
+            case TransferDict::DEALING:
+                $this->dealing($site_id, $transfer_no, $transfer->type);
+                break;
+            case TransferDict::FAIL:
+                $this->fail($site_id, $transfer_no, $transfer->type);
+                break;
+        }
+        return true;
+    }
     /**
      * 转账完成
      * @param int $site_id
@@ -135,12 +153,12 @@ class CoreTransferService extends BaseCoreService
         $transfer = $this->findTransferByTransferNo($site_id, $transfer_no);
 
         if($transfer->isEmpty()) throw new PayException('TRANSFER_ORDER_INVALID');
-        if(!in_array($transfer['transfer_status'], [TransferEnum::WAIT, TransferEnum::FAIL]))  throw new PayException('TRANFER_STATUS_NOT_IN_WAIT_TANSFER');
+        if(!in_array($transfer['transfer_status'], [TransferDict::WAIT, TransferDict::DEALING]))  throw new PayException('TRANFER_STATUS_NOT_IN_WAIT_TANSFER');
 
         $trade_type = $transfer->trade_type;
         $data = array(
             'transfer_time' => time(),
-            'transfer_status' => TransferEnum::SUCCESS,
+            'transfer_status' => TransferDict::SUCCESS,
             'batch_id' => $params['batch_id'] ?? '',
             'out_batch_no' => $params['out_batch_no'] ?? '',
 //            'transfer_type' => $transfer_type,
@@ -176,10 +194,10 @@ class CoreTransferService extends BaseCoreService
         $transfer = $this->findTransferByTransferNo($site_id, $transfer_no);
 
         if($transfer->isEmpty()) throw new PayException('TRANSFER_ORDER_INVALID');
-        if(!in_array($transfer['transfer_status'], [TransferEnum::WAIT, TransferEnum::FAIL]))  throw new PayException('TRANFER_STATUS_NOT_IN_WAIT_TANSFER');
+        if(!in_array($transfer['transfer_status'], [TransferDict::WAIT, TransferDict::DEALING]))  throw new PayException('TRANFER_STATUS_NOT_IN_WAIT_TANSFER');
         $data = array(
             'transfer_time' => time(),
-            'transfer_status' => TransferEnum::FAIL,
+            'transfer_status' => TransferDict::FAIL,
             'transfer_fail_reason' => $params['reason']
 //            'transfer_type' => $transfer_type,
         );
@@ -189,4 +207,48 @@ class CoreTransferService extends BaseCoreService
         return true;
     }
 
+
+    public function check(int $site_id, array $data){
+        $transfer_no = $data['transfer_no'];
+        $transfer = $this->findTransferByTransferNo($site_id, $transfer_no);
+        if($transfer->isEmpty()) throw new PayException('');
+        if(!in_array($transfer['status'], [TransferDict::DEALING, TransferDict::WAIT]) )  throw new PayException('');//只有待转账和转账中的订单可以校验
+
+        //查询第三方支付单据
+        $transfer_info = $this->pay_event->init($site_id, $transfer->channel, $transfer->type)->getTransfer($transfer_no);
+        if(empty($transfer_info)) throw new PayException();//查询不到转账信息
+        $status = $transfer_info['status'];
+        switch($status){
+            case TransferDict::SUCCESS:
+                $this->success($site_id, $transfer_no, $transfer->type);
+                break;
+            case TransferDict::DEALING:
+                $this->dealing($site_id, $transfer_no, $transfer->type);
+                break;
+            case TransferDict::FAIL:
+                $this->fail($site_id, $transfer_no, $transfer->type);
+                break;
+        }
+        return true;
+    }
+
+    /**
+     * 处理中
+     * @param int $site_id
+     * @param $transfer_no
+     * @param $type
+     * @return true
+     */
+    public function dealing(int $site_id, $transfer_no, $type){
+        $this->model->where([
+            ['site_id', '=', $site_id],
+            ['transfer_no', '=', $transfer_no]
+        ])->update(
+            [
+                'status' => TransferDict::DEALING,
+                'type' => $type
+            ]
+        );
+        return true;
+    }
 }

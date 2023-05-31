@@ -12,7 +12,7 @@
 namespace app\service\admin\sys;
 
 
-use app\enum\sys\AgreementEnum;
+use app\dict\sys\AgreementDict;
 use app\service\core\sys\CoreAgreementService;
 use core\base\BaseAdminService;
 
@@ -30,7 +30,7 @@ class AgreementService extends BaseAdminService
      */
     public function getList()
     {
-        $type = AgreementEnum::getType();
+        $type = AgreementDict::getType();
         $list = [];
         foreach ($type as $k => $v)
         {

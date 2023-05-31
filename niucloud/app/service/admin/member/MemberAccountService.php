@@ -11,7 +11,8 @@
 
 namespace app\service\admin\member;
 
-use app\enum\member\MemberAccountEnum;
+use app\dict\member\MemberAccountChangeTypeDict;
+use app\dict\member\MemberAccountTypeDict;
 use app\model\member\Member;
 use app\model\member\MemberAccountLog;
 use app\service\core\member\CoreMemberAccountService;
@@ -39,8 +40,16 @@ class MemberAccountService extends BaseAdminService
     public function getPage(array $where = [])
     {
 
-        $field = 'id, member_id, site_id, account_type, account_data, from_type, related_id, create_time, memo';
-        $search_model = $this->model->where([['site_id', '=', $this->site_id]])->withSearch(['member_id','account_type', 'from_type', 'create_time'],$where)->with('memberInfo')->field($field)->order('create_time desc')->append(['from_type_name', 'account_type_name']);
+        $field = 'member_account_log.id, member_account_log.member_id, member_account_log.site_id, member_account_log.account_type, member_account_log.account_data,member_account_log.account_sum, member_account_log.from_type, member_account_log.related_id, member_account_log.create_time, member_account_log.memo';
+        $member_where = [];
+        if(!empty($where['keywords']))
+        {
+            $member_where[] = ["member.member_no|member.nickname|member.mobile", '=', $where['keywords']];
+        }
+        $search_model = $this->model->where([['member_account_log.site_id', '=', $this->site_id]])->withSearch(['member_id','account_type', 'from_type', 'create_time'],$where)->withJoin(['member' => function($query){
+            $query->field("member.nickname, member.headimg, member.mobile, member.member_id, member.member_no");
+        }
+        ])->where($member_where)->field($field)->order('create_time desc')->append(['from_type_name', 'account_type_name']);
         $list = $this->pageQuery($search_model);
         return $list;
     }
@@ -80,7 +89,7 @@ class MemberAccountService extends BaseAdminService
 
     public function adjustMoney(array $data)
     {
-        $res = (new CoreMemberAccountService())->addLog($this->site_id, $data['member_id'], MemberAccountEnum::MONEY, $data['account_data'], 'adjust', $data['memo'], 0);
+        $res = (new CoreMemberAccountService())->addLog($this->site_id, $data['member_id'], MemberAccountTypeDict::MONEY, $data['account_data'], 'adjust', $data['memo'], 0);
         return $res;
     }
     /**
@@ -90,8 +99,8 @@ class MemberAccountService extends BaseAdminService
      */
     public function getFromType($account_type)
     {
-        if(!array_key_exists($account_type, MemberAccountEnum::getType())) throw new AdminException('MEMBER_TYPE_NOT_EXIST');
-        $res = MemberAccountEnum::getFromType($account_type);
+        if(!array_key_exists($account_type, MemberAccountTypeDict::getType())) throw new AdminException('MEMBER_TYPE_NOT_EXIST');
+        $res = MemberAccountChangeTypeDict::getType($account_type);
         return $res;
     }
 
@@ -115,7 +124,38 @@ class MemberAccountService extends BaseAdminService
         return (new Member())->where([['member_id', '=', $member_id], ['site_id', '=', $this->site_id]])->field($field)->findOrEmpty()->toArray();
     }
 
+    /**
+     * 已提现佣金
+     * @return float
+     */
+    public function getWithdrawnCommission(int $member_id = 0)
+    {
+        $condition = [
+            ['site_id', '=', $this->site_id],
+            ['account_type', '=', MemberAccountTypeDict::COMMISSION],
+            ['from_type', '=', 'cash_out']
+        ];
+        if(!empty($member_id)) $condition[] = ['member_id', '=', $member_id];
 
+        $sum = $this->model->where($condition)->sum('account_data');
+        return $sum;
+    }
 
+    /**
+     * 账户支出总额
+     * @return float
+     */
+    public function getExpensesSumAccount(string $account_type, int $member_id = 0)
+    {
+        $condition = [
+            ['site_id', '=', $this->site_id],
+            ['account_type', '=', $account_type],
+            ['account_data', '<', '0']
+        ];
+        if(!empty($member_id)) $condition[] = ['member_id', '=', $member_id];
+
+        $sum = $this->model->where($condition)->sum('account_data');
+        return $sum;
+    }
 
 }

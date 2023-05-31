@@ -44,9 +44,22 @@ class Config extends BaseAdminController
             ["full_address",""],
             ["phone",""],
             ["business_hours",""],
+            ["site_name",""],
+            ["logo",""],
+            ["front_end_name", ""],
+            ["front_end_logo", ""],
+            ["icon", ""]
         ]);
-        $this->validate($data, 'app\validate\site\site.edit');
+        $this->validate($data, 'app\validate\site\Site.edit');
         (new ConfigService())->setWebSite($data);
+
+        $service_data = $this->request->params([
+            ["wechat_code",""],
+            ["enterprise_wechat",""],
+            ["tel",""],
+        ]);
+        (new ConfigService())->setService($service_data);
+
         return success();
     }
 
@@ -82,5 +95,13 @@ class Config extends BaseAdminController
      */
     public function getSceneDomain(){
         return success((new ConfigService())->getSceneDomain());
+    }
+
+    /**
+     * 获取服务信息
+     * @return Response
+     */
+    public function getServiceInfo(){
+        return success((new ConfigService())->getService());
     }
 }

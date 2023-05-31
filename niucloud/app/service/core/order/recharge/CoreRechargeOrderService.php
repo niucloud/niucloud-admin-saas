@@ -11,7 +11,7 @@
 
 namespace app\service\core\order\recharge;
 
-use app\enum\order\RechargeOrderEnum;
+use app\dict\order\RechargeOrderDict;
 use app\model\order\Order;
 use app\service\core\member\CoreMemberAccountService;
 use app\service\core\order\CoreOrderCreateService;
@@ -39,7 +39,7 @@ class CoreRechargeOrderService extends BaseCoreService
             'site_id' => $data['site_id'],
             'order_from' => $data['order_from'] ?? 'h5',
             'order_type' => 'recharge',
-            'order_status' => RechargeOrderEnum::WAIT_PAY,
+            'order_status' => RechargeOrderDict::WAIT_PAY,
             'member_id' => $data['member_id'],
             'ip' => request()->ip() ?? '',
             'member_message' => $data['member_message'] ?? '',
@@ -78,7 +78,7 @@ class CoreRechargeOrderService extends BaseCoreService
                 throw new CommonException('ORDER_NOT_EXIST');
             $order_data = [
                 'pay_time' => time(),
-                'order_status' => RechargeOrderEnum::FINISH,
+                'order_status' => RechargeOrderDict::FINISH,
                 'is_enable_refund' => 1 // 是否允许退款
             ];
             $order_model->where([['site_id', '=', $pay_info['site_id']], ['out_trade_no', '=', $pay_info['out_trade_no']]])->update($order_data);
@@ -99,9 +99,9 @@ class CoreRechargeOrderService extends BaseCoreService
     public function close(int $site_id, int $order_id){
         $order = (new Order())->where([ ['site_id', '=', $site_id ],['order_id', '=', $order_id ], ])->find();
         if ($order->isEmpty()) throw new CommonException('ORDER_NOT_EXIST');
-        if ($order->order_status == RechargeOrderEnum::CLOSE) throw new CommonException('ORDER_CLOSED');
+        if ($order->order_status == RechargeOrderDict::CLOSE) throw new CommonException('ORDER_CLOSED');
 
-        $order->save(['order_status' => RechargeOrderEnum::CLOSE]);
+        $order->save(['order_status' => RechargeOrderDict::CLOSE]);
         return true;
     }
 }

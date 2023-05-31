@@ -37,6 +37,7 @@ class Config extends BaseAdminController
             [ 'is_mobile', 0 ],
             [ 'is_auth_register', 1 ],
             [ 'is_bind_mobile', 0 ],
+            [ 'agreement_show', 0 ]
         ]);
         $this->validate($data, 'app\validate\member\LoginConfig.set');
         ( new MemberConfigService() )->setLoginConfig($data);
@@ -71,4 +72,25 @@ class Config extends BaseAdminController
         return success('SET_SUCCESS');
     }
 
+    /**
+     * 获取会员配置
+     * @return Response
+     */
+    public function getMemberConfig(){
+        return success(( new MemberConfigService() )->getMemberConfig());
+    }
+
+    /**
+     * 设置会员配置
+     * @return Response
+     */
+    public function setMemberConfig(){
+        $data = $this->request->params([
+            [ 'prefix', '' ],
+            [ 'length', 10 ]
+        ]);
+        $this->validate($data, 'app\validate\member\MemberConfig.set');
+        ( new MemberConfigService() )->setMemberConfig($data);
+        return success('MODIFY_SUCCESS');
+    }
 }

@@ -11,7 +11,7 @@
 
 namespace app\service\core\order\recharge;
 
-use app\enum\order\RechargeOrderEnum;
+use app\dict\order\RechargeOrderDict;
 use app\model\member\Member;
 use app\model\order\Order;
 use app\model\order\OrderItem;
@@ -39,14 +39,16 @@ class CoreRechargeRefundService extends BaseCoreService
      * @return void
      */
     public function create(int $site_id, int $order_id) {
+        $order_model = (new OrderItem())->where([ ['site_id', '=', $site_id], ['order_id', '=', $order_id], ['item_type', '=', $this->order_type ] ])->with('ordermain')->find();
+        $order = $order_model->toArray();
+        $order_info = (new Order())->where([ ['site_id', '=', $site_id], ['order_id', '=', $order_id] ])->field("order_no")->find();
+        if (empty($order)) throw new CommonException('ORDER_NOT_EXIST');
+        if (!$order['ordermain']['is_enable_refund']) throw new CommonException('NOT_ALLOW_APPLY_REFUND');
+        if (!in_array($order['ordermain']['order_status'], [RechargeOrderDict::PAY, RechargeOrderDict::FINISH])) throw new CommonException('ORDER_UNPAID_NOT_ALLOW_APPLY_REFUND');
+        if ($order['refund_status'] != RechargeOrderDict::NOT_APPLAY) throw new CommonException('REFUND_HAD_APPLIED');
+
         Db::startTrans();
         try {
-            $order_model = (new OrderItem())->where([ ['site_id', '=', $site_id], ['order_id', '=', $order_id], ['item_type', '=', $this->order_type ] ])->with('ordermain')->find();
-            $order = $order_model->toArray();
-
-            if (empty($order)) throw new CommonException('ORDER_NOT_EXIST');
-            if (!$order['ordermain']['is_enable_refund'] || $order['ordermain']['order_status'] != RechargeOrderEnum::FINISH || $order['refund_status'] != RechargeOrderEnum::NOT_APPLAY) throw new CommonException('NOT_ALLOW_APPLY_REFUND');
-
             // 查询会员账户余额
             $member_info = (new Member())->where([
                 [ 'member_id', '=', $order['member_id'] ],
@@ -57,18 +59,18 @@ class CoreRechargeRefundService extends BaseCoreService
 
             $order['out_trade_no'] = $order['ordermain']['out_trade_no'];
             $order['money'] = $order['item_money'] > $member_info['balance'] ? $member_info['balance'] : $order['item_money'];
-
+            $order['order_no'] = $order_info['order_no'];
             $creat_res = (new CoreOrderRefundService())->create($order);
 
             $order_model->save([
                 'refund_no' => $creat_res['refund_no'],
-                'refund_status' => RechargeOrderEnum::REFUNDING
+                'refund_status' => RechargeOrderDict::REFUNDING
             ]);
             $order_model->ordermain->save([
-                'refund_status' => RechargeOrderEnum::REFUNDING
+                'refund_status' => RechargeOrderDict::REFUNDING
             ]);
 
-            (new OrderItemRefund())->update(['status' => RechargeOrderEnum::REFUNDING], [ ['refund_no', '=', $creat_res['refund_no'] ] ]);
+            (new OrderItemRefund())->update(['status' => RechargeOrderDict::REFUNDING], [ ['refund_no', '=', $creat_res['refund_no'] ] ]);
 
             // 执行退款
             $this->refund($order, $creat_res['refund_no']);
@@ -101,13 +103,13 @@ class CoreRechargeRefundService extends BaseCoreService
     public function refundComplete($refund_no){
         $model = (new OrderItemRefund())->where([ ['refund_no', '=', $refund_no ] ])->find();
         if ($model->isEmpty()) throw new CommonException('ORDER_NOT_EXIST');
-        if ($model->status != RechargeOrderEnum::REFUNDING) throw new CommonException('REFUND_STATUS_ABNORMAL');
+        if ($model->status != RechargeOrderDict::REFUNDING) throw new CommonException('REFUND_STATUS_ABNORMAL');
 
         Db::startTrans();
         try {
-            $model->save(['status' => RechargeOrderEnum::REFUND_COMPLETED]);
-            $model->item()->save([ 'refund_status' => RechargeOrderEnum::REFUND_COMPLETED ]);
-            (new Order())->update(['refund_status' => RechargeOrderEnum::REFUND_COMPLETED], [ ['order_id', '=', $model->order_id ] ]);
+            $model->save(['status' => RechargeOrderDict::REFUND_COMPLETED]);
+            $model->item()->save([ 'refund_status' => RechargeOrderDict::REFUND_COMPLETED ]);
+            (new Order())->update(['refund_status' => RechargeOrderDict::REFUND_COMPLETED], [ ['order_id', '=', $model->order_id ] ]);
             (new CoreRechargeOrderService())->close($model->site_id, $model->order_id);
             Db::commit();
             return true;

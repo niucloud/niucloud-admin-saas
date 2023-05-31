@@ -11,7 +11,7 @@
 
 namespace app\adminapi\controller\pay;
 
-use app\enum\pay\PayEnum;
+use app\dict\pay\PayDict;
 use app\model\pay\PayConfigTemplate;
 use app\service\admin\pay\PayChannelService;
 use app\service\admin\pay\PayConfigTemplateService;
@@ -68,8 +68,8 @@ class PayChannel extends BaseAdminController
             ['wechatpay_config', []],
             ['alipay_config', []],
         ]);
-        $this->validate(array_merge($data['wechatpay_config'], ['type' => PayEnum::WECHATPAY]), 'app\validate\pay\Pay.set');
-        $this->validate(array_merge($data['alipay_config'], ['type' => PayEnum::ALIPAY]), 'app\validate\pay\Pay.set');
+        $this->validate(array_merge($data['wechatpay_config'], ['type' => PayDict::WECHATPAY]), 'app\validate\pay\Pay.set');
+        $this->validate(array_merge($data['alipay_config'], ['type' => PayDict::ALIPAY]), 'app\validate\pay\Pay.set');
         (new PayChannelService())->setTransfer($data);
         return success('SET_SUCCESS');
     }
@@ -82,8 +82,8 @@ class PayChannel extends BaseAdminController
         $data = $this->request->params([
             ['config', []],
         ]);
-//        $this->validate(array_merge($data['wechatpay_config'], ['type' => PayEnum::WECHATPAY]), 'app\validate\pay\Pay.set');
-//        $this->validate(array_merge($data['alipay_config'], ['type' => PayEnum::ALIPAY]), 'app\validate\pay\Pay.set');
+//        $this->validate(array_merge($data['wechatpay_config'], ['type' => PayDict::WECHATPAY]), 'app\validate\pay\Pay.set');
+//        $this->validate(array_merge($data['alipay_config'], ['type' => PayDict::ALIPAY]), 'app\validate\pay\Pay.set');
         (new PayChannelService())->setAll($data['config']);
         return success('SET_SUCCESS');
     }

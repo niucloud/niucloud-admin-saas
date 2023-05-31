@@ -35,14 +35,9 @@ class MemberLabelService extends BaseAdminService
      */
     public function getPage(array $where = [], string $order = 'create_time desc')
     {
-        $condition[] = ['site_id', '=', $this->site_id];
-        if($where['label_name'])
-        {
-            $condition[] = ['label_name', 'like', '%'.$where['label_name'].'%'];
-        }
         $field = 'label_id, site_id, label_name, memo, sort, create_time, update_time';
-
-        $list = $this->getPageList($this->model, $condition, $field, $order, []);
+        $search_model = $this->model->where([ [ 'site_id', '=', $this->site_id ] ])->withSearch([ 'label_name'], $where)->field($field)->append(["member_num"])->order($order);
+        $list = $this->pageQuery($search_model);
         return $list;
     }
 

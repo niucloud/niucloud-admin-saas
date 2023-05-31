@@ -11,7 +11,7 @@
 
 namespace app\service\core\upload;
 
-use app\enum\sys\FileEnum;
+use app\dict\sys\FileDict;
 use app\service\core\sys\CoreAttachmentService;
 use core\exception\UploadFileException;
 
@@ -39,12 +39,12 @@ class CoreUploadService extends CoreFileService
     public function image(string $file, int $site_id, string $file_dir, int $cate_id = 0)
     {
         //校验上传设置
-//        $this->checkFile($site_id, $file, FileEnum::IMAGE);
+//        $this->checkFile($site_id, $file, FileDict::IMAGE);
         //实例化上传引擎
         $this->upload_driver = $this->driver($site_id);
         //读取上传附件的信息用于后续得校验和数据写入
         $this->upload_driver->read($file);
-        return $this->after($site_id, $file_dir, FileEnum::IMAGE, $cate_id);
+        return $this->after($site_id, $file_dir, FileDict::IMAGE, $cate_id);
     }
 
     /**
@@ -59,12 +59,12 @@ class CoreUploadService extends CoreFileService
     {
 
         //校验上传设置
-//        $this->checkFile($site_id, $file, FileEnum::VIDEO);
+//        $this->checkFile($site_id, $file, FileDict::VIDEO);
         //实例化上传引擎
         $this->upload_driver = $this->driver($site_id);
         //读取上传附件的信息用于后续得校验和数据写入
         $this->upload_driver->read($file);
-        return $this->after($site_id, $file_dir, FileEnum::VIDEO, $cate_id);
+        return $this->after($site_id, $file_dir, FileDict::VIDEO, $cate_id);
 
     }
 
@@ -81,7 +81,7 @@ class CoreUploadService extends CoreFileService
     public function document(string $file, int $site_id, string $type, string $file_dir, bool $is_local = false, bool $is_rename = true)
     {
         //校验上传设置(todo  文件暂时不校验,后补安全性校验)
-//        $this->checkFile($site_id, $file, $type ?: FileEnum::DOCUMENT);
+//        $this->checkFile($site_id, $file, $type ?: FileDict::DOCUMENT);
 
         //实例化上传引擎
         $this->upload_driver = $this->driver($site_id, $is_local);

@@ -13,6 +13,7 @@ namespace app\adminapi\controller\login;
 
 use app\service\admin\auth\ConfigService;
 use app\service\admin\auth\LoginService;
+use app\service\core\addon\CoreAddonInstallService;
 use core\base\BaseAdminController;
 use think\Response;
 

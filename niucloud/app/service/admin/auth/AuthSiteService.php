@@ -44,13 +44,24 @@ class AuthSiteService extends BaseAdminService
     public function getSiteList(){
         //通过用户id获取
         $cache_name = 'site_list'.'_'.$this->uid;
-        return Cache::tag(SiteService::$cache_tag_name)->remember($cache_name, function (){
-            $auth_service = new AuthService();
-            $user_role_list = $auth_service->getAuthSiteRoleList();
-            $site_ids = array_column($user_role_list, 'site_id');
-            $site_list = $this->model->where([['site_id', 'in', $site_ids]])->field('app_type,site_name,logo')->column('site_id, site_name, logo, app_type');
-            return $site_list;
-        });
+        return cache_remember(
+            $cache_name,
+            function (){
+                $auth_service = new AuthService();
+                $user_role_list = $auth_service->getAuthSiteRoleList();
+                $site_ids = array_column($user_role_list, 'site_id');
+                $site_list = $this->model->where([['site_id', 'in', $site_ids]])->field('app_type,site_name,logo')->column('site_id, site_name, logo, app_type');
+                return $site_list;
+            },
+            SiteService::$cache_tag_name
+        );
+//        return Cache::tag(SiteService::$cache_tag_name)->remember($cache_name, function (){
+//            $auth_service = new AuthService();
+//            $user_role_list = $auth_service->getAuthSiteRoleList();
+//            $site_ids = array_column($user_role_list, 'site_id');
+//            $site_list = $this->model->where([['site_id', 'in', $site_ids]])->field('app_type,site_name,logo')->column('site_id, site_name, logo, app_type');
+//            return $site_list;
+//        });
     }
 
     /**

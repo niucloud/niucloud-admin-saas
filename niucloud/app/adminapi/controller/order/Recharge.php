@@ -25,10 +25,14 @@ class Recharge extends BaseAdminController
     public function lists()
     {
         $data = $this->request->params([
+            ['order_no', ''],
             ['order_status', ''],
             ['order_from', ''],
             ['create_time', []],
-            ['member_id', '']
+            ['pay_time', []],
+            ['member_id', ''],
+            ['start_money', 0],
+            ['end_money', 0]
         ]);
         return success((new RechargeOrderService())->getPage($data));
     }
@@ -54,5 +58,19 @@ class Recharge extends BaseAdminController
         if ($res === true) return success();
         return fail($res);
     }
+
+
+    /**
+     * 充值统计
+     */
+    public function stat()
+    {
+        $data = $this->request->params([
+            [ 'member_id', '' ],
+        ]);
+        $res = (new RechargeOrderService())->stat($data);
+        return success($res);
+    }
+
 
 }

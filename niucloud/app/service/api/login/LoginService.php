@@ -11,9 +11,9 @@
 
 namespace app\service\api\login;
 
-use app\enum\member\MemberLoginTypeEnum;
-use app\enum\sys\AppTypeEnum;
-use app\enum\sys\SmsEnum;
+use app\dict\member\MemberLoginTypeDict;
+use app\dict\sys\AppTypeDict;
+use app\dict\sys\SmsDict;
 use app\model\member\Member;
 use app\service\api\captcha\CaptchaService;
 use app\service\api\member\MemberConfigService;
@@ -91,7 +91,7 @@ class LoginService extends BaseApiService
         $member_info = $member_service->findMemberInfo(['username' => $username, 'site_id' => $this->site_id]);
         if ($member_info->isEmpty()) throw new AuthException('MEMBER_NOT_EXIST');//账号不存在
         if (!check_password($password, $member_info->password)) return false;//密码与账号不匹配
-        return $this->login($member_info, MemberLoginTypeEnum::USERNAME);
+        return $this->login($member_info, MemberLoginTypeDict::USERNAME);
     }
 
 
@@ -111,7 +111,7 @@ class LoginService extends BaseApiService
         $member_info = $member_service->findMemberInfo(['mobile' => $mobile, 'site_id' => $this->site_id]);
         if ($member_info->isEmpty()) throw new AuthException('MEMBER_NOT_EXIST');//账号不存在
 
-        return $this->login($member_info, MemberLoginTypeEnum::MOBILE);
+        return $this->login($member_info, MemberLoginTypeDict::MOBILE);
     }
     /**
      * 生成token
@@ -121,7 +121,7 @@ class LoginService extends BaseApiService
     public function createToken($member_info): ?array
     {
         $expire_time = env('system.api_token_expire_time') ?? 3600;//todo  不一定和管理端合用这个token时限
-        $token_info = TokenAuth::createToken($member_info->member_id, AppTypeEnum::API, ['member_id' => $member_info->member_id, 'username' => $member_info->username, 'site_id' => $member_info->site_id], $expire_time);
+        $token_info = TokenAuth::createToken($member_info->member_id, AppTypeDict::API, ['member_id' => $member_info->member_id, 'username' => $member_info->username, 'site_id' => $member_info->site_id], $expire_time);
         return $token_info;
     }
 
@@ -140,7 +140,7 @@ class LoginService extends BaseApiService
      */
     public static function clearToken(int $member_id, ?string $token = ''): ?bool
     {
-        TokenAuth::clearToken($member_id, AppTypeEnum::API, $token);
+        TokenAuth::clearToken($member_id, AppTypeDict::API, $token);
         return true;
     }
 
@@ -159,7 +159,7 @@ class LoginService extends BaseApiService
         }
 
         try {
-            $token_info = TokenAuth::parseToken($token, AppTypeEnum::API);
+            $token_info = TokenAuth::parseToken($token, AppTypeDict::API);
         } catch ( \Throwable $e ) {
 //            if(env('app_debug', false)){
 //                throw new AuthException($e->getMessage(), 401);
@@ -186,7 +186,7 @@ class LoginService extends BaseApiService
         (new CaptchaService())->check();
         if(empty($mobile)) throw new AuthException('MOBILE_NEEDED');
         //发送
-        if(!in_array($type, SmsEnum::SCENE_TYPE)) throw new AuthException('MEMBER_MOBILE_CAPTCHA_ERROR');
+        if(!in_array($type, SmsDict::SCENE_TYPE)) throw new AuthException('MEMBER_MOBILE_CAPTCHA_ERROR');
         $code = str_pad(random_int(1, 9999), 4, 0, STR_PAD_LEFT);// 生成4位随机数，左侧补0
         (new NoticeService())->send('member_verify_code', ['code' => $code, 'mobile' => $mobile]);
         //将验证码存入缓存

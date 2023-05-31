@@ -9,7 +9,7 @@
 // | Author: Niucloud Team
 // +----------------------------------------------------------------------
 
-namespace app\validate\sys;
+namespace app\validate\notice;
 
 use think\Validate;
 

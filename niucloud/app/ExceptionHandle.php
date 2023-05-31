@@ -1,9 +1,10 @@
 <?php
 namespace app;
 
-use app\enum\sys\AppTypeEnum;
+use app\dict\sys\AppTypeDict;
 use core\exception\AdminException;
 use core\exception\AuthException;
+use core\exception\ServerException;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
@@ -57,7 +58,7 @@ class ExceptionHandle extends Handle
             $app_type = empty($app_type) ? str_replace('/', '', request()->rootUrl()) : $app_type;
             //写入日志内容
             $log = [
-                '服务主体：'.($app_type == AppTypeEnum::ADMIN ? request()->uid() : request()->memberId()),//服务发起者                                                                     //用户ID
+                '服务主体：'.($app_type == AppTypeDict::ADMIN ? request()->uid() : request()->memberId()),//服务发起者                                                                     //用户ID
                 'IP：'.request()->ip(),//ip
                 '耗时（毫秒）：'.ceil((microtime(true) * 1000) - (request()->time(true) * 1000)),//耗时（毫秒）
                 '请求类型：'.request()->method(),//请求类型
@@ -102,8 +103,9 @@ class ExceptionHandle extends Handle
         } else if($e instanceof UnexpectedValueException){
             return fail($e->getMessage(), [], 401);
         }else if($e instanceof AuthException || $e instanceof AdminException){
-
             return fail($e->getMessage(), [], $e->getCode() ?: 400);
+        }else if($e instanceof ServerException){
+            return fail($e->getMessage(), [], http_code:$e->getCode());
         }else {
             return fail($e->getMessage(), $massageData);
         }

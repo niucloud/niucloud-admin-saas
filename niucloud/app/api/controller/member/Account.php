@@ -11,7 +11,8 @@
 
 namespace app\api\controller\member;
 
-use app\enum\member\MemberAccountEnum;
+use app\dict\member\MemberAccountChangeTypeDict;
+use app\dict\member\MemberAccountTypeDict;
 use app\service\api\member\MemberAccountService;
 use core\base\BaseApiController;
 use think\Response;
@@ -31,7 +32,7 @@ class Account extends BaseApiController
         $data = $this->request->params([
             ['from_type', '']
         ]);
-        $data['account_type'] = MemberAccountEnum::POINT;
+        $data['account_type'] = MemberAccountTypeDict::POINT;
         return success((new MemberAccountService())->getPage($data));
     }
 
@@ -43,7 +44,7 @@ class Account extends BaseApiController
         $data = $this->request->params([
             ['from_type', '']
         ]);
-        $data['account_type'] = MemberAccountEnum::BALANCE;
+        $data['account_type'] = MemberAccountTypeDict::BALANCE;
         return success((new MemberAccountService())->getPage($data));
     }
 
@@ -55,7 +56,7 @@ class Account extends BaseApiController
         $data = $this->request->params([
             ['from_type', '']
         ]);
-        $data['account_type'] = MemberAccountEnum::MONEY;
+        $data['account_type'] = MemberAccountTypeDict::MONEY;
         return success((new MemberAccountService())->getPage($data));
     }
 
@@ -79,7 +80,7 @@ class Account extends BaseApiController
         $data = $this->request->params([
             ['from_type', '']
         ]);
-        $data['account_type'] = MemberAccountEnum::COMMISSION;
+        $data['account_type'] = MemberAccountTypeDict::COMMISSION;
         return success((new MemberAccountService())->getPage($data));
     }
 
@@ -90,7 +91,7 @@ class Account extends BaseApiController
      */
     public function getFromType($account_type){
 
-        return success(MemberAccountEnum::getFromType($account_type));
+        return success(MemberAccountChangeTypeDict::getType($account_type));
     }
 
 }

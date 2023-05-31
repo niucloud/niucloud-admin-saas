@@ -1,4 +1,5 @@
 <?php
+use \core\dict\DictLoader;
 
 $system_event = [
     //文件执行序列号
@@ -28,6 +29,7 @@ $system_event = [
         'memberAccount' => [ 'app\listener\member\MemberAccountListener' ],
         //扫码事件
         'scan' => [ 'app\listener\scan\ScanListener' ],
+        'addSiteAfter' => [ 'app\listener\site\AddSiteAfterListener' ],
 
         /**
          * 消息相关事件
@@ -64,4 +66,4 @@ $system_event = [
     'subscribe' => [
     ],
 ];
-return (new \core\addon\AddonLoader("Event"))->load($system_event);
+return (new DictLoader("Event"))->load($system_event);

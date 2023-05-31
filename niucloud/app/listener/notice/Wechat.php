@@ -2,8 +2,8 @@
 
 namespace app\listener\notice;
 
-use app\enum\notice\NoticeTypeEnum;
-use app\enum\sys\MessageTypeEnum;
+use app\dict\notice\NoticeTypeDict;
+use app\dict\sys\MessageTypeDict;
 use app\service\core\member\CoreMemberService;
 use app\service\core\notice\CoreNoticeLogService;
 use core\exception\NoticeException;
@@ -14,7 +14,6 @@ class Wechat
 
     public function handle(array $data)
     {
-        return true;
         $site_id = $data['site_id'];
         $template = $data['template'];//模板
         $vars = $data['vars'];//模板变量
@@ -33,8 +32,8 @@ class Wechat
             //或者还有用户的
             if(!empty($openid)){
                 $wechat_template_id = $template['wechat_template_id'];
-                $wechat_json = $template['wechat'];
-                $wechat_content = $wechat_json['content'];
+                $wechat = $template['wechat'];
+                $wechat_content = $wechat['content'];
                 $wechat_data = [];
                 foreach($wechat_content as $k => $v){
                     $search_content = $v[1];
@@ -43,8 +42,8 @@ class Wechat
                     }
                     $wechat_data[$v[2]] = $search_content;
                 }
-                $first = $wechat_json['wechat_first'] ?? '';
-                $remark = $wechat_json['wechat_remark'] ?? '';
+                $first = $wechat['wechat_first'] ?? '';
+                $remark = $wechat['wechat_remark'] ?? '';
                 if(!empty($first)) $vars['first'] = $first;
                 if(!empty($remark)) $vars['remark'] = $remark;
                 $url = '';
@@ -55,17 +54,17 @@ class Wechat
                 //消息日志
                 $log_data = array(
                     'key' => $key,
-                    'message_type' => NoticeTypeEnum::WECHAT,
+                    'message_type' => NoticeTypeDict::WECHAT,
                     'uid' => $data['uid'] ?? 0,
                     'member_id' => $member_id,
                     'nickname' => $nickname ?? '',
                     'receiver' => $openid,
                     'params' => $vars,
-                    'content' => $wechat_json
+                    'content' => $wechat
                 );
 
                 try{
-                    (new TemplateLoader(NoticeTypeEnum::WECHAT, ['site_id' => $site_id]))->send(
+                    (new TemplateLoader(NoticeTypeDict::WECHAT, ['site_id' => $site_id]))->send(
                         [
                             'template_id' => $wechat_template_id,
                             'first' => $remark,

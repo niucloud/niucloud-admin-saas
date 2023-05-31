@@ -11,7 +11,7 @@
 
 namespace app\service\admin\channel;
 
-use app\enum\sys\ConfigKeyEnum;
+use app\dict\sys\ConfigKeyDict;
 use app\service\core\channel\CoreH5Service;
 use app\service\core\sys\CoreConfigService;
 use core\base\BaseAdminService;
@@ -42,7 +42,7 @@ class H5Service extends BaseAdminService
         $data = [
             'is_open' => $value['is_open']
         ];
-        $res = $this->core_config_service->setConfig($this->site_id,ConfigKeyEnum::H5, $data);
+        $res = $this->core_config_service->setConfig($this->site_id,ConfigKeyDict::H5, $data);
         return $res;
     }
 

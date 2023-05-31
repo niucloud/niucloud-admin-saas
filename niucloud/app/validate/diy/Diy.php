@@ -11,7 +11,7 @@
 
 namespace app\validate\diy;
 
-use app\enum\diy\PageEnum;
+use app\dict\diy\TemplateDict;
 
 /**
  * 自定义页面验证器
@@ -45,7 +45,7 @@ class Diy extends \think\Validate
      */
     protected function checkType($value, $rule, $data = [])
     {
-        return isset(PageEnum::getPageType()[ $value ]) ? true : get_lang("validate_diy.type_not_exist");
+        return isset(TemplateDict::getTemplate()[ $value ]) ? true : get_lang("validate_diy.type_not_exist");
     }
 
 }

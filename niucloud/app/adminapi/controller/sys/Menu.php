@@ -11,9 +11,9 @@
 
 namespace app\adminapi\controller\sys;
 
-use app\enum\sys\MenuEnum;
-use app\enum\sys\MenuTypeEnum;
-use app\enum\sys\MethodEnum;
+use app\dict\sys\MenuDict;
+use app\dict\sys\MenuTypeDict;
+use app\dict\sys\MethodDict;
 use app\service\admin\install\InstallSystemService;
 use app\service\admin\sys\MenuService;
 use core\base\BaseAdminController;
@@ -60,7 +60,7 @@ class Menu extends BaseAdminController
             ['methods', ''],
             ['sort', 0],
 
-            ['status', MenuEnum::ON],
+            ['status', MenuDict::ON],
             ['is_show', 0],
         ]);
         $this->validate($data, 'app\validate\sys\Menu.add');
@@ -85,7 +85,7 @@ class Menu extends BaseAdminController
             ['methods', ''],
             ['sort', 0],
 
-            ['status', MenuEnum::ON],
+            ['status', MenuDict::ON],
             ['is_show', 0],
         ]);
         $this->validate($data, 'app\validate\sys\Menu.edit');
@@ -99,7 +99,7 @@ class Menu extends BaseAdminController
      * @return Response
      */
     public function getMenuType(){
-        return success(MenuTypeEnum::getMenuType());
+        return success(MenuTypeDict::getMenuType());
     }
 
     /**
@@ -107,7 +107,7 @@ class Menu extends BaseAdminController
      * @return Response
      */
     public function getMethodType(){
-        return success(MethodEnum::getMethodType());
+        return success(MethodDict::getMethodType());
     }
 
     /**

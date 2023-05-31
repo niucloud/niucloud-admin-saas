@@ -38,10 +38,18 @@ class AreaService extends BaseAdminService
     {
 
         $cache_name = self::$cache_tag_name.'_pid_'.$pid;
-        return Cache::tag([self::$cache_tag_name])->remember($cache_name,  function() use($pid) {
-            $list = $this->model->where([['pid', '=', $pid]])->field('id, pid, name, shortname, longitude, latitude, level, sort, status')->select()->toArray();
-            return $list;
-        });
+        return cache_remember(
+            $cache_name,
+            function() use($pid) {
+                $list = $this->model->where([['pid', '=', $pid]])->field('id, pid, name, shortname, longitude, latitude, level, sort, status')->select()->toArray();
+                return $list;
+            },
+            [self::$cache_tag_name]
+        );
+//        return Cache::tag([self::$cache_tag_name])->remember($cache_name,  function() use($pid) {
+//            $list = $this->model->where([['pid', '=', $pid]])->field('id, pid, name, shortname, longitude, latitude, level, sort, status')->select()->toArray();
+//            return $list;
+//        });
 
     }
 
@@ -53,11 +61,20 @@ class AreaService extends BaseAdminService
     public function getAreaTree(int $level = 3)
     {
         $cache_name = self::$cache_tag_name.'_tree_'.$level;
-        return Cache::tag([self::$cache_tag_name])->remember($cache_name,  function() use($level) {
-            $list = $this->model->where([['level', '<=', $level]])->field('id, pid, name, shortname, longitude, latitude, level, sort, status')->select()->toArray();
-            $tree = list_to_tree($list, 'id', 'pid');
-            return $tree;
-        });
+        return cache_remember(
+            $cache_name,
+            function() use($level) {
+                $list = $this->model->where([['level', '<=', $level]])->field('id, pid, name, shortname, longitude, latitude, level, sort, status')->select()->toArray();
+                $tree = list_to_tree($list, 'id', 'pid');
+                return $tree;
+            },
+            [self::$cache_tag_name]
+        );
+//        return Cache::tag([self::$cache_tag_name])->remember($cache_name,  function() use($level) {
+//            $list = $this->model->where([['level', '<=', $level]])->field('id, pid, name, shortname, longitude, latitude, level, sort, status')->select()->toArray();
+//            $tree = list_to_tree($list, 'id', 'pid');
+//            return $tree;
+//        });
     }
 
 

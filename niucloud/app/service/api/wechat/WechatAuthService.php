@@ -12,9 +12,9 @@
 namespace app\service\api\wechat;
 
 
-use app\enum\member\MemberLoginTypeEnum;
-use app\enum\member\MemberRegisterTypeEnum;
-use app\enum\scan\ScanEnum;
+use app\dict\member\MemberLoginTypeDict;
+use app\dict\member\MemberRegisterTypeDict;
+use app\dict\scan\ScanDict;
 use app\service\api\login\LoginService;
 use app\service\api\login\RegisterService;
 use app\service\api\member\MemberConfigService;
@@ -116,7 +116,7 @@ class WechatAuthService extends BaseApiService
         } else {
             //可能会更新用户和粉丝表
             $login_service = new LoginService();
-            return $login_service->login($member_info, MemberLoginTypeEnum::WECHAT);
+            return $login_service->login($member_info, MemberLoginTypeDict::WECHAT);
         }
     }
 
@@ -156,7 +156,7 @@ class WechatAuthService extends BaseApiService
             [
                 'wx_openid' => $openid,
             ],
-            MemberRegisterTypeEnum::WECHAT
+            MemberRegisterTypeDict::WECHAT
         );
         return $result;
 
@@ -183,7 +183,7 @@ class WechatAuthService extends BaseApiService
             'channel' => $this->channel,
         );
 
-        $key = (new  CoreScanService())->scan($this->site_id, ScanEnum::WECHAT_LOGIN, $data, 300);
+        $key = (new  CoreScanService())->scan($this->site_id, ScanDict::WECHAT_LOGIN, $data, 300);
         $url = $this->core_wechat_serve_service->scan($this->site_id, $key, 300);
         return [
             'url' => $url,

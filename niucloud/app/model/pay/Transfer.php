@@ -11,7 +11,7 @@
 
 namespace app\model\pay;
 
-use app\enum\pay\TransferEnum;
+use app\dict\pay\TransferDict;
 use core\base\BaseModel;
 
 /**
@@ -48,7 +48,7 @@ class Transfer extends BaseModel
      */
     public function getTransferStatusNameAttr($value, $data)
     {
-        return TransferEnum::getStatus()[$data['transfer_status'] ?? ''] ?? '';
+        return TransferDict::getStatus()[$data['transfer_status'] ?? ''] ?? '';
     }
 
 
@@ -59,7 +59,7 @@ class Transfer extends BaseModel
      */
     public function getTransferTypeNameAttr($value, $data)
     {
-        return TransferEnum::getTransferType()[$data['transfer_type'] ?? '']['name'] ?? '';
+        return TransferDict::getTransferType()[$data['transfer_type'] ?? '']['name'] ?? '';
     }
 
 }

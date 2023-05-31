@@ -11,7 +11,7 @@
 
 namespace app\service\admin\cron;
 
-use app\service\core\cron\CoreCronService;
+use app\service\core\schedule\CoreCronService;
 use core\base\BaseAdminService;
 
 /**

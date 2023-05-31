@@ -11,9 +11,11 @@
 
 namespace app\service\admin\sys;
 
-use app\enum\sys\RoleStatusEnum;
+use app\dict\sys\RoleStatusDict;
 use app\model\sys\SysRole;
 use app\model\sys\SysUserRole;
+use app\service\admin\site\SiteGroupService;
+use app\service\admin\site\SiteService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
 use think\facade\Cache;
@@ -137,12 +139,22 @@ class RoleService extends BaseAdminService
      */
     public function getColumn(int $site_id){
         $cache_name = 'role_column_'.$site_id;
-        return Cache::tag([MenuService::$cache_tag_name, self::$cache_tag_name.$this->site_id])->remember($cache_name,  function() use($site_id) {
-            $where = [
-                ['site_id', '=', $site_id]
-            ];
-            return $this->model->where($where)->column('role_name', 'role_id');
-        });
+        return cache_remember(
+            $cache_name,
+            function() use($site_id) {
+                $where = [
+                    ['site_id', '=', $site_id]
+                ];
+                return $this->model->where($where)->column('role_name', 'role_id');
+            },
+            [MenuService::$cache_tag_name, self::$cache_tag_name.$this->site_id]
+        );
+//        return Cache::tag([MenuService::$cache_tag_name, self::$cache_tag_name.$this->site_id])->remember($cache_name,  function() use($site_id) {
+//            $where = [
+//                ['site_id', '=', $site_id]
+//            ];
+//            return $this->model->where($where)->column('role_name', 'role_id');
+//        });
 
     }
 
@@ -152,18 +164,25 @@ class RoleService extends BaseAdminService
      * @return array
      */
     public function getMenuIdsByRoleIds(int $site_id, array $role_ids){
-        sort($role_ids);
-        $cache_name = 'user_role_'.$site_id.'_'.md5(implode('_', $role_ids));
-        return Cache::tag([MenuService::$cache_tag_name, self::$cache_tag_name.$site_id])->remember($cache_name,  function() use($role_ids) {
-            $rules = $this->model::where([['role_id', 'IN', $role_ids], ['status', '=', RoleStatusEnum::ON]])->field('rules')->select()->toArray();
-            if(!empty($rules)){
-                $temp = [];
-                foreach($rules as $k => $v){
-                    $temp = array_merge($temp, $v['rules']);
+        $menu_keys = (new SiteService())->getMenuIdsBySiteId($site_id, true, 1);
+        $allow_role_ids = array_intersect($role_ids, $menu_keys);
+        sort($allow_role_ids);
+        $cache_name = 'user_role_'.$site_id.'_'.md5(implode('_', $allow_role_ids));
+        return cache_remember(
+            $cache_name,
+            function() use($role_ids) {
+                $rules = $this->model::where([['role_id', 'IN', $role_ids], ['status', '=', RoleStatusDict::ON]])->field('rules')->select()->toArray();
+                if(!empty($rules)){
+                    $temp = [];
+                    foreach($rules as $k => $v){
+                        $temp = array_merge($temp, $v['rules']);
+                    }
+                    return array_unique($temp);
                 }
-                return array_unique($temp);
-            }
-            return [];
-        });
+                return [];
+            },
+            [MenuService::$cache_tag_name, self::$cache_tag_name.$site_id]
+        );
+
     }
 }

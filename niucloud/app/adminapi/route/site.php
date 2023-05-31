@@ -29,6 +29,10 @@ Route::group('site', function () {
     Route::post('site', 'site.Site/add');
     //更新站点
     Route::put('site/:id', 'site.Site/edit');
+    //关闭站点
+    Route::put('closesite/:id', 'site.Site/closeSite');
+    //开启站点
+    Route::put('opensite/:id', 'site.Site/openSite');
     //站点状态
     Route::get('statuslist', 'site.Site/getStatuList');
     /***************************************************** 站点分组 *************************************************/

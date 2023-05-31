@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\member;
 
-use app\enum\member\MemberCashOutEnum;
-use app\enum\pay\TransferEnum;
+use app\dict\member\MemberCashOutDict;
+use app\dict\pay\TransferDict;
 use app\service\admin\member\MemberCashOutService;
 use core\base\BaseAdminController;
 use think\Response;
@@ -28,7 +28,12 @@ class CashOut extends BaseAdminController
         $data = $this->request->params([
             ['member_id', ''],
             ['status', ''],
+            ['transfer_type', ''],
             ['create_time', []],
+            ['audit_time', []],
+            ['transfer_time', []],
+            ['cash_out_no', ''],
+            ['keywords', '']
         ]);
         return success((new MemberCashOutService())->getPage($data));
     }
@@ -58,7 +63,7 @@ class CashOut extends BaseAdminController
      */
     public function getTransferType()
     {
-        return success(TransferEnum::getTransferType([], false));
+        return success(TransferDict::getTransferType([], false));
     }
 
     /**
@@ -82,6 +87,14 @@ class CashOut extends BaseAdminController
      * @return Response
      */
     public function getStatusList(){
-        return success(MemberCashOutEnum::getStatus());
+        return success(MemberCashOutDict::getStatus());
+    }
+
+    /**
+     * 统计数据
+     */
+    public function stat()
+    {
+        return success((new MemberCashOutService())->stat());
     }
 }

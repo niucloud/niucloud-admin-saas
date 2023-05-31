@@ -11,7 +11,7 @@
 
 namespace app\service\api\order;
 
-use app\enum\order\RechargeOrderEnum;
+use app\dict\order\RechargeOrderDict;
 use app\model\order\Order;
 use app\service\core\order\recharge\CoreRechargeOrderService;
 use core\base\BaseApiService;
@@ -78,6 +78,6 @@ class RechargeOrderService extends BaseApiService
      */
     public function getStatus()
     {
-        return RechargeOrderEnum::getStatus();
+        return RechargeOrderDict::getStatus();
     }
 }

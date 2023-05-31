@@ -11,7 +11,6 @@
 
 namespace app\adminapi\controller\diy;
 
-use app\enum\diy\PageEnum;
 use app\service\admin\diy\DiyService;
 use core\base\BaseAdminController;
 
@@ -67,7 +66,7 @@ class Diy extends BaseAdminController
 
     /**
      * 自定义页面编辑
-     * @param $id  自定义页面id
+     * @param $id
      * @return \think\Response
      */
     public function edit($id)
@@ -84,7 +83,7 @@ class Diy extends BaseAdminController
 
     /**
      * 自定义页面删除
-     * @param $id  自定义页面id
+     * @param $id
      * @return \think\Response
      */
     public function del(int $id)
@@ -114,7 +113,8 @@ class Diy extends BaseAdminController
         $params = $this->request->params([
             [ 'id', "" ],
             [ "name", "" ],
-            [ "type", "" ],
+            [ "template", "" ],
+            [ 'template_name', '' ],
             [ "title", "" ],
         ]);
 
@@ -132,16 +132,16 @@ class Diy extends BaseAdminController
     }
 
     /**
-     * 获取页面类型
+     * 获取页面模板
      * @return \think\Response
      */
-    public function getPageType()
+    public function getTemplate()
     {
         $params = $this->request->params([
             [ 'type', "" ],
         ]);
-        $page_type = PageEnum::getPageType($params[ 'type' ]);
-        return success($page_type);
+        $diy_service = new DiyService();
+        return success($diy_service->getTemplate($params[ 'type' ]));
     }
 
     /**

@@ -55,7 +55,7 @@ class Generator extends BaseController
         $data = $this->request->params([
             [ "table_name", "" ],
         ], false);
-        $this->validate($data, 'app\validate\generator\generator.add');
+        $this->validate($data, 'app\validate\generator\Generator.add');
         $id = ( new GenerateService() )->add($data);
         return success('ADD_SUCCESS', [ 'id' => $id ]);
     }
@@ -75,7 +75,7 @@ class Generator extends BaseController
             [ "edit_type", "1" ],
             [ "table_column", "" ],
         ], false);
-        $this->validate($data, 'app\validate\generator\generator.edit');
+        $this->validate($data, 'app\validate\generator\Generator.edit');
         ( new GenerateService() )->edit($id, $data);
         return success('MODIFY_SUCCESS');
     }

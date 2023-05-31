@@ -26,6 +26,8 @@ Route::group('refund', function () {
     Route::get('refund/:refund_id', 'order.Refund/detail');
     //退款状态
     Route::get('status', 'order.Refund/status');
+    //退款状态
+    Route::get('stat', 'order.Refund/stat');
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,

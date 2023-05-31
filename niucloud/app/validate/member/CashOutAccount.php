@@ -11,7 +11,7 @@
 
 namespace app\validate\member;
 
-use app\enum\pay\TransferEnum;
+use app\dict\pay\TransferDict;
 use think\Validate;
 
 /**
@@ -42,7 +42,7 @@ class CashOutAccount extends Validate
     }
 
     protected function checkAccountType($value){
-        $transfer_type = array_keys(TransferEnum::getTransferType());
+        $transfer_type = array_keys(TransferDict::getTransferType());
         return in_array($value, $transfer_type) ? true : 'validate_member_cash_out_account.not_support_transfer_type';
     }
 }

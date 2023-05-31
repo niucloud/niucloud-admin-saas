@@ -88,4 +88,39 @@ class ConfigService extends BaseAdminService
     public function getSceneDomain(){
         return (new CoreSysConfigService())->getSceneDomain($this->site_id);
     }
+
+    /**
+     * 获取服务信息
+     * @return array|mixed
+     */
+    public function getService()
+    {
+        $info = (new CoreConfigService())->getConfig(0, 'SERVICE_INFO');
+        if(empty($info))
+        {
+            $info = [];
+            $info['value'] = [
+                'wechat_code' => '',
+                'enterprise_wechat' => '',
+                'tel' => '',
+            ];
+        }
+        return $info['value'];
+    }
+
+    /**
+     * 设置服务信息
+     * @param array $value
+     * @return bool
+     */
+    public function setService (array $value)
+    {
+        $data = [
+            "wechat_code" => $value['wechat_code'],
+            "enterprise_wechat" => $value['enterprise_wechat'],
+            "tel" => $value['tel']
+        ];
+        $res = $this->core_config_service->setConfig(0,'SERVICE_INFO', $data);
+        return $res;
+    }
 }

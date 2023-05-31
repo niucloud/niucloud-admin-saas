@@ -11,6 +11,7 @@
 
 namespace app\service\admin\member;
 
+use app\dict\member\MemberCashOutDict;
 use app\model\member\MemberCashOut;
 use app\service\core\member\CoreMemberCashOutService;
 use core\base\BaseAdminService;
@@ -34,8 +35,15 @@ class MemberCashOutService extends BaseAdminService
     public function getPage(array $where = [])
     {
 
-        $field = 'id,site_id,cash_out_no,member_id,account_type,transfer_type,transfer_realname,transfer_mobile,transfer_bank,transfer_account,transfer_fail_reason,transfer_status,transfer_time,apply_money,rate,service_money,money,audit_time,status,remark,create_time,refuse_reason,transfer_no';
-        $search_model = $this->model->where([['site_id', '=', $this->site_id]])->withSearch(['member_id','status', 'create_time'],$where)->with(['memberInfo', 'transfer'])->field($field)->order('create_time desc')->append(['status_name', 'transfer_status_name', 'transfer_type_name', 'account_type_name']);
+        $field = 'id,member_cash_out.site_id,cash_out_no,member_cash_out.member_id,account_type,transfer_type,transfer_realname,transfer_mobile,transfer_bank,transfer_account,transfer_fail_reason,transfer_status,transfer_time,apply_money,rate,service_money,member_cash_out.money,audit_time,member_cash_out.status,remark,member_cash_out.create_time,refuse_reason,transfer_no';
+        $member_where = [];
+        if(!empty($where['keywords']))
+        {
+            $member_where = [['member.member_no|member.nickname|member.mobile', '=', $where['keywords']]];
+        }
+        $search_model = $this->model->where([['member_cash_out.site_id', '=', $this->site_id]])->withSearch(['member_id','status', 'create_time', 'audit_time', 'transfer_time', 'transfer_type', 'cash_out_no'],$where)->with(['transfer'])->withJoin(["member" => function($query){
+                $query->field("member.nickname, member.headimg, member.mobile, member.member_id, member.member_no");
+            }])->where($member_where)->field($field)->order('create_time desc')->append(['status_name', 'transfer_status_name', 'transfer_type_name', 'account_type_name']);
         $list = $this->pageQuery($search_model);
         return $list;
     }
@@ -71,6 +79,22 @@ class MemberCashOutService extends BaseAdminService
     public function transfer(int $id, array $data){
         $core_member_cash_out_service = new CoreMemberCashOutService();
         return $core_member_cash_out_service->transfer($this->site_id, $id, $data);
+    }
+
+    /**
+     * 统计数据
+     * @return array
+     */
+    public function stat()
+    {
+        $stat = [];
+        //已提现
+        $stat['transfered'] = $this->model->where([['status', '=', MemberCashOutDict::TRANSFERED], ['site_id', '=', $this->site_id]])->sum("apply_money");
+        //所有金额（包括提现中，已提现）
+        $all_money = $this->model->where([['status', '>=', 0], ['site_id', '=', $this->site_id]])->sum("apply_money");
+
+        $stat['cash_outing'] = $all_money - $stat['transfered'];
+        return $stat;
     }
 
 }

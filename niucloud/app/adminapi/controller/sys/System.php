@@ -47,4 +47,27 @@ class System extends BaseAdminController
         return success((new SystemService())->getSystemInfo());
     }
 
+    /**
+     * 清理缓存，更新菜单
+     */
+    public function schemaCache(){
+
+        return success((new SystemService())->schemaCache());
+    }
+
+    /**
+     * 校验消息队列是否正常运行
+     * @return \think\Response
+     */
+    public function checkJob(){
+        return success(data:(new SystemService())->checkJob());
+    }
+
+    /**
+     * 校验计划任务是否正常运行
+     * @return \think\Response
+     */
+    public function checkSchedule(){
+        return success(data:(new SystemService())->checkSchedule());
+    }
 }

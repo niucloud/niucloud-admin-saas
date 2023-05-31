@@ -86,6 +86,8 @@ class StatService extends BaseAdminService
         $data['today_data']['today_member_count'] = (new CoreMemberService())->getCount(['create_time' => get_start_and_end_time_by_day()]);
         $data['today_data']['total_site_count'] = (new SiteService())->getCount();
         $data['today_data']['today_site_count'] = (new SiteService())->getCount(['create_time' => [$day_start_time, $day_end_time]]);
+        $data['today_data']['norma_site_count'] = (new SiteService())->getCount(['status' => [1],'app_type' => ['site']]);
+        $data['today_data']['expire_site_count'] = (new SiteService())->getCount(['status' => [2]]);
 
         $data['system'] = (new SystemService())->getInfo();
         $data['version'] = $data['system']['version'] ?? [];
@@ -107,9 +109,12 @@ class StatService extends BaseAdminService
                 $data['site_group_stat']['value'][] = (new SiteService())->getCount(['group_id' => $v['group_id']]);
             }
         }
+        $app_count = (new CoreAddonService())->getLocalAddonCount();
+        $app_installed_count = (new CoreAddonService())->getCount();
         $app = [
-            'app_count' => (new CoreAddonService())->getLocalAddonCount(),
-            'app_installed_count' => (new CoreAddonService())->getCount(),
+            'app_count' => $app_count,
+            'app_no_installed_count' => $app_count-$app_installed_count,
+            'app_installed_count' => $app_installed_count,
         ];
         $data['app'] = $app;
         return $data;

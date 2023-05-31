@@ -12,6 +12,7 @@
 namespace app\service\core\sys;
 
 use app\model\sys\SysAttachment;
+use app\service\core\upload\CoreFileService;
 use app\service\core\upload\CoreStorageService;
 use core\base\BaseCoreService;
 use core\exception\AdminException;
@@ -116,10 +117,7 @@ class CoreAttachmentService extends BaseCoreService
      * @return void
      */
     public function delAll(int $site_id, array $att_ids){
-        $core_storage_service = new CoreStorageService();
-        $storage_config = $core_storage_service->getDefaultStorage($site_id);
-        $storage_type = $storage_config['storage_type'];
-        $file_driver = new FileDriver($storage_config, $storage_type);
+        $file_driver = (new CoreFileService())->driver($site_id);
         $core_attachment_service = new CoreAttachmentService();
         $list = $core_attachment_service->getList($site_id, compact('att_ids'));
         if(empty($list))

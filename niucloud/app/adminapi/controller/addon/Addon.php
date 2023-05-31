@@ -13,7 +13,6 @@ namespace app\adminapi\controller\addon;
 
 use app\service\admin\addon\AddonService;
 use app\service\core\addon\CoreAddonService;
-use app\service\core\addon\CoreInstallService;
 use core\base\BaseAdminController;
 use think\Response;
 
@@ -34,17 +33,34 @@ class Addon extends BaseAdminController
      */
     public function install($addon)
     {
-        ( new AddonService() )->install($addon);
-        return success('ADDON_INSTALL_SUCCESS');
+        return ( new AddonService() )->install($addon);
+    }
+
+    /**
+     * 执行安装
+     * @param $addon
+     * @return void
+     */
+    public function execute($addon) {
+        return ( new AddonService() )->executeInstall($addon);
+    }
+
+    /**
+     * 插件安装环境检测
+     * @param $addon
+     * @return mixed
+     */
+    public function installCheck($addon){
+        return ( new AddonService() )->installCheck($addon);
     }
 
     /**
      * 查询插件安装状态
      * @param $addon
      */
-    public function getInstallState($addon)
+    public function getInstallState($addon, $key)
     {
-        return success(( new AddonService() )->getInstallState($addon));
+        return success(( new AddonService() )->getInstallState($addon, $key));
     }
 
     /**

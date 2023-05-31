@@ -11,8 +11,8 @@
 
 namespace app\model\pay;
 
-use app\enum\order\OrderTypeEnum;
-use app\enum\pay\PayEnum;
+use app\dict\order\OrderTypeDict;
+use app\dict\pay\PayDict;
 use core\base\BaseModel;
 
 /**
@@ -54,7 +54,7 @@ class Pay extends BaseModel
      */
     public function getStatusNameAttr($value, $data)
     {
-        return PayEnum::getStatus()[$data['status'] ?? ''] ?? '';
+        return PayDict::getStatus()[$data['status'] ?? ''] ?? '';
     }
 
     /**
@@ -64,7 +64,7 @@ class Pay extends BaseModel
      * @return void
      */
     public function getPayTypeListAttr($value, $data){
-        return  OrderTypeEnum::getAllowPayType($data['trade_type']);
+        return  OrderTypeDict::getAllowPayType($data['trade_type']);
     }
     /**
      * 支付方式字段转化
@@ -73,7 +73,7 @@ class Pay extends BaseModel
      */
     public function getTypeNameAttr($value, $data)
     {
-        return PayEnum::getPayType()[$data['type'] ?? '']['name'] ?? '';
+        return PayDict::getPayType()[$data['type'] ?? '']['name'] ?? '';
     }
 
 }

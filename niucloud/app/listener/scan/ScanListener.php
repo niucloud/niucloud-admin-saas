@@ -11,7 +11,7 @@
 
 namespace app\listener\scan;
 
-use app\enum\scan\ScanEnum;
+use app\dict\scan\ScanDict;
 use app\service\api\wechat\WechatAuthService;
 use app\service\core\order\recharge\CoreRechargeOrderService;
 
@@ -26,13 +26,13 @@ class ScanListener
     {
         $action = $data['action'];
         switch($action){
-            case ScanEnum::WECHAT_LOGIN:
+            case ScanDict::WECHAT_LOGIN:
                 try {
                     $wechat_auth_service = new WechatAuthService();
                     $data['login_data'] = $wechat_auth_service->login($data['openid']);
-                    $data['status'] = ScanEnum::SUCCESS;
+                    $data['status'] = ScanDict::SUCCESS;
                 }catch(\Throwable $e){
-                    $data['status'] = ScanEnum::FAIL;
+                    $data['status'] = ScanDict::FAIL;
                     $data['fail_reason'] = get_lang($e->getMessage());
                 }
                 unset($data['openid']);

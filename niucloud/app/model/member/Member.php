@@ -11,12 +11,12 @@
 
 namespace app\model\member;
 
-use app\enum\common\ChannelEnum;
-use app\enum\common\CommonEnum;
-use app\enum\member\MemberEnum;
-use app\enum\member\MemberLoginTypeEnum;
-use app\enum\member\MemberRegisterChannelEnum;
-use app\enum\member\MemberRegisterTypeEnum;
+use app\dict\common\ChannelDict;
+use app\dict\common\CommonDict;
+use app\dict\member\MemberDict;
+use app\dict\member\MemberLoginTypeDict;
+use app\dict\member\MemberRegisterChannelDict;
+use app\dict\member\MemberRegisterTypeDict;
 use core\base\BaseModel;
 use think\db\Query;
 use think\model\concern\SoftDelete;
@@ -72,7 +72,7 @@ class Member extends BaseModel
      */
     public function getStatusNameAttr($value, $data)
     {
-        return MemberEnum::getStatus()[$data['status'] ?? ''] ?? '';
+        return MemberDict::getStatus()[$data['status'] ?? ''] ?? '';
     }
     /**
      * 注册来源字段转化
@@ -81,7 +81,7 @@ class Member extends BaseModel
      */
     public function getRegisterChannelNameAttr($value, $data)
     {
-        return MemberRegisterChannelEnum::getType()[ $data[ 'register_channel' ] ?? '' ] ?? '';
+        return MemberRegisterChannelDict::getType()[ $data[ 'register_channel' ] ?? '' ] ?? '';
     }
 
     /**
@@ -91,7 +91,7 @@ class Member extends BaseModel
      */
     public function getRegisterTypeNameAttr($value, $data)
     {
-        return MemberRegisterTypeEnum::getType()[ $data[ 'register_type' ] ?? '' ] ?? '';
+        return MemberRegisterTypeDict::getType()[ $data[ 'register_type' ] ?? '' ] ?? '';
     }
 
     /**
@@ -101,7 +101,7 @@ class Member extends BaseModel
      */
     public function getLoginChannelNameAttr($value, $data)
     {
-        return ChannelEnum::getType()[ $data[ 'login_channel' ] ?? '' ] ?? '';
+        return ChannelDict::getType()[ $data[ 'login_channel' ] ?? '' ] ?? '';
     }
 
     /**
@@ -111,7 +111,7 @@ class Member extends BaseModel
      */
     public function getLoginTypeNameAttr($value, $data)
     {
-        return MemberLoginTypeEnum::getType()[ $data[ 'login_type' ] ?? '' ] ?? '';
+        return MemberLoginTypeDict::getType()[ $data[ 'login_type' ] ?? '' ] ?? '';
     }
 
     /**
@@ -122,7 +122,7 @@ class Member extends BaseModel
      */
     public function getSexNameAttr($value, $data)
     {
-        return CommonEnum::getSexType()[ $data[ 'sex' ] ?? '' ] ?? '';
+        return CommonDict::getSexType()[ $data[ 'sex' ] ?? '' ] ?? '';
     }
 
     /**
@@ -143,7 +143,7 @@ class Member extends BaseModel
     public function searchKeywordAttr($query, $value, $data)
     {
         if ($value) {
-            $query->where('username|nickname|mobile', 'like', '%' . $value . '%');
+            $query->where('member_no|username|nickname|mobile', 'like', '%' . $value . '%');
         }
     }
 
@@ -197,11 +197,11 @@ class Member extends BaseModel
         $start_time = empty($value[ 0 ]) ? 0 : strtotime($value[ 0 ]);
         $end_time = empty($value[ 1 ]) ? 0 : strtotime($value[ 1 ]);
         if ($start_time > 0 && $end_time > 0) {
-            $query->whereBetweenTime('create_time', $start_time, $end_time);
+            $query->whereBetweenTime('member.create_time', $start_time, $end_time);
         } else if ($start_time > 0 && $end_time == 0) {
-            $query->where([ [ 'create_time', '>=', $start_time ] ]);
+            $query->where([ [ 'member.create_time', '>=', $start_time ] ]);
         } else if ($start_time == 0 && $end_time > 0) {
-            $query->where([ [ 'create_time', '<=', $end_time ] ]);
+            $query->where([ [ 'member.create_time', '<=', $end_time ] ]);
         }
     }
 

@@ -11,8 +11,8 @@
 
 namespace app\validate\sys;
 
-use app\enum\sys\MenuTypeEnum;
-use app\enum\sys\MethodEnum;
+use app\dict\sys\MenuTypeDict;
+use app\dict\sys\MethodDict;
 use think\Validate;
 
 /**
@@ -57,7 +57,7 @@ class Menu extends Validate
      */
     protected function checkMenuType($value, $rule, $data = [])
     {
-        return isset(MenuTypeEnum::getMenuType()[$value]) ? true : get_lang("validate_menu.not_exit_menu_type");
+        return isset(MenuTypeDict::getMenuType()[$value]) ? true : get_lang("validate_menu.not_exit_menu_type");
     }
 
     /**
@@ -69,7 +69,7 @@ class Menu extends Validate
      */
     protected function checkMethodType($value, $rule, $data = [])
     {
-        return isset(MethodEnum::getMethodType()[$value]) ? true : get_lang("validate_menu.not_exit_request_type");
+        return isset(MethodDict::getMethodType()[$value]) ? true : get_lang("validate_menu.not_exit_request_type");
     }
 
 }

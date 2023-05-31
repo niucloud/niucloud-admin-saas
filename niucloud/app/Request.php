@@ -1,7 +1,7 @@
 <?php
 
 namespace app;
-use app\enum\common\ChannelEnum;
+use app\dict\common\ChannelDict;
 
 /**
  * Class Request
@@ -13,7 +13,7 @@ class Request extends \think\Request
     //认证信息
     protected static $auth_info = [];
 
-    protected static $site_id = 1;
+    protected static $site_id = 0;
 
     /**
      * 获取请求参数
@@ -95,7 +95,7 @@ class Request extends \think\Request
         if ($site_id > 0) {
             static::$site_id = (int)$site_id;
         } else {
-            return static::$site_id ?? $this->getDefaultSiteId();
+            return static::$site_id ?? $this->defaultSiteId();
         }
     }
 
@@ -165,7 +165,7 @@ class Request extends \think\Request
      * @return array|string
      */
     public function getChannel(){
-        return $this->header(system_name('channel_name'), ChannelEnum::H5);
+        return $this->header(system_name('channel_name'), ChannelDict::H5);
     }
 
     /**
@@ -173,7 +173,7 @@ class Request extends \think\Request
      * @return int
      */
     public function defaultSiteId(){
-        return 1;
+        return 0;
     }
 
     /**

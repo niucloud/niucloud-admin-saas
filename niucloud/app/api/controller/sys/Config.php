@@ -11,6 +11,7 @@
 
 namespace app\api\controller\sys;
 
+use app\service\api\site\SiteService;
 use app\service\api\sys\ConfigService;
 use core\base\BaseApiController;
 use think\Response;
@@ -33,4 +34,11 @@ class Config extends BaseApiController
         return success((new ConfigService())->getSceneDomain());
     }
 
+    /**
+     * 获取站点信息
+     * @return Response
+     */
+    public function site(){
+        return success((new SiteService())->getSiteCache());
+    }
 }

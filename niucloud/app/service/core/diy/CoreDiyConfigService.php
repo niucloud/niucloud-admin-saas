@@ -11,7 +11,7 @@
 
 namespace app\service\core\diy;
 
-use app\enum\sys\ConfigKeyEnum;
+use app\dict\sys\ConfigKeyDict;
 use app\model\sys\SysConfig;
 use app\service\core\sys\CoreConfigService;
 use core\base\BaseCoreService;
@@ -31,7 +31,7 @@ class  CoreDiyConfigService extends BaseCoreService
      */
     public function getBottomConfig(int $site_id)
     {
-        $info = ( new CoreConfigService() )->getConfig($site_id, ConfigKeyEnum::DIY_BOTTOM)[ 'value' ] ?? [];
+        $info = ( new CoreConfigService() )->getConfig($site_id, ConfigKeyDict::DIY_BOTTOM)[ 'value' ] ?? [];
         if (empty($info)) {
 
             $info = [
@@ -87,7 +87,7 @@ class  CoreDiyConfigService extends BaseCoreService
      */
     public function setBottomConfig(int $site_id, array $data)
     {
-        return ( new CoreConfigService() )->setConfig($site_id, ConfigKeyEnum::DIY_BOTTOM, $data);
+        return ( new CoreConfigService() )->setConfig($site_id, ConfigKeyDict::DIY_BOTTOM, $data);
     }
 
 }

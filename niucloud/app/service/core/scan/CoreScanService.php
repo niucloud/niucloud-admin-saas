@@ -11,7 +11,7 @@
 
 namespace app\service\core\scan;
 
-use app\enum\scan\ScanEnum;
+use app\dict\scan\ScanDict;
 use core\base\BaseCoreService;
 use core\exception\CommonException;
 use think\facade\Cache;
@@ -41,7 +41,7 @@ class CoreScanService extends BaseCoreService
     public function scan(int $site_id, string $action, array $data, int $expire = null){
         $key = str_replace('==','', md5(uniqid(null, true)));
         $cache_name = self::$cache_name.$key;
-        $data['status'] = ScanEnum::WAIT;
+        $data['status'] = ScanDict::WAIT;
         $data['is_scan'] =  false;//是否被扫描
         $data['action'] = $action;
         $data['expire'] = $expire ? time() + $expire : 0;

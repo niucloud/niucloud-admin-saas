@@ -11,7 +11,7 @@
 
 namespace app\service\core\sys;
 
-use app\enum\sys\AgreementEnum;
+use app\dict\sys\AgreementDict;
 use app\model\sys\SysAgreement;
 use core\base\BaseCoreService;
 use core\exception\CommonException;
@@ -37,7 +37,7 @@ class CoreAgreementService extends BaseCoreService
      */
     public function getAgreement(int $site_id, string $key)
     {
-        if(!array_key_exists($key, AgreementEnum::getType())) throw new CommonException('AGREEMENT_TYPE_NOT_EXIST');
+        if(!array_key_exists($key, AgreementDict::getType())) throw new CommonException('AGREEMENT_TYPE_NOT_EXIST');
         $where = array(
             ['agreement_key', '=', $key],
             ['site_id', '=', $site_id]
@@ -48,7 +48,7 @@ class CoreAgreementService extends BaseCoreService
             $info = [
                 'site_id' => $site_id,
                 'agreement_key' => $key,
-                'agreement_key_name' => AgreementEnum::getType()[$key] ?? '',
+                'agreement_key_name' => AgreementDict::getType()[$key] ?? '',
                 'title' => '',
                 'content' => '',
                 'create_time' => '',
@@ -60,7 +60,7 @@ class CoreAgreementService extends BaseCoreService
 
     public function find(int $site_id, string $key)
     {
-        if(!array_key_exists($key, AgreementEnum::getType())) throw new CommonException('AGREEMENT_TYPE_NOT_EXIST');
+        if(!array_key_exists($key, AgreementDict::getType())) throw new CommonException('AGREEMENT_TYPE_NOT_EXIST');
         $where = array(
             ['agreement_key', '=', $key],
             ['site_id', '=', $site_id]
@@ -78,7 +78,7 @@ class CoreAgreementService extends BaseCoreService
      */
     public function setAgreement(int $site_id, string $key, string $title, string $content)
     {
-        if(!array_key_exists($key, AgreementEnum::getType())) throw new CommonException('AGREEMENT_TYPE_NOT_EXIST');
+        if(!array_key_exists($key, AgreementDict::getType())) throw new CommonException('AGREEMENT_TYPE_NOT_EXIST');
         $where = array(
             ['agreement_key', '=', $key],
             ['site_id', '=', $site_id]

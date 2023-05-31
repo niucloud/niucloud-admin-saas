@@ -11,8 +11,8 @@
 
 namespace app\model\pay;
 
-use app\enum\common\ChannelEnum;
-use app\enum\pay\PayEnum;
+use app\dict\common\ChannelDict;
+use app\dict\pay\PayDict;
 use core\base\BaseModel;
 
 /**
@@ -47,7 +47,7 @@ class PayChannel extends BaseModel
      */
     public function getTypeNameAttr($value, $data)
     {
-        return PayEnum::getPayType()[$data['type'] ?? '']['name'] ?? '';
+        return PayDict::getPayType()[$data['type'] ?? '']['name'] ?? '';
     }
 
     /**
@@ -57,7 +57,7 @@ class PayChannel extends BaseModel
      */
     public function getChannelNameAttr($value, $data)
     {
-        return ChannelEnum::getType()[$data['channel'] ?? ''] ?? '';
+        return ChannelDict::getType()[$data['channel'] ?? ''] ?? '';
     }
 
 }

@@ -11,8 +11,8 @@
 
 namespace app\service\core\order;
 
-use app\enum\order\OrderRefundEnum;
-use app\enum\pay\PayEnum;
+use app\dict\order\OrderRefundDict;
+use app\dict\pay\PayDict;
 use app\model\order\Order;
 use app\model\order\OrderItem;
 use app\model\order\OrderItemRefund;

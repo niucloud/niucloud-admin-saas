@@ -11,9 +11,8 @@
 
 namespace addon\hello_world\app\adminapi\controller;
 
-use app\adminapi\controller\BaseAdminController;
-use app\service\core\addon\CoreInstallService;
 
+use core\base\BaseAdminController;
 
 class Index extends BaseAdminController
 {

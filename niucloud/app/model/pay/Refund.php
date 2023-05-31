@@ -11,10 +11,10 @@
 
 namespace app\model\pay;
 
-use app\enum\order\OrderTypeEnum;
-use app\enum\pay\PayEnum;
-use app\enum\pay\PayRefundEnum;
-use app\enum\pay\RefundEnum;
+use app\dict\order\OrderTypeDict;
+use app\dict\pay\PayDict;
+use app\dict\pay\PayRefundDict;
+use app\dict\pay\RefundDict;
 use core\base\BaseModel;
 
 /**
@@ -50,7 +50,7 @@ class Refund extends BaseModel
      */
     public function getStatusNameAttr($value, $data)
     {
-        return RefundEnum::getStatus()[$data['status'] ?? ''] ?? '';
+        return RefundDict::getStatus()[$data['status'] ?? ''] ?? '';
     }
 
     /**
@@ -60,7 +60,7 @@ class Refund extends BaseModel
      */
     public function getTypeNameAttr($value, $data)
     {
-        return RefundEnum::getType()[$data['type'] ?? ''] ?? '';
+        return RefundDict::getType()[$data['type'] ?? ''] ?? '';
     }
 
 }

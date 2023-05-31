@@ -11,7 +11,7 @@
 
 namespace app\adminapi\controller\sys;
 
-use app\enum\common\ChannelEnum;
+use app\dict\common\ChannelDict;
 use core\base\BaseAdminController;
 
 class Channel extends BaseAdminController
@@ -24,6 +24,6 @@ class Channel extends BaseAdminController
      */
     public function getChannelType()
     {
-        return success(ChannelEnum::getType());
+        return success(ChannelDict::getType());
     }
 }

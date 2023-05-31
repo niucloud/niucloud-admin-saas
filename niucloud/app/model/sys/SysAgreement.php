@@ -11,7 +11,7 @@
 
 namespace app\model\sys;
 
-use app\enum\sys\AgreementEnum;
+use app\dict\sys\AgreementDict;
 use core\base\BaseModel;
 
 /**
@@ -45,6 +45,6 @@ class SysAgreement extends BaseModel
      */
     public function getAgreementKeyNameAttr($value, $data)
     {
-        return AgreementEnum::getType()[$data['agreement_key'] ?? ''] ?? '';
+        return AgreementDict::getType()[$data['agreement_key'] ?? ''] ?? '';
     }
 }

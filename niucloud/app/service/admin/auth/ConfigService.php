@@ -11,7 +11,7 @@
 
 namespace app\service\admin\auth;
 
-use app\enum\sys\ConfigKeyEnum;
+use app\dict\sys\ConfigKeyDict;
 use app\model\sys\SysConfig;
 use app\service\core\sys\CoreConfigService;
 use core\base\BaseAdminService;
@@ -36,7 +36,7 @@ class ConfigService extends BaseAdminService
      */
     public function getConfig()
     {
-        $info = (new CoreConfigService())->getConfig($this->request->defaultSiteId(), ConfigKeyEnum::ADMIN_LOGIN)['value'] ?? [];
+        $info = (new CoreConfigService())->getConfig($this->request->defaultSiteId(), ConfigKeyDict::ADMIN_LOGIN)['value'] ?? [];
         $config = [
             'is_captcha' => $info['is_captcha'] ?? 0,//是否启用验证码
             'is_site_captcha' => $info['is_site_captcha'] ?? 0,//是否启用站点验证码
@@ -60,7 +60,7 @@ class ConfigService extends BaseAdminService
             'bg' => $data['bg'] ?? '',//平台登录端 背景
             'site_bg' => $data['site_bg'] ?? '',//站点登录端  背景
         ];
-        (new CoreConfigService())->setConfig($this->site_id, ConfigKeyEnum::ADMIN_LOGIN, $config);
+        (new CoreConfigService())->setConfig($this->site_id, ConfigKeyDict::ADMIN_LOGIN, $config);
         return true;
     }
 

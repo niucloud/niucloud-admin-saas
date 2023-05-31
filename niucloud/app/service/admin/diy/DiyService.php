@@ -11,9 +11,10 @@
 
 namespace app\service\admin\diy;
 
-use app\enum\diy\ComponentEnum;
-use app\enum\diy\LinkEnum;
-use app\enum\diy\PageEnum;
+use app\dict\diy\ComponentDict;
+use app\dict\diy\LinkDict;
+use app\dict\diy\PagesDict;
+use app\dict\diy\TemplateDict;
 use app\model\diy\Diy;
 use app\service\admin\sys\SystemService;
 use core\base\BaseAdminService;
@@ -162,7 +163,7 @@ class DiyService extends BaseAdminService
      */
     public function getInit(array $params = [])
     {
-        $page_type = PageEnum::getPageType();
+        $page_template = TemplateDict::getTemplate();
 
         $time = time();
         $data = [];
@@ -173,23 +174,32 @@ class DiyService extends BaseAdminService
         }
 
         if (!empty($data)) {
-            if (isset($page_type[ $data[ 'type' ] ])) {
-                $page = $page_type[ $data[ 'type' ] ];
+            // 编辑赋值
+            if (isset($page_template[ $data[ 'type' ] ])) {
+                $page = $page_template[ $data[ 'type' ] ];
                 $data[ 'type_name' ] = $page[ 'title' ];
                 $data[ 'page' ] = $page[ 'page' ];
             }
         } else {
-            // 空页面赋值
+            // 新页面赋值
             $type = 'DIY_PAGE';
             $type_name = '';
             $name = $params[ 'name' ];
             $page_route = '';
-            if (isset($page_type[ $params[ 'type' ] ])) {
-                $page = $page_type[ $params[ 'type' ] ];
-                $name = $params[ 'type' ] == 'DIY_PAGE' ? 'DIY_PAGE_RANDOM_' . $time : $params[ 'type' ];
-                $type = $params[ 'type' ];
+            $value = '';
+            if (isset($page_template[ $params[ 'template' ] ])) {
+                $page = $page_template[ $params[ 'template' ] ];
+                $name = $params[ 'template' ] == 'DIY_PAGE' ? 'DIY_PAGE_RANDOM_' . $time : $params[ 'template' ];
+                $type = $params[ 'template' ];
                 $type_name = $page[ 'title' ];
                 $page_route = $page[ 'page' ];
+
+                // 查询指定页面数据
+                $page_data = $this->getPageData($params[ 'template' ], $params[ 'template_name' ]);
+                if (!empty($page_data)) {
+                    $value = json_encode($page_data[ 'data' ], JSON_UNESCAPED_UNICODE);
+                }
+
             }
             $data = [
                 'name' => $name,
@@ -197,15 +207,24 @@ class DiyService extends BaseAdminService
                 'type' => $type,
                 'type_name' => $type_name,
                 'page' => $page_route,
-                'value' => '',
+                'value' => $value,
+                'is_default' => 0
             ];
 
-            if (isset($page_type[ $params[ 'name' ] ])) {
-                $page = $page_type[ $params[ 'name' ] ];
-                $data[ 'name' ] = $params[ 'type' ];
+            if (isset($page_template[ $params[ 'name' ] ])) {
+                $page = $page_template[ $params[ 'name' ] ];
+                $data[ 'name' ] = $params[ 'template' ] ? $params[ 'template' ] : $params[ 'name' ];
+                $data[ 'type' ] = $data[ 'name' ];
                 $data[ 'title' ] = $page[ 'title' ];
                 $data[ 'type_name' ] = $page[ 'title' ];
                 $data[ 'page' ] = $page[ 'page' ];
+
+                // 查询默认页面数据
+                $page_data = $this->getFirstPageData($data[ 'name' ]);
+                if (!empty($page_data)) {
+                    $data[ 'value' ] = json_encode($page_data[ 'data' ], JSON_UNESCAPED_UNICODE);
+                    $data[ 'is_default' ] = 1;
+                }
             }
         }
         $data[ 'component' ] = $this->getComponentList($data[ 'name' ]);
@@ -220,7 +239,7 @@ class DiyService extends BaseAdminService
      */
     public function getComponentList(string $name = '')
     {
-        $data = ComponentEnum::getComponent();
+        $data = ComponentDict::getComponent();
         foreach ($data as $k => $v) {
             // 查询组件支持的页面
             $sort_arr = [];
@@ -247,16 +266,17 @@ class DiyService extends BaseAdminService
      */
     public function getLink()
     {
-        $link = LinkEnum::getLink();
+        $link = LinkDict::getLink();
         foreach ($link as $k => $v) {
+            $link[ $k ][ 'name' ] = $k;
             if (!empty($v[ 'child_list' ])) {
                 foreach ($v[ 'child_list' ] as $ck => $cv) {
-                    $link[ $k ][ 'child_list' ][ $ck ][ 'parent' ] = $v[ 'name' ];
+                    $link[ $k ][ 'child_list' ][ $ck ][ 'parent' ] = $k;
                 }
             }
 
             // 查询自定义页面
-            if ($v[ 'name' ] == 'DIY_PAGE') {
+            if ($k == 'DIY_PAGE') {
                 $diy_service = new DiyService();
                 $list = $diy_service->getList([ [ 'type', '=', 'DIY_PAGE' ] ]);
                 foreach ($list as $ck => $cv) {
@@ -269,7 +289,7 @@ class DiyService extends BaseAdminService
 
             }
 
-            if ($v[ 'name' ] == 'DIY_LINK') {
+            if ($k == 'DIY_LINK') {
                 $link[ $k ][ 'parent' ] = 'DIY_LINK';
             }
 
@@ -289,5 +309,50 @@ class DiyService extends BaseAdminService
         return true;
     }
 
+    /**
+     * 获取页面模板
+     * @param string $type
+     * @return array|string
+     */
+    public function getTemplate(string $type)
+    {
+        $page_template = TemplateDict::getTemplate($type);
+        foreach ($page_template as $k => $v) {
+            // 查询页面数据
+            $page_template[ $k ][ 'template' ] = PagesDict::getPages($k);
+        }
+        return $page_template;
+    }
+
+    /**
+     * 获取页面数据
+     * @param $template
+     * @param $name
+     * @return array
+     */
+    public function getPageData($template, $name)
+    {
+        $pages = PagesDict::getPages($template);
+        if (isset($pages[ $name ])) {
+            return $pages[ $name ];
+        }
+        return [];
+    }
+
+    /**
+     * 获取默认页面数据
+     * @param $template
+     * @return array|mixed
+     */
+    public function getFirstPageData($template)
+    {
+        $pages = PagesDict::getPages($template);
+        if (!empty($pages)) {
+            $page = array_shift($pages);
+            $page[ 'template' ] = $template;
+            return $page;
+        }
+        return [];
+    }
 
 }

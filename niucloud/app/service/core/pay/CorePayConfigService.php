@@ -11,8 +11,8 @@
 
 namespace app\service\core\pay;
 
-use app\enum\pay\PayEnum;
-use app\enum\sys\ConfigKeyEnum;
+use app\dict\pay\PayDict;
+use app\dict\sys\ConfigKeyDict;
 use app\model\sys\SysConfig;
 use app\service\core\sys\CoreConfigService;
 use app\service\core\weapp\CoreWeappConfigService;
@@ -38,19 +38,19 @@ class CorePayConfigService extends BaseCoreService
     public function getPayList(int $site_id, array $allow_type = [])
     {
         $pay_list = [];
-        foreach(PayEnum::getPayType($allow_type) as $k => $v){
+        foreach(PayDict::getPayType($allow_type) as $k => $v){
             switch($k){
-                case PayEnum::WECHATPAY:
+                case PayDict::WECHATPAY:
                     $config = $this->getWechatpayConfig($site_id);
                     break;
-                case PayEnum::ALIPAY:
+                case PayDict::ALIPAY:
                     $config = $this->getAlipayConfig($site_id);
                     break;
-                case PayEnum::OFFLINEPAY:
+                case PayDict::OFFLINEPAY:
                     $config = $this->getOfflinepayConfig($site_id);
                     break;
             }
-            if($config['status'] == PayEnum::ON){
+            if($config['status'] == PayDict::ON){
                 $pay_list[] = [
                     'key' => $k,
                     'name' => $v['name'],
@@ -69,15 +69,15 @@ class CorePayConfigService extends BaseCoreService
     public function getPayConfigList(int $site_id)
     {
         $pay_config_list = [];
-        foreach(PayEnum::getPayType() as $k => $v){
+        foreach(PayDict::getPayType() as $k => $v){
             switch($k){
-                case PayEnum::WECHATPAY:
+                case PayDict::WECHATPAY:
                     $config = self::getWechatpayConfig($site_id);
                     break;
-                case PayEnum::ALIPAY:
+                case PayDict::ALIPAY:
                     $config = self::getAlipayConfig($site_id);
                     break;
-                case PayEnum::OFFLINEPAY:
+                case PayDict::OFFLINEPAY:
                     $config = self::getOfflinepayConfig($site_id);
                     break;
             }
@@ -97,11 +97,11 @@ class CorePayConfigService extends BaseCoreService
      * @return array|mixed|string[]
      */
     public function getWechatpayConfig(int $site_id){
-        $config = (new CoreConfigService())->getConfig($site_id, ConfigKeyEnum::WECHAT_PAY)['value'] ?? [];
+        $config = (new CoreConfigService())->getConfig($site_id, ConfigKeyDict::WECHAT_PAY)['value'] ?? [];
         if(empty($config)){
             $config = array(
-                'status' => PayEnum::OFF,
-                'icon' => path_to_url(PayEnum::WECHATPAY_ICON),
+                'status' => PayDict::OFF,
+                'icon' => path_to_url(PayDict::WECHATPAY_ICON),
                 'mch_id' => '',//商户号
                 'mch_secret_key' => '',//商户秘钥  现在默认认为是v3版
                 'mch_secret_cert' => '',//商户私钥 字符串或路径
@@ -117,11 +117,11 @@ class CorePayConfigService extends BaseCoreService
      * @return array|mixed|string[]
      */
     public function getAlipayConfig(int $site_id){
-        $config = (new CoreConfigService())->getConfig($site_id, ConfigKeyEnum::ALIPAY)['value'] ?? [];
+        $config = (new CoreConfigService())->getConfig($site_id, ConfigKeyDict::ALIPAY)['value'] ?? [];
         if(empty($config)){
             $config = array(
-                'status' => PayEnum::OFF,
-                'app_id' => path_to_url(PayEnum::ALIPAY_ICON),// 必填-支付宝分配的 app_id
+                'status' => PayDict::OFF,
+                'app_id' => path_to_url(PayDict::ALIPAY_ICON),// 必填-支付宝分配的 app_id
                 'app_secret_cert' => '',// 必填-应用私钥 字符串或路径
                 'app_public_cert_path' => '',//必填-应用公钥证书 路径
                 'alipay_public_cert_path' => '',//必填-支付宝公钥证书 路径
@@ -137,10 +137,10 @@ class CorePayConfigService extends BaseCoreService
      * @return array|mixed|string[]
      */
     public function getOfflinepayConfig(int $site_id){
-        $config = (new CoreConfigService())->getConfig($site_id, ConfigKeyEnum::OFFLINE_PAY)['value'] ?? [];
+        $config = (new CoreConfigService())->getConfig($site_id, ConfigKeyDict::OFFLINE_PAY)['value'] ?? [];
         if(empty($config)){
             $config = array(
-                'status' => PayEnum::OFF,
+                'status' => PayDict::OFF,
             );
         }
         return $config;
@@ -154,18 +154,18 @@ class CorePayConfigService extends BaseCoreService
      */
     public function getPayConfigByType(int $site_id, string $type){
         switch($type){
-            case PayEnum::WECHATPAY:
+            case PayDict::WECHATPAY:
                 $config = self::getWechatpayConfig($site_id);
                 $config = array_merge($config, $this->getWechatPayFullConfig($site_id));//一般来说,微信支付商户号不能完整的进行支付活动,需要我们主动完善支付信息, 例如公众号appid
                 break;
-            case PayEnum::ALIPAY:
+            case PayDict::ALIPAY:
                 $config = self::getAlipayConfig($site_id);
                 break;
-            case PayEnum::OFFLINEPAY:
+            case PayDict::OFFLINEPAY:
                 $config = self::getOfflinepayConfig($site_id);
                 break;
         }
-        if($config['status'] != PayEnum::ON)
+        if($config['status'] != PayDict::ON)
             throw new CommonException('PAYMENT_METHOD_NOT_EXIST');
 
         return $config;
@@ -179,13 +179,13 @@ class CorePayConfigService extends BaseCoreService
      */
     public function getConfigByType(int $site_id, string $type){
         switch($type){
-            case PayEnum::WECHATPAY:
+            case PayDict::WECHATPAY:
                 $config = self::getWechatpayConfig($site_id);
                 break;
-            case PayEnum::ALIPAY:
+            case PayDict::ALIPAY:
                 $config = self::getAlipayConfig($site_id);
                 break;
-            case PayEnum::OFFLINEPAY:
+            case PayDict::OFFLINEPAY:
                 $config = self::getOfflinepayConfig($site_id);
                 break;
         }
@@ -225,7 +225,7 @@ class CorePayConfigService extends BaseCoreService
         $config = [
             'status' => $data['status'],
         ];
-        return (new CoreConfigService())->setConfig($site_id, ConfigKeyEnum::OFFLINE_PAY, $config);
+        return (new CoreConfigService())->setConfig($site_id, ConfigKeyDict::OFFLINE_PAY, $config);
     }
     /**
      * 设置线下支付
@@ -242,7 +242,7 @@ class CorePayConfigService extends BaseCoreService
             'mch_secret_cert' => $data['mch_secret_cert'],//商户私钥 字符串或路径
             'mch_public_cert_path' => $data['mch_public_cert_path'],//商户公钥证书路径
         ];
-        return (new CoreConfigService())->setConfig($site_id, ConfigKeyEnum::WECHAT_PAY, $config);
+        return (new CoreConfigService())->setConfig($site_id, ConfigKeyDict::WECHAT_PAY, $config);
     }
     /**
      * 设置线下支付
@@ -260,7 +260,7 @@ class CorePayConfigService extends BaseCoreService
             'alipay_public_cert_path' => $data['alipay_public_cert_path'],//必填-支付宝公钥证书 路径
             'alipay_root_cert_path' => $data['alipay_root_cert_path'],// 必填-支付宝根证书 路径
         ];
-        return (new CoreConfigService())->setConfig($site_id, ConfigKeyEnum::ALIPAY, $config);
+        return (new CoreConfigService())->setConfig($site_id, ConfigKeyDict::ALIPAY, $config);
     }
 
     /**
@@ -272,13 +272,13 @@ class CorePayConfigService extends BaseCoreService
      */
     public function setConfigByType(int $site_id, string $type, array $data){
         switch($type){
-            case PayEnum::WECHATPAY:
+            case PayDict::WECHATPAY:
                 $result = $this->setWechatpayConfig($site_id, $data);
                 break;
-            case PayEnum::ALIPAY:
+            case PayDict::ALIPAY:
                 $result = $this->setAlipayConfig($site_id, $data);
                 break;
-            case PayEnum::OFFLINEPAY:
+            case PayDict::OFFLINEPAY:
                 $result = $this->setOfflinepayConfig($site_id, $data);
                 break;
         }

@@ -11,7 +11,7 @@
 
 namespace app\model\sys;
 
-use app\enum\sys\UserEnum;
+use app\dict\sys\UserDict;
 use core\base\BaseModel;
 use think\model\concern\SoftDelete;
 
@@ -72,7 +72,12 @@ class SysUser extends BaseModel
      */
     public function getStatusNameAttr($value, $data)
     {
-        return UserEnum::getStatus()[$data['status'] ?? ''] ?? '';
+        return UserDict::getStatus()[$data['status'] ?? ''] ?? '';
+    }
+
+    public function getCreateTimeAttr($value, $data)
+    {
+        return $data['create_time'] ? get_date_by_time($data['create_time']) : '';
     }
 
     /**

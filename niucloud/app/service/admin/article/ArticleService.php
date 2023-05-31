@@ -38,7 +38,7 @@ class ArticleService extends BaseAdminService
         $where[] = [ 'site_id', '=', $this->site_id ];
         $field = 'id, category_id, site_id, title, intro, summary, image, author, content, visit, visit_virtual, is_show, sort, create_time, update_time';
         $order = 'create_time desc';
-        $search_model = $this->model->where([ [ 'site_id', '=', $this->site_id ] ])->withSearch([ 'title', 'category_id', 'is_show'], $where)->with('articleCategory')->field($field)->order($order);
+        $search_model = $this->model->where([ [ 'site_id', '=', $this->site_id ] ])->withSearch([ 'title', 'category_id', 'is_show'], $where)->with('articleCategory')->field($field)->order($order)->append(['article_url']);
         $list = $this->pageQuery($search_model);
         return $list;
     }

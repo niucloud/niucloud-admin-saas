@@ -11,7 +11,7 @@
 
 namespace app\model\sys;
 
-use app\enum\notice\NoticeTypeEnum;
+use app\dict\notice\NoticeTypeDict;
 use core\base\BaseModel;
 use think\db\Query;
 
@@ -66,7 +66,7 @@ class SysNoticeLog extends BaseModel
      */
     public function getNameAttr($value,$data)
     {
-        $temp = \app\enum\notice\NoticeEnum::getNotice()[$data['key'] ?? ''] ?? '';
+        $temp = \app\dict\notice\NoticeDict::getNotice()[$data['key'] ?? ''] ?? '';
         return  $temp['name'] ?? '';
     }
 
@@ -78,7 +78,7 @@ class SysNoticeLog extends BaseModel
      */
     public function getNoticeTypeNameAttr($value,$data)
     {
-        $temp = NoticeTypeEnum::getType()[$data['notice_type'] ?? ''] ?? '';
+        $temp = NoticeTypeDict::getType()[$data['notice_type'] ?? ''] ?? '';
         return  $temp['name'] ?? '';
     }
     /**

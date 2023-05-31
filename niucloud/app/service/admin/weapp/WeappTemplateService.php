@@ -11,7 +11,7 @@
 
 namespace app\service\admin\weapp;
 
-use app\enum\notice\NoticeTypeEnum;
+use app\dict\notice\NoticeTypeDict;
 use app\service\admin\notice\NoticeService;
 use app\service\core\notice\CoreNoticeService;
 use core\base\BaseAdminService;
@@ -38,7 +38,7 @@ class WeappTemplateService extends BaseAdminService
         $list = $core_notice_service->getList($site_id);
         $template = [];
         foreach ($list as $k => $v){
-            if(in_array(NoticeTypeEnum::WEAPP, $v['support_type'])) $template[] = $v;
+            if(in_array(NoticeTypeDict::WEAPP, $v['support_type'])) $template[] = $v;
         }
         return $template;
     }
@@ -67,21 +67,21 @@ class WeappTemplateService extends BaseAdminService
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function syncItem($item){
-        $key = $item['key'];
-        $weapp_json = $item['wechat_json'];
-        $temp_key = $weapp_json['temp_key'] ?? '';
+        $key = $item['key'] ?? '';
+        $weapp = $item['weapp'] ?? [];
+        $temp_key = $weapp['temp_key'] ?? '';
         if(empty($temp_key)) $error = 'WECHAT_TEMPLATE_NEED_NO';
         $weapp_template_id = $item['weapp_template_id'];
         //删除原来的消息模板
-        $template_loader = (new TemplateLoader(NoticeTypeEnum::WEAPP, ['site_id' => $this->site_id]));
+        $template_loader = (new TemplateLoader(NoticeTypeDict::WEAPP, ['site_id' => $this->site_id]));
         $template_loader->delete(['template_id' => $weapp_template_id ]);
 //        (new CoreWeappTemplateService())->deleteTemplate($this->site_id, $weapp_template_id);
         //新的消息模板
-        $tid = $weapp_json['tid'] ?? '';
-        $kid_list = $weapp_json['kid_list'] ?? [];
-        $scene_desc = $weapp_json['scene_desc'] ?? '';
+        $tid = $weapp['tid'] ?? '';
+        $kid_list = $weapp['kid_list'] ?? [];
+        $scene_desc = $weapp['scene_desc'] ?? '';
 //        $res = (new CoreWeappTemplateService())->addTemplate($this->site_id, $tid, $kid_list, $scene_desc);
-        $res = $template_loader->add(['tid' => $tid, 'kid_list' => $kid_list, 'scene_desc' => $scene_desc ]);
+        $res = $template_loader->addTemplate(['tid' => $tid, 'kid_list' => $kid_list, 'scene_desc' => $scene_desc ]);
         $notice_service = new NoticeService();
         if (isset($res[ 'errcode' ]) && $res[ 'errcode' ] == 0) {
             //修改

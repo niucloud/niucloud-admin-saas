@@ -39,14 +39,17 @@ class AppService extends BaseAdminService
             if(isset($v['category']))
             {
                 $category_list = empty($category_list) ? $v['category'] : array_merge($category_list, $v['category']);
+
                 unset($v['category']);
             }
 
             $list = empty($list) ? $v : array_merge($list, $v);
         }
 
+
         foreach ($category_list as $k_category => $category)
         {
+            $category_list[$k_category]['sort'] = $category['sort'] ?? 100;
             $category_list[$k_category]['app_list'] = [];
             foreach ($list as $k => $app)
             {
@@ -59,6 +62,9 @@ class AppService extends BaseAdminService
 
             }
         }
+
+        $sort = array_column($category_list, 'sort');
+        array_multisort($category_list, $sort);
 
         return $category_list;
     }

@@ -11,7 +11,7 @@
 
 namespace app\adminapi\controller\sys;
 
-use app\enum\sys\CronEnum;
+use app\dict\sys\CronDict;
 use app\service\admin\cron\CronService;
 use core\base\BaseAdminController;
 
@@ -51,6 +51,6 @@ class Cron extends BaseAdminController
      * @return \think\Response
      */
     public function getType(){
-        return success((new CronEnum())->getType());
+        return success((new CronDict())->getType());
     }
 }

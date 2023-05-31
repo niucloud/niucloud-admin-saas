@@ -171,7 +171,7 @@ abstract class BaseGenerator
      */
     public function checkDir(string $path)
     {
-        !is_dir($path) && mkdirs($path, 0755, true);
+        !is_dir($path) && mkdir($path, 0777, true);
     }
 
     /**
@@ -316,7 +316,7 @@ abstract class BaseGenerator
      */
     public function getDefault(string $type)
     {
-        if (0 === strpos($type, 'set') || 0 === strpos($type, 'enum')) {
+        if (0 === strpos($type, 'set') || 0 === strpos($type, 'dict')) {
             $result = '""';
         } elseif (preg_match('/(int|serial|bit)/is', $type)) {
             $result = '0';
@@ -342,7 +342,7 @@ abstract class BaseGenerator
      */
     public function getAuthor()
     {
-        return empty($this->table['author']) ? 'Niushop team' : $this->table['author'];
+        return empty($this->table['author']) ? 'Niucloud team' : $this->table['author'];
     }
 
 

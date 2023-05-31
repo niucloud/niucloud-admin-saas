@@ -25,23 +25,24 @@ class AppManageListener
 
                 [
                     "key" => "basic",
-                    "name" => "系统应用"
+                    "name" => get_lang('dict_app_manage.system_app'),
+                    "sort" => 10
                 ]
             ],
             [
                 "addon" => "",
-                "title" => "消息管理",
+                "title" => get_lang('dict_app_manage.message_manage'),
                 "category" => "basic",
-                "desc" => "消息管理",
+                "desc" => get_lang('dict_app_manage.message_manage'),
                 "icon" => "static/resource/images/app/message_icon.png",
                 "cover" => "static/resource/images/app/message_cover.png",
-                "url" => "/setting/message/template"
+                "url" => "/setting/notice/template"
             ],
             [
                 "addon" => "",
-                "title" => "会员充值",
+                "title" => get_lang('dict_app_manage.member_recharge'),
                 "category" => "basic",
-                "desc" => "会员充值",
+                "desc" => get_lang('dict_app_manage.member_recharge'),
                 "icon" => "static/resource/images/app/recharge_icon.png",
                 "cover" => "static/resource/images/app/recharge_cover.png",
                 "url" => "/finance/recharge"

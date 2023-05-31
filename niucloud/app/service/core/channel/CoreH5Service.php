@@ -11,7 +11,7 @@
 
 namespace app\service\core\channel;
 
-use app\enum\sys\ConfigKeyEnum;
+use app\dict\sys\ConfigKeyDict;
 use app\model\sys\SysAttachment;
 use app\service\core\sys\CoreConfigService;
 use core\base\BaseCoreService;
@@ -37,7 +37,7 @@ class CoreH5Service extends BaseCoreService
      */
     public function getH5(int $site_id)
     {
-        $info = (new CoreConfigService())->getConfig($site_id, ConfigKeyEnum::H5)['value'] ?? [];
+        $info = (new CoreConfigService())->getConfig($site_id, ConfigKeyDict::H5)['value'] ?? [];
         if(empty($info))
         {
             $info = [

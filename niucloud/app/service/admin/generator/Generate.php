@@ -63,7 +63,7 @@ class Generate
     public function delOutFiles()
     {
         // 删除runtime目录制定文件夹
-        !is_dir($this->outPath) && mkdir($this->outPath, 0755, true);
+        !is_dir($this->outPath) && mkdirs($this->outPath, 0777, true);
         del_target_dir($this->outPath, false);
     }
 

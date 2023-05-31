@@ -34,6 +34,13 @@ class OrderItem extends BaseModel
     protected $name = 'order_item';
 
     /**
+     * @return HasOne
+     */
+    public function orderNo()
+    {
+        return $this->hasOne(Order::class, 'order_id', 'order_id')->joinType('left')->withField('order_id, order_no')->bind(['order_no' => 'order_no']);
+    }
+    /**
      * 数量字段处理
      * @param $value
      * @return mixed

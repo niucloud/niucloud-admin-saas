@@ -11,9 +11,9 @@
 
 namespace app\adminapi\controller\member;
 
-use app\enum\member\MemberEnum;
-use app\enum\member\MemberRegisterChannelEnum;
-use app\enum\member\MemberRegisterTypeEnum;
+use app\dict\member\MemberDict;
+use app\dict\member\MemberRegisterChannelDict;
+use app\dict\member\MemberRegisterTypeDict;
 use app\service\admin\member\MemberService;
 use core\base\BaseAdminController;
 use think\Response;
@@ -55,7 +55,8 @@ class Member extends BaseAdminController
         $data = $this->request->params([
             ['nickname', ''],
             ['mobile', ''],
-            ['username', ''],
+            ['member_no', ''],
+            ['init_member_no', ''],
             ['password', ''],
             ['headimg', ''],
             ['member_label', []],
@@ -104,13 +105,19 @@ class Member extends BaseAdminController
         return success('EDIT_SUCCESS');
     }
 
+    public function del($member_id)
+    {
+        $res = (new MemberService())->deleteMember($member_id);
+        return success('DELETE_SUCCESS');
+    }
+
     /**
      * 会员使用场景
      * @return array|mixed|string
      */
     public function getMemberRegisterType()
     {
-        return success(MemberRegisterTypeEnum::getType());
+        return success(MemberRegisterTypeDict::getType());
     }
 
     /**
@@ -131,7 +138,7 @@ class Member extends BaseAdminController
      */
     public function getMemberRegisterChannelType()
     {
-        return success(MemberRegisterChannelEnum::getType());
+        return success(MemberRegisterChannelDict::getType());
     }
 
     /**
@@ -154,6 +161,17 @@ class Member extends BaseAdminController
      * @return Response
      */
     public function getStatusList(){
-        return success(MemberEnum::getStatus());
+        return success(MemberDict::getStatus());
     }
+
+    /**
+     * 获取会员编码
+     * @return Response
+     */
+    public function getMemberNo(){
+        $member_no = (new MemberService())->getMemberNo();
+        return success('SUCCESS', $member_no);
+    }
+
+
 }

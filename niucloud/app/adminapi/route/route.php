@@ -27,7 +27,9 @@ Route::group(function () {
     Route::get('captcha/check', 'login.Captcha/check');
 
     Route::get('terminal', 'sys.Terminal/exec');
+
+    Route::get('test', 'login.Login/test');
 });
 
 //加载插件路由
-(new \core\addon\AddonLoader("Route"))->load(['app_type' => 'adminapi']);
+(new \core\dict\DictLoader("Route"))->load(['app_type' => 'adminapi']);

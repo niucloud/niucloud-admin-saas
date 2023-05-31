@@ -11,6 +11,7 @@
 
 namespace app\service\api\diy;
 
+use app\dict\diy\PagesDict;
 use app\model\diy\Diy;
 use core\base\BaseApiService;
 
@@ -44,10 +45,45 @@ class DiyService extends BaseApiService
             $condition[] = [ 'name', '=', $params[ 'name' ] ];
             $condition[] = [ 'is_default', '=', 1 ];
         }
+
         $field = 'id,site_id,title,name,type,value,is_default,share,visit_count';
 
         $info = $this->model->field($field)->where($condition)->findOrEmpty()->toArray();
+        if (empty($info)) {
+            // 查询默认页面数据
+            if (!empty($params[ 'name' ])) {
+                $page_data = $this->getFirstPageData($params[ 'name' ]);
+                if (!empty($page_data)) {
+                    $info = [
+                        'site_id' => $this->site_id,
+                        'title' => $page_data[ 'title' ],
+                        'name' => $page_data[ 'template' ],
+                        'type' => $page_data[ 'template' ],
+                        'value' => json_encode($page_data[ 'data' ], JSON_UNESCAPED_UNICODE),
+                        'is_default' => 1,
+                        'share' => '',
+                        'visit_count' => 0
+                    ];
+                }
+            }
+        }
         return $info;
+    }
+
+    /**
+     * 获取默认页面数据
+     * @param $template
+     * @return array|mixed
+     */
+    public function getFirstPageData($template)
+    {
+        $pages = PagesDict::getPages($template);
+        if (!empty($pages)) {
+            $page = array_shift($pages);
+            $page[ 'template' ] = $template;
+            return $page;
+        }
+        return [];
     }
 
 }

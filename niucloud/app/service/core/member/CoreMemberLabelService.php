@@ -41,9 +41,16 @@ class CoreMemberLabelService extends BaseCoreService
     public function getMemberLabelListByLabelIds(int $site_id, array $label_ids){
         sort($label_ids);
         $cache_name = __METHOD__ . md5(implode("_", $label_ids));
-        return Cache::tag(self::$cache_tag_name.$site_id)->remember($cache_name, function () use ($site_id, $label_ids) {
-            return array_keys_search($this->getAll($site_id), $label_ids, 'label_id');
-        });
+        return cache_remember(
+            $cache_name,
+            function () use ($site_id, $label_ids) {
+                return array_keys_search($this->getAll($site_id), $label_ids, 'label_id');
+            },
+            self::$cache_tag_name.$site_id
+        );
+//        return Cache::tag(self::$cache_tag_name.$site_id)->remember($cache_name, function () use ($site_id, $label_ids) {
+//            return array_keys_search($this->getAll($site_id), $label_ids, 'label_id');
+//        });
     }
 
     /**
@@ -56,11 +63,20 @@ class CoreMemberLabelService extends BaseCoreService
      */
     public function getAll(int $site_id){
         $cache_name = __METHOD__ . $site_id;
-        return Cache::tag(self::$cache_tag_name.$site_id)->remember($cache_name, function () use ($site_id) {
-            $field = 'label_id, label_name';
-            return $this->model->where([['site_id', '=', $site_id]])->field($field)->select()->toArray();
+        return cache_remember(
+            $cache_name,
+            function () use ($site_id) {
+                $field = 'label_id, label_name';
+                return $this->model->where([['site_id', '=', $site_id]])->field($field)->select()->toArray();
 
-        });
+            },
+            self::$cache_tag_name.$site_id
+        );
+//        return Cache::tag(self::$cache_tag_name.$site_id)->remember($cache_name, function () use ($site_id) {
+//            $field = 'label_id, label_name';
+//            return $this->model->where([['site_id', '=', $site_id]])->field($field)->select()->toArray();
+//
+//        });
     }
 
     /**

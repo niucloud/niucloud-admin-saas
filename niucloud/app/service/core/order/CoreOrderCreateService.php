@@ -11,7 +11,7 @@
 
 namespace app\service\core\order;
 
-use app\enum\pay\PayEnum;
+use app\dict\pay\PayDict;
 use app\model\order\Order;
 use app\model\order\OrderItem;
 use app\service\core\pay\CorePayService;
@@ -40,7 +40,7 @@ class CoreOrderCreateService extends BaseCoreService
         Db::startTrans();
         try{
             //添加订单支付表
-            $order_data['out_trade_no'] = (new CorePayService())->create($site_id, PayEnum::MEMBER, $order_data['member_id'], $order_data['order_money'], $order_data['order_type'], get_lang("enum_order.trade_type_recharge"));
+            $order_data['out_trade_no'] = (new CorePayService())->create($site_id, PayDict::MEMBER, $order_data['member_id'], $order_data['order_money'], $order_data['order_type'], get_lang("dict_order.trade_type_recharge"));
             //添加订单表
             $order_data['order_no'] = $this->createOrderNo($site_id);
             $create_order = (new Order())->create($order_data);
@@ -55,7 +55,7 @@ class CoreOrderCreateService extends BaseCoreService
             //订单创建执行事件
             event("orderCreateAfter");
             if($order_data['order_money'] == 0){
-                (new CorePayService())->finish($site_id, $order_data['out_trade_no'], PayEnum::BALANCEPAY);
+                (new CorePayService())->finish($site_id, $order_data['out_trade_no'], PayDict::BALANCEPAY);
             }
             Db::commit();
             //返回订单信息

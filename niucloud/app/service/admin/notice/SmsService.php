@@ -11,7 +11,7 @@
 
 namespace app\service\admin\notice;
 
-use app\enum\sys\SmsEnum;
+use app\dict\sys\SmsDict;
 use app\service\core\sys\CoreConfigService;
 use app\service\core\sys\CoreMessage;
 use core\base\BaseAdminService;
@@ -33,7 +33,7 @@ class SmsService extends BaseAdminService
      */
     public function getList()
     {
-        $sms_type_list = SmsEnum::getType();
+        $sms_type_list = SmsDict::getType();
         $info = (new CoreConfigService())->getConfig($this->site_id, 'SMS');
         if(empty($info))
         {
@@ -67,7 +67,7 @@ class SmsService extends BaseAdminService
      */
     public function getConfig(string $sms_type)
     {
-        $sms_type_list = SmsEnum::getType();
+        $sms_type_list = SmsDict::getType();
         if(!array_key_exists($sms_type, $sms_type_list)) throw new AdminException('SMS_TYPE_NOT_EXIST');
         $info = (new CoreConfigService())->getConfig($this->site_id, 'SMS');
         if(empty($info))
@@ -100,7 +100,7 @@ class SmsService extends BaseAdminService
      */
     public function setConfig(string $sms_type, array $data)
     {
-        $sms_type_list = SmsEnum::getType();
+        $sms_type_list = SmsDict::getType();
         if(!array_key_exists($sms_type, $sms_type_list)) throw new AdminException('SMS_TYPE_NOT_EXIST');
         $info = (new CoreConfigService())->getConfig($this->site_id, 'SMS');
         if(empty($info))

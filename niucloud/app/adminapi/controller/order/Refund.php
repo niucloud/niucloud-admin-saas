@@ -27,7 +27,9 @@ class Refund extends BaseAdminController
             ['create_time', []],
             ['member_id', ''],
             ['refund_no', ''],
-            ['status', '']
+            ['status', ''],
+            ['keywords', ''],
+            ['order_no', ''],
         ]);
         return success((new RefundService())->getPage($data));
     }
@@ -53,5 +55,13 @@ class Refund extends BaseAdminController
             ['type', 'recharge']
         ]);
         return success((new RefundService())->getStatus($data['type']));
+    }
+
+    /**
+     * 退款统计
+     */
+    public function stat()
+    {
+        return success((new RefundService())->stat());
     }
 }

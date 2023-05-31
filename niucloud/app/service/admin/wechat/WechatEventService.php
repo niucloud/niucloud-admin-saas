@@ -11,7 +11,7 @@
 
 namespace app\service\admin\wechat;
 
-use app\enum\channel\WechatEnum;
+use app\dict\channel\WechatDict;
 use Closure;
 use core\base\BaseAdminService;
 
@@ -28,7 +28,7 @@ class WechatEventService extends BaseAdminService
      */
     public function event($message, Closure $next){
         switch($message->MsgType){
-            case WechatEnum::EVENT_SUBSCRIBE :
+            case WechatDict::EVENT_SUBSCRIBE :
                 $message->FromUserName;
                 break;
         }

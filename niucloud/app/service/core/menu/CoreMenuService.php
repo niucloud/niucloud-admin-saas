@@ -11,11 +11,11 @@
 
 namespace app\service\core\menu;
 
-use app\enum\sys\AppTypeEnum;
+use app\dict\sys\AppTypeDict;
 use app\model\addon\Addon;
 use app\model\sys\SysMenu;
 use app\service\admin\sys\MenuService;
-use core\addon\AddonLoader;
+use core\dict\DictLoader;
 use core\base\BaseCoreService;
 use think\facade\Cache;
 
@@ -61,7 +61,7 @@ class CoreMenuService extends BaseCoreService
      * @param string $parent_key
      * @param string $app_type
      */
-    private function menuTreeToList(array $tree, string $parent_key = '', string $app_type = AppTypeEnum::ADMIN, string $addon = '', array &$menu_list= [])
+    private function menuTreeToList(array $tree, string $parent_key = '', string $app_type = AppTypeDict::ADMIN, string $addon = '', array &$menu_list= [])
     {
         if (is_array($tree)) {
             foreach ($tree as $key => $value) {
@@ -79,15 +79,14 @@ class CoreMenuService extends BaseCoreService
                     'methods' => $value['methods'] ?? '',
                     'sort' => $value['sort'] ?? '',
                     'status' => 1,
-                    'is_show' => $value['is_show'] ?? 1,
-                    'en_menu_name' => $value['en_menu_name'] ?? '',
+                    'is_show' => $value['is_show'] ?? 1
                 ];
                 $refer = $value;
                 if (isset($refer[ 'children' ])) {
                     unset($refer[ 'children' ]);
                     array_push($menu_list, $item);
                     $p_key = $refer[ 'menu_key' ];
-                    $this->menuTreeToList($value[ 'children' ],$p_key, $app_type, $menu_list);
+                    $this->menuTreeToList($value[ 'children' ],$p_key, $app_type,$addon, $menu_list);
                 } else {
                     array_push($menu_list, $item);
                 }
@@ -101,6 +100,7 @@ class CoreMenuService extends BaseCoreService
      * @return true
      */
     public function deleteByAddon(string $addon){
+
         $this->model->where([['addon', '=', $addon]])->delete();
         return true;
     }
@@ -112,14 +112,32 @@ class CoreMenuService extends BaseCoreService
      */
     public function refreshAddonMenu($addon)
     {
-        $addon_loader = new AddonLoader("Menu");
+        $addon_loader = new DictLoader("Menu");
+
+        //获取插件删除替换的菜单key
         $addon_admin_tree = $addon_loader->load(["addon" => $addon, "app_type" => "admin"]);
+
+        if(isset($addon_admin_tree["delete"]))
+        {
+            //软删除数据
+            $this->model->where([["menu_key", "in", $addon_admin_tree["delete"]], ["app_type", "=", "admin"]])->useSoftDelete('delete_time',time())->delete();
+            unset($addon_admin_tree["delete"]);
+        }
         $menu = [];
         if(!empty($addon_admin_tree))
         {
             $menu = $this->loadMenu($addon_admin_tree, "admin", $addon);
         }
+
         $addon_site_tree = $addon_loader->load(["addon" => $addon, "app_type" => "site"]);
+
+        if(isset($addon_site_tree["delete"]))
+        {
+            //软删除数据
+            $this->model->where([["menu_key", "in", $addon_site_tree["delete"]], ["app_type", "=", "site"]])->useSoftDelete('delete_time',time())->delete();
+            unset($addon_site_tree["delete"]);
+        }
+
         if(!empty($addon_site_tree))
         {
             $site_menu = $this->loadMenu($addon_site_tree, "site", $addon);
@@ -132,15 +150,46 @@ class CoreMenuService extends BaseCoreService
     }
 
     /**
+     * 插件卸载
+     * @param $addon
+     * @return bool
+     */
+    public function uninstallAddonMenu($addon)
+    {
+        $addon_loader = new DictLoader("Menu");
+
+        //获取插件删除替换的菜单key
+        $addon_admin_tree = $addon_loader->load(["addon" => $addon, "app_type" => "admin"]);
+
+        if(isset($addon_admin_tree["delete"]))
+        {
+            //软删除数据
+            $this->model->where([["menu_key", "in", $addon_admin_tree["delete"]], ["app_type", "=", "admin"]])->update(["delete_time" => 0]);
+        }
+
+        $addon_site_tree = $addon_loader->load(["addon" => $addon, "app_type" => "site"]);
+
+        if(isset($addon_site_tree["delete"]))
+        {
+            //软删除数据
+            $this->model->where([["menu_key", "in", $addon_site_tree["delete"]], ["app_type", "=", "site"]])->update(["delete_time" => 0]);
+        }
+        $this->deleteByAddon($addon);
+        // 清除缓存
+        Cache::tag(MenuService::$cache_tag_name)->clear();
+        return true;
+    }
+
+    /**
      * 刷新所有插件菜单
      */
     public function refreshAllAddonMenu()
     {
 
-        $addons  = (new Addon())->field("title")->select()->toArray();
+        $addons  = (new Addon())->field("key")->select()->toArray();
         foreach ($addons as $k => $v)
         {
-            $this->refreshAddonMenu($v["title"]);
+            $this->refreshAddonMenu($v["key"]);
         }
         return true;
     }

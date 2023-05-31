@@ -11,7 +11,7 @@
 
 namespace app\service\admin\diy;
 
-use app\enum\diy\LinkEnum;
+use app\dict\diy\LinkDict;
 use app\model\diy\DiyRoute;
 use core\base\BaseAdminService;
 
@@ -36,7 +36,7 @@ class DiyRouteService extends BaseAdminService
      */
     public function getList(array $where = [])
     {
-        $link = LinkEnum::getLink();
+        $link = LinkDict::getLink();
         $diy_route_list = [];
         $sort = 0;
         foreach ($link as $k => $v) {

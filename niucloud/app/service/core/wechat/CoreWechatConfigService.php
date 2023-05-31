@@ -11,8 +11,8 @@
 
 namespace app\service\core\wechat;
 
-use app\enum\channel\WechatEnum;
-use app\enum\sys\ConfigKeyEnum;
+use app\dict\channel\WechatDict;
+use app\dict\sys\ConfigKeyDict;
 use app\model\sys\SysConfig;
 use app\service\core\sys\CoreConfigService;
 use app\service\core\sys\CoreSysConfigService;
@@ -31,7 +31,7 @@ class CoreWechatConfigService extends BaseCoreService
      * @param $site_id
      */
     public function getWechatConfig(int $site_id){
-        $info = (new CoreConfigService())->getConfig($site_id, ConfigKeyEnum::WECHAT)['value'] ?? [];
+        $info = (new CoreConfigService())->getConfig($site_id, ConfigKeyDict::WECHAT)['value'] ?? [];
         $config = [
             'wechat_name' => $info['wechat_name'] ?? '',//公众号名称
             'wechat_original' => $info['wechat_original'] ?? '',//原始ID
@@ -62,7 +62,7 @@ class CoreWechatConfigService extends BaseCoreService
             'encoding_aes_key'  => $data['encoding_aes_key'] ?? '',
             'encryption_type'   => $data['encryption_type'] ?? '',
         ];
-        return (new CoreConfigService())->setConfig($site_id, ConfigKeyEnum::WECHAT, $config);
+        return (new CoreConfigService())->setConfig($site_id, ConfigKeyDict::WECHAT, $config);
     }
 
 
@@ -82,7 +82,7 @@ class CoreWechatConfigService extends BaseCoreService
             'business_domain'   => $wap_domain,
             'js_secure_domain'  => $wap_domain,
             'web_auth_domain'   => $wap_domain,
-            'encryption_type' => WechatEnum::getEncryptionType()
+            'encryption_type' => WechatDict::getEncryptionType()
         ];
     }
 }

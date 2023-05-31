@@ -12,7 +12,7 @@
 namespace app\adminapi\controller\upload;
 
 use app\adminapi\controller\sys\AdminException;
-use app\enum\sys\StorageEnum;
+use app\dict\sys\StorageDict;
 use app\service\admin\file\StorageConfigService;
 use core\base\BaseAdminController;
 use think\Response;
@@ -47,7 +47,7 @@ class Storage extends BaseAdminController
     public function editStorage($storage_type)
     {
         //参数获取
-        $storage_type_list = StorageEnum::getType();
+        $storage_type_list = StorageDict::getType();
         if (!array_key_exists($storage_type, $storage_type_list)) throw new AdminException('OSS_TYPE_NOT_EXIST');
         //数据验证
         $data = [

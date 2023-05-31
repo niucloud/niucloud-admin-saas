@@ -11,7 +11,7 @@
 
 namespace app\adminapi\controller\site;
 
-use app\enum\site\SiteEnum;
+use app\dict\site\SiteDict;
 use app\service\admin\auth\AuthSiteService;
 use app\service\admin\site\SiteService;
 use core\base\BaseAdminController;
@@ -27,8 +27,10 @@ class Site extends BaseAdminController
     {
         $data = $this->request->params([
             ['keywords', ''],
-            ['status', 1],
+            ['status', ""],
             ['group_id', 0],
+            ['create_time', []],
+            ['expire_time', []],
         ]);
         return success((new SiteService())->getPage($data));
     }
@@ -84,7 +86,7 @@ class Site extends BaseAdminController
      */
     public function getStatuList()
     {
-        return success(SiteEnum::getStatus());
+        return success(SiteDict::getStatus());
     }
 
     /**
@@ -93,5 +95,29 @@ class Site extends BaseAdminController
      */
     public function menu(){
         return success((new AuthSiteService())->getMenuList(1, 'all'));
+    }
+
+    /**
+     * 关闭站点
+     */
+    public function closeSite($id)
+    {
+        $data = $this->request->params([
+            ['status', SiteDict::CLOSE],
+        ]);
+        (new SiteService())->edit($id, $data);
+        return success('SUCCESS');
+    }
+
+    /**
+     * 开启站点
+     */
+    public function openSite($id)
+    {
+        $data = $this->request->params([
+            ['status', SiteDict::ON],
+        ]);
+        (new SiteService())->edit($id, $data);
+        return success('SUCCESS');
     }
 }

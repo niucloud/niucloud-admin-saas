@@ -11,7 +11,7 @@
 
 namespace app\validate\pay;
 
-use app\enum\pay\PayEnum;
+use app\dict\pay\PayDict;
 use think\Validate;
 
 /**
@@ -27,17 +27,17 @@ class PayTemplate extends Validate
     protected $rule = [
         'name' => 'require',
         //支付宝
-        'app_id' => 'requireIf:type,'.PayEnum::ALIPAY,
-        'app_secret_cert' => 'requireIf:type,'.PayEnum::ALIPAY,
-        'app_public_cert_path' => 'requireIf:type,'.PayEnum::ALIPAY,
-        'alipay_public_cert_path' => 'requireIf:type,'.PayEnum::ALIPAY,
-        'alipay_root_cert_path' => 'requireIf:type,'.PayEnum::ALIPAY,
+        'app_id' => 'requireIf:type,'.PayDict::ALIPAY,
+        'app_secret_cert' => 'requireIf:type,'.PayDict::ALIPAY,
+        'app_public_cert_path' => 'requireIf:type,'.PayDict::ALIPAY,
+        'alipay_public_cert_path' => 'requireIf:type,'.PayDict::ALIPAY,
+        'alipay_root_cert_path' => 'requireIf:type,'.PayDict::ALIPAY,
 
         //微信
-        'mch_id' => 'requireIf:type,'.PayEnum::WECHATPAY,
-        'mch_secret_key' => 'requireIf:type,'.PayEnum::WECHATPAY,
-        'mch_secret_cert' => 'requireIf:type,'.PayEnum::WECHATPAY,
-        'mch_public_cert_path' => 'requireIf:type,'.PayEnum::WECHATPAY,
+        'mch_id' => 'requireIf:type,'.PayDict::WECHATPAY,
+        'mch_secret_key' => 'requireIf:type,'.PayDict::WECHATPAY,
+        'mch_secret_cert' => 'requireIf:type,'.PayDict::WECHATPAY,
+        'mch_public_cert_path' => 'requireIf:type,'.PayDict::WECHATPAY,
 
         //支付方式
         'type' => 'require|checkPayType',
@@ -80,7 +80,7 @@ class PayTemplate extends Validate
      */
     protected function checkPayType($value, $rule, $data = [])
     {
-        return isset(   PayEnum::getPayType()[$value]) ? true : get_lang('validate_pay.not_exit_pay_type');
+        return isset(   PayDict::getPayType()[$value]) ? true : get_lang('validate_pay.not_exit_pay_type');
     }
 
 }

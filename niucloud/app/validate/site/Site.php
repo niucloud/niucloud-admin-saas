@@ -26,7 +26,6 @@ class Site extends Validate
         'site_name'  => 'require|max:20',
         'group_id'   => 'require|number',
         'expire_time'   => 'date',
-
     ];
 
     protected $message  =   [
@@ -35,7 +34,6 @@ class Site extends Validate
         'group_id.require' => 'validate_site.group_id_require',
         'group_id.number'     => 'validate_site.group_id_number',
         'expire_time.number'     => 'validate_site.expire_time_number',
-
     ];
 
     protected $scene = [

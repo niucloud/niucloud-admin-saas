@@ -1,14 +1,15 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-            <div class="flex">
-                <el-button type="primary" @click="addEvent">
 
-                    {{ t('add{UCASE_CLASS_NAME}') }}
+            <div class="flex justify-between items-center">
+                <span class="text-[24px]">{{pageName}}</span>
+                <el-button type="primary" class="w-[100px]" @click="addEvent">
+                    {{ t('addArticle') }}
                 </el-button>
             </div>
 
-            <el-card class="box-card !border-none my-[16px] table-search-wrap" shadow="never">
+            <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="{LCASE_CLASS_NAME}Table.searchParam" ref="searchFormRef">
 {SEARCH_VIEW}
                     <el-form-item>
@@ -18,14 +19,12 @@
                 </el-form>
             </el-card>
 
-            <div class="mt-[16px]">
+            <div class="mt-[10px]">
                 <el-table :data="{LCASE_CLASS_NAME}Table.data" size="large" v-loading="{LCASE_CLASS_NAME}Table.loading">
                     <template #empty>
                         <span>{{ !{LCASE_CLASS_NAME}Table.loading ? t('emptyData') : '' }}</span>
                     </template>
-
 {LISTS_VIEW}
-
                     <el-table-column :label="t('operation')" fixed="right" min-width="120">
                        <template #default="{ row }">
                            <el-button type="primary" link @click="editEvent(row)">{{ t('edit') }}</el-button>
@@ -53,6 +52,9 @@ import { get{UCASE_NAME}List, delete{UCASE_NAME} } from '@/api/{MODULE_NAME}'
 import { img } from '@/utils/common'
 import { ElMessageBox } from 'element-plus'
 {EDIT_PATH}
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title;
 
 let {LCASE_CLASS_NAME}Table = reactive({
     page: 1,

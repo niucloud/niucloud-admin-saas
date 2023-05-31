@@ -11,8 +11,8 @@
 
 namespace app\model\sys;
 
-use app\enum\sys\MenuEnum;
-use app\enum\sys\MenuTypeEnum;
+use app\dict\sys\MenuDict;
+use app\dict\sys\MenuTypeDict;
 use core\base\BaseModel;
 
 /**
@@ -38,6 +38,18 @@ class SysMenu extends BaseModel
      * @var array
      */
     protected $append = ['status_name', 'menu_type_name'];
+
+    /**
+     * 定义软删除标记字段
+     * @var string
+     */
+    protected $deleteTime = 'delete_time';
+    /**
+     * 定义软删除字段的默认值
+     * @var int
+     */
+    protected $defaultSoftDelete = 0;
+
     /**
      * 菜单类型
      * @param $value
@@ -46,7 +58,7 @@ class SysMenu extends BaseModel
      */
     public function getMenuTypeNameAttr($value,$data)
     {
-        return MenuTypeEnum::getMenuType()[$data['menu_type'] ?? ''] ?? '';
+        return MenuTypeDict::getMenuType()[$data['menu_type'] ?? ''] ?? '';
     }
 
     /**
@@ -57,6 +69,6 @@ class SysMenu extends BaseModel
      */
     public function getStatusNameAttr($value,$data)
     {
-        return MenuEnum::getStatus()[$data['status'] ?? ''] ?? '';
+        return MenuDict::getStatus()[$data['status'] ?? ''] ?? '';
     }
 }

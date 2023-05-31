@@ -73,7 +73,7 @@ class DiyRoute extends BaseAdminController
 
     /**
      * 自定义路由表编辑
-     * @param $id  自定义路由表id
+     * @param $id
      * @return \think\Response
      */
     public function edit($id)
@@ -92,7 +92,7 @@ class DiyRoute extends BaseAdminController
 
     /**
      * 自定义路由表删除
-     * @param $id  自定义路由表id
+     * @param $id
      * @return \think\Response
      */
     public function del(int $id)

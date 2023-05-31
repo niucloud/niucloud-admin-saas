@@ -11,7 +11,7 @@
 
 namespace app\api\middleware;
 
-use app\enum\sys\AppTypeEnum;
+use app\dict\sys\AppTypeDict;
 use app\Request;
 use app\service\api\login\AuthService;
 use app\service\api\login\LoginService;
@@ -36,7 +36,9 @@ class ApiCheckToken
      */
     public function handle(Request $request, Closure $next, bool $exception = false)
     {
-        $request->appType(AppTypeEnum::API);
+        $request->appType(AppTypeDict::API);
+        //检测站点
+        ( new AuthService() )->checkSite($request);
         //通过配置来设置系统header参数
         try {
             $token = $request->apiToken();

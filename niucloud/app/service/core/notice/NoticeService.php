@@ -12,7 +12,7 @@
 namespace app\service\core\notice;
 
 
-use app\enum\pay\PayEnum;
+use app\dict\pay\PayDict;
 use app\job\notice\Message;
 use app\job\notice\Notice;
 use app\model\pay\PayChannel;

@@ -11,7 +11,7 @@
 
 namespace app\service\admin\file;
 
-use app\enum\sys\FileEnum;
+use app\dict\sys\FileDict;
 use app\service\core\upload\CoreUploadService;
 use core\base\BaseAdminService;
 use core\exception\UploadFileException;
@@ -58,7 +58,7 @@ class UploadService extends BaseAdminService
      * @return array
      */
     public function document($file, string $type,bool $is_local = false){
-        if(!in_array($type, FileEnum::getSceneType()))
+        if(!in_array($type, FileDict::getSceneType()))
             throw new UploadFileException('CERT_TYPE_ERROR');
         $dir = $this->root_path.'/document/'.$type.'/'.$this->site_id.'/'.date('Ym').'/'.date('d');
         $core_upload_service = new CoreUploadService();

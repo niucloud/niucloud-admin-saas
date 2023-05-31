@@ -11,7 +11,7 @@
 
 namespace app\service\core\weapp;
 
-use app\enum\sys\ConfigKeyEnum;
+use app\dict\sys\ConfigKeyDict;
 use app\model\sys\SysConfig;
 use app\service\core\sys\CoreConfigService;
 use core\base\BaseCoreService;
@@ -30,7 +30,7 @@ class  CoreWeappConfigService extends BaseCoreService
      * @return array
      */
     public function getWeappConfig(int $site_id){
-        $info = (new CoreConfigService())->getConfig($site_id, ConfigKeyEnum::WEAPP)['value'] ?? [];
+        $info = (new CoreConfigService())->getConfig($site_id, ConfigKeyDict::WEAPP)['value'] ?? [];
         $config = [
             'weapp_name' => $info['weapp_name'] ?? '',//小程序名称
             'weapp_original' => $info['weapp_original'] ?? '',//原始ID
@@ -61,7 +61,7 @@ class  CoreWeappConfigService extends BaseCoreService
             'encoding_aes_key'  => $data['encoding_aes_key'] ?? '',
             'encryption_type'   => $data['encryption_type'] ?? 'not_encrypt',//加解密模式   not_encrypt 明文   compatible 兼容  safe 安全
         ];
-        return (new CoreConfigService())->setConfig($site_id, ConfigKeyEnum::WEAPP, $config);
+        return (new CoreConfigService())->setConfig($site_id, ConfigKeyDict::WEAPP, $config);
     }
 
 

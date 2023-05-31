@@ -42,11 +42,13 @@ class CoreAddonBaseService extends BaseCoreService
     public function getAddonConfig(string $addon)
     {
         $path = $this->addon_path . $addon . DIRECTORY_SEPARATOR . 'info.json';
+        $resource_path = $this->addon_path . $addon . DIRECTORY_SEPARATOR.'resource'.DIRECTORY_SEPARATOR;
         if (is_file($path)) {
             $json_string = file_get_contents($path);
             // 用参数true把JSON字符串强制转成PHP数组
             $info = json_decode($json_string, true);
-            $info['icon'] = '';
+            $info['icon'] = $resource_path.'icon.png';
+            $info['cover'] = $resource_path.'cover.png';
         }
         return $info ?? [];
     }
@@ -59,6 +61,16 @@ class CoreAddonBaseService extends BaseCoreService
     public function getAddonConfigPath(string $addon)
     {
         return $this->addon_path . $addon . DIRECTORY_SEPARATOR . 'config'. DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * 获取插件定义的package目录
+     * @param string $addon
+     * @return string
+     */
+    public function geAddonPackagePath(string $addon)
+    {
+        return $this->addon_path . $addon . DIRECTORY_SEPARATOR . 'package'. DIRECTORY_SEPARATOR;
     }
 
     /**

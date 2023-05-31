@@ -11,6 +11,7 @@
 
 namespace app\service\api\login;
 
+use app\dict\site\SiteDict;
 use app\model\member\Member;
 use app\Request;
 use app\service\api\member\MemberService;
@@ -33,20 +34,32 @@ class AuthService extends BaseApiService
     }
 
     public function checkSiteAuth(Request $request){
-        $site_id = $request->apiSiteId();//todo  可以是依赖传值,也可以通过domain域名来获取site_id
-        if(empty((new CoreSiteService())->getSiteCache($site_id))) throw new AuthException('SITE_NOT_EXIST');
         //如果登录信息非法就报错
         if($this->member_id > 0){
             $member_service = new MemberService();
-            $member_info = $member_service->findMemberInfo(['member_id' => $this->member_id, 'site_id' => $site_id]);
+            $member_info = $member_service->findMemberInfo(['member_id' => $this->member_id, 'site_id' => $this->site_id]);
             if($member_info->isEmpty())
                 throw new AuthException('MEMBER_NOT_EXIST');
         }
-        $request->siteId($site_id);
-
         return true;
     }
 
+    /**
+     * 检测站点的合法性
+     * @param Request $request
+     * @return true
+     */
+    public function checkSite(Request $request){
+        $site_id = $request->apiSiteId();//todo  可以是依赖传值,也可以通过domain域名来获取site_id
+        $site_info = (new CoreSiteService())->getSiteCache($site_id);
+        if(empty($site_info)) throw new AuthException('SITE_NOT_EXIST');
+        if($site_info['status'] == SiteDict::CLOSE){
+            $rule = trim(strtolower($request->rule()->getRule()));
+            if($rule != 'site') throw new AuthException('SITE_CLOSE_NOT_ALLOW');
+        }
+        $request->siteId($site_id);
+        return true;
+    }
     /**
      * 绑定手机号
      * @param string|int $mobile

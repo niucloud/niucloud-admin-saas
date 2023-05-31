@@ -11,7 +11,7 @@
 
 namespace app\validate\sys;
 
-use app\enum\sys\FileEnum;
+use app\dict\sys\FileDict;
 use think\Validate;
 
 /**
@@ -46,7 +46,7 @@ class AttachmentCategory extends Validate
      */
     protected function checkMenuType($value, $rule, $data = [])
     {
-        return isset(FileEnum::getType()[$value]) ? true : get_lang("validate_attachment.not_exit_type");
+        return isset(FileDict::getType()[$value]) ? true : get_lang("validate_attachment.not_exit_type");
     }
 
 

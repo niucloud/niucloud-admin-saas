@@ -11,7 +11,7 @@
 
 namespace app\adminapi\controller\sys;
 
-use app\enum\sys\FileEnum;
+use app\dict\sys\FileDict;
 use app\service\admin\sys\AttachmentService;
 use core\base\BaseAdminController;
 use think\Response;
@@ -63,7 +63,7 @@ class Attachment extends BaseAdminController
     public function addCategory()
     {
         $data = $this->request->params([
-            ['type', FileEnum::IMAGE],
+            ['type', FileDict::IMAGE],
             ['name', '']
         ]);
         $this->validate($data, 'app\validate\sys\AttachmentCategory.add');

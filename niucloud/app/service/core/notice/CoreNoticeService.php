@@ -12,7 +12,7 @@
 namespace app\service\core\notice;
 
 
-use app\enum\notice\NoticeEnum;
+use app\dict\notice\NoticeDict;
 use app\job\notice\Message;
 use app\model\sys\SysNotice;
 use core\base\BaseCoreService;
@@ -47,7 +47,7 @@ class CoreNoticeService extends BaseCoreService
             $list_key = array_column($list, 'key');
             $list = array_combine($list_key, $list);
         }
-        $notice = NoticeEnum::getNotice();
+        $notice = NoticeDict::getNotice();
         foreach ($notice as $k => $v)
         {
             if(!empty($keys) && !in_array($v['key'], $keys)){
@@ -82,11 +82,11 @@ class CoreNoticeService extends BaseCoreService
      */
     public function getInfo(int $site_id, string $key)
     {
-        if(!array_key_exists($key, NoticeEnum::getNotice())) throw new NoticeException('NOTICE_TYPE_NOT_EXIST');
+        if(!array_key_exists($key, NoticeDict::getNotice())) throw new NoticeException('NOTICE_TYPE_NOT_EXIST');
         $info = $this->model->where([['site_id', '=', $site_id], ['key', '=', $key]])->findOrEmpty()->toArray();
         if(!empty($info))
         {
-            $notice = array_merge(NoticeEnum::getNotice($key), $info);
+            $notice = array_merge(NoticeDict::getNotice($key), $info);
         }else{
             $data = [
                 'site_id' => $site_id,
@@ -100,7 +100,7 @@ class CoreNoticeService extends BaseCoreService
                 'wechat_first' => '',
                 'wechat_remark' => ''
             ];
-            $notice = array_merge(NoticeEnum::getNotice($key), $data);
+            $notice = array_merge(NoticeDict::getNotice($key), $data);
 
         }
         return $notice;
@@ -122,14 +122,14 @@ class CoreNoticeService extends BaseCoreService
     {
         $notice = $this->find($site_id, $key);
         if($notice->isEmpty()){
-            $notice_template = NoticeEnum::getNotice($key);
-            $wechat_json = $notice_template['wechat_json'] ?? [];
+            $notice_template = NoticeDict::getNotice($key);
+            $wechat = $notice_template['wechat'] ?? [];
             $this->model->create(array_merge([
                 'site_id' => $site_id,
                 'key' => $key,
                 'sms_content' => $notice_template['sms_default_content'] ?? '',
-                'wechat_first' => $data['wechat_first'] ?? ($wechat_json['first'] ?? ''),
-                'wechat_remark' => $data['wechat_remark'] ?? ($wechat_json['remark'] ?? ''),
+                'wechat_first' => $data['wechat_first'] ?? ($wechat['first'] ?? ''),
+                'wechat_remark' => $data['wechat_remark'] ?? ($wechat['remark'] ?? ''),
             ], $data));
         }else{
             $notice->save($data);

@@ -11,7 +11,7 @@
 
 namespace app\adminapi\controller\site;
 
-use app\enum\sys\UserEnum;
+use app\dict\sys\UserDict;
 use app\service\admin\site\SiteUserService;
 use app\service\admin\user\UserService;
 use core\base\BaseAdminController;
@@ -55,7 +55,7 @@ class User extends BaseAdminController
             ['password', ''],
             ['real_name', ''],
             ['head_img', ''],
-            ['status', UserEnum::ON],
+            ['status', UserDict::ON],
             ['role_ids', []]
         ]);
         $this->validate($data, 'app\validate\sys\User.add');
@@ -71,7 +71,7 @@ class User extends BaseAdminController
         $data = $this->request->params([
             ['real_name', ''],
             ['head_img', ''],
-            ['status', UserEnum::ON],
+            ['status', UserDict::ON],
             ['role_ids', []],
             ['password', '']
         ]);

@@ -12,6 +12,7 @@
 namespace app\service\core\member;
 
 use app\model\member\Member;
+use app\model\site\Site;
 use core\base\BaseCoreService;
 use think\db\exception\DbException;
 
@@ -100,5 +101,52 @@ class CoreMemberService extends BaseCoreService
             $condition[] = ['last_visit_time', 'between', $where['last_visit_time']];
         }
         return $this->model->where($condition)->count();
+    }
+
+    /**
+     * 生成会员编码
+     * @param int $site_id
+     * @return void
+     */
+    public static function createMemberNo(int $site_id) {
+        $site = (new Site())->where([ ['site_id', '=', $site_id] ])->find();
+        $config = (new CoreMemberConfigService())->getMemberConfig($site_id);
+
+        $no = $site->member_no + 1;
+        $member_no = $config['prefix'] . ( strlen($config['prefix']) > $config['length'] ? $no : str_pad($no, ($config['length'] - strlen($config['prefix'])), "0", STR_PAD_LEFT) );
+
+        $member = (new Member())->where([ ['site_id', '=', $site_id], ['member_no', '=', $member_no] ])->findOrEmpty();
+
+        if ($member->isEmpty()) {
+            return $member_no;
+        } else {
+            // 变更站点最大会员码值
+            $site->save(['member_no' => $no ]);
+            return self::createMemberNo($site_id);
+        }
+    }
+
+    /**
+     * 设置会员会员码
+     * @param int $site_id
+     * @return void
+     */
+    public static function setMemberNo(int $site_id, int $member_id) {
+        $site = (new Site())->where([ ['site_id', '=', $site_id] ])->find();
+        $config = (new CoreMemberConfigService())->getMemberConfig($site_id);
+
+        $no = $site->member_no + 1;
+        $member_no = $config['prefix'] . ( strlen($config['prefix']) > $config['length'] ? $no : str_pad($no, ($config['length'] - strlen($config['prefix'])), "0", STR_PAD_LEFT) );
+
+        $member = (new Member())->where([ ['site_id', '=', $site_id], ['member_no', '=', $member_no] ])->findOrEmpty();
+
+        // 变更站点最大会员码值
+        $site->save(['member_no' => $no ]);
+
+        if ($member->isEmpty()) {
+            (new Member())->update([ 'member_no' => $member_no ], [ ['site_id', '=', $site_id], ['member_id', '=', $member_id] ]);
+        } else {
+            self::setMemberNo($site_id, $member_id);
+        }
     }
 }

@@ -46,6 +46,7 @@ class CoreMemberAccountService extends BaseCoreService
             'member_id' => $member_id,
             'account_type' => $account_type,
             'account_data' => $account_data,
+            "account_sum" => $account_new_data,
             'from_type' => $from_type,
             'create_time' => time(),
             'nickname' => $member_info[ 'nickname' ],

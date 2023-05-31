@@ -11,7 +11,7 @@
 
 namespace app\model\addon;
 
-use app\enum\addon\AddonEnum;
+use app\dict\addon\AddonDict;
 use core\base\BaseModel;
 
 /**
@@ -45,7 +45,7 @@ class Addon extends BaseModel
      */
     public function getStatusNameAttr($value, $data)
     {
-        return AddonEnum::getStatus()[ $data[ 'status' ] ?? '' ] ?? '';
+        return AddonDict::getStatus()[ $data[ 'status' ] ?? '' ] ?? '';
     }
     /**
      * 插件名称搜索器

@@ -11,7 +11,7 @@
 
 namespace app\model\site;
 
-use app\enum\site\SiteEnum;
+use app\dict\site\SiteDict;
 use core\base\BaseModel;
 use think\db\Query;
 
@@ -46,7 +46,7 @@ class Site extends BaseModel
      */
     public function getStatusNameAttr($value, $data)
     {
-        return SiteEnum::getStatus()[$data['status'] ?? ''] ?? '';
+        return SiteDict::getStatus()[$data['status'] ?? ''] ?? '';
     }
     /**
      * 关键字搜索
@@ -111,6 +111,23 @@ class Site extends BaseModel
             $query->where([ [ 'create_time', '>=', $start_time ] ]);
         } else if ($start_time == 0 && $end_time > 0) {
             $query->where([ [ 'create_time', '<=', $end_time ] ]);
+        }
+    }
+
+    /**
+     * 到期时间搜索器
+     * @param $value
+     */
+    public function searchExpireTimeAttr(Query $query, $value, $data)
+    {
+        $start_time = empty($value[ 0 ]) ? 0 : strtotime($value[ 0 ]);
+        $end_time = empty($value[ 1 ]) ? 0 : strtotime($value[ 1 ]);
+        if ($start_time > 0 && $end_time > 0) {
+            $query->whereBetweenTime('expire_time', $start_time, $end_time);
+        } else if ($start_time > 0 && $end_time == 0) {
+            $query->where([ [ 'expire_time', '>=', $start_time ] ]);
+        } else if ($start_time == 0 && $end_time > 0) {
+            $query->where([ [ 'expire_time', '<=', $end_time ] ]);
         }
     }
 

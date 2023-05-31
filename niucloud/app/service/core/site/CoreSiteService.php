@@ -11,9 +11,11 @@
 
 namespace app\service\core\site;
 
+use app\dict\site\SiteDict;
 use app\model\site\Site;
 use app\service\api\login\BaseApiService;
 use core\base\BaseCoreService;
+use core\exception\CommonException;
 use think\facade\Cache;
 
 /**
@@ -38,16 +40,67 @@ class CoreSiteService extends BaseCoreService
      */
     public function getSiteCache(int $site_id){
         $cache_name = 'site_info_cache';
-        return Cache::tag(self::$cache_tag_name.$site_id)->remember($cache_name.$site_id, function () use ($site_id) {
-            $where = [
-                ['site_id', '=', $site_id],
-            ];
-            $site = $this->model->where($where)->field('app_type,site_name,logo,group_id, status, expire_time')->findOrEmpty();
-            if(!$site->isEmpty()){
-                $site->append(['status_name']);
-            }
-            return $site->toArray();
-        });
+        return cache_remember(
+            $cache_name.$site_id,
+            function () use ($site_id) {
+                $where = [
+                    ['site_id', '=', $site_id],
+                ];
+                $site = $this->model->where($where)->field('app_type,site_name,logo,front_end_name,front_end_logo,group_id, status, expire_time')->findOrEmpty();
+                if(!$site->isEmpty()){
+                    $site->append(['status_name']);
+                }
+                return $site->toArray();
+            },
+            self::$cache_tag_name.$site_id
+        );
+//        return Cache::tag(self::$cache_tag_name.$site_id)->remember($cache_name.$site_id, function () use ($site_id) {
+//            $where = [
+//                ['site_id', '=', $site_id],
+//            ];
+//            $site = $this->model->where($where)->field('app_type,site_name,logo,group_id, status, expire_time')->findOrEmpty();
+//            if(!$site->isEmpty()){
+//                $site->append(['status_name']);
+//            }
+//            return $site->toArray();
+//        });
+    }
+
+    /**
+     * 模型实例
+     * @param int $site_id
+     * @return Site|array|mixed|\think\Model
+     */
+    public function find(int $site_id){
+        return $this->model->findOrEmpty($site_id);
+    }
+    /**
+     * 获取过期的站点
+     * @return void
+     */
+    public function getExpireSiteList(){
+        return $this->model->where([
+            ['status', '<>', SiteDict::EXPIRE],
+            ['expire_time', 'between', [1,time()]],
+        ])->field('site_id,status,site_name')->select()->toArray();
+    }
+    /**
+     * 站点到期(计划任务专用,切勿调用)
+     * @param int $site_id
+     * @return void
+     */
+    public function expire(int $site_id){
+        $site = $this->find($site_id);
+        if($site->isEmpty())throw new CommonException('SITE_NOT_EXIST');
+        if($site->status == SiteDict::EXPIRE) throw new CommonException('SITE_EXPIRE');
+        $this->model->where([[
+            'site_id', '=', $site_id
+        ]])->update(
+            [
+                'status' => SiteDict::EXPIRE,
+            ]
+        );
+        return true;
     }
 
 }

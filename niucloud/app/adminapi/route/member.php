@@ -26,8 +26,13 @@ Route::group('member', function () {
     Route::get('member/:id', 'member.Member/info');
     //会员添加
     Route::post('member', 'member.Member/add');
+    //会员删除
+    Route::delete('member/:member_id', 'member.Member/del');
+    //会员编码
+    Route::get('memberno', 'member.Member/getMemberNo');
     //会员添加
     Route::put('member/:member_id', 'member.Member/edit');//会员添加
+
     Route::put('member/modify/:member_id/:field', 'member.Member/modify');
     //会员注册方式
     Route::get('registertype', 'member.Member/getMemberRegisterType');
@@ -63,6 +68,10 @@ Route::group('member', function () {
     Route::get('account/money', 'member.Account/money');
     //会员佣金流水
     Route::get('account/commission', 'member.Account/commission');
+    //会员佣金统计
+    Route::get('account/sum_commission', 'member.Account/sumCommission');
+    //会员积分统计
+    Route::get('account/sum_point', 'member.Account/sumPoint');
     //会员积分调整
     Route::post('account/point', 'member.Account/adjustPoint');
     //会员余额调整
@@ -95,7 +104,12 @@ Route::group('member', function () {
     Route::put('cash_out/transfer/:id', 'member.CashOut/transfer');
     //提现状态
     Route::get('cash_out/status', 'member.CashOut/getStatusList');
-
+    //提现统计信息
+    Route::get('cash_out/stat', 'member.CashOut/stat');
+    //获取注册与登录设置
+    Route::get('config/member', 'member.Config/getMemberConfig');
+    //更新注册与登录设置
+    Route::post('config/member', 'member.Config/setMemberConfig');
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,

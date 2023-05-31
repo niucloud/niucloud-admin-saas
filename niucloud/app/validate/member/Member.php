@@ -11,8 +11,8 @@
 
 namespace app\validate\member;
 
-use app\enum\common\CommonEnum;
-use app\enum\member\MemberEnum;
+use app\dict\common\CommonDict;
+use app\dict\member\MemberDict;
 use think\Validate;
 
 /**
@@ -50,9 +50,9 @@ class Member extends Validate
     ];
 
     protected $scene = [
-        'add'  =>  ['nickname', 'birthday', 'username', 'password'],
-        'edit'  =>  ['nickname', 'sex', 'birthday'],
-        'modify'  =>  ['nickname', 'sex', 'birthday'],
+        'add'  =>  ['birthday', 'mobile', 'password'],
+        'edit'  =>  ['sex', 'birthday'],
+        'modify'  =>  ['sex', 'birthday'],
         'account_register'  =>  ['username', 'password', 'mobile'],
         'reset_password' => ['password', 'mobile'],
         'set_status' => ['status']
@@ -67,11 +67,11 @@ class Member extends Validate
      */
     protected function checkSex($value, $rule, $data = [])
     {
-        return isset(CommonEnum::getSexType()[$value]) ? true : get_lang("validate_member.sex_bot_exist");
+        return isset(CommonDict::getSexType()[$value]) ? true : get_lang("validate_member.sex_bot_exist");
     }
 
     protected function checkStatus($value, $rule, $data = [])
     {
-        return isset(MemberEnum::getStatus()[$value]) ? true : get_lang("validate_member.not_exit_status");
+        return isset(MemberDict::getStatus()[$value]) ? true : get_lang("validate_member.not_exit_status");
     }
 }

@@ -11,7 +11,7 @@
 
 namespace app\service\core\upload;
 
-use app\enum\sys\StorageEnum;
+use app\dict\sys\StorageDict;
 use app\service\core\sys\CoreConfigService;
 use core\base\BaseCoreService;
 
@@ -30,7 +30,7 @@ class CoreStorageService extends BaseCoreService
     {
         $storage_list = $this->getStorageList($site_id);
         foreach($storage_list as $k => $v){
-            if($v['is_use'] == StorageEnum::ON){
+            if($v['is_use'] == StorageDict::ON){
                 $item_storage = $v['params'] ?? [];
                 $item_storage['storage_type'] = $v['storage_type'];
                 return $item_storage;
@@ -46,7 +46,7 @@ class CoreStorageService extends BaseCoreService
     public function getStorageConfig(int $site_id){
         $info = (new CoreConfigService())->getConfig($site_id, 'STORAGE')['value'] ?? [];
         if(empty($info))
-            $info = ['default' => StorageEnum::LOCAL];
+            $info = ['default' => StorageDict::LOCAL];
 
         return $info;
 
@@ -59,12 +59,12 @@ class CoreStorageService extends BaseCoreService
     public function getStorageList(int $site_id = 0)
     {
         $config_type = $this->getStorageConfig($site_id);
-        $storage_type_list = StorageEnum::getType();
+        $storage_type_list = StorageDict::getType();
         $list = [];
         foreach ($storage_type_list as $k => $v) {
             $data = [];
             $data['storage_type'] = $k;
-            $data['is_use'] = $k == $config_type['default'] ? StorageEnum::ON : StorageEnum::OFF;
+            $data['is_use'] = $k == $config_type['default'] ? StorageDict::ON : StorageDict::OFF;
             $data['name'] = $v['name'];
             foreach ($v['params'] as $k_param => $v_param) {
                 $data['params'][$k_param] = [

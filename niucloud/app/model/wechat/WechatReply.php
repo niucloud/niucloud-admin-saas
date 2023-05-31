@@ -11,7 +11,7 @@
 
 namespace app\model\wechat;
 
-use app\enum\channel\ReplyEnum;
+use app\dict\channel\ReplyDict;
 use core\base\BaseModel;
 
 /**
@@ -44,7 +44,7 @@ class WechatReply extends BaseModel
     public function getContentAttr($value,$data)
     {
 
-        return $data['content_type'] == ReplyEnum::CONTENT_TYPE_TEXT ? $value : json_decode($value, true);
+        return $data['content_type'] == ReplyDict::CONTENT_TYPE_TEXT ? $value : json_decode($value, true);
     }
 
 }

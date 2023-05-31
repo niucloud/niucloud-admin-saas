@@ -11,9 +11,9 @@
 
 namespace app\service\admin\pay;
 
-use app\enum\common\ChannelEnum;
-use app\enum\pay\PayChannelEnum;
-use app\enum\pay\PayEnum;
+use app\dict\common\ChannelDict;
+use app\dict\pay\PayChannelDict;
+use app\dict\pay\PayDict;
 use app\model\pay\PayChannel;
 use app\service\core\pay\CorePayChannelService;
 use app\service\core\pay\CorePayConfigTemplateService;
@@ -47,9 +47,9 @@ class PayChannelService extends BaseAdminService
             'type' => $type,
             'channel' => $channel
         );
-        if (!in_array($type, array_keys(PayEnum::getPayType()))) throw new PayException('PATMENT_METHOD_INVALID');
+        if (!in_array($type, array_keys(PayDict::getPayType()))) throw new PayException('PATMENT_METHOD_INVALID');
         if ($channel != 'transfer') {
-            if (!in_array($channel, array_keys(ChannelEnum::getType()))) throw new PayException('CHANNEL_MARK_INVALID');
+            if (!in_array($channel, array_keys(ChannelDict::getType()))) throw new PayException('CHANNEL_MARK_INVALID');
         }
         $pay_channel = $this->core_pay_channel_service->find($this->site_id, $where);
         if ($pay_channel->isEmpty()) {
@@ -71,7 +71,7 @@ class PayChannelService extends BaseAdminService
      */
     public function getChannelList()
     {
-        $channel_list = PayChannelEnum::getPayChannel();
+        $channel_list = PayChannelDict::getPayChannel();
         $where = array(
             'site_id' => $this->site_id,
         );
@@ -125,7 +125,7 @@ class PayChannelService extends BaseAdminService
     {
         $config = [];
         switch ($type) {
-            case PayEnum::WECHATPAY:
+            case PayDict::WECHATPAY:
                 $config = [
                     'mch_id' => $data['mch_id'] ?? '',//商户号
                     'mch_secret_key' => $data['mch_secret_key'] ?? '',//商户秘钥  现在默认认为是v3版
@@ -133,7 +133,7 @@ class PayChannelService extends BaseAdminService
                     'mch_public_cert_path' => $data['mch_public_cert_path'] ?? '',//商户公钥证书路径
                 ];
                 break;
-            case PayEnum::ALIPAY:
+            case PayDict::ALIPAY:
                 $config = [
                     'app_id' => $data['app_id'] ?? '',// 必填-支付宝分配的 app_id
                     'app_secret_cert' => $data['app_secret_cert'] ?? '',// 必填-应用私钥 字符串或路径
@@ -156,11 +156,11 @@ class PayChannelService extends BaseAdminService
     {
         $wechatpay_config = $data['wechatpay_config'];
         $alipay_config = $data['alipay_config'];
-        $this->set('transfer', PayEnum::WECHATPAY, [
+        $this->set('transfer', PayDict::WECHATPAY, [
             'config' => $wechatpay_config,
             'status' => 1,
         ]);
-        $this->set('transfer', PayEnum::ALIPAY, [
+        $this->set('transfer', PayDict::ALIPAY, [
             'config' => $alipay_config,
             'status' => 1,
         ]);

@@ -11,7 +11,7 @@
 
 namespace app\listener\pay;
 
-use app\enum\cash_out\CashOutTypeEnum;
+use app\dict\cash_out\CashOutTypeDict;
 use app\service\core\member\CoreMemberCashOutService;
 
 /**
@@ -22,7 +22,7 @@ class TransferSuccessListener
     public function handle(array $info)
     {
         //会员零钱提现
-        if($info['trade_type'] == CashOutTypeEnum::MEMBER_CASH_OUT)
+        if($info['trade_type'] == CashOutTypeDict::MEMBER_CASH_OUT)
         {
             return (new CoreMemberCashOutService())->transferFinish($info['site_id'], $info['transfer_no']);
         }

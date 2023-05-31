@@ -15,6 +15,7 @@ use app\service\admin\auth\ConfigService;
 use core\base\BaseAdminController;
 use think\Response;
 
+
 class Config extends BaseAdminController
 {
 

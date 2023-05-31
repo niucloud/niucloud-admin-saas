@@ -11,7 +11,7 @@
 
 namespace app\adminapi\controller\notice;
 
-use app\enum\sys\SmsEnum;
+use app\dict\sys\SmsDict;
 use app\service\admin\notice\NoticeService;
 use app\service\admin\notice\SmsService;
 use core\base\BaseAdminController;
@@ -78,7 +78,7 @@ class Notice extends BaseAdminController
     public function editSms($sms_type)
     {
         //参数获取
-        $sms_type_list = SmsEnum::getType();
+        $sms_type_list = SmsDict::getType();
         if(!array_key_exists($sms_type, $sms_type_list)) throw new AdminException('SMS_TYPE_NOT_EXIST');
         //数据验证
         $data = [

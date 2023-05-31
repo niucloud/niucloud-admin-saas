@@ -11,7 +11,7 @@
 
 namespace app\model\member;
 
-use app\enum\pay\TransferEnum;
+use app\dict\pay\TransferDict;
 use core\base\BaseModel;
 
 /**
@@ -39,7 +39,7 @@ class MemberCashOutAccount extends BaseModel
      * @return mixed|string
      */
     public function getAccountTypeNameAttr($value, $data){
-        return TransferEnum::getTransferType()[ $data[ 'transfer_type' ] ?? '' ] ?? '';
+        return TransferDict::getTransferType()[ $data[ 'transfer_type' ] ?? '' ] ?? '';
     }
 
     /**

@@ -1,18 +1,18 @@
 <?php
 // +----------------------------------------------------------------------
-// | Niushop商城系统 - 团队十年电商经验汇集巨献!
+// | Niucloud-admin 企业快速开发的saas管理平台
 // +----------------------------------------------------------------------
-// | Copyright (c) 2022~2025 https://www.niushop.com All rights reserved.
+// | 官方网址：https://www.niucloud-admin.com
 // +----------------------------------------------------------------------
-// | Licensed Niushop并不是自由软件，未经许可不能去掉Niushop相关版权
+// | niucloud团队 版权所有 开源版本可自由商用
 // +----------------------------------------------------------------------
-// | Author: Niushop Team <niucloud@outlook.com>
+// | Author: Niucloud Team
 // +----------------------------------------------------------------------
 
 namespace app\service\api\weapp;
 
-use app\enum\member\MemberLoginTypeEnum;
-use app\enum\member\MemberRegisterTypeEnum;
+use app\dict\member\MemberLoginTypeDict;
+use app\dict\member\MemberRegisterTypeDict;
 use app\service\api\login\LoginService;
 use app\service\api\login\RegisterService;
 use app\service\api\member\MemberConfigService;
@@ -100,7 +100,7 @@ class WeappAuthService extends BaseApiService
         }else{
             //可能会更新用户和粉丝表
             $login_service = new LoginService();
-            return $login_service->login($member_info, MemberLoginTypeEnum::WEAPP);
+            return $login_service->login($member_info, MemberLoginTypeDict::WEAPP);
         }
         //todo  业务落地
 
@@ -140,7 +140,7 @@ class WeappAuthService extends BaseApiService
             [
                 'weapp_openid' => $openid
             ],
-            MemberRegisterTypeEnum::WEAPP,
+            MemberRegisterTypeDict::WEAPP,
             $is_verify_mobile ?? false
         );
         return $result;

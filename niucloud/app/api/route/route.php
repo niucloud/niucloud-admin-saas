@@ -70,11 +70,12 @@ Route::group(function () {
     Route::get('wechat/jssdkconfig', 'wechat.Wechat/jssdkConfig');
     /***************************************************** 版权相关设置**************************************************/
     Route::get('copyright', 'sys.Config/getCopyright');
-
+    // 站点信息
+    Route::get('site', 'sys.Config/site');
     //场景域名
     Route::get('scene_domain', 'sys.Config/getSceneDomain');
 })->middleware(ApiChannel::class)
 ->middleware(ApiCheckToken::class)
 ->middleware(ApiLog::class);
 //加载插件路由
-(new \core\addon\AddonLoader("Route"))->load(['app_type' => 'api']);
+(new \core\dict\DictLoader("Route"))->load(['app_type' => 'api']);

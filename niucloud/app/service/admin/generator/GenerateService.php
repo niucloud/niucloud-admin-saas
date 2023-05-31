@@ -272,7 +272,7 @@ class GenerateService extends BaseAdminService
      */
     public static function getDbFieldType(string $type): string
     {
-        if (0 === strpos($type, 'set') || 0 === strpos($type, 'enum')) {
+        if (0 === strpos($type, 'set') || 0 === strpos($type, 'dict')) {
             $result = 'string';
         } elseif (preg_match('/(double|float|decimal|real|numeric)/is', $type)) {
             $result = 'float';

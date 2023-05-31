@@ -13,6 +13,7 @@ namespace app\service\admin\site;
 
 use app\model\site\Site;
 use app\model\site\SiteGroup;
+use app\model\sys\SysMenu;
 use app\service\admin\sys\MenuService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
@@ -120,8 +121,29 @@ class SiteGroupService extends BaseAdminService
      */
     public function getMenuIdsByGroupId($group_id){
         $cache_name = self::$cache_name . $group_id;
-        return Cache::tag([MenuService::$cache_tag_name,self::$cache_tag_name])->remember($cache_name, function () use ($group_id) {
-            return $this->model->findOrEmpty($group_id)?->group_roles ?? [];
-        });
+        return cache_remember(
+            $cache_name,
+            function () use ($group_id) {
+                return $this->model->findOrEmpty($group_id)?->group_roles ?? [];
+            },
+            [MenuService::$cache_tag_name,self::$cache_tag_name]
+        );
+//        return Cache::tag([MenuService::$cache_tag_name,self::$cache_tag_name])->remember($cache_name, function () use ($group_id) {
+//            return $this->model->findOrEmpty($group_id)?->group_roles ?? [];
+//        });
+    }
+
+    /**
+     * 创建所有权限的菜单
+     */
+    public function addAllMenuGroup()
+    {
+        $menus = (new SysMenu())->where([['app_type', '=', 'site']])->column("menu_key");
+        $data = [
+            'group_name' => "默认套餐",
+            'group_desc' => '',
+            'group_roles' => json_encode($menus),
+        ];
+        return $this->add($data);
     }
 }

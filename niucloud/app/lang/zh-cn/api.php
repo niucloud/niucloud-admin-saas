@@ -35,7 +35,9 @@ return [
     'ADDON_UNINSTALL_SUCCESS' => '插件卸载成功',
     'DATA_GET_FAIL' => '数据获取失败',
     'SERVER_CROSS_REQUEST_FAIL' => '服务器跨域请求异常',
-
+    'ADDON_INSTALL_NOT_EXIST' => '未找到插件安装任务',
+    'ADDON_INSTALL_EXECUTED' => '插件安装任务已执行',
+    'INSTALL_CHECK_NOT_PASS' => '安装校验未通过',
 
     //登录注册重置账号....
 
@@ -43,7 +45,7 @@ return [
     'MUST_LOGIN' => '请登录',
     'LOGIN_EXPIRE' => '登录过期,请重新登录',
     'LOGIN_STATE_ERROR' => '登录状态有误,请重新登录',
-    'USER_LOCK' => '账号被限制',
+    'USER_LOCK' => '账号被锁定',
     'USER_ERROR' => '账号或密码错误',
     'NO_SITE_PERMISSION' => '您没有当前站点的访问权限',
     'SITE_NOT_EXIST' => '站点不存在',
@@ -114,6 +116,7 @@ return [
     'MEMBER_LOGOUT' => '账号退出',
     'MEMBER_TYPE_NOT_EXIST' => '账户类型不存在',
     'MEMBER_IS_EXIST' => '账号已存在',
+    'MEMBER_NO_IS_EXIST' => '会员编号已存在',
     'REG_CHANNEL_NOT_EXIST' => '无效的注册渠道',
     'MEMBER_USERNAME_LOGIN_NOT_OPEN' => '未开始账号登录注册',
     'AUTH_LOGIN_NOT_OPEN' => '未开启第三方登录注册',
@@ -158,7 +161,9 @@ return [
 
     //站点相关
     'SITE_GROUP_IS_EXIST' => '当前套餐存在站点，请调整站点对应套餐后重试',
-
+    'SITE_EXPIRE' => '站点已过期',
+    'SITE_EXPIRE_NOT_ALLOW' => '站点已打烊，续费后可继续使用此项功能',
+    'SITE_CLOSE_NOT_ALLOW' => '站点已停止',
 
     //支付相关(todo  注意:7段不共享)
     'ALIPAY_TRANSACTION_NO_NOT_EXIST' => '无效的支付交易号',
@@ -178,14 +183,26 @@ return [
     'CHANNEL_MARK_INVALID' => '无效的渠道标识',
     'TEMPLATE_NOT_EXIST' => '模板不存在',
     'IS_EXIST_TEMPLATE_NOT_MODIFY' => '已存在的支付模板不支持修改支付类型',
-
+    //退款相关
+    'REFUND_NOT_EXIST' => '退款单据不存在',
     //订单相关  8***
     'ORDER_NOT_EXIST' => '订单不存在',
     'ORDER_CLOSED' => '订单已关闭',
 
     // 退款相关
-    'NOT_ALLOW_APPLY_REFUND' => '当前订单不允许退款',
+    'NOT_ALLOW_APPLY_REFUND' => '该订单不允许退款',
     'ITEM_REFUND_NOT_EXIST' => '退款单不存在',
     'REFUND_STATUS_ABNORMAL' => '退款单状态异常',
-    'NO_REFUNDABLE_AMOUNT' => '会员账户金额为0不允许进行退款'
+    'NO_REFUNDABLE_AMOUNT' => '会员账户金额为0不允许进行退款',
+    'REFUND_HAD_APPLIED' => '订单已申请退款',
+    'ORDER_UNPAID_NOT_ALLOW_APPLY_REFUND' => '订单尚未支付不能进行退款',
+
+
+    // 缓存相关
+    'CLEAR_MYSQL_CACHE_SUCCESS' => '数据表缓存清除成功',
+
+    //任务队列相关
+    'JOB_NOT_EXISTS' => '任务类不存在',
+    'JOB_CREATE_FAIL' => '任务创建失败',
+
 ];

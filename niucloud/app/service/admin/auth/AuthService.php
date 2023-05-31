@@ -11,6 +11,7 @@
 
 namespace app\service\admin\auth;
 
+use app\dict\site\SiteDict;
 use app\Request;
 use app\service\admin\site\SiteService;
 use app\service\admin\site\SiteUserService;
@@ -66,6 +67,12 @@ class AuthService extends BaseAdminService
 
         $rule = trim(strtolower($request->rule()->getRule()));
         $method = trim(strtolower($request->method()));
+        $site_info = (new AuthSiteService())->getSiteInfo();
+        if($method != 'get'){
+            if($site_info['status'] == SiteDict::EXPIRE) throw new AuthException('SITE_EXPIRE_NOT_ALLOW');
+            if($site_info['status'] == SiteDict::CLOSE) throw new AuthException('SITE_CLOSE_NOT_ALLOW');
+        }
+
         $menu_service = new MenuService();
         $all_menu_list = $menu_service->getAllApiList($this->app_type);
         //先判断当前访问的接口是否收到权限的限制
@@ -104,7 +111,6 @@ class AuthService extends BaseAdminService
         if($is_admin){//查询全部启用的权限
             //获取站点信息
             return  (new AuthSiteService())->getApiList(1);
-//            return $menu_service->getAllApiList($this->app_type, 1);
         }else{
             $user_role_ids = $user_role_info['role_ids'];
             $role_service = new RoleService();

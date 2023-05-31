@@ -51,4 +51,19 @@ class MemberConfigService extends BaseAdminService
     public function setCashOutConfig(array $data){
         return (new CoreMemberConfigService())->setCashOutConfig($this->site_id, $data);
     }
+
+    /**
+     * 获取会员设置
+     */
+    public function getMemberConfig(){
+        return (new CoreMemberConfigService())->getMemberConfig($this->site_id);
+    }
+
+    /**
+     * 会员设置
+     * @param $data
+     */
+    public function setMemberConfig(array $data){
+        return (new CoreMemberConfigService())->setMemberConfig($this->site_id, $data);
+    }
 }

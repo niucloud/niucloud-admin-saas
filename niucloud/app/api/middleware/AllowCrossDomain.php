@@ -14,6 +14,7 @@ namespace app\api\middleware;
 use app\Request;
 use Closure;
 use core\exception\ApiException;
+use core\exception\ServerException;
 
 /**
  * http跨域请求中间件
@@ -58,7 +59,7 @@ class AllowCrossDomain
 //            header('Access-Control-Allow-Origin: ' . $origin);
         }else{
             header('Access-Control-Allow-Origin: *');
-            throw new ApiException('SERVER_CROSS_REQUEST_FAIL');
+            throw new ServerException('SERVER_CROSS_REQUEST_FAIL', 409);
         }
         return $next($request);
     }

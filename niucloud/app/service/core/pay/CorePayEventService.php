@@ -11,9 +11,9 @@
 
 namespace app\service\core\pay;
 
-use app\enum\common\ChannelEnum;
-use app\enum\pay\PayEnum;
-use app\enum\pay\TransferEnum;
+use app\dict\common\ChannelDict;
+use app\dict\pay\PayDict;
+use app\dict\pay\TransferDict;
 use core\base\BaseCoreService;
 use core\exception\PayException;
 use core\pay\PayDriver;
@@ -62,6 +62,7 @@ class CorePayEventService extends BaseCoreService
     {
         $notify_url = (string)url("/api/pay/notify/$this->site_id/$this->channel/$this->type/$action", [], '', true);//异步回调通知地址
         $this->config['notify_url'] = $notify_url;
+        $this->config['site_id'] = $this->site_id;
         return new PayLoader($this->type, $this->config);
     }
 
@@ -91,42 +92,42 @@ class CorePayEventService extends BaseCoreService
             'openid' => $openid
         );
         switch($this->type){
-            case PayEnum::WECHATPAY:
+            case PayDict::WECHATPAY:
                 $params['money'] = $params['money'] * 100;
 
                 switch ($this->channel) {
-                    case ChannelEnum::H5://h5
+                    case ChannelDict::H5://h5
                         $pay_fun = 'wap';
                         break;
-                    case ChannelEnum::WECHAT://公众号
+                    case ChannelDict::WECHAT://公众号
                         $pay_fun = 'mp';
 
                         break;
-                    case ChannelEnum::WEAPP://微信小程序
+                    case ChannelDict::WEAPP://微信小程序
                         $pay_fun = 'mini';
                         break;
 
-                    case ChannelEnum::PC://pc
+                    case ChannelDict::PC://pc
                         $pay_fun = 'scan';//扫码支付
                         break;
-                    case ChannelEnum::APP://app
+                    case ChannelDict::APP://app
                         $pay_fun = 'app';
                         break;
                 }
 
                 break;
-            case PayEnum::ALIPAY:
+            case PayDict::ALIPAY:
                 switch ($this->channel) {
-                    case ChannelEnum::H5://h5
+                    case ChannelDict::H5://h5
                         $pay_fun = 'wap';
                         break;
-                    case ChannelEnum::PC://pc
+                    case ChannelDict::PC://pc
                         $pay_fun = 'web';
                         break;
-                    case ChannelEnum::APP://app
+                    case ChannelDict::APP://app
                         $pay_fun = 'app';
                         break;
-                    case ChannelEnum::WECHAT://wap
+                    case ChannelDict::WECHAT://wap
                         $pay_fun = 'wap';
                         break;
                 }
@@ -149,12 +150,12 @@ class CorePayEventService extends BaseCoreService
      */
     public function transfer(float $money, string $transfer_no,string  $to_no, string $to_name, string $remark, array $transfer_list = [], string $to_type = '', string $product_code = '', string $scene = '')
     {
-        $transfer_type = TransferEnum::getPayTypeByTransfer($this->type);
+        $transfer_type = TransferDict::getPayTypeByTransfer($this->type);
         switch($transfer_type){
-            case PayEnum::WECHATPAY:
+            case PayDict::WECHATPAY:
                 $money = $money * 100;
                 break;
-            case PayEnum::ALIPAY:
+            case PayDict::ALIPAY:
 
         }
         return $this->app('transfer')->transfer([
@@ -201,9 +202,9 @@ class CorePayEventService extends BaseCoreService
      * 支付异步通知
      * @return void
      */
-    public function notify(Callable $callback)
+    public function notify(string $action, Callable $callback)
     {
-        return $this->app()->notify($callback);
+        return $this->app()->notify($action, $callback);
     }
 
     /**

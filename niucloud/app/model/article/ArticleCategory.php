@@ -41,9 +41,15 @@ class ArticleCategory extends BaseModel
     public function searchNameAttr($query, $value, $data)
     {
         if ($value) {
-            $query->where('name', $value);
+            $query->where([ ['name', 'like', "%$value%" ]]);
         }
     }
+
+    public function getArticleNumAttr($value, $data)
+    {
+        return (new Article())->where([['category_id', '=', $data['category_id']]])->count();
+    }
+
 
 
 }

@@ -5,10 +5,11 @@ namespace app\install\controller;
 
 use app\model\site\Site;
 use app\model\sys\SysUser;
-use app\service\admin\install\InstallArticleService;
-use app\service\admin\install\InstallDiyService;
 use app\service\admin\install\InstallSystemService;
+use app\service\admin\site\SiteGroupService;
+use app\service\admin\site\SiteService;
 use think\facade\Cache;
+use think\facade\Db;
 use think\facade\View;
 
 
@@ -206,44 +207,62 @@ class Index extends BaseInstall
 
     public function install()
     {
+
+
         set_time_limit(300);
         Cache::delete('install_data');
         Cache::set('install_status', 0);//进行中
 
         $check = $this->testDb()->getData();
-        if ($check[ 'code' ] != 200) {
+        if ($check[ 'code' ] != 1) {
             $this->setSuccessLog([ $check[ 'data' ][ 'message' ], 'error' ]);
             return fail($check[ 'data' ][ 'message' ]);
         }
 
-        $site_name = input('site_name', "");
+        $admin_name = input('admin_name', "");
         $username = input('username', "");
         $password = input('password', "");
         $password2 = input('password2', "");
 
-        if ($site_name == '' || $username == '' || $password == '') {
+        $site_name = input('site_name', "");
+        $site_username = input('site_username', "");
+        $site_password = input('site_password', "");
+        $site_password2 = input('site_password2', "");
+
+        if ($admin_name == '' || $username == '' || $password == '') {
             $this->setSuccessLog([ '平台信息不能为空', 'error' ]);
             return fail('平台信息不能为空!');
         }
 
         if ($password != $password2) {
-            $this->setSuccessLog([ '两次密码输入不一样，请重新输入', 'error' ]);
-            return fail('两次密码输入不一样，请重新输入');
+            $this->setSuccessLog([ '平台两次密码输入不一样，请重新输入', 'error' ]);
+            return fail('平台两次密码输入不一样，请重新输入');
+        }
+
+        if ($site_name == '' || $site_username == '' || $site_password == '') {
+            $this->setSuccessLog([ '平台信息不能为空', 'error' ]);
+            return fail('平台信息不能为空!');
+        }
+
+        if ($site_password != $site_password2) {
+            $this->setSuccessLog([ '站点两次密码输入不一样，请重新输入', 'error' ]);
+            return fail('站点两次密码输入不一样，请重新输入');
         }
 
         try {
             //配置写入
             $res = $this->installConfig(input())->getData();
-            if ($res[ 'code' ] != 200) {
+            if ($res[ 'code' ] != 1) {
                 $this->setSuccessLog([ $res[ 'msg' ], 'error' ]);
                 return fail($res[ 'msg' ]);
             }
             //数据库
             $res = $this->installSql(input())->getData();
-            if ($res[ 'code' ] != 200) {
+            if ($res[ 'code' ] != 1) {
                 $this->setSuccessLog([ $res[ 'msg' ], 'error' ]);
                 return fail($res[ 'msg' ]);
             }
+
             Cache::set('install_status', 1);//成功
             return success();
         } catch (\Exception $e) {
@@ -255,16 +274,29 @@ class Index extends BaseInstall
     public function initData()
     {
         $this->checkLock();
-        $site_name = input('site_name', "");
+        $admin_name = input('admin_name', "");
         $username = input('username', "");
         $password = input('password', "");
         $password2 = input('password2', "");
-        if ($site_name == '' || $username == '' || $password == '') {
+
+        $site_name = input('site_name', "");
+        $site_username = input('site_username', "");
+        $site_password = input('site_password', "");
+        $site_password2 = input('site_password2', "");
+        if ($admin_name == '' || $username == '' || $password == '') {
             return fail('平台信息不能为空!');
         }
 
         if ($password != $password2) {
-            return fail('两次密码输入不一样，请重新输入');
+            return fail('平台两次密码输入不一样，请重新输入');
+        }
+
+        if ($site_name == '' || $site_username == '' || $site_password == '') {
+            return fail('平台信息不能为空!');
+        }
+
+        if ($site_password != $site_password2) {
+            return fail('站点两次密码输入不一样，请重新输入');
         }
 
         try {
@@ -282,28 +314,27 @@ class Index extends BaseInstall
                     'password' => create_password($password),
                 ]);
             }
-
-            $site = ( new Site() )->where([ [ 'site_id', '=', 1 ] ])->findOrEmpty();
+            ( new Site() )->where([ [ 'site_id', '=', 1 ] ])->update(['site_id' => 0]);
+            $site = ( new Site() )->where([ [ 'site_id', '=', 0 ] ])->findOrEmpty();
             if (!$site->isEmpty()) {
-                $user->save([
-                    'site_name' => $site_name,
+                $site->save([
+                    'site_name' => $admin_name,
                 ]);
             }
+            //修改自增主键默认值
+            Db::execute("alter table ".env('database.prefix', '')."site auto_increment = 1");
+            //获取默认套餐
+            $group_id = (new SiteGroupService())->addAllMenuGroup();
 
-            // 初始化自定义页面数据
-            $res = ( new InstallDiyService() )->install([ 'site_id' => $site->site_id ]);
-            if (!$res) {
-                $this->setSuccessLog([ '自定义页面初始化失败', 'error' ]);
-                return fail('自定义页面初始化失败');
-            }
-
-            // 初始化文章数据
-            $res = ( new InstallArticleService() )->install([ 'site_id' => $site->site_id ]);
-            if (!$res) {
-                $this->setSuccessLog([ '文章初始化失败', 'error' ]);
-                return fail('文章初始化失败');
-            }
-
+            $data = [
+                'site_name' => $site_name,
+                'real_name' => '',
+                'group_id' => $group_id,
+                'expire_time' => 0,
+                'username' => $site_username,
+                'password' => $site_password,
+            ];
+            (new SiteService())->add($data);
             $fp = fopen($this->lock_file, "w");
             if ($fp == false) {
                 $this->setSuccessLog([ "写入失败，请检查目录" . dirname(dirname(__FILE__)) . "是否可写入！'", 'error' ]);
@@ -313,6 +344,7 @@ class Index extends BaseInstall
             fwrite($fp, '已安装');
             fclose($fp);
             Cache::set('install_status', 2);//成功
+//            Cache::tag(MenuService::$cache_tag_name)->clear();
             return success();
         } catch (\Exception $e) {
             $this->setSuccessLog([ '安装失败' . $e->getMessage(), 'error' ]);
@@ -368,7 +400,7 @@ class Index extends BaseInstall
         //导入SQL并执行。
         $get_sql_data = file_get_contents($file_name);
         $sql_query = $this->getSqlQuery($get_sql_data);
-        @mysqli_query($conn, "SET NAMES utf8");
+        @mysqli_query($conn, "SET NAMES utf8mb4");
         $query_count = count($sql_query);
 
         for ($i = 0; $i < $query_count; $i++) {

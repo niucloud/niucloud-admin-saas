@@ -11,7 +11,10 @@
 
 namespace app\service\admin\sys;
 
+use app\job\sys\CheckJob;
+use app\service\admin\install\InstallSystemService;
 use core\base\BaseAdminService;
+use core\exception\CommonException;
 use think\facade\Db;
 
 /**
@@ -46,7 +49,7 @@ class SystemService extends BaseAdminService
      */
     public function getUrl()
     {
-        $site_tag = $this->site_id == 30 ? '' : '/s' . $this->site_id;
+        $site_tag = $this->site_id == 1 ? '' : '/s' . $this->site_id;
         $data = [
             'wap_url' => ( !empty(env("system.wap_domain")) ? env("system.wap_domain") : request()->domain() ) . "/wap" . $site_tag,
             'web_url' => ( !empty(env("system.web_domain")) ? env("system.web_domain") : request()->domain() ) . "/web" . $site_tag,
@@ -60,51 +63,104 @@ class SystemService extends BaseAdminService
      */
     public function getSystemInfo(){
         $server = [];
-        $server[] = [ "name" => "服务器操作系统", "server" => PHP_OS ];
-        $server[] = [ "name" => "服务器web环境", "server" => PHP_SAPI ];
-        $server[] = [ "name" => "PHP版本", "server" => phpversion() ];
+        $server[] = [ "name" => get_lang('dict_setting.server_system'), "server" => PHP_OS ];
+        $server[] = [ "name" => get_lang('dict_setting.server_setting'), "server" => PHP_SAPI ];
+        $server[] = [ "name" => get_lang('dict_setting.php_version'), "server" => phpversion() ];
 
         //环境权限
         $system_variables = [];
         //pdo
         $pdo = extension_loaded('pdo') && extension_loaded('pdo_mysql');
-        $system_variables[] = [ "name" => "pdo", "need" => "开启", "status" => $pdo ];
+        $system_variables[] = [ "name" => "pdo", "need" => get_lang('dict_setting.php_authority_ask'), "status" => $pdo ];
         //curl
         $curl = extension_loaded('curl') && function_exists('curl_init');
-        $system_variables[] = [ "name" => "curl", "need" => "开启", "status" => $curl ];
+        $system_variables[] = [ "name" => "curl", "need" => get_lang('dict_setting.php_authority_ask'), "status" => $curl ];
         //openssl
         $openssl = extension_loaded('openssl');
-        $system_variables[] = [ "name" => "openssl", "need" => "开启", "status" => $openssl ];
+        $system_variables[] = [ "name" => "openssl", "need" => get_lang('dict_setting.php_authority_ask'), "status" => $openssl ];
         //gd
         $gd = extension_loaded('gd');
-        $system_variables[] = [ "name" => "GD库", "need" => "开启", "status" => $gd ];
+        $system_variables[] = [ "name" => "GD库", "need" => get_lang('dict_setting.php_authority_ask'), "status" => $gd ];
         //fileinfo
         $fileinfo = extension_loaded('fileinfo');
-        $system_variables[] = [ "name" => "fileinfo", "need" => "开启", "status" => $fileinfo ];
+        $system_variables[] = [ "name" => "fileinfo", "need" => get_lang('dict_setting.php_authority_ask'), "status" => $fileinfo ];
         //目录权限
         $root_path = str_replace("\\", DIRECTORY_SEPARATOR, dirname(dirname(dirname(dirname(dirname(__FILE__))))));
         $root_path = str_replace("../", DIRECTORY_SEPARATOR, $root_path);
 
+
         $dirs_list = [
-            [ "path" => $root_path . DIRECTORY_SEPARATOR . 'runtime'.DIRECTORY_SEPARATOR, "demand" => "可读可写", "path_name" => "/runtime", "name" => "runtime" ],
-            [ "path" => $root_path . DIRECTORY_SEPARATOR . 'public'.DIRECTORY_SEPARATOR.'upload'.DIRECTORY_SEPARATOR, "demand" => "可读可写", "path_name" => "/public/upload", "name" => "upload" ],
+            [ "path" => $root_path . DIRECTORY_SEPARATOR . 'runtime'.DIRECTORY_SEPARATOR, "need" => get_lang('dict_setting.file_authority_ask'), "path_name" => "/runtime", "name" => "runtime" ],
+            [ "path" => $root_path . DIRECTORY_SEPARATOR . 'public'.DIRECTORY_SEPARATOR.'upload'.DIRECTORY_SEPARATOR, "need" => get_lang('dict_setting.file_authority_ask'), "path_name" => "/public/upload", "name" => "upload" ],
        ];
         //目录 可读 可写检测
         foreach ($dirs_list as $k => $v) {
             $is_readable = is_readable($v[ "path" ]);
             $is_write = is_write($v[ "path" ]);
-            $dirs_list[ $k ][ "is_readable" ] = $is_readable;
-            $dirs_list[ $k ][ "is_write" ] = $is_write;
+            if($is_readable && $is_write){
+                $dirs_list[ $k ][ "status" ] = true;
+            }else{
+                $dirs_list[ $k ][ "status" ] = false;
+            }
         }
+        $system_variables = array_merge($system_variables, $dirs_list);
 
         //获取环境版本
         $server_version = [];
         $row = (array)Db::query("select VERSION() as verson");
-        $server_version[] = [ "name" => "PHP版本", "demand" => "大于等于8.0.0", "server" => phpversion() ];
-        $server_version[] = [ "name" => "mysql版本", "demand" => "大于等于5.7", "server" => $row[0]['verson']];
+        $server_version[] = [ "name" => get_lang('dict_setting.php_version'), "demand" => get_lang('dict_setting.php_ask'), "server" => phpversion() ];
+        $server_version[] = [ "name" => get_lang('dict_setting.mysql_version'), "demand" => get_lang('dict_setting.mysql_ask'), "server" => $row[0]['verson']];
 
-        $data = ["server" => $server, "dirs_list" => $dirs_list, 'system_variables' => $system_variables, 'server_version' => $server_version];
+        // 进程
+        $process[] = [ "name" => "php think queue:listen", "need" => get_lang('dict_setting.php_authority_ask'), "status" => ( new SystemService() )->checkJob() ];
+
+        $data = ["server" => $server, "dirs_list" => $dirs_list, 'system_variables' => $system_variables, 'server_version' => $server_version, 'process' => $process ];
         return $data;
     }
 
+    /**
+     * 清理缓存
+     */
+    public function schemaCache(){
+        if (is_dir(dirname($_SERVER['DOCUMENT_ROOT']) . '/runtime/schema')) {
+            rmdirs(dirname($_SERVER['DOCUMENT_ROOT']) . '/runtime/schema');
+            return 'CLEAR_MYSQL_CACHE_SUCCESS';
+        }
+        return;
+    }
+
+    /**
+     *校验消息队列是否正常运行
+     * @return void
+     */
+    public function checkJob(){
+        $secret = uniqid();
+        $file = root_path('runtime').$secret.'.job';
+        try{
+            CheckJob::invoke(['file' => $file]);
+        }catch(\Throwable $e){
+            return false;
+        }
+        sleep(3);
+        if(file_exists($file)){
+            @unlink($file);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 校验计划任务是否正常运行
+     * @return bool
+     */
+    public function checkSchedule(){
+        $file = root_path('runtime').'.schedule';
+        if(file_exists($file)){
+            $time = file_get_contents($file);
+            if (!empty($time) && abs($time - time()) < 90 ) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

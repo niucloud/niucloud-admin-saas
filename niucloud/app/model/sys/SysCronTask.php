@@ -11,7 +11,7 @@
 
 namespace app\model\sys;
 
-use app\enum\sys\CronEnum;
+use app\dict\sys\CronDict;
 use core\base\BaseModel;
 use think\db\Query;
 
@@ -52,7 +52,7 @@ class SysCronTask extends BaseModel
      */
     public function getTypeNameAttr($value, $data)
     {
-        return CronEnum::getType()[$data['type'] ?? ''] ?? '';
+        return CronDict::getType()[$data['type'] ?? ''] ?? '';
     }
 
     /**
@@ -62,7 +62,7 @@ class SysCronTask extends BaseModel
      */
     public function getCrondTypeNameAttr($value, $data)
     {
-        return CronEnum::getCrondType()[$data['crond_type'] ?? ''] ?? '';
+        return CronDict::getCrondType()[$data['crond_type'] ?? ''] ?? '';
     }
     /**
      * 任务名称搜索器

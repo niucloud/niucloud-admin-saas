@@ -11,7 +11,7 @@
 
 namespace app\model\order;
 
-use app\enum\pay\PayRefundEnum;
+use app\dict\pay\PayRefundDict;
 use app\model\member\Member;
 use app\model\pay\Refund;
 use core\base\BaseModel;
@@ -49,7 +49,7 @@ class OrderItemRefund extends BaseModel
      */
     public function getStatusNameAttr($value, $data)
     {
-        $class = "\\app\\enum\\order\\" . ucfirst($data['item_type']). "OrderEnum";
+        $class = "\\app\\dict\\order\\" . ucfirst($data['item_type']). "OrderDict";
         if (!class_exists($class)) return '';
         return $class::getRefundStatus()[$data['status'] ?? '']['name'] ?? '';
     }
@@ -68,7 +68,7 @@ class OrderItemRefund extends BaseModel
      */
     public function member()
     {
-        return $this->hasOne(Member::class,'member_id', 'member_id');
+        return $this->hasOne( Member::class, 'member_id', 'member_id')->withField('member_id, username, mobile, nickname, headimg')->joinType('left');
     }
 
     /**
@@ -92,6 +92,20 @@ class OrderItemRefund extends BaseModel
         }
     }
 
+
+    /**
+     * 订单号搜索
+     * @param $query
+     * @param $value
+     * @param $data
+     */
+    public function searchOrderNoAttr($query, $value, $data)
+    {
+        if ($value) {
+            $query->where('order_item_refund.order_no', '=', $value);
+        }
+    }
+
     /**
      * 会员id搜索
      * @param $query
@@ -101,7 +115,7 @@ class OrderItemRefund extends BaseModel
     public function searchMemberIdAttr($query, $value, $data)
     {
         if ($value) {
-            $query->where('member_id', '=', $value);
+            $query->where('order_item_refund.member_id', '=', $value);
         }
     }
 
@@ -114,7 +128,7 @@ class OrderItemRefund extends BaseModel
     public function searchStatusAttr($query, $value, $data)
     {
         if ($value != '') {
-            $query->where('status', '=', $value);
+            $query->where('order_item_refund.status', '=', $value);
         }
     }
 
@@ -127,11 +141,11 @@ class OrderItemRefund extends BaseModel
         $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
         $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
         if($start_time > 0 && $end_time > 0){
-            $query->whereBetweenTime('create_time', $start_time, $end_time);
+            $query->whereBetweenTime('order_item_refund.create_time', $start_time, $end_time);
         }else if($start_time > 0 && $end_time == 0){
-            $query->where([['create_time', '>=', $start_time]]);
+            $query->where([['order_item_refund.create_time', '>=', $start_time]]);
         }else if($start_time == 0 && $end_time > 0){
-            $query->where([['create_time', '<=', $end_time]]);
+            $query->where([['order_item_refund.create_time', '<=', $end_time]]);
         }
     }
 }

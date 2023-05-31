@@ -11,8 +11,8 @@
 
 namespace app\service\admin\notice;
 
-use app\enum\notice\NoticeEnum;
-use app\enum\notice\NoticeTypeEnum;
+use app\dict\notice\NoticeDict;
+use app\dict\notice\NoticeTypeDict;
 use app\model\sys\SysNotice;
 use app\service\core\notice\CoreNoticeService;
 use core\base\BaseAdminService;
@@ -70,8 +70,8 @@ class NoticeService extends BaseAdminService
      */
     public function editMessageStatus(string $key, string $type, int $status)
     {
-        if(!array_key_exists($type, NoticeTypeEnum::getType())) throw new AdminException('NOTICE_TYPE_NOT_EXIST');
-        if(!array_key_exists($key, NoticeEnum::getNotice())) return fail('NOTICE_TYPE_NOT_EXIST');
+        if(!array_key_exists($type, NoticeTypeDict::getType())) throw new AdminException('NOTICE_TYPE_NOT_EXIST');
+        if(!array_key_exists($key, NoticeDict::getNotice())) return fail('NOTICE_TYPE_NOT_EXIST');
         return (new CoreNoticeService())->edit($this->site_id, $key, ['is_'.$type => $status]);
     }
 
@@ -84,19 +84,19 @@ class NoticeService extends BaseAdminService
      */
     public function edit(string $key, string $type, array $data)
     {
-        if(!array_key_exists($type, NoticeTypeEnum::getType())) throw new AdminException('NOTICE_TYPE_NOT_EXIST');
-        if(!array_key_exists($key, NoticeEnum::getNotice())) return fail('NOTICE_TYPE_NOT_EXIST');
+        if(!array_key_exists($type, NoticeTypeDict::getType())) throw new AdminException('NOTICE_TYPE_NOT_EXIST');
+        if(!array_key_exists($key, NoticeDict::getNotice())) return fail('NOTICE_TYPE_NOT_EXIST');
         $save_data = ['is_'.$type => $data['status']];
         switch ($type)
         {
-            case NoticeTypeEnum::SMS:
+            case NoticeTypeDict::SMS:
                 $save_data['sms_id'] = $data['sms_id'] ?? '';
                 break;
-            case NoticeTypeEnum::WECHAT:
+            case NoticeTypeDict::WECHAT:
                 $save_data['wechat_first'] = $data['wechat_first'] ?? '';
                 $save_data['wechat_remark'] = $data['wechat_remark'] ?? '';
                 break;
-            case NoticeTypeEnum::WEAPP:
+            case NoticeTypeDict::WEAPP:
                 break;
         }
         return (new CoreNoticeService())->edit($this->site_id, $key, $save_data);

@@ -1,5 +1,6 @@
 <?php
 
+use think\Container;
 use think\Response;
 use think\facade\Lang;
 use think\facade\Queue;
@@ -12,7 +13,7 @@ use think\facade\Cache;
  * @param int $msg
  * @param array $
  */
-function success($msg = 'SUCCESS', array|string|null $data = [], int $code = 1, int $http_code = 200): Response
+function success($msg = 'SUCCESS', array|string|bool|null $data = [], int $code = 1, int $http_code = 200): Response
 {
     if (is_array($msg)) {
         $data = $msg;
@@ -389,6 +390,26 @@ function mkdirs($dir, $mode = 0777)
 }
 
 /**
+ * 删除缓存文件使用
+ * @param $dir
+ */
+function rmdirs($dir)
+{
+    $dh = opendir($dir);
+    while ($file = readdir($dh)) {
+        if ($file != "." && $file != "..") {
+            $fullpath = $dir . "/" . $file;
+            if (is_dir($fullpath)) {
+                rmdirs($fullpath);
+            } else {
+                unlink($fullpath);
+            }
+        }
+    }
+    closedir($dh);
+}
+
+/**
  * 获取唯一随机字符串
  * @param int $len
  * @return string
@@ -613,7 +634,7 @@ function search_dir($path, &$data, $search = '')
         $fp = dir($path);
         while ($file = $fp->read()) {
             if ($file != '.' && $file != '..') {
-                search_dir($path . '/' . $file, $data, $search);
+                search_dir($path . $file, $data, $search);
             }
         }
         $fp->close();
@@ -652,4 +673,36 @@ function getFileMap($path, $arr = [])
         }
         return $arr;
     }
+}
+
+/**
+ * 如果不存在则写入缓存
+ * @param string|null $name
+ * @param $value
+ * @param $options
+ * @param $tag
+ * @return mixed|string
+ */
+function cache_remember(string $name = null, $value = '', $tag = null, $options = null){
+    if(!empty($hit = Cache::get($name)))//可以用has
+        return $hit;
+    if ($value instanceof Closure) {
+        // 获取缓存数据
+        $value = Container::getInstance()->invokeFunction($value);
+    }
+    if (is_null($tag)) {
+        Cache::set($name, $value, $options['expire'] ?? null);
+    } else {
+        Cache::tag($tag)->set($name, $value, $options['expire'] ?? null);
+    }
+    return $value;
+
+}
+
+/**
+ * 项目目录
+ * @return void
+ */
+function project_path() {
+    return dirname(root_path()) . DIRECTORY_SEPARATOR;
 }

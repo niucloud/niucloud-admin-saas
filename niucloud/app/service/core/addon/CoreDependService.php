@@ -110,7 +110,7 @@ class CoreDependService extends CoreAddonBaseService
      */
     public function getAddonComposerContent(string $addon)
     {
-        $composer_path = $this->getAddonConfigPath($addon). 'composer.json';
+        $composer_path = $this->geAddonPackagePath($addon). 'composer.json';
         return $this->jsonFileToArray($composer_path);
     }
 
@@ -152,12 +152,12 @@ class CoreDependService extends CoreAddonBaseService
     {
         if($type == 'admin')
         {
-            $file_path = $this->getAddonConfigPath($addon).'admin-package.json';
+            $file_path = $this->geAddonPackagePath($addon).'admin-package.json';
         }elseif($type == 'web')
         {
-            $file_path = $this->getAddonConfigPath($addon).'web-package.json';
+            $file_path = $this->geAddonPackagePath($addon).'web-package.json';
         }else{
-            $file_path = $this->getAddonConfigPath($addon).'uni-app-package.json';
+            $file_path = $this->geAddonPackagePath($addon).'uni-app-package.json';
         }
         return $this->jsonFileToArray($file_path);
     }

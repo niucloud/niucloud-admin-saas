@@ -11,15 +11,16 @@
 
 namespace app\service\core\member;
 
-use app\enum\cash_out\CashOutTypeEnum;
-use app\enum\member\MemberAccountEnum;
-use app\enum\member\MemberCashOutEnum;
-use app\enum\pay\PayEnum;
-use app\enum\pay\TransferEnum;
+use app\dict\cash_out\CashOutTypeDict;
+use app\dict\member\MemberAccountTypeDict;
+use app\dict\member\MemberCashOutDict;
+use app\dict\pay\PayDict;
+use app\dict\pay\TransferDict;
 use app\model\member\MemberCashOut;
 use app\service\core\pay\CoreTransferService;
 use core\base\BaseCoreService;
 use core\exception\CommonException;
+use think\facade\Cache;
 use think\facade\Db;
 
 /**
@@ -58,7 +59,7 @@ class CoreMemberCashOutService extends BaseCoreService
 
         $cash_out = $this->find($site_id, $id);
         if($cash_out->isEmpty()) throw new CommonException('CASHOUT_LOG_NOT_EXIST');
-        if($cash_out['status'] != MemberCashOutEnum::WAIT_AUDIT) throw new CommonException('CASHOUT_STATUS_NOT_IN_WAIT_AUDIT');
+        if($cash_out['status'] != MemberCashOutDict::WAIT_AUDIT) throw new CommonException('CASHOUT_STATUS_NOT_IN_WAIT_AUDIT');
         switch($action){
             case 'agree'://同意
                 $this->agree($site_id, $cash_out, $data);
@@ -79,7 +80,7 @@ class CoreMemberCashOutService extends BaseCoreService
     public function agree(int $site_id, MemberCashOut $cash_out, array $data = []){
         $cash_out->save([
             'audit_time' => time(),
-            'status' => MemberCashOutEnum::WAIT_TRANSFER
+            'status' => MemberCashOutDict::WAIT_TRANSFER
         ]);
         $config = (new CoreMemberConfigService())->getCashOutConfig($site_id);
         if($config['is_auto_transfer']){
@@ -101,7 +102,7 @@ class CoreMemberCashOutService extends BaseCoreService
     public function refuse(int $site_id, MemberCashOut $cash_out, array $data){
         $cash_out->save([
             'audit_time' => time(),
-            'status' => MemberCashOutEnum::REFUSE,
+            'status' => MemberCashOutDict::REFUSE,
             'refuse_reason' => $data['refuse_reason']
         ]);
         $this->returnMember($site_id, $cash_out);
@@ -120,10 +121,10 @@ class CoreMemberCashOutService extends BaseCoreService
 
         $cash_out = $this->find($site_id, $id);
         if($cash_out->isEmpty()) throw new CommonException('RECHARGE_LOG_NOT_EXIST');
-        if($cash_out['status'] != MemberCashOutEnum::WAIT_TRANSFER) throw new CommonException('CASHOUT_STATUS_NOT_IN_WAIT_TRANSFER');
+        if($cash_out['status'] != MemberCashOutDict::WAIT_TRANSFER) throw new CommonException('CASHOUT_STATUS_NOT_IN_WAIT_TRANSFER');
         $transfer_no = $cash_out['transfer_no'];
         if(!$transfer_no){
-            $transfer_no = (new CoreTransferService())->create($site_id, PayEnum::MEMBER, $cash_out['member_id'], $cash_out['money'], CashOutTypeEnum::MEMBER_CASH_OUT, get_lang('MEMBER_CASHOUT_TRANSFER'));
+            $transfer_no = (new CoreTransferService())->create($site_id, PayDict::MEMBER, $cash_out['member_id'], $cash_out['money'], CashOutTypeDict::MEMBER_CASH_OUT, get_lang('MEMBER_CASHOUT_TRANSFER'));
             $cash_out->save(
                 [
                     'transfer_no' => $transfer_no
@@ -131,19 +132,21 @@ class CoreMemberCashOutService extends BaseCoreService
             );
         }
 
-        if($transfer_type != TransferEnum::OFFLINE){
+        if($transfer_type != TransferDict::OFFLINE){
             $data['transfer_type'] = $cash_out['transfer_type'];
             $data['transfer_realname'] = $cash_out['transfer_realname'];
             $data['transfer_mobile'] = $cash_out['transfer_mobile'];
             $data['transfer_bank'] = $cash_out['transfer_bank'];
             $data['transfer_account'] = $cash_out['transfer_account'];
-            if($transfer_type == TransferEnum::WECHAT){
+            $transfer_type = $cash_out['transfer_type'];
+            if($transfer_type == TransferDict::WECHAT){
                 $member = (new CoreMemberService())->find($site_id, $cash_out['member_id']);
                 $data['openid'] = $member['wx_openid'];
             }
         }else{
             $transfer_type = $cash_out['transfer_type'];
         }
+
         $result = (new CoreTransferService())->transfer($site_id, $transfer_no, $transfer_type, $data);
         return true;
 
@@ -165,9 +168,9 @@ class CoreMemberCashOutService extends BaseCoreService
         )->findOrEmpty();
 
         if($cash_out->isEmpty()) throw new CommonException('RECHARGE_LOG_NOT_EXIST');
-        if($cash_out['status'] != MemberCashOutEnum::WAIT_TRANSFER) throw new CommonException('CASHOUT_STATUS_NOT_IN_WAIT_TRANSFER');
+        if($cash_out['status'] != MemberCashOutDict::WAIT_TRANSFER) throw new CommonException('CASHOUT_STATUS_NOT_IN_WAIT_TRANSFER');
         $cash_out->save([
-            'status' => MemberCashOutEnum::TRANSFERED,
+            'status' => MemberCashOutDict::TRANSFERED,
             'transfer_time' => time()
         ]);
         return true;
@@ -195,10 +198,10 @@ class CoreMemberCashOutService extends BaseCoreService
         if($apply_money < $min) throw new CommonException('CASHOUT_MONEY_TOO_LITTLE');
 //        $apply_money, $transfer_type, $transfer_realname, $transfer_mobile, $transfer_bank, $transfer_account
         $money = $apply_money - $service_money;
-        $account_type = $data['account_type'] ?? MemberAccountEnum::MONEY;
+        $account_type = $data['account_type'] ?? MemberAccountTypeDict::MONEY;
 
         $cash_out_account = [];
-        if ($transfer_type != TransferEnum::WECHAT) {
+        if ($transfer_type != TransferDict::WECHAT) {
             $cash_out_account = (new CoreMemberCashOutAccountService())->getInfo($data['account_id'], $site_id, $member_id);
             if (empty($cash_out_account)) throw new CommonException('CASH_OUT_ACCOUNT_NOT_EXIST');
         }
@@ -208,7 +211,8 @@ class CoreMemberCashOutService extends BaseCoreService
             $data = array(
                 'member_id' => $member_id,
                 'site_id' => $site_id,
-                'status' => MemberCashOutEnum::WAIT_AUDIT,
+                'cash_out_no' => $this->createCashOutNo($site_id),
+                'status' => MemberCashOutDict::WAIT_AUDIT,
                 'account_type' => $account_type,
                 'apply_money' => $apply_money,
                 'service_money' => $service_money,
@@ -249,7 +253,7 @@ class CoreMemberCashOutService extends BaseCoreService
      */
     public function getTransferType($site_id){
         $config = (new CoreMemberConfigService())->getCashOutConfig($site_id);
-        return TransferEnum::getTransferType($config['transfer_type'], false);
+        return TransferDict::getTransferType($config['transfer_type'], false);
     }
 
 
@@ -273,5 +277,24 @@ class CoreMemberCashOutService extends BaseCoreService
             ]
         );
         return true;
+    }
+    /**
+     * 创建订单编号
+     * @param int $site_id
+     * @return string
+     */
+    public function createCashOutNo(int $site_id)
+    {
+        $time_str = date('YmdHi');
+        $max_no = Cache::get("cash_out_no_" . $site_id . "_" . $time_str);
+
+        if (!isset($max_no) || empty($max_no)) {
+            $max_no = 1;
+        } else {
+            $max_no = $max_no + 1;
+        }
+        $cash_out_no = $time_str . $site_id . sprintf('%03d', $max_no);
+        Cache::set("cash_out_no_" . $site_id . "_" . $time_str, $max_no);
+        return $cash_out_no;
     }
 }

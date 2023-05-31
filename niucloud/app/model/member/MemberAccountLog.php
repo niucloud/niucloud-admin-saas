@@ -11,7 +11,8 @@
 
 namespace app\model\member;
 
-use app\enum\member\MemberAccountEnum;
+use app\dict\member\MemberAccountChangeTypeDict;
+use app\dict\member\MemberAccountTypeDict;
 use core\base\BaseModel;
 
 /**
@@ -43,7 +44,7 @@ class MemberAccountLog extends BaseModel
      */
     public function getAccountTypeNameAttr($value,$data)
     {
-        return MemberAccountEnum::getType()[$data['account_type'] ?? ''] ?? '';
+        return MemberAccountTypeDict::getType()[$data['account_type'] ?? ''] ?? '';
     }
 
     /**
@@ -53,8 +54,17 @@ class MemberAccountLog extends BaseModel
     public function memberInfo()
     {
         return $this->hasOne( Member::class, 'member_id', 'member_id')->joinType('left')
-            ->withField('member_id, username, mobile, nickname, headimg')
+            ->withField('member_id,member_no, username, mobile, nickname, headimg')
             ->bind(['username', 'mobile', 'nickname', 'headimg']);
+    }
+
+    /**
+     * 会员关联
+     * @return \think\model\relation\HasOne
+     */
+    public function member()
+    {
+        return $this->hasOne( Member::class, 'member_id', 'member_id')->withField('member_id, member_no, username, mobile, nickname, headimg')->joinType('left');
     }
 
     /**
@@ -72,6 +82,20 @@ class MemberAccountLog extends BaseModel
     }
 
     /**
+     * 获取account_sum
+     * @param $value
+     * @param $data
+     * @return int
+     */
+    public function getAccountSumAttr($value,$data)
+    {
+        if($data['account_type'] == 'point'|| $data['account_type'] == 'growth')
+            return (int)$data['account_sum'];
+        else
+            return $data['account_sum'];
+    }
+
+    /**
      * 获取账户变动类型名称
      * @param $value
      * @param $data
@@ -80,7 +104,7 @@ class MemberAccountLog extends BaseModel
     public function getFromTypeNameAttr($value,$data)
     {
         if(isset($data['from_type'])&& isset($data['account_type']))
-            return MemberAccountEnum::getFromType($data['account_type'])[$data['from_type']]['name'];
+            return MemberAccountChangeTypeDict::getType($data['account_type'])[$data['from_type']]['name'];
         else
             return '';
     }
@@ -92,7 +116,7 @@ class MemberAccountLog extends BaseModel
     public function searchMemberIdAttr($query, $value, $data)
     {
         if ($value) {
-            $query->where('member_id', $value);
+            $query->where('member_account_log.member_id', $value);
         }
     }
 
@@ -127,11 +151,11 @@ class MemberAccountLog extends BaseModel
         $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
         $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
         if($start_time > 0 && $end_time > 0){
-            $query->whereBetweenTime('create_time', $start_time, $end_time);
+            $query->whereBetweenTime('member_account_log.create_time', $start_time, $end_time);
         }else if($start_time > 0 && $end_time == 0){
-            $query->where([['create_time', '>=', $start_time]]);
+            $query->where([['member_account_log.create_time', '>=', $start_time]]);
         }else if($start_time == 0 && $end_time > 0){
-            $query->where([['create_time', '<=', $end_time]]);
+            $query->where([['member_account_log.create_time', '<=', $end_time]]);
         }
     }
 

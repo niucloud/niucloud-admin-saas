@@ -12,7 +12,6 @@
 namespace app\adminapi\controller\addon;
 
 use app\service\core\addon\CoreAddonService;
-use app\service\core\addon\CoreInstallService;
 use core\base\BaseAdminController;
 
 

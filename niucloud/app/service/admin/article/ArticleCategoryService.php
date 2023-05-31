@@ -37,7 +37,7 @@ class ArticleCategoryService extends BaseAdminService
 
         $field = 'category_id, site_id, name, sort, is_show, create_time, update_time';
         $order = 'create_time desc';
-        $search_model = $this->model->where([['site_id', '=', $this->site_id]])->withSearch(['name'], $where)->field($field)->order($order);
+        $search_model = $this->model->where([['site_id', '=', $this->site_id]])->withSearch(['name'], $where)->field($field)->order($order)->append(["article_num"]);
         $list = $this->pageQuery($search_model);
         return $list;
     }
@@ -62,7 +62,7 @@ class ArticleCategoryService extends BaseAdminService
     {
         $field = 'category_id, site_id, name, sort, is_show, create_time, update_time';
 
-        $info = $this->model->field($field)->where([['category_id', '=', $id], ['site_id', '=', $this->site_id]])->findOrEmpty()->toArray();
+        $info = $this->model->field($field)->where([['category_id', '=', $id], ['site_id', '=', $this->site_id]])->append(["article_num"])->findOrEmpty()->toArray();
         return $info;
     }
 

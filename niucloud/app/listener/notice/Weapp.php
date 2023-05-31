@@ -2,8 +2,8 @@
 
 namespace app\listener\notice;
 
-use app\enum\notice\NoticeTypeEnum;
-use app\enum\sys\MessageTypeEnum;
+use app\dict\notice\NoticeTypeDict;
+use app\dict\sys\MessageTypeDict;
 use app\service\core\member\CoreMemberService;
 use app\service\core\notice\CoreNoticeLogService;
 use core\exception\NoticeException;
@@ -30,8 +30,8 @@ class Weapp
             }
             if(!empty($openid)) {
                 $weapp_template_id = $template['weapp_template_id'];
-                $weapp_json = $template['weapp'];
-                $weapp_content = $weapp_json['content'];
+                $weapp = $template['weapp'];
+                $weapp_content = $weapp['content'];
                 $weapp_data = [];
                 foreach($weapp_content as $k => $v){
                     $search_content = $v[1];
@@ -47,16 +47,16 @@ class Weapp
                 }
                 $log_data = array(
                     'key' => $key,
-                    'message_type' => NoticeTypeEnum::WEAPP,
+                    'message_type' => NoticeTypeDict::WEAPP,
                     'uid' => $data['uid'] ?? 0,
                     'member_id' => $member_id,
                     'nickname' => $nickname ?? '',
                     'receiver' => $openid,
                     'params' => $data,
-                    'content' => $weapp_json
+                    'content' => $weapp
                 );
                 try {
-                    (new TemplateLoader(NoticeTypeEnum::WEAPP, ['site_id' => $site_id]))->send(
+                    (new TemplateLoader(NoticeTypeDict::WEAPP, ['site_id' => $site_id]))->send(
                         [
                             'template_id' => $weapp_template_id,
                             'data' => $weapp_data,

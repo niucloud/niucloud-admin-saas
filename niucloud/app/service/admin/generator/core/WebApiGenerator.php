@@ -61,7 +61,7 @@ class WebApiGenerator extends BaseGenerator
      */
     public function getModuleOutDir()
     {
-        $dir = dirname(app()->getRootPath()) . '/admin-niushop/src/api/';
+        $dir = dirname(app()->getRootPath()) . '/admin/src/api/';
         $this->checkDir($dir);
         return $dir;
     }

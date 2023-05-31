@@ -11,7 +11,7 @@
 
 namespace app\service\admin\sys;
 
-use app\enum\sys\MenuTypeEnum;
+use app\dict\sys\MenuTypeDict;
 use app\model\sys\SysMenu;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
@@ -117,18 +117,34 @@ class MenuService extends BaseAdminService
     {
         sort($menu_keys);
         $cache_name = 'menu' . md5(implode("_", $menu_keys)) . $is_tree;
-        return Cache::tag(self::$cache_tag_name)->remember($cache_name, function () use ($menu_keys, $app_type, $is_tree) {
-            $where = [
-                ['menu_key', 'in', $menu_keys],
+        return cache_remember(
+            $cache_name,
+            function () use ($menu_keys, $app_type, $is_tree) {
+                $where = [
+                    ['menu_key', 'in', $menu_keys],
 //                ['menu_type', 'in', [0,1]]
-            ];
-            if(!empty($app_type)){
-                $where[] = ['app_type', '=', $app_type];
-            }
-            $menu_list = $this->model->where($where)->order('sort', 'desc')->select()->toArray();
-            return $is_tree ? $this->menuToTree($menu_list, 'menu_key', 'parent_key', 'children', 'auth', '', 1) : $menu_list;
+                ];
+                if(!empty($app_type)){
+                    $where[] = ['app_type', '=', $app_type];
+                }
+                $menu_list = $this->model->where($where)->order('sort', 'desc')->select()->toArray();
+                return $is_tree ? $this->menuToTree($menu_list, 'menu_key', 'parent_key', 'children', 'auth', '', 1) : $menu_list;
 
-        });
+            },
+            self::$cache_tag_name
+        );
+//        return Cache::tag(self::$cache_tag_name)->remember($cache_name, function () use ($menu_keys, $app_type, $is_tree) {
+//            $where = [
+//                ['menu_key', 'in', $menu_keys],
+////                ['menu_type', 'in', [0,1]]
+//            ];
+//            if(!empty($app_type)){
+//                $where[] = ['app_type', '=', $app_type];
+//            }
+//            $menu_list = $this->model->where($where)->order('sort', 'desc')->select()->toArray();
+//            return $is_tree ? $this->menuToTree($menu_list, 'menu_key', 'parent_key', 'children', 'auth', '', 1) : $menu_list;
+//
+//        });
     }
 
     /**
@@ -139,19 +155,36 @@ class MenuService extends BaseAdminService
     {
         sort($menu_keys);
         $cache_name = 'api' . md5(implode("_", $menu_keys));
-        return Cache::tag(self::$cache_tag_name)->remember($cache_name, function () use ($menu_keys, $app_type) {
-            $where = [
-                ['menu_key', 'in', $menu_keys]
-            ];
-            if(!empty($app_type)){
-                $where[] = ['app_type', '=', $app_type];
-            }
-            $menu_list = (new SysMenu())->where($where)->order('sort', 'desc')->column('api_url,methods');
-            foreach ($menu_list as $v) {
-                $auth_menu_list[$v['methods']][] = $v['api_url'];
-            }
-            return $auth_menu_list ?? [];
-        });
+        return cache_remember(
+            $cache_name,
+            function () use ($menu_keys, $app_type) {
+                $where = [
+                    ['menu_key', 'in', $menu_keys]
+                ];
+                if(!empty($app_type)){
+                    $where[] = ['app_type', '=', $app_type];
+                }
+                $menu_list = (new SysMenu())->where($where)->order('sort', 'desc')->column('api_url,methods');
+                foreach ($menu_list as $v) {
+                    $auth_menu_list[$v['methods']][] = $v['api_url'];
+                }
+                return $auth_menu_list ?? [];
+            },
+            self::$cache_tag_name
+        );
+//        return Cache::tag(self::$cache_tag_name)->remember($cache_name, function () use ($menu_keys, $app_type) {
+//            $where = [
+//                ['menu_key', 'in', $menu_keys]
+//            ];
+//            if(!empty($app_type)){
+//                $where[] = ['app_type', '=', $app_type];
+//            }
+//            $menu_list = (new SysMenu())->where($where)->order('sort', 'desc')->column('api_url,methods');
+//            foreach ($menu_list as $v) {
+//                $auth_menu_list[$v['methods']][] = $v['api_url'];
+//            }
+//            return $auth_menu_list ?? [];
+//        });
     }
 
 
@@ -165,18 +198,33 @@ class MenuService extends BaseAdminService
     {
         sort($menu_keys);
         $cache_name = 'button' . md5(implode("_", $menu_keys));
-        return Cache::tag(self::$cache_tag_name)->remember($cache_name, function () use ($menu_keys, $app_type) {
-            $where = [
-                ['menu_key', 'in', $menu_keys],
-                ['menu_type', '=', MenuTypeEnum::BUTTON]
-            ];
-            if(!empty($app_type)){
-                $where[] = ['app_type', '=', $app_type];
-            }
-            $menu_list = $this->model->where($where)->order('sort', 'desc')->column('menu_key');
-            return $menu_list;
-
-        });
+        return cache_remember(
+            $cache_name,
+            function () use ($menu_keys, $app_type) {
+                $where = [
+                    ['menu_key', 'in', $menu_keys],
+                    ['menu_type', '=', MenuTypeDict::BUTTON]
+                ];
+                if(!empty($app_type)){
+                    $where[] = ['app_type', '=', $app_type];
+                }
+                $menu_list = $this->model->where($where)->order('sort', 'desc')->column('menu_key');
+                return $menu_list;
+            },
+            self::$cache_tag_name
+        );
+//        return Cache::tag(self::$cache_tag_name)->remember($cache_name, function () use ($menu_keys, $app_type) {
+//            $where = [
+//                ['menu_key', 'in', $menu_keys],
+//                ['menu_type', '=', MenuTypeDict::BUTTON]
+//            ];
+//            if(!empty($app_type)){
+//                $where[] = ['app_type', '=', $app_type];
+//            }
+//            $menu_list = $this->model->where($where)->order('sort', 'desc')->column('menu_key');
+//            return $menu_list;
+//
+//        });
     }
 
     /**
@@ -188,40 +236,97 @@ class MenuService extends BaseAdminService
     public function getAllApiList($app_type = '', $status = 'all')
     {
         $cache_name = 'all_api'  .$app_type.'_'. $status;
-        return Cache::tag(self::$cache_tag_name)->remember($cache_name, function () use ($status, $app_type) {
-            $where = [
-                ['api_url', '<>', ''],
-                ['app_type', '=', $app_type],
-            ];
-            if ($status != 'all') {
-                $where[] = ['status', '=', $status];
-            }
-            $menu_list = $this->model->where($where)->order('sort', 'desc')->column('methods, api_url');
-            $auth_menu_list = [];
-            foreach ($menu_list as $v) {
-                $auth_menu_list[$v['methods']][] = $v['api_url'];
-            }
-            return $auth_menu_list;
-        });
+        return cache_remember(
+            $cache_name,
+            function () use ($status, $app_type) {
+                $where = [
+                    ['api_url', '<>', ''],
+                    ['app_type', '=', $app_type],
+                ];
+                if ($status != 'all') {
+                    $where[] = ['status', '=', $status];
+                }
+                $menu_list = $this->model->where($where)->order('sort', 'desc')->column('methods, api_url');
+                $auth_menu_list = [];
+                foreach ($menu_list as $v) {
+                    $auth_menu_list[$v['methods']][] = $v['api_url'];
+                }
+                return $auth_menu_list;
+            },
+            self::$cache_tag_name
+        );
+//        return Cache::tag(self::$cache_tag_name)->remember($cache_name, function () use ($status, $app_type) {
+//            $where = [
+//                ['api_url', '<>', ''],
+//                ['app_type', '=', $app_type],
+//            ];
+//            if ($status != 'all') {
+//                $where[] = ['status', '=', $status];
+//            }
+//            $menu_list = $this->model->where($where)->order('sort', 'desc')->column('methods, api_url');
+//            $auth_menu_list = [];
+//            foreach ($menu_list as $v) {
+//                $auth_menu_list[$v['methods']][] = $v['api_url'];
+//            }
+//            return $auth_menu_list;
+//        });
     }
 
+    /**
+     * 通过站点端口获取菜单id
+     * @param string $app_type
+     * @param $status
+     * @return mixed|string
+     */
+    public function getAllMenuIdsByAppType(string $app_type, $status = 'all'){
+        $cache_name = 'menu_id_by_app_type_' .$app_type;
+        return cache_remember(
+            $cache_name,
+            function () use ($app_type, $status) {
+                $where = [
+//
+                    ['app_type', '=', $app_type],
+                ];
+                if ($status != 'all') {
+                    $where[] = ['status', '=', $status];
+                }
+                return $this->model->where($where)->order('sort desc')->column('menu_key');
+            },
+            self::$cache_tag_name
+        );
+    }
     /**
      * 获取所有接口菜单
      */
     public function getAllMenuList($app_type = '', $status = 'all', $is_tree = 0, $is_button = 0)
     {
         $cache_name = 'menu_api_' .$app_type.'_'. $status . '_' . $is_tree . '_' . $is_button;
-        return Cache::tag(self::$cache_tag_name)->remember($cache_name, function () use ($status, $is_tree, $is_button, $app_type) {
-            $where = [
+        return cache_remember(
+            $cache_name,
+            function () use ($status, $is_tree, $is_button, $app_type) {
+                $where = [
 //                ['menu_type', 'in', [0,1]]
-                ['app_type', '=', $app_type],
-            ];
-            if ($status != 'all') {
-                $where[] = ['status', '=', $status];
-            }
-            $menu_list = $this->model->where($where)->order('sort desc')->select()->toArray();
-            return $is_tree ? $this->menuToTree($menu_list, 'menu_key', 'parent_key', 'children', 'auth', '', $is_button) : $menu_list;
-        });
+                    ['app_type', '=', $app_type],
+                ];
+                if ($status != 'all') {
+                    $where[] = ['status', '=', $status];
+                }
+                $menu_list = $this->model->where($where)->order('sort desc')->select()->toArray();
+                return $is_tree ? $this->menuToTree($menu_list, 'menu_key', 'parent_key', 'children', 'auth', '', $is_button) : $menu_list;
+            },
+            self::$cache_tag_name
+        );
+//        return Cache::tag(self::$cache_tag_name)->remember($cache_name, function () use ($status, $is_tree, $is_button, $app_type) {
+//            $where = [
+////                ['menu_type', 'in', [0,1]]
+//                ['app_type', '=', $app_type],
+//            ];
+//            if ($status != 'all') {
+//                $where[] = ['status', '=', $status];
+//            }
+//            $menu_list = $this->model->where($where)->order('sort desc')->select()->toArray();
+//            return $is_tree ? $this->menuToTree($menu_list, 'menu_key', 'parent_key', 'children', 'auth', '', $is_button) : $menu_list;
+//        });
 
     }
 
@@ -233,17 +338,32 @@ class MenuService extends BaseAdminService
     public function getAllButtonList($app_type = '', $status = 'all', $is_tree = 0)
     {
         $cache_name = 'menu_api_' .$app_type.'_' . $status . '_' . $is_tree;
-        return Cache::tag(self::$cache_tag_name)->remember($cache_name, function () use ($status, $is_tree, $app_type) {
-            $where = [
-                ['menu_type', '=', MenuTypeEnum::BUTTON],
-                ['app_type', '=', $app_type],
-            ];
-            if ($status != 'all') {
-                $where[] = ['status', '=', $status];
-            }
-            $menu_list = $this->model->where($where)->order('sort', 'desc')->column('menu_key');
-            return $menu_list;
-        });
+        return cache_remember(
+            $cache_name,
+            function () use ($status, $is_tree, $app_type) {
+                $where = [
+                    ['menu_type', '=', MenuTypeDict::BUTTON],
+                    ['app_type', '=', $app_type],
+                ];
+                if ($status != 'all') {
+                    $where[] = ['status', '=', $status];
+                }
+                $menu_list = $this->model->where($where)->order('sort', 'desc')->column('menu_key');
+                return $menu_list;
+            },
+            self::$cache_tag_name
+        );
+//        return Cache::tag(self::$cache_tag_name)->remember($cache_name, function () use ($status, $is_tree, $app_type) {
+//            $where = [
+//                ['menu_type', '=', MenuTypeDict::BUTTON],
+//                ['app_type', '=', $app_type],
+//            ];
+//            if ($status != 'all') {
+//                $where[] = ['status', '=', $status];
+//            }
+//            $menu_list = $this->model->where($where)->order('sort', 'desc')->column('menu_key');
+//            return $menu_list;
+//        });
     }
 
     /**

@@ -2,8 +2,7 @@
 
 namespace app\listener\notice;
 
-use app\enum\notice\NoticeTypeEnum;
-use app\enum\sys\MessageTypeEnum;
+use app\dict\notice\NoticeTypeDict;
 use app\service\core\member\CoreMemberService;
 use app\service\core\notice\CoreNoticeLogService;
 use app\service\core\notice\CoreSmsService;
@@ -14,7 +13,6 @@ class Sms
 
     public function handle(array $data)
     {
-        return true;
         $site_id = $data['site_id'];
         $template = $data['template'];//模板
         $vars = $data['vars'];//模板变量
@@ -23,7 +21,6 @@ class Sms
         $mobile = $to['mobile'] ?? '';
         //完全信任消息的设置, 不再依赖support_type
         if (!$template['is_sms']) {
-            try {
                 $sms_id = $template['sms_id'];//发送模板id
                 $content = $template['sms_content'];
                 $member_id = $to['member_id'] ?? 0;
@@ -36,12 +33,14 @@ class Sms
                         $nickname = $info['nickname'] ?? '';
                     }
                 }
+
+            try{
                 if (empty($mobile)) throw new NoticeException('NOTICE_SMS_EMPTY');//没有手机号不能发送短信
                 $core_sms_service = new CoreSmsService();
                 //消息日志
                 $log_data = array(
                     'key' => $key,
-                    'message_type' => NoticeTypeEnum::SMS,
+                    'message_type' => NoticeTypeDict::SMS,
                     'uid' => $uid ?? 0,
                     'member_id' => $member_id ?? 0,
                     'nickname' => $nickname ?? '',

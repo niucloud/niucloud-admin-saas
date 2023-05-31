@@ -11,7 +11,7 @@
 
 namespace app\service\api\member;
 
-use app\enum\member\MemberCashOutEnum;
+use app\dict\member\MemberCashOutDict;
 use app\model\member\MemberCashOut;
 use app\service\core\member\CoreMemberCashOutService;
 use app\service\core\member\CoreMemberConfigService;
@@ -84,12 +84,12 @@ class MemberCashOutService extends BaseApiService
         ])->findOrEmpty();
 
         if($cash_out->isEmpty()) throw new ApiException('RECHARGE_LOG_NOT_EXIST');
-        if($cash_out['status'] != MemberCashOutEnum::WAIT_AUDIT) throw new CommonException('CASHOUT_STATUS_NOT_IN_WAIT_AUDIT');
+        if($cash_out['status'] != MemberCashOutDict::WAIT_AUDIT) throw new CommonException('CASHOUT_STATUS_NOT_IN_WAIT_AUDIT');
         $cash_out->save(
 
             [
                 'cancel_time' => time(),
-                'status' => MemberCashOutEnum::CANCEL
+                'status' => MemberCashOutDict::CANCEL
             ]
         );
         (new CoreMemberConfigService())->returnMember($this->site_id, $cash_out);

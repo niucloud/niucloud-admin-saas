@@ -11,7 +11,7 @@
 
 namespace app\service\admin\wechat;
 
-use app\enum\notice\NoticeTypeEnum;
+use app\dict\notice\NoticeTypeDict;
 use app\service\admin\notice\NoticeService;
 use app\service\core\notice\CoreNoticeService;
 use app\service\core\wechat\CoreWechatTemplateService;
@@ -39,7 +39,6 @@ class WechatTemplateService extends BaseAdminService
         $core_notice_service = new CoreNoticeService();
         $list = $core_notice_service->getList($site_id, $keys);
         if(empty($list)) throw new NoticeException('NOTICE_TEMPLATE_NOT_EXIST');
-
         foreach($list as $v){
             $this->syncItem($v);
         }
@@ -54,9 +53,9 @@ class WechatTemplateService extends BaseAdminService
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function syncItem($item){
-        $key = $item['key'];
-        $wechat_json = $item['wechat_json'];
-        $temp_key = $wechat_json['temp_key'] ?? '';
+        $key = $item['key'] ?? '';
+        $wechat = $item['wechat'] ?? '';
+        $temp_key = $wechat['temp_key'] ?? '';
         if(empty($temp_key)) $error = 'WECHAT_TEMPLATE_NEED_NO';
         $wechat_template_id = $item['wechat_template_id'];
         //删除原来的消息模板
@@ -65,7 +64,7 @@ class WechatTemplateService extends BaseAdminService
         $template_loader->delete(['templateId' => $wechat_template_id]);
         //新的消息模板
 //        $res = (new CoreWechatTemplateService())->addTemplate($this->site_id, $temp_key);
-        $res = $template_loader->add(['shortId' => $temp_key]);
+        $res = $template_loader->addTemplate(['shortId' => $temp_key]);
         $notice_service = new NoticeService();
         if (isset($res[ 'errcode' ]) && $res[ 'errcode' ] == 0) {
             //修改
@@ -87,7 +86,7 @@ class WechatTemplateService extends BaseAdminService
         $list = $core_notice_service->getList($site_id);
         $template = [];
         foreach ($list as $k => $v){
-            if(in_array(NoticeTypeEnum::WECHAT, $v['support_type'])) $template[] = $v;
+            if(in_array(NoticeTypeDict::WECHAT, $v['support_type'])) $template[] = $v;
         }
         return $template;
     }

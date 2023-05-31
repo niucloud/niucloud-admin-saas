@@ -11,9 +11,9 @@
 
 namespace app\model\member;
 
-use app\enum\member\MemberAccountEnum;
-use app\enum\member\MemberCashOutEnum;
-use app\enum\pay\TransferEnum;
+use app\dict\member\MemberAccountTypeDict;
+use app\dict\member\MemberCashOutDict;
+use app\dict\pay\TransferDict;
 use app\model\pay\Transfer;
 use core\base\BaseModel;
 
@@ -34,6 +34,10 @@ class MemberCashOut extends BaseModel
      * @var string
      */
     protected $name = 'member_cash_out';
+    protected $type = [
+        'audit_time' =>  'timestamp',
+        'transfer_time' => 'timestamp',
+    ];
 
     /**
      * 会员信息
@@ -42,8 +46,17 @@ class MemberCashOut extends BaseModel
     public function memberInfo()
     {
         return $this->hasOne( Member::class, 'member_id', 'member_id')->joinType('left')
-            ->withField('member_id, username, mobile, nickname, headimg')
-            ->bind(['username', 'mobile', 'nickname', 'headimg']);
+            ->withField('member_id, member_no, username, mobile, nickname, headimg')
+            ->bind(['username', 'mobile', 'nickname', 'headimg', 'member_no']);
+    }
+
+    /**
+     * 会员信息关联列表查询
+     * @return \think\model\relation\HasOne
+     */
+    public function member()
+    {
+        return $this->hasOne( Member::class, 'member_id', 'member_id')->joinType('left');
     }
 
     /**
@@ -63,7 +76,7 @@ class MemberCashOut extends BaseModel
      * @return mixed|string
      */
     public function getAccountTypeNameAttr($value, $data){
-        return MemberAccountEnum::getType()[ $data[ 'account_type' ] ?? '' ] ?? '';
+        return MemberAccountTypeDict::getType()[ $data[ 'account_type' ] ?? '' ] ?? '';
     }
     /**
      * 提现状态名称
@@ -72,7 +85,7 @@ class MemberCashOut extends BaseModel
      * @return mixed|string
      */
     public function getStatusNameAttr($value, $data){
-        return MemberCashOutEnum::getStatus()[ $data[ 'status' ] ?? '' ] ?? '';
+        return MemberCashOutDict::getStatus()[ $data[ 'status' ] ?? '' ] ?? '';
     }
     /**
      * 转账方式名称
@@ -82,7 +95,7 @@ class MemberCashOut extends BaseModel
      */
     public function getTransferTypeNameAttr($value, $data)
     {
-        return TransferEnum::getTransferType()[ $data[ 'transfer_type' ] ?? '' ]['name'] ?? '';
+        return TransferDict::getTransferType()[ $data[ 'transfer_type' ] ?? '' ]['name'] ?? '';
     }
 
     /**
@@ -92,7 +105,7 @@ class MemberCashOut extends BaseModel
      * @return mixed|string
      */
     public function getTransferStatusNameAttr($value, $data){
-        return TransferEnum::getStatus()[ $data[ 'transfer_status' ] ?? '' ] ?? '';
+        return TransferDict::getStatus()[ $data[ 'transfer_status' ] ?? '' ] ?? '';
     }
     /**
      * 会员搜索
@@ -119,6 +132,30 @@ class MemberCashOut extends BaseModel
     }
 
     /**
+     *
+     * @param $value
+     * @param $data
+     */
+    public function searchCashOutNoAttr($query, $value, $data)
+    {
+        if ($value) {
+            $query->where('cash_out_no', $value);
+        }
+    }
+
+    /**
+     *
+     * @param $value
+     * @param $data
+     */
+    public function searchTransferTypeAttr($query, $value, $data)
+    {
+        if ($value) {
+            $query->where('transfer_type', $value);
+        }
+    }
+
+    /**
      * 创建时间搜索器
      * @param $value
      */
@@ -132,6 +169,40 @@ class MemberCashOut extends BaseModel
             $query->where([['create_time', '>=', $start_time]]);
         }else if($start_time == 0 && $end_time > 0){
             $query->where([['create_time', '<=', $end_time]]);
+        }
+    }
+
+    /**
+     * 审核时间搜索器
+     * @param $value
+     */
+    public function searchAuditTimeAttr($query, $value, $data)
+    {
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
+        if($start_time > 0 && $end_time > 0){
+            $query->whereBetweenTime('audit_time', $start_time, $end_time);
+        }else if($start_time > 0 && $end_time == 0){
+            $query->where([['audit_time', '>=', $start_time]]);
+        }else if($start_time == 0 && $end_time > 0){
+            $query->where([['audit_time', '<=', $end_time]]);
+        }
+    }
+
+    /**
+     * 审核时间搜索器
+     * @param $value
+     */
+    public function searchTransferTimeAttr($query, $value, $data)
+    {
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
+        if($start_time > 0 && $end_time > 0){
+            $query->whereBetweenTime('transfer_time', $start_time, $end_time);
+        }else if($start_time > 0 && $end_time == 0){
+            $query->where([['transfer_time', '>=', $start_time]]);
+        }else if($start_time == 0 && $end_time > 0){
+            $query->where([['transfer_time', '<=', $end_time]]);
         }
     }
 

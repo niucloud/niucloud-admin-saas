@@ -11,7 +11,7 @@
 
 namespace app\model\order;
 
-use app\enum\common\ChannelEnum;
+use app\dict\common\ChannelDict;
 use app\model\member\Member;
 use core\base\BaseModel;
 
@@ -51,10 +51,26 @@ class Order extends BaseModel
     {
         if(isset($data['order_type']) && isset($data['order_status']))
         {
-            $class = "app\\enum\\order\\". ucfirst($data['order_type']).'OrderEnum';
+            $class = "app\\dict\\order\\". ucfirst($data['order_type']).'OrderDict';
             return $class::getStatus($data['order_status']);
         }else
             return [];
+    }
+
+    /**
+     * 获取退款状态
+     * @param $value
+     * @param $data
+     * @return void
+     */
+    public function getRefundStatusNameAttr($value, $data) {
+        if(isset($data['order_type']) && isset($data['refund_status']))
+        {
+            $class = "app\\dict\\order\\". ucfirst($data['order_type']).'OrderDict';
+            return $class::getRefundStatus($data['refund_status'])['name'] ?? '';
+        } else {
+            return '';
+        }
     }
 
     /**
@@ -66,7 +82,7 @@ class Order extends BaseModel
     {
         if(isset($data['order_from']))
         {
-            return ChannelEnum::getType()[$data['order_from']] ?? '';
+            return ChannelDict::getType()[$data['order_from']] ?? '';
         }
 
     }
@@ -124,6 +140,39 @@ class Order extends BaseModel
     }
 
     /**
+     * 订单号
+     * @param $query
+     * @param $value
+     * @param $data
+     */
+    public function searchOrderNoAttr($query, $value, $data)
+    {
+        if ($value) {
+            $query->where('order_no', '=', $value);
+        }
+    }
+
+    /**
+     * 订单金额
+     * @param $query
+     * @param $value
+     * @param $data
+     * @return void
+     */
+    public function searchOrderMoneyAttr($query, $value, $data)
+    {
+        if (!empty($data['start_money']) && !empty($data['end_money'])) {
+            $money = [ $data['start_money'], $data['end_money'] ];
+            sort($money);
+            $query->where('order_money', 'between', $money);
+        } else if (!empty($data['start_money'])) {
+            $query->where('order_money', '>=', $data['start_money']);
+        } else if (!empty($data['end_money'])) {
+            $query->where('order_money', '<=', $data['end_money']);
+        }
+    }
+
+    /**
      * 订单状态
      * @param $query
      * @param $value
@@ -149,6 +198,26 @@ class Order extends BaseModel
             $query->where([['create_time', '>=', $start_time]]);
         }else if($start_time == 0 && $end_time > 0){
             $query->where([['create_time', '<=', $end_time]]);
+        }
+    }
+
+    /**
+     * 支付时间筛选
+     * @param $query
+     * @param $value
+     * @param $data
+     * @return void
+     */
+    public function searchPayTimeAttr($query, $value, $data)
+    {
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
+        if($start_time > 0 && $end_time > 0){
+            $query->whereBetweenTime('pay_time', $start_time, $end_time);
+        }else if($start_time > 0 && $end_time == 0){
+            $query->where([['pay_time', '>=', $start_time]]);
+        }else if($start_time == 0 && $end_time > 0){
+            $query->where([['pay_time', '<=', $end_time]]);
         }
     }
 

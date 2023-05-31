@@ -11,7 +11,7 @@
 
 namespace app\service\api\pay;
 
-use app\enum\common\ChannelEnum;
+use app\dict\common\ChannelDict;
 use app\service\core\member\CoreMemberService;
 use app\service\core\pay\CorePayService;
 use core\base\BaseApiService;
@@ -51,11 +51,11 @@ class PayService extends BaseApiService
 
         $member = (new CoreMemberService())->getInfoByMemberId($this->site_id, $this->member_id);
         switch ($this->channel) {
-            case ChannelEnum::WECHAT://公众号
+            case ChannelDict::WECHAT://公众号
                 $openid = $member['wx_openid'] ?? '';
 
                 break;
-            case ChannelEnum::WEAPP://微信小程序
+            case ChannelDict::WEAPP://微信小程序
                 $openid = $member['weapp_openid'] ?? '';
                 break;
         }

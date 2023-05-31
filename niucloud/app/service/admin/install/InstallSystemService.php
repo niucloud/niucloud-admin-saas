@@ -11,7 +11,7 @@
 
 namespace app\service\admin\install;
 
-use app\enum\sys\AppTypeEnum;
+use app\dict\sys\AppTypeDict;
 use app\model\sys\SysMenu;
 use app\service\admin\sys\MenuService;
 use app\service\core\menu\CoreMenuService;
@@ -45,8 +45,8 @@ class InstallSystemService extends BaseAdminService
         $sys_menu = new SysMenu();
 
         //系统菜单
-        $admin_menus = $this->loadMenu(AppTypeEnum::ADMIN);
-        $site_menus = $this->loadMenu(AppTypeEnum::SITE);
+        $admin_menus = $this->loadMenu(AppTypeDict::ADMIN);
+        $site_menus = $this->loadMenu(AppTypeDict::SITE);
         $menus = array_merge($admin_menus, $site_menus);
         $sys_menu->where([ [ 'id', '>', 0 ] ])->delete();
         $sys_menu->replace()->insertAll($menus);
@@ -64,7 +64,7 @@ class InstallSystemService extends BaseAdminService
     public function loadMenu($app_type)
     {
         //加载系统
-        $system_tree = include root_path() . str_replace('/', DIRECTORY_SEPARATOR, "app/enum/menu/" . $app_type . ".php");
+        $system_tree = include root_path() . str_replace('/', DIRECTORY_SEPARATOR, "app/dict/menu/" . $app_type . ".php");
         $this->menuTreeToList($system_tree, '', $app_type);
         $menu_list = $this->menu_list;
         $this->menu_list = [];
@@ -77,7 +77,7 @@ class InstallSystemService extends BaseAdminService
      * @param string $parent_key
      * @param string $app_type
      */
-    private function menuTreeToList(array $tree, string $parent_key = '', string $app_type = AppTypeEnum::ADMIN)
+    private function menuTreeToList(array $tree, string $parent_key = '', string $app_type = AppTypeDict::ADMIN)
     {
         if (is_array($tree)) {
             foreach ($tree as $key => $value) {
@@ -94,8 +94,7 @@ class InstallSystemService extends BaseAdminService
                     'methods' => $value[ 'methods' ] ?? '',
                     'sort' => $value[ 'sort' ] ?? '',
                     'status' => 1,
-                    'is_show' => $value[ 'is_show' ] ?? 1,
-                    'en_menu_name' => $value[ 'en_menu_name' ] ?? '',
+                    'is_show' => $value[ 'is_show' ] ?? 1
                 ];
                 $refer = $value;
                 if (isset($refer[ 'children' ])) {

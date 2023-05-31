@@ -12,7 +12,7 @@
 namespace app\service\admin\user;
 
 
-use app\enum\sys\UserEnum;
+use app\dict\sys\UserDict;
 use app\model\sys\SysUser;
 use app\service\admin\auth\LoginService;
 use core\base\BaseAdminService;
@@ -201,7 +201,7 @@ class UserService extends BaseAdminService
         $is_off_status = false;
         if(isset($data['status'])){
             $user_data['status'] = $data['status'];
-            if($data['status'] == UserEnum::OFF)
+            if($data['status'] == UserDict::OFF)
                 $is_off_status = true;
         }
         if(isset($data['head_img'])){
