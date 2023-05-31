@@ -144,7 +144,7 @@ input,button,select{
 
 .pr-agreement{
 	overflow-y:scroll;
-	max-height :500px;
+	max-height :520px;
 	padding: 10px 30px;
 	line-height:21px;
 	color:#666;
@@ -574,4 +574,9 @@ button:hover{
 	margin-top: 10px;
 	display: flex;
 	justify-content: space-between;
+}
+.td-aux{
+	height: 20px!important;
+	color: #999;
+	font-size: smaller;
 }
