@@ -24,6 +24,14 @@ Route::rule('/', function () {
 Route::rule('admin/:any', function () {
     return view(app()->getRootPath() . 'public/admin/index.html');
 })->pattern(['any' => '\w+']);
+// 站点端
+Route::rule('site/:any', function () {
+    return view(app()->getRootPath() . 'public/admin/index.html');
+})->pattern(['any' => '\w+']);
+// 装修端
+Route::rule('decorate/:any', function () {
+    return view(app()->getRootPath() . 'public/admin/index.html');
+})->pattern(['any' => '\w+']);
 // 手机端
 Route::rule('wap/:any', function () {
     return view(app()->getRootPath() . 'public/wap/index.html');
