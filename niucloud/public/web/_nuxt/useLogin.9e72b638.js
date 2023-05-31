@@ -1,1 +1,0 @@
-import{a$ as t,c8 as e}from"./entry.86379606.js";function c(){return{setLoginBack:a=>{t.set({key:"loginBack",data:{path:a.path,query:a.query}})},handleLoginBack:()=>{const a=t.get("loginBack");a?e().push({path:a.path,query:a.query}):e().push({path:"/"})}}}export{c as u};
