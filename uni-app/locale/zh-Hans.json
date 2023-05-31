@@ -14,5 +14,7 @@
 	"pages.member.detailed_account": "流水明细",
 	"pages.member.apply_cash_out": "申请提现",
 	"pages.member.cash_out": "提现记录",
-	"pages.member.cash_out_detail": "提现详情"
+	"pages.member.cash_out_detail": "提现详情",
+    "pages.index.close": "站点已关闭",
+    "pages.index.nonexistence": "站点不存在"
 }

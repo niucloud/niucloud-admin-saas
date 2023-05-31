@@ -1,4 +1,6 @@
 {
+    "requestFail": "请求失败",
+    "notInDomainList": "不在request 合法域名列表中",
     "currency": "￥",
     "getSmsCode": "获取验证码",
     "smsCodeChangeText": "秒后重新获取",
@@ -39,8 +41,9 @@
         "incompletePay": "未完成支付",
         "getting": "获取支付结果中"
     },
-	"memberLanguage": "与你分享我的观点，共享真实世界",
 	"myBalance": "我的余额",
 	"myPoint": "我的积分",
-	"customerService": "联系客服"
+	"customerService": "联系客服",
+    "siteClose": "站点已关闭",
+    "siteNonexistence": "站点不存在"
 }

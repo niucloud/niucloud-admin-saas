@@ -2,59 +2,40 @@
 	<view class="diy-group" id="componentList">
 		<view v-for="(component, index) in data.value" :key="component.id"
 			@click="diyStore.changeCurrentIndex(index, component)" class="draggable-element relative cursor-move"
-			:class="{ selected: diyStore.currentIndex == index,decorate : diyStore.mode == 'decorate' }">
+			:class="{ selected: diyStore.currentIndex == index,decorate : diyStore.mode == 'decorate' }"
+			:style="component.pageStyle">
 
-			<!-- 标题 -->
-			<template v-if="component.componentName == 'Text'">
-				<diy-system-text :component="component" :index="index"></diy-system-text>
-			</template>
-
-			<!-- 图片广告 -->
-			<template v-if="component.componentName == 'ImageAds'">
-				<diy-system-image-ads :component="component" :index="index"></diy-system-image-ads>
-			</template>
-
-			<!-- 图文导航 -->
-			<template v-if="component.componentName == 'GraphicNav'">
-				<diy-system-graphic-nav :component="component" :index="index"></diy-system-graphic-nav>
-			</template>
-
-			<!-- 文章 -->
 			<template v-if="component.componentName == 'Article'">
-				<diy-system-article :component="component" :index="index"></diy-system-article>
+				<diy-article :component="component" :index="index"></diy-article>
 			</template>
-
-			<!-- 辅助空白 -->
+			<template v-if="component.componentName == 'GraphicNav'">
+				<diy-graphic-nav :component="component" :index="index"></diy-graphic-nav>
+			</template>
 			<template v-if="component.componentName == 'HorzBlank'">
-				<diy-system-horz-blank :component="component" :index="index"></diy-system-horz-blank>
+				<diy-horz-blank :component="component" :index="index"></diy-horz-blank>
 			</template>
-
-			<!-- 会员信息 -->
+			<template v-if="component.componentName == 'ImageAds'">
+				<diy-image-ads :component="component" :index="index"></diy-image-ads>
+			</template>
 			<template v-if="component.componentName == 'MemberInfo'">
-				<diy-system-member-info :component="component" :index="index"></diy-system-member-info>
+				<diy-member-info :component="component" :index="index"></diy-member-info>
 			</template>
-
-			<!-- 自定义扩展组件 -->
-			<template v-if="systemComponent.indexOf(component.componentName) == -1">
-				<diy-comp-extend :component="component" :index="index"></diy-comp-extend>
+			<template v-if="component.componentName == 'Text'">
+				<diy-text :component="component" :index="index"></diy-text>
 			</template>
 		</view>
-		<template v-if="diyStore.mode == ''">
+		<template v-if="diyStore.mode == '' && data.global.bottomTabBarSwitch">
 			<view class="pt-[20rpx]"></view>
 			<tabbar />
 		</template>
 	</view>
-
 </template>
-
 <script lang="ts" setup>
 	import useDiyStore from '@/stores/diy';
 	import { onMounted, nextTick, computed, ref } from 'vue';
 	import Sortable from 'sortablejs';
 	import { range } from 'lodash-es';
-
 	const props = defineProps(['data']);
-
 	const diyStore = useDiyStore();
 
 	const data = computed(() => {
@@ -64,9 +45,6 @@
 			return props.data;
 		}
 	})
-
-	// 系统组件
-	const systemComponent = ref(['Text', 'ImageAds', 'GraphicNav', 'Article', 'HorzBlank', 'MemberInfo'])
 
 	onMounted(() => {
 		// #ifdef H5
@@ -96,36 +74,6 @@
 		// #endif
 	});
 </script>
-
 <style lang="scss" scoped>
-	.draggable-element {
-		&.decorate {
-			&:hover:before {
-				content: '';
-				position: absolute;
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				border: 4rpx solid $u-primary;
-				z-index: 10;
-				pointer-events: none;
-				cursor: move;
-				border-style: dotted;
-			}
-
-			&.selected:before {
-				content: '';
-				position: absolute;
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				border: 4rpx solid $u-primary;
-				z-index: 10;
-				pointer-events: none;
-				cursor: move;
-			}
-		}
-	}
+	@import './index.scss';
 </style>

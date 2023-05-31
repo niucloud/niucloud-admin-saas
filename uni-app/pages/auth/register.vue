@@ -78,7 +78,7 @@
                 </u-form>
             </view>
         </view>
-        <view class="text-xs py-[50rpx] flex justify-center w-full">
+        <view class="text-xs py-[50rpx] flex justify-center w-full" v-if="configStore.login.agreement_show">
             {{ t('registerAgreeTips') }} 
             <app-link url="/pages/auth/agreement?key=service">
                 <text class="text-primary">{{ t('userAgreement') }}</text>

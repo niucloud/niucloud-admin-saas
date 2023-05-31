@@ -7,7 +7,7 @@ interface Diy {
 	global : {
 		title : string,
 		pageBgColor : string, // 页面背景颜色
-		tabbarSwitch : boolean, // 底部导航开关
+		bottomTabBarSwitch : boolean, // 底部导航开关
 	},
 	// 组件集合
 	value : any[]
@@ -21,7 +21,8 @@ const useDiyStore = defineStore('diy', {
 			global: {
 				title: "",
 				pageBgColor: "", // 页面背景颜色
-				tabbarSwitch: true
+				bottomTabBarSwitch: true,
+				bgUrl: ''
 			},
 			// 组件集合
 			value: []
@@ -45,13 +46,26 @@ const useDiyStore = defineStore('diy', {
 				try {
 					let data = JSON.parse(event.data);
 					this.currentIndex = data.currentIndex;
-					this.global = data.global;
-					this.value = data.value;
+					if(data.global) this.global = data.global;
+					if(data.value) this.value = data.value;
+
+					if (this.value) {
+						this.value.forEach((item, index) => {
+							item.pageStyle = '';
+							if (item.pageBgColor) item.pageStyle += 'background-color:' + item.pageBgColor + ';';
+							if (item.margin) {
+								item.pageStyle += 'padding-top:' + item.margin.top * 2 + 'rpx' + ';';
+								item.pageStyle += 'padding-bottom:' + item.margin.bottom * 2 + 'rpx' + ';';
+								item.pageStyle += 'padding-right:' + item.margin.both * 2 + 'rpx' + ';';
+								item.pageStyle += 'padding-left:' + item.margin.both * 2 + 'rpx' + ';';
+							}
+						});
+					}
 					// console.log('uniapp 接受后台装修返回的组件数据', data);
 				} catch (e) {
 					console.log('uniapp接受数据错误', e)
 				}
-			});
+			}, false);
 			// #endif
 		},
 		// 将数据传输给后台
@@ -73,10 +87,10 @@ const useDiyStore = defineStore('diy', {
 		// 选中正在编辑的组件
 		changeCurrentIndex(index : number, component : any = null) {
 			// #ifdef H5
-			
+
 			// 实际展示禁止编辑
 			if (this.mode == '') return;
-			
+
 			// 减少重复请求
 			if (this.currentIndex == index) return;
 			this.currentIndex = index;

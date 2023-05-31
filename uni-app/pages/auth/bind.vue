@@ -24,7 +24,7 @@
                             </u-input>
                         </u-form-item>
                     </view>
-                    <view class="flex items-start mt-[30rpx]" v-if="!info">
+                    <view class="flex items-start mt-[30rpx]" v-if="!info && config.agreement_show">
                         <u-checkbox-group>
                             <u-checkbox :checked="isAgree" shape="shape" size="14" @change="agreeChange"
                                 :customStyle="{'marginTop': '4rpx'}" />
@@ -47,7 +47,8 @@
                     <!-- #ifdef MP-WEIXIN -->
                     <view class="mt-[30rpx]">
                         <u-button type="primary" :plain="true" :text="t('weixinUserAuth')" open-type="getPhoneNumber"
-                            @getphonenumber="mobileAuth"></u-button>
+                            @getphonenumber="mobileAuth" v-if="!info.value || !config.agreement_show || isAgree"></u-button>
+                        <u-button type="primary" :plain="true" :text="t('weixinUserAuth')" v-else @click="agreeTips"></u-button>
                     </view>
                     <!-- #endif -->
                 </u-form>
@@ -62,11 +63,16 @@
     import { bind } from '@/api/auth'
     import { bindMobile } from '@/api/member'
     import useMemberStore from '@/stores/member'
+    import useConfigStore from '@/stores/config'
     import { useLogin } from '@/hooks/useLogin'
     import { redirect } from '@/utils/common'
 
     const memberStore = useMemberStore()
     const info = computed(() => memberStore.info)
+    
+    const config = computed(() => {
+        return useConfigStore().login
+    })
 
     const loading = ref(false)
     const isAgree = ref(false)
@@ -106,16 +112,15 @@
     const agreeChange = () => {
         isAgree.value = !isAgree.value
     }
+    
+    const agreeTips = () => {
+        uni.showToast({ title: `${t('pleaceAgree')}《${t('userAgreement')}》《${t('privacyAgreement')}》`, icon: 'none' })
+    }
 
     const formRef = ref(null)
 
     const handleBind = () => {
         formRef.value.validate().then(() => {
-            if (!isAgree.value && !info.value) {
-                uni.showToast({ title: `${t('pleaceAgree')}《${t('userAgreement')}》《${t('privacyAgreement')}》`, icon: 'none' })
-                return
-            }
-
             if (loading.value) return
             loading.value = true
 
@@ -135,8 +140,9 @@
         })
     }
 
+
     const mobileAuth = (e) => {
-        if (!isAgree.value && !info.value) {
+        if (!isAgree.value && !info.value && config.value.agreement_show) {
             uni.showToast({ title: `${t('pleaceAgree')}《${t('userAgreement')}》《${t('privacyAgreement')}》`, icon: 'none' })
             return
         }

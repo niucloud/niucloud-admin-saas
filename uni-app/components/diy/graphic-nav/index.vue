@@ -1,12 +1,11 @@
 <template>
-	<view class="bg-[#F5F6F8]">
-		<view v-if="diyComponent.layout == 'vertical'" class="graphic-nav px-[32rpx] bg-white rounded-[20rpx] box-border relative m-[30rpx]">
-			<!-- <div v-if="diyComponent.navTitle"
-				class="py-2 border-solid border-b border-t-0 border-l-0 border-r-0 border-gray-200">
-				{{diyComponent.navTitle}}
-			</div> -->
-			<view
-				class="graphic-nav-item flex items-center justify-between py-2 border-gray-200"
+	<view :style="warpCss">
+		<div v-if="diyComponent.navTitle" class="py-[30rpx] px-[32rpx] text-[30rpx]"
+			:style="{fontWeight: diyComponent.font.weight,color:diyComponent.font.color}">
+			{{diyComponent.navTitle}}
+		</div>
+		<view v-if="diyComponent.layout == 'vertical'" class="graphic-nav">
+			<view class="graphic-nav-item flex items-center justify-between py-[30rpx] px-[32rpx]"
 				v-for=" (item, index) in diyComponent.list" :key="item.id"
 				:class="[index == 0 ? 'border-t-0':'border-t']" @click="redirectTo(item.link)">
 
@@ -27,7 +26,8 @@
 					:style="{ fontSize: diyComponent.font.size * 2 + 'rpx', fontWeight: diyComponent.font.weight, color: diyComponent.font.color }">
 					{{ item.title }}
 				</text>
-				<u-icon name="arrow-right"></u-icon>
+				<u-icon name="arrow-right" color="#CACACA"></u-icon>
+
 			</view>
 
 		</view>
@@ -132,6 +132,16 @@
 		} else {
 			return props.component;
 		}
+	})
+
+	const warpCss = computed(() => {
+		var style = '';
+		if (diyComponent.value.componentBgColor) style += 'background-color:' + diyComponent.value.componentBgColor + ';';
+		if (diyComponent.value.topRounded) style += 'border-top-left-radius:' + diyComponent.value.topRounded * 2 + 'rpx;';
+		if (diyComponent.value.topRounded) style += 'border-top-right-radius:' + diyComponent.value.topRounded * 2 + 'rpx;';
+		if (diyComponent.value.bottomRounded) style += 'border-bottom-left-radius:' + diyComponent.value.bottomRounded * 2 + 'rpx;';
+		if (diyComponent.value.bottomRounded) style += 'border-bottom-right-radius:' + diyComponent.value.bottomRounded * 2 + 'rpx;';
+		return style;
 	})
 
 	const swiperIndex = ref(0);

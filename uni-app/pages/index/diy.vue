@@ -1,7 +1,9 @@
 <template>
 	<view>
 		<u-loading-page :loading="loading" loadingText=""></u-loading-page>
-		<view v-show="!loading" :style="{ backgroundColor: data.global.pageBgColor }">
+		<view v-show="!loading"
+			:style="{ backgroundColor: data.global.pageBgColor,minHeight: 'calc(100vh - 50px)',backgroundImage : data.global.bgUrl ? 'url(' +  img(data.global.bgUrl) + ')' : '' }"
+			class="bg-index">
 			<diy-group :data="data"></diy-group>
 		</view>
 	</view>
@@ -13,6 +15,7 @@
 	import { getDiyInfo } from '@/api/diy';
 	import useDiyStore from '@/stores/diy';
 	import { useShare } from '@/hooks/useShare'
+	import { img } from '@/utils/common';
 
 	const { setShare, onShareAppMessage, onShareTimeline } = useShare()
 	onShareAppMessage()
@@ -58,22 +61,39 @@
 				id: id.value,
 				name: name.value
 			}).then((res : any) => {
-                if (res.data.value) {
-                    let sources = JSON.parse(res.data.value);
-                    diyData.global = sources.global;
-                    diyData.value = sources.value;
-                    uni.setNavigationBarTitle({
-                        title: diyData.global.title
-                    })
-                }
+				if (res.data.value) {
+					let sources = JSON.parse(res.data.value);
+					diyData.global = sources.global;
+					diyData.value = sources.value;
+					diyData.value.forEach((item, index) => {
+						item.pageStyle = '';
+						if (item.pageBgColor) item.pageStyle += 'background-color:' + item.pageBgColor + ';';
+						if (item.margin) {
+							item.pageStyle += 'padding-top:' + item.margin.top * 2 + 'rpx' + ';';
+							item.pageStyle += 'padding-bottom:' + item.margin.bottom * 2 + 'rpx' + ';';
+							item.pageStyle += 'padding-right:' + item.margin.both * 2 + 'rpx' + ';';
+							item.pageStyle += 'padding-left:' + item.margin.both * 2 + 'rpx' + ';';
+						}
+					});
+					uni.setNavigationBarTitle({
+						title: diyData.global.title
+					})
+				}
 
-                let share = res.data.share ? JSON.parse(res.data.share) : null;
-                setShare(share);
+				let share = res.data.share ? JSON.parse(res.data.share) : null;
+				setShare(share);
 
-                loading.value = false;
+				loading.value = false;
 			});
 		}
 	});
 </script>
 <style lang="scss" scoped>
+	.bg-index {
+		width: 100%;
+		height: 100%;
+		box-sizing: border-box;
+		background-size: 100% !important;
+		background-repeat: no-repeat !important;
+	}
 </style>

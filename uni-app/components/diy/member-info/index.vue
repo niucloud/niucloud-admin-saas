@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view :style="warpCss">
 		<!-- #ifdef MP-WEIXIN -->
 		<u-navbar :placeholder="true" bgColor="var(--primary-color)" titleStyle="color: #fff">
 			<template #left>
@@ -8,86 +8,56 @@
 		<!-- #endif -->
 		<view class="pt-[34rpx] member-info">
 			<view v-if="info" class="flex ml-[32rpx] mr-[52rpx]  items-center relative">
-				<!-- clickAvatar 唤起获取微信 -->
-				<u-avatar :src="img(info.headimg)" size="60" leftIcon="none" @click="clickAvatar"></u-avatar>
+				<!-- 唤起获取微信 -->
+				<u-avatar :src="img(info.headimg)" size="55" leftIcon="none" @click="clickAvatar"></u-avatar>
 				<view class="ml-[22rpx]">
-					<view class="text-[#222222] truncate w-[430rpx] font-bold text-lg">{{ info.nickname }}</view>
-					<view class="text-[#696B70] text-[24rpx] mt-[10rpx]">{{ t('memberLanguage') }}</view>
+					<view class="text-[#222222] truncate w-[430rpx] font-bold text-lg"
+						:style="{ color : diyComponent.textColor }">{{ info.nickname }}</view>
+					<view class="text-[#696B70] text-[24rpx] mt-[10rpx]" :style="{ color : diyComponent.textColor }">
+						UID：{{ info.member_no }}</view>
 				</view>
 				<view class="set-icon flex items-center absolute right-0 top-2">
 					<app-link url="/pages/setting/index">
-						<text class="iconfont iconshezhi text-[#000] text-[1.6rem] ml-[10rpx]"></text>
+						<text class="iconfont iconshezhi text-[1.6rem] ml-[10rpx]"
+							:style="{ color : diyComponent.textColor }"></text>
 					</app-link>
 				</view>
 			</view>
 			<view v-else class="flex ml-[32rpx] mr-[52rpx]  items-center relative" @click="toLogin">
-				<u-avatar src="" size="60"></u-avatar>
+				<u-avatar src="" size="55"></u-avatar>
 				<view class="ml-[22rpx]">
-					<view class="text-[#222222] font-bold text-lg">{{ t('login') }}/{{ t('register') }}</view>
-					<view class="text-[#696B70] text-[24rpx] mt-[10rpx]">{{ t('memberLanguage') }}</view>
+					<view class="text-[#222222] font-bold text-lg" :style="{ color : diyComponent.textColor }">
+						{{ t('login') }}/{{ t('register') }}</view>
 				</view>
 				<view class="set-icon flex items-center absolute right-0 top-2">
 					<app-link url="/pages/setting/index">
-						<text class="iconfont iconshezhi text-[#000] text-[1.6rem] ml-[10rpx]"></text>
+						<text class="iconfont iconshezhi text-[1.6rem] ml-[10rpx]"
+							:style="{ color : diyComponent.textColor }"></text>
 					</app-link>
 				</view>
 			</view>
 
-			<view class="flex m-[30rpx] mb-0 py-[30rpx] ">
+			<view class="flex m-[30rpx] mb-0 py-[30rpx] items-center">
 				<view class="flex-1 text-center">
 					<view class="font-bold">
-						<app-link :url="(info ? '/pages/member/point' : '')">{{ parseInt(info?.point) || 0 }}</app-link>
+						<app-link :url="(info ? '/pages/member/balance' : '')" :style="{ color : diyComponent.textColor }">{{ money }}</app-link>
 					</view>
 					<view class="text-sm mt-[10rpx]">
-						<app-link :url="(info ? '/pages/member/point' : '')">{{ t('point') }}</app-link>
+						<app-link :url="(info ? '/pages/member/balance' : '')" :style="{ color : diyComponent.textColor }">{{ t('balance') }}</app-link>
 					</view>
 				</view>
+				<view class="border-solid border-white border-l border-b-0 border-t-0 border-r-0 h-[60rpx]"></view>
 				<view class="flex-1 text-center">
 					<view class="font-bold">
-						<app-link :url="(info ? '/pages/member/balance' : '')">{{ money }}</app-link>
+						<app-link :url="(info ? '/pages/member/point' : '')" :style="{ color : diyComponent.textColor }">{{ parseInt(info?.point) || 0 }}</app-link>
 					</view>
 					<view class="text-sm mt-[10rpx]">
-						<app-link :url="(info ? '/pages/member/balance' : '')">{{ t('balance') }}</app-link>
+						<app-link :url="(info ? '/pages/member/point' : '')" :style="{ color : diyComponent.textColor }">{{ t('point') }}</app-link>
 					</view>
 				</view>
 			</view>
 		</view>
-		<view class="m-[32rpx] flex justify-between p-[32rpx] bg-white rounded-[20rpx]">
-			<app-link url="/pages/member/personal">
-				<view>
-					<view class="w-[60rpx] h-[60rpx] mx-auto">
-						<image class="w-[60rpx]" :src="img('static/resource/images/diy/m_info.jpg')" mode="widthFix" />
-					</view>
-					<view class="text-[24rpx] text-[#333] mt-[18rpx] text-center">{{ t('memberCenter') }}</view>
-				</view>
-			</app-link>
-			<app-link url="/pages/member/balance">
-				<view>
-					<view class="w-[60rpx] h-[60rpx] mx-auto">
-						<image class="w-[60rpx]" :src="img('static/resource/images/diy/m_balance.jpg')"
-							mode="widthFix" />
-					</view>
-					<view class="text-[24rpx] text-[#333] mt-[18rpx] text-center">{{ t('myBalance') }}</view>
-				</view>
-			</app-link>
-			<app-link url="/pages/member/point">
-				<view>
-					<view class="w-[60rpx] h-[60rpx] mx-auto">
-						<image class="w-[60rpx]" :src="img('static/resource/images/diy/m_point.jpg')" mode="widthFix" />
-					</view>
-					<view class="text-[24rpx] text-[#333] mt-[18rpx] text-center">{{ t('myPoint') }}</view>
-				</view>
-			</app-link>
-			<app-link>
-				<view @click="servicePopup = true">
-					<view class="w-[60rpx] h-[60rpx] mx-auto">
-						<image class="w-[60rpx]" :src="img('static/resource/images/diy/m_service.jpg')"
-							mode="widthFix" />
-					</view>
-					<view class="text-[24rpx] text-[#333] mt-[18rpx] text-center">{{ t('customerService') }}</view>
-				</view>
-			</app-link>
-		</view>
+
 		<!-- #ifdef MP-WEIXIN -->
 		<information-filling ref="infoFill"></information-filling>
 		<!-- #endif -->
@@ -115,6 +85,21 @@
 		}
 	})
 
+	const warpCss = computed(() => {
+		var style = '';
+		if(diyComponent.value.componentBgColor) style += 'background-color:' + diyComponent.value.componentBgColor + ';';
+		if (diyComponent.value.bgUrl) {
+			style += 'background-image:url(' + img(diyComponent.value.bgUrl) + ');';
+			style += 'background-size: 100%;';
+			style += 'background-repeat: no-repeat;';
+		}
+		if (diyComponent.value.topRounded) style += 'border-top-left-radius:' + diyComponent.value.topRounded * 2 + 'rpx;';
+		if (diyComponent.value.topRounded) style += 'border-top-right-radius:' + diyComponent.value.topRounded * 2 + 'rpx;';
+		if (diyComponent.value.bottomRounded) style += 'border-bottom-left-radius:' + diyComponent.value.bottomRounded * 2 + 'rpx;';
+		if (diyComponent.value.bottomRounded) style += 'border-bottom-right-radius:' + diyComponent.value.bottomRounded * 2 + 'rpx;';
+		return style;
+	})
+
 	const memberStore = useMemberStore()
 
 	const { query } = urlDeconstruction(location.href)
@@ -131,7 +116,9 @@
 				headimg: '',
 				nickname: '昵称',
 				balance: 0,
-				point: 0
+				point: 0,
+				money: 0,
+				member_no:'NIU0000021'
 			}
 		} else {
 			return memberStore.info;
@@ -169,6 +156,6 @@
 
 <style lang="scss" scoped>
 	.member-info {
-		background-image: linear-gradient(#E3F0FF, #F5F6F8)
+		// background-image: linear-gradient(#E3F0FF, #F5F6F8)
 	}
 </style>

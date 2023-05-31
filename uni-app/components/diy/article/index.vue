@@ -1,8 +1,8 @@
 <template>
-	<view>
+	<view :style="warpCss">
 		<view v-for="(item,index) in articleList" :key="item.id"
-			:class="['bg-white flex align-center p-[20rpx]',{'border-solid border-t-0 border-l-0 border-r-0 border-b border-gray-200': articleList.length-1 !== index}] "
-			@click="toLink(item.id)">
+			:class="['item flex align-center p-[20rpx]',{'border-solid border-t-0 border-l-0 border-r-0 border-b border-gray-200 mb-[20rpx]': articleList.length-1 !== index}] "
+			@click="toLink(item.id)" :style="itemCss">
 			<u--image width="260rpx" height="200rpx" :src="img(item.image)" v-if="item.image" model="aspectFill">
 				<template #error>
 					<u-icon name="photo" color="#999" size="50"></u-icon>
@@ -10,9 +10,9 @@
 			</u--image>
 			<view class="flex-1 flex flex-col justify-between ml-[20rpx]">
 				<view class="text-[32rpx] leading-[1.3] multi-hidden mt-[4rpx]">{{item.title}}</view>
-				<view class="text-[28rx] using-hidden mb-[auto] mt-[20rpx] text-gray-500">{{item.summary}}</view>
-				<view class="text-[24rpx] text-gray-400 flex justify-between mb-[10rpx]">
-					<text class="">{{item.create_time}}</text>
+				<view class="text-[28rpx] using-hidden mb-[auto] mt-[20rpx] text-gray-500">{{item.summary}}</view>
+				<view class="text-[24rpx] text-gray-400 flex justify-between mt-[10rpx]">
+					<text>{{item.create_time}}</text>
 				</view>
 			</view>
 		</view>
@@ -36,6 +36,26 @@
 		} else {
 			return props.component;
 		}
+	})
+
+	const warpCss = computed(() => {
+		var style = '';
+		if (diyComponent.value.componentBgColor) style += 'background-color:' + diyComponent.value.componentBgColor + ';';
+		if (diyComponent.value.topRounded) style += 'border-top-left-radius:' + diyComponent.value.topRounded * 2 + 'rpx;';
+		if (diyComponent.value.topRounded) style += 'border-top-right-radius:' + diyComponent.value.topRounded * 2 + 'rpx;';
+		if (diyComponent.value.bottomRounded) style += 'border-bottom-left-radius:' + diyComponent.value.bottomRounded * 2 + 'rpx;';
+		if (diyComponent.value.bottomRounded) style += 'border-bottom-right-radius:' + diyComponent.value.bottomRounded * 2 + 'rpx;';
+		return style;
+	})
+
+	const itemCss = computed(() => {
+		var style = '';
+		if (diyComponent.value.elementBgColor) style += 'background-color:' + diyComponent.value.elementBgColor + ';';
+		if (diyComponent.value.topElementRounded) style += 'border-top-left-radius:' + diyComponent.value.topElementRounded * 2 + 'rpx;';
+		if (diyComponent.value.topElementRounded) style += 'border-top-right-radius:' + diyComponent.value.topElementRounded * 2 + 'rpx;';
+		if (diyComponent.value.bottomElementRounded) style += 'border-bottom-left-radius:' + diyComponent.value.bottomElementRounded * 2 + 'rpx;';
+		if (diyComponent.value.bottomElementRounded) style += 'border-bottom-right-radius:' + diyComponent.value.bottomElementRounded * 2 + 'rpx;';
+		return style;
 	})
 
 	const getArticleListFn = () => {
@@ -68,6 +88,7 @@
 				title: "文章标题",
 				create_time: "2023-03-28 09:00:00"
 			};
+			articleList.value.push(obj);
 			articleList.value.push(obj);
 		} else {
 			getArticleListFn();

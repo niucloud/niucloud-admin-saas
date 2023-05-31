@@ -32,7 +32,7 @@ export function getAgreementInfo(key : string) {
  * 重置密码
  */
 export function resetPassword(data : AnyObject) {
-    return request.post(`/password/reset`, data, { showErrorMessage: true })
+    return request.post(`password/reset`, data, { showErrorMessage: true })
 }
 
 /**
@@ -68,4 +68,11 @@ export function fetchImage(data : AnyObject) {
  */
 export function fetchBase64Image(data : AnyObject) {
     return request.post('file/image/base64', data)
+}
+
+/**
+ * 获取站点信息
+ */
+export function getSiteInfo() {
+    return request.get('site')
 }

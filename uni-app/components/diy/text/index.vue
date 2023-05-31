@@ -1,5 +1,5 @@
 <template>
-	<view class="diy-text bg-white" @click="redirect(diyComponent.link)">
+	<view class="diy-text" @click="redirect(diyComponent.link)" :style="warpCss">
 
 		<view v-if="diyComponent.style == 'style-1'" class="p-[20rpx]">
 			<view class="" :style="{
@@ -21,8 +21,8 @@
 			</view>
 			<text class="ml-[16rpx] max-w-[300rpx] truncate" :style="{ color: diyComponent.subTitle.color,
 						fontSize: diyComponent.subTitle.fontSize * 2 + 'rpx', }">{{ diyComponent.subTitle.text }}</text>
-			<view class="ml-auto text-right flex items-center" v-if="diyComponent.more.isShow" :style="{ color: diyComponent.more.color }"
-				@click.stop="redirect(diyComponent.more.link)">
+			<view class="ml-auto text-right flex items-center" v-if="diyComponent.more.isShow"
+				:style="{ color: diyComponent.more.color }" @click.stop="redirect(diyComponent.more.link)">
 				<text class="max-w-[200rpx] truncate text-[24rpx] mr-[8rpx]">{{ diyComponent.more.text }}</text>
 				<u-icon name="arrow-right" size="12" :style="{ color: diyComponent.more.color }"></u-icon>
 			</view>
@@ -47,6 +47,15 @@
 		}
 	})
 
+	const warpCss = computed(() => {
+		var style = '';
+		if (diyComponent.value.componentBgColor) style += 'background-color:' + diyComponent.value.componentBgColor + ';';
+		if (diyComponent.value.topRounded) style += 'border-top-left-radius:' + diyComponent.value.topRounded * 2 + 'rpx;';
+		if (diyComponent.value.topRounded) style += 'border-top-right-radius:' + diyComponent.value.topRounded * 2 + 'rpx;';
+		if (diyComponent.value.bottomRounded) style += 'border-bottom-left-radius:' + diyComponent.value.bottomRounded * 2 + 'rpx;';
+		if (diyComponent.value.bottomRounded) style += 'border-bottom-right-radius:' + diyComponent.value.bottomRounded * 2 + 'rpx;';
+		return style;
+	})
 </script>
 
 <style lang="scss" scoped>

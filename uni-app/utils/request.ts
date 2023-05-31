@@ -1,5 +1,6 @@
 import { getToken, getAppChannel } from './common'
 import useMemberStore from '@/stores/member'
+import { t } from '@/locale'
 
 interface RequestConfig {
     showErrorMessage ?: boolean
@@ -121,6 +122,9 @@ class Request {
                 },
                 fail: res => {
                     reject(res)
+                },
+                complete: (res) => {
+                    this.handleRequestFail(res)
                 }
             })
         })
@@ -131,6 +135,23 @@ class Request {
             case 401:
                 useMemberStore().logout()
                 break;
+        }
+    }
+    
+    private handleRequestFail(res) {
+        if (res.errMsg && res.errMsg == "request:ok") {
+            if (typeof res.data == 'string') {
+                uni.showToast({ icon: 'none', title: this.baseUrl + t('requestFail') })
+                return
+            }
+        }
+        if (res.errMsg == 'request:fail') {
+            uni.showToast({ icon: 'none', title: this.baseUrl + t('requestFail') })
+            return
+        }
+        if (res.errMsg && res.errMsg == 'request:fail url not in domain list') {
+            uni.showToast({ icon: 'none', title: this.baseUrl + t('notInDomainList') });
+            return
         }
     }
 }

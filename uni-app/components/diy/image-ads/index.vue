@@ -1,16 +1,16 @@
 <template>
-	<view class="image-ads">
-		<view v-if="diyComponent.list.length == 1" class="simple-graph-wrap"
-			@click="diyRedirect(diyComponent.list[0].link)">
-			<image :src="img(diyComponent.list[0].imageUrl)" :style="{ height: diyComponent.list[0].height }"
+	<view class="image-ads" :style="warpCss">
+		<view v-if="diyComponent.list.length == 1" class="leading-0 overflow-hidden"
+			@click="diyRedirect(diyComponent.list[0].link)" :style="swiperWarpCss">
+			<image :src="img(diyComponent.list[0].imageUrl)" :style="{height: diyComponent.list[0].height}"
 				mode="widthFix" class="w-full" :show-menu-by-longpress="true"></image>
 		</view>
 
 		<swiper v-else class="swiper" :style="{ height: swiperHeight }" autoplay="true" circular="true"
 			@change="swiperChange">
 			<swiper-item class="swiper-item" v-for="(item) in diyComponent.list" :key="item.id"
-				@click="diyRedirect(item.link)">
-				<view class="item" :style="{ height: item.height }">
+				@click="diyRedirect(item.link)" :style="swiperWarpCss">
+				<view class="item" :style="{height: item.height}">
 					<image :src="img(item.imageUrl)" mode="scaleToFill" class="w-full h-full"></image>
 				</view>
 			</swiper-item>
@@ -34,6 +34,20 @@
 		} else {
 			return props.component;
 		}
+	})
+	const warpCss = computed(() => {
+		var style = '';
+		if (diyComponent.value.componentBgColor) style += 'background-color:' + diyComponent.value.componentBgColor + ';';
+		return style;
+	})
+
+	const swiperWarpCss = computed(() => {
+		var style = '';
+		if (diyComponent.value.topRounded) style += 'border-top-left-radius:' + diyComponent.value.topRounded * 2 + 'rpx;';
+		if (diyComponent.value.topRounded) style += 'border-top-right-radius:' + diyComponent.value.topRounded * 2 + 'rpx;';
+		if (diyComponent.value.bottomRounded) style += 'border-bottom-left-radius:' + diyComponent.value.bottomRounded * 2 + 'rpx;';
+		if (diyComponent.value.bottomRounded) style += 'border-bottom-right-radius:' + diyComponent.value.bottomRounded * 2 + 'rpx;';
+		return style;
 	})
 
 	const swiperIndex = ref(0);

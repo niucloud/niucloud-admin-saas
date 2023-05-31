@@ -5,6 +5,7 @@
     import { getToken, isWeixinBrowser, urlDeconstruction } from '@/utils/common'
     import useMemberStore from '@/stores/member'
     import useConfigStore from '@/stores/config'
+    import useSystemStore from '@/stores/system'
     import { useLogin } from '@/hooks/useLogin'
     import { language } from '@/locale'
 
@@ -25,6 +26,8 @@
         const configStore = useConfigStore()
         configStore.getTabbarConfig()
         await configStore.getLoginConfig()
+        
+        useSystemStore().getSitenfo()
 
         // 隐藏tabbar
         uni.hideTabBar()

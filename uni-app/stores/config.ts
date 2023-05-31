@@ -7,7 +7,8 @@ interface loginConfig {
     is_username: number | boolean,
     is_mobile: number | boolean,
     is_auth_register: number | boolean,
-    is_bind_mobile: number | boolean
+    is_bind_mobile: number | boolean,
+    agreement_show: number | boolean
 }
 
 interface tabbarConfig {
@@ -30,7 +31,8 @@ const useConfigStore = defineStore('config', {
                 is_username: 0,
                 is_mobile: 0,
                 is_auth_register: 0,
-                is_bind_mobile: 0
+                is_bind_mobile: 0,
+                agreement_show: 0
             },
             tabbar: null
         }
@@ -42,6 +44,7 @@ const useConfigStore = defineStore('config', {
                 this.login.is_mobile = parseInt(res.data.is_mobile)
                 this.login.is_auth_register = parseInt(res.data.is_auth_register)
                 this.login.is_bind_mobile = parseInt(res.data.is_bind_mobile)
+                this.login.agreement_show = parseInt(res.data.agreement_show)
             }).catch(() => { 
                 
             })
