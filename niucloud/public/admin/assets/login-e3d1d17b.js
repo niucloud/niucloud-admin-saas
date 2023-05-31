@@ -1,1 +1,0 @@
-const e="Niushop Vite Management side",o="Login",n="Logging",s="Please enter your account number",l="Please enter your password",t={title:e,login:o,logging:n,userPlaceholder:s,passwordPlaceholder:l};export{t as default,n as logging,o as login,l as passwordPlaceholder,e as title,s as userPlaceholder};
