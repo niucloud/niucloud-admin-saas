@@ -17,44 +17,43 @@
         {
             "name": "yunwuxin",
             "email": "448901948@qq.com"
-        }        
+        }
     ],
     "require": {
         "php": ">=7.2.5",
-        "topthink/framework": "^6.0.0",
-        "topthink/think-orm": "^2.0",
-        "topthink/think-multi-app": "^1.0",
-        "topthink/think-view": "^1.0",
-        "topthink/think-captcha": "^3.0",
-        "topthink/think-image": "^1.0",
-        "topthink/think-queue": "^3.0",
-        "firebase/php-jwt": "^5.0",
-        "overtrue/wechat": "~5.0",
-        "spatie/macroable": "^1.0",
-        "dh2y/think-qrcode": "^2.0",
-        "dragonmantank/cron-expression": "^3.3",
-        "phpoffice/phpspreadsheet": "^1.22",
-        "qiniu/php-sdk": "7.4",
-        "qcloud/cos-sdk-v5": "^2.5",
-        "aliyuncs/oss-sdk-php": "^2.4",
-        "tencentcloud/tencentcloud-sdk-php": "^3.0",
-        "alibabacloud/client": "^1.5",
-        "rmccue/requests": "^2.0",
+        "topthink/framework": "v6.1.2",
+        "topthink/think-orm": "v2.0.61",
+        "topthink/think-multi-app": "v1.0.16",
+        "topthink/think-view": "v1.0.14",
+        "topthink/think-captcha": "v3.0.9",
+        "topthink/think-image": "v1.0.7",
+        "topthink/think-queue": "v3.0.7",
+        "firebase/php-jwt": "v5.5.1",
+        "overtrue/wechat": "v5.30.0",
+        "spatie/macroable": "v1.0.1",
+        "dh2y/think-qrcode": "v2.0",
+        "dragonmantank/cron-expression": "v3.3.1",
+        "phpoffice/phpspreadsheet": "v1.28.0",
+        "qiniu/php-sdk": "v7.4.0",
+        "qcloud/cos-sdk-v5": "v2.6.2",
+        "aliyuncs/oss-sdk-php": "v2.6.0",
+        "tencentcloud/tencentcloud-sdk-php": "v3.0.885",
+        "alibabacloud/client": "v1.5.32",
+        "rmccue/requests": "v2.0.5",
         "ext-json": "*",
         "ext-curl": "*",
         "ext-bcmath": "*",
         "ext-mbstring": "*",
-        "yunwuxin/think-cron": "^3.0",
-        "php-di/php-di": "^7.0",
+        "php-di/php-di": "v7.0.1",
         "guzzlehttp/guzzle": "7.5",
-        "yansongda/pay": "~3.2.14",
-        "symfony/psr-http-message-bridge": "^2.1",
-        "fastknife/ajcaptcha": "^1.2"
-
+        "yansongda/pay": "v3.2.14",
+        "symfony/psr-http-message-bridge": "v2.2.0",
+        "fastknife/ajcaptcha": "v1.2.1",
+        "yzh52521/schedule": "^1.0"
     },
     "require-dev": {
-        "symfony/var-dumper": "^4.2",
-        "topthink/think-trace":"^1.0"
+        "symfony/var-dumper": "v4.4.47",
+        "topthink/think-trace": "v1.6"
     },
     "autoload": {
         "psr-4": {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d782b0e5848e7012a2ec0114b9e793c5",
+    "content-hash": "c28d105402847e957afdd94104f190aa",
     "packages": [
         {
             "name": "adbario/php-dot-notation",
@@ -911,16 +911,16 @@
         },
         {
             "name": "guzzlehttp/promises",
-            "version": "1.5.2",
+            "version": "1.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "b94b2807d85443f9719887892882d0329d1e2598"
+                "reference": "67ab6e18aaa14d753cc148911d273f6e6cb6721e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/b94b2807d85443f9719887892882d0329d1e2598",
-                "reference": "b94b2807d85443f9719887892882d0329d1e2598",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/67ab6e18aaa14d753cc148911d273f6e6cb6721e",
+                "reference": "67ab6e18aaa14d753cc148911d273f6e6cb6721e",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -936,11 +936,6 @@
                 "symfony/phpunit-bridge": "^4.4 || ^5.1"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.5-dev"
-                }
-            },
             "autoload": {
                 "files": [
                     "src/functions_include.php"
@@ -981,7 +976,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/1.5.2"
+                "source": "https://github.com/guzzle/promises/tree/1.5.3"
             },
             "funding": [
                 {
@@ -997,7 +992,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-28T14:55:35+00:00"
+            "time": "2023-05-21T12:31:43+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -5263,17 +5258,17 @@
             "time": "2022-03-28T10:25:04+00:00"
         },
         {
-            "name": "yunwuxin/think-cron",
-            "version": "v3.0.5",
+            "name": "yzh52521/schedule",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/yunwuxin/think-cron.git",
-                "reference": "a5e5c679b7f5daedab9fb4bb00b641b6c4a054ca"
+                "url": "https://github.com/yzh52521/schedule.git",
+                "reference": "4c8f537f0c08417e785f84b8b91bf16b083cb163"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yunwuxin/think-cron/zipball/a5e5c679b7f5daedab9fb4bb00b641b6c4a054ca",
-                "reference": "a5e5c679b7f5daedab9fb4bb00b641b6c4a054ca",
+                "url": "https://api.github.com/repos/yzh52521/schedule/zipball/4c8f537f0c08417e785f84b8b91bf16b083cb163",
+                "reference": "4c8f537f0c08417e785f84b8b91bf16b083cb163",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -5283,46 +5278,33 @@
                 ]
             },
             "require": {
-                "dragonmantank/cron-expression": "^3.0",
-                "nesbot/carbon": "^2.28",
-                "symfony/process": "^4.4|^5.0",
-                "topthink/framework": "^6.0"
-            },
-            "require-dev": {
-                "topthink/think-swoole": "^4.0"
+                "nesbot/carbon": "^2.0",
+                "php": ">=7.1"
             },
             "type": "library",
-            "extra": {
-                "think": {
-                    "config": {
-                        "cron": "src/config.php"
-                    },
-                    "services": [
-                        "yunwuxin\\cron\\Service"
-                    ]
-                }
-            },
             "autoload": {
                 "psr-4": {
-                    "yunwuxin\\cron\\": "src/cron"
+                    "schedule\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "Apache-2.0"
+                "MIT"
             ],
-            "authors": [
-                {
-                    "name": "yunwuxin",
-                    "email": "448901948@qq.com"
-                }
+            "description": "task schedule,schedule,thinkphp schedule,任务调度",
+            "keywords": [
+                "schedule",
+                "task schedule",
+                "think-schedule",
+                "thinkphp",
+                "thinkphp5.1",
+                "thinkphp6"
             ],
-            "description": "计划任务",
             "support": {
-                "issues": "https://github.com/yunwuxin/think-cron/issues",
-                "source": "https://github.com/yunwuxin/think-cron/tree/v3.0.5"
+                "issues": "https://github.com/yzh52521/schedule/issues",
+                "source": "https://github.com/yzh52521/schedule/tree/v1.0.0"
             },
-            "time": "2021-12-22T09:25:54+00:00"
+            "time": "2020-07-02T01:34:32+00:00"
         }
     ],
     "packages-dev": [
