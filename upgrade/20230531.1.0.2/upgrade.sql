@@ -1,4 +1,6 @@
 
+TRUNCATE TABLE `{{prefix}}diy_page`;
+
 ALTER TABLE `{{prefix}}wechat_reply` MODIFY COLUMN site_id INT NOT NULL DEFAULT 0 COMMENT '站点id';
 
 ALTER TABLE `{{prefix}}wechat_media` MODIFY COLUMN site_id INT NOT NULL DEFAULT 0 COMMENT '站点id';
