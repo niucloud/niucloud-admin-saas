@@ -8,36 +8,28 @@
 // +----------------------------------------------------------------------
 // | Author: Niucloud Team
 // +----------------------------------------------------------------------
+namespace core\dict;
 
-namespace core\sms;
 
-use core\loader\Loader;
-
-/**
- * @see \core\sms\SmsLoader
- * @package think\facade
- * @mixin \core\sms\BaseSms
- * @method  string|null send(string $mobile, string $template_id, array $data) 发送短信
- */
-class SmsLoader extends Loader
+class Route extends BaseDict
 {
-
-
     /**
-     * 空间名
-     * @var string
+     * 加载路由
+     * @param array $data 传入路由端口
+     * @return array|mixed
      */
-    protected $namespace = '\\core\\sms\\';
-
-    protected $config_name = 'sms';
-    /**
-     * 默认驱动
-     * @return mixed
-     */
-    protected function getDefault()
+    public function load(array $data)
     {
-        return config('sms.default');
+        $addons  = $this->getLocalAddons();
+
+        foreach ($addons as $k => $v)
+        {
+            $route_path = $this->getAddonAppPath($v). DIRECTORY_SEPARATOR. $data['app_type']. DIRECTORY_SEPARATOR. "route.php";
+            if(is_file($route_path))
+            {
+                include $route_path;
+            }
+        }
+        return true;
     }
-
-
 }

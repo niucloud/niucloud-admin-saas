@@ -36,8 +36,9 @@ abstract class Loader extends Facade
      * @return mixed
      */
     abstract protected function getDefault();
+
     /**
-     * 获取实例
+     * 创建实例对象
      * @param string $type
      * @return object|\think\DbManager
      * @throws \Exception
@@ -59,20 +60,29 @@ abstract class Loader extends Facade
      */
     public function getClass(string $type){
         $class = config($this->config_name.'.drivers.'.$type.'.driver');
-        if (class_exists($class)) {
+        if (!empty($class) && class_exists($class)) {
             return $class;
         }else{
             if ($this->namespace || str_contains($type, '\\')) {
-                $class = str_contains($type, '\\') ? $type : $this->namespace . ucfirst(strtolower($type));
-                if (class_exists($class)) {
+                $class = str_contains($type, '\\') ? $type : $this->namespace . $type;
+                if(class_exists($class)){
                     return $class;
+                }else{
+                    $class = str_contains($type, '\\') ? $type : $this->namespace . Str::studly($type);
+                    if (class_exists($class)) {
+                        return $class;
+                    }
                 }
             }
         }
         throw new \Exception("Driver [$type] not supported.");
     }
 
-
+    /**
+     * 通过装载器获取实例
+     * @return object|\think\DbManager
+     * @throws \Exception
+     */
     public function getLoader(){
 
         if(empty($this->class)){

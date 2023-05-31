@@ -31,26 +31,19 @@ abstract class BaseSms extends Storage
     }
 
     /**
-     * 开通服务
+     * 发送短信
+     * @param string $mobile
+     * @param string $template_id
+     * @param array $data
      * @return mixed
      */
-    abstract public function open();
+    abstract public function send(string $mobile, string $template_id, array $data);
 
-    /**修改签名
+    /**
+     * 编辑签名
      * @return mixed
      */
-    abstract public function modify(string $sign = null, string $phone, string $code);
-
-    /**用户信息
-     * @return mixed
-     */
-    abstract public function info();
-
-    /**发送短信
-     * @return mixed
-     */
-    abstract public function send(string $phone, string $templateId, array $data);
-
+    abstract public function modify(string $sign = null, string $mobile, string $code);
     /**
      * 短信模板
      * @param int $page
@@ -58,11 +51,11 @@ abstract class BaseSms extends Storage
      * @param int $type
      * @return mixed
      */
-    abstract public function temps(int $page, int $limit, int $type);
+    abstract public function template(int $page, int $limit, int $type);
 
 
     /**
-     * 申请模板
+     * 申请短信
      * @param string $title
      * @param string $content
      * @param int $type
@@ -71,18 +64,20 @@ abstract class BaseSms extends Storage
     abstract public function apply(string $title, string $content, int $type);
 
     /**
-     * 模板记录
-     * @param int $tempType
+     * 模板列表
+     * @param int $type
      * @param int $page
      * @param int $limit
      * @return mixed
      */
-    abstract public function applys(int $tempType, int $page, int $limit);
+    abstract public function localTemplate(int $type, int $page, int $limit);
 
-    /**发送记录
+    /**
+     * 记录
+     * @param $id
      * @return mixed
      */
-    abstract public function record($record_id);
+    abstract public function record($id);
 
 
 }

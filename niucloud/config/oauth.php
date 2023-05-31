@@ -9,32 +9,18 @@
 // | Author: Niucloud Team
 // +----------------------------------------------------------------------
 
-namespace core\addon;
+return [
+    //默认驱动
+    'default' => 'wechat',
+    //驱动厂商列表及参数-第三方授权
+    'drivers' => [
+        //微信公众号
+        'wechat' => [
 
-use core\loader\Loader;
+        ],
+        //微信小程序
+        'weapp' => [
 
-/**
- * @see \core\addon\AddonLoader
- * @mixin \core\addon\BaseAddon
- * @method  array|null load(array $data)
- */
-class AddonLoader extends Loader
-{
-
-    /**
-     * 空间名
-     * @var string
-     */
-    protected $namespace = '\\core\\addon\\';
-
-    protected $config_name = 'addon';
-    /**
-     * 默认驱动
-     * @return mixed
-     */
-    protected function getDefault()
-    {
-        return "Event";
-    }
-
-}
+        ]
+    ]
+];

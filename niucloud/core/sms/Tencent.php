@@ -1,5 +1,13 @@
 <?php
-
+// +----------------------------------------------------------------------
+// | Niucloud-admin 企业快速开发的saas管理平台
+// +----------------------------------------------------------------------
+// | 官方网址：https://www.niucloud-admin.com
+// +----------------------------------------------------------------------
+// | niucloud团队 版权所有 开源版本可自由商用
+// +----------------------------------------------------------------------
+// | Author: Niucloud Team
+// +----------------------------------------------------------------------
 namespace core\sms;
 
 use core\exception\CommonException;
@@ -77,19 +85,12 @@ class Tencent extends BaseSms
     }
 
 
-    public function open()
+
+    public function modify(string $sign = null, string $mobile, string $code)
     {
     }
 
-    public function modify(string $sign = null, string $phone, string $code)
-    {
-    }
-
-    public function info()
-    {
-    }
-
-    public function temps(int $page = 0, int $limit = 10, int $type = 1)
+    public function template(int $page = 0, int $limit = 15, int $type = 1)
     {
     }
 
@@ -97,11 +98,11 @@ class Tencent extends BaseSms
     {
     }
 
-    public function applys(int $tempType, int $page, int $limit)
+    public function localTemplate(int $type, int $page, int $limit)
     {
     }
 
-    public function record($record_id)
+    public function record($id)
     {
     }
 }

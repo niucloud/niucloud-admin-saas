@@ -99,7 +99,7 @@ abstract class BasePay extends Storage
      * @param callable $callback
      * @return mixed
      */
-    abstract protected function notify(Callable $callback);
+    abstract protected function notify(string $action, Callable $callback);
 
     /**
      * 查询支付订单
@@ -163,6 +163,33 @@ abstract class BasePay extends Storage
         }
     }
 
+    /**
+     * 解析退款返回数据并解析
+     * @param $our_trade_no
+     * @param $refund_no
+     * @param $status
+     * @return array
+     */
+    public function getRefundData($our_trade_no, $refund_no, $status, $success_time = 0, $reason = ''){
+        return [
+            'our_trade_no' => $our_trade_no,
+            'refund_no' => $refund_no,
+            'status' => $status,
+            'success_time' =>$success_time,
+            'reason' => $reason
+        ];
+    }
+
+    /**
+     * 获取转账数据并解析
+     * @param $transfer_no
+     * @param $status
+     * @param $reason
+     * @return void
+     */
+    public function getTransferData($transfer_no, $status, $reason){
+
+    }
 
 
 

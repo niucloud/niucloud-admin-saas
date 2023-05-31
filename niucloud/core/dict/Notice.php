@@ -1,9 +1,17 @@
 <?php
+// +----------------------------------------------------------------------
+// | Niucloud-admin 企业快速开发的saas管理平台
+// +----------------------------------------------------------------------
+// | 官方网址：https://www.niucloud-admin.com
+// +----------------------------------------------------------------------
+// | niucloud团队 版权所有 开源版本可自由商用
+// +----------------------------------------------------------------------
+// | Author: Niucloud Team
+// +----------------------------------------------------------------------
+namespace core\dict;
 
-namespace core\addon;
 
-
-class Notice extends BaseAddon
+class Notice extends BaseDict
 {
     /**
      * 系统uniapp页面链接
@@ -13,7 +21,7 @@ class Notice extends BaseAddon
     public function load(array $data)
     {
         $template_files = [];
-        $system_path = $this->getEnumPath(). "notice". DIRECTORY_SEPARATOR. $data['type']. ".php";
+        $system_path = $this->getDictPath(). "notice". DIRECTORY_SEPARATOR. $data['type']. ".php";
         if(is_file($system_path))
         {
             $template_files[] = $system_path;
@@ -21,7 +29,7 @@ class Notice extends BaseAddon
         $addons  = $this->getLocalAddons();
         foreach ($addons as $k => $v)
         {
-            $template_path = $this->getAddonEnumPath($v). "notice". DIRECTORY_SEPARATOR. $data['type']. ".php";
+            $template_path = $this->getAddonDictPath($v). "notice". DIRECTORY_SEPARATOR. $data['type']. ".php";
             if(is_file($template_path))
             {
                 $template_files[] = $template_path;

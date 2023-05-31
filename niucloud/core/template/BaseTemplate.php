@@ -43,7 +43,7 @@ abstract class BaseTemplate extends Storage
      * @param string $shortId
      * @return mixed
      */
-    abstract protected function add(array $data);
+    abstract protected function addTemplate(array $data);
 
     /**
      * 删除消息模板

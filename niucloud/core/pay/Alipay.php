@@ -8,7 +8,9 @@
 
 namespace core\pay;
 
-use app\enum\pay\OnlinePayEnum;
+use app\dict\pay\OnlinePayDict;
+use app\dict\pay\RefundDict;
+use app\dict\pay\TransferDict;
 use core\exception\PayException;
 use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -153,17 +155,22 @@ class Alipay extends BasePay
         ]));
         if(!empty($result['msg']) && $result['msg'] != 'Success'){
             throw new PayException($result['sub_msg']);
-
         }else{
-            if($result['status'] == 'SUCCESS'){
-                $result = array(
-                    'batch_id' => $result['pay_fund_order_id']
-                );
-            }else if($result['status'] == 'FAIL' && !empty($result['fail_reason'])){
-                throw new PayException($result['fail_reason']);
+            $status = $result['status'];
+            $status_array = array(
+                'SUCCESS' => TransferDict::SUCCESS,
+                'WAIT_PAY' => TransferDict::WAIT,
+                'CLOSED' => TransferDict::FAIL,
+                'FAIL' => TransferDict::FAIL
+            );
+            $res = array(
+                'status' => $status_array[$status],
+            );
+            if($status == 'FAIL'){
+                $res['fail_reason'] = $result['fail_reason'];
             }
         }
-        return $result;
+        return $res;
     }
 
     /**
@@ -196,11 +203,29 @@ class Alipay extends BasePay
         $out_trade_no = $params['out_trade_no'];
         $money = $params['money'];
 //        $total = $params['total'];
-//        $refund_no = $params['refund_no'];
-        $result = Pay::alipay()->refund([
+        $refund_no = $params['refund_no'];
+        $result = $this->returnFormat(Pay::alipay()->refund([
             'out_trade_no' => $out_trade_no,
             'refund_amount' => $money,
-        ]);
+            'out_request_no' => $refund_no
+        ]));
+        if(!empty($result['msg']) && $result['msg'] == 'Success'){
+            $fund_change = $result['fund_change'];//退款是否成功可以根据同步响应的 fund_change 参数来判断，fund_change 表示本次退款是否发生了资金变化，返回 Y 表示退款成功，返回 N 则表示本次退款未发生资金变动 。
+            if($fund_change == 'Y'){
+                $status = RefundDict::SUCCESS;
+            }else{
+                $status = RefundDict::DEALING;
+            }
+            return [
+                'status' => $status,
+                'refund_no' => $refund_no,
+                'out_trade_no' => $out_trade_no
+            ];
+        }else{
+            //todo 这儿可以抛出错误
+            return false;
+        }
+
         return $result;
     }
 
@@ -210,21 +235,24 @@ class Alipay extends BasePay
      * @param $out_trade_no
      * @return void
      */
-    public function notify(Callable $callback){
+    public function notify(string $action, Callable $callback){
         try{
             $result = Pay::alipay()->callback();
             //通过返回的值
             if(!empty($result)){//成功
-                //todo  这儿需要具体设计
-                $temp_data = array(
-                    'mchid' => $result['seller_id'],
-                    'trade_no' => $result['trade_no'],
-                    'result' => $result
-                );
-                $callback_result = $callback($result['out_trade_no'], $temp_data);
-                if(is_bool($callback_result) && $callback_result){
-                    return Pay::alipay()->success();
+                if($action == 'pay'){
+                    //todo  这儿需要具体设计
+                    $temp_data = array(
+                        'mchid' => $result['seller_id'],
+                        'trade_no' => $result['trade_no'],
+                        'result' => $result
+                    );
+                    $callback_result = $callback($result['out_trade_no'], $temp_data);
+                    if(is_bool($callback_result) && $callback_result){
+                        return Pay::alipay()->success();
+                    }
                 }
+
             }
             return $this->fail();
         } catch (\Throwable $e) {
@@ -247,7 +275,7 @@ class Alipay extends BasePay
         $result = $this->returnFormat(Pay::alipay()->find($order));
         if(!empty($result['msg']) && $result['msg'] == 'Success'){
             return [
-                'status' => OnlinePayEnum::getAliPayStatus($result['trade_status'])
+                'status' => OnlinePayDict::getAliPayStatus($result['trade_status'])
             ];
         }else{
             if(!empty($result['sub_code']) && $result['sub_code'] == 'ACQ.ACQ.SYSTEM_ERROR'){
@@ -272,7 +300,25 @@ class Alipay extends BasePay
         ];
 
         $result = $this->returnFormat(Pay::alipay()->find($order));
-        return $result;
+        if(!empty($result['msg']) && $result['msg'] == 'Success'){
+            $refund_status = $result['refund_status'] ?? '';
+            if($refund_status == 'REFUND_SUCCESS'){
+                $status = RefundDict::SUCCESS;
+            }else{
+                $status = RefundDict::DEALING;
+            }
+            return [
+                'status' => $status,
+                'refund_no' => $refund_no,
+                'out_trade_no' => $out_trade_no
+            ];
+        }else{
+            if(!empty($result['sub_code']) && $result['sub_code'] == 'ACQ.ACQ.SYSTEM_ERROR'){
+                throw new PayException($result['msg']);
+            }else{
+                return [];
+            }
+        }
     }
 
     /**
@@ -286,7 +332,25 @@ class Alipay extends BasePay
             '_type' => 'transfer'
         ];
         $result = $this->returnFormat(Pay::alipay()->find($order));
-        return $result;
+        if(!empty($result['msg']) && $result['msg'] == 'Success'){
+            $status = $result['SUCCESS'] ?? '';
+            $status_array = array(
+                'SUCCESS' => TransferDict::SUCCESS,
+                'WAIT_PAY' => TransferDict::WAIT,
+                'CLOSED' => TransferDict::FAIL,
+                'FAIL' => TransferDict::FAIL
+            );
+            return [
+                'status' => $status_array[$status],
+                'transfer_no' => $transfer_no
+            ];
+        }else{
+            if(!empty($result['sub_code']) && $result['sub_code'] == 'ACQ.ACQ.SYSTEM_ERROR'){
+                throw new PayException($result['msg']);
+            }else{
+                return [];
+            }
+        }
     }
 
     public function fail(){

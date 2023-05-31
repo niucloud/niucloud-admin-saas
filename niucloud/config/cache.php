@@ -16,11 +16,11 @@ return [
             // 缓存保存目录
             'path'       =>  app()->getRuntimePath() . 'cache' . DIRECTORY_SEPARATOR,
             // 缓存前缀
-            'prefix'     => 'CACHE',
+            'prefix'     => '',
             // 缓存有效期 0表示永久缓存
             'expire'     => 0,
             // 缓存标签前缀
-            'tag_prefix' => 'CACHE:',
+            'tag_prefix' => 'tag:',
             // 序列化机制 例如 ['serialize', 'unserialize']
             'serialize'  => [],
         ],
@@ -38,9 +38,9 @@ return [
             // 缓存有效期 0表示永久缓存
             'expire'        => 0 ,
             // 缓存前缀
-            'prefix'     => 'CACHE',
+            'prefix'     => '',
             // 缓存标签前缀
-            'tag_prefix'    => 'CACHE:',
+            'tag_prefix'    => 'tag:',
             // 数据库 0号数据库
             'select'        => env('redis.select', 0),
             'serialize'     => [],

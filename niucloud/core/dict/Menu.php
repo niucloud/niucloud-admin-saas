@@ -8,36 +8,23 @@
 // +----------------------------------------------------------------------
 // | Author: Niucloud Team
 // +----------------------------------------------------------------------
+namespace core\dict;
 
-namespace core\sms;
 
-use core\loader\Loader;
-
-/**
- * @see \core\sms\SmsLoader
- * @package think\facade
- * @mixin \core\sms\BaseSms
- * @method  string|null send(string $mobile, string $template_id, array $data) 发送短信
- */
-class SmsLoader extends Loader
+class Menu extends BaseDict
 {
-
-
     /**
-     * 空间名
-     * @var string
+     * 加载菜单
+     * @param array $data  //传入插件，应用类型
+     * @return array|mixed
      */
-    protected $namespace = '\\core\\sms\\';
-
-    protected $config_name = 'sms';
-    /**
-     * 默认驱动
-     * @return mixed
-     */
-    protected function getDefault()
+    public function load(array $data):array
     {
-        return config('sms.default');
+        $menu_path = $this->getAddonDictPath($data['addon'])."menu".DIRECTORY_SEPARATOR. $data['app_type']. ".php";
+        if(is_file($menu_path))
+        {
+            return include $menu_path;
+        }
+        return [];
     }
-
-
 }

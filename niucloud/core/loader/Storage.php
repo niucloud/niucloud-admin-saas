@@ -42,7 +42,7 @@ abstract class Storage
      */
     protected function setError(?string $error = null)
     {
-        $this->error = $error ?: '未知错误';
+        $this->error = $error;
         return false;
     }
 

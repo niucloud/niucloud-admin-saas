@@ -18,5 +18,9 @@ return [
         'wechatpay' => [],
         //支付宝
         'alipay' => [],
+        //余额
+//        'balance' => [
+//            'driver' => 'app\service\core\paytype\CoreBalanceService',  //反射类的名字
+//        ],
     ]
 ];

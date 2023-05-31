@@ -12,16 +12,18 @@
 namespace core\base;
 
 use app\model\system\Cron;
+use app\service\core\schedule\CoreCronService;
 use core\job\Dispatch;
 use think\queue\Job;
 
 /**
- * 队列异步调用定时任务
+ * 队列
  */
 abstract class BaseJob extends Dispatch
 {
 
     /**
+     * 引导
      * @param $name
      * @param $arguments
      */
@@ -30,52 +32,50 @@ abstract class BaseJob extends Dispatch
         $this->fire(...$arguments);
     }
 
+
     /**
-     * 运行消息队列
+     * 运行队列
      * @param Job $job
-     * @param $data
+     * @param $params
      */
-    public function fire(Job $job, $data): void
+    public function fire(Job $job, $params): void
     {
         try {
-            $action     = $data['do'] ?? 'doJob';//任务名
-            $infoData   = $data['data'] ?? [];//数据
-            $errorCount = $data['errorCount'] ?? 0;//执行任务错误的最大重试次数
-            $this->runJob($action, $job, $infoData, $errorCount);
-        } catch (\Throwable $e) {
+            $action = $params['do'] ?? 'doJob';//任务名
+            $data = $params['data'] ?? [];//数据
+            $error_count = $params['error_count'] ?? 0;//执行任务错误的最大重试次数
+            $this->runJob($action, $job, $data, $error_count);
+        } catch ( \Throwable $e ) {
             $job->delete();
         }
     }
-
 
 
     /**
      * 执行队列
      * @param string $action
      * @param Job $job
-     * @param array $infoData
-     * @param int $errorCount
+     * @param array $data
+     * @param int $error_count
      */
-    protected function runJob(string $action, Job $job, array $infoData, int $errorCount = 3)
+    protected function runJob(string $action, Job $job, array $data, int $error_count = 3)
     {
-
         $action = method_exists($this, $action) ? $action : 'handle';
         if (!method_exists($this, $action)) {
             $job->delete();
         }
-
-        if ($this->{$action}(...$infoData)) {
+        if ($this->{$action}(...$data)) {
             //删除任务
             $job->delete();
         } else {
-            if ($job->attempts() >= $errorCount && $errorCount) {
+            if ($job->attempts() >= $error_count && $error_count) {
                 //删除任务
                 $job->delete();
             } else {
-                //再次放入队列
+                //重发任务
                 $job->release();
             }
         }
-
     }
+
 }

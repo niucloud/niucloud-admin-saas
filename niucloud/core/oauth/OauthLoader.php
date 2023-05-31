@@ -9,35 +9,29 @@
 // | Author: Niucloud Team
 // +----------------------------------------------------------------------
 
-namespace core\sms;
+namespace core\oauth;
 
 use core\loader\Loader;
 
 /**
- * @see \core\sms\SmsLoader
+ * @see \core\oauth\OauthLoader
  * @package think\facade
- * @mixin \core\sms\BaseSms
- * @method  string|null send(string $mobile, string $template_id, array $data) 发送短信
  */
-class SmsLoader extends Loader
+class OauthLoader extends Loader
 {
-
-
     /**
      * 空间名
      * @var string
      */
-    protected $namespace = '\\core\\sms\\';
+    protected $namespace = '\\core\\oauth\\';
 
-    protected $config_name = 'sms';
+    protected $config_name = 'oauth';
     /**
      * 默认驱动
      * @return mixed
      */
     protected function getDefault()
     {
-        return config('sms.default');
+        return config('oauth.default');
     }
-
-
 }

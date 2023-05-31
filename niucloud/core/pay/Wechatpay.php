@@ -8,7 +8,9 @@
 
 namespace core\pay;
 
-use app\enum\pay\OnlinePayEnum;
+use app\dict\pay\OnlinePayDict;
+use app\dict\pay\RefundDict;
+use app\dict\pay\TransferDict;
 use core\exception\PayException;
 use EasyWeChat\Factory;
 use Psr\Http\Message\MessageInterface;
@@ -268,7 +270,18 @@ class Wechatpay extends BasePay
                 'currency' => 'CNY',
             ],
         ]);
-        return $this->returnFormat($result);
+        $result = $this->returnFormat($result);
+        $refund_status_array = [
+            'SUCCESS' => RefundDict::SUCCESS,
+            'CLOSED' => RefundDict::FAIL,
+            'PROCESSING' => RefundDict::DEALING,
+            'ABNORMAL' => RefundDict::FAIL,
+        ];
+        return [
+            'status' => $refund_status_array[$result['status']],
+            'refund_no' => $refund_no,
+            'out_trade_no' => $out_trade_no
+        ];
     }
 
 
@@ -277,18 +290,38 @@ class Wechatpay extends BasePay
      * @param $out_trade_no
      * @return void
      */
-    public function notify(Callable $callback){
+    public function notify(string $action, Callable $callback){
         try{
             $result = $this->returnFormat(Pay::wechat()->callback());
-            if($result['event_type'] == 'TRANSACTION.SUCCESS'){
-                $pay_trade_data = $result['resource']['ciphertext'];
-                $temp_params = [
-                    'trade_no' => $pay_trade_data['transaction_id'],
-                    'mch_id' => $pay_trade_data['mchid']
-                ];
-                $callback_result = $callback($pay_trade_data['out_trade_no'], $temp_params);
-                if(is_bool($callback_result) && $callback_result){
-                    return Pay::wechat()->success();
+            if($action == 'pay') {//支付
+                if ($result['event_type'] == 'TRANSACTION.SUCCESS') {
+                    $pay_trade_data = $result['resource']['ciphertext'];
+
+                    $temp_params = [
+                        'trade_no' => $pay_trade_data['transaction_id'],
+                        'mch_id' => $pay_trade_data['mchid'],
+                        'status' => OnlinePayDict::getWechatPayStatus($pay_trade_data['trade_state'])
+                    ];
+
+                    $callback_result = $callback($pay_trade_data['out_trade_no'], $temp_params);
+                    if (is_bool($callback_result) && $callback_result) {
+                        return Pay::wechat()->success();
+                    }
+                }
+            }else if($action == 'refund'){//退款
+                if ($result['event_type'] == 'REFUND.SUCCESS') {
+                    $refund_trade_data = $result['resource']['ciphertext'];
+                    $temp_params = [
+                        'trade_no' => $refund_trade_data['transaction_id'],
+                        'mch_id' => $refund_trade_data['mchid'],
+                        'refund_no' => $refund_trade_data['out_refund_no'],
+                        'status' => OnlinePayDict::getWechatPayStatus($refund_trade_data['refund_status'])
+                    ];
+
+                    $callback_result = $callback($refund_trade_data['out_trade_no'], $temp_params);
+                    if (is_bool($callback_result) && $callback_result) {
+                        return Pay::wechat()->success();
+                    }
                 }
             }
             return $this->fail();
@@ -326,7 +359,7 @@ class Wechatpay extends BasePay
             return $result;
         $result = $this->returnFormat($result);
         return [
-            'status' => OnlinePayEnum::getWechatPayStatus($result['trade_state']),
+            'status' => OnlinePayDict::getWechatPayStatus($result['trade_state']),
         ];
     }
 
@@ -342,7 +375,20 @@ class Wechatpay extends BasePay
             'out_refund_no' => $refund_no
         ];
         $result = Pay::wechat()->find($order);
-        return $this->returnFormat($result);
+        if(empty($result))
+            return $result;
+        $result = $this->returnFormat($result);
+        $refund_status_array = [
+            'SUCCESS' => RefundDict::SUCCESS,
+            'CLOSED' => RefundDict::FAIL,
+            'PROCESSING' => RefundDict::DEALING,
+            'ABNORMAL' => RefundDict::FAIL,
+        ];
+        return [
+            'status' => $refund_status_array[$result['status']],
+            'refund_no' => $refund_no,
+            'out_trade_no' => $out_trade_no
+        ];
     }
 
     /**
@@ -351,16 +397,24 @@ class Wechatpay extends BasePay
      * @return void
      */
     public function getTransfer(string $transfer_no){
-
-
         $params = [
             'out_batch_no' => $transfer_no,
         ];
-
         $allPlugins = Pay::wechat()->mergeCommonPlugins([QueryOutBatchNoPlugin::class]);
-
         $result = Pay::wechat()->pay($allPlugins, $params);
-        return $this->returnFormat($result);
+        $result = $this->returnFormat($result);
+        //微信转账状态
+        $transfer_status_array = [
+            'INIT' => TransferDict::DEALING,//初始态。 系统转账校验中
+            'WAIT_PAY' => TransferDict::DEALING,
+            'PROCESSING' => TransferDict::DEALING,
+            'FAIL' => TransferDict::FAIL,
+            'SUCCESS' => TransferDict::SUCCESS,
+        ];
+        return [
+            'status' => $transfer_status_array[$result['status']],
+            'transfer_no' => $transfer_no
+        ];
     }
 
 

@@ -18,12 +18,11 @@ use think\facade\Log;
 /**
  * Class Queue
  * @package core\util
- * @method $this do(string $do) 设置任务执行方法
+ * @method $this method(string $method) 设置任务执行方法
  * @method $this job(string $job) 设置任务执行类名
- * @method $this errorCount(int $errorCount) 执行失败次数
+ * @method $this errorCount(int $error_count) 执行失败次数
  * @method $this data(...$data) 执行数据
  * @method $this secs(int $secs) 延迟执行秒数
- * @method $this log($log) 记录日志
  */
 class Queue
 {
@@ -33,65 +32,37 @@ class Queue
      * @var string
      */
     protected $error;
-
     /**
-     * 设置错误信息
-     * @param string|null $error
-     * @return bool
-     */
-    protected function setError(?string $error = null)
-    {
-        $this->error = $error ?: '未知错误';
-        return false;
-    }
-
-    /**
-     * 获取错误信息
-     * @return string
-     */
-    public function getError()
-    {
-        $error = $this->error;
-        $this->error = null;
-        return $error;
-    }
-
-    /**
-     * 任务执行
+     * 任务执行方法
      * @var string
      */
-    protected $do = 'doJob';
+    protected $method = 'doJob';
 
     /**
      * 默认任务执行方法名
      * @var string
      */
-    protected $defaultDo;
-
+    protected $default_method;
     /**
      * 任务类名
      * @var string
      */
     protected $job;
-
     /**
-     * 错误次数
+     * 队列失败次数
      * @var int
      */
-    protected $errorCount = 3;
-
+    protected $error_count = 3;
     /**
      * 数据
      * @var array|string
      */
     protected $data;
-
     /**
-     * 队列名
+     * 队列名称
      * @var null
      */
-    protected $queueName = null;
-
+    protected $queue_name = null;
     /**
      * 延迟执行秒数
      * @var int
@@ -99,30 +70,22 @@ class Queue
     protected $secs = 0;
 
     /**
-     * 记录日志
-     * @var string|callable|array
-     */
-    protected $log;
-
-    /**
+     * 允许的方法或属性
      * @var array
      */
-    protected $rules = ['do', 'data', 'errorCount', 'job', 'secs', 'log'];
-
+    protected $allow_function = ['method', 'data', 'error_count', 'job', 'secs'];
     /**
+     * 当前实例
      * @var static
      */
     protected static $instance;
-
-    /**
-     * Queue constructor.
-     */
     protected function __construct()
     {
-        $this->defaultDo = $this->do;
+        $this->default_method = $this->method;
     }
 
     /**
+     * 实例化当前队列
      * @return static
      */
     public static function instance()
@@ -134,24 +97,25 @@ class Queue
     }
 
     /**
-     * @param string $queueName
+     * 设置队列名称
+     * @param string $queue_name
      * @return $this
      */
-    public function setQueueName(string $queueName)
+    public function setQueueName(string $queue_name)
     {
-        $this->queueName = $queueName;
+        $this->queue_name = $queue_name;
         return $this;
     }
 
     /**
-     * 放入消息队列
+     * 加入队列
      * @param array|null $data
-     * @return mixed
+     * @return bool
      */
     public function push(?array $data = null)
     {
         if (!$this->job) {
-            return $this->setError('需要执行的队列类必须存在');
+            return $this->setError('JOB_NOT_EXISTS');
         }
         $jodValue = $this->getValues($data);
         //todo 队列扩展策略调度,
@@ -159,7 +123,7 @@ class Queue
         if (!$res) {
             $res = ThinkQueue::{$this->action()}(...$jodValue);
             if (!$res) {
-                Log::error('加入队列失败，参数：' . json_encode($this->getValues($data)));
+                Log::error('队列推送失败，参数：' . json_encode($jodValue));
             }
         }
         $this->clean();
@@ -173,10 +137,9 @@ class Queue
     {
         $this->secs = 0;
         $this->data = [];
-        $this->log = null;
-        $this->queueName = null;
-        $this->errorCount = 3;
-        $this->do = $this->defaultDo;
+        $this->queue_name = null;
+        $this->error_count = 3;
+        $this->method = $this->default_method;
     }
 
     /**
@@ -196,35 +159,57 @@ class Queue
     protected function getValues($data)
     {
         $jobData['data'] = $data ?: $this->data;
-        $jobData['do'] = $this->do;
-        $jobData['errorCount'] = $this->errorCount;
-        $jobData['log'] = $this->log;
-        if ($this->do != $this->defaultDo) {
-            $this->job .= '@' . Config::get('queue.prefix', 'eb_') . $this->do;
+        $jobData['method'] = $this->method;
+        $jobData['error_count'] = $this->error_count;
+        if ($this->method != $this->default_method) {
+            $this->job .= '@'.$this->method;
         }
         if ($this->secs) {
-            return [$this->secs, $this->job, $jobData, $this->queueName];
+            return [$this->secs, $this->job, $jobData, $this->queue_name];
         } else {
-            return [$this->job, $jobData, $this->queueName];
+            return [$this->job, $jobData, $this->queue_name];
         }
     }
 
     /**
+     * 不可访问时调用
      * @param $name
      * @param $arguments
      * @return $this
      */
-    public function __call($name, $arguments)
+    public function __call($method, $arguments)
     {
-        if (in_array($name, $this->rules)) {
-            if ($name === 'data') {
-                $this->{$name} = $arguments;
+        if (in_array($method, $this->allow_function)) {
+            if ($method === 'data') {
+                $this->{$method} = $arguments;
             } else {
-                $this->{$name} = $arguments[0] ?? null;
+                $this->{$method} = $arguments[0] ?? null;
             }
             return $this;
         } else {
-            throw new \RuntimeException('Method does not exist' . __CLASS__ . '->' . $name . '()');
+            throw new \Exception('Method does not exist' . __CLASS__ . '->' . $method . '()');
         }
+    }
+
+    /**
+     * 设置错误信息
+     * @param string|null $error
+     * @return bool
+     */
+    protected function setError(?string $error = null)
+    {
+        $this->error = $error;
+        return false;
+    }
+
+    /**
+     * 获取错误信息
+     * @return string
+     */
+    public function getError()
+    {
+        $error = $this->error;
+        $this->error = null;
+        return $error;
     }
 }

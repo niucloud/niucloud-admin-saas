@@ -9,35 +9,32 @@
 // | Author: Niucloud Team
 // +----------------------------------------------------------------------
 
-namespace core\sms;
+namespace core\dict;
 
 use core\loader\Loader;
 
 /**
- * @see \core\sms\SmsLoader
- * @package think\facade
- * @mixin \core\sms\BaseSms
- * @method  string|null send(string $mobile, string $template_id, array $data) 发送短信
+ * @see \core\dict\DictLoader
+ * @mixin \core\dict\BaseDict
+ * @method  array|null load(array $data = [])
  */
-class SmsLoader extends Loader
+class DictLoader extends Loader
 {
-
 
     /**
      * 空间名
      * @var string
      */
-    protected $namespace = '\\core\\sms\\';
+    protected $namespace = '\\core\\dict\\';
 
-    protected $config_name = 'sms';
+    protected $config_name = 'dict';
     /**
      * 默认驱动
      * @return mixed
      */
     protected function getDefault()
     {
-        return config('sms.default');
+        return "Event";
     }
-
 
 }

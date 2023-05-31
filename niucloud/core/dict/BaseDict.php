@@ -9,9 +9,8 @@
 // | Author: Niucloud Team
 // +----------------------------------------------------------------------
 
-namespace core\addon;
+namespace core\dict;
 
-use core\loader\DriverConfig;
 use core\loader\Storage;
 use think\facade\Cache;
 use think\facade\Db;
@@ -20,7 +19,7 @@ use think\facade\Db;
  * Class BaseAddon
  * @package 
  */
-abstract class BaseAddon extends Storage
+abstract class BaseDict extends Storage
 {
     //插件整体缓存标识
     public static $cache_tag_name = 'addon_cash';
@@ -39,10 +38,18 @@ abstract class BaseAddon extends Storage
     protected function getLocalAddons()
     {
         $cache_name = "local_install_addons";
-        return Cache::tag(self::$cache_tag_name)->remember($cache_name, function ()  {
-            $list = Db::name("addon")->column("key");
-            return $list;
-        });
+        return cache_remember(
+            $cache_name,
+            function ()  {
+                $list = Db::name("addon")->column("key");
+                return $list;
+            },
+            self::$cache_tag_name
+        );
+//        return Cache::tag(self::$cache_tag_name)->remember($cache_name, function ()  {
+//            $list = Db::name("addon")->column("key");
+//            return $list;
+//        });
     }
 
     /**
@@ -75,20 +82,20 @@ abstract class BaseAddon extends Storage
     }
 
     /**
-     *获取系统enum path
+     *获取系统dict path
      */
-    protected function getEnumPath()
+    protected function getDictPath()
     {
-        return root_path(). "app". DIRECTORY_SEPARATOR. "enum". DIRECTORY_SEPARATOR;;
+        return root_path(). "app". DIRECTORY_SEPARATOR. "dict". DIRECTORY_SEPARATOR;;
     }
 
     /**
-     *获取插件对应的enum目录
+     *获取插件对应的dict目录
      * @param string $addon
      */
-    protected function getAddonEnumPath(string $addon)
+    protected function getAddonDictPath(string $addon)
     {
-        return $this->getAddonPath($addon). "app". DIRECTORY_SEPARATOR. "enum". DIRECTORY_SEPARATOR;
+        return $this->getAddonPath($addon). "app". DIRECTORY_SEPARATOR. "dict". DIRECTORY_SEPARATOR;
     }
 
     /**
