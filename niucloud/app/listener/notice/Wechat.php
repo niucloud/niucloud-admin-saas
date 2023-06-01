@@ -84,10 +84,6 @@ class Wechat
                     }
                 }
             }
-        }else {
-            if (!$template['async']) {
-                throw new NoticeException('WECHAT_TEMPLATE_NOTICE_NOT_OPEN');
-            }
         }
         return true;
     }

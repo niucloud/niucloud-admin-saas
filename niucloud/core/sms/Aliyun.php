@@ -47,7 +47,6 @@ class Aliyun extends BaseSms
             AlibabaCloud::accessKeyClient($this->app_key, $this->secret_key)
                 ->regionId('cn-hangzhou')
                 ->asDefaultClient();
-
             $result = AlibabaCloud::rpcRequest()
                 ->product('Dysmsapi')
                 ->host('dysmsapi.aliyuncs.com')
@@ -60,7 +59,7 @@ class Aliyun extends BaseSms
                         'PhoneNumbers'  => $mobile,
                         'SignName'      => $this->sign,
                         'TemplateCode'  => $template_id,
-                        'TemplateParam' => $data,
+                        'TemplateParam' => json_encode($data, JSON_UNESCAPED_UNICODE),
                     ],
                 ])
                 ->request();

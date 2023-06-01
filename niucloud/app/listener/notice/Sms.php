@@ -20,7 +20,7 @@ class Sms
         $to = $data['to'];//发送对象主题
         $mobile = $to['mobile'] ?? '';
         //完全信任消息的设置, 不再依赖support_type
-        if (!$template['is_sms']) {
+        if ($template['is_sms']) {
                 $sms_id = $template['sms_id'];//发送模板id
                 $content = $template['sms_content'];
                 $member_id = $to['member_id'] ?? 0;

@@ -13,11 +13,9 @@ namespace app\service\core\sys;
 
 use app\model\sys\SysAttachment;
 use app\service\core\upload\CoreFileService;
-use app\service\core\upload\CoreStorageService;
 use core\base\BaseCoreService;
 use core\exception\AdminException;
 use core\exception\UploadFileException;
-use core\upload\FileDriver;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;

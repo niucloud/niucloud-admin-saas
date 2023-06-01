@@ -39,13 +39,17 @@ class CoreAddonService extends CoreAddonBaseService
             $install_addon_list = $this->model->append(['status_name'])->column('title, icon, key, desc, status, author, version, install_time, update_time, cover', 'key');
             foreach($files as $path) {
                 $data = $this->getAddonConfig($path);
-                $icon = addon_resource($data['key'], "icon.png");
-                $data['icon'] = is_file($icon) ? $icon : '';
-                $cover = addon_resource($data['key'], "cover.png");
-                $data['cover'] = is_file($cover) ? $cover : '';
-                $key = $data['key'];
-                $data['install_info'] = $install_addon_list[$key] ?? [];
-                $list[] = $data;
+                if(isset($data['key']))
+                {
+                    $icon = addon_resource($data['key'], "icon.png");
+                    $data['icon'] = is_file($icon) ? $icon : '';
+                    $cover = addon_resource($data['key'], "cover.png");
+                    $data['cover'] = is_file($cover) ? $cover : '';
+                    $key = $data['key'];
+                    $data['install_info'] = $install_addon_list[$key] ?? [];
+                    $list[] = $data;
+                }
+
             }
         }
         return $list;

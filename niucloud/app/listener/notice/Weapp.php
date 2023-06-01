@@ -73,10 +73,6 @@ class Weapp
                     }
                 }
             }
-        }else {
-            if (!$template['async']) {
-                throw new NoticeException('WEAPP_TEMPLATE_NOTICE_NOT_OPEN');
-            }
         }
         return true;
     }

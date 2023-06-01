@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2023-02-17
- * Time: 15:58
- */
-
 namespace core\upload;
 
 use core\exception\UploadFileException;
@@ -13,8 +6,6 @@ use Exception;
 
 /**
  * 文件管理驱动类
- * Class FileDriver
- * @package core\file
  */
 class Local extends BaseUpload
 {

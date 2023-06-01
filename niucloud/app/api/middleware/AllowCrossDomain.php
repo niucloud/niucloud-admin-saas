@@ -53,10 +53,8 @@ class AllowCrossDomain
             $origin = rtrim(str_replace('https://','',str_replace('http://','',$referer)),"/");
         }
 
-//        $origin = $request->header('origin');
         if(env('app_debug') || ($origin && in_array($origin, $allow_origin))){
             header('Access-Control-Allow-Origin: *');
-//            header('Access-Control-Allow-Origin: ' . $origin);
         }else{
             header('Access-Control-Allow-Origin: *');
             throw new ServerException('SERVER_CROSS_REQUEST_FAIL', 409);

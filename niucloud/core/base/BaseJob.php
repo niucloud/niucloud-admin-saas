@@ -34,7 +34,7 @@ abstract class BaseJob extends Dispatch
 
 
     /**
-     * 运行队列
+     * 消费任务
      * @param Job $job
      * @param $params
      */
@@ -52,7 +52,7 @@ abstract class BaseJob extends Dispatch
 
 
     /**
-     * 执行队列
+     * 执行任务
      * @param string $action
      * @param Job $job
      * @param array $data

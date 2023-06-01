@@ -94,7 +94,7 @@ class CoreSmsService extends BaseCoreService
     {
         $info = (new CoreConfigService())->getConfig($site_id, 'SMS')['value'] ?? [];
         if (empty($info))
-            throw new NoticeException('NO_SMS_DRIVER_OPEN');
+            throw new NoticeException('NOTICE_SMS_NOT_OPEN');
 
         $sms_type = $info['default'] ?? '';
         $config = array(

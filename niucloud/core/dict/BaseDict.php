@@ -42,19 +42,13 @@ abstract class BaseDict extends Storage
             //尚未安装不加载插件
             return [];
         }
-        $cache_name = "local_install_addons";
-        return cache_remember(
-            $cache_name,
-            function ()  {
-                $list = Db::name("addon")->column("key");
-                return $list;
-            },
-            self::$cache_tag_name
-        );
-//        return Cache::tag(self::$cache_tag_name)->remember($cache_name, function ()  {
-//            $list = Db::name("addon")->column("key");
-//            return $list;
-//        });
+        $addons = Cache::get("local_install_addons");
+        if(empty($addons))
+        {
+            $addons = Db::name("addon")->column("key");
+            Cache::set("local_install_addons", $addons);
+        }
+        return $addons;
     }
 
     /**

@@ -8,15 +8,12 @@
 // +----------------------------------------------------------------------
 // | Author: Niucloud Team
 // +----------------------------------------------------------------------
-
 namespace core\upload;
-
 
 use app\service\core\upload\CoreUploadConfigService;
 use core\exception\UploadFileException;
 use core\loader\DriverConfig;
 use core\loader\Storage;
-
 /**
  * Class BaseUpload
  */

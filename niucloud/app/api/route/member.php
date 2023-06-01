@@ -12,6 +12,7 @@
 use app\api\middleware\ApiChannel;
 use app\api\middleware\ApiCheckToken;
 use app\api\middleware\ApiLog;
+use app\api\middleware\AllowCrossDomain;
 use think\facade\Route;
 
 
@@ -71,7 +72,7 @@ Route::group('member', function() {
     Route::put('cashout_account/:account_id', 'member.CashOutAccount/edit');
     // 删除提现账号
     Route::delete('cashout_account/:account_id', 'member.CashOutAccount/del');
-})->middleware(ApiChannel::class)
+})->middleware(AllowCrossDomain::class)->middleware(ApiChannel::class)
     ->middleware(ApiCheckToken::class, true)
     ->middleware(ApiLog::class);
 
@@ -81,6 +82,6 @@ Route::group('member', function() {
     /***************************************************** 会员管理 ****************************************************/
     //会员日志
     Route::post('log', 'member.Member/log');
-})->middleware(ApiChannel::class)
+})->middleware(AllowCrossDomain::class)->middleware(ApiChannel::class)
     ->middleware(ApiCheckToken::class)
     ->middleware(ApiLog::class);

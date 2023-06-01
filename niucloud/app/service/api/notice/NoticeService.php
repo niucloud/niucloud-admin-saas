@@ -31,7 +31,6 @@ class NoticeService extends BaseApiService
      * 发送消息
      * @param $key
      * @param $data
-     * @param bool $is_delay 是否延时
      * @return bool
      */
     public function send($key, $data)

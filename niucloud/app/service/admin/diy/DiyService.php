@@ -229,6 +229,7 @@ class DiyService extends BaseAdminService
         }
         $data[ 'component' ] = $this->getComponentList($data[ 'name' ]);
         $data[ 'domain_url' ] = ( new SystemService() )->getUrl();
+        $data[ 'site_id' ] = $this->site_id;
         return $data;
     }
 

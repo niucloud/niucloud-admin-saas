@@ -234,6 +234,11 @@ class Index extends BaseInstall
             return fail('平台信息不能为空!');
         }
 
+        if ($site_username == $username) {
+            $this->setSuccessLog([ '站点管理员和平台管理员不能相同，请重新输入', 'error' ]);
+            return fail('站点管理员和平台管理员不能相同，请重新输入');
+        }
+
         if ($password != $password2) {
             $this->setSuccessLog([ '平台两次密码输入不一样，请重新输入', 'error' ]);
             return fail('平台两次密码输入不一样，请重新输入');
@@ -242,6 +247,11 @@ class Index extends BaseInstall
         if ($site_name == '' || $site_username == '' || $site_password == '') {
             $this->setSuccessLog([ '平台信息不能为空', 'error' ]);
             return fail('平台信息不能为空!');
+        }
+
+        if($site_username == $username) {
+            $this->setSuccessLog([ '站点账号不能跟平台账号一致', 'error' ]);
+            return fail('站点账号不能跟平台账号一致!');
         }
 
         if ($site_password != $site_password2) {
@@ -292,7 +302,11 @@ class Index extends BaseInstall
         }
 
         if ($site_name == '' || $site_username == '' || $site_password == '') {
-            return fail('平台信息不能为空!');
+            return fail('站点信息不能为空!');
+        }
+
+        if($site_username == $username) {
+            return fail('站点账号不能跟平台账号一致');
         }
 
         if ($site_password != $site_password2) {

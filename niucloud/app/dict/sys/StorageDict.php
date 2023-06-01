@@ -25,7 +25,7 @@ class StorageDict
     const QINIU = 'qiniu';
 
     //阿里云存储
-    const ALI = 'ali';
+    const ALI = 'aliyun';
 
     //腾讯云存储
     const TENCENT = 'tencent';

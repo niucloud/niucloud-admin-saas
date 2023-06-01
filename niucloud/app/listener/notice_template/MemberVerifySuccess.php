@@ -14,9 +14,10 @@ class MemberVerifySuccess extends BaseNoticeTemplate
 
     private $key = 'member_verify_code';
 
-    public function handle(array $data)
+    public function handle(array $params)
     {
-        if ($this->key == $data['key']) {
+        if ($this->key == $params['key']){
+            $data = $params['data'];
             return $this->toReturn(
                 [
                     'code' => $data['code'],

@@ -106,6 +106,7 @@ return [
     'WECHAT_TEMPLATE_NEED_NO' => '微信消息模板缺少模板编号',
     'NOTICE_NOT_OPEN_SMS' => '当前消息未开启短信发送',
     'NOTICE_SMS_EMPTY' => '手机号为空',
+    'NOTICE_SMS_NOT_OPEN' => '短信未启用',
 
     //会员相关
     'MOBILE_IS_EXIST' => '当前手机号已绑定账号',

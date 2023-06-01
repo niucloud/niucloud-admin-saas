@@ -109,7 +109,7 @@ class WechatAuthService extends BaseApiService
             $is_bind_mobile = $config['is_bind_mobile'];
             $is_auth_register = $config['is_auth_register'];
             if ($is_bind_mobile == 0 && $is_auth_register == 1) {
-                return $this->register($openid);
+                return $this->register($openid, '', $nickname, $avatar);
             } else {
                 return ['avatar' => $avatar, 'nickname' => $nickname, 'openid' => $openid];
             }
@@ -146,7 +146,7 @@ class WechatAuthService extends BaseApiService
      * @return void
      * @throws InvalidArgumentException
      */
-    public function register(string $openid, string|int $mobile = '')
+    public function register(string $openid, string|int $mobile = '', string $nickname = '', string $avatar = '')
     {
         $member_service = new MemberService();
         $member_info = $member_service->findMemberInfo(['wx_openid' => $openid, 'site_id' => $this->site_id]);
@@ -155,6 +155,8 @@ class WechatAuthService extends BaseApiService
         $result = $register_service->register($mobile,
             [
                 'wx_openid' => $openid,
+                'nickname' => $nickname,
+                'headimg' => $avatar
             ],
             MemberRegisterTypeDict::WECHAT
         );

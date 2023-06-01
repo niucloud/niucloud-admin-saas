@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2023-02-17
- * Time: 15:58
- */
-
 namespace core\upload;
 
 use core\exception\UploadFileException;
@@ -14,8 +7,6 @@ use Qcloud\Cos\Client;
 
 /**
  * 腾讯云存储引擎 (COS)
- * Class Qiniu
- * @package app\common\library\storage\engine
  */
 class Qcloud extends BaseUpload
 {

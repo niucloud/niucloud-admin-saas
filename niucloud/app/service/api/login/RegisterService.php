@@ -50,7 +50,7 @@ class RegisterService extends BaseApiService
             $member_id =  $data;
         } else{
             if(empty($data['nickname'])){
-                $data['nickname'] = $data['username'] ?? substr_replace($data['mobile'], '****', 3, 4) ?? $this->createName();
+                $data['nickname'] = $data['username'] ?? !empty($mobile) ? substr_replace($mobile, '****', 3, 4) : $this->createName();
             }
             $data['register_channel'] = $this->channel;
             $data['register_type'] = $type;

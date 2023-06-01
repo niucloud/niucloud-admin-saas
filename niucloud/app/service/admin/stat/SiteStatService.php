@@ -19,6 +19,7 @@ use app\service\admin\sys\SystemService;
 use app\service\core\member\CoreMemberService;
 use Carbon\Carbon;
 use core\base\BaseAdminService;
+use think\facade\Db;
 
 
 /**
@@ -54,7 +55,7 @@ class SiteStatService extends BaseAdminService
             'version' => [],
             'visit_stat' => [
                 'date' => [],
-                'value' => [980,1323,882,762,865,923,1105]
+                'value' => []
             ],
             'member_stat' => [
                 'type' => ['男','女','未知'],
@@ -88,7 +89,12 @@ class SiteStatService extends BaseAdminService
         $data['system'] = (new SystemService())->getInfo();
         $data['version'] = $data['system']['version'] ?? [];
         $time = time();
-        for ($i=1; $i<=7; $i++) $data['visit_stat']['date'][] = date('Y-m-d', strtotime( '+' . $i-7 .' days', $time));
+        for ($i=1; $i<=7; $i++){
+            $time_data = date('Y-m-d', strtotime( '+' . $i-7 .' days', $time));
+            $data['visit_stat']['date'][] = $time_data;
+            $time_arr = get_start_and_end_time_by_day($time_data);
+            $data['visit_stat']['value'][] = (new MemberService())->getCount([[ '', 'exp', Db::raw('(`create_time` >= ' . $time_arr[0] . ')  and (`create_time` < ' . $time_arr[1] . ')') ]]);
+        }
         $member_count = (new MemberService())->getCount();
         $man_count = (new MemberService())->getCount([ ['sex', '=', '1'] ]);
         $woman_count = (new MemberService())->getCount([ ['sex', '=', '2'] ]);

@@ -1210,9 +1210,9 @@ CREATE TABLE jobs (
   id int(11) NOT NULL AUTO_INCREMENT,
   queue varchar(255) NOT NULL,
   payload longtext NOT NULL,
-  attempts tinyint(3) UNSIGNED NOT NULL,
-  reserved tinyint(3) UNSIGNED NOT NULL,
-  reserve_time int(10) UNSIGNED DEFAULT NULL,
+  attempts tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
+  reserved tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
+  reserve_time int(10) UNSIGNED DEFAULT 0,
   available_time int(10) UNSIGNED NOT NULL,
   create_time int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (id)

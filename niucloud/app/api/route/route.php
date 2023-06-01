@@ -13,12 +13,13 @@ use app\api\middleware\ApiChannel;
 use app\api\middleware\ApiCheckToken;
 use app\api\middleware\ApiLog;
 use think\facade\Route;
+use app\api\middleware\AllowCrossDomain;
 //公众号消息推送
 
 Route::any('wechat/serve/:site_id', 'wechat.Serve/serve')
     ->middleware(ApiChannel::class)
     ->middleware(ApiCheckToken::class)
-    ->middleware(ApiLog::class);
+    ->middleware(ApiLog::class)->allowCrossDomain();
 
 
 /**
@@ -74,7 +75,8 @@ Route::group(function () {
     Route::get('site', 'sys.Config/site');
     //场景域名
     Route::get('scene_domain', 'sys.Config/getSceneDomain');
-})->middleware(ApiChannel::class)
+})->middleware(AllowCrossDomain::class)
+    ->middleware(ApiChannel::class)
 ->middleware(ApiCheckToken::class)
 ->middleware(ApiLog::class);
 //加载插件路由

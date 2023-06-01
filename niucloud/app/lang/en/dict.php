@@ -62,7 +62,7 @@ return [
         //存储方式
         'storage_type_local' => 'local',
         'storage_type_qiniu' => 'qiniu',
-        'storage_type_ali' => 'ali',
+        'storage_type_ali' => 'aliyun',
         'storage_type_qcloud' => 'tencent',
 
     ],

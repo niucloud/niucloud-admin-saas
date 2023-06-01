@@ -12,6 +12,7 @@
 use app\api\middleware\ApiChannel;
 use app\api\middleware\ApiCheckToken;
 use app\api\middleware\ApiLog;
+use app\api\middleware\AllowCrossDomain;
 use think\facade\Route;
 
 
@@ -33,6 +34,6 @@ Route::group('article', function () {
     //文章分类详情
     Route::get('category/:id', 'article.ArticleCategory/info');
 
-})->middleware(ApiChannel::class)
+})->middleware(AllowCrossDomain::class)->middleware(ApiChannel::class)
     ->middleware(ApiCheckToken::class, false)
     ->middleware(ApiLog::class);

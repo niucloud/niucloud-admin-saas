@@ -19,7 +19,7 @@ namespace app\dict\sys;
 class SmsDict
 {
     //阿里云短信
-    const ALISMS = 'ali';
+    const ALISMS = 'aliyun';
     //腾讯云短信
     const TENCENTSMS = 'tencent';
 

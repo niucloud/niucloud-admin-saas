@@ -48,6 +48,6 @@ class NoticeService extends BaseCoreService
         $template = (new CoreNoticeService())->getInfo($site_id, $key);
         if(empty($template)) return false;
 
-        return Notice::invoke(['site_id' => $site_id, 'key' => $key, 'data' => $data, 'template' => $template], is_open:$template['async']);
+        return Notice::invoke(['site_id' => $site_id, 'key' => $key, 'data' => $data, 'template' => $template], is_async:false);
     }
 }

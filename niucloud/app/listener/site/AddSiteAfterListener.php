@@ -28,7 +28,7 @@ class AddSiteAfterListener
     {
 
         // 初始化文章数据
-        ( new InstallArticleService() )->install([ 'site_id' => $data[ 'site_id' ] ]);
+//        ( new InstallArticleService() )->install([ 'site_id' => $data[ 'site_id' ] ]);
         //加载插件语言包
         return;
     }

@@ -26,8 +26,6 @@ Route::group(function () {
     //一次校验验证码
     Route::get('captcha/check', 'login.Captcha/check');
 
-    Route::get('terminal', 'sys.Terminal/exec');
-
     Route::get('test', 'login.Login/test');
 });
 
