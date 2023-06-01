@@ -2,7 +2,7 @@
     import { onLaunch, onShow, onHide } from '@dcloudio/uni-app'
     import manifest from '@/manifest.json'
     import { redirectInterceptor, launchInterceptor } from '@/utils/interceptor'
-    import { getToken, isWeixinBrowser, urlDeconstruction } from '@/utils/common'
+    import { getToken, isWeixinBrowser,getSiteId } from '@/utils/common'
     import useMemberStore from '@/stores/member'
     import useConfigStore from '@/stores/config'
     import useSystemStore from '@/stores/system'
@@ -22,6 +22,9 @@
         // #ifdef H5
         uni.getSystemInfoSync().platform == 'ios' && (uni.setStorageSync('initUrl', location.href))
         // #endif
+        
+        // 缺少站点id，拦截
+        if (getSiteId(uni.getStorageSync('wap_site_id') || import.meta.env.VITE_SITE_ID) === '') return;
 
         const configStore = useConfigStore()
         configStore.getTabbarConfig()

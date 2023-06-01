@@ -259,7 +259,16 @@
 				// #endif
 				"navigationBarTitleText": "%pages.webview.index%"
 			}
-		}// {{PAGE}}        
+		},
+		{
+			"path": "pages/index/develop",
+			"style": {
+				// #ifdef H5
+				"navigationStyle": "custom",
+				// #endif
+				"navigationBarTitleText": "%pages.index.develop%"
+			}
+		}// {{PAGE}}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

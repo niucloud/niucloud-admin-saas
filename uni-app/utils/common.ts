@@ -1,6 +1,7 @@
 import { getTabbarPages } from './pages'
 import useDiyStore from '@/stores/diy'
 import useMemberStore from '@/stores/member'
+import internal from 'stream'
 
 /**
 	* 跳转页面
@@ -214,4 +215,19 @@ export function moneyFormat(money : string) : string {
  */
 export function mobileConceal(mobile : string) : string {
 	return mobile.substring(0, 3) + "****" + mobile.substr(mobile.length - 4);
+}
+
+/**
+ * 获取站点id
+ */
+export function getSiteId(siteid : number) {
+    // #ifdef H5
+    const match = location.href.match(/\/s(\d*)\//);
+    if (match) return match[1]
+    else return siteid
+    // #endif
+    
+    // #ifndef H5
+    return siteid
+    // #endif
 }

@@ -1,6 +1,6 @@
-import { getToken, getAppChannel } from './common'
 import useMemberStore from '@/stores/member'
 import { t } from '@/locale'
+import { getToken, getAppChannel, getSiteId } from './common'
 
 interface RequestConfig {
     showErrorMessage ?: boolean
@@ -23,13 +23,12 @@ class Request {
         // #ifndef H5
         this.baseUrl = import.meta.env.VITE_APP_BASE_URL
         // #endif
-
-        // #ifdef MP
-        this.config.header[import.meta.env.VITE_REQUEST_HEADER_SITEID_KEY] = import.meta.env.VITE_SITE_ID
-        // #endif
-        // #ifdef H5
-        this.config.header[import.meta.env.VITE_REQUEST_HEADER_SITEID_KEY] = uni.getStorageSync('wap_site_id') || import.meta.env.VITE_SITE_ID
-        // #endif    
+		
+        if (process.env.NODE_ENV == 'development') {
+            this.config.header[import.meta.env.VITE_REQUEST_HEADER_SITEID_KEY] = getSiteId(uni.getStorageSync('wap_site_id') || import.meta.env.VITE_SITE_ID)
+        } else {
+            this.config.header[import.meta.env.VITE_REQUEST_HEADER_SITEID_KEY] = getSiteId(import.meta.env.VITE_SITE_ID)
+        }
 
         this.config.header[import.meta.env.VITE_REQUEST_HEADER_CHANNEL_KEY] = getAppChannel()
     }

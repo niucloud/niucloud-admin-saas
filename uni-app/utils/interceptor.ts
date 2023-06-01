@@ -1,6 +1,6 @@
 import { language } from '@/locale'
 import { checkNeedLogin } from '@/utils/auth'
-import { urlDeconstruction, getToken } from '@/utils/common'
+import { redirect, urlDeconstruction, getToken, getSiteId } from '@/utils/common'
 import { memberLog } from '@/api/auth'
 
 /**
@@ -17,6 +17,15 @@ export const redirectInterceptor = () => {
 				// 加载语言包
 				language.loadLocaleMessages(route.path, uni.getLocale())
 
+				// 开发模式下，如果未配置站点ID，则跳转到开发环境配置页面
+				// #ifdef H5
+				if (process.env.NODE_ENV == 'development') {
+					if ((getSiteId(uni.getStorageSync('wap_site_id') || import.meta.env.VITE_SITE_ID) === '') && route.path != '/pages/index/develop') {
+						redirect({ url: '/pages/index/develop', mode: 'reLaunch' })
+					}
+				}
+				// #endif
+
 				// 校验是否需要登录
 				checkNeedLogin(route)
 
@@ -31,9 +40,25 @@ export const redirectInterceptor = () => {
  * 应用初始化拦截器
  */
 export const launchInterceptor = () => {
-	// 加载语言包
 	const launch = uni.getLaunchOptionsSync()
 	launch.path = `/${launch.path}`
+
+	// 开发模式下，如果未配置站点ID，则跳转到开发环境配置页面
+	// #ifdef H5
+	if (process.env.NODE_ENV == 'development') {
+		// 后台DIY装修页面时，获取站点ID
+		if (location.search.indexOf('?mode=decorate&site_id=') != -1) {
+			uni.setStorageSync('wap_site_id', location.search.replace('?mode=decorate&site_id=',''));
+		}
+		if (getSiteId(uni.getStorageSync('wap_site_id') || import.meta.env.VITE_SITE_ID) === '') {
+			launch.path = '/pages/index/develop';
+			uni.setStorageSync('develop_before_path', launch.path);
+			redirect({ url: '/pages/index/develop', mode: 'reLaunch' })
+		}
+	}
+	// #endif
+
+	// 加载语言包
 	language.loadLocaleMessages(launch.path, uni.getLocale())
 
 	// 校验是否需要登录
@@ -43,12 +68,6 @@ export const launchInterceptor = () => {
 	if (launch.query && launch.query.mid) {
 		uni.setStorageSync('pid', launch.query.mid)
 	}
-
-	// #ifdef H5
-	const match = location.href.match(/\/s(\d*)\//);
-	if (match) uni.setStorageSync('wap_site_id', match[1])
-	else uni.removeStorageSync('wap_site_id')
-	// #endif
 
 	// 添加会员访问日志
 	if (getToken()) memberLog({ route: launch.path, params: JSON.stringify(launch.query || {}), pre_route: '' })
