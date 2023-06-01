@@ -12,7 +12,7 @@
 				<span class="text-base">{{payItems.name }}</span>
 			</div>
 			<div class="pay-table">
-				<div class="flex items-center pay-table-head bg-[#fbfbfb] table-item-pd table-item-border justify-between">
+				<div class="flex items-center pay-table-head table-bg table-item-pd table-item-border justify-between table-bg">
 					<span class="text-base text-[#999] w-[150px]">{{t('payType')}}</span>
 					<!-- <span class="text-base font-bold text-[#999] w-[110px]">{{t('settingDefaultPay')}}</span> -->
 					<span class="text-base text-[#999] w-[110px] text-center">{{t('onState')}}</span>
@@ -219,5 +219,11 @@ const cancelFn = ()=>{
 
 :deep(.box-pay-card) .el-card__body{
 	padding: 0;
+}
+.table-bg{
+	background: #f5f7f9;
+}
+html.dark .table-bg{
+	background: #141414;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="main-container bg-[#fff] min-w-[1000px] min-h-[650px]" v-loading="loading">
+    <div class="main main-container min-w-[1000px] min-h-[650px]" v-loading="loading">
 		<div class="pt-[1px]" v-for="(listItems, listIndex) in appManageList" :key="listIndex" v-if="appManageList.length > 0" >
 			<p class="ml-4 mt-[20px] border-l-[2px] border-[#273de3] pl-3 leading-[1] font-bold">{{ listItems.name }}</p>
 			<div class="flex flex-wrap">
@@ -9,7 +9,7 @@
 						<img v-else class="w-[240px] h-[120px]" src="@/assets/images/app_default.png"/>
 					</div>
 					<div class="text-left mt-2 w-[240px]">
-						<p class="app-text text-[14px] text-[#222] pl-2">{{ appItems.title }}</p>
+						<p class="app-text text-[14px] pl-2">{{ appItems.title }}</p>
 						<p class="app-text text-[12px] text-[#999] pl-2">{{ appItems.desc }}</p>
 					</div>
 				</div>
@@ -59,6 +59,9 @@ const toLink = (link) => {
 		white-space: nowrap;
 		text-overflow: ellipsis;
 		-o-text-overflow:ellipsis;
+	}
+	.main {
+		background-color: var(--el-bg-color-overlay);
 	}
 	.app-item {
 		// box-shadow: 0px 6px 18px 0px rgba(82,129,187,0.1);

@@ -23,6 +23,7 @@
       "contactAddress": "联系地址",
       "address": "详细地址",
       "contactAddressPlaceholder":"联系地址",
+      "keywords":"关键字",
       "keywordsPlaceholder": "网站关键字",
       "logoPlaceholder": "网站Logo",
       "descPlaceholder": "网站简介",

@@ -22,7 +22,7 @@ export function getAddonDetial(id: number) {
  * @returns
  */
 export function installAddon(params: Record<string, any>) {
-    return request.post(`addon/install/${params.addon}`, params, { showErrorMessage: true })
+    return request.post(`addon/install/${params.addon}`, params)
 }
 
 /**
@@ -59,5 +59,5 @@ export function getAddonInstallTaskState(addon: string, key: string) {
  * @returns 
  */
 export function executeInstall(addon: string) {
-    return request.post(`addon/install/execute/${addon}`, {}, { showErrorMessage: true })
+    return request.post(`addon/install/execute/${addon}`, {})
 }

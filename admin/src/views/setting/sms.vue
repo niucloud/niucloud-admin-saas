@@ -28,7 +28,7 @@
                 </el-table>
             </div>
 
-            <ali ref="aliDialog" @complete="loadSmsList()" />
+            <ali ref="aliyunDialog" @complete="loadSmsList()" />
             <tencent ref="tencentDialog" @complete="loadSmsList()" />
         </el-card>
     </div>
@@ -44,7 +44,7 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 const pageName = route.meta.title;
 
-const aliDialog: Record<string, any> | null = ref(null)
+const aliyunDialog: Record<string, any> | null = ref(null)
 const tencentDialog: Record<string, any> | null = ref(null)
 
 let smsTableData = reactive({

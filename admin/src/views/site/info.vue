@@ -10,6 +10,7 @@
 
                 <el-form-item :label="t('siteLogo')">
                     <el-image v-if="formData.logo" class="w-20 h-20" :src="img(formData.logo)" fit="contain"></el-image>
+					<img class="w-20 h-20" v-else src="@/assets/images/site_logo.png" alt="" >
                 </el-form-item>
 
                 <el-form-item :label="t('groupName')">

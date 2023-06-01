@@ -167,7 +167,7 @@
                                 v-if="!installCheckResult.job_normal" />
                             <p class="pt-[20px] pl-[20px] ">{{ t('dirPermission') }}</p>
                             <div class="px-[20px] text-[14px]">
-                                <el-row class="py-[10px] items">
+                                <el-row class="py-[10px] items table-head-bg pl-[15px] mb-[10px]">
                                     <el-col :span="12">
                                         <span>{{ t('path') }}</span>
                                     </el-col>
@@ -178,7 +178,7 @@
                                         <span>{{ t('status') }}</span>
                                     </el-col>
                                 </el-row>
-                                <el-row class="pb-[10px] items" v-for="item in installCheckResult.dir.is_readable">
+                                <el-row class="pb-[10px] items pl-[15px]" v-for="item in installCheckResult.dir.is_readable">
                                     <el-col :span="12">
                                         <span>{{ item.dir }}</span>
                                     </el-col>
@@ -192,7 +192,7 @@
                                             </el-icon></span>
                                     </el-col>
                                 </el-row>
-                                <el-row class="pb-[10px] items" v-for="item in installCheckResult.dir.is_write">
+                                <el-row class="pb-[10px] items pl-[15px]" v-for="item in installCheckResult.dir.is_write">
                                     <el-col :span="12">
                                         <span>{{ item.dir }}</span>
                                     </el-col>
@@ -211,7 +211,7 @@
                         <div class="bg-[#fff] my-3" v-if="installCheckResult.dir">
                             <p class="pl-[20px] ">{{ t('packageManageTool') }}</p>
                             <div class="px-[20px] text-[14px]">
-                                <el-row class="py-[10px] items">
+                                <el-row class="py-[10px] items table-head-bg pl-[15px] mb-[10px]">
                                     <el-col :span="12">
                                         <span>{{ t('name') }}</span>
                                     </el-col>
@@ -222,7 +222,7 @@
                                         <span>{{ t('status') }}</span>
                                     </el-col>
                                 </el-row>
-                                <el-row class="pb-[10px] items" v-for="item in installCheckResult.runtime">
+                                <el-row class="pb-[10px] items pl-[15px]" v-for="item in installCheckResult.runtime">
                                     <el-col :span="12">
                                         <span>{{ item.name }}</span>
                                     </el-col>
@@ -241,7 +241,7 @@
                         <div class="bg-[#fff] my-3"
                             v-if="installCheckResult.conflict_files && installCheckResult.conflict_files.length">
                             <p class="pl-[20px] ">{{ t('conflictFiles') }}</p>
-                            <div class="px-[20px] text-[14px] pt-[10px]">
+                            <div class="px-[20px] text-[14px] pt-[10px] pl-[15px]">
                                 <el-row class="pb-[10px] items" v-for="item in installCheckResult.conflict_files">
                                     <el-col :span="24">
                                         <span>{{ item }}</span>
@@ -252,7 +252,7 @@
                         <div class="bg-[#fff] my-3">
                             <p class="pl-[20px] ">{{ t('process') }}</p>
                             <div class="px-[20px] text-[14px]">
-                                <el-row class="py-[10px] items">
+                                <el-row class="py-[10px] items table-head-bg pl-[15px] mb-[10px]">
                                     <el-col :span="12">
                                         <span>{{ t('name') }}</span>
                                     </el-col>
@@ -263,7 +263,7 @@
                                         <span>{{ t('status') }}</span>
                                     </el-col>
                                 </el-row>
-                                <el-row class="pb-[10px] items">
+                                <el-row class="pb-[10px] items pl-[15px]">
                                     <el-col :span="12">
                                         <span>php think queue:listen</span>
                                     </el-col>
@@ -544,5 +544,13 @@ const getAddonDetialFn = (data: AnyObject) => {
     white-space: nowrap;
     text-overflow: ellipsis;
     -o-text-overflow: ellipsis;
+}
+
+// 插件安装-弹窗-表格样式
+.table-head-bg{
+	background: #f5f7f9;
+}
+html.dark .table-head-bg{
+	background: #141414;
 }
 </style>

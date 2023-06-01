@@ -164,3 +164,31 @@ select:-webkit-autofill {
         }
     }
 }
+
+
+// 温馨提示样式
+.warm-prompt {
+    background-color: var(--el-color-primary-light-9) !important;
+    .el-icon, p {
+        color: var(--el-color-primary-light-3);
+    }
+    .el-alert__content{
+        padding: 0;
+    }
+}
+html.dark {
+    .warm-prompt {
+        background-color: var(--el-color-primary-light-5) !important;
+        .el-icon, p {
+            color: var(--el-color-primary-dark-2);
+        }
+    }   
+}
+.app-item {
+	background: #f7f7f7;
+}
+html.dark {
+    .app-item {
+        background: #191a23;
+    }   
+}

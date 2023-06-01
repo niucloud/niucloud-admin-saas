@@ -33,7 +33,7 @@
 
             <storage-local ref="localDialog" @complete="loadStorageList()" />
             <storage-qiniu ref="qiniuDialog" @complete="loadStorageList()" />
-            <storage-ali ref="aliDialog" @complete="loadStorageList()" />
+            <storage-ali ref="aliyunDialog" @complete="loadStorageList()" />
             <storage-tencent ref="tencentDialog" @complete="loadStorageList()" />
         </el-card>
     </div>
@@ -53,7 +53,7 @@ const pageName = route.meta.title;
 
 const localDialog: Record<string, any> | null = ref(null)        
 const qiniuDialog: Record<string, any> | null = ref(null)
-const aliDialog: Record<string, any> | null = ref(null)
+const aliyunDialog: Record<string, any> | null = ref(null)
 const tencentDialog: Record<string, any> | null = ref(null)
 
 let storageTableData = reactive({

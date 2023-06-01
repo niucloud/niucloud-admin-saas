@@ -258,15 +258,8 @@ const openClose = (i, site_id) => {
 
 <style lang="scss" scoped>
 :deep(.warm-prompt) {
-    background-color: var(--el-color-primary-light-9) !important;
-    .el-icon, p {
-        color: var(--el-color-primary-light-3);
-    }
-    .el-alert__content{
-        padding: 0;
-        .el-alert__description{
-            margin: 0;
-        }
+    .el-alert__description{
+        margin: 0;
     }
 }
 </style>

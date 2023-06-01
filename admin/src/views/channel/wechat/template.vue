@@ -132,14 +132,4 @@ const infoSwitch = (res: AnyObject) => {
 }
 
 </script>
-<style lang="scss" scoped>
-:deep(.warm-prompt) {
-    background-color: var(--el-color-primary-light-9) !important;
-    .el-icon, p {
-        color: var(--el-color-primary-light-3);
-    }
-    .el-alert__content{
-        padding: 0;
-    }
-}
-</style>
+<style lang="scss" scoped></style>

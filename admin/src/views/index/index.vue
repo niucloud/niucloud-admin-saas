@@ -67,7 +67,7 @@
 						</div>
 					</el-col>
 					<el-col :span="4">
-						<div class="w-[120px] 2xl:w-[200px] py-[15px] rounded-[10px] flex justify-center items-center cursor-pointer border-[1px] border-[#E5E8EE]" @click="toLink('/tools/app_store')">
+						<div class="w-[120px] 2xl:w-[200px] py-[15px] rounded-[10px] flex justify-center items-center cursor-pointer border-[1px] border-[#E5E8EE]" @click="toLink('/app_store')">
 							<img class="w-[33px]" src="@/assets/images/index/app.png"/>
 						    <span class="ml-[10px] text-[16px] text-[#666]">{{t('appMarketplace')}}</span>
 						</div>

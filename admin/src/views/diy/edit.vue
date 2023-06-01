@@ -275,7 +275,7 @@ initPage({
         }
     }
 
-    wapDomain.value = `${data.domain_url.wap_url}/${data.page}?mode=decorate`; // 模式：decorate 装修 访问预览页面
+    wapDomain.value = `${data.domain_url.wap_url}/${data.page}?mode=decorate&site_id=${data.site_id}`; // 模式：decorate 装修 访问预览页面
 })
 
 onMounted(() => {

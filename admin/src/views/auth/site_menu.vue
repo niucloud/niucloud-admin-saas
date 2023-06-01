@@ -1,12 +1,12 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-            
+
             <div class="flex justify-between items-center">
-                <span class="text-[24px]">{{pageName}}</span>
-                <el-button type="primary" class="w-[100px]" @click="addEvent">
+                <span class="text-[24px]">{{ pageName }}</span>
+                <!-- <el-button type="primary" class="w-[100px]" @click="addEvent">
                     {{ t('addMenu') }}
-                </el-button>
+                </el-button> -->
             </div>
 
             <div class="mt-[20px]">
@@ -41,8 +41,8 @@
                     <el-table-column prop="create_time" :label="t('createTime')" width="180" />
                     <el-table-column :label="t('operation')" fixed="right" width="130">
                         <template #default="{ row }">
-                            <el-button type="primary" link @click="editEvent(row)">{{ t('edit') }}</el-button>
-                            <el-button type="danger" link @click="deleteEvent(row.menu_key)">{{ t('delete') }}</el-button>
+                            <!-- <el-button type="primary" link @click="editEvent(row)">{{ t('edit') }}</el-button>
+                            <el-button type="danger" link @click="deleteEvent(row.menu_key)">{{ t('delete') }}</el-button> -->
                         </template>
                     </el-table-column>
                 </el-table>
@@ -61,7 +61,7 @@ import { ElMessageBox } from 'element-plus'
 import EditMenu from '@/views/auth/components/edit-menu.vue'
 import { useRoute } from 'vue-router'
 const route = useRoute()
-const pageName = route.meta.title;
+const pageName = route.meta.title
 
 const menusTableData = reactive({
     loading: true,
@@ -88,7 +88,7 @@ getMenuList()
 const editMenuDialog: Record<string, any> | null = ref(null)
 
 const addEvent = () => {
-    editMenuDialog.value.setFormData({app_type:'site'})
+    editMenuDialog.value.setFormData({ app_type: 'site' })
     editMenuDialog.value.showDialog = true
 }
 
