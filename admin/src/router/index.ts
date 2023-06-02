@@ -46,7 +46,7 @@ router.beforeEach(async (to, from, next) => {
     if (matched && matched.length && matched[0].path != '/:pathMatch(.*)*') {
         matched = matched[0].path;
     } else {
-        matched = 'site';
+        matched = getAppType();
     }
 
     const loginPath = to.path == '/' ? '/admin/login' : `${matched}/login`
