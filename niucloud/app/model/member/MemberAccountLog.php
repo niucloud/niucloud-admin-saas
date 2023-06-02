@@ -116,7 +116,7 @@ class MemberAccountLog extends BaseModel
     public function searchMemberIdAttr($query, $value, $data)
     {
         if ($value) {
-            $query->where('member_account_log.member_id', $value);
+            $query->where('member_id', $value);
         }
     }
 
