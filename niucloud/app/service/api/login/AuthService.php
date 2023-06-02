@@ -62,10 +62,10 @@ class AuthService extends BaseApiService
     }
     /**
      * 绑定手机号
-     * @param string|int $mobile
+     * @param string $mobile
      * @return void
      */
-    public function bindMobile(string|int $mobile, string $mobile_code){
+        public function bindMobile(string $mobile, string $mobile_code){
 
         if(empty($mobile)){
             $result = (new CoreWeappAuthService())->getUserPhoneNumber($this->site_id, $mobile_code);

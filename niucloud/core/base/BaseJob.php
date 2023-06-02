@@ -11,8 +11,6 @@
 
 namespace core\base;
 
-use app\model\system\Cron;
-use app\service\core\schedule\CoreCronService;
 use core\job\Dispatch;
 use think\queue\Job;
 

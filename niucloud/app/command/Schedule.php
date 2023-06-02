@@ -2,12 +2,10 @@
 
 namespace app\command;
 
-use app\job\schedule\OrderClose;
 use app\service\core\schedule\CoreScheduleService;
 use schedule\console\Command;
 use think\console\Input;
 use think\console\Output;
-use think\facade\Log;
 use think\helper\Str;
 use DateTimeZone;
 use Workerman\Crontab\Crontab;

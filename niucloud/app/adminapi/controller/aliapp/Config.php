@@ -12,7 +12,6 @@
 namespace app\adminapi\controller\aliapp;
 
 use app\service\admin\aliapp\AliappConfigService;
-use app\service\admin\site\WebSiteConfigService;
 use core\base\BaseAdminController;
 use think\Response;
 

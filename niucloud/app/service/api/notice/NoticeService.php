@@ -11,7 +11,6 @@
 
 namespace app\service\api\notice;
 
-use app\service\core\notice\CoreNoticeService;
 use core\base\BaseApiService;
 
 /**

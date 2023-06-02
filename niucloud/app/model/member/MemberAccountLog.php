@@ -64,7 +64,7 @@ class MemberAccountLog extends BaseModel
      */
     public function member()
     {
-        return $this->hasOne( Member::class, 'member_id', 'member_id')->withField('member_id, member_no, username, mobile, nickname, headimg')->joinType('left');
+        return $this->hasOne( Member::class, 'member_id', 'member_id')->withField('member_id, member_no, username, mobile, nickname, headimg')->joinType('inner');
     }
 
     /**
@@ -121,6 +121,18 @@ class MemberAccountLog extends BaseModel
     }
 
     /**
+     * 会员搜索(用于关联表查询)
+     * @param $value
+     * @param $data
+     */
+    public function searchJoinMemberIdAttr($query, $value, $data)
+    {
+        if ($value) {
+            $query->where('member_account_log.member_id', $value);
+        }
+    }
+
+    /**
      * 类型搜索
      * @param $value
      * @param $data
@@ -147,6 +159,23 @@ class MemberAccountLog extends BaseModel
      * @param $value
      */
     public function searchCreateTimeAttr($query, $value, $data)
+    {
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
+        if($start_time > 0 && $end_time > 0){
+            $query->whereBetweenTime('create_time', $start_time, $end_time);
+        }else if($start_time > 0 && $end_time == 0){
+            $query->where([['create_time', '>=', $start_time]]);
+        }else if($start_time == 0 && $end_time > 0){
+            $query->where([['create_time', '<=', $end_time]]);
+        }
+    }
+
+    /**
+     * 创建关联表时间搜索器
+     * @param $value
+     */
+    public function searchJoinCreateTimeAttr($query, $value, $data)
     {
         $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
         $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;

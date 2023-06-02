@@ -146,7 +146,7 @@ class WechatAuthService extends BaseApiService
      * @return void
      * @throws InvalidArgumentException
      */
-    public function register(string $openid, string|int $mobile = '', string $nickname = '', string $avatar = '')
+    public function register(string $openid, string $mobile = '', string $nickname = '', string $avatar = '')
     {
         $member_service = new MemberService();
         $member_info = $member_service->findMemberInfo(['wx_openid' => $openid, 'site_id' => $this->site_id]);

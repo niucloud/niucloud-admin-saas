@@ -25,6 +25,7 @@ class Serve extends BaseController
      * @return void
      */
     public function serve($site_id){
+
         return (new WechatServeService())->serve();
     }
 

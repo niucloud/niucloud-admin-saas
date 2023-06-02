@@ -178,7 +178,7 @@ class Alipay extends BasePay
      * @param $out_trade_no
      * @return void
      */
-    public function close(string|int $out_trade_no){
+    public function close(string $out_trade_no){
         $result = $this->returnFormat(Pay::alipay()->close([
             'out_trade_no' => $out_trade_no,
         ]));

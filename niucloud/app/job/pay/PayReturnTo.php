@@ -11,7 +11,6 @@
 
 namespace app\job\pay;
 
-use app\model\system\Cron;
 use app\service\core\pay\CorePayService;
 use core\base\BaseJob;
 use think\facade\Log;

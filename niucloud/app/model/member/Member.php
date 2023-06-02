@@ -197,6 +197,22 @@ class Member extends BaseModel
         $start_time = empty($value[ 0 ]) ? 0 : strtotime($value[ 0 ]);
         $end_time = empty($value[ 1 ]) ? 0 : strtotime($value[ 1 ]);
         if ($start_time > 0 && $end_time > 0) {
+            $query->whereBetweenTime('create_time', $start_time, $end_time);
+        } else if ($start_time > 0 && $end_time == 0) {
+            $query->where([ [ 'create_time', '>=', $start_time ] ]);
+        } else if ($start_time == 0 && $end_time > 0) {
+            $query->where([ [ 'create_time', '<=', $end_time ] ]);
+        }
+    }
+    /**
+     * 创建时间搜索器
+     * @param $value
+     */
+    public function searchJoinCreateTimeAttr(Query $query, $value, $data)
+    {
+        $start_time = empty($value[ 0 ]) ? 0 : strtotime($value[ 0 ]);
+        $end_time = empty($value[ 1 ]) ? 0 : strtotime($value[ 1 ]);
+        if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('member.create_time', $start_time, $end_time);
         } else if ($start_time > 0 && $end_time == 0) {
             $query->where([ [ 'member.create_time', '>=', $start_time ] ]);

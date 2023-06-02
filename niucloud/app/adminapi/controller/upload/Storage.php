@@ -11,10 +11,10 @@
 
 namespace app\adminapi\controller\upload;
 
-use app\adminapi\controller\sys\AdminException;
 use app\dict\sys\StorageDict;
 use app\service\admin\file\StorageConfigService;
 use core\base\BaseAdminController;
+use core\exception\AdminException;
 use think\Response;
 
 class Storage extends BaseAdminController
@@ -61,8 +61,5 @@ class Storage extends BaseAdminController
         (new StorageConfigService())->setStorageConfig($storage_type, $request_data);
         return success('SET_SUCCESS');
     }
-
-
-
 
 }

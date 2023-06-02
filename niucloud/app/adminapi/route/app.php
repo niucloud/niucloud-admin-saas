@@ -12,9 +12,7 @@
 use think\facade\Route;
 
 $is_demo = env('system.is_demo', 0);
-if($is_demo&& !\think\facade\Request::isGet())
-{
+if ($is_demo && !\think\facade\Request::isGet()) {
     //加载插件路由
-            throw new \core\exception\CommonException("演示数据不能进行修改");
+    throw new \core\exception\CommonException("演示数据不能进行修改");
 }
-

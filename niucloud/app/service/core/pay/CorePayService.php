@@ -39,7 +39,7 @@ class CorePayService extends BaseCoreService
     /**
      * 创建支付单据
      * @param $site_id
-     * @param string|int $main
+     * @param string $main
      * @param float $money
      * @param string $trade_type
      * @param string $body
@@ -115,7 +115,7 @@ class CorePayService extends BaseCoreService
         if(!in_array($type, $allow_type)){
             throw new PayException('PAYMENT_METHOD_NOT_SUPPORT');//业务不支持
         }
-        if(!in_array($type, array_keys((new CorePayChannelService())->getAllowPayTypeByCahnnel($site_id, $channel))))  throw new PayException('PAYMENT_METHOD_NOT_SCENE');//场景不支持
+        if(!in_array($type, array_column((new CorePayChannelService())->getAllowPayTypeByCahnnel($site_id, $channel), 'key')))  throw new PayException('PAYMENT_METHOD_NOT_SCENE');//场景不支持
         $pay_result = $this->pay_event->init($site_id, $channel, $type)->pay($out_trade_no, $money, $body, $return_url, $quit_url, $buyer_id, $openid ?? '');
         //todo  特殊支付方式会直接返回支付状态,状态如果为已支付会直接支付
         if(!empty($pay_result['status']) && $pay_result['status'] == PayDict::STATUS_ED){

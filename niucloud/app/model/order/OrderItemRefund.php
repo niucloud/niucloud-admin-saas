@@ -11,7 +11,6 @@
 
 namespace app\model\order;
 
-use app\dict\pay\PayRefundDict;
 use app\model\member\Member;
 use app\model\pay\Refund;
 use core\base\BaseModel;
@@ -102,6 +101,19 @@ class OrderItemRefund extends BaseModel
     public function searchOrderNoAttr($query, $value, $data)
     {
         if ($value) {
+            $query->where('order_no', '=', $value);
+        }
+    }
+
+    /**
+     * 订单号搜索(用于关联)
+     * @param $query
+     * @param $value
+     * @param $data
+     */
+    public function searchJoinOrderNoAttr($query, $value, $data)
+    {
+        if ($value) {
             $query->where('order_item_refund.order_no', '=', $value);
         }
     }
@@ -113,6 +125,19 @@ class OrderItemRefund extends BaseModel
      * @param $data
      */
     public function searchMemberIdAttr($query, $value, $data)
+    {
+        if ($value) {
+            $query->where('member_id', '=', $value);
+        }
+    }
+
+    /**
+     * 会员id搜索
+     * @param $query
+     * @param $value
+     * @param $data
+     */
+    public function searchJoinMemberIdAttr($query, $value, $data)
     {
         if ($value) {
             $query->where('order_item_refund.member_id', '=', $value);
@@ -128,6 +153,19 @@ class OrderItemRefund extends BaseModel
     public function searchStatusAttr($query, $value, $data)
     {
         if ($value != '') {
+            $query->where('status', '=', $value);
+        }
+    }
+
+    /**
+     * 退款状态
+     * @param $query
+     * @param $value
+     * @param $data
+     */
+    public function searchJoinStatusAttr($query, $value, $data)
+    {
+        if ($value != '') {
             $query->where('order_item_refund.status', '=', $value);
         }
     }
@@ -137,6 +175,23 @@ class OrderItemRefund extends BaseModel
      * @param $value
      */
     public function searchCreateTimeAttr($query, $value, $data)
+    {
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
+        if($start_time > 0 && $end_time > 0){
+            $query->whereBetweenTime('create_time', $start_time, $end_time);
+        }else if($start_time > 0 && $end_time == 0){
+            $query->where([['create_time', '>=', $start_time]]);
+        }else if($start_time == 0 && $end_time > 0){
+            $query->where([['create_time', '<=', $end_time]]);
+        }
+    }
+
+    /**
+     * 创建时间搜索器
+     * @param $value
+     */
+    public function searchJoinCreateTimeAttr($query, $value, $data)
     {
         $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
         $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;

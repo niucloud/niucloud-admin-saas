@@ -472,7 +472,10 @@ class PagesDict
                                     [
                                         "title" => "个人资料",
                                         "link" => [
-                                            "name" => ""
+                                            "parent" => "MEMBER_LINK",
+                                            "name" => "MEMBER_PERSONAL",
+                                            "title" => "个人资料",
+                                            "url" => "/pages/member/personal"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/vert_m_personal.png",
                                         "label" => [
@@ -489,7 +492,10 @@ class PagesDict
                                     [
                                         "title" => "我的余额",
                                         "link" => [
-                                            "name" => ""
+                                            "parent" => "MEMBER_LINK",
+                                            "name" => "MEMBER_BALANCE",
+                                            "title" => "我的余额",
+                                            "url" => "/pages/member/balance"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/vert_m_balance.png",
                                         "label" => [
@@ -506,7 +512,10 @@ class PagesDict
                                     [
                                         "title" => "我的积分",
                                         "link" => [
-                                            "name" => ""
+                                            "parent" => "MEMBER_LINK",
+                                            "name" => "MEMBER_POINT",
+                                            "title" => "我的积分",
+                                            "url" => "/pages/member/point"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/vert_m_point.png",
                                         "label" => [
@@ -786,7 +795,10 @@ class PagesDict
                                     [
                                         "title" => "个人资料",
                                         "link" => [
-                                            "name" => ""
+                                            "parent" => "MEMBER_LINK",
+                                            "name" => "MEMBER_PERSONAL",
+                                            "title" => "个人资料",
+                                            "url" => "/pages/member/personal"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/vert_m_personal.png",
                                         "label" => [
@@ -803,7 +815,10 @@ class PagesDict
                                     [
                                         "title" => "我的余额",
                                         "link" => [
-                                            "name" => ""
+                                            "parent" => "MEMBER_LINK",
+                                            "name" => "MEMBER_BALANCE",
+                                            "title" => "我的余额",
+                                            "url" => "/pages/member/balance"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/vert_m_balance.png",
                                         "label" => [
@@ -820,7 +835,10 @@ class PagesDict
                                     [
                                         "title" => "我的积分",
                                         "link" => [
-                                            "name" => ""
+                                            "parent" => "MEMBER_LINK",
+                                            "name" => "MEMBER_POINT",
+                                            "title" => "我的积分",
+                                            "url" => "/pages/member/point"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/vert_m_point.png",
                                         "label" => [

@@ -11,7 +11,6 @@
 
 namespace app\adminapi\controller\wechat;
 
-use app\service\admin\site\WebSiteConfigService;
 use app\service\admin\wechat\WechatConfigService;
 use core\base\BaseAdminController;
 use think\Response;

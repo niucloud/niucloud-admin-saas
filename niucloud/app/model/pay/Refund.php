@@ -11,9 +11,6 @@
 
 namespace app\model\pay;
 
-use app\dict\order\OrderTypeDict;
-use app\dict\pay\PayDict;
-use app\dict\pay\PayRefundDict;
 use app\dict\pay\RefundDict;
 use core\base\BaseModel;
 

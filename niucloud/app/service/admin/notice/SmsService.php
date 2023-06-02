@@ -13,7 +13,6 @@ namespace app\service\admin\notice;
 
 use app\dict\sys\SmsDict;
 use app\service\core\sys\CoreConfigService;
-use app\service\core\sys\CoreMessage;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
 use think\Response;

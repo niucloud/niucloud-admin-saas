@@ -12,7 +12,6 @@
 namespace app\adminapi\controller\channel;
 
 use app\service\admin\channel\H5Service;
-use app\service\admin\site\WebSiteConfigService;
 use core\base\BaseAdminController;
 use think\Response;
 

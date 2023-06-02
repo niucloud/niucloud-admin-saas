@@ -25,6 +25,4 @@ class App extends BaseAdminController
         return success(( new CoreAddonService() )->getAppList());
     }
 
-
-
 }

@@ -11,14 +11,8 @@
 
 namespace app\job\schedule;
 
-use app\model\system\Cron;
-use app\service\core\schedule\CoreCronService;
 use app\service\core\site\CoreSiteService;
 use core\base\BaseJob;
-use core\exception\NoticeException;
-use core\util\Schedule;
-use think\facade\Log;
-use think\queue\Job;
 
 /**
  * 站点到期自动关闭

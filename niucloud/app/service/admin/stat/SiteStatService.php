@@ -11,7 +11,6 @@
 
 namespace app\service\admin\stat;
 
-use app\dict\order\RechargeOrderDict;
 use app\model\order\Order;
 use app\service\admin\member\MemberService;
 use app\service\admin\site\SiteService;

@@ -16,7 +16,6 @@ use app\dict\pay\PayChannelDict;
 use app\dict\pay\PayDict;
 use app\model\pay\PayChannel;
 use app\service\core\pay\CorePayChannelService;
-use app\service\core\pay\CorePayConfigTemplateService;
 use core\base\BaseAdminService;
 use core\exception\PayException;
 

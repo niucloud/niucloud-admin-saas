@@ -12,15 +12,11 @@
 namespace app\service\admin\user;
 
 
-use app\dict\site\SiteDict;
-use app\dict\sys\AppTypeDict;
 use app\model\sys\SysRole;
 use app\model\sys\SysUserRole;
-use app\service\admin\site\SiteService;
 use app\service\admin\sys\RoleService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
-use core\exception\AuthException;
 use think\facade\Cache;
 
 /**

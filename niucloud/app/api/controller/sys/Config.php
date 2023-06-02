@@ -23,22 +23,26 @@ class Config extends BaseApiController
      * 获取版权信息
      * @return Response
      */
-    public function getCopyright(){
-        return success((new ConfigService())->getCopyright());
+    public function getCopyright()
+    {
+        return success(( new ConfigService() )->getCopyright());
     }
-/**
+
+    /**
      * 场景域名
      * @return Response
      */
-    public function getSceneDomain(){
-        return success((new ConfigService())->getSceneDomain());
+    public function getSceneDomain()
+    {
+        return success(( new ConfigService() )->getSceneDomain());
     }
 
     /**
      * 获取站点信息
      * @return Response
      */
-    public function site(){
-        return success((new SiteService())->getSiteCache());
+    public function site()
+    {
+        return success(( new SiteService() )->getSiteCache());
     }
 }

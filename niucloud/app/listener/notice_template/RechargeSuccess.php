@@ -3,9 +3,7 @@
 namespace app\listener\notice_template;
 
 use app\service\core\member\CoreMemberService;
-use app\service\core\order\CoreOrderRefundService;
 use app\service\core\order\CoreOrderService;
-use core\exception\NoticeException;
 
 class RechargeSuccess extends BaseNoticeTemplate
 {

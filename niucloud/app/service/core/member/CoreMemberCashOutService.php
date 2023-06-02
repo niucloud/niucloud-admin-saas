@@ -105,7 +105,7 @@ class CoreMemberCashOutService extends BaseCoreService
             'status' => MemberCashOutDict::REFUSE,
             'refuse_reason' => $data['refuse_reason']
         ]);
-        $this->returnMember($site_id, $cash_out);
+        $this->giveback($site_id, $cash_out);
         return true;
     }
 
@@ -264,7 +264,7 @@ class CoreMemberCashOutService extends BaseCoreService
      * @param MemberCashOut $cash_out
      * @return true
      */
-    public function returnMember(int $site_id, MemberCashOut $cash_out){
+    public function giveback(int $site_id, MemberCashOut $cash_out){
         $core_member_account_service = new CoreMemberAccountService();
 
         $core_member_account_service->addLog($site_id, $cash_out->member_id, $cash_out->account_type, $cash_out->apply_money, 'cash_out', get_lang('CASHOUT_IS_REFUSE'), $cash_out->id);

@@ -12,9 +12,7 @@
 namespace app\adminapi\controller\pay;
 
 use app\dict\pay\PayDict;
-use app\model\pay\PayConfigTemplate;
 use app\service\admin\pay\PayChannelService;
-use app\service\admin\pay\PayConfigTemplateService;
 use core\base\BaseAdminController;
 use think\Response;
 

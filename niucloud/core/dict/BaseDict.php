@@ -14,6 +14,7 @@ namespace core\dict;
 use core\loader\Storage;
 use think\facade\Cache;
 use think\facade\Db;
+use think\facade\Log;
 
 /**
  * Class BaseAddon
@@ -46,7 +47,15 @@ abstract class BaseDict extends Storage
         if(empty($addons))
         {
             $addons = Db::name("addon")->column("key");
-            Cache::set("local_install_addons", $addons);
+            if(empty($addons))
+            {
+                Cache::set("local_install_addons", -1);
+            }else
+                Cache::set("local_install_addons", $addons);
+        }
+        if($addons == -1)
+        {
+            $addons = [];
         }
         return $addons;
     }

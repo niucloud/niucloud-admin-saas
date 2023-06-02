@@ -11,13 +11,8 @@
 
 namespace app\job\schedule;
 
-use app\model\system\Cron;
-use app\service\core\schedule\CoreCronService;
 use core\base\BaseJob;
-use core\exception\NoticeException;
-use core\util\Schedule;
 use think\facade\Log;
-use think\queue\Job;
 
 /**
  * 队列异步调用定时任务

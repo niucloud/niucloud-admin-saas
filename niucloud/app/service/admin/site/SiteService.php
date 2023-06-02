@@ -13,8 +13,6 @@ namespace app\service\admin\site;
 
 use app\dict\sys\AppTypeDict;
 use app\model\site\Site;
-use app\service\admin\install\InstallArticleService;
-use app\service\admin\install\InstallDiyService;
 use app\service\admin\sys\MenuService;
 use app\service\admin\user\UserService;
 use core\base\BaseAdminService;

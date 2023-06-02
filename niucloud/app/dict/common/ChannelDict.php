@@ -11,8 +11,6 @@
 
 namespace app\dict\common;
 
-use app\dict\pay\PayDict;
-use core\exception\PayException;
 
 /**
  * 渠道枚举类

@@ -109,11 +109,11 @@ class WeappAuthService extends BaseApiService
     /**
      * 注册
      * @param string|array $data
-     * @param string|int $mobile
+     * @param string $mobile
      * @return \app\model\member\Member|array|mixed|\think\Model
      * @throws InvalidArgumentException
      */
-    public function register(string $openid, string|int $mobile, string $mobile_code){
+    public function register(string $openid, string $mobile, string $mobile_code){
 
         if(empty($openid)) throw new AuthException('AUTH_LOGIN_TAG_NOT_EXIST');
         //todo openid可能还需要合法性验证

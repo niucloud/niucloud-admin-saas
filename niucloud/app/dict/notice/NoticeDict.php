@@ -10,7 +10,9 @@
 // +----------------------------------------------------------------------
 
 namespace app\dict\notice;
+
 use core\dict\DictLoader;
+
 /**
  * 消息类
  * Class NoticeDict
@@ -22,31 +24,29 @@ class NoticeDict
      * 获取消息
      * @return array
      */
-    public static function getNotice(string $key = ''){
+    public static function getNotice(string $key = '')
+    {
         $addon_load = new DictLoader('Notice');
-        $notice = $addon_load->load(['type' => 'notice']);
+        $notice = $addon_load->load([ 'type' => 'notice' ]);
         $notice_type = NoticeTypeDict::getType();
-        foreach($notice_type as $k => $v){
-            $var_name = $k.'_notice';
-            $$var_name = $addon_load->load(['type' => $k]);
+        foreach ($notice_type as $k => $v) {
+            $var_name = $k . '_notice';
+            $$var_name = $addon_load->load([ 'type' => $k ]);
         }
 
-        foreach ($notice as $k => $v)
-        {
+        foreach ($notice as $k => $v) {
             $support_type = [];
-            foreach($notice_type as $notice_type_k => $notice_type_v){
-                $var_name = $notice_type_k.'_notice';
-                if(array_key_exists($k, $$var_name))
-                {
-                    $notice[$k][$notice_type_k] = $$var_name[$k];
+            foreach ($notice_type as $notice_type_k => $notice_type_v) {
+                $var_name = $notice_type_k . '_notice';
+                if (array_key_exists($k, $$var_name)) {
+                    $notice[ $k ][ $notice_type_k ] = $$var_name[ $k ];
                     $support_type[] = $notice_type_k;
                 }
             }
-            $notice[$k]['support_type'] = $support_type;
+            $notice[ $k ][ 'support_type' ] = $support_type;
         }
-        if(!empty($key))
-        {
-            return $notice[$key] ?? [];
+        if (!empty($key)) {
+            return $notice[ $key ] ?? [];
         }
         return $notice;
     }

@@ -14,7 +14,6 @@ namespace app\service\admin\sys;
 use app\dict\sys\RoleStatusDict;
 use app\model\sys\SysRole;
 use app\model\sys\SysUserRole;
-use app\service\admin\site\SiteGroupService;
 use app\service\admin\site\SiteService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;

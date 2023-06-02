@@ -41,7 +41,8 @@ class Addon extends BaseAdminController
      * @param $addon
      * @return void
      */
-    public function execute($addon) {
+    public function execute($addon)
+    {
         return ( new AddonService() )->executeInstall($addon);
     }
 
@@ -50,7 +51,8 @@ class Addon extends BaseAdminController
      * @param $addon
      * @return mixed
      */
-    public function installCheck($addon){
+    public function installCheck($addon)
+    {
         return ( new AddonService() )->installCheck($addon);
     }
 

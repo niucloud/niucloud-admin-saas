@@ -11,8 +11,6 @@
 
 namespace app\job\notice;
 
-use app\model\system\Cron;
-use app\service\core\notice\CoreNoticeEventService;
 use core\base\BaseJob;
 use core\exception\NoticeException;
 

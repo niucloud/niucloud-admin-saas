@@ -57,7 +57,7 @@ class RechargeOrderDict
     {
         return [
             'type' => 'recharge',
-            'name' =>  get_lang('dict_order.order_type_recharge')
+            'name' => get_lang('dict_order.order_type_recharge')
         ];
     }
 
@@ -108,15 +108,16 @@ class RechargeOrderDict
         if ($status == '') {
             return $data;
         }
-        return $data[$status] ?? '';
+        return $data[ $status ] ?? '';
     }
 
     /**
      * 获取退款状态
-     * @param int|string $status
+     * @param string $status
      * @return array|array[]|string
      */
-    public static function getRefundStatus(int|string $status = '') {
+    public static function getRefundStatus(string $status = '')
+    {
         $data = [
             self::REFUNDING => [
                 'name' => get_lang('dict_order_refund.refunding'),
@@ -135,7 +136,7 @@ class RechargeOrderDict
         if ($status == '') {
             return $data;
         }
-        return $data[$status] ?? '';
+        return $data[ $status ] ?? '';
     }
 
 }

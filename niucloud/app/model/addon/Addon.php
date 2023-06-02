@@ -22,7 +22,7 @@ use core\base\BaseModel;
 class Addon extends BaseModel
 {
     protected $type = [
-        'install_time'  =>  'timestamp',
+        'install_time' => 'timestamp',
     ];
     /**
      * 数据表主键
@@ -47,6 +47,7 @@ class Addon extends BaseModel
     {
         return AddonDict::getStatus()[ $data[ 'status' ] ?? '' ] ?? '';
     }
+
     /**
      * 插件名称搜索器
      * @param $value
@@ -55,11 +56,8 @@ class Addon extends BaseModel
     public function searchTitleAttr($query, $value, $data)
     {
         if ($value) {
-            $query->whereLike('title', '%'.$value.'%');
+            $query->whereLike('title', '%' . $value . '%');
         }
     }
-
-
-
 
 }

@@ -13,7 +13,6 @@ namespace app\adminapi\middleware;
 
 use app\Request;
 use Closure;
-use core\exception\AdminException;
 use core\exception\ServerException;
 
 /**
@@ -39,9 +38,17 @@ class AllowCrossDomain
         $allow_origin = [
             rtrim(str_replace('https://','',str_replace('http://','',$request->domain())),"/"),
         ];
-        if(env('system.admin_domain')){
-            $allow_origin[] = rtrim(str_replace('https://','',str_replace('http://','',env('system.admin_domain'))),"/");
+        $admin_domain = env('system.admin_domain');
+        if(!empty($admin_domain)){
+            $admin_domain = explode(',', $admin_domain);
+            foreach($admin_domain as $v){
+                if(!trim($v)) continue;
+                $allow_origin[] = rtrim(str_replace('https://','',str_replace('http://','',$v)),"/");
+            }
         }
+//        if(env('system.admin_domain')){
+//            $allow_origin[] = rtrim(str_replace('https://','',str_replace('http://','',env('system.admin_domain'))),"/");
+//        }
         $referer = $request->header('referer');
         $origin = '';
         if(!empty($referer)){

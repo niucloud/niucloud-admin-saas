@@ -32,7 +32,7 @@ class Login extends BaseController
         //验证码验证
         $result = (new LoginService())->account($data['username'], $data['password']);
         if(!$result){
-            //账号密码错误...., 重置验证码
+            //账号密码错误, 重置验证码
             return fail('ACCOUNT_OR_PASSWORD_ERROR');
         }
         return success($result);

@@ -3,7 +3,6 @@
 namespace app\listener\notice;
 
 use app\dict\notice\NoticeTypeDict;
-use app\dict\sys\MessageTypeDict;
 use app\service\core\member\CoreMemberService;
 use app\service\core\notice\CoreNoticeLogService;
 use core\exception\NoticeException;

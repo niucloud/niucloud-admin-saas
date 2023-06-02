@@ -13,7 +13,6 @@ namespace app\listener\scan;
 
 use app\dict\scan\ScanDict;
 use app\service\api\wechat\WechatAuthService;
-use app\service\core\order\recharge\CoreRechargeOrderService;
 
 /**
  * 支付异步回调事件

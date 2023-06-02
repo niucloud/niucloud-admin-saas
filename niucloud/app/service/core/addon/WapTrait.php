@@ -135,6 +135,8 @@ trait WapTrait
      */
     public function installPageCode($compile_path)
     {
+        if (!file_exists($this->geAddonPackagePath($this->addon) . 'uni-app-pages.php')) return;
+
         $uniapp_pages = require $this->geAddonPackagePath($this->addon) . 'uni-app-pages.php';
 
         if (empty($uniapp_pages[ 'pages' ])) {
@@ -144,6 +146,7 @@ trait WapTrait
         $addon = strtoupper($this->addon);
 
         $content = @file_get_contents($compile_path . "pages.json");
+
 
         $page_begin = $addon . '_PAGE_BEGIN';
         $page_end = $addon . '_PAGE_END';
@@ -182,6 +185,8 @@ trait WapTrait
      */
     public function uninstallPageCode($compile_path)
     {
+        if (!file_exists($this->geAddonPackagePath($this->addon) . 'uni-app-pages.php')) return;
+
         $uniapp_pages = require $this->geAddonPackagePath($this->addon) . 'uni-app-pages.php';
 
         if (empty($uniapp_pages[ 'pages' ])) {

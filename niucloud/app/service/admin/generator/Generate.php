@@ -13,7 +13,6 @@ namespace app\service\admin\generator;
 
 use think\App;
 use ZipArchive;
-
 use app\service\admin\generator\core\ControllerGenerator;
 use app\service\admin\generator\core\ServiceGenerator;
 use app\service\admin\generator\core\AdminApiRouteGenerator;

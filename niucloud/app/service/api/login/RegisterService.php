@@ -100,21 +100,22 @@ class RegisterService extends BaseApiService
      * @param string $password
      * @return void
      */
-    public function account(string $username, string $password, string|int $mobile){
+    public function account(string $username, string $password, $mobile)
+    {
         //todo  校验验证码  可以加try catch  后续
-        (new CaptchaService())->check();
+        ( new CaptchaService() )->check();
 
         //登录注册配置
-        $config = (new MemberConfigService())->getLoginConfig();
-        $is_username = $config['is_username'];
+        $config = ( new MemberConfigService() )->getLoginConfig();
+        $is_username = $config[ 'is_username' ];
         //未开启账号密码登录注册
-        if($is_username != 1) throw new AuthException('MEMBER_USERNAME_LOGIN_NOT_OPEN');
+        if ($is_username != 1) throw new AuthException('MEMBER_USERNAME_LOGIN_NOT_OPEN');
         $member_service = new MemberService();
-        $member_info = $member_service->findMemberInfo(['username' => $username, 'site_id' => $this->site_id]);
+        $member_info = $member_service->findMemberInfo([ 'username' => $username, 'site_id' => $this->site_id ]);
         if (!$member_info->isEmpty()) throw new AuthException('MEMBER_IS_EXIST');//账号已存在
 
         $password_hash = create_password($password);
-        $data = array(
+        $data = array (
             'username' => $username,
             'password' => $password_hash,
         );
@@ -122,58 +123,56 @@ class RegisterService extends BaseApiService
         return $result;
     }
 
-/**
- * 手机号注册
- * @param $mobile
- * @return Member|array|mixed|\think\Model
- */
-public
-function mobile($mobile)
-{
-    //登录注册配置
-    $config = ( new MemberConfigService() )->getLoginConfig();
-    $is_mobile = $config[ 'is_mobile' ];
-    //未开启账号密码登录注册
-    if ($is_mobile != 1) throw new AuthException('MEMBER_USERNAME_LOGIN_NOT_OPEN');
-    $member_service = new MemberService();
-    $member_info = $member_service->findMemberInfo([ 'mobile' => $mobile, 'site_id' => $this->site_id ]);
-    if (!$member_info->isEmpty()) throw new AuthException('MEMBER_IS_EXIST');//账号已存在
+    /**
+     * 手机号注册
+     * @param $mobile
+     * @return Member|array|mixed|\think\Model
+     */
+    public function mobile($mobile)
+    {
+        //登录注册配置
+        $config = ( new MemberConfigService() )->getLoginConfig();
+        $is_mobile = $config[ 'is_mobile' ];
+        //未开启账号密码登录注册
+        if ($is_mobile != 1) throw new AuthException('MEMBER_USERNAME_LOGIN_NOT_OPEN');
+        $member_service = new MemberService();
+        $member_info = $member_service->findMemberInfo([ 'mobile' => $mobile, 'site_id' => $this->site_id ]);
+        if (!$member_info->isEmpty()) throw new AuthException('MEMBER_IS_EXIST');//账号已存在
 
-    $data = array (
-        'mobile' => $mobile,
-    );
-    $result = $this->register($mobile, $data, MemberRegisterTypeDict::MOBILE);
-    return $result;
-}
+        $data = array (
+            'mobile' => $mobile,
+        );
+        $result = $this->register($mobile, $data, MemberRegisterTypeDict::MOBILE);
+        return $result;
+    }
 
-/**
- * 校验是否启用第三方登录注册
- * @return true
- */
-public
-function checkAuth()
-{
-    $config = ( new MemberConfigService() )->getLoginConfig();
-    $is_auth_register = $config[ 'is_auth_register' ];
-    if ($is_auth_register != 1) throw new AuthException('AUTH_LOGIN_NOT_OPEN');//手机号已存在
-    return true;
-}
+    /**
+     * 校验是否启用第三方登录注册
+     * @return true
+     */
+    public function checkAuth()
+    {
+        $config = ( new MemberConfigService() )->getLoginConfig();
+        $is_auth_register = $config[ 'is_auth_register' ];
+        if ($is_auth_register != 1) throw new AuthException('AUTH_LOGIN_NOT_OPEN');//手机号已存在
+        return true;
+    }
 
-/**
- * 通过手机号尝试绑定已存在会员,没有就绑定数据(todo  仅限注册使用)
- * @param string|int $mobile
- * @param array $data
- * @param string $type
- * @param bool $is_verify
- * @return array|mixed
- */
-public
-function bindByMobile(string|int $mobile, array $data, string $type, bool $is_verify = true){
-    $config = ( new MemberConfigService() )->getLoginConfig();
-    $is_bind_mobile = $config[ 'is_bind_mobile' ];
+    /**
+     * 通过手机号尝试绑定已存在会员,没有就绑定数据(todo  仅限注册使用)
+     * @param string $mobile
+     * @param array $data
+     * @param string $type
+     * @param bool $is_verify
+     * @return array|mixed
+     */
+    public function bindByMobile($mobile, array $data, string $type, bool $is_verify = true)
+    {
+        $config = ( new MemberConfigService() )->getLoginConfig();
+        $is_bind_mobile = $config[ 'is_bind_mobile' ];
 
-    $with_field = match($type){
-    MemberLoginTypeDict::USERNAME => 'username',
+        $with_field = match($type){
+            MemberLoginTypeDict::USERNAME => 'username',
             MemberLoginTypeDict::MOBILE => 'mobile',
             MemberLoginTypeDict::WECHAT => 'wx_openid',
             MemberLoginTypeDict::WEAPP => 'weapp_openid',

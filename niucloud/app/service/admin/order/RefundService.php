@@ -12,7 +12,6 @@
 namespace app\service\admin\order;
 
 use app\dict\order\OrderRefundDict;
-use app\dict\pay\OnlineRefundDict;
 use app\model\order\OrderItemRefund;
 use core\base\BaseAdminService;
 
@@ -44,7 +43,7 @@ class RefundService extends BaseAdminService
         }
         $search_model = $this->model->where([['order_item_refund.site_id', '=', $this->site_id]])->with(['item' => function($query) {
             $query->with('orderNo')->field('order_id, order_item_id, item_name, item_image');
-        }])->withSearch(['order_no', 'status', 'member_id', 'refund_no', 'create_time'],$where)->withJoin(['member' => function($query){
+        }])->withSearch(['join_order_no' => 'order_no', 'join_status' => 'status', 'join_member_id' => 'member_id', 'refund_no' => 'refund_no', 'join_create_time' => 'create_time'],$where)->withJoin(['member' => function($query){
             $query->field("member.nickname, member.headimg, member.mobile, member.member_id");
         }
         ])->where($member_where)->field($field)->order('create_time desc')->append(['status_name', 'payrefund.type_name']);

@@ -60,7 +60,7 @@ class CorePayChannelService extends BaseCoreService
                 $allow_pay_type_list[] = $pay_type_list[$v['type']];
             }
         }
-        return $allow_pay_type ?? [];
+        return $allow_pay_type_list ?? [];
 
     }
 
@@ -73,7 +73,12 @@ class CorePayChannelService extends BaseCoreService
      */
     public function getConfigByChannelAndType(int $site_id, string $channel, string $type){
         $pay_channel = $this->model->where([['site_id', '=', $site_id], ['channel', '=', $channel], ['type', '=', $type]])->field('config')->findOrEmpty();
-        if(!$pay_channel->isEmpty()) return $pay_channel->config;
+        if(!$pay_channel->isEmpty()){
+            if($type == PayDict::WECHATPAY){
+                $pay_channel->config = array_merge($pay_channel->config, (new CorePayConfigService())->getWechatPayFullConfig($site_id));
+            }
+            return $pay_channel->config;
+        }
         return [];
     }
 }

@@ -11,7 +11,6 @@
 
 namespace app\adminapi\controller\upload;
 
-use app\adminapi\controller\sys\AdminException;
 use app\service\admin\file\UploadConfigService;
 use app\service\admin\file\UploadService;
 use core\base\BaseAdminController;
@@ -59,8 +58,6 @@ class Upload extends BaseAdminController
         $upload_service = new UploadService();
         return success($upload_service->document($data['file'], $type, true));
     }
-
-
 
     /**
      * 上传配置

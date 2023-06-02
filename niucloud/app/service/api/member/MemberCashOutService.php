@@ -92,7 +92,7 @@ class MemberCashOutService extends BaseApiService
                 'status' => MemberCashOutDict::CANCEL
             ]
         );
-        (new CoreMemberConfigService())->returnMember($this->site_id, $cash_out);
+        (new CoreMemberCashOutService())->giveback($this->site_id, $cash_out);
         return true;
     }
 

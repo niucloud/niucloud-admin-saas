@@ -27,8 +27,6 @@ class Weapp extends BaseApiController
         $data = $this->request->params([['code', '']]);
         $weapp_auth_service = new WeappAuthService();
         return success($weapp_auth_service->login($data['code']));
-
-        //todo  执行登录操作
     }
 
     /**

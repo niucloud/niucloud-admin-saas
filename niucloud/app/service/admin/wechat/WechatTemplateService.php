@@ -14,7 +14,6 @@ namespace app\service\admin\wechat;
 use app\dict\notice\NoticeTypeDict;
 use app\service\admin\notice\NoticeService;
 use app\service\core\notice\CoreNoticeService;
-use app\service\core\wechat\CoreWechatTemplateService;
 use core\base\BaseAdminService;
 use core\exception\NoticeException;
 use core\template\TemplateLoader;

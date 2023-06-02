@@ -14,8 +14,8 @@ use app\api\middleware\ApiCheckToken;
 use app\api\middleware\ApiLog;
 use think\facade\Route;
 use app\api\middleware\AllowCrossDomain;
-//公众号消息推送
 
+//公众号消息推送
 Route::any('wechat/serve/:site_id', 'wechat.Serve/serve')
     ->middleware(ApiChannel::class)
     ->middleware(ApiCheckToken::class)
@@ -25,12 +25,10 @@ Route::any('wechat/serve/:site_id', 'wechat.Serve/serve')
 /**
  * 路由
  */
-Route::group(function () {
+Route::group(function() {
     //获取授权地址
     Route::get('wechat/codeurl', 'wechat.Wechat/getCodeUrl');
 
-    //公众号消息推送
-    Route::any('wechat/serve/:site_id', 'wechat.Serve/serve');
     //公众号通过code登录
     Route::post('wechat/login', 'wechat.Wechat/login');
     //公众号通过code注册
@@ -77,7 +75,7 @@ Route::group(function () {
     Route::get('scene_domain', 'sys.Config/getSceneDomain');
 })->middleware(AllowCrossDomain::class)
     ->middleware(ApiChannel::class)
-->middleware(ApiCheckToken::class)
-->middleware(ApiLog::class);
+    ->middleware(ApiCheckToken::class)
+    ->middleware(ApiLog::class);
 //加载插件路由
-(new \core\dict\DictLoader("Route"))->load(['app_type' => 'api']);
+( new \core\dict\DictLoader("Route") )->load([ 'app_type' => 'api' ]);

@@ -11,10 +11,7 @@
 
 namespace app\job\sys;
 
-use app\model\system\Cron;
-use app\service\core\schedule\CoreCronService;
 use core\base\BaseJob;
-use think\queue\Job;
 
 /**
  * 校验文件删除是否在正常运行

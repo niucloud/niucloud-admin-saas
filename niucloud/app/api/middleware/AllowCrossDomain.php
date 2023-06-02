@@ -13,7 +13,6 @@ namespace app\api\middleware;
 
 use app\Request;
 use Closure;
-use core\exception\ApiException;
 use core\exception\ServerException;
 
 /**
@@ -39,12 +38,29 @@ class AllowCrossDomain
         $allow_origin = [
             rtrim(str_replace('https://','',str_replace('http://','',$request->domain())),"/"),
         ];
-        if(env('system.wap_domain')){
-            $allow_origin[] = rtrim(str_replace('https://','',str_replace('http://','',env('system.wap_domain'))),"/");
+
+        $wap_domain = env('system.wap_domain');
+        if(!empty($wap_domain)){
+            $wap_domain = explode(',', $wap_domain);
+            foreach($wap_domain as $v){
+                if(!trim($v)) continue;
+                $allow_origin[] = rtrim(str_replace('https://','',str_replace('http://','',$v)),"/");
+            }
         }
-        if(env('system.web_domain')){
-            $allow_origin[] = rtrim(str_replace('https://','',str_replace('http://','',env('system.web_domain'))),"/");
+        $web_domain = env('system.web_domain');
+        if(!empty($web_domain)){
+            $web_domain = explode(',', $web_domain);
+            foreach($web_domain as $v){
+                if(!trim($v)) continue;
+                $allow_origin[] = rtrim(str_replace('https://','',str_replace('http://','',$v)),"/");
+            }
         }
+//        if(env('system.wap_domain')){
+//            $allow_origin[] = rtrim(str_replace('https://','',str_replace('http://','',env('system.wap_domain'))),"/");
+//        }
+//        if(env('system.web_domain')){
+//            $allow_origin[] = rtrim(str_replace('https://','',str_replace('http://','',env('system.web_domain'))),"/");
+//        }
         $referer = $request->header('referer');
         $origin = '';
         if(!empty($referer)){
@@ -52,7 +68,6 @@ class AllowCrossDomain
             $referer = $referer['host'] ?? '';
             $origin = rtrim(str_replace('https://','',str_replace('http://','',$referer)),"/");
         }
-
         if(env('app_debug') || ($origin && in_array($origin, $allow_origin))){
             header('Access-Control-Allow-Origin: *');
         }else{

@@ -97,10 +97,10 @@ class LoginService extends BaseApiService
 
     /**
      * 手机号登录
-     * @param string|int $mobile
+     * @param string $mobile
      * @return array
      */
-    public function mobile(string|int $mobile){
+    public function mobile(string $mobile){
         //校验手机验证码
         $this->checkMobileCode($mobile);
         //登录注册配置
@@ -212,7 +212,7 @@ class LoginService extends BaseApiService
      * @param $member_key
      * @return void
      */
-    public function checkMobileCode(string|int $mobile){
+    public function checkMobileCode(string $mobile){
         if(empty($mobile)) throw new AuthException('MOBILE_NEEDED');
         $mobile_key = request()->param('mobile_key', '');
         $mobile_code = request()->param('mobile_code', '');
@@ -268,11 +268,11 @@ class LoginService extends BaseApiService
 
     /**
      * 重置密码
-     * @param string|int $mobile
-     * @param int|string $password
+     * @param string $mobile
+     * @param string $password
      * @return null
      */
-    public function resetPassword(string|int $mobile, int|string $password){
+    public function resetPassword(string $mobile, string $password){
         $member_service = new MemberService();
         //校验手机验证码
         $this->checkMobileCode($mobile);

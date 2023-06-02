@@ -12,9 +12,7 @@
 namespace app\service\admin\sys;
 
 use app\job\sys\CheckJob;
-use app\service\admin\install\InstallSystemService;
 use core\base\BaseAdminService;
-use core\exception\CommonException;
 use think\facade\Db;
 
 /**
@@ -49,7 +47,7 @@ class SystemService extends BaseAdminService
      */
     public function getUrl()
     {
-        $site_tag = $this->site_id == 31 ? '' : '/s' . $this->site_id;
+        $site_tag = $this->site_id == 1 ? '' : '/s' . $this->site_id;
         $data = [
             'wap_url' => ( !empty(env("system.wap_domain")) ? env("system.wap_domain") : request()->domain() ) . "/wap" . $site_tag,
             'web_url' => ( !empty(env("system.web_domain")) ? env("system.web_domain") : request()->domain() ) . "/web" . $site_tag,
