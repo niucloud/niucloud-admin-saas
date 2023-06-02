@@ -56,14 +56,12 @@ niucloud-admin是一款快速开发SaaS通用管理系统后台框架，前端�
 - 手机端使用uniapp ，同时使用uview页面展示，可以开发出丰富的手机样式，同时不需要专门学习小程序，app等开发语言，只需要通过uniapp编译就可以。
 
 ### 操作指南
- :fa-th-list:  [官网地址](https://www.niucloud.com)
- | [服务市场]()
- | [系统功能]()
- | [系统演示](https://demo.niucloud.com/web/)
+ [官网地址](https://www.niucloud.com)
+ | [服务市场](https://www.niucloud.com)
  | [使用手册](https://www.kancloud.cn/niucloud/niucloud-admin-develop/3153336)
  | [二开手册](https://www.kancloud.cn/niucloud/niucloud-admin-develop/3153336)
- | [论坛地址](https://www.niushop.com/web/community/index.html)
- | [留言评论](https://www.niushop.com/web/community/index.html)
+ | [API接口手册](https://www.niucloud.com/apidoc.html)
+ | [论坛地址](https://www.niucloud.com/bbs)
 
 ### 演示地址
 - 电脑端演示网址：[<a href='https://demo.niucloud.com/web/s2/' target="_blank"> 查看 </a>]       
