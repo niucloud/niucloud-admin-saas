@@ -23,7 +23,7 @@
                             <u-icon name="checkbox-mark" color="var(--primary-color)" v-if="item.key == type"></u-icon>
                         </view>
                     </block>
-                    <view class="py-[20rpx] text-center text-sm text-gray-subtitle">{{ t('pay.notHavePayType') }}</view>
+                    <view class="py-[20rpx] text-center text-sm text-gray-subtitle" v-else>{{ t('pay.notHavePayType') }}</view>
 				</view>
 			</scroll-view>
 			<view class="p-[30rpx]">

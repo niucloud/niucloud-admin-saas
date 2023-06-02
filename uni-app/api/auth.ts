@@ -67,5 +67,5 @@ export function bind(data : AnyObject) {
  * 记录会员访问日志
  */
 export function memberLog(data : AnyObject) {
-    return request.post('member/log', data)
+    return request.post('member/log', data, { showErrorMessage: false })
 }

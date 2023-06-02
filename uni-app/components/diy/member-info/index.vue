@@ -1,11 +1,5 @@
 <template>
 	<view :style="warpCss">
-		<!-- #ifdef MP-WEIXIN -->
-		<u-navbar :placeholder="true" bgColor="var(--primary-color)" titleStyle="color: #fff">
-			<template #left>
-			</template>
-		</u-navbar>
-		<!-- #endif -->
 		<view class="pt-[34rpx] member-info">
 			<view v-if="info" class="flex ml-[32rpx] mr-[52rpx]  items-center relative">
 				<!-- 唤起获取微信 -->
@@ -102,12 +96,14 @@
 
 	const memberStore = useMemberStore()
 
+	// #ifdef H5
 	const { query } = urlDeconstruction(location.href)
 	if (query.code && isWeixinBrowser()) {
 		wechatSync({ code: query.code }).then(res => {
 			memberStore.getMemberInfo()
 		})
 	}
+	// #endif
 
 	const info = computed(() => {
 		// 装修模式

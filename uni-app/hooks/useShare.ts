@@ -31,8 +31,10 @@ export const useShare = () => {
 	const setShare = async (options : any = {}) => {
 		let memberStore = useMemberStore();
 
+		// #ifdef H5
 		// 初始化sdk
 		await wechatInit();
+		// #endif
 
 		if (options && options.wechat && options.weapp) {
 			let query = currShareRoute().params;
@@ -64,30 +66,30 @@ export const useShare = () => {
 			}
 		} else {
 			getShareInfo({ route: '/' + currRoute(), params: JSON.stringify(currShareRoute().params) }).then((res : any) => {
-                let data = res.data;
+				let data = res.data;
 
-                // #ifdef H5
-                let wechat = data.wechat;
-                if (wechat) {
-                    let link = location.origin + location.pathname + (data.query ? '?' + data.query : '');
-                    wechatOptions = {
-                        link: link,
-                        title: wechat.title,
-                        desc: wechat.desc,
-                        imgUrl: wechat.url ? img(wechat.url) : ''
-                    }
-                }
-                wechatShare()
-                // #endif
+				// #ifdef H5
+				let wechat = data.wechat;
+				if (wechat) {
+					let link = location.origin + location.pathname + (data.query ? '?' + data.query : '');
+					wechatOptions = {
+						link: link,
+						title: wechat.title,
+						desc: wechat.desc,
+						imgUrl: wechat.url ? img(wechat.url) : ''
+					}
+				}
+				wechatShare()
+				// #endif
 
-                let weapp = data.weapp;
-                if (weapp) {
-                    weappOptions = {
-                        query: data.url,
-                        title: weapp.title,
-                        imageUrl: weapp.url ? img(weapp.url) : ''
-                    }
-                }
+				let weapp = data.weapp;
+				if (weapp) {
+					weappOptions = {
+						query: data.url,
+						title: weapp.title,
+						imageUrl: weapp.url ? img(weapp.url) : ''
+					}
+				}
 			})
 		}
 

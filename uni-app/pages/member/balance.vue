@@ -1,20 +1,24 @@
 <template>
-	<view class="account-info-wrap">
-		<view class="account-info-head" :style="{ background: 'url(' + img('static/resource/images/member/balance_bg.png') + ') no-repeat 95% 30% / auto 250rpx, linear-gradient(314deg, #FE7849 0%, #FF1959 100%)'}">
+	<u-loading-page :loading="loading" loadingText=""></u-loading-page>
+	<view class="account-info-wrap" v-show="!loading">
+		<view class="account-info-head"
+			:style="{ background: 'url(' + img('static/resource/images/member/balance_bg.png') + ') no-repeat 95% 30% / auto 250rpx, linear-gradient(314deg, #FE7849 0%, #FF1959 100%)'}">
 			<view class="name">{{t('balanceInfo')}}</view>
 			<view class="content">
-				<view  class="money">
-					{{ memberStore.info ? moneyFormat((parseFloat(memberStore.info.balance) + parseFloat(memberStore.info.money)).toString()) : 0.00 }}
+				<view class="money">
+					{{ memberStore.info ? moneyFormat((parseFloat(memberStore.info.balance) + parseFloat(memberStore.info.money)).toString()) : '0.00' }}
 				</view>
 				<view class="text">{{t('accountBalance')}}</view>
 				<view class="money-wrap">
-					<view class="money-item" @click="redirect({ url: '/pages/member/detailed_account', param: { type : 'balance' } })">
+					<view class="money-item"
+						@click="redirect({ url: '/pages/member/detailed_account', param: { type : 'balance' } })">
 						<view class="money">
 							{{ moneyFormat(memberStore.info?.balance)|| '0.00' }}
 						</view>
 						<view class="text leading-none">{{ t('balance') }}</view>
 					</view>
-					<view class="money-item" @click="redirect({ url: '/pages/member/detailed_account', param: { type : 'money' } })">
+					<view class="money-item"
+						@click="redirect({ url: '/pages/member/detailed_account', param: { type : 'money' } })">
 						<view class="money">
 							{{ moneyFormat(memberStore.info?.money)|| '0.00' }}
 						</view>
@@ -28,17 +32,18 @@
 			<u-button type="primary" shape="circle" class="btn"
 				:customStyle="{backgroundColor: '#FE4E50',color: '#fff', borderColor: '#FE4E50',width: 'calc(100vw - 64rpx)'}"
 				@click="topUpFn">
-					<img class="max-w-[36rpx] max-h-[36rpx] mr-1" :src="img('static/resource/images/member/reset.png')" alt="">
-					<text>{{t('recharge')}}</text>
+				<img class="max-w-[36rpx] max-h-[36rpx] mr-1" :src="img('static/resource/images/member/reset.png')"
+					alt="">
+				<text>{{t('recharge')}}</text>
 			</u-button>
 			<u-button v-if="cashOutConfigObj.is_open == 1" type="primary" :plain="true" shape="circle" class="btn"
 				:customStyle="{backgroundColor: '#fff',color: '#FE4E50', borderColor: '#FE4E50',width: 'calc(100vw - 64rpx)'}"
 				@click="applyCashOut">
-					<img class="max-w-[36rpx] max-h-[36rpx] mr-1" :src="img('static/resource/images/member/withdraw_deposit.png')" alt="">
-					<text>{{t('cashOut')}}</text>
+				<img class="max-w-[36rpx] max-h-[36rpx] mr-1"
+					:src="img('static/resource/images/member/withdraw_deposit.png')" alt="">
+				<text>{{t('cashOut')}}</text>
 			</u-button>
 		</view>
-
 
 		<!-- 充值 -->
 		<u-popup :show="topUpShow" mode="center" :round="10" @close="closePopup" :closeable="true">
@@ -101,6 +106,8 @@
 		transfer_type: [] // 提现方式
 	})
 
+	const loading = ref(true);
+
 	onShow(() => {
 		// h5端检测是否是支付后返回 支付组件必须调用
 		// #ifdef H5
@@ -108,9 +115,10 @@
 		// #endif
 
 		cashOutConfig().then((res) => {
-            for (let key in res.data) {
-                cashOutConfigObj[key] = res.data[key];
-            }
+			for (let key in res.data) {
+				cashOutConfigObj[key] = res.data[key];
+			}
+			loading.value = false;
 		})
 	})
 
@@ -135,11 +143,11 @@
 			rechargeLoading.value = false
 		})
 	}
-    
-    const applyCashOut = ()=> {
-        uni.setStorageSync('cashOutAccountType', 'money')
-        redirect({ url: '/pages/member/apply_cash_out' })
-    }
+
+	const applyCashOut = () => {
+		uni.setStorageSync('cashOutAccountType', 'money')
+		redirect({ url: '/pages/member/apply_cash_out' })
+	}
 </script>
 
 <style lang="scss" scoped>

@@ -8,7 +8,7 @@
                     <input type="digit" class="h-[70rpx] leading-[70rpx] pl-[10rpx] flex-1 font-bold text-[60rpx]"
                         v-model="applyData.apply_money" />
                     <image @click="clearMoney" v-if="applyData.apply_money"
-                        :src="img('static/resource/images/member/apply_cash_out/close.png')" class="w-[40rpx] h-[40rpx]"
+                        :src="img('static/resource/images/member/apply_withdrawal/close.png')" class="w-[40rpx] h-[40rpx]"
                         mode="widthFix" />
                 </view>
                 <view class="pt-[20rpx]">
