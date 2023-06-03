@@ -12,7 +12,6 @@
 use app\api\middleware\ApiChannel;
 use app\api\middleware\ApiCheckToken;
 use app\api\middleware\ApiLog;
-use app\api\middleware\AllowCrossDomain;
 use think\facade\Route;
 
 
@@ -23,6 +22,6 @@ Route::group('auth',function () {
 
     Route::put('logout', 'login.Login/logout');
 
-})->middleware(AllowCrossDomain::class)->middleware(ApiChannel::class)
+})->middleware(ApiChannel::class)
     ->middleware(ApiCheckToken::class, true)
     ->middleware(ApiLog::class);

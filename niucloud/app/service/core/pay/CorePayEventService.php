@@ -16,7 +16,6 @@ use app\dict\pay\PayDict;
 use app\dict\pay\TransferDict;
 use core\base\BaseCoreService;
 use core\exception\PayException;
-use core\pay\PayDriver;
 use core\pay\PayLoader;
 use Yansongda\Supports\Collection;
 
@@ -46,17 +45,20 @@ class CorePayEventService extends BaseCoreService
      * @param string $type
      * @return $this
      */
-    public function init(int $site_id, string $channel = '', string $type = ''){
+    public function init(int $site_id, string $channel = '', string $type = '')
+    {
         $this->site_id = $site_id;
         $this->channel = $channel;
         $this->type = $type;
         $this->config = (new CorePayChannelService())->getConfigByChannelAndType($this->site_id, $this->channel, $this->type);
         return $this;
     }
+
     /**
      * 获取实例化应用
-     * @param $site_id
-     * @return \core\pay\PayDriver
+     * @param string $action
+     * @return PayLoader
+     * @throws \Exception
      */
     public function app(string $action = 'query')
     {
@@ -91,7 +93,7 @@ class CorePayEventService extends BaseCoreService
             'buyer_id' => $buyer_id,
             'openid' => $openid
         );
-        switch($this->type){
+        switch ($this->type) {
             case PayDict::WECHATPAY:
                 $params['money'] = $params['money'] * 100;
 
@@ -132,7 +134,7 @@ class CorePayEventService extends BaseCoreService
                         break;
                 }
         }
-        if(empty($pay_fun)) throw new PayException('PAYMENT_METHOD_NOT_SCENE');
+        if (empty($pay_fun)) throw new PayException('PAYMENT_METHOD_NOT_SCENE');
         return $this->app('pay')->$pay_fun($params);
     }
 
@@ -148,10 +150,10 @@ class CorePayEventService extends BaseCoreService
      * @param $to_name
      * @return mixed|Collection
      */
-    public function transfer(float $money, string $transfer_no,string  $to_no, string $to_name, string $remark, array $transfer_list = [], string $to_type = '', string $product_code = '', string $scene = '')
+    public function transfer(float $money, string $transfer_no, string $to_no, string $to_name, string $remark, array $transfer_list = [], string $to_type = '', string $product_code = '', string $scene = '')
     {
         $transfer_type = TransferDict::getPayTypeByTransfer($this->type);
-        switch($transfer_type){
+        switch ($transfer_type) {
             case PayDict::WECHATPAY:
                 $money = $money * 100;
                 break;
@@ -190,11 +192,15 @@ class CorePayEventService extends BaseCoreService
      */
     public function refund(string $out_trade_no, float $money, float $total, string $refund_no)
     {
+        if ($this->type == PayDict::WECHATPAY) {
+            $money = $money * 100;
+            $total = $total * 100;
+        }
         return $this->app('refund')->refund([
             'out_trade_no' => $out_trade_no,
-            'out_trade_no' => $money,
-            'out_trade_no' => $total,
-            'out_trade_no' => $refund_no
+            'money' => $money,
+            'total' => $total,
+            'refund_no' => $refund_no
         ]);
     }
 
@@ -202,7 +208,7 @@ class CorePayEventService extends BaseCoreService
      * 支付异步通知
      * @return void
      */
-    public function notify(string $action, Callable $callback)
+    public function notify(string $action, callable $callback)
     {
         return $this->app()->notify($action, $callback);
     }

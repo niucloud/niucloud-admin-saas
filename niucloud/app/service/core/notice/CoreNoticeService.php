@@ -13,7 +13,6 @@ namespace app\service\core\notice;
 
 
 use app\dict\notice\NoticeDict;
-use app\job\notice\Message;
 use app\model\sys\SysNotice;
 use core\base\BaseCoreService;
 use core\exception\NoticeException;

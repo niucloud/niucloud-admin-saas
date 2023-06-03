@@ -14,7 +14,7 @@
 {SEARCH_VIEW}
                     <el-form-item>
                         <el-button type="primary" @click="load{UCASE_NAME}List()">{{ t('search') }}</el-button>
-                        <el-button @click="searchFormRef?.resetFields()">{{ t('reset') }}</el-button>
+                        <el-button @click="resetForm(searchFormRef)">{{ t('reset') }}</el-button>
                     </el-form-item>
                 </el-form>
             </el-card>
@@ -123,6 +123,13 @@ const deleteEvent = (id: number) => {
         }).catch(() => {
         })
     })
+}
+
+
+const resetForm = (formEl: FormInstance | undefined) => {
+    if (!formEl) return
+    formEl.resetFields()
+    load{UCASE_NAME}List()
 }
 </script>
 

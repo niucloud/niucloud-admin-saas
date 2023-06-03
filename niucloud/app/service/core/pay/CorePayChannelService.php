@@ -51,16 +51,13 @@ class CorePayChannelService extends BaseCoreService
      */
     public function getAllowPayTypeByCahnnel(int $site_id, string $channel, array $pay_type_limit_list = []){
         $channel_pay_list = $this->model->where([['site_id', '=', $site_id], ['channel', '=', $channel], ['status', '=', 1]])->field('type')->order('sort asc')->select()->toArray();
+
         if(!empty($channel_pay_list)){
             $temp_channel_pay_list = array_column($channel_pay_list, 'type');
             if($pay_type_limit_list) $temp_channel_pay_list = array_intersect($temp_channel_pay_list, $pay_type_limit_list);
             $pay_type_list = PayDict::getPayType($temp_channel_pay_list);
-            $allow_pay_type_list = [];
-            foreach($channel_pay_list as $v){
-                $allow_pay_type_list[] = $pay_type_list[$v['type']];
-            }
         }
-        return $allow_pay_type_list ?? [];
+        return $pay_type_list ?? [];
 
     }
 

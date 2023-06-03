@@ -8,7 +8,7 @@ return [
     'listen' => [
 
         //应用管理
-        'appManage' => ['addon\hello_world\app\listener\AppManageListener'],
+        'AppManage' => ['addon\hello_world\app\listener\AppManageListener'],
     ],
 
     'subscribe' => [

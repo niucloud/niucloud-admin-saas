@@ -19,8 +19,6 @@ use Yansongda\Supports\Collection;
 
 /**
  * 支付业务
- * Class WechatConfigService
- * @package app\service\core\wechat
  */
 class PayService extends BaseApiService
 {
@@ -31,8 +29,6 @@ class PayService extends BaseApiService
         parent::__construct();
         $this->core_pay_service = new CorePayService();
     }
-
-
 
     /**
      * 去支付
@@ -63,22 +59,6 @@ class PayService extends BaseApiService
         return $this->core_pay_service->pay($this->site_id, $out_trade_no, $type, $this->channel, $openid ?? '', $return_url, $quit_url, $buyer_id);
     }
 
-
-    /**
-     * 转账
-     * @param $site_id
-     * @param $from_no
-     * @param $product_code 支付宝用
-     * @param $scene
-     * @param $to_no
-     * @param $to_type 支付宝用
-     * @param $to_name
-     * @return mixed|Collection
-     */
-    public function transfer(string $type, float $money, string $transfer_no, string $to_no, string $to_type, string $to_name, string $product_code, string $scene){
-        return $this->core_pay_service->transfer($this->site_id, $type, $money, $transfer_no, $to_no, $to_type, $to_name, $product_code, $scene);
-    }
-
     /**
      * 关闭支付
      * @param $site_id
@@ -91,17 +71,6 @@ class PayService extends BaseApiService
     }
 
     /**
-     * 退款
-     * @param $site_id
-     * @param $out_trade_no
-     * @param $money
-     * @return void
-     */
-    public function refund(string $type, string $out_trade_no, float $money){
-        return $this->core_pay_service->refund($this->site_id, $type, $out_trade_no, $money);
-    }
-
-    /**
      * 支付异步通知
      * @param $site_id
      * @param $type
@@ -110,42 +79,6 @@ class PayService extends BaseApiService
     public function notify(string $channel, string $type, string $action){
         return $this->core_pay_service->notify($this->site_id, $channel, $type, $action);
     }
-
-    /**
-     * 查询普通支付订单
-     * @param $site_id
-     * @param $type
-     * @param $out_trade_no
-     * @return null
-     */
-    public function getOrder(string $type, string $out_trade_no){
-        return $this->core_pay_service->notify($this->site_id, $type, $out_trade_no);
-    }
-
-    /**
-     * 查询退款订单
-     * @param $site_id
-     * @param $type
-     * @param $out_trade_no
-     * @param $refund_no
-     * @return null
-     */
-    public function getRefund(string $type, string $out_trade_no, string $refund_no){
-        return $this->core_pay_service->getRefund($this->site_id, $type, $out_trade_no, $refund_no);
-
-    }
-
-    /**
-     * 查询转账订单
-     * @param $site_id
-     * @param $type
-     * @param $transfer_no
-     * @return null
-     */
-    public function getTransfer(string $type, string $transfer_no){
-        return $this->core_pay_service->getTransfergetTransfer($this->site_id, $type, $transfer_no);
-    }
-
 
     /**
      * 通过交易流水号查询支付信息以及支付方式

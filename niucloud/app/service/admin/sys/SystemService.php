@@ -47,7 +47,7 @@ class SystemService extends BaseAdminService
      */
     public function getUrl()
     {
-        $site_tag = $this->site_id == 1 ? '' : '/s' . $this->site_id;
+        $site_tag = $this->site_id == 1 ? '/' : '/s' . $this->site_id . '/';
         $data = [
             'wap_url' => ( !empty(env("system.wap_domain")) ? env("system.wap_domain") : request()->domain() ) . "/wap" . $site_tag,
             'web_url' => ( !empty(env("system.web_domain")) ? env("system.web_domain") : request()->domain() ) . "/web" . $site_tag,
@@ -59,7 +59,8 @@ class SystemService extends BaseAdminService
      * 获取系统信息
      * @return void
      */
-    public function getSystemInfo(){
+    public function getSystemInfo()
+    {
         $server = [];
         $server[] = [ "name" => get_lang('dict_setting.server_system'), "server" => PHP_OS ];
         $server[] = [ "name" => get_lang('dict_setting.server_setting'), "server" => PHP_SAPI ];
@@ -88,16 +89,16 @@ class SystemService extends BaseAdminService
 
 
         $dirs_list = [
-            [ "path" => $root_path . DIRECTORY_SEPARATOR . 'runtime'.DIRECTORY_SEPARATOR, "need" => get_lang('dict_setting.file_authority_ask'), "path_name" => "/runtime", "name" => "runtime" ],
-            [ "path" => $root_path . DIRECTORY_SEPARATOR . 'public'.DIRECTORY_SEPARATOR.'upload'.DIRECTORY_SEPARATOR, "need" => get_lang('dict_setting.file_authority_ask'), "path_name" => "/public/upload", "name" => "upload" ],
-       ];
+            [ "path" => $root_path . DIRECTORY_SEPARATOR . 'runtime' . DIRECTORY_SEPARATOR, "need" => get_lang('dict_setting.file_authority_ask'), "path_name" => "/runtime", "name" => "runtime" ],
+            [ "path" => $root_path . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'upload' . DIRECTORY_SEPARATOR, "need" => get_lang('dict_setting.file_authority_ask'), "path_name" => "/public/upload", "name" => "upload" ],
+        ];
         //目录 可读 可写检测
         foreach ($dirs_list as $k => $v) {
             $is_readable = is_readable($v[ "path" ]);
             $is_write = is_write($v[ "path" ]);
-            if($is_readable && $is_write){
+            if ($is_readable && $is_write) {
                 $dirs_list[ $k ][ "status" ] = true;
-            }else{
+            } else {
                 $dirs_list[ $k ][ "status" ] = false;
             }
         }
@@ -105,24 +106,25 @@ class SystemService extends BaseAdminService
 
         //获取环境版本
         $server_version = [];
-        $row = (array)Db::query("select VERSION() as verson");
+        $row = (array) Db::query("select VERSION() as verson");
         $server_version[] = [ "name" => get_lang('dict_setting.php_version'), "demand" => get_lang('dict_setting.php_ask'), "server" => phpversion() ];
-        $server_version[] = [ "name" => get_lang('dict_setting.mysql_version'), "demand" => get_lang('dict_setting.mysql_ask'), "server" => $row[0]['verson']];
+        $server_version[] = [ "name" => get_lang('dict_setting.mysql_version'), "demand" => get_lang('dict_setting.mysql_ask'), "server" => $row[ 0 ][ 'verson' ] ];
 
         // 进程
         $process[] = [ "name" => "php think queue:listen", "need" => get_lang('dict_setting.php_authority_ask'), "status" => ( new SystemService() )->checkJob() ];
 
-        $data = ["server" => $server, "dirs_list" => $dirs_list, 'system_variables' => $system_variables, 'server_version' => $server_version, 'process' => $process ];
+        $data = [ "server" => $server, "dirs_list" => $dirs_list, 'system_variables' => $system_variables, 'server_version' => $server_version, 'process' => $process ];
         return $data;
     }
 
     /**
      * 清理缓存
      */
-    public function schemaCache(){
+    public function schemaCache()
+    {
 
-        if (is_dir(dirname($_SERVER['DOCUMENT_ROOT']) . '/runtime/schema')) {
-            rmdirs(dirname($_SERVER['DOCUMENT_ROOT']) . '/runtime/schema');
+        if (is_dir(dirname($_SERVER[ 'DOCUMENT_ROOT' ]) . '/runtime/schema')) {
+            rmdirs(dirname($_SERVER[ 'DOCUMENT_ROOT' ]) . '/runtime/schema');
         }
         return 'CLEAR_MYSQL_CACHE_SUCCESS';
     }
@@ -131,16 +133,17 @@ class SystemService extends BaseAdminService
      *校验消息队列是否正常运行
      * @return void
      */
-    public function checkJob(){
+    public function checkJob()
+    {
         $secret = uniqid();
-        $file = root_path('runtime').$secret.'.job';
-        try{
-            CheckJob::invoke(['file' => $file]);
-        }catch(\Throwable $e){
+        $file = root_path('runtime') . $secret . '.job';
+        try {
+            CheckJob::invoke([ 'file' => $file ]);
+        } catch (\Throwable $e) {
             return false;
         }
         sleep(3);
-        if(file_exists($file)){
+        if (file_exists($file)) {
             @unlink($file);
             return true;
         }
@@ -151,11 +154,12 @@ class SystemService extends BaseAdminService
      * 校验计划任务是否正常运行
      * @return bool
      */
-    public function checkSchedule(){
-        $file = root_path('runtime').'.schedule';
-        if(file_exists($file)){
+    public function checkSchedule()
+    {
+        $file = root_path('runtime') . '.schedule';
+        if (file_exists($file)) {
             $time = file_get_contents($file);
-            if (!empty($time) && abs($time - time()) < 90 ) {
+            if (!empty($time) && abs($time - time()) < 90) {
                 return true;
             }
         }

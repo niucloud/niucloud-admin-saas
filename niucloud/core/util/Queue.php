@@ -11,7 +11,6 @@
 
 namespace core\util;
 
-use think\facade\Config;
 use think\facade\Queue as ThinkQueue;
 use think\facade\Log;
 

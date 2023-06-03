@@ -22,7 +22,7 @@ abstract class Loader extends Facade
      */
     public function __construct($name = '', array $config = []){
         if(is_array($name)){
-            $config = $config;
+            $config = $name;
             $name = null;
         }
         if($name){

@@ -11,7 +11,6 @@
 
 use app\api\middleware\ApiChannel;
 use app\api\middleware\ApiCheckToken;
-use app\api\middleware\AllowCrossDomain;
 use app\api\middleware\ApiLog;
 use think\facade\Route;
 
@@ -19,7 +18,7 @@ use think\facade\Route;
 Route::any('pay/notify/:site_id/:channel/:type/:action', 'pay.Pay/notify')
     ->middleware(ApiChannel::class)
     ->middleware(ApiCheckToken::class)
-    ->middleware(ApiLog::class)->allowCrossDomain();
+    ->middleware(ApiLog::class);
 /**
  * 路由
  */
@@ -29,6 +28,6 @@ Route::group('pay',function () {
     //支付信息
     Route::get('info/:out_trade_no', 'pay.Pay/info');
 
-})->middleware(AllowCrossDomain::class)->middleware(ApiChannel::class)
+})->middleware(ApiChannel::class)
     ->middleware(ApiCheckToken::class)
     ->middleware(ApiLog::class);

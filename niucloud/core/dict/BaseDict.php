@@ -14,7 +14,6 @@ namespace core\dict;
 use core\loader\Storage;
 use think\facade\Cache;
 use think\facade\Db;
-use think\facade\Log;
 
 /**
  * Class BaseAddon

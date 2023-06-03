@@ -30,7 +30,7 @@ class AppService extends BaseAdminService
      */
     public function getAppList()
     {
-        $data = event('appManage');
+        $data = event('AppManage');
         //
         $category_list = [];
         $list = [];

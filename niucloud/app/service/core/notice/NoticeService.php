@@ -12,16 +12,9 @@
 namespace app\service\core\notice;
 
 
-use app\dict\pay\PayDict;
-use app\job\notice\Message;
 use app\job\notice\Notice;
-use app\model\pay\PayChannel;
-use app\model\sys\SysMessage;
 use app\model\sys\SysNotice;
-use app\service\core\message\CoreMessageService;
 use core\base\BaseCoreService;
-use core\exception\NoticeException;
-use think\Model;
 
 
 /**

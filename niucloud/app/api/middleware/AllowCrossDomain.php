@@ -18,7 +18,7 @@ use core\exception\ServerException;
 /**
  * http跨域请求中间件
  * Class AllowCrossDomain
- * @package app\adminapi\middleware
+ * @package app\api\middleware
  */
 class AllowCrossDomain
 {
@@ -34,46 +34,7 @@ class AllowCrossDomain
         header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
         header('Access-Control-Max-Age: 1728000');
         header('Access-Control-Allow-Credentials:true');
-        //todo 周  自定义Authorization等，需要在.htaccess内加上SetEnvIf Authorization .+ HTTP_AUTHORIZATION=$0  nginx同理
-        $allow_origin = [
-            rtrim(str_replace('https://','',str_replace('http://','',$request->domain())),"/"),
-        ];
-
-        $wap_domain = env('system.wap_domain');
-        if(!empty($wap_domain)){
-            $wap_domain = explode(',', $wap_domain);
-            foreach($wap_domain as $v){
-                if(!trim($v)) continue;
-                $allow_origin[] = rtrim(str_replace('https://','',str_replace('http://','',$v)),"/");
-            }
-        }
-        $web_domain = env('system.web_domain');
-        if(!empty($web_domain)){
-            $web_domain = explode(',', $web_domain);
-            foreach($web_domain as $v){
-                if(!trim($v)) continue;
-                $allow_origin[] = rtrim(str_replace('https://','',str_replace('http://','',$v)),"/");
-            }
-        }
-//        if(env('system.wap_domain')){
-//            $allow_origin[] = rtrim(str_replace('https://','',str_replace('http://','',env('system.wap_domain'))),"/");
-//        }
-//        if(env('system.web_domain')){
-//            $allow_origin[] = rtrim(str_replace('https://','',str_replace('http://','',env('system.web_domain'))),"/");
-//        }
-        $referer = $request->header('referer');
-        $origin = '';
-        if(!empty($referer)){
-            $referer = parse_url($referer);
-            $referer = $referer['host'] ?? '';
-            $origin = rtrim(str_replace('https://','',str_replace('http://','',$referer)),"/");
-        }
-        if(env('app_debug') || ($origin && in_array($origin, $allow_origin))){
-            header('Access-Control-Allow-Origin: *');
-        }else{
-            header('Access-Control-Allow-Origin: *');
-            throw new ServerException('SERVER_CROSS_REQUEST_FAIL', 409);
-        }
+        header('Access-Control-Allow-Origin: *');
         return $next($request);
     }
 }

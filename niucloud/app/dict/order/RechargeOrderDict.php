@@ -23,8 +23,6 @@ class RechargeOrderDict
     //订单状态
     //待支付
     const WAIT_PAY = 0;
-    //已支付
-    const PAY = 1;
     //已完成
     const FINISH = 10;
     //已关闭
@@ -76,14 +74,6 @@ class RechargeOrderDict
                         'class' => '',
                         'params' => ''
                     ],
-                ],
-            ],
-            self::PAY => [
-                'name' => '已支付',
-                'status' => self::PAY,
-                'is_refund' => 0,
-                'action' => [],
-                'member_action' => [
                 ],
             ],
             self::FINISH => [

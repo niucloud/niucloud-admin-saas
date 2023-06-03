@@ -42,7 +42,9 @@ class RechargeOrderService extends BaseAdminService
             $query->field('order_item_id, order_id, member_id, item_id, item_type, item_name, item_image, price, num, item_money, is_refund, refund_no, refund_status, create_time');
         }, 'member' => function($query) {
             $query->field('member_id, nickname, mobile, headimg');
-        }])->order($order)->append(['order_status_info', 'order_from_name', 'refund_status_name']);
+        }, 'pay' => function($query) {
+            $query->field('');
+        } ])->order($order)->append(['order_status_info', 'order_from_name', 'refund_status_name' ]);
         return $this->pageQuery($search_model);
     }
 
@@ -58,7 +60,9 @@ class RechargeOrderService extends BaseAdminService
             $query->field('order_item_id, order_id, member_id, item_id, item_type, item_name, item_image, price, num, item_money, is_refund, refund_no, refund_status, create_time');
         }, 'member' => function($query) {
             $query->field('member_id, nickname, mobile, headimg');
-        }])->append(['order_status_info', 'order_from_name'])->findOrEmpty()->toArray();
+        }, 'pay' => function($query) {
+            $query->field('');
+        } ])->append(['order_status_info', 'order_from_name'])->findOrEmpty()->toArray();
         return $detail;
     }
 

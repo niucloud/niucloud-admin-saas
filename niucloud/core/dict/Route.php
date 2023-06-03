@@ -24,7 +24,7 @@ class Route extends BaseDict
 
         foreach ($addons as $k => $v)
         {
-            $route_path = $this->getAddonAppPath($v). DIRECTORY_SEPARATOR. $data['app_type']. DIRECTORY_SEPARATOR. "route.php";
+            $route_path = $this->getAddonAppPath($v). DIRECTORY_SEPARATOR. $data['app_type']. DIRECTORY_SEPARATOR. "route". DIRECTORY_SEPARATOR. "route.php";
             if(is_file($route_path))
             {
                 include $route_path;

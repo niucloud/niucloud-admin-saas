@@ -11,7 +11,6 @@
 
 use app\api\middleware\ApiCheckToken;
 use app\api\middleware\ApiLog;
-use app\api\middleware\AllowCrossDomain;
 use think\facade\Route;
 
 
@@ -27,5 +26,5 @@ Route::group('diy', function() {
 
     Route::get('share', 'diy.Diy/share');
 
-})->middleware(AllowCrossDomain::class)->middleware(ApiLog::class)
+})->middleware(ApiLog::class)
     ->middleware(ApiCheckToken::class, false);

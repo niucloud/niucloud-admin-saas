@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2023-02-17
- * Time: 15:58
- */
 
 namespace core\pay;
 

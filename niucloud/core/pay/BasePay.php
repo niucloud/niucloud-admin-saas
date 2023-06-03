@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2023-02-17
- * Time: 15:58
- */
 
 namespace core\pay;
 
@@ -134,7 +128,7 @@ abstract class BasePay extends Storage
             [
                 'logger' => [
                     'enable' => true,
-                    'file' => runtime_path() . 'paylog'.DIRECTORY_SEPARATOR.date('Ym').DIRECTORY_SEPARATOR.date('d').'.log',
+                    'file' => root_path('runtime') . 'paylog'.DIRECTORY_SEPARATOR.date('Ym').DIRECTORY_SEPARATOR.date('d').'.log',
                     'level' => env('app_debug') ? 'debug' : 'info', // 建议生产环境等级调整为 info，开发环境为 debug
                     'type' => 'single', // optional, 可选 daily.
                     'max_file' => 30, // optional, 当 type 为 daily 时有效，默认 30 天

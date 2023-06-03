@@ -12,7 +12,6 @@
 namespace app\service\core\addon;
 
 use app\dict\addon\AddonDict;
-use app\dict\sys\AppTypeDict;
 use app\job\sys\AddonInstall;
 use app\service\admin\sys\MenuService;
 use app\service\admin\sys\SystemService;
@@ -23,7 +22,6 @@ use core\util\Terminal;
 use think\db\exception\PDOException;
 use think\facade\Cache;
 use think\facade\Db;
-use think\facade\Log;
 use think\helper\Str;
 
 /**

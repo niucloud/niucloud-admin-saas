@@ -14,7 +14,6 @@ namespace app\service\core\notice;
 use app\dict\sys\SmsDict;
 use app\service\core\sys\CoreConfigService;
 use core\base\BaseCoreService;
-use core\sms\SmsDriver;
 use core\exception\NoticeException;
 use core\sms\SmsLoader;
 

@@ -11,7 +11,6 @@
 
 namespace core\sms;
 
-use core\loader\DriverConfig;
 use core\loader\Storage;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace core\util;
 
-use core\exception\CommonException;
 
 class Terminal
 {

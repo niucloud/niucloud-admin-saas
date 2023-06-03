@@ -13,6 +13,7 @@ namespace app\model\order;
 
 use app\dict\common\ChannelDict;
 use app\model\member\Member;
+use app\model\pay\Pay;
 use core\base\BaseModel;
 
 /**
@@ -239,5 +240,11 @@ class Order extends BaseModel
         return $this->hasOne(Member::class,'member_id', 'member_id');
     }
 
-
+    /**
+     * 支付记录
+     * @return \think\model\relation\HasOne
+     */
+    public function pay() {
+        return $this->hasOne(Pay::class,'out_trade_no', 'out_trade_no')->bind(['pay_type_name' => 'type_name']);
+    }
 }

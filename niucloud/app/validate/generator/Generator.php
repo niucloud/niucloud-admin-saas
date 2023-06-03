@@ -15,10 +15,9 @@ namespace app\validate\generator;
 use think\Validate;
 
 /**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2023-01-07
- * Time: 18:08
+ * 代码生成器
+ * Class Generator
+ * @package app\validate\generator
  */
 class Generator extends Validate
 {

@@ -86,8 +86,4 @@ class CoreMemberAccountService extends BaseCoreService
         }
     }
 
-
-
-
-
 }

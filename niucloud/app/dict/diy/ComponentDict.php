@@ -75,6 +75,7 @@ class ComponentDict
                         'uses' => 0, // 最大添加数量
                         'sort' => 10002,
                         'value' => [
+                            "imageHeight" => 180,
                             "list" => [
                                 [
                                     "link" => [

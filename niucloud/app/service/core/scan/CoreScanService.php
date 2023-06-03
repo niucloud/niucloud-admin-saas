@@ -62,7 +62,7 @@ class CoreScanService extends BaseCoreService
         Log::write('scan_log_'.$key);
         if(!empty($cache)){
             $cache['is_scan'] = true;
-            Cache::set($cache_name, event('scan', array_merge($cache, $data))[0]);
+            Cache::set($cache_name, event('Scan', array_merge($cache, $data))[0]);
         }
         return true;
     }

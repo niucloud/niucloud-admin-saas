@@ -107,7 +107,7 @@ class MemberService extends BaseAdminService
 
         $member = $this->model->create($data);
         $data['member_id'] = $member->member_id;
-        event("memberRegister", $data);
+        event("MemberRegister", $data);
         return $member->member_id;
     }
 

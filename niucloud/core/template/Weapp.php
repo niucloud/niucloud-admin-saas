@@ -11,12 +11,7 @@
 
 namespace core\template;
 
-use AlibabaCloud\Client\AlibabaCloud;
 use app\service\core\weapp\CoreWeappService;
-use app\service\core\wechat\CoreWechatService;
-use core\exception\NoticeException;
-use core\sms\BaseSms;
-use Exception;
 
 
 class Weapp extends BaseTemplate

@@ -101,7 +101,7 @@ class SiteService extends BaseAdminService
             ( new UserService() )->addSiteUser($data_user, $site_id);
 
             //添加站点成功事件
-            event("addSiteAfter", [ 'site_id' => $site_id ]);
+            event("AddSiteAfter", [ 'site_id' => $site_id ]);
 
             Db::commit();
             return $site_id;

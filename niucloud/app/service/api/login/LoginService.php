@@ -71,7 +71,7 @@ class LoginService extends BaseApiService
         $member_info->last_visit_time = time();
         $member_info->save();
         $token_info = $this->createToken($member_info);
-        event("memberLogin", $member_info);
+        event("MemberLogin", $member_info);
         return [
             'token' => $token_info['token'],
             'expires_time' => $token_info['params']['exp'],

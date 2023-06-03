@@ -13,7 +13,6 @@ namespace app\service\core\upload;
 
 use app\dict\sys\FileDict;
 use app\service\core\sys\CoreAttachmentService;
-use core\exception\UploadFileException;
 
 /**
  * 上传服务层

@@ -13,10 +13,8 @@ namespace app\service\core\site;
 
 use app\dict\site\SiteDict;
 use app\model\site\Site;
-use app\service\api\login\BaseApiService;
 use core\base\BaseCoreService;
 use core\exception\CommonException;
-use think\facade\Cache;
 
 /**
  * 站点服务层

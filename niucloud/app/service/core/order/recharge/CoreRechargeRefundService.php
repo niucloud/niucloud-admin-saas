@@ -93,7 +93,7 @@ class CoreRechargeRefundService extends BaseCoreService
     public function refund(array $order, string $refund_no){
         (new CoreMemberAccountService())->addLog($order['site_id'], $order['member_id'], 'balance', -$order['money'], 'recharge_refund', '充值订单退款', $order['order_id']);
         // 调用支付退款
-//        (new CoreRefundService())->refund($order['site_id'], $refund_no);
+        (new CoreRefundService())->refund($order['site_id'], $refund_no);
     }
 
     /**

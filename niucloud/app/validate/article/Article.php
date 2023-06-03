@@ -15,10 +15,8 @@ namespace app\validate\article;
 use think\Validate;
 
 /**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2023-01-07
- * Time: 18:08
+ * Class Article
+ * @package app\validate\article
  */
 class Article extends Validate
 {

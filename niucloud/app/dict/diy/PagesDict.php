@@ -85,6 +85,7 @@ class PagesDict
                                 "componentName" => "ImageAds",
                                 "componentTitle" => "图片广告",
                                 "uses" => 0,
+                                "imageHeight" => 160,
                                 "list" => [
                                     [
                                         "link" => [

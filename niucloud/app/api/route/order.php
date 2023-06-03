@@ -12,7 +12,6 @@
 use app\api\middleware\ApiChannel;
 use app\api\middleware\ApiCheckToken;
 use app\api\middleware\ApiLog;
-use app\api\middleware\AllowCrossDomain;
 use think\facade\Route;
 
 
@@ -28,6 +27,6 @@ Route::group('order', function () {
     Route::get('recharge', 'order.Recharge/lists');
     // 充值订单详情
     Route::get('recharge/:order_id', 'order.Recharge/detail');
-})->middleware(AllowCrossDomain::class)->middleware(ApiChannel::class)
+})->middleware(ApiChannel::class)
     ->middleware(ApiCheckToken::class, true)
     ->middleware(ApiLog::class);

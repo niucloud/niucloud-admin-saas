@@ -11,7 +11,6 @@
 
 namespace core\template;
 
-use core\loader\DriverConfig;
 use core\loader\Storage;
 
 /**

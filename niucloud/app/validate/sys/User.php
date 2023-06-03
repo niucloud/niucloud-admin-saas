@@ -13,12 +13,9 @@ namespace app\validate\sys;
 use think\Validate;
 
 /**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2023-01-07
- * Time: 18:08
+ * Class User
+ * @package app\validate\sys
  */
-
 class User extends Validate
 {
 

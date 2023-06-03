@@ -68,7 +68,7 @@ class RegisterService extends BaseApiService
             }
             $member_id = ( new MemberService() )->add($data);
             $data[ 'member_id' ] = $member_id;
-            event('memberRegister', $data);
+            event('MemberRegister', $data);
             CoreMemberService::setMemberNo($this->site_id, $member_id);
         }
         $member_info = $member_service->findMemberInfo([ 'member_id' => $member_id, 'site_id' => $this->site_id ]);

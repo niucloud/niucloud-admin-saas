@@ -12,17 +12,21 @@
 namespace app\listener\pay;
 
 
+use app\dict\order\RechargeOrderDict;
+use app\service\core\order\recharge\CoreRechargeOrderService;
+
 /**
  * 支付异步回调事件
- * Class PayNotify
- * @package app\listener\pay
  */
 class PaySuccessListener
 {
     public function handle(array $pay_info)
     {
-        $class = "app\\dict\\order\\". $pay_info['trade_type']."\\".ucfirst($pay_info['trade_type']).'OrderService';
-
-        return (new $class)->pay($pay_info);
+        $trade_type = $pay_info['trade_type'] ?? '';
+        switch($trade_type){
+            case RechargeOrderDict::getOrderType()['type']:
+                return (new CoreRechargeOrderService())->pay($pay_info);
+                break;
+        }
     }
 }

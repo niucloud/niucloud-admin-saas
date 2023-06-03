@@ -15,10 +15,8 @@ use app\dict\pay\PayDict;
 use think\Validate;
 
 /**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2023-01-07
- * Time: 18:08
+ * Class PayTemplate
+ * @package app\validate\pay
  */
 class PayTemplate extends Validate
 {

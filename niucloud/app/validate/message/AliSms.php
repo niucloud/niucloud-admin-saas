@@ -14,10 +14,8 @@ namespace app\validate\notice;
 use think\Validate;
 
 /**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2023-01-07
- * Time: 18:08
+ * Class Menu
+ * @package app\validate\notice
  */
 class Menu extends Validate
 {

@@ -11,7 +11,6 @@
 
 namespace app\service\core\pay;
 
-use app\dict\pay\PayDict;
 use app\dict\pay\RefundDict;
 use app\model\pay\Refund;
 use core\base\BaseCoreService;
@@ -54,7 +53,7 @@ class CoreRefundService extends BaseCoreService
             'channel' => $pay->channel,//渠道
             'out_trade_no' => $out_trade_no,
             'refund_no' => $refund_no,
-            'status' => 0,
+            'status' => RefundDict::WAIT,
             'reason' => $reason
         );
         $this->model->create($data);
@@ -75,7 +74,7 @@ class CoreRefundService extends BaseCoreService
         $money = $refund->money;
         try{
             //判断成功的话,可以直接调用退款成功
-            $pay_result = $this->pay_event->init($site_id, $refund->channel, $refund->type)->refund($out_trade_no, $money, $refund_no);
+            $pay_result = $this->pay_event->init($site_id, $refund->channel, $refund->type)->refund($out_trade_no, $money, $money, $refund_no);
             $this->refundNotify($site_id, $out_trade_no, $refund->type, $pay_result);
         }catch (\Throwable $e) {
             throw new PayException($e->getMessage());
@@ -128,7 +127,7 @@ class CoreRefundService extends BaseCoreService
                     $this->refundFail($site_id, [
                         'out_trade_no' => $out_trade_no,
                         'refund_no' => $refund_no,
-                        'fail_reason' => $params['fail_reason']
+                        'fail_reason' => $params['fail_reason'] ?? ''
                     ]);
                     break;
             }
@@ -170,6 +169,7 @@ class CoreRefundService extends BaseCoreService
                     'out_trade_no' => $out_trade_no,
                     'refund_no' => $refund_no,
                 ]);
+                break;
             case RefundDict::FAIL://退款失败
                 $this->refundFail($site_id, [
                     'out_trade_no' => $out_trade_no,
@@ -219,7 +219,7 @@ class CoreRefundService extends BaseCoreService
             ['refund_no', '=', $refund_no]
         ])->update([
             'status' => RefundDict::SUCCESS,
-            'fail_reason' => $data['reason']
+            'fail_reason' => $data['fail_reason']
         ]);
         return true;
     }

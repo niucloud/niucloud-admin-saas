@@ -22,14 +22,14 @@ $system_event = [
          */
 
         //会员注册事件
-        'memberRegister' => [ 'app\listener\member\MemberRegisterListener' ],
+        'MemberRegister' => [ 'app\listener\member\MemberRegisterListener' ],
         //会员登录事件
-        'memberLogin' => [ 'app\listener\member\MemberLoginListener' ],
+        'MemberLogin' => [ 'app\listener\member\MemberLoginListener' ],
         //会员账户变化事件
-        'memberAccount' => [ 'app\listener\member\MemberAccountListener' ],
+        'MemberAccount' => [ 'app\listener\member\MemberAccountListener' ],
         //扫码事件
-        'scan' => [ 'app\listener\scan\ScanListener' ],
-        'addSiteAfter' => [ 'app\listener\site\AddSiteAfterListener' ],
+        'Scan' => [ 'app\listener\scan\ScanListener' ],
+        'AddSiteAfter' => [ 'app\listener\site\AddSiteAfterListener' ],
 
         /**
          * 消息相关事件
@@ -40,23 +40,26 @@ $system_event = [
          */
         'PaySuccess' => [ 'app\listener\pay\PaySuccessListener' ],
         'TransferSuccess' => [ 'app\listener\pay\TransferSuccessListener' ],
+        /**
+         * 订单相关事件
+         */
 
         // 任务失败统一回调,有四种定义方式
         'queue_failed'=> [
             ['app\listener\job\QueueFailedLoggerListener', 'report'],
         ],
-        'appManage' => [
+        'AppManage' => [
             'app\listener\system\AppManageListener'
         ],
 
         //消息模板数据内容
-        'noticeData' => [
+        'NoticeData' => [
             'app\listener\notice_template\VerifyCode',//手机验证码
             'app\listener\notice_template\MemberVerifySuccess',//
             'app\listener\notice_template\RechargeSuccess',
         ],
         //全场景消息发送
-        'notice' => [
+        'Notice' => [
             'app\listener\notice\Sms',//短信
             'app\listener\notice\Wechat',//公众号模板消息
             'app\listener\notice\Weapp',//小程序订阅消息

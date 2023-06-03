@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2023-02-17
- * Time: 15:58
- */
 
 namespace core\pay;
 
@@ -271,6 +265,7 @@ class Wechatpay extends BasePay
             ],
         ]);
         $result = $this->returnFormat($result);
+
         $refund_status_array = [
             'SUCCESS' => RefundDict::SUCCESS,
             'CLOSED' => RefundDict::FAIL,
