@@ -1,5 +1,4 @@
 <template>
-    <!-- main-container -->
     <div class="flex h-full min-w-[1200px]">
         <div class="flex items-center ml-[20px]">
             <NuxtLink to="/">

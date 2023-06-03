@@ -1,7 +1,6 @@
 <template>
     <div class="h-[30px]">
-        <el-button type="primary" link :disabled="!sendSms.canGetCode.value" @click="handleClick">{{ sendSms.text.value
-        }}</el-button>
+        <el-button type="primary" link :disabled="!sendSms.canGetCode.value" @click="handleClick">{{ sendSms.text.value }}</el-button>
     </div>
 
     <el-dialog v-model="captchaDialog" :title="t('captchaTitle')" width="350px" :append-to-body="true" :align-center="true">
@@ -10,8 +9,7 @@
                 <el-input v-model="formData.captcha_code" :placeholder="t('captchaPlaceholder')">
                     <template #suffix>
                         <div class="py-[5px] leading-none">
-                            <el-image :src="captcha.image.value" class="h-[30px] cursor-pointer"
-                                @click="captcha.refresh()"></el-image>
+                            <el-image :src="captcha.image.value" class="h-[30px] cursor-pointer" @click="captcha.refresh()"></el-image>
                         </div>
                     </template>
                 </el-input>

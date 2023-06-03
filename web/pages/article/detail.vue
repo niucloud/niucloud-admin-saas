@@ -28,10 +28,10 @@ import { useRoute } from 'vue-router';
 const Route = useRoute(); //获取到值
 const articleDeatail = ref();
 onMounted(() => {
-	obtainArricleInfo(Route.query.id)
+	obtainArticleInfo(Route.query.id)
 });
 
-const obtainArricleInfo = (id) => {
+const obtainArticleInfo = (id) => {
 	getArticleDetail(id).then(res => {
 		articleDeatail.value = res.data;
     })
@@ -71,7 +71,6 @@ const obtainArricleInfo = (id) => {
     color: var(--el-color-primary);
 }
 
-// .demo-tabs .el-ta
 .custom-tabs-label span{
 	font-size: 20px;
 	padding: 0px 10px;

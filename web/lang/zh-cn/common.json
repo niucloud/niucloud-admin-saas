@@ -14,7 +14,7 @@
     "privacyAgreement": "隐私协议",
     "protocolNotConfigured": "未配置协议",
     "siteClose": "站点已关闭",
-    "siteNonexistence": "站点不存在",
+    "noSite": "站点不存在",
     "request": {
         "unknownError": "未知错误",
         "400": "错误的请求",

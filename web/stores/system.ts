@@ -25,7 +25,7 @@ const useSystemStore = defineStore('system', {
                     if (this.site.status == 3) navigateTo('/site/close', { replace: true })
                 })
                 .catch((err) => {
-                    navigateTo('/site/nonexistence', { replace: true })
+                    navigateTo('/site/nosite', { replace: true })
                 })
         }
     }

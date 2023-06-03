@@ -17,9 +17,7 @@
                         <el-table-column prop="create_time" :label="t('occurrenceTime')" />
                     </el-table>
                     <div class="mt-[16px] flex justify-end">
-                        <el-pagination v-model:current-page="balanceTableData.page" v-model:page-size="balanceTableData.limit"
-                            layout="total, sizes, prev, pager, next, jumper" :total="balanceTableData.total"
-                            @size-change="loadBalanceList()" @current-change="loadBalanceList" />
+                        <el-pagination v-model:current-page="balanceTableData.page" v-model:page-size="balanceTableData.limit" layout="total, sizes, prev, pager, next, jumper" :total="balanceTableData.total" @size-change="loadBalanceList()" @current-change="loadBalanceList" />
                     </div>
                 </div>
             </el-card>

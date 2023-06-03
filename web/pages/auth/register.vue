@@ -5,34 +5,26 @@
                 <div class="title font-bold text-xl">打开手机微信</div>
                 <div class="tips text-sm mt-[5px]">点击右上角打开扫一扫</div>
                 <div class="qrcode mt-[30px] border leading-none">
-                    <el-image
-                        :src="img('https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQHU7zwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAySlJSbU1Sb0hiMlQxOEcwSGhBY1AAAgTSfStkAwRYAgAA')"
-                        class="w-[120px]"></el-image>
+                    <el-image :src="img('https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=gQHU7zwAAAAAAAAAAS5odHRwOi8vd2VpeGluLnFxLmNvbS9xLzAySlJSbU1Sb0hiMlQxOEcwSGhBY1AAAgTSfStkAwRYAgAA')" class="w-[120px]"></el-image>
                 </div>
             </div>
 
             <div class="bg-white w-[380px] p-[30px]">
                 <div class="flex items-end my-[30px]">
-                    <div class="mr-[20px] text-base cursor-pointer leading-none" :class="{ 'font-bold': type == item.type }"
-                        v-for="item in registerType" @click="type = item.type">{{
-                            item.title }}
-                    </div>
+                    <div class="mr-[20px] text-base cursor-pointer leading-none" :class="{ 'font-bold': type == item.type }" v-for="item in registerType" @click="type = item.type">{{item.title }}</div>
                 </div>
                 <el-form :model="formData" ref="formRef" :rules="formRules" :validate-on-rule-change="false">
                     <div v-show="type == 'username'">
                         <el-form-item prop="username">
-                            <el-input v-model="formData.username" :placeholder="t('usernamePlaceholder')" clearable
-                                :inline-message="true">
+                            <el-input v-model="formData.username" :placeholder="t('usernamePlaceholder')" clearable :inline-message="true">
                             </el-input>
                         </el-form-item>
                         <el-form-item prop="password">
-                            <el-input v-model="formData.password" :placeholder="t('passwordPlaceholder')" type="password"
-                                clearable :show-password="true">
+                            <el-input v-model="formData.password" :placeholder="t('passwordPlaceholder')" type="password" clearable :show-password="true">
                             </el-input>
                         </el-form-item>
                         <el-form-item prop="confirm_password">
-                            <el-input v-model="formData.confirm_password" :placeholder="t('confirmPasswordPlaceholder')"
-                                type="password" clearable :show-password="true">
+                            <el-input v-model="formData.confirm_password" :placeholder="t('confirmPasswordPlaceholder')" type="password" clearable :show-password="true">
                             </el-input>
                         </el-form-item>
                     </div>
@@ -44,8 +36,7 @@
                         <el-form-item prop="mobile_code">
                             <el-input v-model="formData.mobile_code" :placeholder="t('codePlaceholder')">
                                 <template #suffix>
-                                    <sms-code :mobile="formData.mobile" type="login" v-model="formData.mobile_key"
-                                        @click="sendSmsCode" ref="smsCodeRef"></sms-code>
+                                    <sms-code :mobile="formData.mobile" type="login" v-model="formData.mobile_key" @click="sendSmsCode" ref="smsCodeRef"></sms-code>
                                 </template>
                             </el-input>
                         </el-form-item>
@@ -55,8 +46,7 @@
                             <el-input v-model="formData.captcha_code" :placeholder="t('captchaPlaceholder')">
                                 <template #suffix>
                                     <div class="py-0 leading-none">
-                                        <el-image :src="captcha.image.value" class="h-[30px] cursor-pointer"
-                                            @click="captcha.refresh()"></el-image>
+                                        <el-image :src="captcha.image.value" class="h-[30px] cursor-pointer" @click="captcha.refresh()"></el-image>
                                     </div>
                                 </template>
                             </el-input>
@@ -70,8 +60,7 @@
                     </div>
 
                     <el-form-item>
-                        <el-button type="primary" class="mt-[20px] w-full" size="large" @click="handleRegister"
-                            :loading="loading">{{ loading ? t('registering') : t('register') }}</el-button>
+                        <el-button type="primary" class="mt-[20px] w-full" size="large" @click="handleRegister" :loading="loading">{{ loading ? t('registering') : t('register') }}</el-button>
                     </el-form-item>
 
                     <div class="text-xs py-[50rpx] flex justify-center w-full" v-if="configStore.login.agreement_show">

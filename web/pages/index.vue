@@ -19,8 +19,7 @@
 					<p class="text-[14px] w-[280px] h-[100px] text-[#666666] leading-[22px] mt-[30px] mb-[20px]">
 						详尽细致的逐步官方教程，帮助您系统全面的接触NIUCLOUD，建议在使用前阅读。</p>
 					<NuxtLink to="https://www.kancloud.cn/cui18734824089/niucloud-admin-develop/3148343" target="_blank">
-						<div
-							class="flex justify-between items-center w-[280px] h-[40px] leading-[40px] rounded-[5px] border-[1px] border-[solid] border-[#508BFE]">
+						<div class="flex justify-between items-center w-[280px] h-[40px] leading-[40px] rounded-[5px] border-[1px] border-[solid] border-[#508BFE]">
 							<span class="block ml-[20px] text-[14px] text-[#333]">前往教程</span>
 							<span class="block mr-[20px] text-[24px] text-[#333]">→</span>
 						</div>
@@ -34,8 +33,7 @@
 					<p class="text-[14px] w-[280px] h-[100px] text-[#666666] leading-[22px] mt-[30px] mb-[20px]">
 						您可以通过API文档了解niucloud的正确使用方法，也可以更加深入地理解niucloud的运行逻辑。</p>
 					<NuxtLink to="https://www.niucloud.com/apidoc.html" target="_blank">
-						<div
-							class="flex justify-between items-center w-[280px] h-[40px] leading-[40px] rounded-[5px] border-[1px] border-[solid] border-[#508BFE]">
+						<div class="flex justify-between items-center w-[280px] h-[40px] leading-[40px] rounded-[5px] border-[1px] border-[solid] border-[#508BFE]">
 							<span class="block ml-[20px] text-[14px] text-[#333]">前往API文档</span>
 							<span class="block mr-[20px] text-[24px] text-[#333]">→</span>
 						</div>
@@ -49,8 +47,7 @@
 					<p class="text-[14px] w-[280px] h-[100px] text-[#666666] leading-[22px] mt-[30px] mb-[20px]">
 						便捷地浏览其它用户关于niucloud的问题，并从解答中获取niucloud的使用方法，当然您可以进行提问。</p>
 					<NuxtLink>
-						<div
-							class="flex justify-between items-center w-[280px] h-[40px] leading-[40px] rounded-[5px] border-[1px] border-[solid] border-[#508BFE]">
+						<div class="flex justify-between items-center w-[280px] h-[40px] leading-[40px] rounded-[5px] border-[1px] border-[solid] border-[#508BFE]">
 							<span class="block ml-[20px] text-[14px] text-[#333]">前往问答社区</span>
 							<span class="block mr-[20px] text-[24px] text-[#333]">→</span>
 						</div>

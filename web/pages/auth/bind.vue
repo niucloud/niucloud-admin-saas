@@ -15,16 +15,14 @@
                         <el-form-item prop="mobile_code">
                             <el-input v-model="formData.mobile_code" :placeholder="t('codePlaceholder')">
                                 <template #suffix>
-                                    <sms-code :mobile="formData.mobile" type="login" v-model="formData.mobile_key"
-                                        @click="sendSmsCode" ref="smsCodeRef"></sms-code>
+                                    <sms-code :mobile="formData.mobile" type="login" v-model="formData.mobile_key" @click="sendSmsCode" ref="smsCodeRef"></sms-code>
                                 </template>
                             </el-input>
                         </el-form-item>
                     </div>
 
                     <el-form-item>
-                        <el-button type="primary" class="mt-[20px] w-full" size="large" @click="handleRegister"
-                            :loading="loading">{{ loading ? t('binding') : t('bind') }}</el-button>
+                        <el-button type="primary" class="mt-[20px] w-full" size="large" @click="handleRegister" :loading="loading">{{ loading ? t('binding') : t('bind') }}</el-button>
                     </el-form-item>
                 </el-form>
             </div>

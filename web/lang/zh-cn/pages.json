@@ -18,7 +18,7 @@
 		},
         "site": {
             "close": "站点已关闭",
-            "nonexistence": "站点不存在"
+            "nosite": "站点不存在"
         }
     }
 }

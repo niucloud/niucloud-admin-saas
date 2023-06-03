@@ -16,7 +16,7 @@
 					<div class="flex mt-[20px] items-start">
 						<div class="w-[50px]">类目：</div>
 						<el-row>
-							<el-button class="mb-[10px]" @click="selectedCategory(categoryItem)" v-for="(categoryItem, categoryIndex) in activeCategotyLsit" :key="categoryIndex">{{ categoryItem.name }}</el-button>
+							<el-button class="mb-[10px]" @click="selectedCategory(categoryItem)" v-for="(categoryItem, categoryIndex) in activeCategoryLsit" :key="categoryIndex">{{ categoryItem.name }}</el-button>
 						</el-row>
 					</div>
 					<div class="article-list mb-[20px] cursor-pointer" v-for="(activeItem, activeIndex) in articleTableData.data" :key="activeIndex"  @click="toLink(activeItem.id)">
@@ -65,7 +65,7 @@ import type { TabsPaneContext } from 'element-plus'
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const activeCategotyLsit = ref([])
+const activeCategoryLsit = ref([])
 const selectedCategoryName = ref()
 const articleTableData = reactive({
     page: 1,
@@ -106,7 +106,7 @@ loadArticleList()
 
 const checkArticleCategory = () => {
 	getArticleCategory().then(res => {
-		activeCategotyLsit.value = res.data.data;
+		activeCategoryLsit.value = res.data.data;
     })
 }
 checkArticleCategory()
@@ -160,7 +160,6 @@ const toLink = (id) => {
     color: var(--el-color-primary);
 }
 
-// .demo-tabs .el-ta
 .custom-tabs-label span{
 	font-size: 20px;
 	padding: 0px 10px;
