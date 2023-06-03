@@ -3,7 +3,9 @@
 		{
 			"path": "pages/index/index",
 			"style": {
+				// #ifdef H5
 				"navigationStyle": "custom",
+				// #endif
 				"navigationBarTitleText": "%pages.index.index%"
 			}
 		},
@@ -70,20 +72,24 @@
 				"navigationBarTitleText": "%pages.index.diy%"
 			}
 		},
-        {
-        	"path": "pages/index/close",
-        	"style": {
-        		"navigationStyle": "custom",
-                "navigationBarTitleText": "%pages.index.close%"
-        	}
-        },
-        {
-        	"path": "pages/index/nonexistence",
-        	"style": {
-        		"navigationStyle": "custom",
-                "navigationBarTitleText": "%pages.index.nonexistence%"
-        	}
-        },
+		{
+			"path": "pages/index/close",
+			"style": {
+				// #ifdef H5
+				"navigationStyle": "custom",
+				// #endif
+				"navigationBarTitleText": "%pages.index.close%"
+			}
+		},
+		{
+			"path": "pages/index/nosite",
+			"style": {
+				// #ifdef H5
+				"navigationStyle": "custom",
+				// #endif
+				"navigationBarTitleText": "%pages.index.nosite%"
+			}
+		},
 		{
 			"path": "pages/article/detail",
 			"style": {
@@ -173,19 +179,11 @@
 		{
 			"path": "pages/member/index",
 			"style": {
-				"navigationStyle": "custom",
-				"navigationBarTitleText": "%pages.member.index%"
-			}
-		},
-		{
-			"path": "pages/member/info",
-			"style": {
 				// #ifdef H5
 				"navigationStyle": "custom",
 				// #endif
-				"navigationBarTitleText": "%pages.member.info%"
-			},
-			"needLogin": true
+				"navigationBarTitleText": "%pages.member.index%"
+			}
 		},
 		{
 			"path": "pages/member/personal",
@@ -230,14 +228,18 @@
 		{
 			"path": "pages/pay/browser",
 			"style": {
+				// #ifdef H5
 				"navigationStyle": "custom",
+				// #endif
 				"navigationBarTitleText": "%pages.pay.browser%"
 			}
 		},
 		{
 			"path": "pages/pay/result",
 			"style": {
+				// #ifdef H5
 				"navigationStyle": "custom",
+				// #endif
 				"navigationBarTitleText": "%pages.pay.result%"
 			}
 		},
@@ -268,7 +270,7 @@
 				// #endif
 				"navigationBarTitleText": "%pages.index.develop%"
 			}
-		}// {{PAGE}}
+		} // {{PAGE}}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
