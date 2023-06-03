@@ -20,7 +20,7 @@ const useSystemStore = defineStore('system', {
 					if (this.site.status == 3) redirect({ url: '/pages/index/close', mode: 'reLaunch' })
 				})
 				.catch((err) => {
-					redirect({ url: '/pages/index/nonexistence', mode: 'reLaunch' })
+					redirect({ url: '/pages/index/nosite', mode: 'reLaunch' })
 				})
 		}
 	}

@@ -1,30 +1,36 @@
 <template>
-	<view class="diy-text" @click="redirect(diyComponent.link)" :style="warpCss">
-
+	<view class="diy-text" :style="warpCss">
 		<view v-if="diyComponent.style == 'style-1'" class="p-[20rpx]">
-			<view class="" :style="{
+			<app-link :data="diyComponent.link">
+				<view :style="{
 						fontSize: diyComponent.fontSize * 2 + 'rpx',
 						color: diyComponent.textColor,
 						fontWeight: diyComponent.fontWeight,
 						textAlign : diyComponent.textAlign
 					}">
-				{{ diyComponent.text }}
-			</view>
+					{{ diyComponent.text }}
+				</view>
+			</app-link>
 		</view>
 		<view v-if="diyComponent.style == 'style-2'" class="p-[20rpx] flex items-center">
-			<view class="max-w-[200rpx] truncate" :style="{
+			<app-link :data="diyComponent.link">
+				<view class="max-w-[200rpx] truncate" :style="{
 						fontSize: diyComponent.fontSize * 2 + 'rpx',
 						color: diyComponent.textColor,
 						fontWeight: diyComponent.fontWeight
 					}">
-				{{ diyComponent.text }}
-			</view>
+					{{ diyComponent.text }}
+				</view>
+			</app-link>
 			<text class="ml-[16rpx] max-w-[300rpx] truncate" :style="{ color: diyComponent.subTitle.color,
 						fontSize: diyComponent.subTitle.fontSize * 2 + 'rpx', }">{{ diyComponent.subTitle.text }}</text>
-			<view class="ml-auto text-right flex items-center" v-if="diyComponent.more.isShow"
-				:style="{ color: diyComponent.more.color }" @click.stop="redirect(diyComponent.more.link)">
-				<text class="max-w-[200rpx] truncate text-[24rpx] mr-[8rpx]">{{ diyComponent.more.text }}</text>
-				<u-icon name="arrow-right" size="12" :style="{ color: diyComponent.more.color }"></u-icon>
+			<view class="ml-auto text-right " v-if="diyComponent.more.isShow"
+				:style="{ color: diyComponent.more.color }">
+
+				<app-link :data="diyComponent.more.link" class="flex items-center">
+					<text class="max-w-[200rpx] truncate text-[24rpx] mr-[8rpx]">{{ diyComponent.more.text }}</text>
+					<u-icon name="arrow-right" size="12" :style="{ color: diyComponent.more.color }"></u-icon>
+				</app-link>
 			</view>
 		</view>
 	</view>

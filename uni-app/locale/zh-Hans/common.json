@@ -45,5 +45,5 @@
 	"myPoint": "我的积分",
 	"customerService": "联系客服",
 	"siteClose": "站点已关闭",
-	"siteNonexistence": "站点不存在"
+	"noSite": "站点不存在"
 }

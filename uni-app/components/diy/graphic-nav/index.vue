@@ -5,28 +5,31 @@
 			{{diyComponent.navTitle}}
 		</div>
 		<view v-if="diyComponent.layout == 'vertical'" class="graphic-nav">
-			<view class="graphic-nav-item flex items-center justify-between py-[30rpx] px-[32rpx]"
-				v-for=" (item, index) in diyComponent.list" :key="item.id"
-				:class="[index == 0 ? 'border-t-0':'border-t']" @click="redirectTo(item.link)">
+			<view class="graphic-nav-item" v-for=" (item, index) in diyComponent.list" :key="item.id">
 
-				<view class="graphic-img relative flex items-center w-10 h-10 mr-[20rpx]"
-					v-if="diyComponent.mode != 'text'"
-					:style="{ width: diyComponent.imageSize * 2 + 'rpx', height: diyComponent.imageSize * 2 + 'rpx' }">
-					<image :src="img(item.imageUrl)" mode="aspectFill"
-						:style="{ maxWidth: diyComponent.imageSize * 2 + 'rpx', maxHeight: diyComponent.imageSize * 2 + 'rpx', borderRadius: diyComponent.aroundRadius * 2 + 'rpx' }">
-					</image>
-					<text v-if="item.label.control"
-						class="tag absolute -top-[10rpx] -right-[24rpx] text-white rounded-[24rpx] rounded-bl-none transform scale-80 py-1 px-2 text-xs"
-						:style="{ color: item.label.textColor, backgroundImage: 'linear-gradient(' + item.label.bgColorStart + ',' + item.label.bgColorEnd + ')' }">
-						{{ item.label.text }}
+				<app-link :data="item.link" class="flex items-center justify-between  py-[30rpx] px-[32rpx]"
+					:class="[index == 0 ? 'border-t-0':'border-t']">
+
+					<view class="graphic-img relative flex items-center w-10 h-10 mr-[20rpx]"
+						v-if="diyComponent.mode != 'text'"
+						:style="{ width: diyComponent.imageSize * 2 + 'rpx', height: diyComponent.imageSize * 2 + 'rpx' }">
+						<image :src="img(item.imageUrl)" mode="aspectFill"
+							:style="{ maxWidth: diyComponent.imageSize * 2 + 'rpx', maxHeight: diyComponent.imageSize * 2 + 'rpx', borderRadius: diyComponent.aroundRadius * 2 + 'rpx' }">
+						</image>
+						<text v-if="item.label.control"
+							class="tag absolute -top-[10rpx] -right-[24rpx] text-white rounded-[24rpx] rounded-bl-none transform scale-80 py-1 px-2 text-xs"
+							:style="{ color: item.label.textColor, backgroundImage: 'linear-gradient(' + item.label.bgColorStart + ',' + item.label.bgColorEnd + ')' }">
+							{{ item.label.text }}
+						</text>
+					</view>
+
+					<text v-if="diyComponent.mode != 'img'" class="graphic-text w-full truncate leading-normal"
+						:style="{ fontSize: diyComponent.font.size * 2 + 'rpx', fontWeight: diyComponent.font.weight, color: diyComponent.font.color }">
+						{{ item.title }}
 					</text>
-				</view>
+					<u-icon name="arrow-right" color="#CACACA"></u-icon>
 
-				<text v-if="diyComponent.mode != 'img'" class="graphic-text w-full truncate leading-normal"
-					:style="{ fontSize: diyComponent.font.size * 2 + 'rpx', fontWeight: diyComponent.font.weight, color: diyComponent.font.color }">
-					{{ item.title }}
-				</text>
-				<u-icon name="arrow-right" color="#CACACA"></u-icon>
+				</app-link>
 
 			</view>
 
@@ -38,39 +41,43 @@
 				v-for="(numItem, numIndex) in Math.ceil(diyComponent.list.length / (diyComponent.pageCount * diyComponent.rowCount))">
 				<!-- #ifdef MP-WEIXIN -->
 
-				<view class="graphic-nav-item flex flex-col items-center box-border py-2" :class="[diyComponent.mode]"
-					v-for=" (item, index) in diyComponent.list" :key="item.id"
+				<view class="graphic-nav-item" :class="[diyComponent.mode]" v-for=" (item, index) in diyComponent.list"
+					:key="item.id"
 					v-if="index >= [(numItem) * (diyComponent.pageCount * diyComponent.rowCount)] && index < [(numItem+1) * (diyComponent.pageCount * diyComponent.rowCount)]"
-					:style="{ width: 100 / diyComponent.rowCount + '%' }" @click="redirectTo(item.link)">
+					:style="{ width: 100 / diyComponent.rowCount + '%' }">
 					<!-- #endif -->
 					<!-- #ifdef H5 -->
-					<view class="graphic-nav-item flex flex-col items-center box-border py-2"
-						:class="[diyComponent.mode]" v-for=" (item, index) in diyComponent.list" :key="item.id"
+					<view class="graphic-nav-item" :class="[diyComponent.mode]"
+						v-for=" (item, index) in diyComponent.list" :key="item.id"
 						v-if="index >= [(numItem - 1) * (diyComponent.pageCount * diyComponent.rowCount)] && index < [numItem * (diyComponent.pageCount * diyComponent.rowCount)]"
-						:style="{ width: 100 / diyComponent.rowCount + '%' }" @click="redirectTo(item.link)">
+						:style="{ width: 100 / diyComponent.rowCount + '%' }">
 						<!-- #endif -->
 
-						<view class="graphic-img relative flex items-center justify-center w-10 h-10"
-							v-if="diyComponent.mode != 'text'"
-							:style="{  width: diyComponent.imageSize * 2 + 'rpx', height: diyComponent.imageSize * 2 + 'rpx' }">
-							<image :src="img(item.imageUrl)" mode="aspectFill"
-								:style="{ maxWidth: diyComponent.imageSize * 2 + 'rpx', maxHeight: diyComponent.imageSize * 2 + 'rpx', borderRadius: diyComponent.aroundRadius * 2 + 'rpx' }">
-							</image>
+						<app-link :data="item.link" class="flex flex-col items-center box-border py-2">
 
-							<text
-								class="tag absolute -top-[10rpx] -right-[24rpx] text-white rounded-[24rpx] rounded-bl-none transform scale-80 py-1 px-2 text-xs"
-								v-if="item.label.control"
-								:style="{ color: item.label.textColor, backgroundImage: 'linear-gradient(' + item.label.bgColorStart + ',' + item.label.bgColorEnd + ')' }">
-								{{ item.label.text }}
+							<view class="graphic-img relative flex items-center justify-center w-10 h-10"
+								v-if="diyComponent.mode != 'text'"
+								:style="{  width: diyComponent.imageSize * 2 + 'rpx', height: diyComponent.imageSize * 2 + 'rpx' }">
+								<image :src="img(item.imageUrl)" mode="aspectFill"
+									:style="{ maxWidth: diyComponent.imageSize * 2 + 'rpx', maxHeight: diyComponent.imageSize * 2 + 'rpx', borderRadius: diyComponent.aroundRadius * 2 + 'rpx' }">
+								</image>
+
+								<text
+									class="tag absolute -top-[10rpx] -right-[24rpx] text-white rounded-[24rpx] rounded-bl-none transform scale-80 py-1 px-2 text-xs"
+									v-if="item.label.control"
+									:style="{ color: item.label.textColor, backgroundImage: 'linear-gradient(' + item.label.bgColorStart + ',' + item.label.bgColorEnd + ')' }">
+									{{ item.label.text }}
+								</text>
+							</view>
+
+							<text v-if="diyComponent.mode != 'img'"
+								class="graphic-text w-full text-center truncate leading-normal"
+								:class="{ 'pt-1.5' : diyComponent.mode != 'text' }"
+								:style="{ fontSize: diyComponent.font.size * 2 + 'rpx', fontWeight: diyComponent.font.weight, color: diyComponent.font.color }">
+								{{ item.title }}
 							</text>
-						</view>
+						</app-link>
 
-						<text v-if="diyComponent.mode != 'img'"
-							class="graphic-text w-full text-center truncate leading-normal"
-							:class="{ 'pt-1.5' : diyComponent.mode != 'text' }"
-							:style="{ fontSize: diyComponent.font.size * 2 + 'rpx', fontWeight: diyComponent.font.weight, color: diyComponent.font.color }">
-							{{ item.title }}
-						</text>
 					</view>
 			</swiper-item>
 		</swiper>
@@ -81,29 +88,31 @@
 			<view class="uni-scroll-view-content">
 				<!-- #endif -->
 
-				<view class="graphic-nav-item flex flex-col items-center box-border py-2"
-					:class="{'flex-shrink-0' : diyComponent.showStyle == 'singleSlide'}"
+				<view class="graphic-nav-item" :class="{'flex-shrink-0' : diyComponent.showStyle == 'singleSlide'}"
 					v-for="(item, index) in diyComponent.list" :key="item.id"
-					:style="{ width: 100 / diyComponent.rowCount + '%' }" @click="redirectTo(item.link)">
-					<view class="graphic-img relative flex items-center justify-center w-10 h-10"
-						v-if="diyComponent.mode != 'text'"
-						:style="{ width: diyComponent.imageSize * 2 + 'rpx', height: diyComponent.imageSize * 2 + 'rpx' }">
-						<image :src="img(item.imageUrl)" mode="aspectFill"
-							:style="{ maxWidth: diyComponent.imageSize * 2 + 'rpx', maxHeight: diyComponent.imageSize * 2 + 'rpx', borderRadius: diyComponent.aroundRadius * 2 + 'rpx' }">
-						</image>
-						<text
-							:class="['tag absolute -top-[10rpx] -right-[24rpx] text-white rounded-[24rpx] rounded-bl-none transform scale-80 py-1 px-2 text-xs']"
-							v-if="item.label.control"
-							:style="{ color: item.label.textColor, backgroundImage: 'linear-gradient(' + item.label.bgColorStart + ',' + item.label.bgColorEnd + ')' }">
-							{{ item.label.text }}
+					:style="{ width: 100 / diyComponent.rowCount + '%' }">
+
+					<app-link :data="item.link" class="flex flex-col items-center box-border py-2">
+						<view class="graphic-img relative flex items-center justify-center w-10 h-10"
+							v-if="diyComponent.mode != 'text'"
+							:style="{ width: diyComponent.imageSize * 2 + 'rpx', height: diyComponent.imageSize * 2 + 'rpx' }">
+							<image :src="img(item.imageUrl)" mode="aspectFill"
+								:style="{ maxWidth: diyComponent.imageSize * 2 + 'rpx', maxHeight: diyComponent.imageSize * 2 + 'rpx', borderRadius: diyComponent.aroundRadius * 2 + 'rpx' }">
+							</image>
+							<text
+								:class="['tag absolute -top-[10rpx] -right-[24rpx] text-white rounded-[24rpx] rounded-bl-none transform scale-80 py-1 px-2 text-xs']"
+								v-if="item.label.control"
+								:style="{ color: item.label.textColor, backgroundImage: 'linear-gradient(' + item.label.bgColorStart + ',' + item.label.bgColorEnd + ')' }">
+								{{ item.label.text }}
+							</text>
+						</view>
+						<text v-if="diyComponent.mode != 'img'"
+							class="graphic-text w-full text-center truncate leading-normal"
+							:class="{ 'pt-1.5' : diyComponent.mode != 'text' }"
+							:style="{ fontSize: diyComponent.font.size * 2 + 'rpx', fontWeight: diyComponent.font.weight, color: diyComponent.font.color }">
+							{{ item.title }}
 						</text>
-					</view>
-					<text v-if="diyComponent.mode != 'img'"
-						class="graphic-text w-full text-center truncate leading-normal"
-						:class="{ 'pt-1.5' : diyComponent.mode != 'text' }"
-						:style="{ fontSize: diyComponent.font.size * 2 + 'rpx', fontWeight: diyComponent.font.weight, color: diyComponent.font.color }">
-						{{ item.title }}
-					</text>
+					</app-link>
 				</view>
 
 				<!-- #ifdef MP -->

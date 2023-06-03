@@ -1,6 +1,6 @@
 import { language } from '@/locale'
 import { checkNeedLogin } from '@/utils/auth'
-import { redirect, urlDeconstruction, getToken, getSiteId } from '@/utils/common'
+import { redirect, urlDeconstruction, getToken, getSiteId, setDocumentTitle } from '@/utils/common'
 import { memberLog } from '@/api/auth'
 
 /**
@@ -16,14 +16,17 @@ export const redirectInterceptor = () => {
 
 				// 加载语言包
 				language.loadLocaleMessages(route.path, uni.getLocale())
-
+                
 				// 开发模式下，如果未配置站点ID，则跳转到开发环境配置页面
 				// #ifdef H5
 				if (process.env.NODE_ENV == 'development') {
 					if ((getSiteId(uni.getStorageSync('wap_site_id') || import.meta.env.VITE_SITE_ID) === '') && route.path != '/pages/index/develop') {
 						redirect({ url: '/pages/index/develop', mode: 'reLaunch' })
 					}
-				}
+				} else {
+                    // 设置网站标题
+                    setDocumentTitle(route.path)
+                }
 				// #endif
 
 				// 校验是否需要登录
@@ -55,7 +58,10 @@ export const launchInterceptor = () => {
 			uni.setStorageSync('develop_before_path', launch.path);
 			redirect({ url: '/pages/index/develop', mode: 'reLaunch' })
 		}
-	}
+	} else {
+        // 设置网站标题
+        setDocumentTitle(launch.path)
+    }
 	// #endif
 
 	// 加载语言包

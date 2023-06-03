@@ -49,6 +49,9 @@
 				desc: articleDetail.value.intro,
 				url: articleDetail.value.image
 			}
+            uni.setNavigationBarTitle({
+                title: articleDetail.value.title
+            })
 			setShare({
 				wechat: {
 					...share

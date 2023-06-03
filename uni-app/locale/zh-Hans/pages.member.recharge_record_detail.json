@@ -1,12 +1,4 @@
 {
-    "statusName": "当前状态",
-    "cashOutNo": "交易号",
-    "serviceMoney": "手续费",
-    "createTime": "申请时间",
-    "auditTime": "审核时间",
-    "transferBank": "银行名称",
-    "transferAccount": "收款账号",
-    "refuseReason": "拒绝理由",
-    "transferTypeName": "转账方式名称",
-    "transferTime": "转账时间"
+    "orderNo": "订单编号",
+    "createTime": "创建时间"
 }

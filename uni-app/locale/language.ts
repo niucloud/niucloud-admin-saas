@@ -1,5 +1,5 @@
 import { nextTick } from 'vue'
-import { currRoute } from '@/utils/common'
+import { setDocumentTitle } from '@/utils/common'
 
 class Language {
     private i18n: any
@@ -13,13 +13,19 @@ class Language {
      *
      * @param locale 设置语言
      */
-    public setI18nLanguage(locale: string) {
+    public setI18nLanguage(locale: string, path: string) {
         if (this.i18n.mode === 'legacy') {
             this.i18n.global.locale = locale
         } else {
             this.i18n.global.locale = locale
         }
         uni.setLocale(locale)
+        
+        // #ifdef H5
+        if (process.env.NODE_ENV == 'production') {
+            setDocumentTitle(path)
+        }
+        // #endif
     }
 
     /**
@@ -33,17 +39,17 @@ class Language {
             const file = path == '/' ? 'pages.index.index' : path.replace('/', '').replaceAll('/', '.')
             // 是否已加载
             if (this.loadLocale.includes(`${locale}/${file}`)) {
-                this.setI18nLanguage(locale)
+                this.setI18nLanguage(locale, file)
                 return nextTick()
             }
             this.loadLocale.push(`${locale}/${file}`)
             // 引入语言包文件
             const messages = await import(`./${locale}/${file}.json`)
             this.i18n.global.mergeLocaleMessage(locale, messages.default)
-            this.setI18nLanguage(locale)
+            this.setI18nLanguage(locale, path)
             return nextTick()
         } catch(e) {
-            this.setI18nLanguage(locale)
+            this.setI18nLanguage(locale, path)
             return nextTick()
         }
     }

@@ -1,14 +1,12 @@
 <template>
 	<view class="member-record-list">
 		<mescroll-body ref="mescrollRef" @init="mescrollInit" @down="downCallback" @up="getListFn" top="">
-			<view v-for="(item,index) in list" :key="item.id" class="member-record-item" @click="toDetailFn(item)">
-				<view class="name">{{item.from_type_name}}</view>
-				<view class="desc" v-if="item.memo">{{item.memo}}</view>
-				<view class="desc">{{item.create_time}}</view>
-				<view class="money" :class="item.account_data > 0 ? 'text-active' : ''">
-					{{ item.account_data > 0 ? '+' + item.account_data : item.account_data }}
-				</view>
-				
+			<view v-for="(order,index) in list" :key="order.order_id" class="member-record-item"
+				@click="toDetailFn(order)">
+				<view class="name">{{order.item[0].item_name}}</view>
+				<view class="desc">{{order.create_time}}</view>
+				<view class="money text-active">+{{ order.order_money }}</view>
+				<view class="status" v-if="order.order_status_info">{{order.order_status_info.name}}</view>
 			</view>
 
 			<mescroll-empty v-if="!list.length && loading" :option="{tip : t('emptyTip') }"></mescroll-empty>
@@ -22,10 +20,10 @@
 	import MescrollBody from '@/components/mescroll/mescroll-body/mescroll-body.vue';
 	import MescrollEmpty from '@/components/mescroll/mescroll-empty/mescroll-empty.vue';
 	import useMescroll from '@/components/mescroll/hooks/useMescroll.js';
-	import { getRechargeList} from '@/api/member';
+	import { getRechargeList } from '@/api/member';
+	import { redirect } from '@/utils/common'
 	import { onPageScroll, onReachBottom, onLoad } from '@dcloudio/uni-app';
 	const { mescrollInit, downCallback, getMescroll } = useMescroll(onPageScroll, onReachBottom);
-
 
 	const list = ref<Array<any>>([]),
 		loading = ref<boolean>(false),
@@ -68,13 +66,24 @@
 			mescroll.endErr(); // 请求失败, 结束加载
 		})
 	}
-	
-	
-	const toDetailFn = (data)=>{
-		redirect({ url: '/pages/member/recharge_record_detail', param: { id: data.order_id }});
+
+	const toDetailFn = (data) => {
+		redirect({ url: '/pages/member/recharge_record_detail', param: { id: data.order_id } });
 	}
 </script>
 
 <style lang="scss" scoped>
 	@import '@/styles/member_record_list.scss';
+
+	.member-record-list {
+		.member-record-item {
+			.desc {
+				@apply leading-8 h-8;
+			}
+
+			.status {
+				@apply absolute right-3 top-11 text-sm;
+			}
+		}
+	}
 </style>

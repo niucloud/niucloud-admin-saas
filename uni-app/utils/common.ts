@@ -1,11 +1,12 @@
 import { getTabbarPages } from './pages'
 import useDiyStore from '@/stores/diy'
 import useMemberStore from '@/stores/member'
-import internal from 'stream'
+import pagesZh from '@/locale/zh-Hans.json'
+import pagesEn from '@/locale/en.json'
 
 /**
-	* 跳转页面
-	*/
+* 跳转页面
+*/
 export const redirect = (redirect : redirectOptions) => {
 	// 装修模式禁止跳转
 	if (useDiyStore().mode == 'decorate') return
@@ -230,4 +231,21 @@ export function getSiteId(siteid : number) {
     // #ifndef H5
     return siteid
     // #endif
+}
+
+/**
+ * 设置html标题
+ * @param {Object} route
+ */
+export function setDocumentTitle(route: string) {
+    if (process.env.NODE_ENV != 'production') return
+    try {
+        const locale: AnyObject = {
+            'zh-Hans': pagesZh,
+            'en': pagesEn
+        }
+        const key = route.replace('/', '').replaceAll('/', '.')
+        locale[ uni.getLocale() ][key] && (document.title = locale[ uni.getLocale() ][key])
+    } catch (e) {
+    } 
 }
