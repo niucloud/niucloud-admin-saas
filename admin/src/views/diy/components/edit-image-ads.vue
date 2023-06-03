@@ -5,7 +5,12 @@
 			<h3 class="mb-[10px]">{{ t('imageSet') }}</h3>
 			<el-form label-width="80px" class="px-[10px]">
 
-				<p class="text-sm text-gray-400 mb-[10px]">{{ t('imageAdsTips') }}</p>
+				<el-form-item :label="t('imageHeight')" class="display-block">
+					<el-input v-model="diyStore.editComponent.imageHeight" :placeholder="t('imageHeightPlaceholder')" clearable maxlength="10">
+						<template #append>px</template>
+					</el-input>
+					<div class="text-sm text-gray-400 mb-[10px]">{{ t('imageAdsTips') }}</div>
+				</el-form-item>
 
 				<div ref="imageBoxRef">
 					<div v-for="(item,index) in diyStore.editComponent.list" :key="item.id" class="item-wrap p-[10px] pb-0 relative border border-dashed border-gray-300 mb-[16px]">
@@ -53,6 +58,16 @@
     // 组件验证
     diyStore.editComponent.verify = (index: number) => {
         var res = {code: true, message: ''};
+        if(diyStore.value[index].imageHeight == 0){
+            res.code = false;
+            res.message = t('imageHeightPlaceholder');
+            return res;
+        }
+        if(!/^\d+.?\d{0,2}$/.test(diyStore.value[index].imageHeight)){
+            res.code = false;
+            res.message = t('imageHeightRegNum');
+            return res;
+        }
         diyStore.value[index].list.forEach((item: any) => {
             if (item.imageUrl === '') {
                 res.code = false;
@@ -71,14 +86,22 @@
         () => diyStore.editComponent.list,
         (newValue, oldValue) => {
             // 设置图片宽高
-            diyStore.editComponent.list.forEach((item: any) => {
+            diyStore.editComponent.list.forEach((item: any, index: number) => {
                 let image = new Image();
                 image.src = img(item.imageUrl);
                 image.onload = async () => {
                     item.imgWidth = image.width;
                     item.imgHeight = image.height;
+                    // 计算第一张图片高度
+                    if (index == 0) {
+                        var ratio = item.imgHeight / item.imgWidth;
+                        item.width = 375;
+                        item.height = item.width * ratio;
+                        diyStore.editComponent.imageHeight = item.height;
+                    }
                 };
             });
+
         },
         {deep: true}
     )

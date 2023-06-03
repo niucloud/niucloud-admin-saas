@@ -1,7 +1,6 @@
 <template>
     <el-dialog v-model="showDialog" :title="popTitle" width="500px" :destroy-on-close="true">
-        <el-form :model="formData" label-width="90px" class="page-form" ref="formRef" :rules="formRules"
-            v-loading="loading">
+        <el-form :model="formData" label-width="90px" class="page-form" ref="formRef" :rules="formRules" v-loading="loading">
             <el-form-item :label="t('menuName')" prop="menu_name">
                 <el-input v-model="formData.menu_name" :placeholder="t('menuNamePlaceholder')" class="input-width" />
             </el-form-item>
@@ -85,9 +84,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
-                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{
-                    t('confirm')
-                }}</el-button>
+                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{t('confirm')}}</el-button>
             </span>
         </template>
     </el-dialog>

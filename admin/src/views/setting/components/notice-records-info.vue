@@ -1,7 +1,6 @@
 <template>
     <el-dialog v-model="showDialog" :title="t('messageInfo')" width="550px" :destroy-on-close="true">
-        <el-form :model="formData" label-width="110px" ref="formRef" :rules="formRules" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="110px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
 
             <el-form-item :label="t('messageKey')">
                 <div class="input-width"> {{ formData.name }} </div>

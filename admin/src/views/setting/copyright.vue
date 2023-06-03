@@ -8,8 +8,7 @@
                 </el-form-item>
 
                 <el-form-item :label="t('companyName')" prop="company_name">
-                    <el-input v-model="formData.company_name" :placeholder="t('companyNamePlaceholder')" class="input-width"
-                        clearable maxlength="30"/>
+                    <el-input v-model="formData.company_name" :placeholder="t('companyNamePlaceholder')" class="input-width" clearable maxlength="30"/>
                 </el-form-item>
                 
                 <el-form-item :label="t('copyrightLink')" >
@@ -17,8 +16,7 @@
                 </el-form-item>
 
                 <el-form-item :label="t('copyrightDesc')" >
-                    <el-input v-model="formData.copyright_desc" type="textarea" rows="4" clearable
-                        :placeholder="t('copyrightDescPlaceholder')" class="input-width" maxlength="150" />
+                    <el-input v-model="formData.copyright_desc" type="textarea" rows="4" clearable :placeholder="t('copyrightDescPlaceholder')" class="input-width" maxlength="150" />
                 </el-form-item>
                 
             </el-card>
@@ -27,8 +25,7 @@
                 <h3 class="panel-title">{{ t('putOnRecordEdit') }}</h3>
 
                 <el-form-item :label="t('icp')" prop="icp">
-                    <el-input v-model="formData.icp" :placeholder="t('icpPlaceholder')" class="input-width"
-                        clearable maxlength="20"/>
+                    <el-input v-model="formData.icp" :placeholder="t('icpPlaceholder')" class="input-width" clearable maxlength="20"/>
                 </el-form-item>
 
                 <el-form-item :label="t('govRecord')" >
@@ -40,8 +37,7 @@
                 </el-form-item>
 
                 <el-form-item :label="t('marketSupervisionUrl')" >
-                    <el-input v-model="formData.market_supervision_url" rows="4" clearable
-                        :placeholder="t('marketSupervisionUrlPlaceholder')" class="input-width" />
+                    <el-input v-model="formData.market_supervision_url" rows="4" clearable :placeholder="t('marketSupervisionUrlPlaceholder')" class="input-width" />
                 </el-form-item>
                 
             </el-card>

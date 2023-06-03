@@ -4,16 +4,13 @@
 
             <div class="flex justify-between items-center">
                 <span class="text-[24px]">{{pageName}}</span>
-                <el-button type="primary" @click="addEvent">
-                    {{ t('addMember') }}
-                </el-button>
+                <el-button type="primary" @click="addEvent">{{ t('addMember') }}</el-button>
             </div>
 
             <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="memberTableData.searchParam" ref="searchFormRef">
                     <el-form-item :label="t('memberInfo')" prop="keyword">
-                        <el-input v-model="memberTableData.searchParam.keyword" class="w-[240px]"
-                            :placeholder="t('memberInfoPlaceholder')" />
+                        <el-input v-model="memberTableData.searchParam.keyword" class="w-[240px]" :placeholder="t('memberInfoPlaceholder')" />
                     </el-form-item>
                     
                     <el-form-item :label="t('registerChannel')" prop="register_channel">
@@ -28,8 +25,7 @@
                         <el-select v-model="memberTableData.searchParam.member_label" collapse-tags clearable 
                             :placeholder="t('memberLabelPlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')"  value=""/>
-                            <el-option :label="item['label_name']" :value="item['label_id']"
-                                v-for="item in labelSelectData" />
+                            <el-option :label="item['label_name']" :value="item['label_id']" v-for="item in labelSelectData" />
                         </el-select>
                     </el-form-item>
                     <el-form-item :label="t('createTime')" prop="create_time">
@@ -54,8 +50,7 @@
                         <template #default="{ row }">
                             <div class="flex items-center">
                                 <img class="w-[50px] h-[50px] mr-[10px]" v-if="row.headimg" :src="img(row.headimg)" alt="">
-                                <img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/assets/images/default_headimg.png"
-                                    alt="">
+                                <img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/assets/images/default_headimg.png" alt="">
                                 <div class="flex flex flex-col">
                                     <span>{{ row.nickname || '' }}</span>
                                 </div>
@@ -115,7 +110,6 @@
                         @size-change="loadMemberList()" @current-change="loadMemberList" />
                 </div>
             </div>
-
 
             <add-member ref="addMemberDialog" @complete="loadMemberList()" />
             <edit-member ref="editMemberDialog" @complete="loadMemberList()" />

@@ -46,9 +46,7 @@
 
                 </el-table>
                 <div class="mt-[16px] flex justify-end">
-                    <el-pagination v-model:current-page="sysUserLogTableData.page" v-model:page-size="sysUserLogTableData.limit"
-                        layout="total, sizes, prev, pager, next, jumper" :total="sysUserLogTableData.total"
-                        @size-change="loadSysUserLogList()" @current-change="loadSysUserLogList" />
+                    <el-pagination v-model:current-page="sysUserLogTableData.page" v-model:page-size="sysUserLogTableData.limit" layout="total, sizes, prev, pager, next, jumper" :total="sysUserLogTableData.total" @size-change="loadSysUserLogList()" @current-change="loadSysUserLogList" />
                 </div>
                 <user-log-detail ref="userLogDetailDialog" @complete="loadSysUserLogList()" />
             </div>

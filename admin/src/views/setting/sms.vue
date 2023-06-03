@@ -14,9 +14,7 @@
                     <el-table-column :label="t('isUse')" min-width="180" align="center">
                         <template #default="{ row }">
                             <el-tag class="ml-2" type="success" v-if="row.is_use == 1">{{ t('statusNormal') }}</el-tag>
-                            <el-tag class="ml-2" type="error" v-if="row.is_use == 0">{{
-                                t('statusDeactivate')
-                            }}</el-tag>
+                            <el-tag class="ml-2" type="error" v-if="row.is_use == 0">{{t('statusDeactivate') }}</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column :label="t('operation')" fixed="right" width="100">

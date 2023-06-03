@@ -23,9 +23,7 @@
                     <!-- 面包屑导航 -->
                     <div class="flex items-center h-full pl-[10px] hidden-xs-only">
                         <el-breadcrumb separator="/">
-                            <el-breadcrumb-item v-for="(route, index) in breadcrumb" :key="index">{{
-                                route.meta.title
-                            }}</el-breadcrumb-item>
+                            <el-breadcrumb-item v-for="(route, index) in breadcrumb" :key="index">{{route.meta.title }}</el-breadcrumb-item>
                         </el-breadcrumb>
                     </div>
                 </div>
@@ -57,8 +55,7 @@
         <input type="hidden" v-model="comparisonToken">
         <input type="hidden" v-model="comparisonSiteId">
 
-        <el-dialog v-model="detectionLoginDialog" :title="t('layout.detectionLoginTip')" width="30%"
-            :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
+        <el-dialog v-model="detectionLoginDialog" :title="t('layout.detectionLoginTip')" width="30%" :close-on-click-modal="false" :close-on-press-escape="false" :show-close="false">
             <span>{{ t('layout.detectionLoginContent') }}</span>
             <template #footer>
                 <span class="dialog-footer">

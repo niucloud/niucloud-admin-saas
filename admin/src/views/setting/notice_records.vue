@@ -16,16 +16,13 @@
                             :placeholder="t('groupIdPlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')" value="" />
                             <el-option-group v-for="(group, gindex) in templateList" :key="gindex" :label="group.label">
-                                <el-option :label="item.name" :value="item.value" v-for="(item, index) in group.list"
-                                    :key="index" />
+                                <el-option :label="item.name" :value="item.value" v-for="(item, index) in group.list" :key="index" />
                             </el-option-group>
                         </el-select>
                     </el-form-item>
 
                     <el-form-item :label="t('createTime')" prop="create_time">
-                        <el-date-picker v-model="recordsTableData.searchParam.create_time" type="datetimerange"
-                            value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')"
-                            :end-placeholder="t('endDate')" />
+                        <el-date-picker v-model="recordsTableData.searchParam.create_time" type="datetimerange" value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')" :end-placeholder="t('endDate')" />
                     </el-form-item>
 
                     <el-form-item>

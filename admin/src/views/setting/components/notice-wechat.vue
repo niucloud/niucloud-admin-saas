@@ -18,8 +18,7 @@
             </el-form-item>
 
             <el-form-item :label="t('first')" prop="first">
-                <el-input v-model="formData.wechat_first" :placeholder="t('firstPlaceholder')" class="input-width"
-                    show-word-limit clearable />
+                <el-input v-model="formData.wechat_first" :placeholder="t('firstPlaceholder')" class="input-width" show-word-limit clearable />
             </el-form-item>
 
             <el-form-item :label="t('content')">
@@ -29,8 +28,7 @@
             </el-form-item>
 
             <el-form-item :label="t('remark')" prop="remark">
-                <el-input v-model="formData.wechat_remark" :placeholder="t('remarkPlaceholder')" class="input-width"
-                    show-word-limit clearable />
+                <el-input v-model="formData.wechat_remark" :placeholder="t('remarkPlaceholder')" class="input-width" show-word-limit clearable />
             </el-form-item>
 
         </el-form>
@@ -38,9 +36,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
-                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{
-                    t('confirm')
-                }}</el-button>
+                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{t('confirm')}}</el-button>
             </span>
         </template>
     </el-dialog>

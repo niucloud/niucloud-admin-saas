@@ -8,15 +8,9 @@
                         <span :class="{ 'text-primary': route.path == tab.path }" class="tab-name">{{ tab.title }}</span>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item icon="Back" :disabled="index == 0" @click="closeLeft(tab.path)">{{
-                                    t('tabs.closeLeft')
-                                }}</el-dropdown-item>
-                                <el-dropdown-item icon="Right" :disabled="index == (tabbarStore.tabLength - 1)"
-                                    @click="closeRight(tab.path)">{{
-                                        t('tabs.closeRight') }}</el-dropdown-item>
-                                <el-dropdown-item icon="Close" :disabled="tabbarStore.tabLength == 1"
-                                    @click="closeOther(tab.path)">{{
-                                        t('tabs.closeOther') }}</el-dropdown-item>
+                                <el-dropdown-item icon="Back" :disabled="index == 0" @click="closeLeft(tab.path)">{{t('tabs.closeLeft') }}</el-dropdown-item>
+                                <el-dropdown-item icon="Right" :disabled="index == (tabbarStore.tabLength - 1)" @click="closeRight(tab.path)">{{t('tabs.closeRight') }}</el-dropdown-item>
+                                <el-dropdown-item icon="Close" :disabled="tabbarStore.tabLength == 1" @click="closeOther(tab.path)">{{t('tabs.closeOther') }}</el-dropdown-item>
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>

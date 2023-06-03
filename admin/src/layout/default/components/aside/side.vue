@@ -12,8 +12,7 @@
 
         <el-main class="menu-wrap">
             <el-scrollbar>
-                <el-menu :default-active="menuActive" :router="true" class="aside-menu h-full" unique-opened="true"
-                    :collapse="systemStore.menuIsCollapse">
+                <el-menu :default-active="menuActive" :router="true" class="aside-menu h-full" unique-opened="true" :collapse="systemStore.menuIsCollapse">
                     <menu-item v-for="(route, index) in userStore.routers" :routes="route" :route-path="route.path" :key="index" />
                 </el-menu>
             </el-scrollbar>
@@ -30,7 +29,7 @@ import menuItem from './menu-item.vue'
 import storage from '@/utils/storage'
 import { img } from '@/utils/common'
 
-const logo = ref('assets/images/logo-square.png')
+const logo = ref('assets/images/login_logo.png')
 const systemStore = useSystemStore()
 const userStore = useUserStore()
 const route = useRoute()

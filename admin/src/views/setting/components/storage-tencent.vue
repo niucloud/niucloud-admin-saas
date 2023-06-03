@@ -10,19 +10,16 @@
             </el-form-item>
 
             <el-form-item :label="t('tencentBucket')" prop="bucket">
-                <el-input v-model="formData.bucket" :placeholder="t('tencentBucketPlaceholder')" class="input-width"
-                    show-word-limit clearable />
+                <el-input v-model="formData.bucket" :placeholder="t('tencentBucketPlaceholder')" class="input-width" show-word-limit clearable />
                 <div class="form-tip">{{ t('tencentBucketTips') }}</div>
             </el-form-item>
 
             <el-form-item :label="t('tencentAccessKey')" prop="access_key">
-                <el-input v-model="formData.access_key" :placeholder="t('tencentAccessKeyPlaceholder')" class="input-width"
-                    clearable />
+                <el-input v-model="formData.access_key" :placeholder="t('tencentAccessKeyPlaceholder')" class="input-width" clearable />
             </el-form-item>
 
             <el-form-item :label="t('tencentSecretKey')" prop="secret_key">
-                <el-input v-model="formData.secret_key" :placeholder="t('tencentSecretKeyPlaceholder')" class="input-width"
-                    clearable />
+                <el-input v-model="formData.secret_key" :placeholder="t('tencentSecretKeyPlaceholder')" class="input-width" clearable />
             </el-form-item>
 
             <el-form-item :label="t('region')" prop="region">
@@ -38,9 +35,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
-                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{
-                    t('confirm')
-                }}</el-button>
+                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{t('confirm')}}</el-button>
             </span>
         </template>
     </el-dialog>

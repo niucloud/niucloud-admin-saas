@@ -24,7 +24,7 @@
 					</el-radio-group>
 				</el-form-item>
 
-				<template v-show="diyStore.editComponent.layout == 'horizontal'">
+				<view v-show="diyStore.editComponent.layout == 'horizontal'">
 
 					<el-form-item :label="t('graphicNavShowStyle')">
 						<el-radio-group v-model="diyStore.editComponent.showStyle">
@@ -48,7 +48,7 @@
 							<el-radio :label="2">2{{t('line')}}</el-radio>
 						</el-radio-group>
 					</el-form-item>
-				</template>
+				</view>
 
 			</el-form>
 		</div>

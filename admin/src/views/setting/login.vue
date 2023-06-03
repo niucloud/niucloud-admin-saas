@@ -5,11 +5,9 @@
                 <h3 class="panel-title">{{ t('commonSetting') }}</h3>
 
                 <el-form-item :label="t('logonMode')">
-                    <el-checkbox v-model="formData.is_username" :label="t('isUsername')"
-                        @change="switchChange($event, 'is_username')" />
+                    <el-checkbox v-model="formData.is_username" :label="t('isUsername')" @change="switchChange($event, 'is_username')" />
                     <div class="form-tip">{{ t('isUsernameTip') }}</div>
-                    <el-checkbox v-model="formData.is_mobile" :label="t('isMobile')"
-                        @change="switchChange($event, 'is_mobile')" />
+                    <el-checkbox v-model="formData.is_mobile" :label="t('isMobile')" @change="switchChange($event, 'is_mobile')" />
                     <div class="form-tip">{{ t('isMobileTip') }}</div>
                 </el-form-item>
 

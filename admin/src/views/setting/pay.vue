@@ -3,9 +3,7 @@
 		<!-- 设置支付配置 -->
 		<div class="flex justify-between items-center" v-if="!payLoading">
 			<span class="text-[24px]">{{pageName}}</span>
-			<el-button type="primary" @click="isEdit = true" ref="setConfigBtn">
-				{{ t('setConfig') }}
-			</el-button>
+			<el-button type="primary" @click="isEdit = true" ref="setConfigBtn">{{ t('setConfig') }}</el-button>
 		</div>
         <el-card class="box-card box-pay-card !border-none mt-[20px]" shadow="never" v-for="(payItems, payKey) in payConfigData" :key="payKey">
 			<div class="flex mb-3">

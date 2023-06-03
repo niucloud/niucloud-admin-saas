@@ -3,8 +3,7 @@
         <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form"
             v-loading="loading">
             <el-form-item :label="t('roleName')" prop="role_name">
-                <el-input v-model="formData.role_name" :placeholder="t('roleNamePlaceholder')" clearable
-                    :disabled="formData.uid" class="input-width" maxlength="10" :show-word-limit="true" />
+                <el-input v-model="formData.role_name" :placeholder="t('roleNamePlaceholder')" clearable :disabled="formData.uid" class="input-width" maxlength="10" :show-word-limit="true" />
             </el-form-item>
 
             <el-form-item :label="t('status')">
@@ -24,9 +23,7 @@
                     
                 </div>
                 <el-scrollbar height="35vh" class="w-full">
-                    <el-tree :data="menus" :props="{ label: 'menu_name' }" :default-checked-keys="formData.rules"
-                        :check-strictly="checkStrictly" show-checkbox default-expand-all @check-change="handleCheckChange"
-                        node-key="menu_key" ref="treeRef" />
+                    <el-tree :data="menus" :props="{ label: 'menu_name' }" :default-checked-keys="formData.rules" :check-strictly="checkStrictly" show-checkbox default-expand-all @check-change="handleCheckChange" node-key="menu_key" ref="treeRef" />
                 </el-scrollbar>
             </el-form-item>
         </el-form>
@@ -34,9 +31,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
-                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{
-                    t('confirm')
-                }}</el-button>
+                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{t('confirm')}}</el-button>
             </span>
         </template>
     </el-dialog>
@@ -210,7 +205,6 @@ function checked(menu_key:string,data:any,newArr:any) {
         }
     } )
 }
-
 
 defineExpose({
     showDialog,

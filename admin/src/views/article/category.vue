@@ -3,16 +3,13 @@
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center">
                 <span class="text-[24px]">{{ pageName }}</span>
-                <el-button type="primary" @click="addEvent">
-                    {{ t('addArticleCategory') }}
-                </el-button>
+                <el-button type="primary" @click="addEvent">{{ t('addArticleCategory') }}</el-button>
             </div>
 
             <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="categoryTableData.searchParam" ref="searchFormRef">
                     <el-form-item :label="t('name')" prop="name">
-                        <el-input v-model="categoryTableData.searchParam.name" :placeholder="t('namePlaceholder')"
-                            class="w-[190px]" prefix-icon="Search" clearable />
+                        <el-input v-model="categoryTableData.searchParam.name" :placeholder="t('namePlaceholder')" class="w-[190px]" prefix-icon="Search" clearable />
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="loadCategoryList()">{{ t('search') }}</el-button>
@@ -39,16 +36,13 @@
                     <el-table-column :label="t('operation')" fixed="right" width="130">
                         <template #default="{ row }">
                             <el-button type="primary" link @click="editEvent(row)">{{ t('edit') }}</el-button>
-                            <el-button type="danger" link @click="deleteEvent(row.category_id)">{{ t('delete')
-                            }}</el-button>
+                            <el-button type="danger" link @click="deleteEvent(row.category_id)">{{ t('delete') }}</el-button>
                         </template>
                     </el-table-column>
 
                 </el-table>
                 <div class="mt-[16px] flex justify-end">
-                    <el-pagination v-model:current-page="categoryTableData.page" v-model:page-size="categoryTableData.limit"
-                        layout="total, sizes, prev, pager, next, jumper" :total="categoryTableData.total"
-                        @size-change="loadCategoryList()" @current-change="loadCategoryList" />
+                    <el-pagination v-model:current-page="categoryTableData.page" v-model:page-size="categoryTableData.limit" layout="total, sizes, prev, pager, next, jumper" :total="categoryTableData.total" @size-change="loadCategoryList()" @current-change="loadCategoryList" />
                 </div>
             </div>
 

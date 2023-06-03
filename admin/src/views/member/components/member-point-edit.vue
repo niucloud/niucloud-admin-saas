@@ -1,7 +1,6 @@
 <template>
     <el-dialog v-model="showDialog" :title="t('adjustPoint')" width="550px" :destroy-on-close="true">
-        <el-form :model="formData" label-width="110px" ref="formRef" :rules="formRules" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="110px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
  
             <el-form-item :label="t('currPoint')" >
                 <div class="input-width"> {{ formData.point }} </div>
@@ -27,9 +26,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
-                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{
-                    t('confirm')
-                }}</el-button>
+                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{t('confirm')}}</el-button>
             </span>
         </template>
     </el-dialog>

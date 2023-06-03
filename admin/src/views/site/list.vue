@@ -16,31 +16,25 @@
                     </el-form-item>
 
                     <el-form-item :label="t('groupId')" prop="group_id">
-                        <el-select v-model="siteTableData.searchParam.group_id" clearable
-                            :placeholder="t('groupIdPlaceholder')" class="input-width">
+                        <el-select v-model="siteTableData.searchParam.group_id" clearable :placeholder="t('groupIdPlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')" value="" />
                             <el-option :label="item['group_name']" :value="item['group_id']" v-for="item in groupList" />
                         </el-select>
                     </el-form-item>
 
                     <el-form-item :label="t('status')" prop="status">
-                        <el-select v-model="siteTableData.searchParam.status" clearable
-                            :placeholder="t('groupIdPlaceholder')" class="input-width">
+                        <el-select v-model="siteTableData.searchParam.status" clearable :placeholder="t('groupIdPlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')" value="" />
                             <el-option :label="item" :value="index" v-for="(item, index) in statusList" />
                         </el-select>
                     </el-form-item>
 
                     <el-form-item :label="t('createTime')" prop="create_time">
-                        <el-date-picker v-model="siteTableData.searchParam.create_time" type="datetimerange"
-                            value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')"
-                            :end-placeholder="t('endDate')" />
+                        <el-date-picker v-model="siteTableData.searchParam.create_time" type="datetimerange" value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')" :end-placeholder="t('endDate')" />
                     </el-form-item>
 
                     <el-form-item :label="t('expireTime')" prop="expire_time">
-                        <el-date-picker v-model="siteTableData.searchParam.expire_time" type="datetimerange"
-                            value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')"
-                            :end-placeholder="t('endDate')" />
+                        <el-date-picker v-model="siteTableData.searchParam.expire_time" type="datetimerange" value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')" :end-placeholder="t('endDate')" />
                     </el-form-item>
 
                     <el-form-item>
@@ -56,8 +50,7 @@
                         <el-icon class="mr-2" size="18">
                             <Warning />
                         </el-icon>
-                        <p class="text-base">{{ t('operationTip') }} <span class="cursor-pointer" @click="toSiteLink">{{
-                            siteLink }}</span> </p>
+                        <p class="text-base">{{ t('operationTip') }} <span class="cursor-pointer" @click="toSiteLink">{{siteLink }}</span> </p>
                     </div>
                 </template>
             </el-alert>
@@ -94,8 +87,7 @@
                             </el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column prop="create_time" :label="t('createTime')" min-width="140"
-                        :show-overflow-tooltip="true" />
+                    <el-table-column prop="create_time" :label="t('createTime')" min-width="140" :show-overflow-tooltip="true" />
                     <el-table-column prop="expire_time" :label="t('expireTime')" min-width="140"
                         :show-overflow-tooltip="true">
                         <template #default="{ row }">
@@ -108,9 +100,7 @@
                         <template #default="{ row }">
                             <el-button type="primary" link @click="urlEvent(row)">{{ t('url') }}</el-button>
                             <el-button type="primary" link @click="infoEvent(row)">{{ t('info') }}</el-button>
-                            <el-button type="primary" link @click="openClose(row.status, row.site_id)"
-                                v-if="row.status == 1 || row.status == 3">{{ row.status == 1 ? t('closeTxt') : t('openTxt')
-                                }}</el-button>
+                            <el-button type="primary" link @click="openClose(row.status, row.site_id)" v-if="row.status == 1 || row.status == 3">{{ row.status == 1 ? t('closeTxt') : t('openTxt') }}</el-button>
                         </template>
                     </el-table-column>
 

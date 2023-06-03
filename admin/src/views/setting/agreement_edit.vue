@@ -6,8 +6,7 @@
                     <el-input v-model="formData.agreement_key_name" readonly class="input-width" />
                 </el-form-item>
                 <el-form-item :label="t('title')" prop="title">
-                    <el-input v-model="formData.title" clearable :placeholder="t('titlePlaceholder')" class="input-width"
-                        maxlength="20" />
+                    <el-input v-model="formData.title" clearable :placeholder="t('titlePlaceholder')" class="input-width" maxlength="20" />
                 </el-form-item>
                 <el-form-item :label="t('content')">
                     <editor v-model="formData.content" />
@@ -37,7 +36,6 @@ const route = useRoute()
 const router = useRouter()
 const agreement_key: string = route.query.key || ''
 const loading = ref(false)
-const categoryList = ref([])
 const tabbarStore = useTabbarStore()
 
 // 页面返回按钮
@@ -67,7 +65,6 @@ const setFormData = async (agreement_key: string = '') => {
     loading.value = false;
 }
 if (agreement_key) setFormData(agreement_key)
-
 
 
 const formRef = ref<FormInstance>()

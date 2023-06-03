@@ -487,7 +487,6 @@ const promoteEvent = (data: any) => {
     })
 
     promoteDialogVisible.value = true;
-    console.log('promoteEvent', data)
 }
 
 

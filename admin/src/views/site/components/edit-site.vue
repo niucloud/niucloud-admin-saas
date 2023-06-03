@@ -3,8 +3,7 @@
         <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form"
             v-loading="loading">
             <el-form-item :label="t('siteName')" prop="site_name">
-                <el-input v-model="formData.site_name" clearable :placeholder="t('siteNamePlaceholder')"
-                    class="input-width" />
+                <el-input v-model="formData.site_name" clearable :placeholder="t('siteNamePlaceholder')" class="input-width" />
             </el-form-item>
 
             <el-form-item :label="t('groupId')" prop="group_id">
@@ -17,24 +16,20 @@
                 </el-form-item> -->
 
             <el-form-item :label="t('username')" prop="username" v-if="!formData.site_id && !loading">
-                <el-input v-model="formData.username" clearable :placeholder="t('usernamePlaceholder')"
-                    class="input-width" />
+                <el-input v-model="formData.username" clearable :placeholder="t('usernamePlaceholder')" class="input-width" />
             </el-form-item>
 
             <el-form-item :label="t('password')" prop="password" v-if="!formData.site_id && !loading">
-                <el-input v-model="formData.password" clearable :placeholder="t('passwordPlaceholder')" class="input-width"
-                    :show-password="true" type="password" />
+                <el-input v-model="formData.password" clearable :placeholder="t('passwordPlaceholder')" class="input-width" :show-password="true" type="password" />
             </el-form-item>
 
             <el-form-item :label="t('confirmPassword')" prop="confirm_password" v-if="!formData.site_id && !loading">
-                <el-input v-model="formData.confirm_password" :placeholder="t('confirmPasswordPlaceholder')" type="password"
-                    :show-password="true" clearable class="input-width" />
+                <el-input v-model="formData.confirm_password" :placeholder="t('confirmPasswordPlaceholder')" type="password" :show-password="true" clearable class="input-width" />
             </el-form-item>
 
 
             <el-form-item :label="t('expireTime')" prop="expire_time" class="input-width">
-                <el-date-picker class="flex-1 !flex" v-model="formData.expire_time" clearable type="datetime"
-                    value-format="YYYY-MM-DD HH:mm:ss" :placeholder="t('expireTimePlaceholder')">
+                <el-date-picker class="flex-1 !flex" v-model="formData.expire_time" clearable type="datetime" value-format="YYYY-MM-DD HH:mm:ss" :placeholder="t('expireTimePlaceholder')">
                 </el-date-picker>
             </el-form-item>
         </el-form>
@@ -42,9 +37,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
-                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{
-                    t('confirm')
-                }}</el-button>
+                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{t('confirm')}}</el-button>
             </span>
         </template>
     </el-dialog>

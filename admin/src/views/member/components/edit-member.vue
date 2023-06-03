@@ -6,12 +6,10 @@
                 <upload-image v-model="saveData.headimg" />
             </el-form-item>
             <el-form-item :label="t('nickname')" v-if="type == 'nickname'">
-                <el-input v-model="saveData.nickname" clearable :placeholder="t('nickNamePlaceholder')"
-                    class="input-width" />
+                <el-input v-model="saveData.nickname" clearable :placeholder="t('nickNamePlaceholder')" class="input-width" />
             </el-form-item>
             <el-form-item :label="t('birthday')" v-if="type == 'birthday'">
-                <el-date-picker v-model="saveData.birthday" value-format="YYYY-MM-DD" type="date"
-                    :placeholder="t('birthdayTip')" />
+                <el-date-picker v-model="saveData.birthday" value-format="YYYY-MM-DD" type="date" :placeholder="t('birthdayTip')" />
             </el-form-item>
             <el-form-item :label="t('sex')" v-if="type == 'sex'">
                 <el-select v-model="saveData.sex" clearable :placeholder="t('sexPlaceholder')" class="input-width">
@@ -19,8 +17,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item :label="t('memberLabel')" v-if="type == 'member_label'">
-                <el-select v-model="saveData.member_label" multiple collapse-tags :placeholder="t('memberLabelPlaceholder')"
-                    class="input-width">
+                <el-select v-model="saveData.member_label" multiple collapse-tags :placeholder="t('memberLabelPlaceholder')" class="input-width">
                     <el-option :label="item['label_name']" :value="item['label_id']" v-for="item in labelSelectData" />
                 </el-select>
             </el-form-item>
@@ -29,9 +26,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
-                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{
-                    t('confirm')
-                }}</el-button>
+                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{t('confirm')}}</el-button>
             </span>
         </template>
     </el-dialog>

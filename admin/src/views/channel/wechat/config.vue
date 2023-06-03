@@ -1,18 +1,15 @@
 <template>
     <div class="main-container">
-        <el-form :model="formData" label-width="200px" ref="formRef" :rules="formRules" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="200px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
                 <h3 class="panel-title">{{ t('wechatInfo') }}</h3>
 
                 <el-form-item :label="t('wechatName')" prop="wechat_name">
-                    <el-input v-model="formData.wechat_name" :placeholder="t('wechatNamePlaceholder')" class="input-width"
-                        clearable />
+                    <el-input v-model="formData.wechat_name" :placeholder="t('wechatNamePlaceholder')" class="input-width" clearable />
                 </el-form-item>
 
                 <el-form-item :label="t('wechatOriginal')" prop="wechat_original">
-                    <el-input v-model="formData.wechat_original" :placeholder="t('wechatOriginalPlaceholder')"
-                        class="input-width" clearable />
+                    <el-input v-model="formData.wechat_original" :placeholder="t('wechatOriginalPlaceholder')" class="input-width" clearable />
                 </el-form-item>
 
                 <el-form-item :label="t('wechatQrcode')" prop="qr_code">
@@ -26,14 +23,12 @@
                 <h3 class="panel-title">{{ t('wechatDevelopInfo') }}</h3>
 
                 <el-form-item :label="t('wechatAppid')" prop="app_id">
-                    <el-input v-model="formData.app_id" :placeholder="t('appidPlaceholder')" class="input-width"
-                        clearable />
+                    <el-input v-model="formData.app_id" :placeholder="t('appidPlaceholder')" class="input-width" clearable />
                     <div class="form-tip">{{ t('wechatAppidTips') }}</div>
                 </el-form-item>
 
                 <el-form-item :label="t('wechatAppsecret')" prop="app_secret">
-                    <el-input v-model="formData.app_secret" :placeholder="t('appSecretPlaceholder')" class="input-width"
-                        clearable />
+                    <el-input v-model="formData.app_secret" :placeholder="t('appSecretPlaceholder')" class="input-width" clearable />
                     <div class="form-tip">{{ t('wechatAppsecretTips') }}</div>
                 </el-form-item>
 
@@ -43,8 +38,7 @@
                 <h3 class="panel-title">{{ t('theServerSetting') }}</h3>
 
                 <el-form-item label="URL">
-                    <el-input :model-value="wechatStatic.serve_url" placeholder="Please input" class="input-width"
-                        :readonly="true">
+                    <el-input :model-value="wechatStatic.serve_url" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
                             <div class="cursor-pointer" @click="copyEvent(wechatStatic.serve_url)">{{ t('copy') }}
                             </div>
@@ -53,22 +47,20 @@
                 </el-form-item>
 
                 <el-form-item label="Token" prop="token">
-                    <el-input v-model="formData.token" :placeholder="t('tokenPlaceholder')" class="input-width"
-                        maxlength="32" show-word-limit clearable />
+                    <el-input v-model="formData.token" :placeholder="t('tokenPlaceholder')" class="input-width" maxlength="32" show-word-limit clearable />
                     <div class="form-tip">{{ t('tokenTips') }}</div>
                 </el-form-item>
 
                 <el-form-item label="EncodingAESKey" prop="encoding_aes_key">
-                    <el-input v-model="formData.encoding_aes_key" :placeholder="t('encodingAesKeyPlaceholder')"
-                        class="input-width" maxlength="43" show-word-limit clearable />
+                    <el-input v-model="formData.encoding_aes_key" :placeholder="t('encodingAesKeyPlaceholder')" class="input-width" maxlength="43" show-word-limit clearable />
                     <div class="form-tip">{{ t('encodingAESKeyTips') }}</div>
                 </el-form-item>
 
                 <el-form-item :label="t('encryptionType')" prop="encryption_type">
                     <el-radio-group v-model="formData.encryption_type">
-                        <el-radio label="0">{{ t('cleartextMode') }}</el-radio>
-                        <el-radio label="1">{{ t('compatibleMode') }}</el-radio>
-                        <el-radio label="2">{{ t('safeMode') }}</el-radio>
+                        <el-radio label="not_encrypt">{{ t('cleartextMode') }}</el-radio>
+                        <el-radio label="compatible">{{ t('compatibleMode') }}</el-radio>
+                        <el-radio label="safe">{{ t('safeMode') }}</el-radio>
                     </el-radio-group>
                     <div class="form-tip">{{ t('cleartextModeTips') }}</div>
                     <div class="form-tip">{{ t('compatibleModeTips') }}</div>
@@ -86,8 +78,7 @@
                 </el-form-item>
 
                 <el-form-item :label="t('businessDomain')">
-                    <el-input :model-value="wechatStatic.business_domain" placeholder="Please input" class="input-width"
-                        :readonly="true">
+                    <el-input :model-value="wechatStatic.business_domain" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
                             <div class="cursor-pointer" @click="copyEvent(wechatStatic.business_domain)">{{ t('copy') }}
                             </div>
@@ -96,8 +87,7 @@
                 </el-form-item>
 
                 <el-form-item :label="t('jsSecureDomain')">
-                    <el-input :model-value="wechatStatic.js_secure_domain" placeholder="Please input" class="input-width"
-                        :readonly="true">
+                    <el-input :model-value="wechatStatic.js_secure_domain" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
                             <div class="cursor-pointer" @click="copyEvent(wechatStatic.business_domain)">{{ t('copy') }}
                             </div>
@@ -106,8 +96,7 @@
                 </el-form-item>
 
                 <el-form-item :label="t('webAuthDomain')">
-                    <el-input :model-value="wechatStatic.web_auth_domain" placeholder="Please input" class="input-width"
-                        :readonly="true">
+                    <el-input :model-value="wechatStatic.web_auth_domain" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
                             <div class="cursor-pointer" @click="copyEvent(wechatStatic.business_domain)">{{ t('copy') }}
                             </div>
@@ -143,7 +132,7 @@ const formData = reactive<Record<string, string>>({
     qr_code: '',
     token: '',
     encoding_aes_key: '',
-    encryption_type: '0'
+    encryption_type: 'not_encrypt'
 })
 
 const formRef = ref<FormInstance>()

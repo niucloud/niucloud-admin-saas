@@ -3,12 +3,10 @@
         <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form"
             v-loading="loading">
             <el-form-item :label="t('groupName')" prop="group_name">
-                <el-input v-model="formData.group_name" :placeholder="t('groupNamePlaceholder')" clearable
-                    :disabled="formData.uid" class="input-width" maxlength="20" :show-word-limit="true" />
+                <el-input v-model="formData.group_name" :placeholder="t('groupNamePlaceholder')" clearable :disabled="formData.uid" class="input-width" maxlength="20" :show-word-limit="true" />
             </el-form-item>
             <el-form-item :label="t('groupDesc')" prop="group_desc">
-                <el-input v-model="formData.group_desc" type="textarea" rows="4" clearable
-                    :placeholder="t('groupDescPlaceholder')" class="input-width" maxlength="100" />
+                <el-input v-model="formData.group_desc" type="textarea" rows="4" clearable :placeholder="t('groupDescPlaceholder')" class="input-width" maxlength="100" />
             </el-form-item>
 
             <el-form-item :label="t('permission')" prop="group_roles">
@@ -32,9 +30,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
-                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{
-                    t('confirm')
-                }}</el-button>
+                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{t('confirm')}}</el-button>
             </span>
         </template>
     </el-dialog>
@@ -184,8 +180,6 @@ const setFormData = async (row: any = null) => {
                 }
             }
         })
-
-
 
     }
     loading.value = false

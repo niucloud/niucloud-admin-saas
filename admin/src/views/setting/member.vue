@@ -6,14 +6,12 @@
                 <h3 class="panel-title">{{ t('memberNoRule') }}</h3>
 
                 <el-form-item :label="t('prefix')" prop="prefix">
-                    <el-input v-model="formData.prefix" :placeholder="t('prefixPlaceholder')" class="input-width" clearable
-                        maxlength="20" @change="getMemberNo(ruleFormRef)"/>
+                    <el-input v-model="formData.prefix" :placeholder="t('prefixPlaceholder')" class="input-width" clearable maxlength="20" @change="getMemberNo(ruleFormRef)"/>
                     
                 </el-form-item>
 
                 <el-form-item :label="t('length')" prop="length">
-                    <el-input v-model="formData.length" :placeholder="t('lengthPlaceholder')" class="input-width" clearable
-                        type="number" @change="getMemberNo(ruleFormRef)"/>
+                    <el-input v-model="formData.length" :placeholder="t('lengthPlaceholder')" class="input-width" clearable type="number" @change="getMemberNo(ruleFormRef)"/>
                     <div class="form-tip">{{ t('lengthTips') }}</div>
                 </el-form-item>
 

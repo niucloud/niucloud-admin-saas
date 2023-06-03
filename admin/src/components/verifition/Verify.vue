@@ -98,7 +98,6 @@ import { computed, ref,watch,toRefs,watchEffect } from 'vue';
              * @description 刷新
              * */
             const refresh = ()=>{
-                console.log(instance.value);
                 if (instance.value.refresh) {
                     instance.value.refresh()
                 }

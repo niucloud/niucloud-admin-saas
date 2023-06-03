@@ -24,12 +24,8 @@
                 <el-form-item :label="t('status')">
                     <template #default="{ row }">
                         <el-tag class="ml-2" type="success" v-if="formData.status == 1">{{ t('statusNormal') }}</el-tag>
-                        <el-tag class="ml-2" type="error" v-if="formData.status == 0">{{
-                            t('statusDeactivate')
-                        }}</el-tag>
-                        <el-tag class="ml-2" type="error" v-if="formData.status == 2">{{
-                            t('statusExpire')
-                        }}</el-tag>
+                        <el-tag class="ml-2" type="error" v-if="formData.status == 0">{{t('statusDeactivate') }}</el-tag>
+                        <el-tag class="ml-2" type="error" v-if="formData.status == 2">{{t('statusExpire') }}</el-tag>
                     </template>
                 </el-form-item>
 
@@ -41,8 +37,7 @@
                     <div class="input-width">{{ formData.expire_time || '' }}</div>
                 </el-form-item>
 
-                <el-button class="absolute right-5 top-5" type="primary" @click="editEvent(formRef)">{{ t('edit')
-                }}</el-button>
+                <el-button class="absolute right-5 top-5" type="primary" @click="editEvent(formRef)">{{ t('edit') }}</el-button>
             </el-card>
 
         </el-form>

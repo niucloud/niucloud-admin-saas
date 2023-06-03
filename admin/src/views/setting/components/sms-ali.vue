@@ -10,18 +10,15 @@
             </el-form-item>
 
             <el-form-item :label="t('aliSign')" prop="sign">
-                <el-input v-model="formData.sign" :placeholder="t('aliSignPlaceholder')" class="input-width" show-word-limit
-                    clearable />
+                <el-input v-model="formData.sign" :placeholder="t('aliSignPlaceholder')" class="input-width" show-word-limit clearable />
             </el-form-item>
 
             <el-form-item :label="t('aliAppKey')" prop="app_key">
-                <el-input v-model="formData.app_key" :placeholder="t('aliAppKeyPlaceholder')" class="input-width"
-                    clearable />
+                <el-input v-model="formData.app_key" :placeholder="t('aliAppKeyPlaceholder')" class="input-width" clearable />
             </el-form-item>
 
             <el-form-item :label="t('aliSecretKey')" prop="secret_key">
-                <el-input v-model="formData.secret_key" :placeholder="t('aliSecretKeyPlaceholder')" class="input-width"
-                    clearable />
+                <el-input v-model="formData.secret_key" :placeholder="t('aliSecretKeyPlaceholder')" class="input-width" clearable />
             </el-form-item>
 
         </el-form>
@@ -29,9 +26,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
-                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{
-                    t('confirm')
-                }}</el-button>
+                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{t('confirm')}}</el-button>
             </span>
         </template>
     </el-dialog>

@@ -1,7 +1,6 @@
 <template>
     <el-dialog v-model="showDialog" :title="t('qiniuStorage')" width="580px" :destroy-on-close="true">
-        <el-form :model="formData" label-width="140px" ref="formRef" :rules="formRules" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="140px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-form-item :label="t('isUse')">
                 <el-radio-group v-model="formData.is_use">
                     <el-radio label="1">{{ t('startUsing') }}</el-radio>
@@ -10,19 +9,16 @@
             </el-form-item>
 
             <el-form-item :label="t('qiniuBucket')" prop="bucket">
-                <el-input v-model="formData.bucket" :placeholder="t('qiniuBucketPlaceholder')" class="input-width"
-                    show-word-limit clearable />
+                <el-input v-model="formData.bucket" :placeholder="t('qiniuBucketPlaceholder')" class="input-width" show-word-limit clearable />
                 <div class="form-tip">{{ t('qiniuBucketTips') }}</div>
             </el-form-item>
 
             <el-form-item :label="t('qiniuAccessKey')" prop="access_key">
-                <el-input v-model="formData.access_key" :placeholder="t('qiniuAccessKeyPlaceholder')" class="input-width"
-                    clearable />
+                <el-input v-model="formData.access_key" :placeholder="t('qiniuAccessKeyPlaceholder')" class="input-width" clearable />
             </el-form-item>
 
             <el-form-item :label="t('qiniuSecretKey')" prop="secret_key">
-                <el-input v-model="formData.secret_key" :placeholder="t('qiniuSecretKeyPlaceholder')" class="input-width"
-                    clearable />
+                <el-input v-model="formData.secret_key" :placeholder="t('qiniuSecretKeyPlaceholder')" class="input-width" clearable />
             </el-form-item>
 
             <el-form-item :label="t('domain')" prop="domain">
@@ -34,9 +30,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
-                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{
-                    t('confirm')
-                }}</el-button>
+                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{t('confirm')}}</el-button>
             </span>
         </template>
     </el-dialog>

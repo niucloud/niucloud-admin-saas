@@ -12,7 +12,7 @@ export function getNoticeList() {
 
 /**
  * 消息详情
- * @param params 
+ * @param key
  * @returns 
  */
 export function getNoticeInfo(key: string) {

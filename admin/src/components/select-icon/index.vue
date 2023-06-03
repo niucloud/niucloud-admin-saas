@@ -7,23 +7,19 @@
             <div class="head flex w-full mb-[10px]">
                 <span>请选择图标</span>
                 <div class="flex justify-end flex-auto">
-                    <span class="ml-[10px] cursor-pointer" :class="{ active: type == 'element' }"
-                        @click="type = 'element'">element</span>
-                    <span class="ml-[10px] cursor-pointer" :class="{ active: type == 'iconfont' }"
-                        @click="type = 'iconfont'">iconfont</span>
+                    <span class="ml-[10px] cursor-pointer" :class="{ active: type == 'element' }" @click="type = 'element'">element</span>
+                    <span class="ml-[10px] cursor-pointer" :class="{ active: type == 'iconfont' }" @click="type = 'iconfont'">iconfont</span>
                 </div>
             </div>
             <div class="icon-wrap h-[240px]">
                 <el-scrollbar>
                     <div class="flex flex-wrap" v-show="type == 'element'">
-                        <el-button v-for="icon in element" class="w-[35px] h-[35px] icon-item"
-                            @click="selectIcon('element-' + icon)">
+                        <el-button v-for="icon in element" class="w-[35px] h-[35px] icon-item" @click="selectIcon('element-' + icon)">
                             <icon :name="'element-' + icon" />
                         </el-button>
                     </div>
                     <div class="flex flex-wrap" v-show="type == 'iconfont'">
-                        <el-button v-for="icon in iconfont" class="w-[35px] h-[35px] icon-item"
-                            @click="selectIcon('iconfont-' + icon)">
+                        <el-button v-for="icon in iconfont" class="w-[35px] h-[35px] icon-item" @click="selectIcon('iconfont-' + icon)">
                             <icon :name="'iconfont-' + icon" />
                         </el-button>
                     </div>

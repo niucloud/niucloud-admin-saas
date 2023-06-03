@@ -1,7 +1,6 @@
 <template>
     <el-dialog v-model="showDialog" :title="t('noticeSetting')" width="550px" :destroy-on-close="true">
-        <el-form :model="formData" label-width="110px" ref="formRef" :rules="formRules" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="110px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-form-item :label="t('status')">
                 <el-radio-group v-model="formData.is_sms">
                     <el-radio :label="1">{{ t('startUsing') }}</el-radio>
@@ -18,8 +17,7 @@
             </el-form-item>
 
             <el-form-item :label="t('smsId')" prop="sms_id">
-                <el-input v-model="formData.sms_id" :placeholder="t('smsIdPlaceholder')" class="input-width" show-word-limit
-                    clearable />
+                <el-input v-model="formData.sms_id" :placeholder="t('smsIdPlaceholder')" class="input-width" show-word-limit clearable />
             </el-form-item>
 
             <el-form-item :label="t('smsContent')">
@@ -31,9 +29,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
-                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{
-                    t('confirm')
-                }}</el-button>
+                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{t('confirm')}}</el-button>
             </span>
         </template>
     </el-dialog>

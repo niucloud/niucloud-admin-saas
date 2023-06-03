@@ -42,8 +42,7 @@
                 <el-form :inline="true" :model="memberAccountLogTableData.searchParam" ref="searchFormRef">
 
 					<el-form-item :label="t('memberInfo')" prop="keywords">
-                        <el-input v-model="memberAccountLogTableData.searchParam.keywords" class="w-[240px]"
-                            :placeholder="t('memberInfoPlaceholder')" />
+                        <el-input v-model="memberAccountLogTableData.searchParam.keywords" class="w-[240px]" :placeholder="t('memberInfoPlaceholder')" />
                     </el-form-item>
 
 					<el-form-item :label="t('balanceType')" prop="from_type">

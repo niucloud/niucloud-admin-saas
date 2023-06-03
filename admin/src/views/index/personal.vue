@@ -78,9 +78,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
     formEl.validate((valid) => {
         if (valid) {
             let msg = "";
-            if(saveInfo.password && !saveInfo.original_password) msg = t('originalPasswordHint');
-            if(saveInfo.password && saveInfo.original_password && !saveInfo.password_copy) msg = t('newPasswordHint');
-            if(saveInfo.password && saveInfo.original_password && saveInfo.password_copy && saveInfo.password != saveInfo.password_copy ) msg = t('doubleCipherHint');
+            if (saveInfo.password && !saveInfo.original_password) msg = t('originalPasswordHint');
+            if (saveInfo.password && saveInfo.original_password && !saveInfo.password_copy) msg = t('newPasswordHint');
+            if (saveInfo.password && saveInfo.original_password && saveInfo.password_copy && saveInfo.password != saveInfo.password_copy) msg = t('doubleCipherHint');
             if (msg) {
                 ElNotification({
                     type: 'error',
@@ -88,7 +88,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
                 })
                 return;
             }
-            
+
             loading.value = true;
 
             setUserInfo(saveInfo).then((res: any) => {
@@ -97,14 +97,10 @@ const submitForm = (formEl: FormInstance | undefined) => {
                 loading.value = false
             })
         } else {
-        console.log('error submit!')
-        return false
+            return false
         }
-    }); 
+    });
 }
-
-
-
 
 </script>
 

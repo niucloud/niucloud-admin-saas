@@ -10,24 +10,20 @@
             </el-form-item>
 
             <el-form-item :label="t('aliBucket')" prop="bucket">
-                <el-input v-model="formData.bucket" :placeholder="t('aliBucketPlaceholder')" class="input-width"
-                    show-word-limit clearable />
+                <el-input v-model="formData.bucket" :placeholder="t('aliBucketPlaceholder')" class="input-width" show-word-limit clearable />
                 <div class="form-tip">{{ t('aliBucketTips') }}</div>
             </el-form-item>
 
             <el-form-item :label="t('aliAccessKey')" prop="access_key">
-                <el-input v-model="formData.access_key" :placeholder="t('aliAccessKeyPlaceholder')" class="input-width"
-                    clearable />
+                <el-input v-model="formData.access_key" :placeholder="t('aliAccessKeyPlaceholder')" class="input-width" clearable />
             </el-form-item>
 
             <el-form-item :label="t('aliSecretKey')" prop="secret_key">
-                <el-input v-model="formData.secret_key" :placeholder="t('aliSecretKeyPlaceholder')" class="input-width"
-                    clearable />
+                <el-input v-model="formData.secret_key" :placeholder="t('aliSecretKeyPlaceholder')" class="input-width" clearable />
             </el-form-item>
 
             <el-form-item :label="t('aliEndpoint')" prop="endpoint">
-                <el-input v-model="formData.endpoint" :placeholder="t('aliEndpointPlaceholder')" class="input-width"
-                    clearable />
+                <el-input v-model="formData.endpoint" :placeholder="t('aliEndpointPlaceholder')" class="input-width" clearable />
                 <div class="form-tip">{{ t('aliEndpointTips') }}</div>
             </el-form-item>
 
@@ -40,9 +36,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
-                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{
-                    t('confirm')
-                }}</el-button>
+                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{t('confirm')}}</el-button>
             </span>
         </template>
     </el-dialog>

@@ -4,9 +4,7 @@
 
             <div class="flex justify-between items-center">
                 <span class="text-[24px]">{{ pageName }}</span>
-                <el-button type="primary" class="w-[100px]" @click="addEvent">
-                    {{ t('addArticle') }}
-                </el-button>
+                <el-button type="primary" class="w-[100px]" @click="addEvent">{{ t('addArticle') }}</el-button>
             </div>
 
             <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
@@ -15,8 +13,7 @@
                         <el-input v-model="articleTableData.searchParam.title" :placeholder="t('titlePlaceholder')" />
                     </el-form-item>
                     <el-form-item :label="t('categoryName')" prop="category_id">
-                        <el-select v-model="articleTableData.searchParam.category_id" clearable
-                            :placeholder="t('categoryIdPlaceholder')" class="input-width">
+                        <el-select v-model="articleTableData.searchParam.category_id" clearable :placeholder="t('categoryIdPlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')" value="" />
                             <el-option :label="item['name']" :value="item['category_id']" v-for="item in categoryList" />
                         </el-select>
@@ -47,7 +44,6 @@
                     <el-table-column :label="t('image')" min-width="120" align="center">
                         <template #default="{ row }">
                             <el-image class="w-12 h-12" v-if="row.image" :src="img(row.image)" fit="contain" />
-
                         </template>
                     </el-table-column>
 
@@ -60,9 +56,7 @@
                     <el-table-column :label="t('isShow')" min-width="120" align="center">
                         <template #default="{ row }">
                             <span v-if="row.is_show == 1">{{ t('show') }}</span>
-                            <span v-if="row.is_show == 0">{{
-                                t('hidden')
-                            }}</span>
+                            <span v-if="row.is_show == 0">{{t('hidden')}}</span>
                         </template>
                     </el-table-column>
 
@@ -83,9 +77,7 @@
 
                 </el-table>
                 <div class="mt-[16px] flex justify-end">
-                    <el-pagination v-model:current-page="articleTableData.page" v-model:page-size="articleTableData.limit"
-                        layout="total, sizes, prev, pager, next, jumper" :total="articleTableData.total"
-                        @size-change="loadArticleList()" @current-change="loadArticleList" />
+                    <el-pagination v-model:current-page="articleTableData.page" v-model:page-size="articleTableData.limit" layout="total, sizes, prev, pager, next, jumper" :total="articleTableData.total" @size-change="loadArticleList()" @current-change="loadArticleList" />
                 </div>
             </div>
 

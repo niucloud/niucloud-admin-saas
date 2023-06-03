@@ -1,7 +1,7 @@
 <template>
     <div class="main-container">
         <el-form :model="formData" label-width="150px" ref="formRef" class="page-form" v-loading="loading">
-            <el-card class="box-card !border-none relative" shadow="never">
+            <el-card class="box-card !border-none relative" shadow="never" v-if="formData">
                 <h3 class="panel-title">{{ t('orderInfo') }}</h3>
 
                 <el-form-item :label="t('orderNo')">
@@ -64,7 +64,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
 import { getRechargeOrderInfo } from '@/api/order'
@@ -85,57 +85,24 @@ watch(route, (newX, oldX) => {
     appStore.pageReturn = false
 })
 
-/**
- * 表单数据
- */
-const initialFormData = {
-    order_id: 0,
-    site_id: '',
-    order_no: 0,
-    order_from: 0,
-    order_type: '',
-    out_trade_no: '',
-    order_status: '',
-    pay_status: '',
-    refund_status: '',
-    pay_type: '',
-    member_id: '',
-    ip: '',
-    member_message: '',
-    order_item_money: '',
-    order_discount_money: '',
-    order_money: '',
-    create_time: '',
-    pay_time: '',
-    close_time: '',
-    is_lock: '',
-    remark: '',
-    invoice_id: '',
-    close_reason: '',
-    item: '',
-    member: '',
-    order_status_info: '',
-    order_from_name: ''
-}
-const formData: Record<string, any> = reactive({ ...initialFormData })
+const formData: Record<string, any> | null = ref(null)
 
 const setFormData = async (orderId: number = 0) => {
     loading.value = true
-    Object.assign(formData, initialFormData)
-    const data = await (await getRechargeOrderInfo(orderId)).data
-    Object.keys(formData).forEach((key: string) => {
-        if (data[key] != undefined) formData[key] = data[key]
-    })
+    formData.value = null
+    await getRechargeOrderInfo(orderId)
+        .then(({ data }) => {
+            formData.value = data
+        })
+        .catch(() => {
+
+        })
     loading.value = false
 }
 if (orderId) setFormData(orderId)
 else loading.value = false
 
 const formRef = ref<FormInstance>()
-
-const onSave = async (formEl: FormInstance | undefined) => {
-    back()
-}
 
 const back = () => {
     tabbarStore.removeTab(route.path)

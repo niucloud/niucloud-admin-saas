@@ -3,16 +3,13 @@
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center">
                 <span class="text-[24px]">{{pageName}}</span>
-                <el-button type="primary" class="w-[100px]" @click="addEvent">
-                    {{ t('addUser') }}
-                </el-button>
+                <el-button type="primary" class="w-[100px]" @click="addEvent">{{ t('addUser') }}</el-button>
             </div>
 
             <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="userTableData.searchParam" ref="searchFormRef">
                     <el-form-item :label="t('accountNumber')" prop="seach">
-                        <el-input v-model="userTableData.searchParam.seach" class="w-[240px]"
-                            :placeholder="t('accountNumberPlaceholder')" />
+                        <el-input v-model="userTableData.searchParam.seach" class="w-[240px]" :placeholder="t('accountNumberPlaceholder')" />
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="loadUserList()">{{ t('search') }}</el-button>
@@ -45,9 +42,7 @@
                     <el-table-column :label="t('status')" min-width="120" align="center">
                         <template #default="{ row }">
                             <el-tag class="ml-2" type="success" v-if="row.status == 1">{{ t('statusUnlock') }}</el-tag>
-                            <el-tag class="ml-2" type="error" v-if="row.status == 0">{{
-                                t('statusLock')
-                            }}</el-tag>
+                            <el-tag class="ml-2" type="error" v-if="row.status == 0">{{t('statusLock') }}</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column prop="last_time" :label="t('lastLoginTime')" min-width="180" align="center">
@@ -75,9 +70,7 @@
                 </el-table>
 
                 <div class="mt-[16px] flex justify-end">
-                    <el-pagination v-model:current-page="userTableData.page" v-model:page-size="userTableData.limit"
-                        layout="total, sizes, prev, pager, next, jumper" :total="userTableData.total"
-                        @size-change="loadUserList()" @current-change="loadUserList" />
+                    <el-pagination v-model:current-page="userTableData.page" v-model:page-size="userTableData.limit" layout="total, sizes, prev, pager, next, jumper" :total="userTableData.total" @size-change="loadUserList()" @current-change="loadUserList" />
                 </div>
             </div>
 
@@ -110,7 +103,6 @@ const userTableData = reactive({
 })
 
 const searchFormRef = ref<FormInstance>()
-
 
 const resetForm = (formEl: FormInstance | undefined)=>{
     if (!formEl) return

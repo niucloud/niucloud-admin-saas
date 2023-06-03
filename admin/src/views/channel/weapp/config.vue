@@ -1,18 +1,15 @@
 <template>
     <div class="main-container">
-        <el-form :model="formData" label-width="200px" ref="formRef" :rules="formRules" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="200px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
                 <h3 class="panel-title">{{ t('weappInfo') }}</h3>
 
                 <el-form-item :label="t('weappName')" prop="weapp_name">
-                    <el-input v-model="formData.weapp_name" :placeholder="t('weappNamePlaceholder')" class="input-width"
-                        clearable />
+                    <el-input v-model="formData.weapp_name" :placeholder="t('weappNamePlaceholder')" class="input-width" clearable />
                 </el-form-item>
 
                 <el-form-item :label="t('weappOriginal')" prop="weapp_original">
-                    <el-input v-model="formData.weapp_original" :placeholder="t('weappOriginalPlaceholder')"
-                        class="input-width" clearable />
+                    <el-input v-model="formData.weapp_original" :placeholder="t('weappOriginalPlaceholder')" class="input-width" clearable />
                 </el-form-item>
 
                 <el-form-item :label="t('weappQrcode')" prop="qr_code">
@@ -26,14 +23,12 @@
                 <h3 class="panel-title">{{ t('weappDevelopInfo') }}</h3>
 
                 <el-form-item :label="t('weappAppid')" prop="app_id">
-                    <el-input v-model="formData.app_id" :placeholder="t('appidPlaceholder')" class="input-width"
-                        clearable />
+                    <el-input v-model="formData.app_id" :placeholder="t('appidPlaceholder')" class="input-width" clearable />
                     <div class="form-tip">{{ t('weappAppidTips') }}</div>
                 </el-form-item>
 
                 <el-form-item :label="t('weappAppsecret')" prop="app_secret">
-                    <el-input v-model="formData.app_secret" :placeholder="t('appSecretPlaceholder')" class="input-width"
-                        clearable />
+                    <el-input v-model="formData.app_secret" :placeholder="t('appSecretPlaceholder')" class="input-width" clearable />
                     <div class="form-tip">{{ t('weappAppsecretTips') }}</div>
                 </el-form-item>
 
@@ -43,8 +38,7 @@
                 <h3 class="panel-title">{{ t('theServerSetting') }}</h3>
 
                 <el-form-item label="URL">
-                    <el-input :model-value="formData.serve_url" placeholder="Please input" class="input-width"
-                        :readonly="true">
+                    <el-input :model-value="formData.serve_url" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
                             <div class="cursor-pointer" @click="copyEvent(formData.serve_url)">{{ t('copy') }}
                             </div>
@@ -53,22 +47,20 @@
                 </el-form-item>
 
                 <el-form-item label="Token" prop="token">
-                    <el-input v-model="formData.token" :placeholder="t('tokenPlaceholder')" class="input-width"
-                        maxlength="32" show-word-limit clearable />
+                    <el-input v-model="formData.token" :placeholder="t('tokenPlaceholder')" class="input-width" maxlength="32" show-word-limit clearable />
                     <div class="form-tip">{{ t('tokenTips') }}</div>
                 </el-form-item>
 
                 <el-form-item label="EncodingAESKey" prop="encoding_aes_key">
-                    <el-input v-model="formData.encoding_aes_key" :placeholder="t('encodingAesKeyPlaceholder')"
-                        class="input-width" maxlength="43" show-word-limit clearable />
+                    <el-input v-model="formData.encoding_aes_key" :placeholder="t('encodingAesKeyPlaceholder')" class="input-width" maxlength="43" show-word-limit clearable />
                     <div class="form-tip">{{ t('encodingAESKeyTips') }}</div>
                 </el-form-item>
 
                 <el-form-item :label="t('encryptionType')" prop="encryption_type">
                     <el-radio-group v-model="formData.encryption_type">
-                        <el-radio label="0">{{ t('cleartextMode') }}</el-radio>
-                        <el-radio label="1">{{ t('compatibleMode') }}</el-radio>
-                        <el-radio label="2">{{ t('safeMode') }}</el-radio>
+                        <el-radio label="not_encrypt">{{ t('cleartextMode') }}</el-radio>
+                        <el-radio label="compatible">{{ t('compatibleMode') }}</el-radio>
+                        <el-radio label="safe">{{ t('safeMode') }}</el-radio>
                     </el-radio-group>
                     <div class="form-tip">{{ t('cleartextModeTips') }}</div>
                     <div class="form-tip">{{ t('compatibleModeTips') }}</div>
@@ -82,8 +74,7 @@
                 </div>
 
                 <el-form-item :label="t('requestUrl')">
-                    <el-input :model-value="formData.request_url" placeholder="Please input" class="input-width"
-                        :readonly="true">
+                    <el-input :model-value="formData.request_url" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
                             <div class="cursor-pointer" @click="copyEvent(formData.request_url)">{{ t('copy') }}
                             </div>
@@ -91,8 +82,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item :label="t('socketUrl')">
-                    <el-input :model-value="formData.socket_url" placeholder="Please input" class="input-width"
-                        :readonly="true">
+                    <el-input :model-value="formData.socket_url" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
                             <div class="cursor-pointer" @click="copyEvent(formData.socket_url)">{{ t('copy') }}
                             </div>
@@ -100,8 +90,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item :label="t('uploadUrl')">
-                    <el-input :model-value="formData.upload_url" placeholder="Please input" class="input-width"
-                        :readonly="true">
+                    <el-input :model-value="formData.upload_url" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
                             <div class="cursor-pointer" @click="copyEvent(formData.upload_url)">{{ t('copy') }}
                             </div>
@@ -109,8 +98,7 @@
                     </el-input>
                 </el-form-item>
                 <el-form-item :label="t('downloadUrl')">
-                    <el-input :model-value="formData.download_url" placeholder="Please input" class="input-width"
-                        :readonly="true">
+                    <el-input :model-value="formData.download_url" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
                             <div class="cursor-pointer" @click="copyEvent(formData.download_url)">{{ t('copy') }}
                             </div>
@@ -146,7 +134,7 @@ const formData = reactive<Record<string, string>>({
     qr_code: '',
     token: '',
     encoding_aes_key: '',
-    encryption_type: '0',
+    encryption_type: 'not_encrypt',
     serve_url: '',
     request_url: '',
     socket_url: '',

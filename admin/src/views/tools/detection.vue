@@ -32,9 +32,11 @@
 						<el-table-column :label="t('status')" align="left" min-width="140">
 							<template #default="{ row }">
 								<span v-if="row.status"><el-icon color="green"><Select /></el-icon></span>
-								<span v-else><el-icon color="red">
+								<span v-else>
+									<el-icon color="red">
 										<CloseBold />
-									</el-icon></span>
+									</el-icon>
+								</span>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -50,9 +52,11 @@
 						<el-table-column :label="t('status')" align="left" min-width="140">
 							<template #default="{ row }">
 								<span v-if="row.status"><el-icon color="green"><Select /></el-icon></span>
-								<span v-else><el-icon color="red">
+								<span v-else>
+									<el-icon color="red">
 										<CloseBold />
-									</el-icon></span>
+									</el-icon>
+								</span>
 							</template>
 						</el-table-column>
 					</el-table>

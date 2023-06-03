@@ -14,10 +14,7 @@
                         <div class="menu-item py-[15px] flex items-center justify-center cursor-pointer"
                             :class="{ 'size-1': button.length == 1, 'size-2-3': button.length > 1, 'active': index == buttonIndex, 'curr': index == buttonIndex && subButtonIndex == -1 }"
                             v-for="(item, index) in button" :key="index" @click="selectButton(index)">
-                            <div
-                                class="menu-name px-[10px] border-r border-color w-full leading-[40px] text-base truncate text-center">
-                                {{ item.name }}
-                            </div>
+                            <div class="menu-name px-[10px] border-r border-color w-full leading-[40px] text-base truncate text-center">{{ item.name }}</div>
                             <div class="active-shade"></div>
 
                             <!-- 子菜单 -->
@@ -26,22 +23,17 @@
                                     :class="{ 'curr': subIndex == subButtonIndex }"
                                     v-for="(subItem, subIndex) in item.sub_button" :key="subIndex"
                                     @click.stop="selectBubButton(index, subIndex)">
-                                    <div class="menu-name w-full text-base truncate text-center">
-                                        {{ subItem.name }}
-                                    </div>
+                                    <div class="menu-name w-full text-base truncate text-center">{{ subItem.name }}</div>
                                     <div class="active-shade"></div>
                                 </div>
                                 <!-- 添加子菜单 -->
-                                <div class="add-menu flex items-center justify-center flex-1 cursor-pointer menu-item h-[50px]"
-                                    v-show="!item.sub_button || item.sub_button.length < 5"
-                                    @click.stop="addSubButton(index)">
+                                <div class="add-menu flex items-center justify-center flex-1 cursor-pointer menu-item h-[50px]" v-show="!item.sub_button || item.sub_button.length < 5" @click.stop="addSubButton(index)">
                                     <icon name="element-Plus" />
                                 </div>
                             </div>
                         </div>
                         <!-- 添加菜单 -->
-                        <div class="add-menu flex items-center justify-center flex-1 cursor-pointer menu-item"
-                            v-show="button.length < 3" @click="addButton">
+                        <div class="add-menu flex items-center justify-center flex-1 cursor-pointer menu-item" v-show="button.length < 3" @click="addButton">
                             <icon name="element-Plus" />
                         </div>
                     </div>
@@ -59,8 +51,7 @@
 
                             <div v-for="(subItem, subIndex) in item.sub_button" :key="subIndex">
                                 <div v-show="index == buttonIndex && subIndex == subButtonIndex">
-                                    <menu-form :data="subItem" @delete="deleteButton" :index="index" :sub-index="subIndex"
-                                        ref="formRef" />
+                                    <menu-form :data="subItem" @delete="deleteButton" :index="index" :sub-index="subIndex" ref="formRef" />
                                 </div>
                             </div>
                         </div>

@@ -13,8 +13,7 @@
                     <template #empty>
                         <span>{{ !menusTableData.loading ? t('emptyData') : '' }}</span>
                     </template>
-                    <el-table-column prop="menu_name" :show-overflow-tooltip="true" :label="t('menuName')"
-                        min-width="150" />
+                    <el-table-column prop="menu_name" :show-overflow-tooltip="true" :label="t('menuName')" min-width="150" />
                     <el-table-column :label="t('icon')" width="100" align="center">
                         <template #default="{ row }">
                             <icon v-if="row.icon" :name="row.icon" size="18px" />
@@ -31,9 +30,7 @@
                     <el-table-column :label="t('status')" min-width="120" align="center">
                         <template #default="{ row }">
                             <el-tag class="ml-2" type="success" v-if="row.status == 1">{{ t('statusNormal') }}</el-tag>
-                            <el-tag class="ml-2" type="error" v-if="row.status == 0">{{
-                                t('statusDeactivate')
-                            }}</el-tag>
+                            <el-tag class="ml-2" type="error" v-if="row.status == 0">{{t('statusDeactivate') }}</el-tag>
                         </template>
                     </el-table-column>
                     <el-table-column prop="sort" :label="t('sort')" min-width="100" />

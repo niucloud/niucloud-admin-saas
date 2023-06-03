@@ -1,6 +1,5 @@
 <template>
-    <el-container
-        :class="['w-full h-screen bg-page', { 'login-wrap': loginType == 'admin' }, { 'site-login-wrap': loginType == 'site' }]">
+    <el-container :class="['w-full h-screen bg-page', { 'login-wrap': loginType == 'admin' }, { 'site-login-wrap': loginType == 'site' }]">
         <!-- 平台端登录 -->
         <el-main class="login-main items-center justify-center" v-if="!imgLoading && loginType == 'admin'">
             <div class="flex rounded-2xl overflow-hidden">
@@ -14,8 +13,7 @@
 
                     <el-form :model="form" ref="formRef" :rules="formRules">
                         <el-form-item prop="username">
-                            <el-input v-model="form.username" :placeholder="t('userPlaceholder')"
-                                @keyup.enter="handleLogin(formRef)" class="h-[40px] input-with-select">
+                            <el-input v-model="form.username" :placeholder="t('userPlaceholder')" @keyup.enter="handleLogin(formRef)" class="h-[40px] input-with-select">
                                 <template #prepend>
                                     <icon name="element-User" />
                                 </template>
@@ -23,9 +21,7 @@
                         </el-form-item>
 
                         <el-form-item prop="password">
-                            <el-input v-model="form.password" :placeholder="t('passwordPlaceholder')" type="password"
-                                @keyup.enter="handleLogin(formRef)" :show-password="true"
-                                class="h-[40px] input-with-select">
+                            <el-input v-model="form.password" :placeholder="t('passwordPlaceholder')" type="password" @keyup.enter="handleLogin(formRef)" :show-password="true" class="h-[40px] input-with-select">
                                 <template #prepend>
                                     <icon name="element-Lock" />
                                 </template>
@@ -33,10 +29,7 @@
                         </el-form-item>
 
                         <el-form-item>
-                            <el-button type="primary" class="mt-[30px] h-[40px] w-full" @click="handleLogin(formRef)"
-                                :loading="loading">{{
-                                    loading ? t('logging') : t('login')
-                                }}</el-button>
+                            <el-button type="primary" class="mt-[30px] h-[40px] w-full" @click="handleLogin(formRef)" :loading="loading">{{loading ? t('logging') : t('login') }}</el-button>
                         </el-form-item>
 
                     </el-form>
@@ -61,8 +54,7 @@
                     <h3 class="text-center text-3xl mb-[30px]">{{ t('siteLogin') }}</h3>
                     <el-form :model="form" ref="formRef" :rules="formRules">
                         <el-form-item prop="username">
-                            <el-input v-model="form.username" @keyup.enter="handleLogin(formRef)" class="w-50 m-1 h-[40px]"
-                                :placeholder="t('userPlaceholder')">
+                            <el-input v-model="form.username" @keyup.enter="handleLogin(formRef)" class="w-50 m-1 h-[40px]" :placeholder="t('userPlaceholder')">
                                 <template #prefix>
                                     <icon name="element-User" />
                                 </template>
@@ -70,8 +62,7 @@
                         </el-form-item>
 
                         <el-form-item prop="password">
-                            <el-input type="password" v-model="form.password" @keyup.enter="handleLogin(formRef)"
-                                :show-password="true" class="w-50 m-1 h-[40px]" :placeholder="t('passwordPlaceholder')">
+                            <el-input type="password" v-model="form.password" @keyup.enter="handleLogin(formRef)" :show-password="true" class="w-50 m-1 h-[40px]" :placeholder="t('passwordPlaceholder')">
                                 <template #prefix>
                                     <icon name="element-Lock" />
                                 </template>
@@ -79,10 +70,7 @@
                         </el-form-item>
 
                         <el-form-item>
-                            <el-button type="primary" class="mt-[30px] h-[40px] w-full" @click="handleLogin(formRef)"
-                                :loading="loading">{{
-                                    loading ? t('logging') : t('login')
-                                }}</el-button>
+                            <el-button type="primary" class="mt-[30px] h-[40px] w-full" @click="handleLogin(formRef)" :loading="loading">{{loading ? t('logging') : t('login') }}</el-button>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -90,8 +78,7 @@
         </el-main>
 
         <!-- 验证组件 -->
-        <verify @success="success" :mode="pop" captchaType="blockPuzzle" :imgSize="{ width: '330px', height: '155px' }"
-            ref="verifyRef"></verify>
+        <verify @success="success" :mode="pop" captchaType="blockPuzzle" :imgSize="{ width: '330px', height: '155px' }" ref="verifyRef"></verify>
 
         <el-footer></el-footer>
     </el-container>

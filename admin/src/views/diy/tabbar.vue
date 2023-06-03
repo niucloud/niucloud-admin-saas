@@ -3,10 +3,8 @@
         <el-card class="box-card !border-none" shadow="never" v-loading="loading">
             <div class="flex">
                 <div class="w-[360px] h-[615px] relative mr-[30px] border-[1px] border-gray-300">
-                    <div class="flex items-center justify-between absolute h-[60px] left-[0px] right-[0px] bottom-[0px] bg-white border-[1px] border-primary"
-                        :style="{ 'backgroundColor': diyBottomData.backgroundColor }">
-                        <div class="flex flex-1 flex-col items-center justify-center"
-                            v-for="(item, index) in diyBottomData.list" :key="'b' + index">
+                    <div class="flex items-center justify-between absolute h-[60px] left-[0px] right-[0px] bottom-[0px] bg-white border-[1px] border-primary" :style="{ 'backgroundColor': diyBottomData.backgroundColor }">
+                        <div class="flex flex-1 flex-col items-center justify-center" v-for="(item, index) in diyBottomData.list" :key="'b' + index">
                             <el-image class="w-[22px] h-[22px] mb-[5px] leading-1" :src="img(item.iconPath)" :fit="contain">
                                 <template #error>
                                     <div class="image-slot flex justify-center items-center mt-1">
@@ -14,8 +12,7 @@
                                     </div>
                                 </template>
                             </el-image>
-                            <span class="text-[12px]" v-if="['1', '3'].includes(diyBottomData.type)"
-                                :style="{ 'color': diyBottomData.textColor }">{{ item.text }}</span>
+                            <span class="text-[12px]" v-if="['1', '3'].includes(diyBottomData.type)" :style="{ 'color': diyBottomData.textColor }">{{ item.text }}</span>
                         </div>
                     </div>
                 </div>
@@ -42,21 +39,18 @@
                                             </div>
                                         </el-form-item>
                                         <el-form-item :label="t('navTitleOne')">
-                                            <el-input class="w-[215px]" v-model="item.text" :placeholder="t('titleContent')"
-                                                maxlength="5" show-word-limit />
+                                            <el-input class="w-[215px]" v-model="item.text" :placeholder="t('titleContent')" maxlength="5" show-word-limit />
                                         </el-form-item>
                                         <el-form-item :label="t('navLinkOne')">
                                             <diy-link v-model="item.link"></diy-link>
                                         </el-form-item>
-                                        <el-icon class="close-icon cursor-pointer -top-[11px] -right-[8px]"
-                                            @click="deleteNav">
+                                        <el-icon class="close-icon cursor-pointer -top-[11px] -right-[8px]" @click="deleteNav">
                                             <CircleCloseFilled />
                                         </el-icon>
                                     </div>
                                 </div>
 
-                                <el-button type="primary" class="mt-[15px]" v-show="diyBottomData.list.length < 5"
-                                    @click="addNav">{{ t('addnav') }}</el-button>
+                                <el-button type="primary" class="mt-[15px]" v-show="diyBottomData.list.length < 5" @click="addNav">{{ t('addnav') }}</el-button>
                             </el-tab-pane>
                             <el-tab-pane :label="t('styleSet')" name="setStyle">
                                 <el-form-item :label="t('navType')">
@@ -70,24 +64,21 @@
                                     <div class="flex align-center">
                                         <el-color-picker v-model="diyBottomData.textColor" />
                                         <el-input class="ml-[10px]" v-model="diyBottomData.textColor" disabled />
-                                        <el-button class="ml-[10px]" type="primary"
-                                            @click="diyBottomData.textColor = '#333333'">{{ t('reset') }}</el-button>
+                                        <el-button class="ml-[10px]" type="primary" @click="diyBottomData.textColor = '#333333'">{{ t('reset') }}</el-button>
                                     </div>
                                 </el-form-item>
                                 <el-form-item :label="t('textSelectColor')">
                                     <div class="flex align-center">
                                         <el-color-picker v-model="diyBottomData.textHoverColor" />
                                         <el-input class="ml-[10px]" v-model="diyBottomData.textHoverColor" disabled />
-                                        <el-button class="ml-[10px]" type="primary"
-                                            @click="diyBottomData.textHoverColor = '#333333'">{{ t('reset') }}</el-button>
+                                        <el-button class="ml-[10px]" type="primary" @click="diyBottomData.textHoverColor = '#333333'">{{ t('reset') }}</el-button>
                                     </div>
                                 </el-form-item>
                                 <el-form-item :label="t('backgroundColor')">
                                     <div class="flex align-center">
                                         <el-color-picker v-model="diyBottomData.backgroundColor" />
                                         <el-input class="ml-[10px]" v-model="diyBottomData.backgroundColor" disabled />
-                                        <el-button class="ml-[10px]" type="primary"
-                                            @click="diyBottomData.backgroundColor = '#FFFFFF'">{{ t('reset') }}</el-button>
+                                        <el-button class="ml-[10px]" type="primary" @click="diyBottomData.backgroundColor = '#FFFFFF'">{{ t('reset') }}</el-button>
                                     </div>
                                 </el-form-item>
                             </el-tab-pane>

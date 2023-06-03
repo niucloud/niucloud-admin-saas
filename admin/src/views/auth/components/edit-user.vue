@@ -1,10 +1,8 @@
 <template>
     <el-dialog v-model="showDialog" :title="popTitle" width="500px" :destroy-on-close="true">
-        <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-form-item :label="t('accountNumber')" prop="username">
-                <el-input v-model="formData.username" :placeholder="t('accountNumberPlaceholder')" clearable
-                    :disabled="formData.uid" class="input-width" maxlength="10" show-word-limit />
+                <el-input v-model="formData.username" :placeholder="t('accountNumberPlaceholder')" clearable :disabled="formData.uid" class="input-width" maxlength="10" show-word-limit />
             </el-form-item>
 
             <el-form-item :label="t('headImg')">
@@ -12,25 +10,21 @@
             </el-form-item>
 
             <el-form-item :label="t('userRealName')" prop="real_name">
-                <el-input v-model="formData.real_name" :placeholder="t('userRealNamePlaceholder')" clearable
-                    class="input-width" maxlength="10" show-word-limit />
+                <el-input v-model="formData.real_name" :placeholder="t('userRealNamePlaceholder')" clearable class="input-width" maxlength="10" show-word-limit />
             </el-form-item>
 
             <el-form-item :label="t('userRoleName')" prop="role_ids" v-if="!formData.userrole.is_admin">
-                <el-select v-model="formData.role_ids" :placeholder="t('userRolePlaceholder')" class="input-width" multiple
-                    collapse-tags collapse-tags-tooltip>
+                <el-select v-model="formData.role_ids" :placeholder="t('userRolePlaceholder')" class="input-width" multiple collapse-tags collapse-tags-tooltip>
                     <el-option :label="item.role_name" :value="item.role_id" v-for="(item, index) in roles" :key="index" />
                 </el-select>
             </el-form-item>
 
             <el-form-item :label="t('password')" prop="password">
-                <el-input v-model="formData.password" :placeholder="t('passwordPlaceholder')" type="password"
-                    :show-password="true" clearable class="input-width" />
+                <el-input v-model="formData.password" :placeholder="t('passwordPlaceholder')" type="password" :show-password="true" clearable class="input-width" />
             </el-form-item>
 
             <el-form-item :label="t('confirmPassword')" prop="confirm_password">
-                <el-input v-model="formData.confirm_password" :placeholder="t('confirmPasswordPlaceholder')" type="password"
-                    :show-password="true" clearable class="input-width" />
+                <el-input v-model="formData.confirm_password" :placeholder="t('confirmPasswordPlaceholder')" type="password" :show-password="true" clearable class="input-width" />
             </el-form-item>
 
             <el-form-item :label="t('status')">
@@ -44,9 +38,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
-                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{
-                    t('confirm')
-                }}</el-button>
+                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{t('confirm')}}</el-button>
             </span>
         </template>
     </el-dialog>

@@ -7,8 +7,7 @@
                 </div>
                 <span :class="['ml-[10px]', {'text-[15px]': routes.meta.class == 1}, {'text-[14px]': routes.meta.class != 1}]">{{ meta.title }}</span>
             </template>
-            <menu-item v-for="(route, index) in routes.children" :routes="route" :route-path="resolvePath(route.path)"
-                :key="index" />
+            <menu-item v-for="(route, index) in routes.children" :routes="route" :route-path="resolvePath(route.path)" :key="index" />
         </el-sub-menu>
         <el-menu-item v-else-if="routes.meta.class == 1" :index="String(routes.name)" :route="routePath">
             <div v-if="meta.icon" class="w-[16px] h-[16px] relative flex justify-center">

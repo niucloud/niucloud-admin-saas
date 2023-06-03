@@ -4,14 +4,12 @@
             v-loading="loading">
 
             <el-form-item :label="t('mchId')" prop="config.mch_id">
-                <el-input v-model="formData.config.mch_id" :placeholder="t('mchIdPlaceholder')" class="input-width" maxlength="32"
-                    show-word-limit clearable />
+                <el-input v-model="formData.config.mch_id" :placeholder="t('mchIdPlaceholder')" class="input-width" maxlength="32" show-word-limit clearable />
                 <div class="form-tip">{{ t('mchIdTips') }}</div>
             </el-form-item>
 
             <el-form-item :label="t('mchSecretKey')" prop="config.mch_secret_key">
-                <el-input v-model="formData.config.mch_secret_key" :placeholder="t('mchSecretKeyPlaceholder')" class="input-width"
-                    maxlength="32" show-word-limit clearable />
+                <el-input v-model="formData.config.mch_secret_key" :placeholder="t('mchSecretKeyPlaceholder')" class="input-width" maxlength="32" show-word-limit clearable />
                 <div class="form-tip">{{ t('mchSecretKeyTips') }}</div>
             </el-form-item>
 
@@ -34,9 +32,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
-                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{
-                    t('confirm')
-                }}</el-button>
+                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{t('confirm')}}</el-button>
             </span>
         </template>
     </el-dialog>
@@ -96,8 +92,12 @@ const emit = defineEmits(['complete'])
  */
 const confirm = async (formEl: FormInstance | undefined) => {
     if (loading.value || !formEl) return
-    emit('complete',formData);
-    showDialog.value = false;
+    await formEl.validate(async (valid) => {
+        if(valid){
+            emit('complete',formData);
+            showDialog.value = false;
+        }
+    })
 }
 
 const setFormData = async (data: any = null) => {

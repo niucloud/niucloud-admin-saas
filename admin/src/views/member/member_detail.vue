@@ -9,10 +9,8 @@
 					<div class="flex items-center">
 						<span class="text-[14px] min-w-[110px] text-right mr-[20px]">{{ t('headimg') }}</span>
 						<span class="flex items-end text-[14px]">
-							<img class="w-[50px] h-[50px] inline-block" v-if="formData.headimg" :src="img(formData.headimg)"
-								alt="">
-							<img class="w-[50px] h-[50px] inline-block" v-else src="@/assets/images/default_headimg.png"
-								alt="">
+							<img class="w-[50px] h-[50px] inline-block" v-if="formData.headimg" :src="img(formData.headimg)" alt="">
+							<img class="w-[50px] h-[50px] inline-block" v-else src="@/assets/images/default_headimg.png" alt="">
 							<el-icon @click="editMemberInfo('headimg')" class="-bottom-[2px] -right-[4px] cursor-pointer">
 								<EditPen color="#273CE2" />
 							</el-icon>
@@ -36,14 +34,12 @@
 												{{ t('point') }}
 											</span>
 											<el-tooltip effect="dark" :content="t('adjust')" placement="top">
-												<el-icon @click="adjustPoint(formData)" class="ml-2 cursor-pointer"
-													:size="12">
+												<el-icon @click="adjustPoint(formData)" class="ml-2 cursor-pointer" :size="12">
 													<EditPen color="#273CE2" />
 												</el-icon>
 											</el-tooltip>
 											<el-tooltip effect="dark" :content="t('detail')" placement="top">
-												<el-icon @click="infoPoint(formData)" class="ml-2 cursor-pointer"
-													:size="12">
+												<el-icon @click="infoPoint(formData)" class="ml-2 cursor-pointer" :size="12">
 													<View />
 												</el-icon>
 											</el-tooltip>
@@ -69,14 +65,12 @@
 												{{ t('balance') }}
 											</span>
 											<el-tooltip effect="dark" :content="t('adjust')" placement="top">
-												<el-icon @click="adjustBalance(formData)" class="ml-2 cursor-pointer"
-													:size="12">
+												<el-icon @click="adjustBalance(formData)" class="ml-2 cursor-pointer" :size="12">
 													<EditPen color="#273CE2" />
 												</el-icon>
 											</el-tooltip>
 											<el-tooltip effect="dark" :content="t('detail')" placement="top">
-												<el-icon @click="infoBalance(formData)" class="ml-2 cursor-pointer"
-													:size="12">
+												<el-icon @click="infoBalance(formData)" class="ml-2 cursor-pointer" :size="12">
 													<View />
 												</el-icon>
 											</el-tooltip>
@@ -102,8 +96,7 @@
 												{{ t("money") }}
 											</span>
 											<el-tooltip effect="dark" :content="t('detail')" placement="top">
-												<el-icon @click="infoBalance(formData)" class="ml-2 cursor-pointer"
-													:size="12">
+												<el-icon @click="infoBalance(formData)" class="ml-2 cursor-pointer" :size="12">
 													<View />
 												</el-icon>
 											</el-tooltip>
@@ -129,8 +122,7 @@
 												{{ t("commission") }}
 											</span>
 											<el-tooltip effect="dark" :content="t('detail')" placement="top">
-												<el-icon @click="infoCommission(formData)" class="ml-2 cursor-pointer"
-													:size="12">
+												<el-icon @click="infoCommission(formData)" class="ml-2 cursor-pointer" :size="12">
 													<View />
 												</el-icon>
 											</el-tooltip>

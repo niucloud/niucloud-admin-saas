@@ -1,8 +1,7 @@
 <template>
     <div class="border border-color">
         <toolbar class="border-b border-color" :editor="editorRef" :defaultConfig="toolbarConfig" :mode="mode" />
-        <wang-editor :style="{ height, 'overflow-y': 'hidden', width: '100%' }" :defaultConfig="editorConfig" :mode="mode"
-            v-model="content" @onCreated="handleCreated" />
+        <wang-editor :style="{ height, 'overflow-y': 'hidden', width: '100%' }" :defaultConfig="editorConfig" :mode="mode" v-model="content" @onCreated="handleCreated" />
         <upload-attachment type="image" ref="imageRef" :limit="10" @confirm="imageSelect" />
         <upload-attachment type="video" ref="videoRef" @confirm="videoSelect" />
     </div>

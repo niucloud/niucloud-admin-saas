@@ -40,8 +40,7 @@
 
                     <el-table-column :label="t('response')" min-width="180">
                         <template #default="{ row }">
-                            <div v-for="(item, index) in row.wechat.content" :key="'a' + index" class="text-left">{{
-                                item.join(":") }}</div>
+                            <div v-for="(item, index) in row.wechat.content" :key="'a' + index" class="text-left">{{item.join(":") }}</div>
                         </template>
                     </el-table-column>
 
@@ -49,8 +48,7 @@
 
                     <el-table-column :label="t('operation')" fixed="right" width="200">
                         <template #default="{ row }">
-                            <el-button type="primary" link @click="infoSwitch(row)">{{ row.is_wechat == 1 ? t('close') :
-                                t('open') }}</el-button>
+                            <el-button type="primary" link @click="infoSwitch(row)">{{ row.is_wechat == 1 ? t('close') : t('open') }}</el-button>
                             <el-button type="danger" link @click="batchAcquisitionFn(row)">{{ t('regain') }}</el-button>
                         </template>
                     </el-table-column>

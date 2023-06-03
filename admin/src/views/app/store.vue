@@ -13,12 +13,10 @@
         </div>
         <div class="relative">
             <div class="absolute right-0 top-[2px] flex items-center cursor-pointer z-20 border	border-inherit">
-                <div class="flex item-center justify-center px-[6px] py-[4px]"
-                    :class="{ 'bg-slate-200': showType == 'small' }" @click="showType = 'small'">
+                <div class="flex item-center justify-center px-[6px] py-[4px]" :class="{ 'bg-slate-200': showType == 'small' }" @click="showType = 'small'">
                     <img src="@/assets/images/app_store/switch_icon_1.png" class=" w-[16px] h-[16px]">
                 </div>
-                <div class="flex item-center justify-center px-[6px] py-[4px]"
-                    :class="{ 'bg-slate-200': showType == 'large' }" @click="showType = 'large'">
+                <div class="flex item-center justify-center px-[6px] py-[4px]" :class="{ 'bg-slate-200': showType == 'large' }" @click="showType = 'large'">
                     <img src="@/assets/images/app_store/switch_icon_2.png" class="w-[16px] h-[16px] ">
                 </div>
             </div>
@@ -26,34 +24,25 @@
 
                 <el-tab-pane :label="installLabel" name="installed">
                     <div class="flex flex-wrap px-2 plug-list pb-10">
-                        <div v-for="(item, index) in localList.installed" :key="index + 'a'"
-                            class="flex items-center cursor-pointer  w-[295px] relative plug-item mr-4 mb-4"
-                            @click="getAddonDetialFn(item)" v-if="showType == 'small'">
+                        <div v-for="(item, index) in localList.installed" :key="index + 'a'" class="flex items-center cursor-pointer  w-[295px] relative plug-item mr-4 mb-4" @click="getAddonDetialFn(item)" v-if="showType == 'small'">
                             <div class="p-3">
                                 <img class="w-[44px] h-[44px] rounded-sm" v-if="item.icon" :src="img(item.icon)" alt="">
-                                <img class="w-[44px] h-[44px] rounded-sm" v-else src="@/assets/images/icon-addon.png"
-                                    alt="">
+                                <img class="w-[44px] h-[44px] rounded-sm" v-else src="@/assets/images/icon-addon.png" alt="">
                             </div>
                             <div class="flex items-center w-[220px] border-b py-3 justify-between">
                                 <div class="flex flex-col">
                                     <span class="text-[14px] truncate w-[160px]">{{ item.title }}</span>
                                     <span class="text-xs text-gray-400 truncate w-[160px] mt-[4px]">{{ item.desc }}</span>
                                 </div>
-                                <span
-                                    class="w-max flex items-center plug-item-operate border rounded-2xl px-3.5 py-1.5 leading-none "
-                                    @click.stop="uninstallAddonFn(item.key)">{{ t('unload') }}</span>
+                                <span class="w-max flex items-center plug-item-operate border rounded-2xl px-3.5 py-1.5 leading-none " @click.stop="uninstallAddonFn(item.key)">{{ t('unload') }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-wrap plug-list pb-10 plug-large" v-if="showType == 'large'">
-                            <div class="app-item cursor-pointer mr-4 mt-[20px] pb-2 bg-[#f7f7f7]"
-                                v-for="(item, index) in localList.installed" :key="index + 'a'"
-                                @click="getAddonDetialFn(item)">
+                            <div class="app-item cursor-pointer mr-4 mt-[20px] pb-2 bg-[#f7f7f7]" v-for="(item, index) in localList.installed" :key="index + 'a'" @click="getAddonDetialFn(item)">
                                 <div class="flex justify-center items-center">
                                     <img class="w-[240px] h-[120px]" v-if="item.cover" :src="img(item.cover)" />
-                                    <img v-else class="w-[240px] h-[120px]"
-                                        src="@/assets/images/app_store/app_store_default.png" />
-
+                                    <img v-else class="w-[240px] h-[120px]" src="@/assets/images/app_store/app_store_default.png" />
                                 </div>
                                 <div class="flex w-[240px] h-[46px]">
                                     <div class="text-left mt-2 w-[190px]">
@@ -61,25 +50,20 @@
                                         <p class="app-text text-[12px] text-[#999] pl-2">{{ item.desc }}</p>
                                     </div>
                                     <div class="flex items-center pr-2">
-                                        <span
-                                            class="w-max flex items-center plug-item-operate border rounded-2xl px-2 py-1 leading-none mt-[10px]"
-                                            @click.stop="uninstallAddonFn(item.key)">{{ t('unload') }}</span>
+                                        <span class="w-max flex items-center plug-item-operate border rounded-2xl px-2 py-1 leading-none mt-[10px]" @click.stop="uninstallAddonFn(item.key)">{{ t('unload') }}</span>
                                     </div>
 
                                 </div>
                             </div>
                         </div>
 
-                        <el-empty :description="t('noPlug')" v-if="!localList.installed.length && !loading"
-                            class="mx-auto" />
+                        <el-empty :description="t('noPlug')" v-if="!localList.installed.length && !loading" class="mx-auto" />
                     </div>
                 </el-tab-pane>
                 <el-tab-pane :label="uninstalledLabel" name="uninstalled">
                     <div class="flex flex-wrap px-2 plug-list pb-10">
 
-                        <div v-for="(item, index) in localList.uninstalled" :key="index + 'a'"
-                            class="flex items-center cursor-pointer  w-[295px] relative plug-item mr-4 mb-4"
-                            @click="getAddonDetialFn(item)" v-if="showType == 'small'">
+                        <div v-for="(item, index) in localList.uninstalled" :key="index + 'a'" class="flex items-center cursor-pointer  w-[295px] relative plug-item mr-4 mb-4" @click="getAddonDetialFn(item)" v-if="showType == 'small'">
                             <div class="p-3">
                                 <!-- <img class="w-[44px] h-[44px] rounded-sm" v-if="item.icon" :src="img(item.icon)" alt=""> -->
                                 <img class="w-[44px] h-[44px] rounded-sm" src="@/assets/images/icon-addon.png" alt="">
@@ -89,21 +73,16 @@
                                     <span class="text-[14px] truncate w-[160px]">{{ item.title }}</span>
                                     <span class="text-xs text-gray-400 truncate w-[160px] mt-[4px]">{{ item.desc }}</span>
                                 </div>
-                                <span
-                                    class="w-max flex items-center plug-item-operate border rounded-2xl px-3.5 py-1.5 leading-none "
-                                    @click.stop="installAddonFn(item.key)">{{ t('install') }}</span>
+                                <span class="w-max flex items-center plug-item-operate border rounded-2xl px-3.5 py-1.5 leading-none" @click.stop="installAddonFn(item.key)">{{ t('install') }}</span>
                             </div>
                         </div>
 
                         <div class="flex flex-wrap plug-list pb-10 plug-large" v-if="showType == 'large'">
-                            <div class="app-item cursor-pointer mr-4 mt-[20px] pb-2 bg-[#f7f7f7]"
-                                v-for="(item, index) in localList.uninstalled" :key="index + 'a'"
-                                @click="getAddonDetialFn(item)">
+                            <div class="app-item cursor-pointer mr-4 mt-[20px] pb-2 bg-[#f7f7f7]" v-for="(item, index) in localList.uninstalled" :key="index + 'a'" @click="getAddonDetialFn(item)">
                                 <div class="flex justify-center items-center">
                                     <!-- <img class="w-[240px] h-[120px]" v-if="item.cover" :src="img(item.cover)"/> -->
 
-                                    <img class="w-[240px] h-[120px]"
-                                        src="@/assets/images/app_store/app_store_default.png" />
+                                    <img class="w-[240px] h-[120px]" src="@/assets/images/app_store/app_store_default.png" />
 
                                 </div>
                                 <div class="flex w-[240px] h-[46px]">
@@ -112,17 +91,14 @@
                                         <p class="app-text text-[12px] text-[#999] pl-2">{{ item.desc }}</p>
                                     </div>
                                     <div class="flex items-center pr-2">
-                                        <span
-                                            class="w-max flex items-center plug-item-operate border rounded-2xl	px-2 py-1 leading-none mt-[10px]"
-                                            @click.stop="installAddonFn(item.key)">{{ t('install') }}</span>
+                                        <span class="w-max flex items-center plug-item-operate border rounded-2xl	px-2 py-1 leading-none mt-[10px]" @click.stop="installAddonFn(item.key)">{{ t('install') }}</span>
                                     </div>
 
                                 </div>
                             </div>
                         </div>
 
-                        <el-empty :description="t('noPlug')" v-if="!localList.uninstalled.length && !loading"
-                            class="mx-auto" />
+                        <el-empty :description="t('noPlug')" v-if="!localList.uninstalled.length && !loading" class="mx-auto" />
                     </div>
                 </el-tab-pane>
             </el-tabs>
@@ -152,8 +128,7 @@
         </el-dialog>
 
         <!-- 安装弹窗 -->
-        <el-dialog v-model="installShowDialog" :title="t('addonInstall')" width="60vw" :close-on-click-modal="false"
-            :close-on-press-escape="false" :before-close="installShowDialogClose">
+        <el-dialog v-model="installShowDialog" :title="t('addonInstall')" width="60vw" :close-on-click-modal="false" :close-on-press-escape="false" :before-close="installShowDialogClose">
             <el-steps :space="200" :active="installStep" finish-status="success" align-center>
                 <el-step :title="t('envCheck')" class="flex-1" />
                 <el-step :title="t('installProgress')" class="flex-1" />
@@ -163,8 +138,7 @@
                 <el-scrollbar max-height="50vh">
                     <div class="min-h-[150px]">
                         <div class="bg-[#fff] my-3" v-if="installCheckResult.dir">
-                            <el-alert :title="t('jobError')" type="error" :closable="false" class="mt-[20px]"
-                                v-if="!installCheckResult.job_normal" />
+                            <el-alert :title="t('jobError')" type="error" :closable="false" class="mt-[20px]" v-if="!installCheckResult.job_normal" />
                             <p class="pt-[20px] pl-[20px] ">{{ t('dirPermission') }}</p>
                             <div class="px-[20px] text-[14px]">
                                 <el-row class="py-[10px] items table-head-bg pl-[15px] mb-[10px]">
@@ -187,9 +161,11 @@
                                     </el-col>
                                     <el-col :span="6">
                                         <span v-if="item.status"><el-icon color="green"><Select /></el-icon></span>
-                                        <span v-else><el-icon color="red">
+                                        <span v-else>
+                                            <el-icon color="red">
                                                 <CloseBold />
-                                            </el-icon></span>
+                                            </el-icon>
+                                        </span>
                                     </el-col>
                                 </el-row>
                                 <el-row class="pb-[10px] items pl-[15px]" v-for="item in installCheckResult.dir.is_write">
@@ -201,9 +177,11 @@
                                     </el-col>
                                     <el-col :span="6">
                                         <span v-if="item.status"><el-icon color="green"><Select /></el-icon></span>
-                                        <span v-else><el-icon color="red">
+                                        <span v-else>
+                                            <el-icon color="red">
                                                 <CloseBold />
-                                            </el-icon></span>
+                                            </el-icon>
+                                        </span>
                                     </el-col>
                                 </el-row>
                             </div>
@@ -231,15 +209,16 @@
                                     </el-col>
                                     <el-col :span="6">
                                         <span v-if="item.status"><el-icon color="green"><Select /></el-icon></span>
-                                        <span v-else><el-icon color="red">
+                                        <span v-else>
+                                            <el-icon color="red">
                                                 <CloseBold />
-                                            </el-icon></span>
+                                            </el-icon>
+                                        </span>
                                     </el-col>
                                 </el-row>
                             </div>
                         </div>
-                        <div class="bg-[#fff] my-3"
-                            v-if="installCheckResult.conflict_files && installCheckResult.conflict_files.length">
+                        <div class="bg-[#fff] my-3" v-if="installCheckResult.conflict_files && installCheckResult.conflict_files.length">
                             <p class="pl-[20px] ">{{ t('conflictFiles') }}</p>
                             <div class="px-[20px] text-[14px] pt-[10px] pl-[15px]">
                                 <el-row class="pb-[10px] items" v-for="item in installCheckResult.conflict_files">
@@ -271,11 +250,14 @@
                                         <span>{{ t('open') }}</span>
                                     </el-col>
                                     <el-col :span="6">
-                                        <span v-if="installCheckResult.job_normal"><el-icon
-                                                color="green"><Select /></el-icon></span>
-                                        <span v-else><el-icon color="red">
+                                        <span v-if="installCheckResult.job_normal">
+                                            <el-icon color="green"><Select /></el-icon>
+                                        </span>
+                                        <span v-else>
+                                            <el-icon color="red">
                                                 <CloseBold />
-                                            </el-icon></span>
+                                            </el-icon>
+                                        </span>
                                     </el-col>
                                 </el-row>
                             </div>
@@ -283,13 +265,11 @@
                     </div>
                 </el-scrollbar>
                 <div class="flex justify-end">
-                    <el-button type="primary" :disabled="!installCheckResult.is_pass" @click="handleInstall">{{ t('install')
-                    }}</el-button>
+                    <el-button type="primary" :disabled="!installCheckResult.is_pass" @click="handleInstall">{{ t('install') }}</el-button>
                 </div>
             </div>
             <div v-show="installStep == 1" class="h-[50vh] mt-[20px]">
-                <terminal name="my-terminal" :context="currAddon" :init-log="null" :show-header="false"
-                    :show-log-time="true" />
+                <terminal name="my-terminal" :context="currAddon" :init-log="null" :show-header="false" :show-log-time="true" />
             </div>
             <div v-show="installStep > 1" class="h-[50vh] mt-[20px] flex items-center justify-center">
                 <el-result icon="success" :title="t('addonInstallSuccess')"></el-result>

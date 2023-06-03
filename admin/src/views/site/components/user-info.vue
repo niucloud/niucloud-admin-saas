@@ -38,9 +38,7 @@
             <el-form-item :label="t('status')" >
                 <div class="input-width">
                     <el-tag class="ml-2" type="success" v-if="formData.status == 1">{{ t('statusNormal') }}</el-tag>
-                    <el-tag class="ml-2" type="error" v-if="formData.status == 0">{{
-                        t('statusDeactivate')
-                    }}</el-tag>
+                    <el-tag class="ml-2" type="error" v-if="formData.status == 0">{{t('statusDeactivate') }}</el-tag>
                 </div>
             </el-form-item>
  
@@ -52,7 +50,6 @@
                 <div class="input-width"> {{ formData.last_time }} </div>
             </el-form-item>
 
-            
             <el-form-item :label="t('createTime')"  v-if="parseFloat(formData.create_time)">
                 <div class="input-width"> {{ formData.create_time }} </div>
             </el-form-item>

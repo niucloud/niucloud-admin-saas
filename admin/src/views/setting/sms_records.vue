@@ -15,8 +15,7 @@
                             :placeholder="t('groupIdPlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')" value="" />
                             <el-option-group v-for="(group, gindex) in templateList" :key="gindex" :label="group.label">
-                                <el-option :label="item.name" :value="item.value" v-for="(item, index) in group.list"
-                                    :key="index" />
+                                <el-option :label="item.name" :value="item.value" v-for="(item, index) in group.list" :key="index" />
                             </el-option-group>
                         </el-select>
                     </el-form-item>

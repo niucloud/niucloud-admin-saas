@@ -4,27 +4,22 @@
             v-loading="loading">
 
             <el-form-item :label="t('memberNo')" prop="member_no">
-                <el-input v-model="formData.member_no" clearable maxlength="20" :placeholder="t('memberNoPlaceholder')"
-                    class="input-width" />
+                <el-input v-model="formData.member_no" clearable maxlength="20" :placeholder="t('memberNoPlaceholder')" class="input-width" />
             </el-form-item>
 
             <el-form-item :label="t('mobile')" prop="mobile">
-                <el-input v-model="formData.mobile" clearable :placeholder="t('mobilePlaceholder')" type="number"
-                    class="input-width" />
+                <el-input v-model="formData.mobile" clearable :placeholder="t('mobilePlaceholder')" type="number" class="input-width" />
             </el-form-item>
 
             <el-form-item :label="t('nickname')">
-                <el-input v-model="formData.nickname" clearable :placeholder="t('nickNamePlaceholder')"
-                    class="input-width" />
+                <el-input v-model="formData.nickname" clearable :placeholder="t('nickNamePlaceholder')" class="input-width" />
             </el-form-item>
             
             <el-form-item :label="t('password')" prop="password">
-                <el-input v-model="formData.password" type="password" :placeholder="t('passwordPlaceholder')" clearable
-                    class="input-width" />
+                <el-input v-model="formData.password" type="password" :placeholder="t('passwordPlaceholder')" clearable class="input-width" />
             </el-form-item>
             <el-form-item :label="t('passwordCopy')" prop="password_copy">
-                <el-input v-model="formData.password_copy" type="password" :placeholder="t('passwordPlaceholder')" clearable
-                    class="input-width" />
+                <el-input v-model="formData.password_copy" type="password" :placeholder="t('passwordPlaceholder')" clearable class="input-width" />
             </el-form-item>
 
         </el-form>
@@ -32,9 +27,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
-                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{
-                    t('confirm')
-                }}</el-button>
+                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{t('confirm')}}</el-button>
             </span>
         </template>
     </el-dialog>

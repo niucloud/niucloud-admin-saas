@@ -16,8 +16,7 @@
 				</el-input>
 			</slot>
 		</div>
-		<el-dialog v-model="showDialog" :title="t('selectLinkTips')" width="40%" :close-on-press-escape="false"
-		           :destroy-on-close="true" :close-on-click-modal="false">
+		<el-dialog v-model="showDialog" :title="t('selectLinkTips')" width="40%" :close-on-press-escape="false" :destroy-on-close="true" :close-on-click-modal="false">
 
 			<div class="flex items-start">
 				<el-scrollbar class="w-[140px] border-r h-[350px]">
@@ -32,14 +31,12 @@
 					<template v-if="parentLinkName == 'DIY_LINK'">
 						<div class="mb-[16px]">
 							<el-form-item :label="t('diyLinkName')">
-								<el-input v-model="selectLink.title" :placeholder="t('diyLinkNamePlaceholder')"
-								          class="w-6/12"/>
+								<el-input v-model="selectLink.title" :placeholder="t('diyLinkNamePlaceholder')" class="w-6/12"/>
 							</el-form-item>
 						</div>
 						<div class="mb-[16px]">
 							<el-form-item :label="t('diyLinkUrl')">
-								<el-input v-model="selectLink.url" :placeholder="t('diyLinkUrlPlaceholder')"
-								          class="w-6/12"/>
+								<el-input v-model="selectLink.url" :placeholder="t('diyLinkUrlPlaceholder')" class="w-6/12"/>
 							</el-form-item>
 						</div>
 						<el-form-item label=" ">

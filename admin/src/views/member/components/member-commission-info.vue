@@ -18,7 +18,6 @@
                 <div class="input-width"> {{ formData.member.nickname }} </div>
             </el-form-item>
 
-
             <el-form-item :label="t('mobile')" >
                 <div class="input-width"> {{ formData.member.mobile }} </div>
             </el-form-item>

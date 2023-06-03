@@ -13,14 +13,12 @@
                 <h3 class="panel-title">{{t('wechatpay')}}</h3>
                     
                 <el-form-item :label="t('mchId')" prop="wechatpay_config.mch_id">
-                    <el-input v-model="formData.wechatpay_config.mch_id" :placeholder="t('mchIdPlaceholder')" class="input-width" maxlength="32"
-                        show-word-limit clearable />
+                    <el-input v-model="formData.wechatpay_config.mch_id" :placeholder="t('mchIdPlaceholder')" class="input-width" maxlength="32" show-word-limit clearable />
                     <div class="form-tip">{{ t('mchIdTips') }}</div>
                 </el-form-item>
 
                 <el-form-item :label="t('mchSecretKey')" prop="wechatpay_config.mch_secret_key">
-                    <el-input v-model="formData.wechatpay_config.mch_secret_key" :placeholder="t('mchSecretKeyPlaceholder')" class="input-width"
-                        maxlength="32" show-word-limit clearable />
+                    <el-input v-model="formData.wechatpay_config.mch_secret_key" :placeholder="t('mchSecretKeyPlaceholder')" class="input-width" maxlength="32" show-word-limit clearable />
                     <div class="form-tip">{{ t('mchSecretKeyTips') }}</div>
                 </el-form-item>
 
@@ -44,13 +42,11 @@
                 <h3 class="panel-title">{{t('alipay')}}</h3>
 
                 <el-form-item :label="t('appId')" prop="alipay_config.app_id">
-                    <el-input v-model="formData.alipay_config.app_id" :placeholder="t('appIdPlaceholder')" class="input-width" maxlength="32"
-                        show-word-limit clearable />
+                    <el-input v-model="formData.alipay_config.app_id" :placeholder="t('appIdPlaceholder')" class="input-width" maxlength="32" show-word-limit clearable />
                     <div class="form-tip">{{ t('appIdTips') }}</div>
                 </el-form-item>
                 <el-form-item :label="t('appSecretCert')" prop="alipay_config.app_secret_cert">
-                    <el-input v-model="formData.alipay_config.app_secret_cert" :placeholder="t('appSecretCertPlaceholder')"
-                        class="input-width" type="textarea" rows="4" clearable />
+                    <el-input v-model="formData.alipay_config.app_secret_cert" :placeholder="t('appSecretCertPlaceholder')" class="input-width" type="textarea" rows="4" clearable />
                 </el-form-item>
 
                 <el-form-item :label="t('appPublicCertPath')" prop="alipay_config.app_public_cert_path">
@@ -72,7 +68,6 @@
                 </el-form-item>
             </el-card>
 
-            
         </el-form>
 
         <div class="fixed-footer-wrap">

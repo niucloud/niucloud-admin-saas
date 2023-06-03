@@ -1,16 +1,13 @@
 <template>
     <div class="main-container">
-        <el-form :model="formData" label-width="200px" ref="formRef" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="200px" ref="formRef" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none mt-[16px]" shadow="never">
                 <div class="flex">
                     <h3 class="panel-title">{{ t('H5Info') }}</h3>
                 </div>
  
                 <el-form-item :label="t('isOpen')">
-                    <el-switch
-                        v-model="formData.is_open"
-                    />
+                    <el-switch v-model="formData.is_open"/>
                 </el-form-item>
                 <el-form-item :label="t('h5DomainName')">
                     <el-input :model-value="formData.request_url" class="input-width" :readonly="true">

@@ -6,8 +6,7 @@
                 <h3 class="panel-title">{{ t('websiteInfo') }}</h3>
 
                 <el-form-item :label="t('siteName')" prop="site_name">
-                    <el-input v-model="formData.site_name" :placeholder="t('siteNamePlaceholder')" class="input-width"
-                        clearable maxlength="20" />
+                    <el-input v-model="formData.site_name" :placeholder="t('siteNamePlaceholder')" class="input-width" clearable maxlength="20" />
                 </el-form-item>
 
                 <el-form-item :label="t('logo')">
@@ -19,20 +18,17 @@
                 </el-form-item>
 
                 <el-form-item :label="t('keywords')">
-                    <el-input v-model="formData.keywords" :placeholder="t('keywordsPlaceholder')" class="input-width"
-                        clearable maxlength="20" />
+                    <el-input v-model="formData.keywords" :placeholder="t('keywordsPlaceholder')" class="input-width" clearable maxlength="20" />
                 </el-form-item>
 
                 <el-form-item :label="t('desc')">
-                    <el-input v-model="formData.desc" type="textarea" rows="4" clearable :placeholder="t('descPlaceholder')"
-                        class="input-width" maxlength="100" />
+                    <el-input v-model="formData.desc" type="textarea" rows="4" clearable :placeholder="t('descPlaceholder')" class="input-width" maxlength="100" />
                 </el-form-item>
             </el-card>
             <el-card class="box-card !border-none" shadow="never">
                 <h3 class="panel-title">{{ t('frontEndInfo') }}</h3>
 				<el-form-item :label="t('frontEndName')">
-				    <el-input v-model="formData.front_end_name" :placeholder="t('frontEndNamePlaceholder')"
-				        class="input-width" clearable maxlength="20" />
+				    <el-input v-model="formData.front_end_name" :placeholder="t('frontEndNamePlaceholder')" class="input-width" clearable maxlength="20" />
 				</el-form-item>
 
                 <el-form-item :label="t('frontEndLogo')">
@@ -42,8 +38,7 @@
 			<el-card class="box-card !border-none" shadow="never" v-if="app_type == 'admin' ">
 			    <h3 class="panel-title">{{ t('serviceInformation') }}</h3>
 				<el-form-item :label="t('contactsTel')">
-				    <el-input v-model="formData.tel" :placeholder="t('contactsTelPlaceholder')"
-				        class="input-width" clearable maxlength="20" />
+				    <el-input v-model="formData.tel" :placeholder="t('contactsTelPlaceholder')" class="input-width" clearable maxlength="20" />
 				</el-form-item>
 			    <el-form-item :label="t('wechatCode')">
 			        <upload-image v-model="formData.wechat_code" />

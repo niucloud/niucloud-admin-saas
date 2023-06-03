@@ -1,13 +1,11 @@
 <template>
     <div class="main-container">
-        <el-form :model="formData" label-width="200px" ref="formRef" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="200px" ref="formRef" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
                 <h3 class="panel-title">{{ t('aliappSet') }}</h3>
 
                 <el-form-item :label="t('aliappName')">
-                    <el-input v-model="formData.name" :placeholder="t('aliappNamePlaceholder')" class="input-width"
-                        clearable />
+                    <el-input v-model="formData.name" :placeholder="t('aliappNamePlaceholder')" class="input-width" clearable />
                 </el-form-item>
 
                 <el-form-item :label="t('aliappQrcode')">
@@ -21,13 +19,11 @@
                 <h3 class="panel-title">{{ t('aliappDevelopInfo') }}</h3>
 
                 <el-form-item :label="t('aliappOriginal')">
-                    <el-input v-model="formData.private_key" :placeholder="t('aliappOriginalPlaceholder')"
-                        class="input-width" clearable />
+                    <el-input v-model="formData.private_key" :placeholder="t('aliappOriginalPlaceholder')" class="input-width" clearable />
                 </el-form-item>
 
                 <el-form-item :label="t('aliappAppid')">
-                    <el-input v-model="formData.app_id" :placeholder="t('appidPlaceholder')" class="input-width"
-                        clearable />
+                    <el-input v-model="formData.app_id" :placeholder="t('appidPlaceholder')" class="input-width" clearable />
                 </el-form-item>
 
                 <el-form-item :label="t('countersignType')">
@@ -70,8 +66,7 @@
                 </div>
 
                 <el-form-item :label="t('serveWhiteList')">
-                    <el-input :model-value="formData.request_url" class="input-width"
-                        :readonly="true">
+                    <el-input :model-value="formData.request_url" class="input-width" :readonly="true">
                         <template #append>
                             <div class="cursor-pointer" @click="copyEvent(formData.request_url)">{{ t('copy') }}
                             </div>

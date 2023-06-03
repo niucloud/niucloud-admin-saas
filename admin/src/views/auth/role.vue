@@ -3,16 +3,13 @@
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center">
                 <span class="text-[24px]">{{pageName}}</span>
-                <el-button type="primary" class="w-[100px]" @click="addEvent">
-                    {{ t('addRole') }}
-                </el-button>
+                <el-button type="primary" class="w-[100px]" @click="addEvent">{{ t('addRole') }}</el-button>
             </div>
 
             <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="roleTableData.searchParam" ref="searchFormRef">
                     <el-form-item :label="t('roleName')" prop="seach">
-                        <el-input v-model="roleTableData.searchParam.seach" class="w-[240px]"
-                            :placeholder="t('roleNamePlaceholder')" />
+                        <el-input v-model="roleTableData.searchParam.seach" class="w-[240px]" :placeholder="t('roleNamePlaceholder')" />
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="loadRoleList()">{{ t('search') }}</el-button>
@@ -43,9 +40,7 @@
                 </el-table>
 
                 <div class="mt-[16px] flex justify-end">
-                    <el-pagination v-model:current-page="roleTableData.page" v-model:page-size="roleTableData.limit"
-                        layout="total, sizes, prev, pager, next, jumper" :total="roleTableData.total"
-                        @size-change="loadRoleList()" @current-change="loadRoleList" />
+                    <el-pagination v-model:current-page="roleTableData.page" v-model:page-size="roleTableData.limit" layout="total, sizes, prev, pager, next, jumper" :total="roleTableData.total" @size-change="loadRoleList()" @current-change="loadRoleList" />
                 </div>
             </div>
 

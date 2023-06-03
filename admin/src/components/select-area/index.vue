@@ -1,49 +1,16 @@
 <template>
     <div class="area-component">
         <!-- 省 -->
-        <el-select
-            :placeholder="t('provincePlaceholder')"
-            v-model="state.province"
-            clearable
-            @change="changeArea('province')"
-        >
-            <el-option
-            v-for="item in state.provinceList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-            />
+        <el-select :placeholder="t('provincePlaceholder')" v-model="state.province" clearable @change="changeArea('province')">
+            <el-option v-for="item in state.provinceList" :key="item.id" :label="item.name" :value="item.id"/>
         </el-select>
         <!-- 市 -->
-        <el-select
-            :placeholder="t('cityPlaceholder')"
-            style="margin: 0 10px;"
-            :disabled="!state.province"
-            v-model="state.city"
-            clearable
-            @change="changeArea('city')"
-        >
-            <el-option
-            v-for="item in state.citiesList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-            />
+        <el-select :placeholder="t('cityPlaceholder')" style="margin: 0 10px;" :disabled="!state.province" v-model="state.city" clearable @change="changeArea('city')">
+            <el-option v-for="item in state.citiesList" :key="item.id" :label="item.name" :value="item.id"/>
         </el-select>
         <!-- 区 -->
-        <el-select
-            :placeholder="t('districtPlaceholder')"
-            :disabled="!state.province || !state.city"
-            v-model="state.area"
-            clearable
-            @change="changeArea('area')"
-        >
-            <el-option
-            v-for="item in state.areasList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-            />
+        <el-select :placeholder="t('districtPlaceholder')" :disabled="!state.province || !state.city" v-model="state.area" clearable @change="changeArea('area')">
+            <el-option v-for="item in state.areasList" :key="item.id" :label="item.name" :value="item.id"/>
         </el-select>
     </div>
 </template>
@@ -88,7 +55,6 @@ const state = reactive({
     area: ""
 })
 
-
 onBeforeMount(async ()=>{
   state.provinceList = (await getAreaListByPid(0)).data
 })
@@ -119,7 +85,6 @@ watch(()=>state.city, (val)=>{
     emitsArea();
   }
 })
-
 
 const emitsArea = () => {
     const paramsData = {

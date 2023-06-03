@@ -1,14 +1,12 @@
 <template>
     <div class="flex flex-wrap">
         <template v-if="limit == 1">
-            <div class="rounded cursor-pointer overflow-hidden relative border border-dashed border-color image-wrap mr-[10px]"
-                :style="style">
+            <div class="rounded cursor-pointer overflow-hidden relative border border-dashed border-color image-wrap mr-[10px]" :style="style">
                 <div class="w-full h-full relative" v-if="images.data.length">
                     <div class="w-full h-full flex items-center justify-center">
                         <el-image :src="img(images.data[0])" fit="contain"></el-image>
                     </div>
-                    <div
-                        class="absolute z-[1] flex items-center justify-center w-full h-full inset-0 bg-black bg-opacity-60 operation">
+                    <div class="absolute z-[1] flex items-center justify-center w-full h-full inset-0 bg-black bg-opacity-60 operation">
                         <icon name="element-ZoomIn" color="#fff" size="18px" class="mr-[10px]" @click="previewImage()" />
                         <icon name="element-Delete" color="#fff" size="18px" @click="removeImage" />
                     </div>
@@ -22,22 +20,18 @@
             </div>
         </template>
         <template v-else>
-            <div class="rounded cursor-pointer overflow-hidden relative border border-dashed border-color image-wrap mr-[10px]"
-                :style="style" v-for="(item, index) in images.data" :key="index">
+            <div class="rounded cursor-pointer overflow-hidden relative border border-dashed border-color image-wrap mr-[10px]" :style="style" v-for="(item, index) in images.data" :key="index">
                 <div class="w-full h-full relative">
                     <div class="w-full h-full flex items-center justify-center">
                         <el-image :src="img(item)" fit="contain"></el-image>
                     </div>
-                    <div
-                        class="absolute z-[1] flex items-center justify-center w-full h-full inset-0 bg-black bg-opacity-60 operation">
-                        <icon name="element-ZoomIn" color="#fff" size="18px" class="mr-[10px]"
-                            @click="previewImage(index)" />
+                    <div class="absolute z-[1] flex items-center justify-center w-full h-full inset-0 bg-black bg-opacity-60 operation">
+                        <icon name="element-ZoomIn" color="#fff" size="18px" class="mr-[10px]" @click="previewImage(index)" />
                         <icon name="element-Delete" color="#fff" size="18px" @click="removeImage(index)" />
                     </div>
                 </div>
             </div>
-            <div class="rounded cursor-pointer overflow-hidden relative border border-dashed border-color" :style="style"
-                v-if="images.data.length < limit">
+            <div class="rounded cursor-pointer overflow-hidden relative border border-dashed border-color" :style="style" v-if="images.data.length < limit">
                 <upload-attachment :limit="limit" @confirm="confirmSelect">
                     <div class="w-full h-full flex items-center justify-center flex-col">
                         <icon name="element-Plus" size="20px" color="var(--el-text-color-secondary)" />
@@ -48,8 +42,7 @@
         </template>
     </div>
 
-    <el-image-viewer :url-list="previewImageList" v-if="imageViewer.show" @close="imageViewer.show = false"
-        :initial-index="imageViewer.index" :zoom-rate="1" />
+    <el-image-viewer :url-list="previewImageList" v-if="imageViewer.show" @close="imageViewer.show = false" :initial-index="imageViewer.index" :zoom-rate="1" />
 </template>
 
 <script lang="ts" setup>

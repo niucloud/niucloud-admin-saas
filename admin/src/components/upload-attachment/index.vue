@@ -2,8 +2,7 @@
     <span @click="openDialog" class="cursor-pointer">
         <slot></slot>
     </span>
-    <el-dialog v-model="showDialog" :title="t('upload.select' + type)" width="60%" class="attachment-dialog"
-        :destroy-on-close="true">
+    <el-dialog v-model="showDialog" :title="t('upload.select' + type)" width="60%" class="attachment-dialog" :destroy-on-close="true">
 
         <attachment :limit="limit" :type="type" ref="attachmentRef" />
 

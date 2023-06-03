@@ -3,9 +3,7 @@
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center">
                 <span class="text-[24px]">{{pageName}}</span>
-                <el-button type="primary" class="w-[100px]" @click="addEvent">
-                    {{ t('addCode') }}
-                </el-button>
+                <el-button type="primary" class="w-[100px]" @click="addEvent">{{ t('addCode') }}</el-button>
             </div>
 
             <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">

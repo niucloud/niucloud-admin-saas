@@ -1,7 +1,6 @@
 <template>
     <el-popover placement="top" trigger="click" :width="prop.width" v-model:visible="visible">
-        <el-input v-model="value" :placeholder="prop.placeholder" clearable class="mr-[10px]" :maxlength="prop.maxlength"
-            :show-word-limit="true" />
+        <el-input v-model="value" :placeholder="prop.placeholder" clearable class="mr-[10px]" :maxlength="prop.maxlength" :show-word-limit="true" />
         <div class="text-right mt-[15px]">
             <el-button @click="visible = false">{{ t('cancel') }}</el-button>
             <el-button type="primary" @click="confirm">{{ t('confirm') }}</el-button>
