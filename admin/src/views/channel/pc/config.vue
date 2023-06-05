@@ -1,7 +1,7 @@
 <template>
     <div class="main-container" v-loading="loading">
         <el-form :model="formData" label-width="120px" ref="formRef" class="page-form">
-            
+
             <el-card class="box-card !border-none" shadow="never">
                 <h3 class="panel-title">{{ t('pcInfo') }}</h3>
 
@@ -24,65 +24,65 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
-import { t } from '@/lang'
-import { getUrl } from '@/api/sys'
-import { useClipboard } from '@vueuse/core'
-import { ElMessage, FormInstance, FormRules } from 'element-plus'
-import { useRouter } from 'vue-router'
+    import { reactive, ref, watch } from 'vue'
+    import { t } from '@/lang'
+    import { getUrl } from '@/api/sys'
+    import { useClipboard } from '@vueuse/core'
+    import { ElMessage, FormInstance, FormRules } from 'element-plus'
+    import { useRouter } from 'vue-router'
 
-const loading = ref(true)
+    const loading = ref(true)
 
-const formData = reactive<Record<string, string | boolean>>({
-    is_open: false,
-    request_url: ''
-})
+    const formData = reactive<Record<string, string | boolean>>({
+        is_open: false,
+        request_url: ''
+    })
 
-const formRef = ref<FormInstance>()
-const router = useRouter()
-
-
-/**
- * 获取pc域名
- */
- getUrl().then(res => {
-    formData.request_url = res.data.web_url;
-    loading.value = false;
-})
+    const formRef = ref<FormInstance>()
+    const router = useRouter()
 
 
-/**
- * 复制
- */
-const { copy, isSupported, copied } = useClipboard()
-const copyEvent = (text: string) => {
-    if (!isSupported.value) {
-        ElMessage({
-            message: t('notSupportCopy'),
-            type: 'warning'
-        })
-        return
+    /**
+     * 获取pc域名
+     */
+    getUrl().then(res => {
+        formData.request_url = res.data.web_url + '/';
+        loading.value = false;
+    })
+
+
+    /**
+     * 复制
+     */
+    const { copy, isSupported, copied } = useClipboard()
+    const copyEvent = (text: string) => {
+        if (!isSupported.value) {
+            ElMessage({
+                message: t('notSupportCopy'),
+                type: 'warning'
+            })
+            return
+        }
+        copy(text)
     }
-    copy(text)
-}
 
-watch(copied, () => {
-    if (copied.value) {
-        ElMessage({
-            message: t('copySuccess'),
-            type: 'success'
-        })
+    watch(copied, () => {
+        if (copied.value) {
+            ElMessage({
+                message: t('copySuccess'),
+                type: 'success'
+            })
+        }
+    })
+
+    // 点击访问
+    const visitFn = ()=>{
+        window.open(formData.request_url);
     }
-})
-
-// 点击访问
-const visitFn = ()=>{
-     window.open(formData.request_url);
-}
 </script>
 
 <style lang="scss" scoped>
-.visit-btn{
-    color:var(--el-color-primary);
-}
+    .visit-btn{
+        color:var(--el-color-primary);
+    }
 </style>
