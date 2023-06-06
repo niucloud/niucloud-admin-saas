@@ -648,7 +648,7 @@ CREATE TABLE site (
   phone varchar(255) NOT NULL DEFAULT '' COMMENT '客服电话',
   business_hours varchar(255) NOT NULL DEFAULT '' COMMENT '营业时间',
   create_time int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
-  expire_time int(11) NOT NULL DEFAULT 0 COMMENT '到期时间（如果是0 无限期）',
+  expire_time BIGINT NOT NULL DEFAULT 0 COMMENT '到期时间（如果是0 无限期）',
   front_end_name varchar(50) NOT NULL DEFAULT '' COMMENT '前台名称',
   front_end_logo varchar(255) NOT NULL DEFAULT '' COMMENT '前台logo',
   icon varchar(255) NOT NULL DEFAULT '' COMMENT '网站图标',
