@@ -1140,7 +1140,7 @@ CREATE TABLE member (
   balance_get decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '累计获取余额',
   money decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '可用余额（可提现）',
   money_get decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '累计获取余额（可提现）',
-  money_cash_outing decimal(10, 2) NOT NULL COMMENT '提现中余额（可提现）',
+  money_cash_outing decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '提现中余额（可提现）',
   growth int(11) NOT NULL DEFAULT 0 COMMENT '成长值',
   growth_get int(11) NOT NULL DEFAULT 0 COMMENT '累计获得成长值',
   commission decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '当前佣金',
