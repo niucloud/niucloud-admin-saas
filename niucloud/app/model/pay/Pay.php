@@ -11,7 +11,6 @@
 
 namespace app\model\pay;
 
-use app\dict\order\OrderTypeDict;
 use app\dict\pay\PayDict;
 use core\base\BaseModel;
 
@@ -55,16 +54,6 @@ class Pay extends BaseModel
     public function getStatusNameAttr($value, $data)
     {
         return PayDict::getStatus()[$data['status'] ?? ''] ?? '';
-    }
-
-    /**
-     * 支持的支付方式
-     * @param $value
-     * @param $data
-     * @return void
-     */
-    public function getPayTypeListAttr($value, $data){
-        return  OrderTypeDict::getAllowPayType($data['trade_type']);
     }
     /**
      * 支付方式字段转化

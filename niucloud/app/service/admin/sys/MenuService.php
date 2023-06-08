@@ -117,7 +117,7 @@ class MenuService extends BaseAdminService
     {
         sort($menu_keys);
         $cache_name = 'menu' . md5(implode("_", $menu_keys)) . $is_tree;
-        return cache_remember(
+        $menu_list = cache_remember(
             $cache_name,
             function () use ($menu_keys, $app_type, $is_tree) {
                 $where = [
@@ -128,23 +128,24 @@ class MenuService extends BaseAdminService
                     $where[] = ['app_type', '=', $app_type];
                 }
                 $menu_list = $this->model->where($where)->order('sort', 'desc')->select()->toArray();
-                return $is_tree ? $this->menuToTree($menu_list, 'menu_key', 'parent_key', 'children', 'auth', '', 1) : $menu_list;
+                return $menu_list;
 
             },
             self::$cache_tag_name
         );
-//        return Cache::tag(self::$cache_tag_name)->remember($cache_name, function () use ($menu_keys, $app_type, $is_tree) {
-//            $where = [
-//                ['menu_key', 'in', $menu_keys],
-////                ['menu_type', 'in', [0,1]]
-//            ];
-//            if(!empty($app_type)){
-//                $where[] = ['app_type', '=', $app_type];
-//            }
-//            $menu_list = $this->model->where($where)->order('sort', 'desc')->select()->toArray();
-//            return $is_tree ? $this->menuToTree($menu_list, 'menu_key', 'parent_key', 'children', 'auth', '', 1) : $menu_list;
-//
-//        });
+        foreach ($menu_list as $k => $v)
+        {
+            $lang_menu_key = "dict_menu_". $v['app_type']. '.'. $v['menu_key'];
+            $lang_menu_name = get_lang("dict_menu_". $v['app_type']. '.'. $v['menu_key']);
+            //语言已定义
+            if($lang_menu_key != $lang_menu_name)
+            {
+                $menu_list[$k]['menu_name'] = $lang_menu_name;
+            }
+        }
+
+        return $is_tree ? $this->menuToTree($menu_list, 'menu_key', 'parent_key', 'children', 'auth', '', 1) : $menu_list;
+
     }
 
     /**
@@ -301,7 +302,7 @@ class MenuService extends BaseAdminService
     public function getAllMenuList($app_type = '', $status = 'all', $is_tree = 0, $is_button = 0)
     {
         $cache_name = 'menu_api_' .$app_type.'_'. $status . '_' . $is_tree . '_' . $is_button;
-        return cache_remember(
+        $menu_list = cache_remember(
             $cache_name,
             function () use ($status, $is_tree, $is_button, $app_type) {
                 $where = [
@@ -312,21 +313,22 @@ class MenuService extends BaseAdminService
                     $where[] = ['status', '=', $status];
                 }
                 $menu_list = $this->model->where($where)->order('sort desc')->select()->toArray();
-                return $is_tree ? $this->menuToTree($menu_list, 'menu_key', 'parent_key', 'children', 'auth', '', $is_button) : $menu_list;
+               return $menu_list;
             },
             self::$cache_tag_name
         );
-//        return Cache::tag(self::$cache_tag_name)->remember($cache_name, function () use ($status, $is_tree, $is_button, $app_type) {
-//            $where = [
-////                ['menu_type', 'in', [0,1]]
-//                ['app_type', '=', $app_type],
-//            ];
-//            if ($status != 'all') {
-//                $where[] = ['status', '=', $status];
-//            }
-//            $menu_list = $this->model->where($where)->order('sort desc')->select()->toArray();
-//            return $is_tree ? $this->menuToTree($menu_list, 'menu_key', 'parent_key', 'children', 'auth', '', $is_button) : $menu_list;
-//        });
+        foreach ($menu_list as $k => $v)
+        {
+            $lang_menu_key = "dict_menu_". $v['app_type']. '.'. $v['menu_key'];
+            $lang_menu_name = get_lang("dict_menu_". $v['app_type']. '.'. $v['menu_key']);
+            //语言已定义
+            if($lang_menu_key != $lang_menu_name)
+            {
+                $menu_list[$k]['menu_name'] = $lang_menu_name;
+            }
+        }
+
+        return $is_tree ? $this->menuToTree($menu_list, 'menu_key', 'parent_key', 'children', 'auth', '', $is_button) : $menu_list;;
 
     }
 

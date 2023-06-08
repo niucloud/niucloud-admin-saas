@@ -19,7 +19,7 @@ return [
             'bucket' => ''
         ],
         //腾讯云
-        'qcloud' => [
+        'tencent' => [
             'access_key' => '',
             'secret_key' => '',
             'region' => '',
@@ -30,12 +30,12 @@ return [
     'rules' => [
         'image' => [
             'ext' => ['jpg', 'jpeg', 'webp', 'png', 'gif'],
-            'mime' => [ 'image/jpeg','image/gif','image/png','image/webp'],
+            'mime' => ['image/jpeg', 'image/gif', 'image/png', 'image/webp'],
             'size' => 2097152
         ],
         'video' => [
             'ext' => ['mp4'],
-            'mime' => [ 'video/mp4'],
+            'mime' => ['video/mp4'],
             'size' => 2097152
         ],
         'wechat' => [
@@ -54,5 +54,23 @@ return [
             ],
             'size' => 2097152
         ],
+    ],
+    'thumb' => [
+        'thumb_type' => [
+            'big' => [
+                'width' => 400,
+                'height' => 400,
+            ],
+            'mid' => [
+                'width' => 100,
+                'height' => 100,
+            ],
+            'small' => [
+                'width' => 50,
+                'height' => 50,
+            ],
+        ]
+
+
     ]
 ];

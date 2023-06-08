@@ -21,8 +21,6 @@ use core\exception\PayException;
 
 /**
  * 支付配置服务层
- * Class PayConfigService
- * @package app\service\admin\pay
  */
 class PayChannelService extends BaseAdminService
 {
@@ -142,7 +140,6 @@ class PayChannelService extends BaseAdminService
                 ];
                 break;
         }
-//        $config['status'] = $data['status'] ?? '0';//是否启用
         return $config;
     }
 

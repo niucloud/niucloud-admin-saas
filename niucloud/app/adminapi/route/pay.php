@@ -19,13 +19,7 @@ use think\facade\Route;
  * 支付相关路由
  */
 Route::group('pay', function () {
-    /***************************************************** 系统整体信息 *************************************************/
-    //设置支付配置
-    Route::put('config/:type', 'pay.Config/set');
-    //获取支付配置
-    Route::get('config/:type', 'pay.Config/get');
-    //获取支付方式列表
-    Route::get('lists', 'pay.Config/lists');
+
     /***************************************************** 支付渠道 *************************************************/
     //渠道列表
     Route::get('channel/lists', 'pay.PayChannel/lists');

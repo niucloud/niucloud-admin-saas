@@ -12,7 +12,7 @@
 namespace app\service\admin\order;
 
 use app\dict\order\RechargeOrderDict;
-use app\model\order\Order;
+use app\model\order\RechargeOrder;
 use core\base\BaseAdminService;
 
 /**
@@ -25,7 +25,7 @@ class RechargeOrderService extends BaseAdminService
     public function __construct()
     {
         parent::__construct();
-        $this->model = new Order();
+        $this->model = new RechargeOrder();
     }
 
     /**
@@ -44,8 +44,16 @@ class RechargeOrderService extends BaseAdminService
             $query->field('member_id, nickname, mobile, headimg');
         }, 'pay' => function($query) {
             $query->field('');
-        } ])->order($order)->append(['order_status_info', 'order_from_name', 'refund_status_name' ]);
-        return $this->pageQuery($search_model);
+        } ])->order($order)->append(['order_from_name' ]);
+        $list = $this->pageQuery($search_model);
+        $order_status = RechargeOrderDict::getStatus();
+        $refund_status = RechargeOrderDict::getRefundStatus();
+        foreach ($list['data'] as $k => $v)
+        {
+            $list['data'][$k]['order_status_info'] = $order_status[$v['order_status']] ?? [];
+            $list['data'][$k]['refund_status_name'] = $refund_status[$v['refund_status']]['name'] ?? '';
+        }
+        return $list;
     }
 
     /**
@@ -62,7 +70,11 @@ class RechargeOrderService extends BaseAdminService
             $query->field('member_id, nickname, mobile, headimg');
         }, 'pay' => function($query) {
             $query->field('');
-        } ])->append(['order_status_info', 'order_from_name'])->findOrEmpty()->toArray();
+        } ])->append(['order_from_name'])->findOrEmpty()->toArray();
+        if(!empty($detail))
+        {
+            $detail['order_status_info'] = RechargeOrderDict::getStatus($detail['order_status']) ?? [];
+        }
         return $detail;
     }
 

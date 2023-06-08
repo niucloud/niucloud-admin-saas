@@ -39,6 +39,23 @@ class CoreStorageService extends BaseCoreService
     }
 
     /**
+     * 通过存储方式获取配置
+     * @param int $site_id
+     * @param string $type
+     * @return array|mixed|void
+     */
+    public function getStorageByType(int $site_id, string $type){
+        $storage_list = $this->getStorageConfigList($site_id);
+        foreach($storage_list as $k => $v){
+            if($k == $type){
+                $item_storage = $v['params'] ?? [];
+                $item_storage['storage_type'] = $v['storage_type'];
+                return $item_storage;
+            }
+        }
+
+    }
+    /**
      * 获取存储配置
      * @param $site_id
      * @return void

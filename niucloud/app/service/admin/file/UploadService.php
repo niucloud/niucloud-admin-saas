@@ -12,6 +12,7 @@
 namespace app\service\admin\file;
 
 use app\dict\sys\FileDict;
+use app\dict\sys\StorageDict;
 use app\service\core\upload\CoreUploadService;
 use core\base\BaseAdminService;
 use core\exception\UploadFileException;
@@ -62,6 +63,6 @@ class UploadService extends BaseAdminService
             throw new UploadFileException('CERT_TYPE_ERROR');
         $dir = $this->root_path.'/document/'.$type.'/'.$this->site_id.'/'.date('Ym').'/'.date('d');
         $core_upload_service = new CoreUploadService();
-        return $core_upload_service->document($file, $this->site_id, $type, $dir, true, true);
+        return $core_upload_service->document($file, $this->site_id, $type, $dir, StorageDict::LOCAL, true);
     }
 }

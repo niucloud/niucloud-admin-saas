@@ -1359,7 +1359,7 @@ CREATE TABLE article (
   author varchar(255) NOT NULL DEFAULT '' COMMENT '作者',
   content text DEFAULT NULL COMMENT '文章内容',
   visit int(11) NOT NULL DEFAULT 0 COMMENT '实际浏览量',
-  visit_virtual int(11) NOT NULL DEFAULT 0 COMMENT '虚拟浏览量',
+  visit_virtual int(11) NOT NULL DEFAULT 0 COMMENT '初始浏览量',
   is_show tinyint(4) NOT NULL DEFAULT 1 COMMENT '是否显示:1-是.0-否',
   sort int(11) NOT NULL DEFAULT 0 COMMENT '排序',
   create_time int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',

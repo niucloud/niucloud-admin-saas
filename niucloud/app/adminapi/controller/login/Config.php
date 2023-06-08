@@ -12,6 +12,7 @@
 namespace app\adminapi\controller\login;
 
 use app\service\admin\auth\ConfigService;
+use app\service\core\upload\CoreImageService;
 use core\base\BaseAdminController;
 use think\Response;
 

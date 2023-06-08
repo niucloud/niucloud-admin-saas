@@ -67,6 +67,11 @@ Route::group('sys', function () {
     //版权设置
     Route::put('config/copyright', 'sys.Config/setCopyright');
 
+    //地图设置
+    Route::put('config/map', 'sys.Config/setMap');
+    //地图设置
+    Route::get('config/map', 'sys.Config/getMap');
+
     //登录注册设置
     Route::get('config/login', 'login.Config/getConfig');
     //登录注册设置

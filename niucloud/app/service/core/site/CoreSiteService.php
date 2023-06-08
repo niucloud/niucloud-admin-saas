@@ -52,16 +52,6 @@ class CoreSiteService extends BaseCoreService
             },
             self::$cache_tag_name.$site_id
         );
-//        return Cache::tag(self::$cache_tag_name.$site_id)->remember($cache_name.$site_id, function () use ($site_id) {
-//            $where = [
-//                ['site_id', '=', $site_id],
-//            ];
-//            $site = $this->model->where($where)->field('app_type,site_name,logo,group_id, status, expire_time')->findOrEmpty();
-//            if(!$site->isEmpty()){
-//                $site->append(['status_name']);
-//            }
-//            return $site->toArray();
-//        });
     }
 
     /**

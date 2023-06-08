@@ -11,7 +11,7 @@
 
 namespace app\service\admin\stat;
 
-use app\model\order\Order;
+use app\model\order\RechargeOrder;
 use app\service\admin\member\MemberService;
 use app\service\admin\site\SiteService;
 use app\service\admin\sys\SystemService;
@@ -115,7 +115,7 @@ class SiteStatService extends BaseAdminService
             ['order_status', '>', 0],
             ['create_time', 'between', [$start_time, $end_time]]
         ];
-        $money = (new Order())->where($where)->sum('order_money');
+        $money = (new RechargeOrder())->where($where)->sum('order_money');
         return $money;
     }
 
@@ -131,7 +131,7 @@ class SiteStatService extends BaseAdminService
             ['order_status', '>', 0],
             ['create_time', 'between', [$start_time, $end_time]]
         ];
-        $money = (new Order())->where($where)->count('order_id');
+        $money = (new RechargeOrder())->where($where)->count('order_id');
         return $money;
     }
 

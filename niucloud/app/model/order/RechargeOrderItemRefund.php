@@ -11,6 +11,7 @@
 
 namespace app\model\order;
 
+use app\dict\order\RechargeOrderDict;
 use app\model\member\Member;
 use app\model\pay\Refund;
 use core\base\BaseModel;
@@ -20,7 +21,7 @@ use core\base\BaseModel;
  * Class OrderItem
  * @package app\model\order
  */
-class OrderItemRefund extends BaseModel
+class RechargeOrderItemRefund extends BaseModel
 {
     //类型
     protected $type = [
@@ -39,7 +40,7 @@ class OrderItemRefund extends BaseModel
      * 模型名称
      * @var string
      */
-    protected $name = 'order_item_refund';
+    protected $name = 'recharge_order_item_refund';
 
     /**
      * 退款状态字段处理
@@ -48,9 +49,7 @@ class OrderItemRefund extends BaseModel
      */
     public function getStatusNameAttr($value, $data)
     {
-        $class = "\\app\\dict\\order\\" . ucfirst($data['item_type']). "OrderDict";
-        if (!class_exists($class)) return '';
-        return $class::getRefundStatus()[$data['status'] ?? '']['name'] ?? '';
+        return  RechargeOrderDict::getRefundStatus()[$data['status'] ?? '']['name'] ?? '';
     }
 
     /**
@@ -58,7 +57,7 @@ class OrderItemRefund extends BaseModel
      * @return \think\model\relation\HasOne
      */
     public function item() {
-        return $this->hasOne(OrderItem::class, 'order_item_id', 'order_item_id')->joinType('inner');
+        return $this->hasOne(RechargeOrderItem::class, 'order_item_id', 'order_item_id')->joinType('inner');
     }
 
     /**
@@ -114,7 +113,7 @@ class OrderItemRefund extends BaseModel
     public function searchJoinOrderNoAttr($query, $value, $data)
     {
         if ($value) {
-            $query->where('order_item_refund.order_no', '=', $value);
+            $query->where('recharge_order_item_refund.order_no', '=', $value);
         }
     }
 
@@ -140,7 +139,7 @@ class OrderItemRefund extends BaseModel
     public function searchJoinMemberIdAttr($query, $value, $data)
     {
         if ($value) {
-            $query->where('order_item_refund.member_id', '=', $value);
+            $query->where('recharge_order_item_refund.member_id', '=', $value);
         }
     }
 
@@ -166,7 +165,7 @@ class OrderItemRefund extends BaseModel
     public function searchJoinStatusAttr($query, $value, $data)
     {
         if ($value != '') {
-            $query->where('order_item_refund.status', '=', $value);
+            $query->where('recharge_order_item_refund.status', '=', $value);
         }
     }
 
@@ -196,11 +195,11 @@ class OrderItemRefund extends BaseModel
         $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
         $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
         if($start_time > 0 && $end_time > 0){
-            $query->whereBetweenTime('order_item_refund.create_time', $start_time, $end_time);
+            $query->whereBetweenTime('recharge_order_item_refund.create_time', $start_time, $end_time);
         }else if($start_time > 0 && $end_time == 0){
-            $query->where([['order_item_refund.create_time', '>=', $start_time]]);
+            $query->where([['recharge_order_item_refund.create_time', '>=', $start_time]]);
         }else if($start_time == 0 && $end_time > 0){
-            $query->where([['order_item_refund.create_time', '<=', $end_time]]);
+            $query->where([['recharge_order_item_refund.create_time', '<=', $end_time]]);
         }
     }
 }

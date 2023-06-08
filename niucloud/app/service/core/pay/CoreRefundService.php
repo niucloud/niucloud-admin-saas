@@ -212,7 +212,6 @@ class CoreRefundService extends BaseCoreService
      * @return void
      */
     public function refundFail(int $site_id, array $data){
-        $out_trade_no = $data['out_trade_no'];
         $refund_no = $data['refund_no'];
         $this->model->where([
             ['site_id', '=', $site_id],

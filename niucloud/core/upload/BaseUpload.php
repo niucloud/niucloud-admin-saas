@@ -62,8 +62,13 @@ abstract class BaseUpload extends Storage
      */
     abstract protected function delete(string $file_name);
 
-
-
+    /**
+     * 缩略图
+     * @param string $file_path
+     * @param $type
+     * @return mixed
+     */
+    abstract protected function thumb(string $file_path, $thumb_type);
     /**
      * 读取文件
      * @param $name

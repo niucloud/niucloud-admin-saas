@@ -36,15 +36,19 @@ class CoreFileService extends BaseCoreService
      */
     protected $upload_driver;
     protected static $storage_type;
+
     /**
      * 实例化上传引擎
      * @param int $site_id
      * @param bool $is_local
-     * @return FileDriver
+     * @return UploadLoader
+     * @throws \Exception
      */
-    public function driver(int $site_id, bool $is_local = false){
-        if($is_local){
-            self::$storage_type = FileDict::LOCAL;
+    public function driver(int $site_id, string $storage_type = ''){
+        if(!empty($storage_type)){
+            self::$storage_type = $storage_type;
+            $core_storage_service = new CoreStorageService();
+            $storage_config = $core_storage_service->getStorageByType($site_id, $storage_type);
         }else{
             $core_storage_service = new CoreStorageService();
             $storage_config = $core_storage_service->getDefaultStorage($this->request->defaultSiteId());

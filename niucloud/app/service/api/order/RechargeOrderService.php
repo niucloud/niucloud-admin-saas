@@ -12,7 +12,7 @@
 namespace app\service\api\order;
 
 use app\dict\order\RechargeOrderDict;
-use app\model\order\Order;
+use app\model\order\RechargeOrder;
 use app\service\core\order\recharge\CoreRechargeOrderService;
 use core\base\BaseApiService;
 
@@ -26,7 +26,7 @@ class RechargeOrderService extends BaseApiService
     public function __construct()
     {
         parent::__construct();
-        $this->model = new Order();
+        $this->model = new RechargeOrder();
     }
 
     /**
@@ -54,8 +54,16 @@ class RechargeOrderService extends BaseApiService
         $where['order_type'] = 'recharge';
         $search_model = $this->model->where([ ['site_id', '=', $this->site_id], ['member_id', '=', $this->member_id] ])->withSearch(['order_status'], $where)->field($field)->with(['item' => function($query) {
             $query->field('order_item_id, order_id, member_id, item_id, item_type, item_name, item_image, price, num, item_money, is_refund, refund_no, refund_status, create_time');
-        }])->order($order)->append(['order_status_info', 'order_from_name']);
-        return $this->pageQuery($search_model);
+        }])->order($order)->append(['order_from_name']);
+        $list = $this->pageQuery($search_model);
+        $order_status = RechargeOrderDict::getStatus();
+        //$refund_status = RechargeOrderDict::getRefundStatus();
+        foreach ($list['data'] as $k => $v)
+        {
+            $list['data'][$k]['order_status_info'] = $order_status[$v['order_status']] ?? [];
+           // $list['data'][$k]['refund_status_name'] = $refund_status[$v['refund_status']]['name'] ?? '';
+        }
+        return $list;
     }
 
     /**
@@ -68,7 +76,11 @@ class RechargeOrderService extends BaseApiService
         $field = 'order_id, site_id, order_no, order_from, order_type, out_trade_no, order_status, refund_status, member_id, ip, member_message, order_item_money, order_discount_money, order_money, create_time, pay_time, close_time, is_delete, is_enable_refund, remark, invoice_id, close_reason';
         $detail = $this->model->where([['order_type', '=', 'recharge'], ['site_id', '=', $this->site_id], ['member_id', '=', $this->member_id], ['order_id', '=', $order_id]])->field($field)->with(['item' => function($query) {
             $query->field('order_item_id, order_id, member_id, item_id, item_type, item_name, item_image, price, num, item_money, is_refund, refund_no, refund_status, create_time');
-        }])->append(['order_status_info', 'order_from_name'])->findOrEmpty()->toArray();
+        }])->append(['order_from_name'])->findOrEmpty()->toArray();
+        if(!empty($detail))
+        {
+            $detail['order_status_info'] = RechargeOrderDict::getStatus($detail['order_status']) ?? [];
+        }
         return $detail;
     }
 

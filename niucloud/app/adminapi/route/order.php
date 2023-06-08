@@ -30,6 +30,14 @@ Route::group('order', function () {
     Route::get('recharge/stat', 'order.Recharge/stat');
     // 订单发起退款
     Route::put('recharge/refund/:order_id', 'order.Recharge/refund');
+    //退款订单列表
+    Route::get('recharge/refund', 'order.Recharge/refundLists');
+    //退款订单详情
+    Route::get('recharge/refund/:refund_id', 'order.Recharge/refundDetail');
+    //退款订单状态
+    Route::get('recharge/refund/status', 'order.Recharge/refundStatus');
+    //退款订单统计
+    Route::get('recharge/refund/stat', 'order.Recharge/refundStat');
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,

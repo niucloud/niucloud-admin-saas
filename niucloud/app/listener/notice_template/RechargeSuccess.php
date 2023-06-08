@@ -3,7 +3,7 @@
 namespace app\listener\notice_template;
 
 use app\service\core\member\CoreMemberService;
-use app\service\core\order\CoreOrderService;
+use app\service\core\order\recharge\CoreRechargeOrderService;
 
 class RechargeSuccess extends BaseNoticeTemplate
 {
@@ -17,8 +17,8 @@ class RechargeSuccess extends BaseNoticeTemplate
             $site_id = $params['site_id'];
             $order_id = $data['order_id'];
 
-            $core_order_service = new CoreOrderService();
-            $order = $core_order_service->getOrderInfo($site_id, $order_id);
+            $core_order_service = new CoreRechargeOrderService();
+            $order = $core_order_service->orderInfo($site_id, $order_id);
             if (!empty($order)){
                 $member = (new CoreMemberService())->getInfoByMemberId($site_id, $order['member_id']);
                 //通过订单id查询订单信息

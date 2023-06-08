@@ -174,7 +174,7 @@ class AttachmentService extends BaseAdminService
             ['id', '=', $id]
         );
         $category_model = new SysAttachmentCategory();
-        $res = $category_model->edit($data, $where);
+        $res = $category_model->where($where)->update($data);
         return $res;
     }
 

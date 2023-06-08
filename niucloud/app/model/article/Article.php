@@ -99,7 +99,7 @@ class Article extends BaseModel
     }
 
     public function getArticleUrlAttr($value, $data) {
-        $site_tag = '/s' . $data['site_id'];
+        $site_tag = $data['site_id'] == 1 ? '' : '/s' . $data['site_id'];
         $data = [
             'wap_url' => ( !empty(env("system.wap_domain")) ? env("system.wap_domain") : request()->domain() ) . "/wap" . $site_tag . "/pages/article/detail?id={$data['id']}",
             'web_url' => ( !empty(env("system.web_domain")) ? env("system.web_domain") : request()->domain() ) . "/web" . $site_tag . "/article/detail?id={$data['id']}"

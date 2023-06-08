@@ -1,5 +1,13 @@
 <template>
     <div class="main-container">
+        <div class="detail-head">
+            <div class="left" @click="back()">
+                <span class="iconfont iconxiangzuojiantou !text-xs"></span>
+                <span class="ml-[1px]">{{t('returnToPreviousPage')}}</span>
+            </div>
+            <span class="adorn">|</span>
+            <span class="right">{{ pageName }}</span>
+        </div>
         <el-card class="box-card !border-none" shadow="never">
             <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form">
 {FORM_VIEW}
@@ -21,9 +29,10 @@ import type { FormInstance } from 'element-plus'
 import { get{UCASE_NAME}Info,add{UCASE_NAME},edit{UCASE_NAME} } from '@/api/{MODULE_NAME}';
 import { useRoute } from 'vue-router'
 
-const router = useRoute()
-const id:number = parseInt(router.query.id);
+const route = useRoute()
+const id:number = parseInt(route.query.id);
 const loading = ref(false)
+const pageName = route.meta.title
 
 /**
  * 表单数据

@@ -9,24 +9,29 @@
 // | Author: Niucloud Team
 // +----------------------------------------------------------------------
 
-namespace app\dict\order;
+namespace app\model\order;
+
+use core\base\BaseModel;
 
 /**
- * 订单类型整体功能
- * Class OrderTypeDict
- * @package app\dict\member
+ * 订单操作日志表
+ * Class OrderLog
+ * @package app\model\order
  */
-class OrderTypeDict
+class RechargeOrderLog extends BaseModel
 {
 
     /**
-     * 查询订单适配的支付方式
-     * @param $type
-     * @return void
+     * 数据表主键
+     * @var string
      */
-    public static function getAllowPayType($type){
-        /** @var RechargeOrderDict $class */
-        $class = __NAMESPACE__ . '\\' . ucfirst(strtolower($type)).'OrderDict';
-        return $class::ALLOW_PAY;
-    }
+    protected $pk = 'id';
+
+    /**
+     * 模型名称
+     * @var string
+     */
+    protected $name = 'recharge_order_log';
+
+
 }

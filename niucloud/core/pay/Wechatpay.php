@@ -44,7 +44,7 @@ class Wechatpay extends BasePay
      * @return mixed|Collection
      */
     public function mp(array $params){
-        return $this->returnFormat(Pay::wechat()->mp([
+        $result = $this->returnFormat(Pay::wechat()->mp([
             'out_trade_no' => $params['out_trade_no'],
             'description' => $params['boby'],
             'amount' => [
@@ -54,6 +54,10 @@ class Wechatpay extends BasePay
                 'openid' => $params['openid'],
             ],
         ]));
+        $code = $result['code'] ?? 0;
+        if($code == 0) return $result;
+        //支付错误抛出
+        throw new PayException($result['message']);
     }
 
 

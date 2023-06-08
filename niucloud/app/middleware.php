@@ -1,6 +1,5 @@
 <?php
 // 全局中间件定义文件
-use app\middleware\AllowCrossDomain;
 use think\middleware\LoadLangPack;
 
 return [

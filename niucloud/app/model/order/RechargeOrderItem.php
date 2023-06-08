@@ -18,7 +18,7 @@ use core\base\BaseModel;
  * Class OrderItem
  * @package app\model\order
  */
-class OrderItem extends BaseModel
+class RechargeOrderItem extends BaseModel
 {
 
     /**
@@ -31,14 +31,14 @@ class OrderItem extends BaseModel
      * 模型名称
      * @var string
      */
-    protected $name = 'order_item';
+    protected $name = 'recharge_order_item';
 
     /**
      * @return HasOne
      */
     public function orderNo()
     {
-        return $this->hasOne(Order::class, 'order_id', 'order_id')->joinType('left')->withField('order_id, order_no')->bind(['order_no' => 'order_no']);
+        return $this->hasOne(RechargeOrder::class, 'order_id', 'order_id')->joinType('left')->withField('order_id, order_no')->bind(['order_no' => 'order_no']);
     }
     /**
      * 数量字段处理
@@ -58,6 +58,6 @@ class OrderItem extends BaseModel
      * @return void
      */
     public function ordermain(){
-        return $this->hasOne(Order::class, 'order_id')->joinType('inner');
+        return $this->hasOne(RechargeOrder::class, 'order_id')->joinType('inner');
     }
 }

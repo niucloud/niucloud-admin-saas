@@ -32,17 +32,15 @@ $system_event = [
         'AddSiteAfter' => [ 'app\listener\site\AddSiteAfterListener' ],
 
         /**
-         * 消息相关事件
-         */
-
-        /**
          * 支付相关事件
          */
+        //支付成功
         'PaySuccess' => [ 'app\listener\pay\PaySuccessListener' ],
+        //退款成功
+        'RefundSuccess' => [ 'app\listener\pay\RefundSuccessListener' ],
+        //转账成功
         'TransferSuccess' => [ 'app\listener\pay\TransferSuccessListener' ],
-        /**
-         * 订单相关事件
-         */
+
 
         // 任务失败统一回调,有四种定义方式
         'queue_failed'=> [

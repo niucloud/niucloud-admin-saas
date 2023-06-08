@@ -72,5 +72,50 @@ class Recharge extends BaseAdminController
         return success($res);
     }
 
+    /**
+     * 退款列表
+     * @return Response
+     */
+    public function refundLists()
+    {
+        $data = $this->request->params([
+            ['create_time', []],
+            ['member_id', ''],
+            ['refund_no', ''],
+            ['status', ''],
+            ['keywords', ''],
+            ['order_no', ''],
+        ]);
+        return success((new RechargeOrderRefundService())->getPage($data));
+    }
+
+    /**
+     * 退款详情
+     * @param int $order_id
+     * @return Response
+     */
+    public function refundDetail(int $refund_id)
+    {
+        return success((new RechargeOrderRefundService())->getDetail($refund_id));
+    }
+
+    /**
+     * 查询退款状态
+     * @param $type
+     * @return Response
+     */
+    public function refundStatus()
+    {
+        return success((new RechargeOrderRefundService())->getStatus());
+    }
+
+    /**
+     * 退款统计
+     */
+    public function refundStat()
+    {
+        return success((new RechargeOrderRefundService())->stat());
+    }
+
 
 }

@@ -84,4 +84,22 @@ class Qiniu extends BaseUpload
             throw new UploadFileException($err->message());
         return true;
     }
+
+    public function thumb($file_path, $thumb_type){
+//        http://examples-1251000004.cos.ap-shanghai.myqcloud.com/sample.jpeg?imageView2/1/w/400/h/600/q/85
+        $thumb_config = config('upload.thumb.thumb_type');
+        $thumb_data = [];
+        foreach($thumb_config as $k => $v){
+            if($thumb_type == 'all' || $thumb_type == $k){
+//                ?x-oss-process=image/resize,m_fill,w_200,h_600,quality,q_60
+                $width = $v['width'];
+                $height = $v['height'];
+                //拼装缩略路径
+                $item_thumb = $file_path.'?imageView2/2/w/' . $width . '/h/' . $height;
+                $thumb_data[] = $item_thumb;
+            }
+        }
+
+        return $thumb_data;
+    }
 }

@@ -104,4 +104,23 @@ class Config extends BaseAdminController
     public function getServiceInfo(){
         return success((new ConfigService())->getService());
     }
+
+    /**设置版权信息
+     * @return Response
+     */
+    public function setMap(){
+        $data = $this->request->params([
+            ['key', ''],
+        ]);
+        (new ConfigService())->setMap($data);
+        return success();
+    }
+
+    /**
+     * 获取地图设置
+     * @return Response
+     */
+    public function getMap(){
+        return success((new ConfigService())->getMap());
+    }
 }

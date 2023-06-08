@@ -11,7 +11,7 @@ return [
     // 多语言自动侦测变量名
     'detect_var'      => 'lang',
     // 是否使用Cookie记录
-    'use_cookie'      => true,
+    'use_cookie'      => false,
     // 多语言cookie变量
     'cookie_var'      => 'lang',
     // 多语言header变量

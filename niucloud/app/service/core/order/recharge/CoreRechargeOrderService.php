@@ -12,11 +12,15 @@
 namespace app\service\core\order\recharge;
 
 use app\dict\order\RechargeOrderDict;
-use app\model\order\Order;
+use app\dict\pay\PayDict;
+use app\model\order\RechargeOrder;
+use app\model\order\RechargeOrderItem;
 use app\service\core\member\CoreMemberAccountService;
-use app\service\core\order\CoreOrderCreateService;
+use app\service\core\pay\CorePayService;
 use core\base\BaseCoreService;
 use core\exception\CommonException;
+use think\facade\Cache;
+use think\facade\Db;
 
 /**
  * 充值订单流程
@@ -25,9 +29,6 @@ use core\exception\CommonException;
  */
 class CoreRechargeOrderService extends BaseCoreService
 {
-
-    public $order_type = 'recharge';
-
     /**
      * 充值订单创建
      * @param array $data //['site_id' => 1, ‘member_id’ => 1， 'order_from' => 'h5', 'member_message' => '','recharge_money' => 12.00]
@@ -61,8 +62,52 @@ class CoreRechargeOrderService extends BaseCoreService
                 'is_refund' => 0
             ]
         ];
-        $res = (new CoreOrderCreateService())->create($data['site_id'], $order_data, $order_items);
-        return $res;
+        Db::startTrans();
+        try{
+            //添加订单支付表
+            $order_data['out_trade_no'] = (new CorePayService())->create($data['site_id'], PayDict::MEMBER, $order_data['member_id'], $order_data['order_money'], $order_data['order_type'], get_lang("dict_order.trade_type_recharge"));
+            //添加订单表
+            $order_data['order_no'] = $this->createOrderNo($data['site_id']);
+            $create_order = (new RechargeOrder())->create($order_data);
+            $order_id = $create_order->order_id;
+            //添加订单项目表
+            $order_item_model = new RechargeOrderItem();
+            foreach ($order_items as $k => $order_item)
+            {
+                $order_item['order_id'] = $order_id;
+                $order_item_model->create($order_item);
+            }
+            Db::commit();
+            //返回订单信息
+            return [
+                'order_id' => $order_id,
+                'out_trade_no' => $order_data['out_trade_no']
+            ];
+
+        }catch (\Exception $e)
+        {
+            Db::rollback();
+            throw new CommonException($e->getMessage());
+        }
+    }
+    /**
+     * 创建订单编号
+     * @param int $site_id
+     * @return string
+     */
+    public function createOrderNo(int $site_id)
+    {
+        $time_str = date('YmdHi');
+        $max_no =  Cache::get("recharge_order_no_".$site_id."_".$time_str);
+
+        if (!isset($max_no) || empty($max_no)) {
+            $max_no = 1;
+        } else {
+            $max_no = $max_no + 1;
+        }
+        $order_no = $time_str . $site_id .sprintf('%03d', $max_no);
+        Cache::set("recharge_order_no_".$site_id."_".$time_str, $max_no);
+        return $order_no;
     }
 
     /**
@@ -72,7 +117,7 @@ class CoreRechargeOrderService extends BaseCoreService
     public function pay(array $pay_info)
     {
         try {
-            $order_model = new Order();
+            $order_model = new RechargeOrder();
             $order_info = $order_model->where([['site_id', '=', $pay_info['site_id']], ['out_trade_no', '=', $pay_info['out_trade_no']]])->findOrEmpty()->toArray();
             if (empty($order_info))
                 throw new CommonException('ORDER_NOT_EXIST');
@@ -97,12 +142,27 @@ class CoreRechargeOrderService extends BaseCoreService
      * @return void
      */
     public function close(int $site_id, int $order_id){
-        $order = (new Order())->where([ ['site_id', '=', $site_id ],['order_id', '=', $order_id ], ])->find();
+        $order = (new RechargeOrder())->where([ ['site_id', '=', $site_id ],['order_id', '=', $order_id ], ])->find();
         if ($order->isEmpty()) throw new CommonException('ORDER_NOT_EXIST');
         if ($order->order_status == RechargeOrderDict::CLOSE) throw new CommonException('ORDER_CLOSED');
 
         $order->save(['order_status' => RechargeOrderDict::CLOSE]);
         return true;
     }
+
+    /**
+     * 获取订单信息
+     * @param int $site_id
+     * @param int $order_id
+     * @return array
+     */
+    public function orderInfo(int $site_id, int $order_id)
+    {
+        return (new RechargeOrder())->where([
+            ['site_id', '=', $site_id],
+            ['order_id', '=', $order_id]
+        ])->field('*')->findOrEmpty()->toArray();
+    }
+
 }
 

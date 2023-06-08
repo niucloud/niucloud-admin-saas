@@ -11,6 +11,7 @@
 
 namespace app\service\api\upload;
 
+use app\dict\sys\StorageDict;
 use app\service\core\upload\CoreUploadService;
 use core\base\BaseApiService;
 
@@ -60,6 +61,6 @@ class UploadService extends BaseApiService
     {
         $dir = $this->root_path . '/' . 'document' . '/' . $this->site_id . '/' . date('Ym') . '/' . date('d');
         $core_upload_service = new CoreUploadService();
-        return $core_upload_service->document($file, $this->site_id, '', $dir, $is_local);
+        return $core_upload_service->document($file, $this->site_id, '', $dir, StorageDict::LOCAL);
     }
 }

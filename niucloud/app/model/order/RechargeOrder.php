@@ -17,11 +17,11 @@ use app\model\pay\Pay;
 use core\base\BaseModel;
 
 /**
- * 订单模型
- * Class Order
+ * 充值订单模型
+ * Class RechargeOrder
  * @package app\model\order
  */
-class Order extends BaseModel
+class RechargeOrder extends BaseModel
 {
 
     /**
@@ -34,7 +34,7 @@ class Order extends BaseModel
      * 模型名称
      * @var string
      */
-    protected $name = 'order';
+    protected $name = 'recharge_order';
 
     //类型
     protected $type = [
@@ -42,37 +42,6 @@ class Order extends BaseModel
         'close_time'  =>  'timestamp',
     ];
 
-    /**
-     * 订单状态名称
-     * @param $value
-     * @param $data
-     * @return mixed|string
-     */
-    public function getOrderStatusInfoAttr($value, $data)
-    {
-        if(isset($data['order_type']) && isset($data['order_status']))
-        {
-            $class = "app\\dict\\order\\". ucfirst($data['order_type']).'OrderDict';
-            return $class::getStatus($data['order_status']);
-        }else
-            return [];
-    }
-
-    /**
-     * 获取退款状态
-     * @param $value
-     * @param $data
-     * @return void
-     */
-    public function getRefundStatusNameAttr($value, $data) {
-        if(isset($data['order_type']) && isset($data['refund_status']))
-        {
-            $class = "app\\dict\\order\\". ucfirst($data['order_type']).'OrderDict';
-            return $class::getRefundStatus($data['refund_status'])['name'] ?? '';
-        } else {
-            return '';
-        }
-    }
 
     /**
      * 登录渠道字段转化
@@ -228,7 +197,7 @@ class Order extends BaseModel
      */
     public function item()
     {
-        return $this->hasMany(OrderItem::class,'order_id', 'order_id');
+        return $this->hasMany(RechargeOrderItem::class,'order_id', 'order_id');
     }
 
     /**

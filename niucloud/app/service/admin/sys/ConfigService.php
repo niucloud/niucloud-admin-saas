@@ -123,4 +123,34 @@ class ConfigService extends BaseAdminService
         $res = $this->core_config_service->setConfig(0,'SERVICE_INFO', $data);
         return $res;
     }
+
+    /**
+     * 设置地图key
+     * @param array $value
+     * @return bool
+     */
+    public function setMap(array $value)
+    {
+        $data = [
+            'key' => $value['key'],
+        ];
+        $res = $this->core_config_service->setConfig($this->site_id,'MAPKEY', $data);
+        return $res;
+    }
+
+    /**
+     * 获取地图key
+     */
+    public function getMap()
+    {
+        $info = (new CoreConfigService())->getConfig($this->site_id, 'MAPKEY');
+        if(empty($info))
+        {
+            $info = [];
+            $info['value'] = [
+                'key' => '',
+            ];
+        }
+        return $info['value'];
+    }
 }

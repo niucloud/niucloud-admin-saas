@@ -11,7 +11,6 @@
 
 namespace app\service\core\pay;
 
-use app\dict\order\OrderTypeDict;
 use app\dict\pay\OnlinePayDict;
 use app\dict\pay\PayDict;
 use app\job\pay\PayReturnTo;
@@ -71,7 +70,7 @@ class CorePayService extends BaseCoreService
             ['site_id', '=', $site_id],
             ['out_trade_no', '=', $out_trade_no]
         );
-        return $this->model->where($where)->append(['pay_type_list', 'type_name', 'status_name'])->findOrEmpty();
+        return $this->model->where($where)->append([ 'type_name', 'status_name'])->findOrEmpty();
     }
 
     /**
@@ -85,10 +84,10 @@ class CorePayService extends BaseCoreService
             ['site_id', '=', $site_id],
             ['out_trade_no', '=', $out_trade_no]
         );
-        $pay = $this->model->where($where)->append(['pay_type_list', 'type_name', 'status_name'])->findOrEmpty()->toArray();
+        $pay = $this->model->where($where)->append(['type_name', 'status_name'])->findOrEmpty()->toArray();
         if(!empty($pay)){
             //todo  校验场景控制支付方式
-            $pay['pay_type_list'] = array_values((new CorePayChannelService())->getAllowPayTypeByCahnnel($site_id, $channel, $pay['pay_type_list']));
+            $pay['pay_type_list'] = array_values((new CorePayChannelService())->getAllowPayTypeByChannel($site_id, $channel, $pay->trade_type));
         }
         return  $pay;
     }
@@ -111,11 +110,9 @@ class CorePayService extends BaseCoreService
         $money = $pay['money'];
         $body = $pay['body'];
         $trade_type = $pay['trade_type'];
-//        $allow_type = OrderTypeDict::getAllowPayType($trade_type);//当前支付允许使用的支付方式
-//        if(!in_array($type, $allow_type)){
-//            throw new PayException('PAYMENT_METHOD_NOT_SUPPORT');//业务不支持
-//        }
-        if(!in_array($type, array_column((new CorePayChannelService())->getAllowPayTypeByCahnnel($site_id, $channel, OrderTypeDict::getAllowPayType($trade_type)), 'key')))  throw new PayException('PAYMENT_METHOD_NOT_SCENE');//场景不支持
+
+        if(!in_array($type, array_column((new CorePayChannelService())->getAllowPayTypeByChannel($site_id, $channel, $trade_type), 'key')))  throw new PayException('PAYMENT_METHOD_NOT_SCENE');//场景不支持
+
         $pay_result = $this->pay_event->init($site_id, $channel, $type)->pay($out_trade_no, $money, $body, $return_url, $quit_url, $buyer_id, $openid ?? '');
         //todo  特殊支付方式会直接返回支付状态,状态如果为已支付会直接支付
         if(!empty($pay_result['status']) && $pay_result['status'] == PayDict::STATUS_ED){

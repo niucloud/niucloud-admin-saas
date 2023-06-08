@@ -9,29 +9,22 @@
 // | Author: Niucloud Team
 // +----------------------------------------------------------------------
 
-namespace app\model\order;
+namespace app\listener\pay;
 
-use core\base\BaseModel;
+use app\service\core\order\recharge\CoreRechargeOrderService;
+use app\service\core\order\recharge\CoreRechargeRefundService;
 
 /**
- * 订单操作日志表
- * Class OrderLog
- * @package app\model\order
+ * 退款成功事件
  */
-class OrderLog extends BaseModel
+class RefundSuccessListener
 {
-
-    /**
-     * 数据表主键
-     * @var string
-     */
-    protected $pk = 'id';
-
-    /**
-     * 模型名称
-     * @var string
-     */
-    protected $name = 'order_log';
-
-
+    public function handle(array $refund_info)
+    {
+        $trade_type = $refund_info['trade_type'] ?? '';
+        if($trade_type == 'recharge')
+        {
+            (new CoreRechargeRefundService())->refundComplete($refund_info['refund_no']);
+        }
+    }
 }

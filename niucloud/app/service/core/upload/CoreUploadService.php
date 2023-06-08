@@ -12,6 +12,7 @@
 namespace app\service\core\upload;
 
 use app\dict\sys\FileDict;
+use app\dict\sys\StorageDict;
 use app\service\core\sys\CoreAttachmentService;
 
 /**
@@ -29,36 +30,33 @@ class CoreUploadService extends CoreFileService
 
     /**
      * 图片上传
-     * @param $site_id
-     * @param $cate_id
-     * @param $app_type
-     * @param $file_path
+     * @param string $file
+     * @param int $site_id
+     * @param string $file_dir
+     * @param int $cate_id
      * @return array
      */
     public function image(string $file, int $site_id, string $file_dir, int $cate_id = 0)
     {
-        //校验上传设置
-//        $this->checkFile($site_id, $file, FileDict::IMAGE);
         //实例化上传引擎
         $this->upload_driver = $this->driver($site_id);
         //读取上传附件的信息用于后续得校验和数据写入
         $this->upload_driver->read($file);
+        //生成缩略图....
         return $this->after($site_id, $file_dir, FileDict::IMAGE, $cate_id);
     }
 
     /**
      * 视频上传
-     * @param $file
-     * @param $site_id
-     * @param $cate_id
-     * @param $file_dir
+     * @param string $file
+     * @param int $site_id
+     * @param string $file_dir
+     * @param int $cate_id
      * @return array
      */
     public function video(string $file, int $site_id, string $file_dir, int $cate_id)
     {
 
-        //校验上传设置
-//        $this->checkFile($site_id, $file, FileDict::VIDEO);
         //实例化上传引擎
         $this->upload_driver = $this->driver($site_id);
         //读取上传附件的信息用于后续得校验和数据写入
@@ -77,13 +75,10 @@ class CoreUploadService extends CoreFileService
      * @param bool $is_rename  是否重命名
      * @return array
      */
-    public function document(string $file, int $site_id, string $type, string $file_dir, bool $is_local = false, bool $is_rename = true)
+    public function document(string $file, int $site_id, string $type, string $file_dir, bool $storage_type, bool $is_rename = true)
     {
-        //校验上传设置(todo  文件暂时不校验,后补安全性校验)
-//        $this->checkFile($site_id, $file, $type ?: FileDict::DOCUMENT);
-
         //实例化上传引擎
-        $this->upload_driver = $this->driver($site_id, $is_local);
+        $this->upload_driver = $this->driver($site_id, $storage_type);
 
         //读取上传附件的信息用于后续得校验和数据写入
         $this->upload_driver->read($file, $is_rename);

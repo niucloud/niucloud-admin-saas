@@ -361,6 +361,105 @@ return
                 ],
         ],
         [
+            'menu_name' => '订单管理',
+            'menu_key' => 'order',
+            'menu_type' => 0,
+            'icon' => 'iconfont-icondingdan',
+            'api_url' => '',
+            'router_path' => 'order',
+            'view_path' => '',
+            'methods' => '',
+            'sort' => 65,
+            'status' => 1,
+            'is_show' => 1,
+            'children' => [
+                [
+                    'menu_name' => '充值订单',
+                    'menu_key' => 'recharge_order',
+                    'menu_type' => 0,
+                    'icon' => 'element-Help',
+                    'api_url' => 'recharge',
+                    'router_path' => 'recharge',
+                    'view_path' => '',
+                    'methods' => 'get',
+                    'sort' => 100,
+                    'status' => 1,
+                    'is_show' => 1,
+                    'children' => [
+                        [
+                            'menu_name' => '订单列表',
+                            'menu_key' => 'recharge_order_list',
+                            'menu_type' => 1,
+                            'icon' => '',
+                            'api_url' => 'recharge',
+                            'router_path' => 'order',
+                            'view_path' => 'order/recharge/list',
+                            'methods' => 'get',
+                            'sort' => 100,
+                            'status' => 1,
+                            'is_show' => 1,
+                            'children' => [
+                                [
+                                    'menu_name' => '退款',
+                                    'menu_key' => 'recharge_refund',
+                                    'menu_type' => 2,
+                                    'icon' => '',
+                                    'api_url' => 'order/refund/<id>',
+                                    'router_path' => '',
+                                    'view_path' => '',
+                                    'methods' => 'put',
+                                    'sort' => 100,
+                                    'status' => 1,
+                                    'is_show' => 0,
+                                ],
+                            ]
+                        ],
+                        [
+                            'menu_name' => '订单详情',
+                            'menu_key' => 'recharge_order_detail',
+                            'menu_type' => 1,
+                            'icon' => '',
+                            'api_url' => 'order/recharge/<order_id>',
+                            'router_path' => 'detail',
+                            'view_path' => 'order/recharge/detail',
+                            'methods' => 'get',
+                            'sort' => 90,
+                            'status' => 1,
+                            'is_show' => 0,
+                        ],
+                        [
+                            'menu_name' => '退款记录',
+                            'menu_key' => 'recharge_refund_list',
+                            'menu_type' => 1,
+                            'icon' => 'iconfont-icontuikuanjilu',
+                            'api_url' => 'order/refund',
+                            'router_path' => 'refund',
+                            'view_path' => 'order/recharge/refund',
+                            'methods' => 'get',
+                            'sort' => 90,
+                            'status' => 1,
+                            'is_show' => 1,
+                            'children' => [
+                                [
+                                    'menu_name' => '退款详情',
+                                    'menu_key' => 'recharge_refund_detail',
+                                    'menu_type' => 2,
+                                    'icon' => '',
+                                    'api_url' => 'order/refund/<id>',
+                                    'router_path' => '',
+                                    'view_path' => '',
+                                    'methods' => 'get',
+                                    'sort' => 100,
+                                    'status' => 1,
+                                    'is_show' => 0,
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ],
+        [
             'menu_name' => '财务管理',
             'menu_key' => 'finance',
             'menu_type' => 0,
@@ -374,47 +473,6 @@ return
             'is_show' => 1,
             'children' => [
                 [
-                    'menu_name' => '会员充值',
-                    'menu_key' => 'recharge_list',
-                    'menu_type' => 1,
-                    'icon' => 'element-Help',
-                    'api_url' => 'order/recharge',
-                    'router_path' => 'recharge',
-                    'view_path' => 'finance/recharge/list',
-                    'methods' => 'get',
-                    'sort' => 100,
-                    'status' => 1,
-                    'is_show' => 1,
-                    'children' => [
-                        [
-                            'menu_name' => '退款',
-                            'menu_key' => 'refund',
-                            'menu_type' => 2,
-                            'icon' => '',
-                            'api_url' => 'order/refund/<id>',
-                            'router_path' => '',
-                            'view_path' => '',
-                            'methods' => 'put',
-                            'sort' => 100,
-                            'status' => 1,
-                            'is_show' => 0,
-                        ],
-                    ]
-                ],
-                [
-                    'menu_name' => '充值详情',
-                    'menu_key' => 'recharge_order_info',
-                    'menu_type' => 1,
-                    'icon' => '',
-                    'api_url' => 'order/recharge/<order_id>',
-                    'router_path' => 'recharge/detail',
-                    'view_path' => 'finance/recharge/detail',
-                    'methods' => 'get',
-                    'sort' => 90,
-                    'status' => 1,
-                    'is_show' => 0,
-                ],
-                [
                     'menu_name' => '会员提现',
                     'menu_key' => 'cash_out_list',
                     'menu_type' => 1,
@@ -426,35 +484,6 @@ return
                     'sort' => 99,
                     'status' => 1,
                     'is_show' => 1,
-                ],
-                [
-                    'menu_name' => '退款记录',
-                    'menu_key' => 'refund_list',
-                    'menu_type' => 1,
-                    'icon' => 'iconfont-icontuikuanjilu',
-                    'api_url' => 'order/refund',
-                    'router_path' => 'refund',
-                    'view_path' => 'order/refund',
-                    'methods' => 'get',
-                    'sort' => 90,
-                    'status' => 1,
-                    'is_show' => 1,
-                    'children' => [
-                        [
-                            'menu_name' => '退款详情',
-                            'menu_key' => 'refund_detail',
-                            'menu_type' => 2,
-                            'icon' => '',
-                            'api_url' => 'order/refund/<id>',
-                            'router_path' => '',
-                            'view_path' => '',
-                            'methods' => 'get',
-                            'sort' => 100,
-                            'status' => 1,
-                            'is_show' => 0,
-                        ],
-
-                    ]
                 ]
             ]
         ],
@@ -1136,10 +1165,23 @@ return
                             'sort' => 11,
                             'status' => 1,
                             'is_show' => 1,
-                            
+
                         ]
                     ]
                 ],
+                [
+                    'menu_name' => '地图设置',
+                    'menu_key' => 'map_setting',
+                    'menu_type' => 1,
+                    'icon' => 'element-Message',
+                    'api_url' => 'sys/config/map',
+                    'router_path' => 'map',
+                    'view_path' => 'setting/map',
+                    'methods' => 'get',
+                    'sort' => 99,
+                    'status' => 1,
+                    'is_show' => 1,
+                ]
             ]
         ]
     ];

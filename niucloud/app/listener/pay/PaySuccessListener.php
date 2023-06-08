@@ -11,8 +11,6 @@
 
 namespace app\listener\pay;
 
-
-use app\dict\order\RechargeOrderDict;
 use app\service\core\order\recharge\CoreRechargeOrderService;
 
 /**
@@ -23,10 +21,9 @@ class PaySuccessListener
     public function handle(array $pay_info)
     {
         $trade_type = $pay_info['trade_type'] ?? '';
-        switch($trade_type){
-            case RechargeOrderDict::getOrderType()['type']:
-                return (new CoreRechargeOrderService())->pay($pay_info);
-                break;
+        if($trade_type == 'recharge')
+        {
+            (new CoreRechargeOrderService())->pay($pay_info);
         }
     }
 }

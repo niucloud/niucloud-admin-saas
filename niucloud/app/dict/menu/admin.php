@@ -67,7 +67,7 @@
                         'is_show' => 1,
                     ],
                     [
-                        'menu_name' => '站点用户',
+                        'menu_name' => '站点管理员',
                         'menu_key' => 'site_user',
                         'menu_type' => 1,
                         'icon' => 'element-User',
@@ -245,7 +245,7 @@
                     ],
                     [
 
-                        'menu_name' => '管理员',
+                        'menu_name' => '平台管理员',
                         'menu_key' => 'auth_user',
                         'menu_type' => 1,
                         'icon' => 'iconfont-iconyonghu',
@@ -515,7 +515,7 @@
                     ],
                     [
                         'menu_name' => '环境检测',
-                        'menu_key' => 'iconfont-iconsixingjiance',
+                        'menu_key' => 'tools_check_environment',
                         'menu_type' => 1,
                         'icon' => 'element-SetUp',
                         'api_url' => '',

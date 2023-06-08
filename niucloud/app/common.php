@@ -42,9 +42,7 @@ function fail($msg = 'FAIL', ?array $data = [], int $code = 0, int $http_code = 
  */
 function get_lang($str)
 {
-    $lang_config = config('lang') ?? [];
-    $range = cookie($lang_config['cookie_var']) ?? 'zh-cn';
-    return Lang::get($str, [], $range);
+    return Lang::get($str);
 }
 
 
