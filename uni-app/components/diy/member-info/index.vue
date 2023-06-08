@@ -21,7 +21,8 @@
 				<u-avatar src="" size="55"></u-avatar>
 				<view class="ml-[22rpx]">
 					<view class="text-[#222222] font-bold text-lg" :style="{ color : diyComponent.textColor }">
-						{{ t('login') }}/{{ t('register') }}</view>
+						{{ t('login') }}/{{ t('register') }}
+					</view>
 				</view>
 				<view class="set-icon flex items-center absolute right-0 top-2">
 					<app-link url="/pages/setting/index">
@@ -34,19 +35,23 @@
 			<view class="flex m-[30rpx] mb-0 py-[30rpx] items-center">
 				<view class="flex-1 text-center">
 					<view class="font-bold">
-						<app-link :url="(info ? '/pages/member/balance' : '')" :style="{ color : diyComponent.textColor }">{{ money }}</app-link>
+						<app-link :url="(info ? '/pages/member/balance' : '')"
+							:style="{ color : diyComponent.textColor }">{{ money }}</app-link>
 					</view>
 					<view class="text-sm mt-[10rpx]">
-						<app-link :url="(info ? '/pages/member/balance' : '')" :style="{ color : diyComponent.textColor }">{{ t('balance') }}</app-link>
+						<app-link :url="(info ? '/pages/member/balance' : '')"
+							:style="{ color : diyComponent.textColor }">{{ t('balance') }}</app-link>
 					</view>
 				</view>
 				<view class="border-solid border-white border-l border-b-0 border-t-0 border-r-0 h-[60rpx]"></view>
 				<view class="flex-1 text-center">
 					<view class="font-bold">
-						<app-link :url="(info ? '/pages/member/point' : '')" :style="{ color : diyComponent.textColor }">{{ parseInt(info?.point) || 0 }}</app-link>
+						<app-link :url="(info ? '/pages/member/point' : '')"
+							:style="{ color : diyComponent.textColor }">{{ parseInt(info?.point) || 0 }}</app-link>
 					</view>
 					<view class="text-sm mt-[10rpx]">
-						<app-link :url="(info ? '/pages/member/point' : '')" :style="{ color : diyComponent.textColor }">{{ t('point') }}</app-link>
+						<app-link :url="(info ? '/pages/member/point' : '')"
+							:style="{ color : diyComponent.textColor }">{{ t('point') }}</app-link>
 					</view>
 				</view>
 			</view>
@@ -81,7 +86,7 @@
 
 	const warpCss = computed(() => {
 		var style = '';
-		if(diyComponent.value.componentBgColor) style += 'background-color:' + diyComponent.value.componentBgColor + ';';
+		if (diyComponent.value.componentBgColor) style += 'background-color:' + diyComponent.value.componentBgColor + ';';
 		if (diyComponent.value.bgUrl) {
 			style += 'background-image:url(' + img(diyComponent.value.bgUrl) + ');';
 			style += 'background-size: 100%;';
@@ -114,7 +119,7 @@
 				balance: 0,
 				point: 0,
 				money: 0,
-				member_no:'NIU0000021'
+				member_no: 'NIU0000021'
 			}
 		} else {
 			return memberStore.info;

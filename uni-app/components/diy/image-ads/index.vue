@@ -2,16 +2,16 @@
 	<view class="image-ads" :style="warpCss">
 		<view v-if="diyComponent.list.length == 1" class="leading-0 overflow-hidden" :style="swiperWarpCss">
 			<app-link :data="diyComponent.list[0].link">
-				<image :src="img(diyComponent.list[0].imageUrl)" :style="{height: diyComponent.imageHeight}"
-					mode="scaleToFill" class="w-full" :show-menu-by-longpress="true"></image>
+				<image :src="img(diyComponent.list[0].imageUrl)" :style="{height: imgHeight}" mode="scaleToFill"
+					class="w-full" :show-menu-by-longpress="true"></image>
 			</app-link>
 		</view>
 
-		<swiper v-else class="swiper" :style="{ height: diyComponent.imageHeight }" autoplay="true" circular="true"
+		<swiper v-else class="swiper" :style="{ height: imgHeight }" autoplay="true" circular="true"
 			@change="swiperChange">
 			<swiper-item class="swiper-item" v-for="(item) in diyComponent.list" :key="item.id" :style="swiperWarpCss">
 				<app-link :data="item.link">
-					<view class="item" :style="{height: diyComponent.imageHeight}">
+					<view class="item" :style="{height: imgHeight}">
 						<image :src="img(item.imageUrl)" mode="scaleToFill" class="w-full h-full"
 							:show-menu-by-longpress="true"></image>
 					</view>
@@ -38,6 +38,7 @@
 			return props.component;
 		}
 	})
+
 	const warpCss = computed(() => {
 		var style = '';
 		if (diyComponent.value.componentBgColor) style += 'background-color:' + diyComponent.value.componentBgColor + ';';
@@ -53,6 +54,10 @@
 		return style;
 	})
 
+	const imgHeight = computed(() => {
+		return (diyComponent.value.imageHeight * 2) + 'rpx';
+	})
+
 	const swiperIndex = ref(0);
 
 	const swiperChange = e => {
@@ -60,7 +65,6 @@
 	};
 
 	const handleData = () => {
-		diyComponent.value.imageHeight = (diyComponent.value.imageHeight * 2) + 'rpx';
 	};
 
 	onMounted(() => {

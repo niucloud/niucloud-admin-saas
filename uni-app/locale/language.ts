@@ -22,9 +22,7 @@ class Language {
         uni.setLocale(locale)
         
         // #ifdef H5
-        if (process.env.NODE_ENV == 'production') {
-            setDocumentTitle(path)
-        }
+        setDocumentTitle(path)
         // #endif
     }
 

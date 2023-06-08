@@ -2,6 +2,7 @@ import { language } from '@/locale'
 import { checkNeedLogin } from '@/utils/auth'
 import { redirect, urlDeconstruction, getToken, getSiteId, setDocumentTitle } from '@/utils/common'
 import { memberLog } from '@/api/auth'
+import { nextTick } from 'vue'
 
 /**
  * 页面跳转拦截器
@@ -23,10 +24,10 @@ export const redirectInterceptor = () => {
 					if ((getSiteId(uni.getStorageSync('wap_site_id') || import.meta.env.VITE_SITE_ID) === '') && route.path != '/pages/index/develop') {
 						redirect({ url: '/pages/index/develop', mode: 'reLaunch' })
 					}
-				} else {
-                    // 设置网站标题
-                    setDocumentTitle(route.path)
-                }
+				}
+                
+                // 设置网站标题
+                setDocumentTitle(route.path)
 				// #endif
 
 				// 校验是否需要登录
@@ -53,15 +54,17 @@ export const launchInterceptor = () => {
 		if (location.search.indexOf('?mode=decorate&site_id=') != -1) {
 			uni.setStorageSync('wap_site_id', location.search.replace('?mode=decorate&site_id=',''));
 		}
+		if (location.search.indexOf('?mode=preview&site_id=') != -1) {
+			uni.setStorageSync('wap_site_id', location.search.replace('?mode=preview&site_id=',''));
+		}
 		if (getSiteId(uni.getStorageSync('wap_site_id') || import.meta.env.VITE_SITE_ID) === '') {
 			launch.path = '/pages/index/develop';
 			uni.setStorageSync('develop_before_path', launch.path);
 			redirect({ url: '/pages/index/develop', mode: 'reLaunch' })
 		}
-	} else {
-        // 设置网站标题
-        setDocumentTitle(launch.path)
-    }
+	}
+    // 设置网站标题
+    setDocumentTitle(launch.path)
 	// #endif
 
 	// 加载语言包

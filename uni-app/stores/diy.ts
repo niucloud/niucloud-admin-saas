@@ -46,8 +46,8 @@ const useDiyStore = defineStore('diy', {
 				try {
 					let data = JSON.parse(event.data);
 					this.currentIndex = data.currentIndex;
-					if(data.global) this.global = data.global;
-					if(data.value) this.value = data.value;
+					if (data.global) this.global = data.global;
+					if (data.value) this.value = data.value;
 
 					if (this.value) {
 						this.value.forEach((item, index) => {
@@ -101,7 +101,7 @@ const useDiyStore = defineStore('diy', {
 			});
 			window.parent.postMessage(data, '*');
 			// #endif
-		},
+		}
 	}
 })
 

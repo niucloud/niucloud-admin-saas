@@ -3,6 +3,7 @@ import useDiyStore from '@/stores/diy'
 import useMemberStore from '@/stores/member'
 import pagesZh from '@/locale/zh-Hans.json'
 import pagesEn from '@/locale/en.json'
+import { onReady } from '@dcloudio/uni-app'
 
 /**
 * 跳转页面
@@ -245,7 +246,17 @@ export function setDocumentTitle(route: string) {
             'en': pagesEn
         }
         const key = route.replace('/', '').replaceAll('/', '.')
-        locale[ uni.getLocale() ][key] && (document.title = locale[ uni.getLocale() ][key])
+        if (locale[ uni.getLocale() ][key]) {
+            setTimeout(() => {
+                uni.setNavigationBarTitle({ 
+                    title: locale[ uni.getLocale() ][key],
+                    fail(e) {
+                        setDocumentTitle(route)
+                    }
+                })
+            }, 500)
+        }
     } catch (e) {
+        console.log(e)
     } 
 }

@@ -24,7 +24,7 @@
 				<diy-text :component="component" :index="index"></diy-text>
 			</template>
 		</view>
-		<template v-if="diyStore.mode == '' && data.global.bottomTabBarSwitch">
+		<template v-if="diyStore.mode != 'decorate' && data.global.bottomTabBarSwitch">
 			<view class="pt-[20rpx]"></view>
 			<tabbar />
 		</template>
