@@ -648,7 +648,7 @@ CREATE TABLE site (
   phone varchar(255) NOT NULL DEFAULT '' COMMENT '客服电话',
   business_hours varchar(255) NOT NULL DEFAULT '' COMMENT '营业时间',
   create_time int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
-  expire_time BIGINT NOT NULL DEFAULT 0 COMMENT '到期时间（如果是0 无限期）',
+  expire_time int(11) NOT NULL DEFAULT 0 COMMENT '到期时间（如果是0 无限期）',
   front_end_name varchar(50) NOT NULL DEFAULT '' COMMENT '前台名称',
   front_end_logo varchar(255) NOT NULL DEFAULT '' COMMENT '前台logo',
   icon varchar(255) NOT NULL DEFAULT '' COMMENT '网站图标',
@@ -678,7 +678,7 @@ CREATE TABLE pay_transfer (
   transfer_no varchar(50) NOT NULL DEFAULT '' COMMENT '转账单号',
   main_id int(11) NOT NULL DEFAULT 0 COMMENT '会员id',
   main_type varchar(255) NOT NULL DEFAULT '' COMMENT '主体类型',
-  transfer_type varchar(20) NOT NULL DEFAULT '' COMMENT '转账类型',
+  transfer_type varchar(20) NOT NULL DEFAULT '0' COMMENT '转账类型',
   transfer_realname varchar(50) NOT NULL DEFAULT '' COMMENT '联系人名称',
   transfer_mobile varchar(11) NOT NULL DEFAULT '' COMMENT '手机号',
   transfer_bank varchar(255) NOT NULL DEFAULT '' COMMENT '银行名称',
@@ -724,7 +724,7 @@ CREATE TABLE pay_refund (
   out_trade_no varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '支付流水号',
   type varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '支付方式',
   channel varchar(50) NOT NULL DEFAULT '' COMMENT '支付渠道',
-  money decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '支付金额',
+  money decimal(10, 2) NOT NULL COMMENT '支付金额',
   reason varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '退款原因',
   status varchar(255) NOT NULL DEFAULT '0' COMMENT '支付状态（0.待退款 1. 退款中中 2. 已退款 -1已关闭）',
   create_time int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
@@ -794,9 +794,9 @@ ALTER TABLE pay
 ADD UNIQUE INDEX UK_ns_pay_out_trade_no (out_trade_no);
 
 --
--- `ns_recharge_order_log`
+-- `ns_order_log`
 --
-CREATE TABLE recharge_order_log (
+CREATE TABLE order_log (
   id int(11) NOT NULL AUTO_INCREMENT,
   order_id int(11) NOT NULL DEFAULT 0 COMMENT '订单id',
   site_id int(11) NOT NULL DEFAULT 0 COMMENT '站点id',
@@ -817,9 +817,9 @@ COMMENT = '订单操作记录表',
 ROW_FORMAT = COMPACT;
 
 --
--- `ns_recharge_order_item_refund`
+-- `ns_order_item_refund`
 --
-CREATE TABLE recharge_order_item_refund (
+CREATE TABLE order_item_refund (
   refund_id int(11) NOT NULL AUTO_INCREMENT,
   order_item_id int(11) NOT NULL DEFAULT 0 COMMENT '订单id',
   order_id int(11) NOT NULL DEFAULT 0 COMMENT '订单id',
@@ -844,9 +844,9 @@ COMMENT = '订单退款表',
 ROW_FORMAT = COMPACT;
 
 --
--- `recharge_order_item`
+-- `ns_order_item`
 --
-CREATE TABLE recharge_order_item (
+CREATE TABLE order_item (
   order_item_id int(11) NOT NULL AUTO_INCREMENT,
   order_id int(11) NOT NULL DEFAULT 0 COMMENT '订单id',
   site_id int(11) NOT NULL DEFAULT 0 COMMENT '站点id',
@@ -872,9 +872,9 @@ COMMENT = '订单商品表',
 ROW_FORMAT = COMPACT;
 
 --
--- `recharge_order`
+-- `ns_order`
 --
-CREATE TABLE `recharge_order` (
+CREATE TABLE `order` (
   order_id int(11) NOT NULL AUTO_INCREMENT,
   site_id int(11) NOT NULL DEFAULT 0 COMMENT '站点id',
   order_no varchar(50) NOT NULL DEFAULT '' COMMENT '订单编号',
@@ -1109,7 +1109,7 @@ CREATE TABLE member (
   member_no varchar(255) NOT NULL DEFAULT '' COMMENT '会员编码',
   pid int(11) NOT NULL DEFAULT 0 COMMENT '推广会员id',
   site_id int(11) NOT NULL DEFAULT 0 COMMENT '站点id',
-  username varchar(255) NOT NULL DEFAULT '' COMMENT '会员用户名',
+  username varchar(255) DEFAULT '' COMMENT '会员用户名',
   mobile varchar(20) NOT NULL DEFAULT '' COMMENT '手机号',
   password varchar(255) NOT NULL DEFAULT '' COMMENT '会员密码',
   nickname varchar(50) NOT NULL DEFAULT '' COMMENT '会员昵称',
@@ -1210,10 +1210,11 @@ CREATE TABLE jobs (
   id int(11) NOT NULL AUTO_INCREMENT,
   queue varchar(255) NOT NULL,
   payload longtext NOT NULL,
-  attempts tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
-  reserve_time int(10) UNSIGNED DEFAULT 0,
-  available_time int(10) UNSIGNED NOT NULL DEFAULT 0,
-  create_time int(10) UNSIGNED NOT NULL DEFAULT 0,
+  attempts tinyint(3) UNSIGNED NOT NULL,
+  reserved tinyint(3) UNSIGNED NOT NULL,
+  reserve_time int(10) UNSIGNED DEFAULT NULL,
+  available_time int(10) UNSIGNED NOT NULL,
+  create_time int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (id)
 )
 ENGINE = INNODB,
@@ -1221,8 +1222,6 @@ AVG_ROW_LENGTH = 5461,
 CHARACTER SET utf8mb4,
 COLLATE utf8mb4_general_ci,
 COMMENT = '消息队列任务表';
-
-ALTER TABLE jobs ADD INDEX queue (queue);
 
 --
 -- `ns_generate_table`
@@ -1262,8 +1261,8 @@ CREATE TABLE generate_column (
   query_type varchar(100) DEFAULT '=' COMMENT '查询类型',
   view_type varchar(100) DEFAULT 'input' COMMENT '显示类型',
   dict_type varchar(255) DEFAULT '' COMMENT '字典类型',
-  create_time int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
-  update_time int(11) NOT NULL DEFAULT 0 NULL COMMENT '修改时间',
+  create_time int(11) NOT NULL COMMENT '创建时间',
+  update_time int(11) DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (id)
 )
 ENGINE = INNODB,
@@ -1360,7 +1359,7 @@ CREATE TABLE article (
   author varchar(255) NOT NULL DEFAULT '' COMMENT '作者',
   content text DEFAULT NULL COMMENT '文章内容',
   visit int(11) NOT NULL DEFAULT 0 COMMENT '实际浏览量',
-  visit_virtual int(11) NOT NULL DEFAULT 0 COMMENT '初始浏览量',
+  visit_virtual int(11) NOT NULL DEFAULT 0 COMMENT '虚拟浏览量',
   is_show tinyint(4) NOT NULL DEFAULT 1 COMMENT '是否显示:1-是.0-否',
   sort int(11) NOT NULL DEFAULT 0 COMMENT '排序',
   create_time int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
@@ -1393,10 +1392,10 @@ ADD INDEX IDX_ns_article_sort (sort);
 --
 CREATE TABLE addon_log (
   id int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  action varchar(40) NOT NULL DEFAULT '' COMMENT '操作类型   install 安装 uninstall 卸载 update 更新',
-  `key` varchar(20) NOT NULL DEFAULT '' COMMENT '插件标识',
-  from_version varchar(20) NOT NULL DEFAULT '' COMMENT '升级前的版本号',
-  to_version varchar(20) NOT NULL DEFAULT '' COMMENT '升级后的版本号',
+  action varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '操作类型   install 安装 uninstall 卸载 update 更新',
+  `key` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '插件标识',
+  from_version varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '升级前的版本号',
+  to_version varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '升级后的版本号',
   create_time int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
   PRIMARY KEY (id)
 )
@@ -1410,13 +1409,13 @@ COMMENT = '插件日志表';
 --
 CREATE TABLE addon (
   id int(11) NOT NULL AUTO_INCREMENT COMMENT '主键',
-  title varchar(40)  NOT NULL DEFAULT '' COMMENT '插件名称',
-  icon varchar(255)  NOT NULL DEFAULT '' COMMENT '插件图标',
-  `key` varchar(20)  NOT NULL DEFAULT '' COMMENT '插件标识',
-  `desc` text  DEFAULT NULL COMMENT '插件描述',
+  title varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '插件名称',
+  icon varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '插件图标',
+  `key` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '插件标识',
+  `desc` text CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '插件描述',
   status tinyint(4) NOT NULL DEFAULT 1 COMMENT '状态',
-  author varchar(40)  NOT NULL DEFAULT '' COMMENT '作者',
-  version varchar(20)  NOT NULL DEFAULT '' COMMENT '版本号',
+  author varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '作者',
+  version varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '版本号',
   create_time int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
   install_time int(11) NOT NULL DEFAULT 0 COMMENT '安装时间',
   update_time int(11) NOT NULL DEFAULT 0 COMMENT '更新时间',
