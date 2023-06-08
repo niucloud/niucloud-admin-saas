@@ -26,7 +26,6 @@
 		if (process.env.NODE_ENV == 'development' && (getSiteId(uni.getStorageSync('wap_site_id') || import.meta.env.VITE_SITE_ID) === '')) return;
 		// #endif
 
-
 		const configStore = useConfigStore()
 		configStore.getTabbarConfig()
 		await configStore.getLoginConfig()
