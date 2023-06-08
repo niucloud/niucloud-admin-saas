@@ -13,12 +13,22 @@
                     <div class="group-item px-[10px] text-xs rounded cursor-pointer flex" v-for="(item, index) in attachmentCategory.data" :key="index" :class="{ active: attachmentParam.cate_id == item.id }">
                         <div class="flex-1 leading-none truncate py-[10px]" @click="attachmentParam.cate_id = item.id">{{item.name }}</div>
                         <div class="leading-none operate py-[10px]" v-if="scene == 'attachment'">
-                            <!-- 编辑分组 -->
-                            <popover-input :placeholder="t('upload.attachmentCategoryPlaceholder')" @confirm="updateAttachmentCategory($event, index)" :value="item.name">
-                                <span class="text-primary">{{ t('edit') }}</span>
-                            </popover-input>
-                            <!-- 删除分组 -->
-                            <span class="text-danger ml-[5px]" @click="deleteAttachmentCategory(index)">{{ t('delete')}}</span>
+                            <!-- 图片操作 -->
+                            <el-dropdown :hide-on-click="false" v-if="scene == 'attachment'">
+                                <icon name="element-MoreFilled" class="cursor-pointer ml-[10px]" size="14px" />{{item.name}}
+                                <template #dropdown>
+                                    <el-dropdown-menu>
+                                        <el-dropdown-item class="text-center">
+                                            <popover-input :placeholder="t('upload.attachmentCategoryPlaceholder')" @confirm="updateAttachmentCategory($event, index)" :value="item.name">
+                                                <span>{{ t('edit') }}</span>
+                                            </popover-input>
+                                        </el-dropdown-item>
+                                        <el-dropdown-item @click="deleteAttachmentCategory(index)">
+                                            <div class="text-center w-full">{{ t('delete') }}</div>
+                                        </el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </template>
+                            </el-dropdown>
                         </div>
                     </div>
                 </el-scrollbar>
@@ -40,7 +50,6 @@
 							<el-button v-if="operate === false" class="ml-[10px]" type="primary" @click="operate = true">{{t('edit') }}</el-button>
 							<el-button v-else class="ml-[10px]" type="primary" @click="operate = false">{{ t('complete') }}</el-button>
 						</div>
-                        
                     </div>
                 </el-col>
                 <el-col :span="12" class="text-right">
@@ -64,8 +73,8 @@
                                     <div class="truncate my-[10px] cursor-pointer text-base flex-1 ">{{ item.real_name }}</div>
                                 </el-tooltip>
                                 <!-- 图片操作 -->
-                                <el-dropdown :hide-on-click="false" v-if="scene == 'attachment'">
-                                    <icon name="element-MoreFilled" class="cursor-pointer ml-[10px]" size="14px" />
+                                <el-dropdown :hide-on-click="false" v-if="scene == 'attachment'" class="attachment-action hidden ">
+                                    <icon name="element-MoreFilled" class="cursor-pointer ml-[8px]" size="14px" />
                                     <template #dropdown>
                                         <el-dropdown-menu>
                                             <el-dropdown-item class="text-center" @click="previewImage(index)" v-if="item.att_type == 'image'">
@@ -479,6 +488,11 @@ defineExpose({
                 display: block;
             }
         }
+    }
+}
+.attachment-item:hover{
+    .attachment-action{
+        display: block;
     }
 }
 

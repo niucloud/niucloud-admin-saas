@@ -1,8 +1,11 @@
 <template>
     <div class="main-container">
+        <div class="flex ml-[18px] justify-between items-center mt-[20px]">
+            <span class="text-[24px]">{{pageName}}</span>
+        </div>
         <el-form :model="formData" label-width="150px" ref="ruleFormRef" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
-                <h3 class="panel-title">{{ t('commonSetting') }}</h3>
+                <h3 class="panel-title !text-sm">{{ t('commonSetting') }}</h3>
 
                 <el-form-item :label="t('logonMode')">
                     <el-checkbox v-model="formData.is_username" :label="t('isUsername')" @change="switchChange($event, 'is_username')" />
@@ -21,7 +24,7 @@
                     <div class="form-tip">{{ t('agreementTips') }}</div>
                 </el-form-item>
 
-                <h3 class="panel-title">{{ t('tripartiteSetting') }}</h3>
+                <h3 class="panel-title !text-sm">{{ t('tripartiteSetting') }}</h3>
 
                 <el-form-item :label="t('isAuthRegister')" prop="formData.is_auth_register">
                     <el-switch v-model="formData.is_auth_register" @change="switchChange($event, 'is_auth_register')" />
@@ -42,6 +45,9 @@ import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getLoginConfig, setLoginConfig } from '@/api/member'
 import { FormInstance } from 'element-plus'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title
 
 const loading = ref(true)
 const ruleFormRef = ref<FormInstance>()

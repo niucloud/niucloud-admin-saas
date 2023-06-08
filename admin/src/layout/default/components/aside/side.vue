@@ -1,5 +1,6 @@
 <template>
-    <el-container class="w-100 h-screen" :class="[{'sidebar-dark-mode':systemStore.sidebar == 'twoType'},{'sidebar-brightness-mode':systemStore.sidebar == 'oneType'}]">
+    <el-container class="w-100 h-screen"
+        :class="[{ 'sidebar-dark-mode': systemStore.sidebar == 'twoType' }, { 'sidebar-brightness-mode': systemStore.sidebar == 'oneType' }]">
         <el-header class="logo-wrap w-100">
             <div class="logo flex items-center m-auto max-w-[210px] h-[30px]" v-if="!systemStore.menuIsCollapse">
                 <img class="max-h-full max-w-full" v-if="storage.get('siteInfo').logo" :src="img(siteInfo.logo)" alt="">
@@ -12,9 +13,12 @@
 
         <el-main class="menu-wrap">
             <el-scrollbar>
-                <el-menu :default-active="menuActive" :router="true" class="aside-menu h-full" unique-opened="true" :collapse="systemStore.menuIsCollapse">
-                    <menu-item v-for="(route, index) in userStore.routers" :routes="route" :route-path="route.path" :key="index" />
+                <el-menu :default-active="menuActive" :router="true" class="aside-menu h-full" unique-opened="true"
+                    :collapse="systemStore.menuIsCollapse">
+                    <menu-item v-for="(route, index) in userStore.routers" :routes="route" :route-path="route.path"
+                        :key="index" />
                 </el-menu>
+                <div class="h-[48px]"></div>
             </el-scrollbar>
         </el-main>
     </el-container>
@@ -37,19 +41,19 @@ const siteInfo = storage.get('siteInfo') || false
 
 const menuActive = computed(() => String(route.name))
 
-userStore.routers.forEach((item,index) => {
-    item.meta.class = 1;
-    if(item.children){
-        item.children.forEach((subItem,subIndex) => {
-            subItem.meta.class = 2;
-            if(subItem.children){
-                subItem.children.forEach((threeItem,threeIndex) => {
-                    threeItem.meta.class = 3;
+userStore.routers.forEach((item, index) => {
+    item.meta.class = 1
+    if (item.children) {
+        item.children.forEach((subItem, subIndex) => {
+            subItem.meta.class = 2
+            if (subItem.children) {
+                subItem.children.forEach((threeItem, threeIndex) => {
+                    threeItem.meta.class = 3
                 })
             }
         })
     }
-});
+})
 </script>
 
 <style lang="scss">
@@ -86,41 +90,52 @@ userStore.routers.forEach((item,index) => {
         border-right: 0 !important;
     }
 }
-.sidebar-dark-mode{
+
+.sidebar-dark-mode {
     background-color: #191a23;
-    & > .logo-wrap{
-        .logo>i{
+
+    &>.logo-wrap {
+        .logo>i {
             font-size: 20px;
         }
+
         border-bottom: 2px solid #101117;
     }
-    .el-menu{
+
+    .el-menu {
         background-color: #191a23;
-        .el-sub-menu{
+
+        .el-sub-menu {
             background: transparent !important;
         }
-        .el-sub-menu__title, .el-menu-item{
+
+        .el-sub-menu__title,
+        .el-menu-item {
             background: transparent !important;
             color: #B7B7ba;
-            &:hover{
+
+            &:hover {
                 background-color: transparent !important;
                 color: #fff !important;
             }
         }
-        .el-menu-item.is-active{
+
+        .el-menu-item.is-active {
             color: #fff !important;
             background-color: var(--el-color-primary) !important;
         }
-        li::after{
+
+        li::after {
             content: "";
             width: 0;
             height: 0;
         }
     }
 }
-.sidebar-brightness-mode{
-    & > .logo-wrap{
-        .logo>i{
+
+.sidebar-brightness-mode {
+    &>.logo-wrap {
+        .logo>i {
             font-size: 20px;
         }
     }

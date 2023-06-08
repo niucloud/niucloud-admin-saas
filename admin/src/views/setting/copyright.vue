@@ -1,8 +1,11 @@
 <template>
     <div class="main-container">
+        <div class="flex ml-[18px] justify-between items-center mt-[20px]">
+			<span class="text-[24px]">{{pageName}}</span>
+		</div>
         <el-form :model="formData" label-width="150px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
-                <h3 class="panel-title">{{ t('copyrightEdit') }}</h3>
+                <h3 class="panel-title !text-sm">{{ t('copyrightEdit') }}</h3>
                 <el-form-item :label="t('logo')">
                     <upload-image v-model="formData.logo" />
                 </el-form-item>
@@ -22,7 +25,7 @@
             </el-card>
 
             <el-card class="box-card !border-none mt-[16px]" shadow="never">
-                <h3 class="panel-title">{{ t('putOnRecordEdit') }}</h3>
+                <h3 class="panel-title !text-sm">{{ t('putOnRecordEdit') }}</h3>
 
                 <el-form-item :label="t('icp')" prop="icp">
                     <el-input v-model="formData.icp" :placeholder="t('icpPlaceholder')" class="input-width" clearable maxlength="20"/>
@@ -56,6 +59,9 @@ import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { setCopyright,getCopyright } from '@/api/sys'
 import { ElMessage, FormInstance, FormRules } from 'element-plus'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title
 
 const loading = ref(true)
 

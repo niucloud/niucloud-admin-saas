@@ -8,7 +8,7 @@
       "author":"作者",
       "content":"文章内容",
       "visit":"浏览量",
-      "visitVirtual":"虚拟浏览量",
+      "visitVirtual":"初始浏览量",
       "isShow":"是否显示",
       "sort":"排序",
       "createTime":"创建时间",

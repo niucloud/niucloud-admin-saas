@@ -2,44 +2,47 @@
 	<div class="main-container">
 		<el-card class="box-card !border-none" shadow="never">
 			<div class="flex justify-between items-center mb-[5px]">
-                <span class="text-[24px]">{{pageName}}</span>
-            </div>
+				<span class="text-[24px]">{{ pageName }}</span>
+			</div>
 
 			<el-card class="box-card !border-none table-search-wra base-bg !px-[35px]" shadow="never">
-			    <el-row class="flex">
-			        <el-col :span="12">
+				<el-row class="flex">
+					<el-col :span="12">
 						<div class="statistic-card">
-                            <el-statistic :value="refundStat.refund_all_money"></el-statistic>
-                            <div class="statistic-footer">
-                                <div class="footer-item text-[14px] text-[#666]">
-                                    <span>{{ t('accumulateRefundMoney') }}</span>
-                                </div>
-                            </div>
-                        </div>
+							<el-statistic :value="refundStat.refund_all_money"></el-statistic>
+							<div class="statistic-footer">
+								<div class="footer-item text-[14px] text-[#666]">
+									<span>{{ t('accumulateRefundMoney') }}</span>
+								</div>
+							</div>
+						</div>
 					</el-col>
 					<el-col :span="12">
 						<div class="statistic-card">
-                            <el-statistic :value="refundStat.refund_have_money"></el-statistic>
-                            <div class="statistic-footer">
-                                <div class="footer-item text-[14px] text-[#666]">
-                                    <span>{{ t('haveRefundMoney') }}</span>
-                                </div>
-                            </div>
-                        </div>
+							<el-statistic :value="refundStat.refund_have_money"></el-statistic>
+							<div class="statistic-footer">
+								<div class="footer-item text-[14px] text-[#666]">
+									<span>{{ t('haveRefundMoney') }}</span>
+								</div>
+							</div>
+						</div>
 					</el-col>
-			    </el-row>
+				</el-row>
 			</el-card>
- 
+
 			<el-card class="box-card !border-none mb-[10px] table-search-wrap" shadow="never">
 				<el-form :inline="true" :model="refundTableData.searchParam" ref="searchFormRef">
 					<el-form-item :label="t('memberInfo')" prop="keywords">
-						<el-input v-model="refundTableData.searchParam.keywords" class="w-[240px]" :placeholder="t('memberInfoPlaceholder')" />
+						<el-input v-model="refundTableData.searchParam.keywords" class="w-[240px]"
+							:placeholder="t('memberInfoPlaceholder')" />
 					</el-form-item>
 					<el-form-item :label="t('refundNumber')" prop="refund_no">
-						<el-input v-model="refundTableData.searchParam.refund_no" class="w-[240px]" :placeholder="t('refundNumberPlaceholder')" />
+						<el-input v-model="refundTableData.searchParam.refund_no" class="w-[240px]"
+							:placeholder="t('refundNumberPlaceholder')" />
 					</el-form-item>
 					<el-form-item :label="t('orderNumber')" prop="order_no">
-						<el-input v-model="refundTableData.searchParam.order_no" class="w-[240px]" :placeholder="t('orderNumberPlaceholder')" />
+						<el-input v-model="refundTableData.searchParam.order_no" class="w-[240px]"
+							:placeholder="t('orderNumberPlaceholder')" />
 					</el-form-item>
 
 					<el-form-item :label="t('refundStatus')" prop="status">
@@ -55,7 +58,7 @@
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="loadRefundList()">{{ t('search') }}</el-button>
-						<el-button  @click="resetForm(searchFormRef)">{{ t('reset') }}</el-button>
+						<el-button @click="resetForm(searchFormRef)">{{ t('reset') }}</el-button>
 					</el-form-item>
 				</el-form>
 			</el-card>
@@ -69,8 +72,10 @@
 					<el-table-column :show-overflow-tooltip="true" :label="t('memberInfo')" align="left" min-width="140">
 						<template #default="{ row }">
 							<div class="flex items-center cursor-pointer " @click="toMember(row.member.member_id)">
-								<img class="w-[50px] h-[50px] mr-[10px]" v-if="row.headimg" :src="img(row.member.headimg)" alt="">
-								<img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/assets/images/default_headimg.png" alt="">
+								<img class="w-[50px] h-[50px] mr-[10px]" v-if="row.headimg" :src="img(row.member.headimg)"
+									alt="">
+								<img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/assets/images/default_headimg.png"
+									alt="">
 								<div class="flex flex flex-col">
 									<span class="">{{ row.member.nickname || '' }}</span>
 									<span class="">{{ row.member.mobile || '' }}</span>
@@ -91,11 +96,11 @@
 							{{ row.status_name || '' }}
 						</template>
 					</el-table-column>
-					
+
 					<el-table-column :label="t('operation')" fixed="right" width="130">
-					    <template #default="{ row }">
-					        <el-button type="primary" link @click="infoEvent(row)">{{ t('info') }}</el-button>
-					    </template>
+						<template #default="{ row }">
+							<el-button type="primary" link @click="infoEvent(row)">{{ t('info') }}</el-button>
+						</template>
 					</el-table-column>
 
 				</el-table>
@@ -107,51 +112,51 @@
 			</div>
 
 		</el-card>
-		
+
 		<el-dialog v-model="refundInfoShowDialog" :title="t('refundDetail')" width="500px" :destroy-on-close="true">
-		    <el-form :model="refundInfo" label-width="120px" ref="formRef" :rules="formRules" class="page-form" >
+			<el-form :model="refundInfo" label-width="120px" ref="formRef" :rules="formRules" class="page-form">
 				<el-form-item :label="t('nickname')">
-				    <div class="input-width"> {{ refundInfo.member.nickname }} </div>
+					<div class="input-width"> {{ refundInfo.member.nickname }} </div>
 				</el-form-item>
 				<el-form-item :label="t('refundSource')">
-				    <div class="input-width"> {{ refundInfo.item.item_name }} </div>
+					<div class="input-width"> {{ refundInfo.item.item_name }} </div>
 				</el-form-item>
 				<el-form-item :label="t('refundAmount')">
-				    <div class="input-width"> {{ refundInfo.money }} </div>
+					<div class="input-width"> {{ refundInfo.money }} </div>
 				</el-form-item>
 				<el-form-item :label="t('orderNumber')">
-				    <div class="input-width"> {{ refundInfo.item.order_no }} </div>
+					<div class="input-width"> {{ refundInfo.item.order_no }} </div>
 				</el-form-item>
 				<el-form-item :label="t('refundNumber')">
-				    <div class="input-width"> {{ refundInfo.refund_no }} </div>
+					<div class="input-width"> {{ refundInfo.refund_no }} </div>
 				</el-form-item>
 				<el-form-item :label="t('refundTime')">
-				    <div class="input-width"> {{ refundInfo.create_time }} </div>
+					<div class="input-width"> {{ refundInfo.create_time }} </div>
 				</el-form-item>
 				<el-form-item :label="t('statusName')">
-				    <div class="input-width"> {{ refundInfo.status_name }} </div>
+					<div class="input-width"> {{ refundInfo.status_name }} </div>
 				</el-form-item>
-		    </el-form>
-		    <template #footer>
-		        <span class="dialog-footer">
-		            <el-button type="primary" @click="refundInfoShowDialog = false">{{t('confirm')}}</el-button>
-		        </span>
-		    </template>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button type="primary" @click="refundInfoShowDialog = false">{{ t('confirm') }}</el-button>
+				</span>
+			</template>
 		</el-dialog>
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { img } from '@/utils/common'
 import { useRouter, useRoute } from 'vue-router'
-import { getRefund, getRefundStatus, getRefundStat } from '@/api/order'
+import { getRechargeRefund, getRechargeRefundStatus, getRechargeRefundStat } from '@/api/order'
 import { FormInstance } from 'element-plus'
 
 const router = useRouter()
 const route = useRoute()
-const pageName = route.meta.title;
+const pageName = route.meta.title
 const searchFormRef = ref<FormInstance>()
 const refundTableData = reactive({
 	page: 1,
@@ -165,16 +170,15 @@ const refundTableData = reactive({
 		create_time: [],
 		status: '',
 		keywords: '',
-		order_no:''
+		order_no: ''
 	}
 })
 
+const resetForm = (formEl: FormInstance | undefined) => {
+	if (!formEl) return
 
-const resetForm = (formEl: FormInstance | undefined)=>{
-    if (!formEl) return
-    
-    formEl.resetFields();
-    loadRefundList();
+	formEl.resetFields()
+	loadRefundList()
 }
 /**
  * 获取退款列表
@@ -183,7 +187,7 @@ const loadRefundList = (page: number = 1) => {
 	refundTableData.loading = true
 	refundTableData.page = page
 
-	getRefund({
+	getRechargeRefund({
 		page: refundTableData.page,
 		limit: refundTableData.limit,
 		...refundTableData.searchParam
@@ -199,7 +203,7 @@ loadRefundList()
 
 const refundList = ref([])
 const checkRefundList = () => {
-	getRefundStatus().then(res => {
+	getRechargeRefundStatus().then(res => {
 		refundList.value = res.data
 	})
 }
@@ -211,29 +215,29 @@ const refundStat = reactive({
 	refund_Success_money: 0.00,
 	refund_fail_moey: 0.00
 })
-const checkRefundStat = () =>{
-	getRefundStat().then(res=>{
-		refundStat.refund_all_money = res.data['all'].money;
-		refundStat.refund_have_money = res.data['have'].money;
-		refundStat.refund_Success_money = res.data['3'].money;
-		refundStat.refund_fail_moey = res.data['-1'].money;
+const checkRefundStat = () => {
+	getRechargeRefundStat().then(res => {
+		refundStat.refund_all_money = res.data.all.money
+		refundStat.refund_have_money = res.data.have.money
+		refundStat.refund_Success_money = res.data['3'].money
+		refundStat.refund_fail_moey = res.data['-1'].money
 	})
 }
 checkRefundStat()
 
 const refundInfoShowDialog = ref(false)
-const refundInfo = ref({});
-// const refundInfoLoading = ref(true);
+const refundInfo = ref({})
+
 const infoEvent = (info) => {
-	refundInfo.value = info;
+	refundInfo.value = info
 	refundInfoShowDialog.value = true
 }
 
 /**
  * 会员详情
  */
-const toMember = (member_id: number) => {
-	router.push(`/member/detail?id=${member_id}`)
+const toMember = (memberId: number) => {
+	router.push(`/member/detail?id=${memberId}`)
 }
 
 </script>

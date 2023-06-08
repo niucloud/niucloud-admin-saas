@@ -1,8 +1,11 @@
 <template>
     <div class="main-container">
-        <el-form :model="formData" label-width="200px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
+        <div class="flex ml-[18px] justify-between items-center mt-[20px]">
+            <span class="text-[24px]">{{pageName}}</span>
+        </div>
+        <el-form :model="formData" label-width="170px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
-                <h3 class="panel-title">{{ t('weappInfo') }}</h3>
+                <h3 class="panel-title !text-sm">{{ t('weappInfo') }}</h3>
 
                 <el-form-item :label="t('weappName')" prop="weapp_name">
                     <el-input v-model="formData.weapp_name" :placeholder="t('weappNamePlaceholder')" class="input-width" clearable />
@@ -20,7 +23,7 @@
             </el-card>
 
             <el-card class="box-card !border-none mt-[16px]" shadow="never">
-                <h3 class="panel-title">{{ t('weappDevelopInfo') }}</h3>
+                <h3 class="panel-title !text-sm">{{ t('weappDevelopInfo') }}</h3>
 
                 <el-form-item :label="t('weappAppid')" prop="app_id">
                     <el-input v-model="formData.app_id" :placeholder="t('appidPlaceholder')" class="input-width" clearable />
@@ -35,7 +38,7 @@
             </el-card>
 
             <el-card class="box-card !border-none mt-[16px]" shadow="never">
-                <h3 class="panel-title">{{ t('theServerSetting') }}</h3>
+                <h3 class="panel-title !text-sm">{{ t('theServerSetting') }}</h3>
 
                 <el-form-item label="URL">
                     <el-input :model-value="formData.serve_url" placeholder="Please input" class="input-width" :readonly="true">
@@ -70,7 +73,7 @@
 
             <el-card class="box-card !border-none mt-[16px]" shadow="never">
                 <div class="flex">
-                    <h3 class="panel-title">{{ t('functionSetting') }}</h3>
+                    <h3 class="panel-title !text-sm">{{ t('functionSetting') }}</h3>
                 </div>
 
                 <el-form-item :label="t('requestUrl')">
@@ -123,6 +126,9 @@ import { t } from '@/lang'
 import { getWeappConfig, setWeappConfig } from '@/api/weapp'
 import { useClipboard } from '@vueuse/core'
 import { ElMessage, FormInstance, FormRules } from 'element-plus'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title
 
 const loading = ref(true)
 

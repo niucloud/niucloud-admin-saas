@@ -12,14 +12,6 @@
                     <div class="navbar-item flex items-center h-full cursor-pointer" @click="refreshRouter">
                         <icon name="element-Refresh" />
                     </div>
-                    <!-- 返回上一页 -->
-                    <div class="flex items-center cursor-pointer" v-if="appStore.pageReturn" @click="backFn">
-                        <el-icon class="mr-1">
-                            <Back />
-                        </el-icon>
-                        <span class="text-base mr-3">{{ t('returnToPreviousPage') }}</span>
-                        <span class=" text-gray-300">|</span>
-                    </div>
                     <!-- 面包屑导航 -->
                     <div class="flex items-center h-full pl-[10px] hidden-xs-only">
                         <el-breadcrumb separator="/">

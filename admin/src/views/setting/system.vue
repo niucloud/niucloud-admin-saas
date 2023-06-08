@@ -1,9 +1,12 @@
 <template>
     <div class="main-container">
+        <div class="flex ml-[18px] justify-between items-center mt-[20px] mb-[5px]">
+			<span class="text-[24px]">{{pageName}}</span>
+		</div>
         <el-form :model="formData" label-width="150px" ref="formRef" :rules="formRules" class="page-form"
             v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
-                <h3 class="panel-title">{{ t('websiteInfo') }}</h3>
+                <h3 class="panel-title !text-sm">{{ t('websiteInfo') }}</h3>
 
                 <el-form-item :label="t('siteName')" prop="site_name">
                     <el-input v-model="formData.site_name" :placeholder="t('siteNamePlaceholder')" class="input-width" clearable maxlength="20" />
@@ -26,7 +29,7 @@
                 </el-form-item>
             </el-card>
             <el-card class="box-card !border-none" shadow="never">
-                <h3 class="panel-title">{{ t('frontEndInfo') }}</h3>
+                <h3 class="panel-title !text-sm">{{ t('frontEndInfo') }}</h3>
 				<el-form-item :label="t('frontEndName')">
 				    <el-input v-model="formData.front_end_name" :placeholder="t('frontEndNamePlaceholder')" class="input-width" clearable maxlength="20" />
 				</el-form-item>
@@ -36,7 +39,7 @@
                 </el-form-item>
             </el-card>
 			<el-card class="box-card !border-none" shadow="never" v-if="app_type == 'admin' ">
-			    <h3 class="panel-title">{{ t('serviceInformation') }}</h3>
+			    <h3 class="panel-title !text-sm">{{ t('serviceInformation') }}</h3>
 				<el-form-item :label="t('contactsTel')">
 				    <el-input v-model="formData.tel" :placeholder="t('contactsTelPlaceholder')" class="input-width" clearable maxlength="20" />
 				</el-form-item>
@@ -64,6 +67,9 @@ import { setWebsite, getWebsite, getService } from '@/api/sys'
 import { FormInstance, FormRules } from 'element-plus'
 import storage from '@/utils/storage'
 import { getAppType } from '@/utils/common'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title
 
 const loading = ref(true)
 const app_type = ref()

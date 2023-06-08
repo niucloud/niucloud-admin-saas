@@ -8,7 +8,7 @@
 			    <el-row class="flex">
 			        <el-col :span="8" class="min-w-[100px]">
 						<div class="statistic-card">
-                            <el-statistic :value="balanceStatistics.money ? Number.parseFloat(balanceStatistics.money+balanceStatistics.balance).toFixed(2) : '0.00'"></el-statistic>
+                            <el-statistic :value="balanceStatistics.money && balanceStatistics.balance  ? (Number.parseFloat(balanceStatistics.money)+Number.parseFloat(balanceStatistics.balance)).toFixed(2) : '0.00'"></el-statistic>
                             <div class="statistic-footer">
                                 <div class="footer-item text-[14px] text-[#666]">
                                     <span>{{ t('totalAllBalance') }}</span>

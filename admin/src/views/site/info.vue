@@ -1,9 +1,16 @@
 <template>
     <div class="main-container">
-        <el-form :model="formData" label-width="150px" ref="formRef" class="page-form">
+        <div class="detail-head !mb-[10px]">
+            <div class="left" @click="router.push({ path: '/admin/site/list' })">
+                <span class="iconfont iconxiangzuojiantou !text-xs"></span>
+                <span class="ml-[1px]">{{t('returnToPreviousPage')}}</span>
+            </div>
+            <span class="adorn">|</span>
+            <span class="right">{{ pageName }}</span>
+            <el-button class="ml-auto w-[100px] mr-[10px]" type="primary" @click="editEvent(formRef)">{{ t('edit') }}</el-button>
+        </div>
+        <el-form :model="formData" label-width="90px" ref="formRef" class="page-form">
             <el-card class="box-card !border-none relative" shadow="never">
-                <h3 class="panel-title">{{ t('siteInfo') }}</h3>
-
                 <el-form-item :label="t('siteName')">
                     <div class="input-width">{{ formData.site_name }}</div>
                 </el-form-item>
@@ -36,8 +43,6 @@
                 <el-form-item :label="t('expireTime')">
                     <div class="input-width">{{ formData.expire_time || '' }}</div>
                 </el-form-item>
-
-                <el-button class="absolute right-5 top-5" type="primary" @click="editEvent(formRef)">{{ t('edit') }}</el-button>
             </el-card>
 
         </el-form>
@@ -66,14 +71,9 @@ const appStore = useAppStore()
 const tabbarStore = useTabbarStore()
 const route = useRoute()
 const router = useRouter()
+const pageName = route.meta.title
 const id: number = parseInt(route.query.id)
 const loading = ref(true)
-
-// 页面返回按钮
-appStore.pageReturn = true
-watch(route, (newX, oldX) => {
-    appStore.pageReturn = false
-})
 
 /**
  * 表单数据

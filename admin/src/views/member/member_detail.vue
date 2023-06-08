@@ -1,9 +1,14 @@
 <template>
 	<div class="main-container" v-loading="loading">
-		<el-card class="box-card !border-none mt-[16px]" shadow="never">
-			<div class="card-header mb-5 pb-[10px] border-b-[1px] border-[#EDEDED]">
-				<span class="font-bold text-[18px] text-[#333333]">{{ t('essentialInfo') }}</span>
+		<div class="detail-head !ml-[20px] !mb-[5px]">
+			<div class="left" @click="router.push({ path: '/member/member' })">
+				<span class="iconfont iconxiangzuojiantou !text-xs"></span>
+				<span class="ml-[1px]">{{t('returnToPreviousPage')}}</span>
 			</div>
+			<span class="adorn">|</span>
+			<span class="right">{{ pageName }}</span>
+		</div>
+		<el-card class="box-card !border-none" shadow="never">
 			<div class="bg-[#FAFAFD] py-[20px] pr-[80px] pl-[280px] relative">
 				<div class="member-info absolute w-[250px]">
 					<div class="flex items-center">
@@ -248,13 +253,8 @@ import colorGradient from '../../../../uniapp/src/uni_modules/vk-uview-ui/libs/f
 import useAppStore from '@/stores/modules/app'
 
 const route = useRoute()
+const pageName = route.meta.title
 const appStore = useAppStore()
-
-// 页面返回按钮
-appStore.pageReturn = true
-watch(route, (newX, oldX) => {
-	appStore.pageReturn = false
-})
 
 const loading = ref(true)
 

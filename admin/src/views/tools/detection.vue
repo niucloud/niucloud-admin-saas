@@ -5,7 +5,7 @@
 				<span class="text-[24px]">{{ pageName }}</span>
 			</div>
 			<div class="bg-[#fff] pb-[20px] mb-3">
-				<p class="pt-[20px] pb-[10px]">{{ t('serverInformation') }}</p>
+				<p class="pt-[20px] pb-[10px] text-sm">{{ t('serverInformation') }}</p>
 				<div class="text-[14px]">
 					<el-table :data="systemService.server" size="large" v-loading="loadingArr.server_load">
 						<el-table-column prop="name" :label="t('environment')" align="left" min-width="200" />
@@ -14,7 +14,7 @@
 				</div>
 			</div>
 			<div class="bg-[#fff] pb-[20px] mb-3">
-				<p class="py-[20px]">{{ t('systemDemand') }}</p>
+				<p class="py-[20px] text-sm">{{ t('systemDemand') }}</p>
 				<div class="text-[14px]">
 					<el-table :data="systemService.server_version" size="large" v-loading="loadingArr.server_version_load">
 						<el-table-column prop="name" :label="t('environment')" align="left" min-width="200" />
@@ -24,7 +24,7 @@
 				</div>
 			</div>
 			<div class="bg-[#fff] pb-[20px] mb-3">
-				<p class="py-[20px]">{{ t('authorityStatus') }}</p>
+				<p class="py-[20px] text-sm">{{ t('authorityStatus') }}</p>
 				<div class="text-[14px]">
 					<el-table :data="systemService.system_variables" size="large" v-loading="loadingArr.system_variables_load">
 						<el-table-column prop="name" :label="t('name')" align="left" min-width="200" />
@@ -44,7 +44,7 @@
 			</div>
 
 			<div class="bg-[#fff] pb-[20px] mb-3">
-				<p class="py-[20px]">{{ t('process') }}</p>
+				<p class="py-[20px] text-sm">{{ t('process') }}</p>
 				<div class="text-[14px]">
 					<el-table :data="systemService.process" size="large" v-loading="loadingArr.process_load">
 						<el-table-column prop="name" :label="t('name')" align="left" min-width="200" />

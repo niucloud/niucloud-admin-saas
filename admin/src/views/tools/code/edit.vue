@@ -1,19 +1,30 @@
 <template>
     <div class="main-container mb-80" v-loading="loading">
-
+        <div class="detail-head !mb-[10px]">
+            <div class="left" @click="router.push({ path: '/admin/tools/code' })">
+                <span class="iconfont iconxiangzuojiantou !text-xs"></span>
+                <span class="ml-[1px]">{{t('returnToPreviousPage')}}</span>
+            </div>
+            <span class="adorn">|</span>
+            <span class="right">{{ pageName }}</span>
+        </div>
         <el-card class="box-card !border-none" shadow="never">
             <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form">
                 <el-form-item :label="t('tableName')" prop="table_name">
-                    <el-input v-model="formData.table_name" clearable :placeholder="t('tableNamePlaceholder')" class="input-width" maxlength="64" />
+                    <el-input v-model="formData.table_name" clearable :placeholder="t('tableNamePlaceholder')"
+                        class="input-width" maxlength="64" />
                 </el-form-item>
                 <el-form-item :label="t('tableContent')" prop="table_content">
-                    <el-input v-model="formData.table_content" clearable :placeholder="t('tableContentPlaceholder')" class="input-width" maxlength="64" />
+                    <el-input v-model="formData.table_content" clearable :placeholder="t('tableContentPlaceholder')"
+                        class="input-width" maxlength="64" />
                 </el-form-item>
                 <el-form-item :label="t('moduleName')">
-                    <el-input v-model="formData.module_name" clearable :placeholder="t('moduleNamePlaceholder')" class="input-width" />
+                    <el-input v-model="formData.module_name" clearable :placeholder="t('moduleNamePlaceholder')"
+                        class="input-width" />
                 </el-form-item>
                 <el-form-item :label="t('className')">
-                    <el-input v-model="formData.class_name" clearable :placeholder="t('classNamePlaceholder')" class="input-width" />
+                    <el-input v-model="formData.class_name" clearable :placeholder="t('classNamePlaceholder')"
+                        class="input-width" />
                 </el-form-item>
                 <el-form-item :label="t('editType')">
                     <el-radio-group v-model="formData.edit_type" :placeholder="t('editTypePlaceholder')">
@@ -29,12 +40,16 @@
                 <el-card class="box-card !border-none p-none" shadow="never">
                     <el-divider content-position="left">{{ t('commentField') }}</el-divider>
                     <div class="flex flex-row m-0.5 cursor-pointer flex-wrap" :ref="tabsRefs.set">
-                        <div class="border border-dashed border-gray-200 mt-2 text-sm mr-2 pt-1 pb-1 pl-1.5 pr-1.5 dashed-border design-field" v-for="(item, index) in fieldList.common" :key="index" :data-id="index">{{ item.column_comment }}
+                        <div class="border border-dashed border-gray-200 mt-2 text-sm mr-2 pt-1 pb-1 pl-1.5 pr-1.5 dashed-border design-field"
+                            v-for="(item, index) in fieldList.common" :key="index" :data-id="index">{{ item.column_comment
+                            }}
                         </div>
                     </div>
                     <el-divider content-position="left">{{ t('baseField') }}</el-divider>
                     <div class="flex flex-row m-0.5 cursor-pointer flex-wrap" :ref="tabsRefs.set">
-                        <div class="border border-dashed border-gray-200 mt-2 text-sm mr-2 pt-1 pb-1 pl-1.5 pr-1.5 dashed-border design-field" v-for="(item, index) in fieldList.base" :key="index" :data-id="index">{{ item.column_comment }}</div>
+                        <div class="border border-dashed border-gray-200 mt-2 text-sm mr-2 pt-1 pb-1 pl-1.5 pr-1.5 dashed-border design-field"
+                            v-for="(item, index) in fieldList.base" :key="index" :data-id="index">{{ item.column_comment }}
+                        </div>
                     </div>
                 </el-card>
             </el-col>
@@ -46,19 +61,27 @@
                             @click="onActivateField(index)" :class="index === formData.editFiledIndex ? 'activate' : ''">
                             <div class="flex flex-row ">
                                 <div class="flex flex-row design-field">
-                                    <div class="text-xs text-gray-500 w-28 items-center	 justify-end flex">{{t('columnName') }}：</div>
-                                    <el-input class="w-50 m-2" v-model="item.column_name" size="small" :placeholder="t('columnNamePlaceholder')" />
+                                    <div class="text-xs text-gray-500 w-28 items-center	 justify-end flex">{{
+                                        t('columnName')
+                                    }}：</div>
+                                    <el-input class="w-50 m-2" v-model="item.column_name" size="small"
+                                        :placeholder="t('columnNamePlaceholder')" />
                                 </div>
                                 <div class="flex flex-row design-field">
-                                    <div class="text-xs text-gray-500 w-28 items-center	justify-end	 flex">{{t('columnComment') }}：</div>
-                                    <el-input class="w-50 m-2" v-model="item.column_comment" size="small" :placeholder="t('columnCommentPlaceholder')" />
+                                    <div class="text-xs text-gray-500 w-28 items-center	justify-end	 flex">
+                                        {{ t('columnComment') }}：</div>
+                                    <el-input class="w-50 m-2" v-model="item.column_comment" size="small"
+                                        :placeholder="t('columnCommentPlaceholder')" />
                                 </div>
                                 <div class="flex flex-row design-field flex-shrink-0 w-40">
-                                    <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{t('columnType') }}：</div>
+                                    <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{
+                                        t('columnType')
+                                    }}：</div>
                                     <div class="w-50 m-2">{{ item.column_type }}</div>
                                 </div>
                             </div>
-                            <div @click="onDel(index)" class="items-center justify-center flex items-center flex-shrink-0 rounded-full bg-red-400 text-white icon-btn w-7 h-7">
+                            <div @click="onDel(index)"
+                                class="items-center justify-center flex items-center flex-shrink-0 rounded-full bg-red-400 text-white icon-btn w-7 h-7">
                                 <el-icon>
                                     <Delete />
                                 </el-icon>
@@ -75,21 +98,29 @@
                     <el-divider content-position="left">{{ t('fieldAttribute') }}</el-divider>
                     <div>
                         <div class="flex flex-row">
-                            <div class="text-xs text-gray-500 w-20 items-center	 justify-end flex">{{ t('columnName') }}：</div>
+                            <div class="text-xs text-gray-500 w-20 items-center	 justify-end flex">{{ t('columnName') }}：
+                            </div>
                             <div>
-                                <el-input class="w-50 m-2" v-model="formData.table_column[formData.editFiledIndex]['column_name']" size="small" :placeholder="t('columnNamePlaceholder')" />
+                                <el-input class="w-50 m-2"
+                                    v-model="formData.table_column[formData.editFiledIndex]['column_name']" size="small"
+                                    :placeholder="t('columnNamePlaceholder')" />
                             </div>
                         </div>
                         <div class="flex flex-row ">
-                            <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('columnComment') }}：</div>
+                            <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('columnComment') }}：
+                            </div>
                             <div>
-                                <el-input class="w-50 m-2" v-model="formData.table_column[formData.editFiledIndex]['column_comment']" size="small" :placeholder="t('columnCommentPlaceholder')" />
+                                <el-input class="w-50 m-2"
+                                    v-model="formData.table_column[formData.editFiledIndex]['column_comment']" size="small"
+                                    :placeholder="t('columnCommentPlaceholder')" />
                             </div>
                         </div>
 
                         <div class="flex flex-row ">
-                            <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('isPk') }}：</div><div>
-                                <el-radio-group class="ml-4" v-model="formData.table_column[formData.editFiledIndex]['is_pk']">
+                            <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('isPk') }}：</div>
+                            <div>
+                                <el-radio-group class="ml-4"
+                                    v-model="formData.table_column[formData.editFiledIndex]['is_pk']">
                                     <el-radio :label="1" size="large">{{ t('yes') }}</el-radio>
                                     <el-radio :label="0" size="large">{{ t('no') }}</el-radio>
                                 </el-radio-group>
@@ -99,26 +130,33 @@
                     <el-divider content-position="left">{{ t('commentField') }}</el-divider>
                     <div>
                         <div class="flex flex-row ">
-                            <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('isRequired') }}：</div>
+                            <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('isRequired') }}：
+                            </div>
                             <div>
-                                <el-radio-group class="ml-4" v-model="formData.table_column[formData.editFiledIndex]['is_required']">
+                                <el-radio-group class="ml-4"
+                                    v-model="formData.table_column[formData.editFiledIndex]['is_required']">
                                     <el-radio :label="1" size="large">{{ t('yes') }}</el-radio>
                                     <el-radio :label="0" size="large">{{ t('no') }}</el-radio>
                                 </el-radio-group>
                             </div>
                         </div>
                         <div class="flex flex-row ">
-                            <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('isInsert') }}：</div><div>
-                                <el-radio-group class="ml-4" v-model="formData.table_column[formData.editFiledIndex]['is_insert']">
+                            <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('isInsert') }}：
+                            </div>
+                            <div>
+                                <el-radio-group class="ml-4"
+                                    v-model="formData.table_column[formData.editFiledIndex]['is_insert']">
                                     <el-radio :label="1" size="large">{{ t('yes') }}</el-radio>
                                     <el-radio :label="0" size="large">{{ t('no') }}</el-radio>
                                 </el-radio-group>
                             </div>
                         </div>
                         <div class="flex flex-row ">
-                            <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('isUpdate') }}：</div>
+                            <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('isUpdate') }}：
+                            </div>
                             <div>
-                                <el-radio-group class="ml-4" v-model="formData.table_column[formData.editFiledIndex]['is_update']">
+                                <el-radio-group class="ml-4"
+                                    v-model="formData.table_column[formData.editFiledIndex]['is_update']">
                                     <el-radio :label="1" size="large">{{ t('yes') }}</el-radio>
                                     <el-radio :label="0" size="large">{{ t('no') }}</el-radio>
                                 </el-radio-group>
@@ -127,16 +165,19 @@
                         <div class="flex flex-row ">
                             <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('isLists') }}：</div>
                             <div>
-                                <el-radio-group class="ml-4" v-model="formData.table_column[formData.editFiledIndex]['is_lists']">
+                                <el-radio-group class="ml-4"
+                                    v-model="formData.table_column[formData.editFiledIndex]['is_lists']">
                                     <el-radio :label="1" size="large">{{ t('yes') }}</el-radio>
                                     <el-radio :label="0" size="large">{{ t('no') }}</el-radio>
                                 </el-radio-group>
                             </div>
                         </div>
                         <div class="flex flex-row ">
-                            <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('isSearch') }}：</div>
+                            <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('isSearch') }}：
+                            </div>
                             <div>
-                                <el-radio-group class="ml-4" v-model="formData.table_column[formData.editFiledIndex]['is_search']">
+                                <el-radio-group class="ml-4"
+                                    v-model="formData.table_column[formData.editFiledIndex]['is_search']">
                                     <el-radio :label="1" size="large">{{ t('yes') }}</el-radio>
                                     <el-radio :label="0" size="large">{{ t('no') }}</el-radio>
                                 </el-radio-group>
@@ -145,25 +186,32 @@
                         <div class="flex flex-row ">
                             <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('isQuery') }}：</div>
                             <div>
-                                <el-radio-group class="ml-4" v-model="formData.table_column[formData.editFiledIndex]['is_query']">
+                                <el-radio-group class="ml-4"
+                                    v-model="formData.table_column[formData.editFiledIndex]['is_query']">
                                     <el-radio :label="1" size="large">{{ t('yes') }}</el-radio>
                                     <el-radio :label="0" size="large">{{ t('no') }}</el-radio>
                                 </el-radio-group>
                             </div>
                         </div>
                         <div class="flex flex-row ">
-                            <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('queryType') }}：</div>
+                            <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('queryType') }}：
+                            </div>
                             <div>
-                                <el-select class="m-2" :placeholder="t('selectPlaceholder')" size="small" v-model="formData.table_column[formData.editFiledIndex]['query_type']">
-                                    <el-option :label="item" :value="item" v-for="(item, index) in queryType" :key="index" />
+                                <el-select class="m-2" :placeholder="t('selectPlaceholder')" size="small"
+                                    v-model="formData.table_column[formData.editFiledIndex]['query_type']">
+                                    <el-option :label="item" :value="item" v-for="(item, index) in queryType"
+                                        :key="index" />
                                 </el-select>
                             </div>
                         </div>
                         <div class="flex flex-row ">
-                            <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('viewType') }}：</div>
+                            <div class="text-xs text-gray-500 w-20 items-center	justify-end	 flex">{{ t('viewType') }}：
+                            </div>
                             <div>
-                                <el-select class="m-2" :placeholder="t('selectPlaceholder')" size="small" v-model="formData.table_column[formData.editFiledIndex]['view_type']">
-                                    <el-option :label="item.label" :value="item.value" v-for="(item, index) in viewType" :key="index" />
+                                <el-select class="m-2" :placeholder="t('selectPlaceholder')" size="small"
+                                    v-model="formData.table_column[formData.editFiledIndex]['view_type']">
+                                    <el-option :label="item.label" :value="item.value" v-for="(item, index) in viewType"
+                                        :key="index" />
                                 </el-select>
                             </div>
                         </div>
@@ -183,22 +231,24 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, computed, onMounted, nextTick } from 'vue'
+import { ref, reactive, computed, onMounted, nextTick, watch } from 'vue'
 import { t } from '@/lang'
 import { FormInstance, ElNotification } from 'element-plus'
-import { getGenerateTableInfo } from '@/api/tools';
+import { getGenerateTableInfo, editGenerateTable } from '@/api/tools'
 import { useRoute, useRouter } from 'vue-router'
 import Sortable, { SortableEvent } from 'sortablejs'
 import { useTemplateRefsList } from '@vueuse/core'
-import { cloneDeep, range, isEmpty } from 'lodash-es'
-import { editGenerateTable } from '@/api/tools'
+import { cloneDeep, range } from 'lodash-es'
 import useTabbarStore from '@/stores/modules/tabbar'
+import useAppStore from '@/stores/modules/app'
 
 const tabbarStore = useTabbarStore()
+const appStore = useAppStore()
 const route = useRoute()
 const router = useRouter()
+const pageName = route.meta.title
 
-const id: number = parseInt(route.query.id || 0);
+const id: number = parseInt(route.query.id || 0)
 
 const loading = ref(true)
 const tabsRefs = useTemplateRefsList<HTMLElement>()
@@ -230,9 +280,8 @@ const initialFormData = {
     class_name: '',
     edit_type: 1,
     table_column: [],
-    editFiledIndex: 0,
+    editFiledIndex: 0
 }
-
 
 const fieldList: {
     common: fieldData[],
@@ -294,7 +343,7 @@ const fieldList: {
             is_search: 0,
             query_type: 'BETWEEN',
             view_type: 'datetime'
-        },
+        }
 
     ],
     base: [
@@ -395,8 +444,7 @@ const fieldList: {
             is_search: 1,
             query_type: '=',
             view_type: 'datetime'
-        },
-
+        }
 
     ]
 }
@@ -404,36 +452,36 @@ const fieldList: {
 const queryType = ['=', '!=', '>', '>=', '<', '<=', 'LIKE', 'BETWEEN']
 const viewType = [
     {
-        'label': t('formInput'),
-        'value': 'input'
+        label: t('formInput'),
+        value: 'input'
     },
     {
-        'label': t('formTextarea'),
-        'value': 'textarea'
+        label: t('formTextarea'),
+        value: 'textarea'
     },
     {
-        'label': t('formSelect'),
-        'value': 'select'
+        label: t('formSelect'),
+        value: 'select'
     },
     {
-        'label': t('formRadio'),
-        'value': 'radio'
+        label: t('formRadio'),
+        value: 'radio'
     },
     {
-        'label': t('formCheckbox'),
-        'value': 'checkbox'
+        label: t('formCheckbox'),
+        value: 'checkbox'
     },
     {
-        'label': t('formDateTime'),
-        'value': 'datetime'
+        label: t('formDateTime'),
+        value: 'datetime'
     },
     {
-        'label': t('formImageSelect'),
-        'value': 'imageSelect'
+        label: t('formImageSelect'),
+        value: 'imageSelect'
     },
     {
-        'label': t('formEditor'),
-        'value': 'editor'
+        label: t('formEditor'),
+        value: 'editor'
     }
 ]
 
@@ -450,13 +498,11 @@ onMounted(() => {
         group: 'design-field',
         animation: 200,
         onAdd: (evt: SortableEvt) => {
-
             const name = evt.originalEvent?.dataTransfer?.getData('name')
             const field = fieldList[name]
 
             if (field && field[evt.oldIndex!]) {
                 const data = cloneDeep(field[evt.oldIndex!])
-
 
                 if (data.is_pk) {
                     const is_pk = formData.table_column.find((item: { is_pk: any; }) => {
@@ -465,7 +511,7 @@ onMounted(() => {
                     if (is_pk) {
                         ElNotification({
                             type: 'error',
-                            message: t('pkRepeatTip'),
+                            message: t('pkRepeatTip')
                         })
                         return evt.item.remove()
                     }
@@ -479,7 +525,6 @@ onMounted(() => {
                     nameRepeatCount++
                 }
                 formData.table_column.splice(evt.newIndex!, 0, data)
-
             }
             evt.item.remove()
             nextTick(() => {
@@ -494,7 +539,7 @@ onMounted(() => {
             nextTick(() => {
                 sortable.sort(range(formData.table_column.length).map((value) => value.toString()))
             })
-        },
+        }
     })
 
     tabsRefs.value.forEach((item, index) => {
@@ -503,12 +548,12 @@ onMounted(() => {
             group: {
                 name: 'design-field',
                 pull: 'clone',
-                put: false,
+                put: false
             },
             animation: 200,
             setData: (dataTransfer) => {
                 dataTransfer.setData('name', Object.keys(fieldList)[index])
-            },
+            }
         })
     })
 })
@@ -533,12 +578,9 @@ const setFormData = async (id: number = 0) => {
 
     loading.value = false
 }
-if (id) setFormData(id);
-
-
+if (id) setFormData(id)
 
 const formRef = ref<FormInstance>()
-
 
 const validataVarName = (val: string) => {
     return /^([a-zA-Z_$])([a-zA-Z0-9_$])*$/.test(val)
@@ -562,19 +604,18 @@ const formRules = computed(() => {
 
         ],
         table_content: [
-            { required: true, message: t('tableContentPlaceholder'), trigger: 'blur' },
+            { required: true, message: t('tableContentPlaceholder'), trigger: 'blur' }
         ]
 
     }
 })
 
-
 const onSave = async (formEl: FormInstance | undefined) => {
     if (loading.value || !formEl) return
-    let msg = '';
+    let msg = ''
     formData.table_column.find((item) => {
         if (!validataVarName(item.column_name)) {
-            msg = item.column_name + " " + t('fieldNameValidata')
+            msg = item.column_name + ' ' + t('fieldNameValidata')
             return true
         }
     })
@@ -582,21 +623,19 @@ const onSave = async (formEl: FormInstance | undefined) => {
     if (msg) {
         ElNotification({
             type: 'error',
-            message: msg,
+            message: msg
         })
         return
     }
 
     loading.value = true
-    let data = cloneDeep(formData)
+    const data = cloneDeep(formData)
     data.table_column = JSON.stringify(data.table_column)
     editGenerateTable(data).then((res: any) => {
-        loading.value = false;
-
-    }).catch((err: any) => {
+        loading.value = false
+    }).catch(() => {
         loading.value = false
     })
-
 }
 const onDel = (index: number) => {
     if (!formData.table_column[index]) return
@@ -609,7 +648,8 @@ const back = () => {
 }
 </script>
 
-<style lang="scss" scoped>.dashed-border {
+<style lang="scss" scoped>
+.dashed-border {
     border-color: var(--el-border-color-light);
 
     &:hover {
@@ -623,4 +663,5 @@ const back = () => {
 
 .icon-btn {
     background-color: var(--el-color-primary);
-}</style>
+}
+</style>

@@ -6,7 +6,7 @@
 			<el-form label-width="80px" class="px-[10px]">
 
 				<el-form-item :label="t('imageHeight')" class="display-block">
-					<el-input v-model="diyStore.editComponent.imageHeight" :placeholder="t('imageHeightPlaceholder')" clearable maxlength="10">
+					<el-input v-model="diyStore.editComponent.imageHeight" :placeholder="t('imageHeightPlaceholder')" clearable maxlength="10" @blur="blurImageHeight">
 						<template #append>px</template>
 					</el-input>
 					<div class="text-sm text-gray-400 mb-[10px]">{{ t('imageAdsTips') }}</div>
@@ -15,7 +15,7 @@
 				<div ref="imageBoxRef">
 					<div v-for="(item,index) in diyStore.editComponent.list" :key="item.id" class="item-wrap p-[10px] pb-0 relative border border-dashed border-gray-300 mb-[16px]">
 						<el-form-item :label="t('image')">
-							<upload-image v-model="item.imageUrl" :limit="1"/>
+							<upload-image v-model="item.imageUrl" :limit="1" @change="selectImg" />
 						</el-form-item>
 
 						<div class="del absolute cursor-pointer z-[2] top-[-8px] right-[-8px]" v-show="diyStore.editComponent.list.length > 1" @click="diyStore.editComponent.list.splice(index,1)">
@@ -86,22 +86,7 @@
         () => diyStore.editComponent.list,
         (newValue, oldValue) => {
             // 设置图片宽高
-            diyStore.editComponent.list.forEach((item: any, index: number) => {
-                let image = new Image();
-                image.src = img(item.imageUrl);
-                image.onload = async () => {
-                    item.imgWidth = image.width;
-                    item.imgHeight = image.height;
-                    // 计算第一张图片高度
-                    if (index == 0) {
-                        var ratio = item.imgHeight / item.imgWidth;
-                        item.width = 375;
-                        item.height = item.width * ratio;
-                        diyStore.editComponent.imageHeight = item.height;
-                    }
-                };
-            });
-
+            handleHeight();
         },
         {deep: true}
     )
@@ -114,6 +99,33 @@
             imgHeight: 0,
             link: {name: ''}
         })
+    }
+
+    const selectImg = (url:string)=> {
+        handleHeight(true);
+    };
+
+    // 处理高度
+    const handleHeight = (isCalcHeight:boolean = false)=> {
+        diyStore.editComponent.list.forEach((item: any, index: number) => {
+            let image = new Image();
+            image.src = img(item.imageUrl);
+            image.onload = async () => {
+                item.imgWidth = image.width;
+                item.imgHeight = image.height;
+                // 计算第一张图片高度
+                if (isCalcHeight && index == 0) {
+                    var ratio = item.imgHeight / item.imgWidth;
+                    item.width = 375;
+                    item.height = item.width * ratio;
+                    diyStore.editComponent.imageHeight = item.height;
+                }
+            };
+        });
+    }
+
+    const blurImageHeight = ()=> {
+        diyStore.editComponent.imageHeight = parseFloat(diyStore.editComponent.imageHeight).toFixed(2);
     }
 
     const imageBoxRef = ref()
@@ -132,6 +144,7 @@
                             return value.toString();
                         })
                     );
+                    handleHeight(true);
                 }
             })
         });

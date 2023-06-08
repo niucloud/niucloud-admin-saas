@@ -1,8 +1,11 @@
 <template>
     <div class="main-container">
-        <el-form :model="formData" label-width="200px" ref="formRef" class="page-form" v-loading="loading">
+        <div class="flex ml-[18px] justify-between items-center mt-[20px] mb-[5px]">
+            <span class="text-[24px]">{{pageName}}</span>
+        </div>
+        <el-form :model="formData" label-width="150px" ref="formRef" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
-                <h3 class="panel-title">{{ t('aliappSet') }}</h3>
+                <h3 class="panel-title !text-sm">{{ t('aliappSet') }}</h3>
 
                 <el-form-item :label="t('aliappName')">
                     <el-input v-model="formData.name" :placeholder="t('aliappNamePlaceholder')" class="input-width" clearable />
@@ -16,7 +19,7 @@
             </el-card>
 
             <el-card class="box-card !border-none mt-[16px]" shadow="never">
-                <h3 class="panel-title">{{ t('aliappDevelopInfo') }}</h3>
+                <h3 class="panel-title !text-sm">{{ t('aliappDevelopInfo') }}</h3>
 
                 <el-form-item :label="t('aliappOriginal')">
                     <el-input v-model="formData.private_key" :placeholder="t('aliappOriginalPlaceholder')" class="input-width" clearable />
@@ -53,7 +56,7 @@
             </el-card>
 
             <el-card class="box-card !border-none mt-[16px]" shadow="never">
-                <h3 class="panel-title">{{ t('theServerSetting') }}</h3>
+                <h3 class="panel-title !text-sm">{{ t('theServerSetting') }}</h3>
 
                 <el-form-item label="AESKey">
                     <el-input v-model="formData.aes_key" :placeholder="t('AESKeyPlaceholder')" class="input-width"  show-word-limit clearable />
@@ -62,7 +65,7 @@
 
             <el-card class="box-card !border-none mt-[16px]" shadow="never">
                 <div class="flex">
-                    <h3 class="panel-title">{{ t('functionSetting') }}</h3>
+                    <h3 class="panel-title !text-sm">{{ t('functionSetting') }}</h3>
                 </div>
 
                 <el-form-item :label="t('serveWhiteList')">
@@ -91,6 +94,9 @@ import { t } from '@/lang'
 import { setAliappConfig, getAliappConfig, getAliappStatic } from '@/api/aliapp'
 import { useClipboard } from '@vueuse/core'
 import { ElMessage, FormInstance } from 'element-plus'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title
 
 const loading = ref(true)
 

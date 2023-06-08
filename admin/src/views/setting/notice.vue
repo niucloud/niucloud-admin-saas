@@ -1,7 +1,10 @@
 <template>
     <div class="main-container" v-loading="noticeTableData.loading">
+        <div class="flex ml-[18px] justify-between items-center mt-[20px]">
+			<span class="text-[24px]">{{pageName}}</span>
+		</div>
         <el-card class="box-card !border-none" shadow="never">
-            <h3 class="panel-title">{{ t('buyerNotice') }}</h3>
+            <h3 class="panel-title !text-base">{{ t('buyerNotice') }}</h3>
             <div class="flex flex-row flex-wrap m-[-4px]">
 				<el-table :data="noticeTableData.seller" size="large">
 				    <el-table-column prop="name" :label="t('noticeType')" min-width="120" />
@@ -28,7 +31,7 @@
         </el-card>
         
         <el-card class="box-card !border-none mt-[16px]" shadow="never">
-            <h3 class="panel-title">{{ t('sellerNotice') }}</h3>
+            <h3 class="panel-title !text-base">{{ t('sellerNotice') }}</h3>
             <div class="flex flex-row flex-wrap m-[-4px]">
 				<el-table :data="noticeTableData.buyer" size="large">
 				    <el-table-column prop="name" :label="t('noticeType')" min-width="120" />
@@ -71,6 +74,9 @@ import Sms from '@/views/setting/components/notice-sms.vue'
 import Wechat from '@/views/setting/components/notice-wechat.vue'
 
 import Weapp from '@/views/setting/components/notice-weapp.vue'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title
 
 const smsDialog: Record<string, any> | null = ref(null)
 const wechatDialog: Record<string, any> | null = ref(null)

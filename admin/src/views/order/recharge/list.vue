@@ -18,10 +18,10 @@
 			            <el-statistic :value="rechargeStatistics.recharge_refund_money ? Number.parseFloat(rechargeStatistics.recharge_refund_money).toFixed(2) : '0.00'">
 			                <template #title>
 			                    <div class="text-[14px] mb-[9px]">{{ t('totalRechargeRefundMoney') }}</div>
-			                </template> 
+			                </template>
 			            </el-statistic>
 			        </el-col>
-			      
+
 			    </el-row>
 			</el-card>
 
@@ -164,7 +164,7 @@ import { AnyObject } from '@/types/global'
 
 const route = useRoute()
 const router = useRouter()
-const pageName = route.meta.title;
+const pageName = route.meta.title
 const memberId: number = parseInt(route.query.id || 0)
 
 const channelList = ref([])
@@ -184,7 +184,7 @@ const orderTableData = reactive({
         order_status: '',
         member_id: memberId,
         create_time: [],
-        pay_time:[],
+        pay_time: [],
         order_from: '',
         start_money: '',
         end_money: ''
@@ -236,7 +236,7 @@ loadOrderList()
  * @param data
  */
 const infoEvent = (data: any) => {
-    router.push(`/finance/recharge/detail?order_id=${data.order_id}`)
+    router.push(`/order/recharge/detail?order_id=${data.order_id}`)
 }
 
 /**

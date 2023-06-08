@@ -1,4 +1,7 @@
 {
+  "developTitle": "开发环境配置",
+  "wapDomain": "wap域名（WAP_DOMAIN）",
+  "wapDomainPlaceholder": "请输入wap域名",
   "pageSet": "页面设置",
   "tabEditContent": "内容",
   "tabEditStyle": "样式",

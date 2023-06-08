@@ -103,5 +103,7 @@
   "returnToPreviousPage": "返回",
   "preview": "预览",
   "emptyApp": "暂未安装任何应用",
-  "newInfo": "最新消息"
+  "newInfo": "最新消息",
+  "mapSetting": "地图设置",
+  "mapKey": "腾讯地图KEY"
 }

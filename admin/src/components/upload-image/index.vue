@@ -72,7 +72,7 @@ const prop = defineProps({
     }
 })
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue','change'])
 
 const value = computed({
     get() {
@@ -121,6 +121,7 @@ const confirmSelect = (data: Record<string, any>) => {
         })
     }
     setValue()
+    emit('change', value.value)
 }
 
 /**

@@ -466,5 +466,20 @@ export function getAppMange() {
     return request.get(`sys/applist`)
 }
 
+/***************************************************** 地图设置 ****************************************************/
+
+/**
+ * 设置地图key
+ */
+export function setMap(params: Record<string, any>) {
+    return request.put(`sys/config/map`, params, { showSuccessMessage: true })
+}
+/**
+ * 获取地图配置
+ */
+export function getMap() {
+    return request.get(`sys/config/map`)
+}
+
 
 

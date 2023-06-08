@@ -1,35 +1,50 @@
 <template>
     <div class="main-container">
+        <div class="detail-head">
+            <div class="left" @click="router.push({ path: '/article/list' })">
+                <span class="iconfont iconxiangzuojiantou !text-xs"></span>
+                <span class="ml-[1px]">{{t('returnToPreviousPage')}}</span>
+            </div>
+            <span class="adorn">|</span>
+            <span class="right">{{ pageName }}</span>
+        </div>
         <el-card class="box-card !border-none" shadow="never">
-            <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
+            <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form"
+                v-loading="loading">
                 <el-form-item :label="t('title')" prop="title">
-                    <el-input v-model="formData.title" clearable :placeholder="t('titlePlaceholder')" class="input-width" maxlength="20" />
+                    <el-input v-model="formData.title" clearable :placeholder="t('titlePlaceholder')" class="input-width"
+                        maxlength="20" />
                 </el-form-item>
 
                 <el-form-item :label="t('categoryName')" prop="category_id">
-                    <el-select v-model="formData.category_id" clearable :placeholder="t('categoryIdPlaceholder')" class="input-width">
+                    <el-select v-model="formData.category_id" clearable :placeholder="t('categoryIdPlaceholder')"
+                        class="input-width">
                         <el-option :label="item['name']" :value="item['category_id']" v-for="item in categoryList" />
                     </el-select>
                 </el-form-item>
 
                 <el-form-item :label="t('intro')" prop="intro">
-                    <el-input v-model="formData.intro" type="textarea" rows="4" clearable :placeholder="t('introPlaceholder')" class="input-width" maxlength="50" />
+                    <el-input v-model="formData.intro" type="textarea" rows="4" clearable
+                        :placeholder="t('introPlaceholder')" class="input-width" maxlength="50" />
                 </el-form-item>
                 <el-form-item :label="t('summary')" prop="summary">
-                    <el-input v-model="formData.summary" type="textarea" rows="4" clearable :placeholder="t('summaryPlaceholder')" class="input-width" maxlength="50" />
+                    <el-input v-model="formData.summary" type="textarea" rows="4" clearable
+                        :placeholder="t('summaryPlaceholder')" class="input-width" maxlength="50" />
                 </el-form-item>
                 <el-form-item :label="t('image')">
                     <upload-image v-model="formData.image" />
                 </el-form-item>
                 <el-form-item :label="t('author')" prop="author">
-                    <el-input v-model="formData.author" clearable :placeholder="t('authorPlaceholder')" class="input-width" maxlength="20" />
+                    <el-input v-model="formData.author" clearable :placeholder="t('authorPlaceholder')" class="input-width"
+                        maxlength="20" />
                 </el-form-item>
                 <el-form-item :label="t('content')" prop="content">
                     <editor v-model="formData.content" />
                 </el-form-item>
 
                 <el-form-item :label="t('visitVirtual')">
-                    <el-input v-model="formData.visit_virtual" clearable :placeholder="t('visitVirtualPlaceholder')" class="input-width" />
+                    <el-input v-model="formData.visit_virtual" clearable :placeholder="t('visitVirtualPlaceholder')"
+                        class="input-width" />
                 </el-form-item>
                 <el-form-item :label="t('isShow')">
                     <el-radio-group v-model="formData.is_show" :placeholder="t('isShowPlaceholder')">
@@ -55,7 +70,7 @@
 <script lang="ts" setup>
 import { ref, reactive, computed, watch } from 'vue'
 import { t } from '@/lang'
-import type { FormInstance, ElNotification } from 'element-plus'
+import type { FormInstance } from 'element-plus'
 import { getArticleInfo, getArticleCategoryAll, addArticle, editArticle } from '@/api/article'
 import { useRoute, useRouter } from 'vue-router'
 import useTabbarStore from '@/stores/modules/tabbar'
@@ -69,12 +84,7 @@ const loading = ref(false)
 const categoryList = ref([])
 const tabbarStore = useTabbarStore()
 const appStore = useAppStore()
-
-// 页面返回按钮
-appStore.pageReturn = true;
-watch(route, (newX, oldX) => {
-    appStore.pageReturn = false;
-});
+const pageName = route.meta.title
 
 /**
  * 表单数据
@@ -97,25 +107,24 @@ const initialFormData = {
 const formData: Record<string, any> = reactive({ ...initialFormData })
 
 const setFormData = async (id: number = 0) => {
-    loading.value = true;
+    loading.value = true
     Object.assign(formData, initialFormData)
     if (id) {
         const data = await (await getArticleInfo(id)).data
         if (!data || Object.keys(data).length == 0) {
             ElMessage.error(t('articleNull'))
             setTimeout(() => {
-                router.go(-1);
+                router.go(-1)
             }, 2000)
-            return false;
+            return false
         }
         Object.keys(formData).forEach((key: string) => {
             if (data[key] != undefined) formData[key] = data[key]
         })
-        loading.value = false;
+        loading.value = false
     } else {
-        loading.value = false;
+        loading.value = false
     }
-
 }
 if (id) setFormData(id)
 
@@ -134,13 +143,13 @@ const formRules = computed(() => {
             { required: true, message: t('titlePlaceholder'), trigger: 'blur' }
         ],
         category_id: [
-            { required: true, message: t('categoryIdPlaceholder'), trigger: 'blur' },
+            { required: true, message: t('categoryIdPlaceholder'), trigger: 'blur' }
         ],
         content: [
             { required: true, message: t('contentPlaceholder'), trigger: 'blur' },
             {
                 validator: (rule: any, value: string, callback: any) => {
-                    let content = value.replace(/<[^<>]+>/g, "").replace(/&nbsp;/gi, "")
+                    const content = value.replace(/<[^<>]+>/g, '').replace(/&nbsp;/gi, '')
                     if (!content && value.indexOf('img') === -1) {
                         callback(new Error(t('contentPlaceholder')))
                     } else callback()
@@ -160,7 +169,7 @@ const onSave = async (formEl: FormInstance | undefined) => {
             const save = id ? editArticle : addArticle
             save(data).then(res => {
                 loading.value = false
-                back();
+                back()
             }).catch(() => {
                 loading.value = false
             })

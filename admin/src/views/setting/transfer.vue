@@ -8,9 +8,12 @@
                 </div>
             </template>
         </el-alert>
-        <el-form :model="formData" label-width="200px" ref="formRef" :rules="formRules" class="page-form mt-2" v-loading="loading">
+        <div class="flex ml-[18px] justify-between items-center mt-[20px]">
+			<span class="text-[24px]">{{pageName}}</span>
+		</div>
+        <el-form :model="formData" label-width="200px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
-                <h3 class="panel-title">{{t('wechatpay')}}</h3>
+                <h3 class="panel-title !text-sm">{{t('wechatpay')}}</h3>
                     
                 <el-form-item :label="t('mchId')" prop="wechatpay_config.mch_id">
                     <el-input v-model="formData.wechatpay_config.mch_id" :placeholder="t('mchIdPlaceholder')" class="input-width" maxlength="32" show-word-limit clearable />
@@ -39,7 +42,7 @@
 
 
             <el-card class="box-card mt-4 !border-none" shadow="never">
-                <h3 class="panel-title">{{t('alipay')}}</h3>
+                <h3 class="panel-title !text-sm">{{t('alipay')}}</h3>
 
                 <el-form-item :label="t('appId')" prop="alipay_config.app_id">
                     <el-input v-model="formData.alipay_config.app_id" :placeholder="t('appIdPlaceholder')" class="input-width" maxlength="32" show-word-limit clearable />
@@ -84,6 +87,9 @@ import { t } from '@/lang'
 import { getTransferInfo, setTransferInfo } from '@/api/sys'
 import { useClipboard } from '@vueuse/core'
 import { ElMessage, FormInstance, FormRules } from 'element-plus'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title
 
 const loading = ref(false)
 

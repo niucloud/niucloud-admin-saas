@@ -1,5 +1,13 @@
 <template>
     <div class="main-container">
+        <div class="detail-head">
+            <div class="left" @click="router.push({ path: '/setting/agreement' })">
+                <span class="iconfont iconxiangzuojiantou !text-xs"></span>
+                <span class="ml-[1px]">{{t('returnToPreviousPage')}}</span>
+            </div>
+            <span class="adorn">|</span>
+            <span class="right">{{ pageName }}</span>
+        </div>
         <el-card class="box-card !border-none" shadow="never" v-loading="loading">
             <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form">
                 <el-form-item :label="t('type')">
@@ -37,12 +45,7 @@ const router = useRouter()
 const agreement_key: string = route.query.key || ''
 const loading = ref(false)
 const tabbarStore = useTabbarStore()
-
-// 页面返回按钮
-appStore.pageReturn = true;
-watch(route, (newX, oldX) => {
-    appStore.pageReturn = false;
-});
+const pageName = route.meta.title
 
 /**
  * 表单数据

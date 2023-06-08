@@ -1,8 +1,11 @@
 <template>
     <div class="main-container">
-        <el-form :model="formData" label-width="200px" ref="formRef" class="page-form" v-loading="loading">
-            <el-card class="box-card !border-none mt-[16px]" shadow="never">
-                <h3 class="panel-title">{{ t('oplatformSetting') }}</h3>
+        <div class="flex ml-[18px] justify-between items-center mt-[20px]">
+			<span class="text-[24px]">{{pageName}}</span>
+		</div>
+        <el-form :model="formData" label-width="150px" ref="formRef" class="page-form" v-loading="loading">
+            <el-card class="box-card !border-none mt-[5px]" shadow="never">
+                <h3 class="panel-title !text-sm">{{ t('oplatformSetting') }}</h3>
 
                 <el-form-item label="APPID">
                     <el-input v-model="formData.appid" :placeholder="t('appidPlaceholder')" class="input-width" clearable/>
@@ -12,7 +15,7 @@
                     <el-input v-model="formData.appsecret" :placeholder="t('appsecretPlaceholder')" class="input-width" clearable/>
                 </el-form-item>
 				
-				<h3 class="panel-title">{{ t('oplatformComm') }}</h3>
+				<h3 class="panel-title !text-sm">{{ t('oplatformComm') }}</h3>
 				<el-form-item :label="t('empowerStartDomain')">
 					<span>{{ formData.start_domain }}</span>
 				</el-form-item>
@@ -45,7 +48,7 @@
 					<span>{{ formData.host }}</span>
 				</el-form-item>	
 				
-				<h3 class="panel-title">{{ t('oplatformBuilder') }}</h3>
+				<h3 class="panel-title !text-sm">{{ t('oplatformBuilder') }}</h3>
 				<el-form-item :label="t('builderEmail')" >
 				    <el-input v-model="formData.email" class="input-width" clearable/>
 				</el-form-item>
@@ -78,6 +81,9 @@ import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { setCopyright,getCopyright } from '@/api/sys'
 import { ElMessage, FormInstance, FormRules } from 'element-plus'
+import { useRoute } from 'vue-router'
+const route = useRoute()
+const pageName = route.meta.title
 
 const loading = ref(true)
 const formData = reactive<Record<string, string>>({

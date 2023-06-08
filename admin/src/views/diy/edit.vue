@@ -64,7 +64,16 @@
                             </ul>
 
                             <!-- 组件预览渲染区域 -->
-                            <iframe id="previewIframe" v-show="wapDomain" :src="wapDomain" frameborder="0" class="preview-iframe w-[375px]"></iframe>
+                            <iframe id="previewIframe" v-show="loadingIframe" :src="wapPreview" frameborder="0" class="preview-iframe w-[375px]" @load="loadIframe"></iframe>
+
+                            <div v-show="loadingDev" class="preview-iframe w-[375px] pt-[20px] px-[20px]">
+                                <div class="font-bold text-xl mb-[40px]">{{t('developTitle')}}</div>
+                                <div class="mb-[20px] flex flex-col">
+                                    <text class="mb-[10px]">{{ t('wapDomain') }}</text>
+                                    <el-input v-model="wapDomain" :placeholder="t('wapDomainPlaceholder')" clearable />
+                                </div>
+                                <el-button type="primary" @click="saveWapDomain" >{{ t('confirm') }}</el-button>
+                            </div>
 
                         </div>
                     </div>
@@ -133,22 +142,32 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, toRaw, onMounted, watch } from 'vue'
+import { ref, reactive, toRaw, watch } from 'vue'
 import { t } from '@/lang'
 import { addDiyPage, editDiyPage, initPage } from '@/api/diy';
 import { useRoute, useRouter } from 'vue-router'
 import { cloneDeep, range, isEmpty } from 'lodash-es'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import useDiyStore from '@/stores/modules/diy'
+import storage from '@/utils/storage'
 
 const diyStore = useDiyStore()
 const route = useRoute();
 const router = useRouter()
 
+const wapUrl = ref('')
 const wapDomain = ref('')
+const wapPreview = ref('')
+
+const loadingIframe = ref(false) // 加载iframe
+const loadingDev = ref(false) // 加载开发环境配置
+const timeFrame = ref(0)
+
 const backPath = route.query.back || '/diy/list'
 const component = ref([])
 const componentType: string[] = reactive([])
+const page = ref('')
+const siteId = ref(0)
 
 const activeNames = ref(componentType)
 const handleChange = (val: string[]) => { }
@@ -275,12 +294,27 @@ initPage({
         }
     }
 
-    wapDomain.value = `${data.domain_url.wap_url}/${data.page}?mode=decorate&site_id=${data.site_id}`; // 模式：decorate 装修 访问预览页面
-})
+    wapDomain.value = data.domain_url.wap_domain;
+    wapUrl.value = data.domain_url.wap_url;
+    page.value = data.page;
+    siteId.value = data.site_id;
+    setDomain();
 
-onMounted(() => {
-    // 预览前端 uniapp iframe
-    window.previewIframe = document.getElementById('previewIframe')
+    // 生产模式禁止
+    if(import.meta.env.MODE == 'production') return;
+
+    // env文件配置过wap域名
+    if (wapDomain.value) return;
+
+    let wap_domain_storage = storage.get('wap_domain');
+    if(wap_domain_storage){
+        wapUrl.value = wap_domain_storage
+        setDomain();
+        return;
+    }
+
+    timeFrame.value = new Date().getTime();
+
 })
 
 // 监听组件数据 uni-app端
@@ -311,14 +345,42 @@ window.addEventListener('message', (event) => {
     }
 }, false);
 
-const loading = ref(false)
+const saveWapDomain = ()=> {
+    wapUrl.value = wapDomain.value + '/wap'
+    setDomain();
+    storage.set({ key : 'wap_domain', data :wapUrl.value });
+    loadingIframe.value = true;
+    loadingDev.value = false;
+}
+
+const setDomain = ()=>{
+    wapPreview.value = `${wapUrl.value}/${page.value}?mode=decorate&site_id=${siteId.value}`; // 模式：decorate 装修 访问预览页面
+}
+
+// 监听iframe加载事件
+const loadIframe = ()=> {
+    if (!wapPreview.value) return
+    var loadTime = new Date().getTime();
+    var difference = loadTime - timeFrame.value;
+    // 检测页面加载差异，小于1000毫秒，则配置wap端域名
+    if (difference < 1000) {
+        loadingDev.value = true;
+        loadingIframe.value = false;
+        wapPreview.value = ''
+    } else {
+        loadingDev.value = false;
+        loadingIframe.value = true;
+    }
+}
+
+const isRepeat = ref(false)
 const save = () => {
     if (!diyStore.verify()) {
         return;
     }
 
-    if (loading.value) return
-    loading.value = true
+    if (isRepeat.value) return
+    isRepeat.value = true
 
     let data = {
         id: diyStore.id,
@@ -334,16 +396,16 @@ const save = () => {
 
     const save = diyStore.id ? editDiyPage : addDiyPage
     save(data).then((res: any) => {
-        loading.value = false
+        isRepeat.value = false
         if (res.code == 1) {
             if (diyStore.id) {
-                loading.value = false // 不刷新
+                isRepeat.value = false // 不刷新
             } else {
                 router.push(backPath);
             }
         }
     }).catch(err => {
-        loading.value = false
+        isRepeat.value = false
     })
 
 }

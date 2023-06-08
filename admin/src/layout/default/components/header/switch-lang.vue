@@ -25,6 +25,7 @@ const switchLang = (command: string) => {
         storage.set({ key: 'lang', data: command })
     })
     language.loadLocaleMessages(route.path, systemStore.lang)
+    location.reload()
 }
 </script>
 

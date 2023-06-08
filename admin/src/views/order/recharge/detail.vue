@@ -78,13 +78,6 @@ const router = useRouter()
 const orderId: number = parseInt(route.query.order_id)
 const loading = ref(true)
 
-// 页面返回按钮
-const appStore = useAppStore()
-appStore.pageReturn = true
-watch(route, (newX, oldX) => {
-    appStore.pageReturn = false
-})
-
 const formData: Record<string, any> | null = ref(null)
 
 const setFormData = async (orderId: number = 0) => {

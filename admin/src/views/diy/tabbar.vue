@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never" v-loading="loading">
             <div class="flex">
-                <div class="w-[360px] h-[615px] relative mr-[30px] border-[1px] border-gray-300">
+                <div class="w-[360px] h-[400px] absolute mr-[30px] border-[1px] border-gray-300">
                     <div class="flex items-center justify-between absolute h-[60px] left-[0px] right-[0px] bottom-[0px] bg-white border-[1px] border-primary" :style="{ 'backgroundColor': diyBottomData.backgroundColor }">
                         <div class="flex flex-1 flex-col items-center justify-center" v-for="(item, index) in diyBottomData.list" :key="'b' + index">
                             <el-image class="w-[22px] h-[22px] mb-[5px] leading-1" :src="img(item.iconPath)" :fit="contain">
@@ -16,7 +16,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex-1">
+                <div class="flex-1 ml-[430px]">
                     <div class="flex items-center border-l-[3px] border-primary pl-[5px] leading-[1.1] mt-[10px]">
                         <span class="text-[14px]">{{ t('bottomNav') }}</span>
                         <span class="text-[12px] ml-[8px] text-gray-500">{{ t('bottomNavHint') }}</span>

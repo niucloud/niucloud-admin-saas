@@ -41,16 +41,16 @@ export function getRechargeOrderStatusList() {
  * 获取退款记录
  * @returns
  */
-export function getRefund(params: Record<string, any>) {
-    return request.get(`refund/refund`, { params })
+export function getRechargeRefund(params: Record<string, any>) {
+    return request.get(`order/recharge/refund`, { params })
 }
 
 /**
  * 获取退款状态
  * @returns
  */
-export function getRefundStatus() {
-    return request.get(`refund/status`)
+export function getRechargeRefundStatus() {
+    return request.get(`order/recharge/refund/status`)
 }
 
 /**
@@ -65,6 +65,6 @@ export function rechargeRefund(id: number) {
 * 获取退款统计
  * @returns
  */
-export function getRefundStat() {
-    return request.get(`refund/stat`);
+export function getRechargeRefundStat() {
+    return request.get(`order/recharge/refund/stat`);
 }

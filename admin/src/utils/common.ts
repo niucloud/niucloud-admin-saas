@@ -149,17 +149,6 @@ export function strByteLength(str: string = ''): number {
 }
 
 /**
- * 获取手机端域名
- */
-export function getWapDomain(): string {
-    if (import.meta.env.MODE == 'development') {
-        return import.meta.env.VITE_WAP_DOMAIN || location.origin + '/wap';
-    } else {
-        return (import.meta.env.VITE_WAP_DOMAIN || location.origin + '/wap') + (storage.get('siteId') == 1 ? '' : '/s' + storage.get('siteId'));
-    }
-}
-
-/**
  * url 转 route
  * @param url 
  */

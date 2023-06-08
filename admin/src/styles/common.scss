@@ -53,8 +53,8 @@
         position: fixed;
         height: inherit;
         background:var(--el-bg-color-overlay);
-        padding-left: var(--aside-width);
-        width: 100%;
+        margin-left: var(--aside-width);
+        width:calc(100% - var(--aside-width));
         left: 0;
         bottom: 0;
         z-index: 100;
@@ -191,4 +191,28 @@ html.dark {
     .app-item {
         background: #191a23;
     }   
+}
+
+// 详情的头部
+.detail-head{
+    display: flex;
+    align-items: center;
+    margin-left: 30px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    .left{
+        color: #666;
+        margin-top: 1px;
+        font-size: 14px;
+        line-height: 1;
+        cursor: pointer;
+    }
+    .adorn{
+        color: #999;
+        margin: 0 12px;
+        font-size: 14px;
+    }
+    .right{
+        font-size: 24px;
+    }
 }
