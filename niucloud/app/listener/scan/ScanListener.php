@@ -13,6 +13,7 @@ namespace app\listener\scan;
 
 use app\dict\scan\ScanDict;
 use app\service\api\wechat\WechatAuthService;
+use Throwable;
 
 /**
  * 支付异步回调事件
@@ -24,13 +25,13 @@ class ScanListener
     public function handle(array $data)
     {
         $action = $data['action'];
-        switch($action){
+        switch ($action) {
             case ScanDict::WECHAT_LOGIN:
                 try {
                     $wechat_auth_service = new WechatAuthService();
                     $data['login_data'] = $wechat_auth_service->login($data['openid']);
                     $data['status'] = ScanDict::SUCCESS;
-                }catch(\Throwable $e){
+                } catch ( Throwable $e ) {
                     $data['status'] = ScanDict::FAIL;
                     $data['fail_reason'] = get_lang($e->getMessage());
                 }

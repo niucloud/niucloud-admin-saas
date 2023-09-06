@@ -5,13 +5,17 @@ use think\Response;
 use think\facade\Lang;
 use think\facade\Queue;
 use think\facade\Cache;
-
+use core\util\Snowflake;
+use app\service\core\upload\CoreImageService;
 // 应用公共文件
 
 /**
  * 接口操作成功，返回信息
- * @param int $msg
- * @param array $
+ * @param string $msg
+ * @param array|string|bool|null $data
+ * @param int $code
+ * @param int $http_code
+ * @return Response
  */
 function success($msg = 'SUCCESS', array|string|bool|null $data = [], int $code = 1, int $http_code = 200): Response
 {
@@ -25,6 +29,11 @@ function success($msg = 'SUCCESS', array|string|bool|null $data = [], int $code 
 
 /**
  * 接口操作失败，返回信息
+ * @param $msg
+ * @param array|null $data
+ * @param int $code
+ * @param int $http_code
+ * @return Response
  */
 function fail($msg = 'FAIL', ?array $data = [], int $code = 0, int $http_code = 200): Response
 {
@@ -37,7 +46,7 @@ function fail($msg = 'FAIL', ?array $data = [], int $code = 0, int $http_code = 
 
 /**
  * 自动侦测语言并转化
- * @param string
+ * @param string $str
  * @return lang()
  */
 function get_lang($str)
@@ -86,7 +95,7 @@ function list_to_tree($list, $pk = 'id', $pid = 'pid', $child = 'child', $root =
  * 生成加密密码
  * @param $password
  * @param $salt  手动提供散列密码的盐值（salt）。这将避免自动生成盐值（salt）。,默认不填写将自动生成
- * @return bool|string
+ * @return string
  */
 function create_password($password, $salt = '')
 {
@@ -97,6 +106,7 @@ function create_password($password, $salt = '')
  * 校验比对密码和加密密码是否一致
  * @param $password
  * @param $hash
+ * @return bool
  */
 function check_password($password, $hash)
 {
@@ -173,38 +183,6 @@ function del_target_dir($path, $delDir)
     }
 }
 
-
-/**
- * @notes 下载文件
- * @param $url
- * @param $saveDir
- * @param $fileName
- * @return string
- */
-function download_file($url, $saveDir, $fileName)
-{
-    if (!file_exists($saveDir)) {
-        mkdir($saveDir, 0775, true);
-    }
-    $fileSrc = $saveDir . $fileName;
-    file_exists($fileSrc) && unlink($fileSrc);
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
-    $file = curl_exec($ch);
-    curl_close($ch);
-    $resource = fopen($fileSrc, 'a');
-    fwrite($resource, $file);
-    fclose($resource);
-    if (filesize($fileSrc) == 0) {
-        unlink($fileSrc);
-        return '';
-    }
-    return $fileSrc;
-}
-
-
 /**
  * 获取一些公共的系统参数
  * @param string|null $key
@@ -234,12 +212,12 @@ function system_name(?string $key = '')
  */
 function get_date_by_time(?int $time = null)
 {
-    return date('Y-m-d h:i:s', time());
+    return date('Y-m-d h:i:s', $time);
 }
 
 function get_start_and_end_time_by_day($day = '')
 {
-    $date = $day ?: date('Y-m-d', time());
+    $date = $day ?: date('Y-m-d');
     $day_start_time = strtotime($date);
     //当天结束之间
     $day_end_time = $day_start_time + 86400;
@@ -268,12 +246,26 @@ function url_to_path($url)
 }
 
 /**
+ * 获取本地文件的对外网络路径
+ * @param string $path
+ * @return string
+ */
+function get_file_url(string $path)
+{
+    if (!$path) return '';
+    if (!str_contains($path, 'http://') && !str_contains($path, 'https://')) {
+        return request()->domain() .'/'. path_to_url($path);
+    } else {
+        return path_to_url($path);
+    }
+}
+/**
  * 新增队列工作
  * @param $job
  * @param $data
  * @param $delay
  * @param $queue
- * @return void
+ * @return bool
  */
 function create_job($job, $data = '', $delay = 0, $queue = null)
 {
@@ -308,7 +300,7 @@ function is_write($file)
 {
     if (is_dir($file)) {
         $dir = $file;
-        if ($fp = @fopen("$dir/test.txt", 'w')) {
+        if ($fp = @fopen("$dir/test.txt", 'wb')) {
             @fclose($fp);
             @unlink("$dir/test.txt");
             $writeable = true;
@@ -316,7 +308,7 @@ function is_write($file)
             $writeable = false;
         }
     } else {
-        if ($fp = @fopen($file, 'a+')) {
+        if ($fp = @fopen($file, 'ab+')) {
             @fclose($fp);
             $writeable = true;
         } else {
@@ -363,14 +355,18 @@ function filter($string)
 
 /**
  * 生成编号
- * @param string $type
+ * @param string $prefix
  * @param string $tag 业务标识 例如member_id ...
- * @return void
+ * @return string
+ * @throws Exception
  */
 function create_no(string $prefix = '', string $tag = '')
 {
-    return $prefix . substr(md5($tag), -5) . uniqid();
-
+    $data_center_id = 1;
+    $machine_id = 2;
+    $snowflake = new Snowflake($data_center_id, $machine_id);
+    $id = $snowflake->generateId();
+    return $prefix.date('Ymd').$tag.$id;
 }
 
 /**
@@ -387,6 +383,19 @@ function mkdirs($dir, $mode = 0777)
     return @mkdir($dir, $mode);
 }
 
+/**
+ * 创建文件夹
+ * @param $dir
+ * @param $mode
+ * @return true
+ */
+function mkdirs_or_notexist($dir, $mode = 0777)
+{
+    if (! is_dir($dir) && ! mkdir($dir, $mode, true) && ! is_dir($dir)) {
+        throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+    }
+    return true;
+}
 /**
  * 删除缓存文件使用
  * @param $dir
@@ -416,14 +425,13 @@ function unique_random($len = 10)
 {
     $str = 'qwertyuiopasdfghjklzxcvbnmasdfgh';
     str_shuffle($str);
-    $res = substr(str_shuffle($str), 0, $len);
-    return $res;
+    return substr(str_shuffle($str), 0, $len);
 }
 
 /**
  * 校验事件结果
  * @param $result
- * @return void
+ * @return bool
  */
 function check_event_result($result)
 {
@@ -438,8 +446,9 @@ function check_event_result($result)
 
 /**
  * 二维数组合并
- * @param $array1
- * @param $array2
+ * @param array $array1
+ * @param array $array2
+ * @return array
  */
 function array_merge2(array $array1, array $array2)
 {
@@ -447,7 +456,7 @@ function array_merge2(array $array1, array $array2)
         if (array_key_exists($array2_k, $array1)) {
             foreach ($array2_v as $array2_kk => $array2_vv) {
                 if (array_key_exists($array2_kk, $array1[$array2_k])) {
-                    if (gettype($array2_vv) == 'array') {
+                    if (is_array($array2_vv)) {
                         $array1[$array2_k][$array2_kk] = array_merge($array1[$array2_k][$array2_kk], $array2_vv);
                     }
                 } else {
@@ -574,7 +583,7 @@ function parse_sql($content = '', $string = false, $replace = [])
         $content = str_replace(["\r\n", "\r"], "\n", $content);
         $content = explode("\n", trim($content));
         // 循环处理每一行
-        foreach ($content as $key => $line) {
+        foreach ($content as $line) {
             // 跳过空行
             if ($line == '') {
                 continue;
@@ -588,12 +597,12 @@ function parse_sql($content = '', $string = false, $replace = [])
                 continue;
             }
             // 多行注释开始
-            if (substr($line, 0, 2) == '/*') {
+            if (str_starts_with($line, '/*')) {
                 $comment = true;
                 continue;
             }
             // 多行注释结束
-            if (substr($line, -2) == '*/') {
+            if (str_ends_with($line, '*/')) {
                 $comment = false;
                 continue;
             }
@@ -623,6 +632,7 @@ function parse_sql($content = '', $string = false, $replace = [])
  * 递归查询目录下所有文件
  * @param $path
  * @param $data
+ * @param $search
  * @return void
  */
 function search_dir($path, &$data, $search = '')
@@ -677,8 +687,8 @@ function getFileMap($path, $arr = [])
  * 如果不存在则写入缓存
  * @param string|null $name
  * @param $value
- * @param $options
  * @param $tag
+ * @param $options
  * @return mixed|string
  */
 function cache_remember(string $name = null, $value = '', $tag = null, $options = null){
@@ -699,8 +709,90 @@ function cache_remember(string $name = null, $value = '', $tag = null, $options 
 
 /**
  * 项目目录
- * @return void
+ * @return string
  */
 function project_path() {
     return dirname(root_path()) . DIRECTORY_SEPARATOR;
+}
+
+/**
+ * 图片转base64
+ * @param string $path
+ * @param $is_delete 转换后是否删除原图
+ * @return string
+ */
+function image_to_base64(string $path, $is_delete = false) {
+    if (!file_exists($path)) return 'image not exist';
+
+    $mime = getimagesize($path)['mime'];
+    $image_data = file_get_contents($path);
+    // 将图片转换为 base64
+    $base64_data = base64_encode($image_data);
+
+    if ($is_delete) @unlink($path);
+
+    return "data:$mime;base64,$base64_data";
+}
+
+/**
+ * 获取缩略图
+ * @param $site_id
+ * @param $image
+ * @param string $thumb_type
+ * @param bool $is_throw_exception
+ * @return mixed
+ * @throws Exception
+ */
+function get_thumb_images($site_id, $image, $thumb_type = 'all', bool $is_throw_exception = false){
+
+    return (new CoreImageService())->thumb($site_id, $image, $thumb_type, $is_throw_exception);
+}
+
+/**
+ * 版本号转整数 例如1.0.0=001.000.000=001000000=1000000
+ * @param $version
+ * @return int
+ */
+function version_to_int($version) {
+    $version_array = explode(".", $version);
+
+    $v1 = sprintf('%03s', (int) $version_array[0] ?? 0);
+    $v2 = sprintf('%03s', (int) $version_array[1] ?? 0);
+    $v3 = sprintf('%03s', (int) $version_array[2] ?? 0);
+    return (int) "{$v1}{$v2}{$v3}";
+}
+
+/**
+ * 整数版本号转字符串例如 1000000=001000000=001.000.000=1.0.0
+ * @param int $ver
+ * @return string
+ */
+function version_to_string($ver) {
+    if($ver > 999) {
+        if($ver > 999999) {
+            $ver .= "";
+            $v3 = (int) substr($ver, -3);
+            $v2 = (int) substr($ver, -6, 3);
+            $v1 = (int) substr($ver, 0, -6);
+        } else {
+            $ver .= "";
+            $v3 = (int) substr($ver, -3);
+            $v2 = (int) substr($ver, 0, -3);
+            $v1 = 0;
+        }
+    } else {
+        $v3 = $ver;
+        $v2 = 0;
+        $v1 = 0;
+    }
+    return "{$v1}.{$v2}.{$v3}";
+}
+
+/**
+ * 检测文件是否是本地图片
+ * @param string $file_path
+ * @return void
+ */
+function check_file_is_remote(string $file_path){
+    return str_contains($file_path, 'https://') || str_contains($file_path, 'http://') || str_contains($file_path, '.com');
 }

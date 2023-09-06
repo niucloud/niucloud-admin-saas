@@ -16,21 +16,22 @@ class CertDict
     /************************************************* 证书 *****************************************/
 
 
-    const WECHATPAY = 'wechatpay';
+    public const WECHATPAY = 'wechatpay';
 
-    const WECHAT = 'wechat';
+    public const WECHAT = 'wechat';
 
-    const ALIYUN = 'aliyun';
+    public const ALIYUN = 'aliyun';
 
-    const WEAPP = 'weapp';
+    public const WEAPP = 'weapp';
 
-    const ALIAPP = 'aliapp';
+    public const ALIAPP = 'aliapp';
 
     /**
      * 加解密方式
      * @return array
      */
-    public static function getCertType(){
+    public static function getCertType()
+    {
         return [
             self::WECHATPAY,
             self::WECHAT,

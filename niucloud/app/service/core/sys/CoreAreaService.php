@@ -41,13 +41,12 @@ class CoreAreaService extends BaseCoreService
      */
     public function getInfo($id)
     {
-        $info = $this->model->where('id', $id)->field('id, pid, name, shortname, longitude, latitude, level, sort, status')->find()->toArray();
-        return $info;
+        return $this->model->where('id', $id)->field('id, pid, name, shortname, longitude, latitude, level, sort, status')->find()->toArray();
     }
 
     /**
      * 获取地址列表
-     * @param $pid
+     * @param int $pid
      * @return array
      * @throws DataNotFoundException
      * @throws DbException
@@ -55,8 +54,7 @@ class CoreAreaService extends BaseCoreService
      */
     public function getListByPid(int $pid)
     {
-        $list = $this->model->where('pid', $pid)->field('id, pid, name, shortname, longitude, latitude, level, sort, status')->select()->toArray();
-        return $list;
+        return $this->model->where('pid', $pid)->field('id, pid, name, shortname, longitude, latitude, level, sort, status')->select()->toArray();
     }
 
     /**
@@ -70,7 +68,23 @@ class CoreAreaService extends BaseCoreService
     public function getTree(int $level = 3)
     {
         $list = $this->model->where('level', '<=', $level)->field('id, pid, name, shortname, longitude, latitude, level, sort, status')->select()->toArray();
-        $tree = list_to_tree($list, 'id', 'pid', 'child', 0);
-        return $tree;
+        return list_to_tree($list);
+    }
+
+    /**
+     * 通过对应省市区县，地址，返回完整地址
+     * @param $province_id
+     * @param $city_id
+     * @param $district_id
+     * @param $address
+     * @param string $tag 分隔符
+     * @return string
+     */
+    public function getFullAddress($province_id, $city_id, $district_id, $address, $tag = ' ')
+    {
+        $province_name = ($this->model->where([['id', '=', $province_id]])->field("name")->findOrEmpty()->toArray())['name'] ?? '';
+        $city_name = ($this->model->where([['id', '=', $city_id]])->field("name")->findOrEmpty()->toArray())['name'] ?? '';
+        $district_name = ($this->model->where([['id', '=', $district_id]])->field("name")->findOrEmpty()->toArray())['name'] ?? '';
+        return $province_name.$tag.$city_name.$tag. $district_name. $tag. $address;
     }
 }

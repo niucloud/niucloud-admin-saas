@@ -22,7 +22,7 @@ class App extends BaseAdminController
      */
     public function getAppList()
     {
-        return success(( new CoreAddonService() )->getAppList());
+        return success((new CoreAddonService())->getAppList());
     }
 
 }

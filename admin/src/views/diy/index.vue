@@ -1,196 +1,355 @@
 <template>
-	<div class="main-container">
+	<div class="flex flex-wrap">
+		<div class="page-item relative bg-no-repeat ml-[20px] mr-[40px] mt-[20px] bg-[#f7f7f7] w-[300px] pt-[80px] pb-[20px]" :class="{ 'cursor-pointer' : !item.isDisabledPop }" v-for="(item,key) in page" :key="key">
+			<p class="absolute top-[46px] left-[50%] translate-x-[-50%] text-[14px] truncate w-[130px] text-center">{{item.use_template.title}}</p>
 
-		<div class="flex h-[700px] bg-body p-[20px]" v-show="loading">
-			<iframe v-show="loadingIframe" class="w-[375px] border border-slate-100" :src="wapPreview" frameborder="0" id="previewIframe" @load="loadIframe"></iframe>
-			<div v-show="loadingDev" class="w-[375px] border border-slate-100 pt-[20px] px-[20px]">
-				<div class="font-bold text-xl mb-[40px]">{{t('developTitle')}}</div>
-				<div class="mb-[20px] flex flex-col">
-					<text class="mb-[10px]">{{ t('wapDomain') }}</text>
-					<el-input v-model="wapDomain" :placeholder="t('wapDomainPlaceholder')" clearable />
+			<div v-show="item.use_template.url" class="w-[282px] h-[493px] mx-auto">
+				<iframe v-show="item.loadingIframe" class="w-[282px] h-[493px] mx-auto" :src="item.use_template.wapPreview" frameborder="0" @load="loadIframe(key)"></iframe>
+				<div v-show="item.loadingDev" class="w-[282px] h-[493px] mx-auto bg-body pt-[20px] px-[20px]">
+					<div class="font-bold text-xl mb-[40px]">{{t('developTitle')}}</div>
+					<div class="mb-[20px] flex flex-col">
+						<text class="mb-[10px]">{{ t('wapDomain') }}</text>
+						<el-input v-model="wapDomain" :placeholder="t('wapDomainPlaceholder')" clearable/>
+					</div>
+					<el-button type="primary" @click="saveDomain()">{{ t('confirm') }}</el-button>
 				</div>
-				<el-button type="primary" @click="save" >{{ t('confirm') }}</el-button>
 			</div>
 
-			<div class="w-[500px] ml-[40px]">
-				<el-button type="primary" @click="toDecorate()">{{ t('decorate') }}</el-button>
-
-				<div class="info-wrap mt-[20px]">
-					<el-form label-width="80px" class="px-[10px]">
-						<el-form-item :label="t('preview')">
-							<el-radio-group v-model="previewMode">
-								<el-radio :label="'weapp'">{{t('weapp')}}</el-radio>
-								<el-radio :label="'wechat'">{{t('wechat')}}</el-radio>
-							</el-radio-group>
-						</el-form-item>
-						<template v-if="previewMode == 'wechat'">
-							<el-form-item :label="t('link')" v-show="wapPreview">
-								<el-input readonly :value="wapPreview">
-									<template #append>
-										<el-button @click="copyEvent(wapPreview)" class="bg-primary copy">{{ t('copy') }}</el-button>
-									</template>
-								</el-input>
-							</el-form-item>
-							<el-form-item label=" " v-show="wapImage">
-								<el-image :src="wapImage"/>
-							</el-form-item>
-						</template>
-						<template v-if="previewMode == 'weapp'">
-							<el-form-item label=" " v-if="weappConfig.qr_code">
-								<el-image class="w-[100px] h-[100px]" :src="img(weappConfig.qr_code)"/>
-							</el-form-item>
-							<el-form-item label=" " v-else>
-								<span class="text-gray-400">{{t('weappNotSet')}}</span>
-							</el-form-item>
-						</template>
-					</el-form>
-
-				</div>
-
+			<div v-show="!item.use_template.wapPreview" class="overflow-hidden w-[282px] h-[493px] mx-auto">
+				<img class="max-w-full" v-if="item.use_template.cover" :src="img(item.use_template.cover)"/>
 			</div>
+
+			<p class="text-[12px] text-[#999] mt-[10px] mx-auto truncate text-center w-[250px]">{{item.use_template.desc}}</p>
+
+			<div class="item-hide absolute inset-x-0 inset-y-0 bg-black bg-opacity-50 text-center" :class="{ 'disabled' : item.isDisabledPop }">
+				<div class="item-btn-box absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] flex flex-col flex-wrap">
+					<el-button @click="show(key,item)">切换</el-button>
+<!--					v-show="item.use_template.mode == 'diy'"-->
+					<el-button @click="toDecorate(item.use_template)">装修</el-button>
+					<el-button @click="toPreview(item.use_template)">预览</el-button>
+				</div>
+			</div>
+
 		</div>
-
 	</div>
+
+	<el-dialog v-model="showDialog" :title="t('changeTemplate')" width="400px" :close-on-press-escape="false" :destroy-on-close="true" :close-on-click-modal="false">
+
+		<el-form :model="form" label-width="0px" v-if="formData.type">
+			<el-form-item label="">
+				<div>{{t('hopeBeforeTip')}}<span class="text-primary px-[5px]">{{ page[formData.type].title }}</span>{{t('hopeAfterTip')}}</div>
+			</el-form-item>
+
+			<el-form-item label="">
+				<el-select v-model="hope" class="w-full">
+					<el-option :label="t('changeTemplateTip') + ' ' + page[formData.type].title + ' ' + t('template')" value="template"/>
+					<el-option :label="t('changeMyPageTip') + ' ' + page[formData.type].title" value="diy"/>
+				</el-select>
+			</el-form-item>
+
+			<el-form-item label="" v-show="hope == 'template'">
+				<el-select v-model="formData.template" class="w-full">
+					<el-option v-for="(item, key) in page[formData.type].template" :label="item.title" :value="key"/>
+				</el-select>
+			</el-form-item>
+
+			<el-form-item label="" v-show="hope == 'diy'">
+				<el-select v-model="formData.id" class="w-full">
+					<el-option v-for="(item, index) in page[formData.type].my_page" :label="item.title" :value="item.id"/>
+				</el-select>
+				<div class="mt-[10px]">
+					<span class="cursor-pointer text-primary mr-[10px]" @click="toDiyList">{{ t('createPage') }}</span>
+					<span class="cursor-pointer text-primary" @click="refreshMyPage">{{ t('refreshPage') }}</span>
+				</div>
+			</el-form-item>
+
+		</el-form>
+
+		<template #footer>
+			<span class="dialog-footer">
+				<el-button @click="showDialog = false">{{ t('cancel')}}</el-button>
+				<el-button type="primary" @click="save">{{ t('confirm') }}</el-button>
+			</span>
+		</template>
+	</el-dialog>
+
 </template>
 
 <script lang="ts" setup>
-    import {ref, reactive, watch} from 'vue'
+    import {reactive, ref, watch} from 'vue'
     import {t} from '@/lang'
-    import { useRouter} from 'vue-router'
-    import {getWeappConfig} from '@/api/weapp'
-    import {getUrl} from '@/api/sys'
-    import {useClipboard} from '@vueuse/core'
-    import {ElMessage} from 'element-plus'
     import {img} from '@/utils/common'
-    import QRCode from "qrcode";
+    import { useRouter } from 'vue-router'
+    import { ElMessage } from 'element-plus'
+    import {getDecoratePage, getDiyList, changeTemplate} from '@/api/diy'
     import storage from '@/utils/storage'
 
-    const wapUrl = ref('')
+    const page: any = reactive({})
+    const showDialog = ref(false)
+    const router = useRouter()
+    const hope = ref('template')
     const wapDomain = ref('')
-    const wapImage = ref('')
-    const wapPreview = ref('')
 
-    const loading = ref(false)
-    const loadingIframe = ref(false) // 加载iframe
-    const loadingDev = ref(false) // 加载开发环境配置
-    const timeFrame = ref(0)
+    // 添加自定义页面
+    const formData = reactive({
+        type: '',
+        mode: '',
+        template: '',
+        id: ''
+    })
 
-    var time = new Date().getTime();
+    const refreshData = () => {
+        formData.type = '';
+        formData.mode = '';
+        formData.template = '';
+        formData.id = '';
+        getDecoratePage({}).then((res => {
+            for (let key in res.data) {
+                page[key] = res.data[key]
+            }
 
-    getUrl().then((res:any)=> {
-        wapDomain.value = res.data.wap_domain;
-        wapUrl.value = res.data.wap_url;
-        setDomain();
+            for (let key in page) {
+                if (page[key].use_template.url) {
 
-        // 生产模式禁止
-        if(import.meta.env.MODE == 'production') return;
+                    page[key].loadingIframe = false; // 加载iframe
+                    page[key].loadingDev = false; // 加载开发环境配置
+                    page[key].isDisabledPop = false; // 是否禁止打开遮罩层
+                    page[key].timeFrame = 0;
 
-        // env文件配置过wap域名
-        if (wapDomain.value) return;
+                    wapDomain.value = page[key].domain_url.wap_domain;
+                    page[key].wapUrl = page[key].domain_url.wap_url;
 
-        let wap_domain_storage = storage.get('wap_domain');
-        if(wap_domain_storage){
-            wapUrl.value = wap_domain_storage
-            setDomain();
-            return;
-        }
+                    // 开发模式增加站点id
+                    if (import.meta.env.MODE == 'development') {
+                        let siteId = storage.get('siteId') || 0;
+                        page[key].use_template.url += `&site_id=${siteId}`;
 
-        timeFrame.value = new Date().getTime();
-    });
+                        // 开发模式情况下，并且未配置wap域名，则获取缓存域名
+                        if (!wapDomain.value && storage.get('wap_domain')) {
+                            page[key].wapUrl = storage.get('wap_domain')
+                            page[key].loadingIframe = true; // 加载iframe
+                            page[key].loadingDev = false; // 加载开发环境配置
+                            page[key].isDisabledPop = false; // 是否禁止打开遮罩层
+                        }
+                        page[key].timeFrame = new Date().getTime();
+                    }
 
-    const save = ()=> {
-        wapUrl.value = wapDomain.value + '/wap'
-        setDomain();
-        storage.set({ key : 'wap_domain', data :wapUrl.value });
-        loadingIframe.value = true;
-        loadingDev.value = false;
+                    setDomain(key);
+                }
+            }
+
+        }));
     }
 
-    const setDomain = ()=> {
-        let siteInfo = storage.get('siteInfo');
-        let siteId = 0;
-        if (siteInfo) siteId = siteInfo.site_id;
-        wapPreview.value = `${wapUrl.value}/pages/index/index?mode=preview&site_id=${siteId}`;
-        QRCode.toDataURL(wapPreview.value, {errorCorrectionLevel: 'L', margin: 0, width: 100}).then(url => {
-            wapImage.value = url
+    refreshData();
+
+    // 监听iframe加载事件
+    const loadIframe = (key: string) => {
+        if (!page[key].use_template.wapPreview) return;
+
+        var loadTime = new Date().getTime();
+        var difference = loadTime - page[key].timeFrame;
+        // 检测页面加载差异，小于1000毫秒，则配置wap端域名
+        if (difference < 1000) {
+            page[key].loadingDev = true;
+            page[key].isDisabledPop = true;
+            page[key].loadingIframe = false;
+        } else {
+            page[key].loadingDev = false;
+            page[key].isDisabledPop = false;
+            page[key].loadingIframe = true;
+        }
+    }
+
+    const saveDomain = () => {
+        if (wapDomain.value.trim().length == 0) {
+            ElMessage({
+                type: 'warning',
+                message: `${t('wapDomainPlaceholder')}`,
+            });
+            return;
+        }
+        let wapUrl = wapDomain.value + '/wap';
+        storage.set({key: 'wap_domain', data: wapUrl});
+
+        for (let key in page) {
+            if (page[key].use_template.url) {
+                page[key].wapUrl = wapUrl;
+                setDomain(key);
+            }
+        }
+        setTimeout(() => {
+            for (let key in page) {
+                if (page[key].use_template.url) {
+                    page[key].loadingIframe = true; // 加载iframe
+                    page[key].loadingDev = false; // 加载开发环境配置
+                    page[key].isDisabledPop = false; // 是否禁止打开遮罩层
+                }
+            }
+        }, 100 * 3);
+    }
+
+    const setDomain = (key: string) => {
+        page[key].use_template.wapPreview = page[key].wapUrl + page[key].use_template.url;
+    }
+
+    const show = (key: string, data: any) => {
+        // 每次打开时赋值
+        showDialog.value = true;
+
+        hope.value = data.use_template.hope;
+        formData.type = key;
+        formData.mode = data.use_template.mode;
+
+        if (hope.value == 'template') {
+            formData.template = data.use_template.template;
+        } else if (hope.value == 'diy') {
+            formData.id = data.use_template.id;
+        }
+    }
+
+    // 跳转去装修
+    const toDecorate = (data: any) => {
+        let query: any = {
+            back: '/diy/index'
+        };
+        if (data.id) {
+            query.id = data.id;
+        } else if (data.name) {
+            query.name = data.name;
+        }
+        let url = router.resolve({
+            path: '/decorate/edit',
+            query
+        });
+        window.open(url.href);
+    }
+
+    // 跳转去预览
+    const toPreview = (data: any) => {
+        let query: any = {};
+        if (data.id) {
+            query.id = data.id;
+        } else if (data.name) {
+            query.name = data.name;
+        }
+        let url = router.resolve({
+            path: '/decorate/preview',
+            query
+        });
+        window.open(url.href);
+    }
+
+    // 创建微页面
+    const toDiyList = (data: any) => {
+        let url = router.resolve({
+            path: '/site/diy/list'
+        });
+        window.open(url.href);
+    }
+
+    // 刷新我的微页面
+    const refreshMyPage = () => {
+        getDiyList({type: formData.type}).then((res) => {
+            let isExist = true; // 检测选择的微页面是否存在，不存在则清空
+            for (let i = 0; i < res.data.length; i++) {
+                if (formData.id == res.data[i].id) {
+                    isExist = false;
+                    break;
+                }
+            }
+            if (isExist) {
+                formData.id = '';
+            }
+            page[formData.type].my_page = {};
+            Object.assign(page[formData.type].my_page, res.data);
         })
     }
 
-    // 监听iframe加载事件
-    const loadIframe = ()=> {
-        if (!wapPreview.value) return
-        var loadTime = new Date().getTime();
-        var difference = loadTime - timeFrame.value;
-	    // 检测页面加载差异，小于1000毫秒，则配置wap端域名
-        if (difference < 1000) {
-            loadingDev.value = true;
-            loadingIframe.value = false;
-            wapPreview.value = ''
-            wapImage.value = ''
-        } else {
-            loadingDev.value = false;
-            loadingIframe.value = true;
+    watch(
+        () => hope.value,
+        (newValue, oldValue) => {
+            if (newValue == 'template') {
+                formData.id = '';
+            } else if (newValue == 'diy') {
+                formData.mode = 'diy';
+                formData.template = '';
+            }
         }
-        loading.value = true
+    )
+
+    watch(
+        () => formData.template,
+        (newValue, oldValue) => {
+            if (newValue) {
+                formData.mode = page[formData.type].template[newValue].mode;
+            }
+        }
+    )
+
+    const isRepeat = ref(false)
+    const save = () => {
+        if (hope.value == 'template') {
+            if (formData.template == '') {
+                ElMessage({
+                    type: 'warning',
+                    message: `${t('placeholderTemplate')}`,
+                });
+                return;
+            }
+        } else if (hope.value == 'diy') {
+            if (formData.id == '') {
+                ElMessage({
+                    type: 'warning',
+                    message: `${t('placeholderMyPage')}`,
+                });
+                return;
+            }
+        }
+
+        if (isRepeat.value) return
+        isRepeat.value = true
+
+        changeTemplate({
+            ...formData
+        }).then((res) => {
+            isRepeat.value = false;
+            showDialog.value = false;
+            refreshData();
+        })
+
     }
-
-    const router = useRouter()
-
-    const weappConfig = reactive({
-        qr_code: ''
-    })
-
-    const previewMode = ref('weapp')
-
-    /**
-     * 获取微信配置
-     */
-    getWeappConfig().then((res: any) => {
-        if (res.code == 1) {
-            let data = res.data;
-            weappConfig.qr_code = data.qr_code;
-        }
-    })
-
-    const url = router.resolve({
-        path: '/decorate/edit',
-        query: {name: 'DIY_INDEX'}
-    });
-
-    const toDecorate = () => {
-        router.push('/decorate/edit?name=DIY_INDEX&back=/diy/index')
-    }
-
-    /**
-     * 复制
-     */
-    const {copy, isSupported, copied} = useClipboard()
-    const copyEvent = (text: string) => {
-        if (!isSupported.value) {
-            ElMessage({
-                message: t('notSupportCopy'),
-                type: 'warning'
-            })
-        }
-        copy(text)
-    }
-
-    watch(copied, () => {
-        if (copied.value) {
-            ElMessage({
-                message: t('copySuccess'),
-                type: 'success'
-            })
-        }
-    })
-
 </script>
 
-<style lang="scss">
-	.copy {
-		background: var(--el-color-primary) !important;
-		color: var(--el-color-white) !important;
-	}
-</style>
 <style lang="scss" scoped>
+	.page-item {
+
+		background-image: url(assets/images/iphone_bg.png);
+		background-color: var(--el-bg-color);
+		background-size: 100%;
+
+		.item-hide {
+			display: none;
+
+			.item-btn-box {
+
+				button {
+					height: 35px;
+					width: 100px;
+
+					& ~ button {
+						margin-top: 15px;
+						margin-left: 0;
+					}
+				}
+
+			}
+		}
+
+		&:hover {
+			.item-hide:not(.disabled) {
+				display: block !important;
+			}
+		}
+	}
 </style>

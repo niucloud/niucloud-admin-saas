@@ -64,7 +64,7 @@ class MemberCashOut extends BaseApiController
 
     /**
      * 申请提现
-     * @return void
+     * @return Response
      */
     public function apply()
     {

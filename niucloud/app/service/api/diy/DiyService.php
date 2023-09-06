@@ -46,7 +46,7 @@ class DiyService extends BaseApiService
             $condition[] = [ 'is_default', '=', 1 ];
         }
 
-        $field = 'id,site_id,title,name,type,value,is_default,share,visit_count';
+        $field = 'id,site_id,title,name,type,template, mode,value,is_default,share,visit_count';
 
         $info = $this->model->field($field)->where($condition)->findOrEmpty()->toArray();
         if (empty($info)) {
@@ -57,8 +57,10 @@ class DiyService extends BaseApiService
                     $info = [
                         'site_id' => $this->site_id,
                         'title' => $page_data[ 'title' ],
-                        'name' => $page_data[ 'template' ],
-                        'type' => $page_data[ 'template' ],
+                        'name' => $page_data[ 'type' ],
+                        'type' => $page_data[ 'type' ],
+                        'template' => $page_data[ 'template' ],
+                        'mode' => $page_data[ 'mode' ],
                         'value' => json_encode($page_data[ 'data' ], JSON_UNESCAPED_UNICODE),
                         'is_default' => 1,
                         'share' => '',
@@ -72,15 +74,17 @@ class DiyService extends BaseApiService
 
     /**
      * 获取默认页面数据
-     * @param $template
+     * @param $type
      * @return array|mixed
      */
-    public function getFirstPageData($template)
+    public function getFirstPageData($type)
     {
-        $pages = PagesDict::getPages($template);
+        $pages = PagesDict::getPages([ 'type' => $type ]);
         if (!empty($pages)) {
+            $template = array_key_first($pages);
             $page = array_shift($pages);
             $page[ 'template' ] = $template;
+            $page[ 'type' ] = $type;
             return $page;
         }
         return [];

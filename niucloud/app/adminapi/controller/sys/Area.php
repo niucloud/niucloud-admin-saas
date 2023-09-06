@@ -13,25 +13,49 @@ namespace app\adminapi\controller\sys;
 
 use app\service\admin\sys\AreaService;
 use core\base\BaseAdminController;
+use think\Response;
 
 class Area extends BaseAdminController
 {
     /**
      * 拖过pid获取子项列表
      * @param int $pid
-     * @return mixed
+     * @return Response
      */
-    public function listByPid(int $pid){
+    public function listByPid(int $pid)
+    {
         return success((new AreaService())->getListByPid($pid));
     }
 
     /**
      * 获取层级列表
      * @param int $level
-     * @return mixed
+     * @return Response
      */
     public function tree(int $level)
     {
         return success((new AreaService())->getAreaTree($level));
+    }
+
+    /**
+     * @return Response
+     */
+    public function addressInfo()
+    {
+        $data = $this->request->params([
+            ['address', ''],
+        ]);
+        return success((new AreaService())->getAddress($data['address']));
+    }
+
+    /**
+     * @return Response
+     */
+    public function contraryAddress()
+    {
+        $data = $this->request->params([
+            ['location', ''],
+        ]);
+        return success((new AreaService())->getAddressInfo($data['location']));
     }
 }

@@ -34,7 +34,7 @@ class WechatDict
 
 
     /************************************************* 请求事件的类型 *****************************************/
-   //事件类型 - 关注
+    //事件类型 - 关注
     const EVENT_SUBSCRIBE = 'subscribe';
     const EVENT_SCAN = 'SCAN';
 
@@ -52,11 +52,12 @@ class WechatDict
      * 加解密方式
      * @return array
      */
-    public static function getEncryptionType(){
+    public static function getEncryptionType()
+    {
         return [
             self::NOT_ENCRYPT => get_lang('dict_wechat_config.not_encrypt'),//明文
-            self::COMPATIBLE  => get_lang('dict_wechat_config.compatible'),//兼容
-            self::SAFE  => get_lang('dict_wechat_config.safe'),//安全
+            self::COMPATIBLE => get_lang('dict_wechat_config.compatible'),//兼容
+            self::SAFE => get_lang('dict_wechat_config.safe'),//安全
         ];
     }
 

@@ -14,9 +14,9 @@ namespace core\pay;
 use core\loader\Loader;
 
 /**
- * @see \core\pay\PayLoader
+ * @see PayLoader
  * @package think\facade
- * @mixin \core\pay\Wechatpay
+ * @mixin Wechatpay
  * @method  string|null upload(string $dir) 附件上传
  * @method  array fetch(string $url, ?string $key) 抓取远程附件
  * @method  mixed delete(string $file_name) 附件删除
@@ -30,6 +30,7 @@ class PayLoader extends Loader
     protected $namespace = '\\core\\pay\\';
 
     protected $config_name = 'pay';
+
     /**
      * 默认驱动
      * @return mixed

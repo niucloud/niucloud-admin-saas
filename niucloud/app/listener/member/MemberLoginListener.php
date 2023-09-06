@@ -24,7 +24,7 @@ class MemberLoginListener
      */
     public function handle(object $member)
     {
-        return ;
+        return;
 
     }
 }

@@ -12,7 +12,10 @@
 use app\api\middleware\ApiChannel;
 use app\api\middleware\ApiCheckToken;
 use app\api\middleware\ApiLog;
+use app\api\route\dispatch\BindDispatch;
+use core\dict\DictLoader;
 use think\facade\Route;
+use app\service\core\niucloud\CoreNotifyService;
 
 //公众号消息推送
 Route::any('wechat/serve/:site_id', 'wechat.Serve/serve')
@@ -20,6 +23,12 @@ Route::any('wechat/serve/:site_id', 'wechat.Serve/serve')
     ->middleware(ApiCheckToken::class)
     ->middleware(ApiLog::class);
 
+Route::group(function() {
+    Route::post('niucloud/notify', function(){
+        return (new CoreNotifyService())->notify();
+    });
+
+});
 
 /**
  * 路由
@@ -40,10 +49,12 @@ Route::group(function() {
     Route::post('weapp/login', 'weapp.Weapp/login');
     //小程序通过code注册
     Route::post('weapp/register', 'weapp.Weapp/register');
+    // 获取小程序订阅消息模板id
+    Route::get('weapp/subscribemsg', 'weapp.Weapp/subscribeMessage');
     //登录
     Route::get('login', 'login.Login/login');
     //第三方绑定
-    Route::post('bind', \app\api\route\dispatch\BindDispatch::class);
+    Route::post('bind', BindDispatch::class);
     //密码重置
     Route::post('password/reset', 'login.Login/resetPassword');
     //账号密码注册
@@ -76,4 +87,4 @@ Route::group(function() {
     ->middleware(ApiCheckToken::class)
     ->middleware(ApiLog::class);
 //加载插件路由
-( new \core\dict\DictLoader("Route") )->load([ 'app_type' => 'api' ]);
+( new DictLoader("Route") )->load([ 'app_type' => 'api' ]);

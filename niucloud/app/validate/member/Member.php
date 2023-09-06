@@ -13,6 +13,7 @@ namespace app\validate\member;
 
 use app\dict\common\CommonDict;
 use app\dict\member\MemberDict;
+use think\facade\Lang;
 use think\Validate;
 
 /**
@@ -24,22 +25,22 @@ class Member extends Validate
 {
 
 
-    protected $rule =   [
-        'nickname'  => 'requireWithout:field|max:30|requireIf:field,nickname',
-        'mobile'   => 'mobile',
+    protected $rule = [
+        'nickname' => 'requireWithout:field|max:30|requireIf:field,nickname',
+        'mobile' => 'mobile',
         'sex' => 'checkSex',
         'birthday' => 'date',
-        'username'  => 'require',
+        'username' => 'require|checkUsername',
         'password' => 'require',
-        'status' =>  'require|checkStatus',
+        'status' => 'require|checkStatus',
     ];
 
-    protected $message  =   [
+    protected $message = [
         'nickname.requireWithout' => 'validate_member.nickname_require',
         'nickname.requireIf' => 'validate_member.nickname_require',
-        'nickname.max'     => 'validate_member.nickname_max',
-        'mobile.require'   => 'validate_member.mobile_require',
-        'mobile.mobile'   => 'validate_member.mobile_mobile',
+        'nickname.max' => 'validate_member.nickname_max',
+        'mobile.require' => 'validate_member.mobile_require',
+        'mobile.mobile' => 'validate_member.mobile_mobile',
         'birthday' => 'validate_member.birthday_format',
         'username.require' => 'validate_member.username_require',
         'username.unique' => 'validate_member.username_is_exist',
@@ -50,20 +51,31 @@ class Member extends Validate
     ];
 
     protected $scene = [
-        'add'  =>  ['birthday', 'mobile', 'password'],
-        'edit'  =>  ['sex', 'birthday'],
-        'modify'  =>  ['sex', 'birthday'],
-        'account_register'  =>  ['username', 'password', 'mobile'],
+        'add' => ['birthday', 'mobile', 'password'],
+        'edit' => ['sex', 'birthday'],
+        'modify' => ['sex', 'birthday'],
+        'account_register' => ['username', 'password', 'mobile'],
         'reset_password' => ['password', 'mobile'],
         'set_status' => ['status']
     ];
+
+    /**
+     * 账号不能是纯数字
+     * @param $value
+     * @param $rule
+     * @param $data
+     * @return Lang|true
+     */
+    public function checkUsername($value, $rule, $data = []){
+        return preg_match('/^\d+$/', $value) ? get_lang("validate_member.username_cannot_pure_number") : true;
+    }
 
     /**
      * 自定义验证 性别
      * @param $value
      * @param $rule
      * @param array $data
-     * @return bool|string
+     * @return Lang|true
      */
     protected function checkSex($value, $rule, $data = [])
     {

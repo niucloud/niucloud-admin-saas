@@ -9,8 +9,3 @@
 // | Author: Niucloud Team
 // +----------------------------------------------------------------------
 
-use app\adminapi\middleware\AdminCheckRole;
-use app\adminapi\middleware\AdminCheckToken;
-use app\adminapi\middleware\AdminLog;
-use think\facade\Route;
-

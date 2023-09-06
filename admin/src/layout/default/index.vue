@@ -11,7 +11,7 @@
                 <el-main :class="['main-wrap h-full p-0',{'bg-page': dark}]">
                     <el-scrollbar>
                         <div class="p-[10px]">
-                            <router-view v-slot="{ Component, route }" v-if="appStore.routeRefrehTag">
+                            <router-view v-slot="{ Component, route }" v-if="appStore.routeRefreshTag">
                                 <keep-alive :include="tabbarStore.tabNames">
                                     <component :is="Component" :key="route.fullPath" />
                                 </keep-alive>

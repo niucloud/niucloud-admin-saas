@@ -21,7 +21,8 @@ class Config extends BaseAdminController
      * 获取网站设置
      * @return Response
      */
-    public function getWebsite(){
+    public function getWebsite()
+    {
         return success((new ConfigService())->getWebSite());
     }
 
@@ -29,23 +30,24 @@ class Config extends BaseAdminController
      * 网站设置
      * @return Response
      */
-    public function setWebsite(){
+    public function setWebsite()
+    {
         $data = $this->request->params([
-            ["site_name",""],
-            ["logo",""],
-            ["keywords",""],
-            ["desc",""],
-            ["latitude",""],
-            ["longitude",""],
-            ["province_id",0],
-            ["city_id",0],
-            ["district_id",0],
-            ["address",""],
-            ["full_address",""],
-            ["phone",""],
-            ["business_hours",""],
-            ["site_name",""],
-            ["logo",""],
+            ["site_name", ""],
+            ["logo", ""],
+            ["keywords", ""],
+            ["desc", ""],
+            ["latitude", ""],
+            ["longitude", ""],
+            ["province_id", 0],
+            ["city_id", 0],
+            ["district_id", 0],
+            ["address", ""],
+            ["full_address", ""],
+            ["phone", ""],
+            ["business_hours", ""],
+            ["site_name", ""],
+            ["logo", ""],
             ["front_end_name", ""],
             ["front_end_logo", ""],
             ["icon", ""]
@@ -54,9 +56,9 @@ class Config extends BaseAdminController
         (new ConfigService())->setWebSite($data);
 
         $service_data = $this->request->params([
-            ["wechat_code",""],
-            ["enterprise_wechat",""],
-            ["tel",""],
+            ["wechat_code", ""],
+            ["enterprise_wechat", ""],
+            ["tel", ""],
         ]);
         (new ConfigService())->setService($service_data);
 
@@ -67,14 +69,16 @@ class Config extends BaseAdminController
      * 获取版权信息
      * @return Response
      */
-    public function getCopyright(){
+    public function getCopyright()
+    {
         return success((new ConfigService())->getCopyright());
     }
 
     /**设置版权信息
      * @return Response
      */
-    public function setCopyright(){
+    public function setCopyright()
+    {
         $data = $this->request->params([
             ['icp', ''],
             ['gov_record', ''],
@@ -93,7 +97,8 @@ class Config extends BaseAdminController
      * 场景域名
      * @return Response
      */
-    public function getSceneDomain(){
+    public function getSceneDomain()
+    {
         return success((new ConfigService())->getSceneDomain());
     }
 
@@ -101,14 +106,16 @@ class Config extends BaseAdminController
      * 获取服务信息
      * @return Response
      */
-    public function getServiceInfo(){
+    public function getServiceInfo()
+    {
         return success((new ConfigService())->getService());
     }
 
     /**设置版权信息
      * @return Response
      */
-    public function setMap(){
+    public function setMap()
+    {
         $data = $this->request->params([
             ['key', ''],
         ]);
@@ -120,7 +127,68 @@ class Config extends BaseAdminController
      * 获取地图设置
      * @return Response
      */
-    public function getMap(){
+    public function getMap()
+    {
         return success((new ConfigService())->getMap());
+    }
+
+    /**
+     * 获取站点首页列表（如果正在使用is_use = 1）
+     */
+    public function getSiteIndexList()
+    {
+        return success((new ConfigService())->getSiteIndexList());
+    }
+
+    /**
+     * 首页配置
+     */
+    public function setSiteIndex()
+    {
+        $data = $this->request->params([
+            ['view_path', ''],
+        ]);
+        (new ConfigService())->setSiteIndexConfig($data);
+        return success();
+    }
+
+    /**
+     * 获取站点首页列表（如果正在使用is_use = 1）
+     */
+    public function getAdminIndexList()
+    {
+        return success((new ConfigService())->getAdminIndexList());
+    }
+
+    /**
+     * 首页配置
+     */
+    public function setAdminIndex()
+    {
+        $data = $this->request->params([
+            ['view_path', ''],
+        ]);
+        (new ConfigService())->setAdminIndexConfig($data);
+        return success();
+    }
+
+    /**
+     * 设置快捷菜单
+     */
+    public function setShortcutMenu()
+    {
+        $data = $this->request->params([
+            ['menu', []],
+        ]);
+        (new ConfigService())->setShortcutMenu($data['menu']);
+        return success();
+    }
+
+    /**
+     * 获取站点快捷菜单
+     */
+    public function getShortcutMenu()
+    {
+        return success(data: (new ConfigService())->getShortcutMenu());
     }
 }

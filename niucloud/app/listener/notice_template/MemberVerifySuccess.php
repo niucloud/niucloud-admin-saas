@@ -13,7 +13,7 @@ class MemberVerifySuccess extends BaseNoticeTemplate
 
     public function handle(array $params)
     {
-        if ($this->key == $params['key']){
+        if ($this->key == $params['key']) {
             $data = $params['data'];
             return $this->toReturn(
                 [

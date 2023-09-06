@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 /**
  * 获取h5配置
- * @returns 
+ * @returns
  */
 export function getH5Config() {
     return request.get('channel/h5/config')
@@ -10,9 +10,9 @@ export function getH5Config() {
 
 /**
  * 编辑h5配置
- * @param params 
- * @returns 
+ * @param params
+ * @returns
  */
 export function setH5Config(params: Record<string, any>) {
-    return request.put('channel/h5/config', params, { showSuccessMessage: true })
+    return request.put('channel/h5/config', params, {showSuccessMessage: true})
 }

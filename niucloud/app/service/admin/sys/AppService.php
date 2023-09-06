@@ -34,7 +34,7 @@ class AppService extends BaseAdminService
         //
         $category_list = [];
         $list = [];
-        foreach ($data as $k => $v)
+        foreach ($data as $v)
         {
             if(isset($v['category']))
             {
@@ -51,7 +51,7 @@ class AppService extends BaseAdminService
         {
             $category_list[$k_category]['sort'] = $category['sort'] ?? 100;
             $category_list[$k_category]['app_list'] = [];
-            foreach ($list as $k => $app)
+            foreach ($list as $app)
             {
                 $app_category = $app['category'] ?? "basic";
 

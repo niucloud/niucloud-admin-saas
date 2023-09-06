@@ -28,7 +28,7 @@ Route::group('{MODULE_NAME}', function () {
     //添加{NOTES}
     Route::post('{ROUTE_NAME}', '{MODULE_NAME}.{UCASE_CLASS_NAME}/add');
     //编辑{NOTES}
-    Route::put('{ROUTE_NAME}/:id', '{MODULE_NAME}.{UCASE_CLASS_NAME}/update');
+    Route::put('{ROUTE_NAME}/:id', '{MODULE_NAME}.{UCASE_CLASS_NAME}/edit');
     //删除{NOTES}
     Route::delete('{ROUTE_NAME}/:id', '{MODULE_NAME}.{UCASE_CLASS_NAME}/del');
 

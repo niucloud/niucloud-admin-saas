@@ -13,6 +13,8 @@ namespace app\service\core\wechat;
 
 use core\base\BaseCoreService;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
+use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use GuzzleHttp\Exception\GuzzleException;
 
 /**
  * 微信服务api提供
@@ -31,9 +33,12 @@ class CoreWechatApiService extends BaseCoreService
 
     /**
      * 批量获取用户基本信息
+     * @param int $site_id
      * @param array $openids
      * @param string $lang
      * @return mixed
+     * @throws GuzzleException
+     * @throws InvalidConfigException
      */
     public function userInfoBatchget(int $site_id, array $openids, string $lang = 'zh_CN')
     {
@@ -51,9 +56,12 @@ class CoreWechatApiService extends BaseCoreService
 
     /**
      * 创建菜单按钮接口
-     * @param $site_id
-     * @param $buttons
-     * @throws InvalidArgumentException
+     * @param int $site_id
+     * @param array $buttons
+     * @param array $match_rule
+     * @return mixed
+     * @throws GuzzleException
+     * @throws InvalidConfigException
      */
     public function menuCreate(int $site_id, array $buttons, array $match_rule = [])
     {

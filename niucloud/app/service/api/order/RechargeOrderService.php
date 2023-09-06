@@ -45,7 +45,7 @@ class RechargeOrderService extends BaseApiService
     /**
      * 充值订单分页列表
      * @param array $where
-     * @return mixed
+     * @return array
      */
     public function getPage(array $where)
     {
@@ -68,8 +68,8 @@ class RechargeOrderService extends BaseApiService
 
     /**
      * 充值订单详情
-     * @param array $where
-     * @return mixed
+     * @param int $order_id
+     * @return array
      */
     public function getDetail(int $order_id)
     {

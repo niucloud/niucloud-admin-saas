@@ -31,6 +31,14 @@ Route::group('pay', function () {
     Route::post('channel/set/transfer', 'pay.PayChannel/setTransfer');
     //多渠道设置
     Route::post('channel/set/all', 'pay.PayChannel/setAll');
+    // 支付审核
+    Route::get('audit', 'pay.Pay/audit');
+    // 审核通过
+    Route::put('pass/:out_trade_no', 'pay.Pay/pass');
+    // 审核拒绝
+    Route::put('refuse/:out_trade_no', 'pay.Pay/refuse');
+    // 支付单据详情
+    Route::get('detail/:id', 'pay.Pay/detail');
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,

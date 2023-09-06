@@ -38,23 +38,29 @@ class MemberCashOutAccount extends BaseModel
      * @param $data
      * @return mixed|string
      */
-    public function getAccountTypeNameAttr($value, $data){
-        return TransferDict::getTransferType()[ $data[ 'transfer_type' ] ?? '' ] ?? '';
+    public function getAccountTypeNameAttr($value, $data)
+    {
+        if (empty($data['transfer_type']))
+            return '';
+        $temp = TransferDict::getTransferType()[$data['transfer_type']] ?? [];
+        return $temp['name'] ?? '';
     }
 
     /**
      * 创建时间搜索器
+     * @param $query
      * @param $value
+     * @param $data
      */
     public function searchCreateTimeAttr($query, $value, $data)
     {
-        $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
-        $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
-        if($start_time > 0 && $end_time > 0){
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
+        if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('create_time', $start_time, $end_time);
-        }else if($start_time > 0 && $end_time == 0){
+        } else if ($start_time > 0 && $end_time == 0) {
             $query->where([['create_time', '>=', $start_time]]);
-        }else if($start_time == 0 && $end_time > 0){
+        } else if ($start_time == 0 && $end_time > 0) {
             $query->where([['create_time', '<=', $end_time]]);
         }
     }

@@ -14,9 +14,12 @@ namespace app\service\core\paytype;
 use app\dict\member\MemberAccountChangeTypeDict;
 use app\dict\member\MemberAccountTypeDict;
 use app\dict\pay\PayDict;
+use app\dict\pay\RefundDict;
+use app\model\pay\Refund;
 use app\service\core\member\CoreMemberAccountService;
 use app\service\core\pay\CorePayService;
 use core\base\BaseCoreService;
+use think\Model;
 
 /**
  * 支付服务层
@@ -42,11 +45,15 @@ class CoreBalanceService extends BaseCoreService
 //        if(empty($password)){
 //
 //        }
-        $site_id = $params['site_id'];
-        $main_id = $params['main_id'];
-        $main_type = $params['main_type'];
-        $money = $params['money'];
         $out_trade_no = $params['out_trade_no'];//交易流水号
+        $site_id = $params['site_id'];
+
+        $pay = (new CorePayService())->findPayInfoByOutTradeNo($site_id, $out_trade_no);
+
+        $main_id = $pay['main_id'];
+        $main_type = $pay['main_type'];
+        $money = $params['money'];
+
         switch($main_type){
             case 'member':
 
@@ -77,7 +84,7 @@ class CoreBalanceService extends BaseCoreService
     /**
      * 订单退款
      * @param array $params
-     * @return true
+     * @return array
      */
     public function refund(array $params){
         $out_trade_no = $params['out_trade_no'];
@@ -85,7 +92,7 @@ class CoreBalanceService extends BaseCoreService
         $site_id = $params['site_id'];
         $refund_no = $params['refund_no'];
         $core_pay_service = new CorePayService();
-        $pay = $core_pay_service->getInfoByOutTradeNo($out_trade_no);
+        $pay = $core_pay_service->findPayInfoByOutTradeNo($site_id, $out_trade_no);
 
         $main_id = $pay['main_id'];
         $main_type = $pay['main_type'];
@@ -102,8 +109,24 @@ class CoreBalanceService extends BaseCoreService
 
                 break;
         }
-        return true;
+        return [
+            'status' => RefundDict::SUCCESS,
+            'refund_no' => $refund_no,
+            'out_trade_no' => $out_trade_no
+        ];
 
+    }
+
+    /**
+     * 获取退款信息
+     * @param string|null $out_trade_no
+     * @param string|null $refund_no
+     * @return Refund|array|mixed|Model
+     */
+    public function getRefund(?string $out_trade_no, ?string $refund_no = '') {
+        return (new Refund())->where([
+            ['refund_no', '=', $refund_no],
+        ])->findOrEmpty();
     }
 
 }

@@ -14,6 +14,9 @@ namespace app\adminapi\controller\pay;
 use app\dict\pay\PayDict;
 use app\service\admin\pay\PayChannelService;
 use core\base\BaseAdminController;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\Response;
 
 class PayChannel extends BaseAdminController
@@ -23,7 +26,8 @@ class PayChannel extends BaseAdminController
      * 支付渠道设置
      * @return Response
      */
-    public function set($channel, $type){
+    public function set($channel, $type)
+    {
         $data = $this->request->params([
             ['is_default', 0],
             ['config', []],
@@ -40,19 +44,21 @@ class PayChannel extends BaseAdminController
      * 支付渠道列表
      * @return Response
      */
-    public function lists(){
-         return success((new PayChannelService())->getChannelList());
+    public function lists()
+    {
+        return success((new PayChannelService())->getChannelList());
     }
 
     /**
      * 通过渠道获取支付配置
      * @param $channel
      * @return Response
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
-    public function getListByChannel($channel){
+    public function getListByChannel($channel)
+    {
         return success((new PayChannelService())->getListByChannel($channel));
     }
 
@@ -61,7 +67,8 @@ class PayChannel extends BaseAdminController
      * 支付设置
      * @return Response
      */
-    public function setTransfer(){
+    public function setTransfer()
+    {
         $data = $this->request->params([
             ['wechatpay_config', []],
             ['alipay_config', []],
@@ -76,7 +83,8 @@ class PayChannel extends BaseAdminController
      * 多渠道支付设置
      * @return Response
      */
-    public function setAll(){
+    public function setAll()
+    {
         $data = $this->request->params([
             ['config', []],
         ]);

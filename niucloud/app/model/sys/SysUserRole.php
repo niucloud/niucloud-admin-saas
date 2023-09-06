@@ -13,6 +13,7 @@ namespace app\model\sys;
 
 use app\model\site\Site;
 use core\base\BaseModel;
+use think\model\relation\HasOne;
 
 /**
  * 用户角色模型
@@ -41,23 +42,23 @@ class SysUserRole extends BaseModel
 
     /**
      * 关联查询用户信息
-     * @return \think\model\relation\HasOne
+     * @return HasOne
      */
     public function userinfo()
     {
-        return $this->hasOne( SysUser::class, 'uid', 'uid')->joinType('left')
+        return $this->hasOne(SysUser::class, 'uid', 'uid')->joinType('left')
             ->withField('uid,username,head_img,real_name,last_ip,last_time,login_count,status,create_time')
-            ->bind(['username','head_img','real_name','last_ip','last_time','login_count','status']);
+            ->bind(['username', 'head_img', 'real_name', 'last_ip', 'last_time', 'login_count', 'status']);
     }
 
     /**
      * 关联查询站点信息
-     * @return \think\model\relation\HasOne
+     * @return HasOne
      */
     public function siteInfo()
     {
-        return $this->hasOne( Site::class, 'site_id', 'site_id')->joinType('inner')
+        return $this->hasOne(Site::class, 'site_id', 'site_id')->joinType('inner')
             ->withField('site_id, site_name, app_type, status, expire_time')
-            ->bind(['site_name','app_type','status','expire_time']);
+            ->bind(['site_name', 'app_type', 'status', 'expire_time']);
     }
 }

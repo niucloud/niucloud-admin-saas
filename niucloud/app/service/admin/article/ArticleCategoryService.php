@@ -31,6 +31,7 @@ class ArticleCategoryService extends BaseAdminService
     /**
      * 获取文章分类列表
      * @param array $where
+     * @return array
      */
     public function getPage(array $where = [])
     {
@@ -38,8 +39,7 @@ class ArticleCategoryService extends BaseAdminService
         $field = 'category_id, site_id, name, sort, is_show, create_time, update_time';
         $order = 'create_time desc';
         $search_model = $this->model->where([['site_id', '=', $this->site_id]])->withSearch(['name'], $where)->field($field)->order($order)->append(["article_num"]);
-        $list = $this->pageQuery($search_model);
-        return $list;
+        return $this->pageQuery($search_model);
     }
 
     /**
@@ -50,25 +50,25 @@ class ArticleCategoryService extends BaseAdminService
 
         $field = 'category_id, site_id, name, sort';
         $order = 'sort desc';
-        $list = $this->model->where([['site_id', '=', $this->site_id], ['is_show', '=', 1]])->field($field)->order($order)->select()->toArray();
-        return $list;
+        return  $this->model->where([['site_id', '=', $this->site_id], ['is_show', '=', 1]])->field($field)->order($order)->select()->toArray();
     }
 
     /**
      * 获取文章分类信息
      * @param int $id
+     * @return array
      */
     public function getInfo(int $id)
     {
         $field = 'category_id, site_id, name, sort, is_show, create_time, update_time';
 
-        $info = $this->model->field($field)->where([['category_id', '=', $id], ['site_id', '=', $this->site_id]])->append(["article_num"])->findOrEmpty()->toArray();
-        return $info;
+        return $this->model->field($field)->where([['category_id', '=', $id], ['site_id', '=', $this->site_id]])->append(["article_num"])->findOrEmpty()->toArray();
     }
 
     /**
      * 添加文章分类
      * @param array $data
+     * @return mixed
      */
     public function add(array $data)
     {
@@ -82,6 +82,7 @@ class ArticleCategoryService extends BaseAdminService
      * 文章分类编辑
      * @param int $id
      * @param array $data
+     * @return true
      */
     public function edit(int $id, array $data)
     {
@@ -93,11 +94,11 @@ class ArticleCategoryService extends BaseAdminService
     /**
      * 删除文章分类
      * @param int $id
+     * @return bool
      */
     public function del(int $id)
     {
-        $res = $this->model->where([['category_id', '=', $id], ['site_id', '=', $this->site_id]])->delete();
-        return $res;
+        return $this->model->where([['category_id', '=', $id], ['site_id', '=', $this->site_id]])->delete();
     }
 
 }

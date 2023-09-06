@@ -15,7 +15,9 @@ use app\dict\common\ChannelDict;
 use app\service\core\member\CoreMemberService;
 use app\service\core\pay\CorePayService;
 use core\base\BaseApiService;
-use Yansongda\Supports\Collection;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 
 /**
  * 支付业务
@@ -32,49 +34,48 @@ class PayService extends BaseApiService
 
     /**
      * 去支付
-     * @param $site_id
-     * @param $type
-     * @param $out_trade_no
-     * @param $money
-     * @param $boby
-     * @param $channel
-     * @param $refund_url
-     * @param $quit_url
-     * @param $buyer_id
+     * @param string $type
+     * @param string $trade_type
+     * @param int $trade_id
+     * @param string $return_url
+     * @param string $quit_url
+     * @param string $buyer_id
      * @return mixed
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
-    public function pay(string $type, string $out_trade_no, string $return_url = '', string $quit_url = '', string $buyer_id = ''){
+    public function pay(string $type, string $trade_type, int $trade_id, string $return_url = '', string $quit_url = '', string $buyer_id = '', string $voucher = ''){
 
         $member = (new CoreMemberService())->getInfoByMemberId($this->site_id, $this->member_id);
         switch ($this->channel) {
             case ChannelDict::WECHAT://公众号
                 $openid = $member['wx_openid'] ?? '';
-
                 break;
             case ChannelDict::WEAPP://微信小程序
                 $openid = $member['weapp_openid'] ?? '';
                 break;
         }
 
-        return $this->core_pay_service->pay($this->site_id, $out_trade_no, $type, $this->channel, $openid ?? '', $return_url, $quit_url, $buyer_id);
+        return $this->core_pay_service->pay($this->site_id, $trade_type, $trade_id, $type, $this->channel, $openid ?? '', $return_url, $quit_url, $buyer_id, $voucher);
     }
 
     /**
      * 关闭支付
-     * @param $site_id
-     * @param $type
-     * @param $out_trade_no
+     * @param string $type
+     * @param string $out_trade_no
      * @return null
      */
     public function close(string $type, string $out_trade_no){
-        return $this->core_pay_service->close($this->site_id, $type, $out_trade_no);
+        return $this->core_pay_service->close($this->site_id, $type);
     }
 
     /**
      * 支付异步通知
-     * @param $site_id
-     * @param $type
-     * @return void
+     * @param string $channel
+     * @param string $type
+     * @param string $action
+     * @return void|null
      */
     public function notify(string $channel, string $type, string $action){
         return $this->core_pay_service->notify($this->site_id, $channel, $type, $action);
@@ -83,9 +84,25 @@ class PayService extends BaseApiService
     /**
      * 通过交易流水号查询支付信息以及支付方式
      * @param $out_trade_no
-     * @return mixed
+     * @return array
      */
     public function getInfoByOutTradeNo($out_trade_no){
         return $this->core_pay_service->getInfoByOutTradeNo($this->site_id, $out_trade_no, $this->channel);
+    }
+
+    public function getInfoByTrade(string $trade_type, int $trade_id){
+        return $this->core_pay_service->getInfoByTrade($this->site_id, $trade_type, $trade_id, $this->channel);
+    }
+
+    /**
+     * 获取支付方法
+     * @param string $trade_type
+     * @return array|array[]
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
+     */
+    public function getPayTypeByTrade(string $trade_type){
+        return $this->core_pay_service->getPayTypeByTrade($this->site_id, $trade_type, $this->channel);
     }
 }

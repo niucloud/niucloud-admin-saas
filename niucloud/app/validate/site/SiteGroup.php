@@ -22,20 +22,20 @@ class SiteGroup extends Validate
 {
 
 
-    protected $rule =   [
-        'group_name'  => 'require|max:20',
-        'group_roles'   => 'require',
+    protected $rule = [
+        'group_name' => 'require|max:20',
+        'group_roles' => 'require',
     ];
 
-    protected $message  =   [
+    protected $message = [
         'group_name.require' => 'validate_site.group_name_require',
-        'group_name.max'     => 'validate_site.group_name_max',
+        'group_name.max' => 'validate_site.group_name_max',
         'group_roles.require' => 'validate_site.group_roles_require',
 
     ];
 
     protected $scene = [
-        'add'  =>  ['group_name', 'group_roles'],
-        'edit'  =>  ['group_name', 'group_roles'],
+        'add' => ['group_name', 'group_roles'],
+        'edit' => ['group_name', 'group_roles'],
     ];
 }

@@ -43,21 +43,26 @@ class PayChannel extends BaseModel
     /**
      * 支付方式字段转化
      * @param $value
+     * @param $data
      * @return mixed
      */
     public function getTypeNameAttr($value, $data)
     {
-        return PayDict::getPayType()[$data['type'] ?? '']['name'] ?? '';
+        if (empty($data['type'])) return '';
+        $temp = PayDict::getPayType()[$data['type']] ?? [];
+        return $temp['name'] ?? '';
     }
 
     /**
      * 渠道字段转化
      * @param $value
+     * @param $data
      * @return mixed
      */
     public function getChannelNameAttr($value, $data)
     {
-        return ChannelDict::getType()[$data['channel'] ?? ''] ?? '';
+        if (empty($data['channel'])) return '';
+        return ChannelDict::getType()[$data['channel']] ?? '';
     }
 
 }

@@ -17,6 +17,9 @@ use app\service\admin\sys\SystemService;
 use app\service\core\addon\CoreAddonService;
 use app\service\core\member\CoreMemberService;
 use core\base\BaseAdminService;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 
 
 /**
@@ -35,6 +38,9 @@ class StatService extends BaseAdminService
     /**
      * 获取统计数据
      * @return int[]
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function getIndexData()
     {
@@ -79,7 +85,7 @@ class StatService extends BaseAdminService
             ]
         ];
 
-        $day_start_time = strtotime(date('Y-m-d', time()));
+        $day_start_time = strtotime(date('Y-m-d'));
         //当天结束之间
         $day_end_time = $day_start_time + 86400;
         $data['today_data']['total_member_count'] = (new CoreMemberService())->getCount();

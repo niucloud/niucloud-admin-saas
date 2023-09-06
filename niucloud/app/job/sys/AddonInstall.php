@@ -13,7 +13,6 @@ namespace app\job\sys;
 
 use app\service\core\addon\CoreAddonInstallService;
 use core\base\BaseJob;
-use think\queue\Job;
 
 /**
  * 队列异步执行插件安装任务
@@ -25,7 +24,8 @@ class AddonInstall extends BaseJob
         (new CoreAddonInstallService($addon))->executeTask($task);
     }
 
-    public function failed($data){
+    public function failed($data)
+    {
 
     }
 }

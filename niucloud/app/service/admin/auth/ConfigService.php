@@ -32,25 +32,23 @@ class ConfigService extends BaseAdminService
 
     /**
      * 获取注册与登录设置
-     * @param $site_id
+     * @return array
      */
     public function getConfig()
     {
         $info = (new CoreConfigService())->getConfig($this->request->defaultSiteId(), ConfigKeyDict::ADMIN_LOGIN)['value'] ?? [];
-        $config = [
+        return [
             'is_captcha' => $info['is_captcha'] ?? 0,//是否启用验证码
             'is_site_captcha' => $info['is_site_captcha'] ?? 0,//是否启用站点验证码
             'bg' => $info['bg'] ?? '',//平台登录端 背景
             'site_bg' => $info['site_bg'] ?? '',//站点登录端  背景
         ];
-        return $config;
     }
 
     /**
      * 注册与登录设置
-     * @param $site_id
-     * @param $data
-     * @return SysConfig|bool|Model
+     * @param array $data
+     * @return true
      */
     public function setConfig(array $data)
     {

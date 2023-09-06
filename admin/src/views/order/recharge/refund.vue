@@ -2,7 +2,7 @@
 	<div class="main-container">
 		<el-card class="box-card !border-none" shadow="never">
 			<div class="flex justify-between items-center mb-[5px]">
-				<span class="text-[24px]">{{ pageName }}</span>
+				<span class="text-[20px]">{{ pageName }}</span>
 			</div>
 
 			<el-card class="box-card !border-none table-search-wra base-bg !px-[35px]" shadow="never">
@@ -33,16 +33,13 @@
 			<el-card class="box-card !border-none mb-[10px] table-search-wrap" shadow="never">
 				<el-form :inline="true" :model="refundTableData.searchParam" ref="searchFormRef">
 					<el-form-item :label="t('memberInfo')" prop="keywords">
-						<el-input v-model="refundTableData.searchParam.keywords" class="w-[240px]"
-							:placeholder="t('memberInfoPlaceholder')" />
+						<el-input v-model="refundTableData.searchParam.keywords" class="w-[240px]" :placeholder="t('memberInfoPlaceholder')" />
 					</el-form-item>
 					<el-form-item :label="t('refundNumber')" prop="refund_no">
-						<el-input v-model="refundTableData.searchParam.refund_no" class="w-[240px]"
-							:placeholder="t('refundNumberPlaceholder')" />
+						<el-input v-model="refundTableData.searchParam.refund_no" class="w-[240px]" :placeholder="t('refundNumberPlaceholder')" />
 					</el-form-item>
 					<el-form-item :label="t('orderNumber')" prop="order_no">
-						<el-input v-model="refundTableData.searchParam.order_no" class="w-[240px]"
-							:placeholder="t('orderNumberPlaceholder')" />
+						<el-input v-model="refundTableData.searchParam.order_no" class="w-[240px]" :placeholder="t('orderNumberPlaceholder')" />
 					</el-form-item>
 
 					<el-form-item :label="t('refundStatus')" prop="status">
@@ -52,9 +49,7 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item :label="t('refundTime')" prop="create_time">
-						<el-date-picker v-model="refundTableData.searchParam.create_time" type="datetimerange"
-							value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')"
-							:end-placeholder="t('endDate')" />
+						<el-date-picker v-model="refundTableData.searchParam.create_time" type="datetimerange" value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')" :end-placeholder="t('endDate')" />
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" @click="loadRefundList()">{{ t('search') }}</el-button>
@@ -72,10 +67,8 @@
 					<el-table-column :show-overflow-tooltip="true" :label="t('memberInfo')" align="left" min-width="140">
 						<template #default="{ row }">
 							<div class="flex items-center cursor-pointer " @click="toMember(row.member.member_id)">
-								<img class="w-[50px] h-[50px] mr-[10px]" v-if="row.headimg" :src="img(row.member.headimg)"
-									alt="">
-								<img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/assets/images/default_headimg.png"
-									alt="">
+								<img class="w-[50px] h-[50px] mr-[10px]" v-if="row.member.headimg" :src="img(row.member.headimg)" alt="">
+								<img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/assets/images/default_headimg.png" alt="">
 								<div class="flex flex flex-col">
 									<span class="">{{ row.member.nickname || '' }}</span>
 									<span class="">{{ row.member.mobile || '' }}</span>

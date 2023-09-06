@@ -59,19 +59,6 @@ class Recharge extends BaseAdminController
         return fail($res);
     }
 
-
-    /**
-     * 充值统计
-     */
-    public function stat()
-    {
-        $data = $this->request->params([
-            [ 'member_id', '' ],
-        ]);
-        $res = (new RechargeOrderService())->stat($data);
-        return success($res);
-    }
-
     /**
      * 退款列表
      * @return Response
@@ -91,7 +78,7 @@ class Recharge extends BaseAdminController
 
     /**
      * 退款详情
-     * @param int $order_id
+     * @param int $refund_id
      * @return Response
      */
     public function refundDetail(int $refund_id)
@@ -101,7 +88,6 @@ class Recharge extends BaseAdminController
 
     /**
      * 查询退款状态
-     * @param $type
      * @return Response
      */
     public function refundStatus()
@@ -115,6 +101,18 @@ class Recharge extends BaseAdminController
     public function refundStat()
     {
         return success((new RechargeOrderRefundService())->stat());
+    }
+
+    /**
+     * 充值统计
+     */
+    public function stat()
+    {
+        $data = $this->request->params([
+            ['member_id', ''],
+        ]);
+        $res = (new RechargeOrderService())->stat($data);
+        return success($res);
     }
 
 

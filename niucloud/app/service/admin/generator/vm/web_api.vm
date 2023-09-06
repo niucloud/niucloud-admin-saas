@@ -8,7 +8,7 @@ import request from '@/utils/request'
  * @returns
  */
 export function get{UCASE_NAME}List(params: Record<string, any>) {
-    return request.get(`{MODULE_NAME}/{LCASE_CLASS_NAME}`, {params})
+    return request.get(`{MODULE_NAME}/{ROUTE_NAME}`, {params})
 }
 
 /**
@@ -17,7 +17,7 @@ export function get{UCASE_NAME}List(params: Record<string, any>) {
  * @returns
  */
 export function get{UCASE_NAME}Info({PK}: number) {
-    return request.get(`{MODULE_NAME}/{LCASE_CLASS_NAME}/${{PK}}`);
+    return request.get(`{MODULE_NAME}/{ROUTE_NAME}/${{PK}}`);
 }
 
 /**
@@ -26,7 +26,7 @@ export function get{UCASE_NAME}Info({PK}: number) {
  * @returns
  */
 export function add{UCASE_NAME}(params: Record<string, any>) {
-    return request.post('{MODULE_NAME}/{LCASE_CLASS_NAME}', params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.post('{MODULE_NAME}/{ROUTE_NAME}', params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
 /**
@@ -36,7 +36,7 @@ export function add{UCASE_NAME}(params: Record<string, any>) {
  * @returns
  */
 export function edit{UCASE_NAME}(params: Record<string, any>) {
-    return request.put(`{MODULE_NAME}/{LCASE_CLASS_NAME}/${params.{PK}}`, params, { showErrorMessage: true, showSuccessMessage: true })
+    return request.put(`{MODULE_NAME}/{ROUTE_NAME}/${params.{PK}}`, params, { showErrorMessage: true, showSuccessMessage: true })
 }
 
 /**
@@ -45,6 +45,6 @@ export function edit{UCASE_NAME}(params: Record<string, any>) {
  * @returns
  */
 export function delete{UCASE_NAME}({PK}: number) {
-    return request.delete(`{MODULE_NAME}/{LCASE_CLASS_NAME}/${{PK}}`, { showErrorMessage: true, showSuccessMessage: true })
+    return request.delete(`{MODULE_NAME}/{ROUTE_NAME}/${{PK}}`, { showErrorMessage: true, showSuccessMessage: true })
 }
 

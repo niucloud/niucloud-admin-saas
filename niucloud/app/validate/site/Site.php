@@ -22,22 +22,22 @@ class Site extends Validate
 {
 
 
-    protected $rule =   [
-        'site_name'  => 'require|max:20',
-        'group_id'   => 'require|number',
-        'expire_time'   => 'date',
+    protected $rule = [
+        'site_name' => 'require|max:20',
+        'group_id' => 'require|number',
+        'expire_time' => 'date',
     ];
 
-    protected $message  =   [
+    protected $message = [
         'site_name.require' => 'validate_site.site_name_require',
-        'site_name.max'     => 'validate_site.site_name_max',
+        'site_name.max' => 'validate_site.site_name_max',
         'group_id.require' => 'validate_site.group_id_require',
-        'group_id.number'     => 'validate_site.group_id_number',
-        'expire_time.number'     => 'validate_site.expire_time_number',
+        'group_id.number' => 'validate_site.group_id_number',
+        'expire_time.number' => 'validate_site.expire_time_number',
     ];
 
     protected $scene = [
-        'add'  =>  ['site_name', 'group_id', 'expire_time'],
+        'add' => ['site_name', 'group_id', 'expire_time'],
         "edit" => ['site_name']
     ];
 }

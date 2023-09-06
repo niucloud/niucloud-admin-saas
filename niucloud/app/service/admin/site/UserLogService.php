@@ -33,15 +33,14 @@ class UserLogService extends BaseAdminService
     /**
      * 获取用户日志
      * @param array $where
-     * @return mixed
+     * @return array
      */
     public function getPage(array $where)
     {
         $field = 'id, ip, site_id, uid, username, url, params, type, create_time';
         $order = 'create_time desc';
         $search_model = $this->model->where([['site_id', '=', $this->site_id]])->withSearch(['username', 'create_time', 'uid', 'ip', 'type', 'url'], $where)->field($field)->order($order);
-        $list = $this->pageQuery($search_model);
-        return $list;
+        return $this->pageQuery($search_model);
     }
 
     /**
@@ -55,8 +54,7 @@ class UserLogService extends BaseAdminService
             ['site_id', '=', $this->site_id]
         );
         $field = 'id, ip, site_id, uid, username, url, params, type, create_time';
-        $info = $this->model->where($where)->field($field)->findOrEmpty()->toArray();
-        return $info;
+        return $this->model->where($where)->field($field)->findOrEmpty()->toArray();
     }
 
     /**

@@ -33,10 +33,11 @@ class ReplyDict
     const MATCHING_TYPE_FULL = 'full';//全匹配
     const MATCHING_TYPE_LIKE = 'like';//模糊匹配
 
-    public static function getStatus(){
+    public static function getStatus()
+    {
         return [
             self::STATUS_ON => get_lang('dict_wechat_reply.status_on'),//启用
-            self::STATUS_OFF  => get_lang('dict_wechat_reply.status_off'),//关闭
+            self::STATUS_OFF => get_lang('dict_wechat_reply.status_off'),//关闭
         ];
     }
 }

@@ -14,8 +14,8 @@ namespace core\dict;
 use core\loader\Loader;
 
 /**
- * @see \core\dict\DictLoader
- * @mixin \core\dict\BaseDict
+ * @see DictLoader
+ * @mixin BaseDict
  * @method  array|null load(array $data = [])
  */
 class DictLoader extends Loader
@@ -28,9 +28,10 @@ class DictLoader extends Loader
     protected $namespace = '\\core\\dict\\';
 
     protected $config_name = 'dict';
+
     /**
      * 默认驱动
-     * @return mixed
+     * @return string
      */
     protected function getDefault()
     {

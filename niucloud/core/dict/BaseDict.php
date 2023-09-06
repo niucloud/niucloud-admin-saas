@@ -17,16 +17,17 @@ use think\facade\Db;
 
 /**
  * Class BaseAddon
- * @package 
+ * @package
  */
 abstract class BaseDict extends Storage
 {
     //插件整体缓存标识
     public static $cache_tag_name = 'addon_cash';
+
     /**
      * 初始化
      * @param array $config
-     * @return mixed|void
+     * @return void
      */
     protected function initialize(array $config = [])
     {
@@ -37,23 +38,19 @@ abstract class BaseDict extends Storage
      */
     protected function getLocalAddons()
     {
-        if(!file_exists("../install.lock"))
-        {
+        if (!file_exists(root_path() . "install.lock")) {
             //尚未安装不加载插件
             return [];
         }
         $addons = Cache::get("local_install_addons");
-        if(empty($addons))
-        {
+        if (empty($addons)) {
             $addons = Db::name("addon")->column("key");
-            if(empty($addons))
-            {
+            if (empty($addons)) {
                 Cache::set("local_install_addons", -1);
-            }else
+            } else
                 Cache::set("local_install_addons", $addons);
         }
-        if($addons == -1)
-        {
+        if ($addons == -1) {
             $addons = [];
         }
         return $addons;
@@ -66,7 +63,7 @@ abstract class BaseDict extends Storage
      */
     protected function getAddonPath(string $addon)
     {
-        return root_path() . 'addon' . DIRECTORY_SEPARATOR. $addon. DIRECTORY_SEPARATOR;
+        return root_path() . 'addon' . DIRECTORY_SEPARATOR . $addon . DIRECTORY_SEPARATOR;
 
     }
 
@@ -76,8 +73,9 @@ abstract class BaseDict extends Storage
      */
     protected function getAppPath()
     {
-        return root_path(). "app". DIRECTORY_SEPARATOR;
+        return root_path() . "app" . DIRECTORY_SEPARATOR;
     }
+
     /**
      * 获取插件对应app目录
      * @param string $addon
@@ -85,7 +83,7 @@ abstract class BaseDict extends Storage
      */
     protected function getAddonAppPath(string $addon)
     {
-        return $this->getAddonPath($addon). "app". DIRECTORY_SEPARATOR;
+        return $this->getAddonPath($addon) . "app" . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -93,25 +91,27 @@ abstract class BaseDict extends Storage
      */
     protected function getDictPath()
     {
-        return root_path(). "app". DIRECTORY_SEPARATOR. "dict". DIRECTORY_SEPARATOR;;
+        return root_path() . 'app' . DIRECTORY_SEPARATOR . 'dict' . DIRECTORY_SEPARATOR;
     }
 
     /**
      *获取插件对应的dict目录
      * @param string $addon
+     * @return string
      */
     protected function getAddonDictPath(string $addon)
     {
-        return $this->getAddonPath($addon). "app". DIRECTORY_SEPARATOR. "dict". DIRECTORY_SEPARATOR;
+        return $this->getAddonPath($addon) . 'app' . DIRECTORY_SEPARATOR . 'dict' . DIRECTORY_SEPARATOR;
     }
 
     /**
      *获取插件对应的config目录
      * @param string $addon
+     * @return string
      */
     protected function getAddonConfigPath(string $addon)
     {
-        return $this->getAddonPath($addon). "config". DIRECTORY_SEPARATOR;
+        return $this->getAddonPath($addon) . 'config' . DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -127,16 +127,16 @@ abstract class BaseDict extends Storage
             foreach ($files as $file) {
                 $config = include $file;
                 if (!empty($config)) {
-                    if (isset($config[ 'file_sort' ])) {
-                        $sort = $config[ 'file_sort' ];
-                        unset($config[ 'file_sort' ]);
+                    if (isset($config['file_sort'])) {
+                        $sort = $config['file_sort'];
+                        unset($config['file_sort']);
                         $sort = $sort * 10;
                         while (array_key_exists($sort, $files_data)) {
                             $sort++;
                         }
-                        $files_data[ $sort ] = $config;
+                        $files_data[$sort] = $config;
                     } else {
-                        $files_data[ $default_sort ] = $config;
+                        $files_data[$default_sort] = $config;
                         $default_sort++;
                     }
                 }

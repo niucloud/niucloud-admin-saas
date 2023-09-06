@@ -42,8 +42,7 @@ class H5Service extends BaseAdminService
         $data = [
             'is_open' => $value['is_open']
         ];
-        $res = $this->core_config_service->setConfig($this->site_id,ConfigKeyDict::H5, $data);
-        return $res;
+        return $this->core_config_service->setConfig($this->site_id,ConfigKeyDict::H5, $data);
     }
 
     /**

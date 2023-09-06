@@ -24,6 +24,6 @@ class MemberRegisterListener
      */
     public function handle($member)
     {
-        return ;
+        return;
     }
 }

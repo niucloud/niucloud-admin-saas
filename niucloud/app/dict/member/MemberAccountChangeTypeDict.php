@@ -32,7 +32,7 @@ class MemberAccountChangeTypeDict
         if (empty($type)) {
             return $account_change_type;
         }
-        return $account_change_type[ $type ] ?? '';
+        return $account_change_type[$type] ?? '';
     }
 
 }

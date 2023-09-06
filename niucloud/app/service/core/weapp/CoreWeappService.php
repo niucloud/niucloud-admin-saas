@@ -14,6 +14,7 @@ namespace app\service\core\weapp;
 use core\base\BaseCoreService;
 use core\exception\WechatException;
 use EasyWeChat\Factory;
+use EasyWeChat\MiniProgram\Application;
 
 
 /**
@@ -26,7 +27,7 @@ class CoreWeappService extends BaseCoreService
     /**
      * 获取小程序的handle
      * @param int $site_id
-     * @return \EasyWeChat\MiniProgram\Application
+     * @return Application
      */
     public static function app(int $site_id)
     {
@@ -37,9 +38,6 @@ class CoreWeappService extends BaseCoreService
         $config = array(
             'app_id' => $weapp_config['app_id'],
             'secret' => $weapp_config['app_secret'],
-            'http' => [
-                'throw' => true,//默认不抛出,还是有系统业务决定是否抛出
-            ],
             // 指定 API 调用返回结果的类型：array(default)/collection/object/raw/自定义类名
             'response_type' => 'array',
             /**
@@ -73,14 +71,14 @@ class CoreWeappService extends BaseCoreService
              * - log_template: 指定 HTTP 日志模板，请参考：https://github.com/guzzle/guzzle/blob/master/src/MessageFormatter.php
              */
             'http' => [
+                'throw' => true,//默认不抛出,还是有系统业务决定是否抛出
                 'max_retries' => 1,
                 'retry_delay' => 500,
                 'timeout' => 5.0,
                 // 'base_uri' => 'https://api.weixin.qq.com/', // 如果你在国外想要覆盖默认的 url 的时候才使用，根据不同的模块配置不同的 uri
             ],
         );
-        $app = Factory::miniProgram($config);
-        return $app;
+        return Factory::miniProgram($config);
     }
 
 }

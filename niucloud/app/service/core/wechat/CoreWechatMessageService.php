@@ -16,6 +16,10 @@ use app\service\core\scan\CoreScanService;
 use Closure;
 use core\base\BaseCoreService;
 use EasyWeChat\Kernel\Messages\Text;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
+use think\facade\Lang;
 
 /**
  * 微信事件中间件类(用于中间件注册)
@@ -27,9 +31,12 @@ class CoreWechatMessageService extends BaseCoreService
 
     /**
      * 通过注入来分配消息事件类型
+     * @param int $site_id
      * @param $message
-     * @param Closure $next
      * @return mixed
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function message(int $site_id, $message)
     {
@@ -88,7 +95,7 @@ class CoreWechatMessageService extends BaseCoreService
      * 扫码事件
      * @param int $site_id
      * @param $message
-     * @return News|Text|false
+     * @return Lang
      */
     public function scan(int $site_id, $message){
         $key = str_replace('qrscene_', '', $message['EventKey']);
@@ -120,8 +127,9 @@ class CoreWechatMessageService extends BaseCoreService
 
     /**
      * 取消关注事件
+     * @param $site_id
      * @param $message
-     * @return void
+     * @return true
      */
     public function unsubscribe($site_id, $message){
         $core_wechat_fans_service = new CoreWechatFansService();
@@ -131,9 +139,12 @@ class CoreWechatMessageService extends BaseCoreService
 
     /**
      * 文本回复事件
-     * @param $site_id
+     * @param int $site_id
      * @param $message
      * @return News|Text|false
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     function text(int $site_id, $message)
     {

@@ -3,7 +3,7 @@
         <el-card class="box-card !border-none" shadow="never">
 
             <div class="flex justify-between items-center">
-                <span class="text-[24px]">{{pageName}}</span>
+                <span class="text-[20px]">{{pageName}}</span>
                 <el-button type="primary" @click="addEvent">{{ t('addMember') }}</el-button>
             </div>
 
@@ -14,24 +14,20 @@
                     </el-form-item>
                     
                     <el-form-item :label="t('registerChannel')" prop="register_channel">
-                        <el-select v-model="memberTableData.searchParam.register_channel" clearable
-                            :placeholder="t('channelPlaceholder')" class="input-width">
+                        <el-select v-model="memberTableData.searchParam.register_channel" clearable :placeholder="t('channelPlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')" value="" />
                             <el-option :label="item" :value="key" v-for="(item, key) in channelList" />
                         </el-select>
                     </el-form-item>
                     
                     <el-form-item :label="t('memberLabel')" prop="member_label">
-                        <el-select v-model="memberTableData.searchParam.member_label" collapse-tags clearable 
-                            :placeholder="t('memberLabelPlaceholder')" class="input-width">
+                        <el-select v-model="memberTableData.searchParam.member_label" collapse-tags clearable :placeholder="t('memberLabelPlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')"  value=""/>
                             <el-option :label="item['label_name']" :value="item['label_id']" v-for="item in labelSelectData" />
                         </el-select>
                     </el-form-item>
                     <el-form-item :label="t('createTime')" prop="create_time">
-                        <el-date-picker v-model="memberTableData.searchParam.create_time" type="datetimerange"
-                            value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')"
-                            :end-placeholder="t('endDate')" />
+                        <el-date-picker v-model="memberTableData.searchParam.create_time" type="datetimerange" value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')" :end-placeholder="t('endDate')" />
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="loadMemberList()">{{ t('search') }}</el-button>
@@ -118,7 +114,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { img } from '@/utils/common'
 import { addMember, getRegisterChannelType, getMemberList, getMemberLabelAll, editMemberStatus,deleteMember } from '@/api/member'
@@ -127,6 +123,7 @@ import { useRouter } from 'vue-router'
 import AddMember from '@/views/member/components/add-member.vue'
 import EditMember from '@/views/member/components/edit-member.vue'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title;
 const memberTableData = reactive({

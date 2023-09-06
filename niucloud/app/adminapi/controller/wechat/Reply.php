@@ -23,14 +23,16 @@ class Reply extends BaseAdminController
 
     /**
      * 关键词回复
-     * @return void
+     * @return Response
      */
-    public function keyword($id){
+    public function keyword($id)
+    {
         $wechat_reply_service = new WechatReplyService();
         return success($wechat_reply_service->getKeywordInfo($id));
     }
 
-    public function getKeywordLists(){
+    public function getKeywordLists()
+    {
         $data = $this->request->params([
             ['keyword', ''],
             ['name', '']
@@ -38,11 +40,13 @@ class Reply extends BaseAdminController
         $wechat_reply_service = new WechatReplyService();
         return success($wechat_reply_service->getKeywordPage($data));
     }
+
     /**
      * 新增关键词回复
-     * @return void
+     * @return Response
      */
-    public function addKeyword(){
+    public function addKeyword()
+    {
         $wechat_reply_service = new WechatReplyService();
         $data = $this->request->params([
             ['name', ''],
@@ -58,9 +62,10 @@ class Reply extends BaseAdminController
 
     /**
      * 更新关键词回复
-     * @return void
+     * @return Response
      */
-    public function editKeyword($id){
+    public function editKeyword($id)
+    {
         $wechat_reply_service = new WechatReplyService();
         $data = $this->request->params([
             ['name', ''],
@@ -76,9 +81,10 @@ class Reply extends BaseAdminController
 
     /**
      * 删除关键字回复
-     * @return void
+     * @return Response
      */
-    public function delKeyword($id){
+    public function delKeyword($id)
+    {
         $wechat_reply_service = new WechatReplyService();
         return success($wechat_reply_service->delKeyword($id));
     }
@@ -87,7 +93,8 @@ class Reply extends BaseAdminController
      * 获取默认回复
      * @return Response
      */
-    public function default(){
+    public function default()
+    {
         $wechat_reply_service = new WechatReplyService();
         return success($wechat_reply_service->getDefault());
     }
@@ -96,7 +103,8 @@ class Reply extends BaseAdminController
      * 更新默认回复
      * @return Response
      */
-    public function editDefault(){
+    public function editDefault()
+    {
         $data = $this->request->params([
             ['content_type', ''],
             ['content', ''],
@@ -110,7 +118,8 @@ class Reply extends BaseAdminController
      * 获取关注回复
      * @return Response
      */
-    public function subscribe(){
+    public function subscribe()
+    {
         $wechat_reply_service = new WechatReplyService();
         return success($wechat_reply_service->getSubscribe());
     }
@@ -119,7 +128,8 @@ class Reply extends BaseAdminController
      * 更新关注回复
      * @return Response
      */
-    public function editSubscribe(){
+    public function editSubscribe()
+    {
         $data = $this->request->params([
             ['content_type', ''],
             ['content', ''],
@@ -128,7 +138,6 @@ class Reply extends BaseAdminController
         $wechat_reply_service = new WechatReplyService();
         return success($wechat_reply_service->editSubscribe($data));
     }
-
 
 
 }

@@ -27,11 +27,11 @@ class NoticeDict
     public static function getNotice(string $key = '')
     {
         $addon_load = new DictLoader('Notice');
-        $notice = $addon_load->load([ 'type' => 'notice' ]);
+        $notice = $addon_load->load(['type' => 'notice']);
         $notice_type = NoticeTypeDict::getType();
         foreach ($notice_type as $k => $v) {
             $var_name = $k . '_notice';
-            $$var_name = $addon_load->load([ 'type' => $k ]);
+            $$var_name = $addon_load->load(['type' => $k]);
         }
 
         foreach ($notice as $k => $v) {
@@ -39,14 +39,14 @@ class NoticeDict
             foreach ($notice_type as $notice_type_k => $notice_type_v) {
                 $var_name = $notice_type_k . '_notice';
                 if (array_key_exists($k, $$var_name)) {
-                    $notice[ $k ][ $notice_type_k ] = $$var_name[ $k ];
+                    $notice[$k][$notice_type_k] = $$var_name[$k];
                     $support_type[] = $notice_type_k;
                 }
             }
-            $notice[ $k ][ 'support_type' ] = $support_type;
+            $notice[$k]['support_type'] = $support_type;
         }
         if (!empty($key)) {
-            return $notice[ $key ] ?? [];
+            return $notice[$key] ?? [];
         }
         return $notice;
     }

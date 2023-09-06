@@ -11,7 +11,6 @@
 
 namespace app\adminapi\controller\notice;
 
-use app\service\admin\notice\NoticeLogService;
 use app\service\admin\notice\NoticeSmsLogService;
 use core\base\BaseAdminController;
 use think\Response;
@@ -26,18 +25,18 @@ class SmsLog extends BaseAdminController
     public function lists()
     {
         $data = $this->request->params([
-            [ 'mobile', '' ],
-            [ 'sms_type', '' ],
-            [ 'key', '' ],
+            ['mobile', ''],
+            ['sms_type', ''],
+            ['key', ''],
         ]);
 
-        $res = ( new NoticeSmsLogService() )->getPage($data);
+        $res = (new NoticeSmsLogService())->getPage($data);
         return success($res);
     }
 
     public function info($id)
     {
-        $res = ( new NoticeLogService() )->getInfo($id);
+        $res = (new NoticeSmsLogService())->getInfo($id);
         return success($res);
     }
 

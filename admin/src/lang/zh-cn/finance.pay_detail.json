@@ -1,0 +1,18 @@
+{
+    "pass": "通过",
+    "refuse": "拒绝",
+    "refuseReason": "拒绝原因",
+    "passTips": "确认要通过该支付单据吗？",
+    "outTradeNo": "交易单号",
+    "createTime": "交易时间",
+    "money": "交易金额",
+    "body": "交易内容",
+    "channel": "支付场景",
+    "payStatus": "支付状态",
+    "payType": "支付方式",
+    "payTime": "支付时间",
+    "failTime": "失败时间",
+    "failReason": "失败原因",
+    "voucher": "支付凭证",
+    "auditVoucher": "审核支付凭证"
+}

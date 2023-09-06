@@ -15,6 +15,7 @@ use app\dict\sys\UserDict;
 use app\service\admin\site\SiteUserService;
 use app\service\admin\user\UserService;
 use core\base\BaseAdminController;
+use Exception;
 use think\Response;
 
 /**
@@ -24,7 +25,8 @@ use think\Response;
  */
 class User extends BaseAdminController
 {
-    public function lists(){
+    public function lists()
+    {
         $data = $this->request->params([
             ['username', ''],
             ['realname', ''],
@@ -41,15 +43,18 @@ class User extends BaseAdminController
      * @param $uid
      * @return Response
      */
-    public function info($uid){
+    public function info($uid)
+    {
         return success((new SiteUserService())->getInfo($uid));
     }
 
     /**
      * 新增用户
      * @return Response
+     * @throws Exception
      */
-    public function add(){
+    public function add()
+    {
         $data = $this->request->params([
             ['username', ''],
             ['password', ''],
@@ -67,7 +72,8 @@ class User extends BaseAdminController
     /**
      * 更新用户
      */
-    public function edit($uid){
+    public function edit($uid)
+    {
         $data = $this->request->params([
             ['real_name', ''],
             ['head_img', ''],
@@ -85,7 +91,8 @@ class User extends BaseAdminController
      * @param $field
      * @return Response
      */
-    public function modify($uid, $field){
+    public function modify($uid, $field)
+    {
         $data = $this->request->params([
             ['value', ''],
             ['field', $field]
@@ -99,8 +106,10 @@ class User extends BaseAdminController
     /**
      * 删除单个用户
      * @param $uid
+     * @return Response
      */
-    public function del($uid){
+    public function del($uid)
+    {
         (new UserService())->del($uid);
         return success('DELETE_SUCCESS');
     }
@@ -108,7 +117,8 @@ class User extends BaseAdminController
     /**
      * 锁定用户
      */
-    public function lock($uid){
+    public function lock($uid)
+    {
 
         (new SiteUserService())->lock($uid);
         return success('MODIFY_SUCCESS');
@@ -117,7 +127,8 @@ class User extends BaseAdminController
     /**
      * 解锁用户
      */
-    public function unlock($uid){
+    public function unlock($uid)
+    {
 
         (new SiteUserService())->unlock($uid);
         return success('MODIFY_SUCCESS');

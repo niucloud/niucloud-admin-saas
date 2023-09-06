@@ -20,15 +20,15 @@ namespace app\dict\member;
 class MemberAccountTypeDict
 {
     //会员积分
-    const POINT = 'point';
+    public const POINT = 'point';
     //会员余额
-    const BALANCE = 'balance';
+    public const BALANCE = 'balance';
 
     //会员可提现余额
-    const MONEY = 'money';
+    public const MONEY = 'money';
 
     //会员佣金
-    const COMMISSION = 'commission';
+    public const COMMISSION = 'commission';
 
 
     public static function getType($type = '')
@@ -42,7 +42,7 @@ class MemberAccountTypeDict
         if (empty($type)) {
             return $data;
         }
-        return $data[ $type ] ?? '';
+        return $data[$type] ?? '';
     }
 
 }

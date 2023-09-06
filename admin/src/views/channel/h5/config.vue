@@ -1,7 +1,7 @@
 <template>
     <div class="main-container">
         <div class="flex ml-[18px] justify-between items-center mt-[20px]">
-			<span class="text-[24px]">{{pageName}}</span>
+			<span class="text-[20px]">{{pageName}}</span>
 		</div>
         <el-form :model="formData" label-width="150px" ref="formRef" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
@@ -36,6 +36,7 @@ import { getUrl } from '@/api/sys'
 import { useClipboard } from '@vueuse/core'
 import { ElMessage, FormInstance } from 'element-plus'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title
 

@@ -15,7 +15,7 @@
 
 /**
  * {CLASS_COMMENT}
- * Class {UCASE_NAME}Controller
+ * Class {UCASE_CLASS_NAME}
  * @package app\adminapi\controller{PACKAGE_NAME}
  */
 class {UCASE_CLASS_NAME} extends BaseAdminController

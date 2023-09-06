@@ -21,9 +21,10 @@ class Aliyun extends BaseSms
     protected $app_key = '';
     protected $secret_key = '';
     protected $sign = '';
+
     /**
      * @param array $config
-     * @return mixed|void
+     * @return void
      */
     protected function initialize(array $config = [])
     {
@@ -39,7 +40,7 @@ class Aliyun extends BaseSms
      * @param string $mobile
      * @param string $template_id
      * @param array $data
-     * @return array|false
+     * @return array
      */
     public function send(string $mobile, string $template_id, array $data = [])
     {
@@ -56,10 +57,10 @@ class Aliyun extends BaseSms
                 ->debug(false)
                 ->options([
                     'query' => [
-                        'PhoneNumbers'  => $mobile,
-                        'SignName'      => $this->sign,
-                        'TemplateCode'  => $template_id,
-                        'TemplateParam' => json_encode($data, JSON_UNESCAPED_UNICODE),
+                        'PhoneNumbers' => $mobile,
+                        'SignName' => $this->sign,
+                        'TemplateCode' => $template_id,
+                        'TemplateParam' => json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE),
                     ],
                 ])
                 ->request();
@@ -70,7 +71,7 @@ class Aliyun extends BaseSms
             }
             $message = $res['Message'] ?? $res;
             throw new NoticeException($message);
-        } catch( Exception $e) {
+        } catch ( Exception $e ) {
             throw new NoticeException($e->getMessage());
         }
     }

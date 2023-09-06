@@ -14,15 +14,16 @@ namespace app\dict\sys;
 class MenuTypeDict
 {
 
-    const LIST = '0';
-    const MENU = '1';
-    const BUTTON = '2';
+    public const LIST = '0';
+    public const MENU = '1';
+    public const BUTTON = '2';
 
-    public static function getMenuType(){
+    public static function getMenuType()
+    {
         return [
             self::LIST => get_lang('dict_menu.type_list'),//目录
-            self::MENU  => get_lang('dict_menu.type_menu'),//菜单
-            self::BUTTON  => get_lang('dict_menu.type_button'),//接口
+            self::MENU => get_lang('dict_menu.type_menu'),//菜单
+            self::BUTTON => get_lang('dict_menu.type_button'),//接口
         ];
     }
 

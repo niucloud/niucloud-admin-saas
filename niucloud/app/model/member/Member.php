@@ -31,8 +31,9 @@ class Member extends BaseModel
 
 
     use SoftDelete;
+
     protected $type = [
-        'last_visit_time' =>  'timestamp',
+        'last_visit_time' => 'timestamp',
         'login_time' => 'timestamp',
         'last_consum_time' => 'timestamp',
     ];
@@ -61,57 +62,73 @@ class Member extends BaseModel
     protected $defaultSoftDelete = 0;
 
     // 设置json类型字段
-    protected $json = [ 'member_label' ];
+    protected $json = ['member_label'];
     // 设置JSON数据返回数组
     protected $jsonAssoc = true;
 
     /**
      * 状态字段转化
      * @param $value
+     * @param $data
      * @return mixed
      */
     public function getStatusNameAttr($value, $data)
     {
-        return MemberDict::getStatus()[$data['status'] ?? ''] ?? '';
+        if (empty($data['status']))
+            return '';
+        return MemberDict::getStatus()[$data['status']] ?? '';
     }
+
     /**
      * 注册来源字段转化
      * @param $value
+     * @param $data
      * @return mixed
      */
     public function getRegisterChannelNameAttr($value, $data)
     {
-        return MemberRegisterChannelDict::getType()[ $data[ 'register_channel' ] ?? '' ] ?? '';
+        if (empty($data['register_channel']))
+            return '';
+        return MemberRegisterChannelDict::getType()[$data['register_channel']] ?? '';
     }
 
     /**
      * 注册方式字段转化
      * @param $value
+     * @param $data
      * @return mixed
      */
     public function getRegisterTypeNameAttr($value, $data)
     {
-        return MemberRegisterTypeDict::getType()[ $data[ 'register_type' ] ?? '' ] ?? '';
+        if (empty($data['register_type']))
+            return '';
+        return MemberRegisterTypeDict::getType()[$data['register_type']] ?? '';
     }
 
     /**
      * 登录渠道字段转化
      * @param $value
+     * @param $data
      * @return mixed
      */
     public function getLoginChannelNameAttr($value, $data)
     {
-        return ChannelDict::getType()[ $data[ 'login_channel' ] ?? '' ] ?? '';
+        if (empty($data['login_channel']))
+            return '';
+        return ChannelDict::getType()[$data['login_channel']] ?? '';
     }
 
     /**
      * 登录方式字段转化
      * @param $value
+     * @param $data
      * @return mixed
      */
     public function getLoginTypeNameAttr($value, $data)
     {
-        return MemberLoginTypeDict::getType()[ $data[ 'login_type' ] ?? '' ] ?? '';
+        if (empty($data['login_type']))
+            return '';
+        return MemberLoginTypeDict::getType()[$data['login_type']] ?? '';
     }
 
     /**
@@ -122,12 +139,14 @@ class Member extends BaseModel
      */
     public function getSexNameAttr($value, $data)
     {
-        return CommonDict::getSexType()[ $data[ 'sex' ] ?? '' ] ?? '';
+        if (empty($data['sex']))
+            return '';
+        return CommonDict::getSexType()[$data['sex']] ?? '';
     }
 
     /**
      * 是否删除搜索器
-     * @param $value
+     * @param $query
      */
     public function searchIsDelAttr($query)
     {
@@ -160,6 +179,7 @@ class Member extends BaseModel
             $query->where('register_type', '=', $value);
         }
     }
+
     /**
      * 注册渠道搜索
      * @param $query
@@ -190,34 +210,39 @@ class Member extends BaseModel
 
     /**
      * 创建时间搜索器
+     * @param Query $query
      * @param $value
+     * @param $data
      */
     public function searchCreateTimeAttr(Query $query, $value, $data)
     {
-        $start_time = empty($value[ 0 ]) ? 0 : strtotime($value[ 0 ]);
-        $end_time = empty($value[ 1 ]) ? 0 : strtotime($value[ 1 ]);
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
         if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('create_time', $start_time, $end_time);
         } else if ($start_time > 0 && $end_time == 0) {
-            $query->where([ [ 'create_time', '>=', $start_time ] ]);
+            $query->where([['create_time', '>=', $start_time]]);
         } else if ($start_time == 0 && $end_time > 0) {
-            $query->where([ [ 'create_time', '<=', $end_time ] ]);
+            $query->where([['create_time', '<=', $end_time]]);
         }
     }
+
     /**
      * 创建时间搜索器
+     * @param Query $query
      * @param $value
+     * @param $data
      */
     public function searchJoinCreateTimeAttr(Query $query, $value, $data)
     {
-        $start_time = empty($value[ 0 ]) ? 0 : strtotime($value[ 0 ]);
-        $end_time = empty($value[ 1 ]) ? 0 : strtotime($value[ 1 ]);
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
         if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('member.create_time', $start_time, $end_time);
         } else if ($start_time > 0 && $end_time == 0) {
-            $query->where([ [ 'member.create_time', '>=', $start_time ] ]);
+            $query->where([['member.create_time', '>=', $start_time]]);
         } else if ($start_time == 0 && $end_time > 0) {
-            $query->where([ [ 'member.create_time', '<=', $end_time ] ]);
+            $query->where([['member.create_time', '<=', $end_time]]);
         }
     }
 

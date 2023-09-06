@@ -3,7 +3,7 @@
         <el-card class="box-card !border-none" shadow="never">
 
             <div class="flex justify-between items-center">
-                <span class="text-[24px]">{{ pageName }}</span>
+                <span class="text-[20px]">{{ pageName }}</span>
                 <el-button type="primary" class="w-[100px]" @click="addEvent">{{ t('addArticle') }}</el-button>
             </div>
 

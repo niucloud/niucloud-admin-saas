@@ -33,9 +33,7 @@ export function addUser(params: Record<string, any>) {
 
 /**
  * 更新用户
- * @param id 
- * @param params 
- * @returns 
+ * @param params
  */
 export function editUser(params: Record<string, any>) {
     return request.put(`user/user/${params.uid}`, params, { showSuccessMessage: true })

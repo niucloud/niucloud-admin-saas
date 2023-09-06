@@ -11,12 +11,14 @@
 
 namespace app\validate\diy;
 
+use think\Validate;
+
 /**
  * 自定义路由表验证器
  * Class DiyRoute
  * @package app\validate\diy
  */
-class DiyRoute extends \think\Validate
+class DiyRoute extends Validate
 {
 
     protected $rule = [
@@ -29,8 +31,8 @@ class DiyRoute extends \think\Validate
     protected $message = [];
 
     protected $scene = [
-        "add" => [ 'title', 'name', 'page' ],
-        "edit" => [ 'title', 'name', 'page' ]
+        "add" => ['title', 'name', 'page'],
+        "edit" => ['title', 'name', 'page']
     ];
 
 }

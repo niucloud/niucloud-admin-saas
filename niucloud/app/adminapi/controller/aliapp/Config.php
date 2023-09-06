@@ -21,7 +21,8 @@ class Config extends BaseAdminController
      * 获取支付宝配置信息
      * @return Response
      */
-    public function get(){
+    public function get()
+    {
         return success((new AliappConfigService())->getAliappConfig());
     }
 
@@ -29,7 +30,8 @@ class Config extends BaseAdminController
      * 设置支付宝配置信息
      * @return Response
      */
-    public function set(){
+    public function set()
+    {
         $data = $this->request->params([
             ['name', ''],
             ['app_id', ''],
@@ -49,7 +51,8 @@ class Config extends BaseAdminController
      * 静态资源
      * @return Response
      */
-    public function static(){
+    public function static()
+    {
         return success((new AliappConfigService())->static());
     }
 }

@@ -36,6 +36,7 @@ class ArticleCategory extends BaseApiController
     /**
      * 文章分类详情
      * @param int $id
+     * @return Response
      */
     public function info(int $id){
         return success((new ArticleCategoryService())->getInfo($id));

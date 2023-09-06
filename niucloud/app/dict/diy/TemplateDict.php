@@ -21,32 +21,44 @@ use core\dict\DictLoader;
 class TemplateDict
 {
 
-    /**
-     * 获取页面模板
-     * @param string $type
-     * @return array|string
-     */
-    public static function getTemplate($type = '')
+    public static function getTemplate($params = [])
     {
         $system_pages = [
             'DIY_INDEX' => [
                 'title' => get_lang('dict_diy.page_index'),
                 'page' => 'pages/index/index',
+                'action' => 'decorate' // 页面是否装修标识，为空标识不装修，decorate：装修
             ],
             'DIY_MEMBER_INDEX' => [
                 'title' => get_lang('dict_diy.page_member_index'),
                 'page' => 'pages/member/index',
+                'action' => 'decorate'
             ],
             'DIY_PAGE' => [
                 'title' => get_lang('dict_diy.page_diy'),
                 'page' => 'pages/index/diy',
+                'action' => ''
             ]
         ];
+
         $pages = (new DictLoader("UniappTemplate"))->load($system_pages);
-        if (empty($type)) {
-            return $pages;
+
+        if (!empty($params['type']) && !empty($pages[$params['type']])) {
+            return [$params['type'] => $pages[$params['type']]];
         }
-        return $pages[ $type ] ?? '';
+
+        if (!empty($params['action'])) {
+            $temp = [];
+            foreach ($pages as $k => $v) {
+                if (isset($v['action']) && $params['action'] == $v['action']) {
+                    $temp[$k] = $v;
+                }
+
+            }
+            return $temp;
+        }
+
+        return $pages;
     }
 
 }

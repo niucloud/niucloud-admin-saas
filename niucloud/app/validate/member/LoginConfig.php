@@ -22,15 +22,15 @@ class LoginConfig extends Validate
 {
 
 
-    protected $rule =   [
-        'is_username'  => 'number|between:0,1',
-        'is_mobile'  => 'number|between:0,1',
-        'is_auth_register'  => 'number|between:0,1',
-        'is_bind_mobile'  => 'number|between:0,1',
+    protected $rule = [
+        'is_username' => 'number|between:0,1',
+        'is_mobile' => 'number|between:0,1',
+        'is_auth_register' => 'number|between:0,1',
+        'is_bind_mobile' => 'number|between:0,1',
 
     ];
 
-    protected $message  =   [
+    protected $message = [
         'is_username.number' => 'validate_member.is_username_number',
         'is_username.between' => 'validate_member.is_username_between',
         'is_mobile.number' => 'validate_member.is_mobile_number',
@@ -42,6 +42,6 @@ class LoginConfig extends Validate
     ];
 
     protected $scene = [
-        'set'  =>  ['is_username', 'is_mobile', 'is_auth_register', 'is_bind_mobile'],
+        'set' => ['is_username', 'is_mobile', 'is_auth_register', 'is_bind_mobile'],
     ];
 }

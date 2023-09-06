@@ -21,10 +21,11 @@ class UserDict
      * 用户状态
      * @return array
      */
-    public static function getStatus(){
+    public static function getStatus()
+    {
         return [
             self::ON => get_lang('dict_user.status_on'),//正常
-            self::OFF  => get_lang('dict_user.status_off'),//无效
+            self::OFF => get_lang('dict_user.status_off'),//无效
         ];
     }
 

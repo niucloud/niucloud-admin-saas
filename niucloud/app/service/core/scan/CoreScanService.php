@@ -34,6 +34,7 @@ class CoreScanService extends BaseCoreService
     /**
      * 扫码生成
      * @param int $site_id
+     * @param string $action
      * @param array $data
      * @param int|null $expire
      * @return array|string|string[]

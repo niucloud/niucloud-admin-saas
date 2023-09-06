@@ -21,7 +21,8 @@ class PayChannelDict
      * 支付渠道类型
      * @return array
      */
-    public static function getPayChannel(array $types = []){
+    public static function getPayChannel(array $types = [])
+    {
         $channel = ChannelDict::getType();
         $list = [];
         $pay_type = PayDict::getPayType();
@@ -32,11 +33,11 @@ class PayChannelDict
 //                $pay_type[$k]['is_template'] = true;
 //            }
 //        }
-        foreach($channel as $k => $v){
+        foreach ($channel as $k => $v) {
             $list[$k] = [
                 'name' => $v,
                 'key' => $k,
-                'pay_type' => $pay_type
+                'pay_type' => $k == ChannelDict::PC ? $pay_type : array_diff_key($pay_type, [ PayDict::OFFLINEPAY => ''])
             ];
         }
         return $list;

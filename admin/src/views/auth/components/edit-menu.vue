@@ -46,19 +46,7 @@
 
             <el-form-item :label="t('menuIcon')" prop="icon" v-show="formData.menu_type != 2">
                 <div class="input-width">
-                    <select-icon placement="bottom" width="300px" @select="selectMenuIcon">
-                        <template #reference>
-                            <el-input>
-                                <template #prepend>
-                                    <icon :name="formData.icon" v-if="formData.icon" />
-                                    <div v-else class="w-[16px]"></div>
-                                </template>
-                                <template #append>
-                                    <icon name="element-RefreshRight" type="element" @click="formData.icon = ''" />
-                                </template>
-                            </el-input>
-                        </template>
-                    </select-icon>
+                    <select-icon v-model="formData.icon" />
                 </div>
             </el-form-item>
 
@@ -170,12 +158,6 @@ const formRules = computed(() => {
         ]
     }
 })
-
-// 选择图标
-const selectMenuIcon = (icon: any) => {
-    formData.icon = ''
-    setTimeout(() => { formData.icon = icon }, 200)
-}
 
 const emit = defineEmits(['complete'])
 

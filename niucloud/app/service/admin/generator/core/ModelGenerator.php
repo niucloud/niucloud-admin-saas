@@ -26,7 +26,7 @@ class ModelGenerator extends BaseGenerator
 
     /**
      * 替换模板中的变量
-     * @return mixed|void
+     * @return void
      */
     public function replaceText()
     {
@@ -115,7 +115,7 @@ class ModelGenerator extends BaseGenerator
             if (!$column['is_search']) {
                 continue;
             }
-            $function_str .= '/**'.PHP_EOL.' * 搜索器:'.$this->table['table_content'].$column['column_comment'].''.PHP_EOL.' * @param $value'.PHP_EOL.' * @param $data'.PHP_EOL.' */'.PHP_EOL;
+            $function_str .= '/**'.PHP_EOL.' * 搜索器:'.$this->table['table_content'].$column['column_comment'].PHP_EOL.' * @param $value'.PHP_EOL.' * @param $data'.PHP_EOL.' */'.PHP_EOL;
             $function_str .= 'public function search'.Str::studly($column['column_name']).'Attr($query, $value, $data)'.PHP_EOL;
             $function_str .= '{'.PHP_EOL;
             $function_str .= '    if ($value) {'.PHP_EOL;
@@ -132,7 +132,7 @@ class ModelGenerator extends BaseGenerator
     public function getSearchContent(array $column_info){
 
         $type = $column_info['query_type'];
-        $result = match ($type) {
+        return match ($type) {
             '<>' => '"' . $column_info['column_name'] . '", "<>", $value',
             '!=' => '"' . $column_info['column_name'] . '", "<>", $value',
             '>' => '"' . $column_info['column_name'] . '", ">", $value',
@@ -143,8 +143,6 @@ class ModelGenerator extends BaseGenerator
             'BETWEEN' => '"' . $column_info['column_name'] . '", $value[0], $value[1] ',
             default => '"' . $column_info['column_name'] . '", $value',
         };
-
-        return $result;
     }
 
     /**

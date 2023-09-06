@@ -21,7 +21,8 @@ class H5 extends BaseAdminController
      * 获取H5配置信息
      * @return Response
      */
-    public function get(){
+    public function get()
+    {
         return success((new H5Service())->getH5());
     }
 
@@ -29,7 +30,8 @@ class H5 extends BaseAdminController
      * 设置H5配置信息
      * @return Response
      */
-    public function set(){
+    public function set()
+    {
         $data = $this->request->params([
             ['is_open', 0],
         ]);

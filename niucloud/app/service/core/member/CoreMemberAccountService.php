@@ -15,6 +15,7 @@ use app\model\member\Member;
 use app\model\member\MemberAccountLog;
 use core\base\BaseCoreService;
 use core\exception\CommonException;
+use Exception;
 use think\facade\Db;
 
 /**
@@ -34,7 +35,7 @@ class CoreMemberAccountService extends BaseCoreService
             [ 'member_id', '=', $member_id ],
             [ 'site_id', '=', $site_id ]
         ])->field($account_type .','.$account_type."_get" .', username, mobile, nickname')->lock(true)->find();
-        if(empty($member_info)) throw new CommonException('MEMBER_NOT_EXIST');;
+        if(empty($member_info)) throw new CommonException('MEMBER_NOT_EXIST');
         $account_new_data = round((float) $member_info[ $account_type ] + (float) $account_data, 2);
 
         if ($account_new_data < 0) {
@@ -80,7 +81,7 @@ class CoreMemberAccountService extends BaseCoreService
             event("memberAccount", $data);
             Db::commit();
             return $res->id;
-        } catch ( \Exception $e) {
+        } catch ( Exception $e) {
             Db::rollback();
             throw new CommonException($e->getMessage());
         }

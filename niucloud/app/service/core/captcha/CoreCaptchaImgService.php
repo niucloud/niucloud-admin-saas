@@ -15,6 +15,7 @@ use app\Request;
 use core\base\BaseCoreService;
 use core\exception\AuthException;
 use core\exception\CaptchaException;
+use Exception;
 use Fastknife\Exception\ParamException;
 use Fastknife\Service\BlockPuzzleCaptchaService;
 use Fastknife\Service\ClickWordCaptchaService;
@@ -34,8 +35,6 @@ class CoreCaptchaImgService extends BaseCoreService
 
     /**
      * 创建验证码
-     * @param int $site_id
-     * @param array|null $data
      * @return array
      */
     public function create(){
@@ -46,7 +45,6 @@ class CoreCaptchaImgService extends BaseCoreService
 
     /**
      * 一次验证验证码
-     * @param Request $request
      * @return true
      */
     public function check(){
@@ -55,14 +53,13 @@ class CoreCaptchaImgService extends BaseCoreService
             $service = $this->getCaptchaService();
             $service->check($captcha_key, $captcha_code);
             return true;
-        } catch (\Exception $e) {
+        } catch ( Exception $e) {
             throw new CaptchaException('CAPTCHA_ERROR');
         }
     }
 
     /**
      * 一次验证验证码
-     * @param Request $request
      * @return true
      */
     public function verification(){
@@ -78,7 +75,7 @@ class CoreCaptchaImgService extends BaseCoreService
 
     /**
      * 验证验证码参数
-     * @return true
+     * @return array
      */
     protected function validate(){
         $captcha_key = request()->param('captcha_key', '');
@@ -89,16 +86,10 @@ class CoreCaptchaImgService extends BaseCoreService
     protected function getCaptchaService($captcha_type = 'blockPuzzle')
     {
         $config = config('imgcaptcha');
-        switch ($captcha_type) {
-            case 'clickWord':
-                $service = new ClickWordCaptchaService($config);
-                break;
-            case 'blockPuzzle':
-                $service = new BlockPuzzleCaptchaService($config);
-                break;
-            default:
-                throw new AuthException('');
-        }
-        return $service;
+        return match ($captcha_type) {
+            'clickWord' => new ClickWordCaptchaService($config),
+            'blockPuzzle' => new BlockPuzzleCaptchaService($config),
+            default => throw new AuthException('CAPTCHA_INVALID'),
+        };
     }
 }

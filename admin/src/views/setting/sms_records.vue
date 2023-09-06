@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center">
-                <span class="text-[24px]">{{pageName}}</span>
+                <span class="text-[20px]">{{pageName}}</span>
             </div>
             <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="recordsTableData.searchParam" ref="searchFormRef">
@@ -11,8 +11,7 @@
                     </el-form-item>
 
                     <el-form-item :label="t('noticeKey')" prop="key">
-                        <el-select v-model="recordsTableData.searchParam.key" clearable
-                            :placeholder="t('groupIdPlaceholder')" class="input-width">
+                        <el-select v-model="recordsTableData.searchParam.key" clearable :placeholder="t('groupIdPlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')" value="" />
                             <el-option-group v-for="(group, gindex) in templateList" :key="gindex" :label="group.label">
                                 <el-option :label="item.name" :value="item.value" v-for="(item, index) in group.list" :key="index" />
@@ -21,9 +20,7 @@
                     </el-form-item>
 
                     <el-form-item :label="t('createTime')" prop="create_time">
-                        <el-date-picker v-model="recordsTableData.searchParam.create_time" type="datetimerange"
-                            value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')"
-                            :end-placeholder="t('endDate')" />
+                        <el-date-picker v-model="recordsTableData.searchParam.create_time" type="datetimerange" value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')" :end-placeholder="t('endDate')" />
                     </el-form-item>
 
                     <el-form-item>
@@ -79,6 +76,7 @@ import { getNoticeList, getSmsLog } from '@/api/notice'
 import RecordsInfo from '@/views/setting/components/notice-records-info.vue'
 import { FormInstance } from 'element-plus'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title;
 
@@ -111,7 +109,7 @@ const setTemplateList = async () => {
         Object.keys(res.data).forEach(key => {
             const item = res.data[key]
             const value = { value: key, name: item.name }
-            item.receiver_type == 1 ? templateList.buyer.list.push(value) : templateList.seller.list.push(value)
+            item.receiver_type == 0 ? templateList.buyer.list.push(value) : templateList.seller.list.push(value)
         })
     }).catch(() => {
 

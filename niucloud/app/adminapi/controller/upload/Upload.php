@@ -11,8 +11,8 @@
 
 namespace app\adminapi\controller\upload;
 
-use app\service\admin\file\UploadConfigService;
-use app\service\admin\file\UploadService;
+use app\service\admin\upload\UploadConfigService;
+use app\service\admin\upload\UploadService;
 use core\base\BaseAdminController;
 use think\Response;
 
@@ -27,10 +27,11 @@ class Upload extends BaseAdminController
 
         $data = $this->request->params([
             ['file', 'file'],
-            ['cate_id', '=', 0]
-        ], true);
+            ['cate_id', 0],
+            ['is_attachment', 1]
+        ]);
         $upload_service = new UploadService();
-        return success($upload_service->image($data['file'], $data['cate_id']));
+        return success($upload_service->image($data['file'], $data['cate_id'], boolval($data['is_attachment'])));
     }
 
     /**
@@ -41,8 +42,8 @@ class Upload extends BaseAdminController
     {
         $data = $this->request->params([
             ['file', 'file'],
-            ['cate_id', '=', 0]
-        ], true);
+            ['cate_id', 0]
+        ]);
         $upload_service = new UploadService();
         return success($upload_service->video($data['file'], $data['cate_id']));
     }
@@ -51,17 +52,18 @@ class Upload extends BaseAdminController
      * 文件上传(默认不上云)
      * @return Response
      */
-    public function document($type){
+    public function document($type)
+    {
         $data = $this->request->params([
             ['file', 'file'],
-        ], true);
+        ]);
         $upload_service = new UploadService();
-        return success($upload_service->document($data['file'], $type, true));
+        return success($upload_service->document($data['file'], $type));
     }
 
     /**
      * 上传配置
-     * @return void
+     * @return Response
      */
     public function setUploadConfig()
     {

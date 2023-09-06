@@ -13,14 +13,14 @@ namespace app\adminapi\controller\sys;
 
 use app\dict\common\ChannelDict;
 use core\base\BaseAdminController;
+use think\Response;
 
 class Channel extends BaseAdminController
 {
 
     /**
      * 获取渠道列表
-     * @param int $level
-     * @return mixed
+     * @return Response
      */
     public function getChannelType()
     {

@@ -1,7 +1,6 @@
 <template>
     <el-dialog v-model="showDialog" :title="elDialogTitle" width="500px" :destroy-on-close="true">
-        <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-form-item :label="t('siteName')" prop="site_name">
                 <el-input v-model="formData.site_name" clearable :placeholder="t('siteNamePlaceholder')" class="input-width" />
             </el-form-item>
@@ -26,7 +25,6 @@
             <el-form-item :label="t('confirmPassword')" prop="confirm_password" v-if="!formData.site_id && !loading">
                 <el-input v-model="formData.confirm_password" :placeholder="t('confirmPasswordPlaceholder')" type="password" :show-password="true" clearable class="input-width" />
             </el-form-item>
-
 
             <el-form-item :label="t('expireTime')" prop="expire_time" class="input-width">
                 <el-date-picker class="flex-1 !flex" v-model="formData.expire_time" clearable type="datetime" value-format="YYYY-MM-DD HH:mm:ss" :placeholder="t('expireTimePlaceholder')">

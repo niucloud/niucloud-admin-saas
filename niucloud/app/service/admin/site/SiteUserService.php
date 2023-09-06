@@ -36,7 +36,7 @@ class SiteUserService extends BaseAdminService
     /**
      * 管理端获取用户列表(对应站点用户列表)
      * @param array $where
-     * @return mixed
+     * @return array
      */
     public function getPage(array $where)
     {
@@ -77,7 +77,7 @@ class SiteUserService extends BaseAdminService
             ['uid', '=', $uid],
         );
         $field = 'uid, username, head_img, real_name, last_ip, last_time, create_time, login_count, status, is_del, delete_time, update_time';
-        $user = $this->model::where($where)->field($field)->with(['userrole'])->findOrEmpty();
+        $user = $this->model->where($where)->field($field)->with(['userrole'])->findOrEmpty();
         if ($user->isEmpty())
             return [];
 
@@ -90,10 +90,8 @@ class SiteUserService extends BaseAdminService
 
     /**
      * 添加当前站点用户
-     * @param int $site_id
      * @param array $data
      * @return bool
-     * @throws Exception
      */
     public function add(array $data)
     {
@@ -104,6 +102,7 @@ class SiteUserService extends BaseAdminService
      * 编辑站点用户
      * @param int $uid
      * @param array $data
+     * @return true
      */
     public function edit(int $uid, array $data)
     {
@@ -130,7 +129,7 @@ class SiteUserService extends BaseAdminService
     /**
      * 删除
      * @param int $uid
-     * @return mixed
+     * @return true
      */
     public function del(int $uid)
     {

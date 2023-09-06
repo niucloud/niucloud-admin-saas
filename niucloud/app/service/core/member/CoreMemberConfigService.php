@@ -28,25 +28,25 @@ class CoreMemberConfigService extends BaseCoreService
 {
     /**
      * 获取注册与登录设置
-     * @param $site_id
+     * @param int $site_id
+     * @return array
      */
     public function getLoginConfig(int $site_id){
         $info = (new CoreConfigService())->getConfig($site_id, 'LOGIN')['value'] ?? [];
-        $config = [
+        return [
             'is_username' => $info['is_username'] ?? 1,//是否用户名密码登录
             'is_mobile' => $info['is_mobile'] ?? 0,//是否手机验证码登录
             'is_auth_register' => $info['is_auth_register'] ?? 1,//是否第三方自动注册
             'is_bind_mobile'            => $info['is_bind_mobile'] ?? 0,//是否强制绑定手机
             'agreement_show' => $info['agreement_show'] ?? 0 // 政策协议是否展示
         ];
-        return $config;
     }
 
     /**
      * 注册与登录设置
-     * @param $site_id
-     * @param $data
-     * @return SysConfig|bool|Model
+     * @param int $site_id
+     * @param array $data
+     * @return true
      */
     public function setLoginConfig(int $site_id, array $data){
         $config = [
@@ -62,22 +62,22 @@ class CoreMemberConfigService extends BaseCoreService
 
     /**
      * 获取会员设置
-     * @param $site_id
+     * @param int $site_id
+     * @return array
      */
     public function getMemberConfig(int $site_id){
         $info = (new CoreConfigService())->getConfig($site_id, 'MEMBER')['value'] ?? [];
-        $config = [
+        return [
             'prefix' => $info['prefix'] ?? '',// 会员编码前缀
             'length' => $info['length'] ?? 4, // 会员编码长度
         ];
-        return $config;
     }
 
     /**
      * 会员设置
-     * @param $site_id
-     * @param $data
-     * @return SysConfig|bool|Model
+     * @param int $site_id
+     * @param array $data
+     * @return true
      */
     public function setMemberConfig(int $site_id, array $data){
         $config = [
@@ -109,9 +109,9 @@ class CoreMemberConfigService extends BaseCoreService
 
     /**
      * 会员提现配置
-     * @param $site_id
-     * @param $data
-     * @return SysConfig|bool|Model
+     * @param int $site_id
+     * @param array $data
+     * @return true
      */
     public function setCashOutConfig(int $site_id, array $data){
         //校验转账方式是否合法

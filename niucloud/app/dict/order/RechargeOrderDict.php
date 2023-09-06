@@ -98,7 +98,7 @@ class RechargeOrderDict
         if ($status == '') {
             return $data;
         }
-        return $data[ $status ] ?? '';
+        return $data[$status] ?? '';
     }
 
     /**
@@ -126,7 +126,7 @@ class RechargeOrderDict
         if ($status == '') {
             return $data;
         }
-        return $data[ $status ] ?? '';
+        return $data[$status] ?? '';
     }
 
 }

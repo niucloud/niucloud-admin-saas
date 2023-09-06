@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 /**
  * 获取支付设置
- * @returns 
+ * @returns
  */
 export function getUserInfo(type: string) {
     return request.get(`auth/get`)
@@ -10,9 +10,9 @@ export function getUserInfo(type: string) {
 
 /**
  * 配置支付
- * @returns 
+ * @returns
  */
 export function setUserInfo(params: Record<string, any>) {
-    return request.put(`auth/edit`, params, { showSuccessMessage: true });
+    return request.put(`auth/edit`, params, {showSuccessMessage: true});
 }
 

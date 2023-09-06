@@ -1,7 +1,7 @@
 <template>
     <div class="main-container">
         <div class="flex ml-[18px] justify-between items-center mt-[20px]">
-            <span class="text-[24px]">{{pageName}}</span>
+            <span class="text-[20px]">{{pageName}}</span>
         </div>
         <el-form :model="formData" label-width="170px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
@@ -43,8 +43,7 @@
                 <el-form-item label="URL">
                     <el-input :model-value="formData.serve_url" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
-                            <div class="cursor-pointer" @click="copyEvent(formData.serve_url)">{{ t('copy') }}
-                            </div>
+                            <div class="cursor-pointer" @click="copyEvent(formData.serve_url)">{{ t('copy') }}</div>
                         </template>
                     </el-input>
                 </el-form-item>
@@ -79,32 +78,28 @@
                 <el-form-item :label="t('requestUrl')">
                     <el-input :model-value="formData.request_url" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
-                            <div class="cursor-pointer" @click="copyEvent(formData.request_url)">{{ t('copy') }}
-                            </div>
+                            <div class="cursor-pointer" @click="copyEvent(formData.request_url)">{{ t('copy') }}</div>
                         </template>
                     </el-input>
                 </el-form-item>
                 <el-form-item :label="t('socketUrl')">
                     <el-input :model-value="formData.socket_url" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
-                            <div class="cursor-pointer" @click="copyEvent(formData.socket_url)">{{ t('copy') }}
-                            </div>
+                            <div class="cursor-pointer" @click="copyEvent(formData.socket_url)">{{ t('copy') }}</div>
                         </template>
                     </el-input>
                 </el-form-item>
                 <el-form-item :label="t('uploadUrl')">
                     <el-input :model-value="formData.upload_url" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
-                            <div class="cursor-pointer" @click="copyEvent(formData.upload_url)">{{ t('copy') }}
-                            </div>
+                            <div class="cursor-pointer" @click="copyEvent(formData.upload_url)">{{ t('copy') }}</div>
                         </template>
                     </el-input>
                 </el-form-item>
                 <el-form-item :label="t('downloadUrl')">
                     <el-input :model-value="formData.download_url" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
-                            <div class="cursor-pointer" @click="copyEvent(formData.download_url)">{{ t('copy') }}
-                            </div>
+                            <div class="cursor-pointer" @click="copyEvent(formData.download_url)">{{ t('copy') }}</div>
                         </template>
                     </el-input>
                 </el-form-item>
@@ -127,6 +122,7 @@ import { getWeappConfig, setWeappConfig } from '@/api/weapp'
 import { useClipboard } from '@vueuse/core'
 import { ElMessage, FormInstance, FormRules } from 'element-plus'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title
 

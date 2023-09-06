@@ -13,6 +13,7 @@ namespace app\adminapi\controller\site;
 
 use app\service\admin\site\SiteGroupService;
 use core\base\BaseAdminController;
+use Exception;
 use think\Response;
 
 /**
@@ -26,7 +27,8 @@ class SiteGroup extends BaseAdminController
      * 站点列表
      * @return Response
      */
-    public function lists(){
+    public function lists()
+    {
         $data = $this->request->params([
             ['keywords', ''],
         ]);
@@ -38,16 +40,18 @@ class SiteGroup extends BaseAdminController
      * @param int $group_id
      * @return Response
      */
-    public function info(int $group_id){
+    public function info(int $group_id)
+    {
         return success((new SiteGroupService())->getInfo($group_id));
     }
 
     /**
      * 添加分组
      * @return Response
-     * @throws \Exception
+     * @throws Exception
      */
-    public function add(){
+    public function add()
+    {
         $data = $this->request->params([
             ['group_name', ''],
             ['group_desc', ''],
@@ -63,7 +67,8 @@ class SiteGroup extends BaseAdminController
      * @param $group_id
      * @return Response
      */
-    public function edit($group_id){
+    public function edit($group_id)
+    {
         $data = $this->request->params([
             ['group_name', ''],
             ['group_desc', ''],
@@ -79,7 +84,8 @@ class SiteGroup extends BaseAdminController
      * @param $group_id
      * @return Response
      */
-    public function del($group_id){
+    public function del($group_id)
+    {
 
         (new SiteGroupService())->del($group_id);
         return success('DELETE_SUCCESS');
@@ -89,8 +95,9 @@ class SiteGroup extends BaseAdminController
      * 所有分组
      * @return Response
      */
-    public function all(){
-        return success( (new SiteGroupService())->getAll());
+    public function all()
+    {
+        return success((new SiteGroupService())->getAll());
     }
 
 }

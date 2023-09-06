@@ -18,7 +18,7 @@ use think\facade\Route;
 /**
  * 路由
  */
-Route::group('auth',function () {
+Route::group('auth', function () {
 
     Route::put('logout', 'login.Login/logout');
 

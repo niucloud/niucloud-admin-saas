@@ -14,18 +14,19 @@ namespace app\dict\sys;
 class MenuDict
 {
 
-    const ON = 1;
-    const OFF = 0;
+    public const ON = 1;
+    public const OFF = 0;
 
 
     /**
      * 菜单状态
      * @return array
      */
-    public static function getStatus(){
+    public static function getStatus()
+    {
         return [
             self::ON => get_lang('dict_menu.status_on'),//展示
-            self::OFF  => get_lang('dict_menu.status_off'),//隐藏
+            self::OFF => get_lang('dict_menu.status_off'),//隐藏
         ];
     }
 

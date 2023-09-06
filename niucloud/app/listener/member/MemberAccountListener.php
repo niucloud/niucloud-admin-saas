@@ -25,6 +25,6 @@ class MemberAccountListener
      */
     public function handle(array $account_log)
     {
-        return ;
+        return;
     }
 }

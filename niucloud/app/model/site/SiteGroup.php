@@ -37,6 +37,7 @@ class SiteGroup extends BaseModel
      * @var string
      */
     protected $name = 'site_group';
+
     /**
      * 关键字搜索
      * @param $query

@@ -32,7 +32,7 @@ class WechatReplyService extends BaseAdminService
 
     /**
      *关键字回复列表
-     * @return void
+     * @return array
      */
     public function getKeywordPage(array $data = []){
 
@@ -41,7 +41,7 @@ class WechatReplyService extends BaseAdminService
 
     /**
      * 获取关键词回复信息
-     * @param $id
+     * @param int $id
      * @return array
      */
     public function getKeywordInfo(int $id){
@@ -50,8 +50,8 @@ class WechatReplyService extends BaseAdminService
 
     /**
      * 新增关键词回复
-     * @param $data
-     * @return WechatReply
+     * @param array $data
+     * @return true
      */
     public function addKeyword(array $data){
         return $this->core_wechat_reply_service->addKeyword($this->site_id, $data);
@@ -59,8 +59,9 @@ class WechatReplyService extends BaseAdminService
 
     /**
      * 更新关键词回复
-     * @param $data
-     * @return void
+     * @param int $id
+     * @param array $data
+     * @return WechatReply
      */
     public function editKeyword(int $id, array $data){
         return $this->core_wechat_reply_service->editKeyword($this->site_id, $id, $data);
@@ -68,7 +69,7 @@ class WechatReplyService extends BaseAdminService
 
     /**
      * 删除关键词回复
-     * @return void
+     * @return void|null
      */
     public function delKeyword(int $id){
         return $this->core_wechat_reply_service->delKeyword($this->site_id, $id);
@@ -76,7 +77,7 @@ class WechatReplyService extends BaseAdminService
 
     /**
      * 获取默认回复
-     * @return void
+     * @return void|null
      */
     public function getDefault(){
         return $this->core_wechat_reply_service->delKeyword($this->site_id);
@@ -84,8 +85,8 @@ class WechatReplyService extends BaseAdminService
 
     /**
      * 更新默认回复
-     * @param $data
-     * @return void
+     * @param array $data
+     * @return void|null
      */
     public function editDefault(array $data){
         return $this->core_wechat_reply_service->editDefault($this->site_id, $data);
@@ -94,7 +95,7 @@ class WechatReplyService extends BaseAdminService
 
     /**
      * 获取关注回复
-     * @return void
+     * @return array
      */
     public function getSubscribe(){
         return $this->core_wechat_reply_service->getSubscribe($this->site_id);
@@ -103,8 +104,8 @@ class WechatReplyService extends BaseAdminService
 
     /**
      * 更新关注回复
-     * @param $data
-     * @return void
+     * @param array $data
+     * @return void|null
      */
     public function editSubscribe(array $data){
         return $this->core_wechat_reply_service->editSubscribe($this->site_id, $data);

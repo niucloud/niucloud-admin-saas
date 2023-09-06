@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center mb-[5px]">
-                <span class="text-[24px]">{{pageName}}</span>
+                <span class="text-[20px]">{{pageName}}</span>
             </div>
             <el-card class="box-card !border-none base-bg !px-[35px]" shadow="never">
 			    <el-row class="flex">
@@ -52,8 +52,7 @@
             <el-card class="box-card !border-none mb-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="memberAccountLogTableData.searchParam" ref="searchFormRef">
                     <el-form-item :label="t('memberInfo')" prop="keywords">
-                        <el-input v-model="memberAccountLogTableData.searchParam.keywords" class="w-[240px]"
-                            :placeholder="t('memberInfoPlaceholder')" />
+                        <el-input v-model="memberAccountLogTableData.searchParam.keywords" class="w-[240px]" :placeholder="t('memberInfoPlaceholder')" />
                     </el-form-item>
                     <el-form-item :label="t('fromType')" prop="from_type">
                         <el-select v-model="memberAccountLogTableData.searchParam.from_type" clearable :placeholder="t('fromTypePlaceholder')" class="input-width">
@@ -137,13 +136,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { FormInstance } from 'element-plus'
 import { getChangeTypeList,getCommissionList,getCommissionSum } from '@/api/member'
 import { img } from '@/utils/common'
 import moneyInfo from '@/views/member/components/member-commission-info.vue'
 import { useRouter,useRoute } from 'vue-router'
+
 const route = useRoute()
 const member_id: number = parseInt(route.query.id || 0)
 const pageName = route.meta.title;

@@ -1,8 +1,8 @@
 <template>
-    <el-container :class="['w-full h-screen bg-page', { 'login-wrap': loginType == 'admin' }, { 'site-login-wrap': loginType == 'site' }]">
+    <el-container :class="['w-full h-screen bg-page', { 'login-wrap': loginType == 'admin' } ,{ 'site-login-wrap': loginType == 'site' }]">
         <!-- 平台端登录 -->
         <el-main class="login-main items-center justify-center" v-if="!imgLoading && loginType == 'admin'">
-            <div class="flex rounded-2xl overflow-hidden">
+			<div class="flex rounded-2xl overflow-hidden">
                 <div class="login-main-left w-[450px] flex flex-wrap justify-center">
                     <el-image v-if="loginConfig.bg" class="w-[450px] h-[400px]" :src="img(loginConfig.bg)" fit="cover" />
                     <img v-else src="@/assets/images/login/login_index_left.png" alt="">
@@ -38,49 +38,45 @@
         </el-main>
 
         <!-- 站点端登录 -->
-        <el-main class="login-main items-center justify-evenly" v-else-if="!imgLoading && loginType == 'site'">
-            <div>
-                <el-row class="items-end mb-[20px] h-[40px] w-[360px]">
-                    <el-col :span="8">
-						<img class="max-h-[40px]" :src="img(webSite.logo)" alt="" v-if="webSite.logo">
-                        <img src="@/assets/images/site_login.png" alt="" v-else>
-                    </el-col>
-                    <el-col :span="12" class="ml-[20px] text-[18px]">
-                        <div class="admin_name" v-if="webSite.site_name">{{ webSite.site_name }}</div>
-						<div class="admin_name" v-else>{{ t('manageAdminFramework') }}</div>
-                    </el-col>
-                </el-row>
-                <div class="login flex flex-col w-[360px] p-[40px] rounded-md rounded-[10px]">
-                    <h3 class="text-center text-3xl mb-[30px]">{{ t('siteLogin') }}</h3>
-                    <el-form :model="form" ref="formRef" :rules="formRules">
-                        <el-form-item prop="username">
-                            <el-input v-model="form.username" @keyup.enter="handleLogin(formRef)" class="w-50 m-1 h-[40px]" :placeholder="t('userPlaceholder')">
-                                <template #prefix>
-                                    <icon name="element-User" />
-                                </template>
-                            </el-input>
-                        </el-form-item>
-
-                        <el-form-item prop="password">
-                            <el-input type="password" v-model="form.password" @keyup.enter="handleLogin(formRef)" :show-password="true" class="w-50 m-1 h-[40px]" :placeholder="t('passwordPlaceholder')">
-                                <template #prefix>
-                                    <icon name="element-Lock" />
-                                </template>
-                            </el-input>
-                        </el-form-item>
-
-                        <el-form-item>
-                            <el-button type="primary" class="mt-[30px] h-[40px] w-full" @click="handleLogin(formRef)" :loading="loading">{{loading ? t('logging') : t('login') }}</el-button>
-                        </el-form-item>
-                    </el-form>
-                </div>
-            </div>
+        <el-main class="login-main w-full login-site-main items-center h-screen justify-evenly bg-[#F8FAFF]" v-else-if="!imgLoading && loginType == 'site'">
+			<div class="flex rounded-2xl overflow-hidden h-screen w-full relative">
+				<img v-if="loginConfig.site_bg" class="hidden h-[100%] lg:block" :src="img(loginConfig.site_bg)"/>
+				<img v-else class="hidden h-[100%] lg:block" src="@/assets/images/site_login_bg.png"/>
+				<div class="w-[100%] bg-[#F8FAFF] flex justify-center items-center absolute right-0 top-0 h-screen lg:w-[60%]">
+					<div class="site-login-item w-[45%] py-[30px] relative rounded-[13px] max-w-[350px] bg-[#fff]">
+						<div class="w-[80%] mx-auto">
+							<h3 class="text-3xl mb-[30px]">{{ t('siteLogin') }}</h3>
+							<el-form :model="form" ref="formRef" :rules="formRules" >
+							    <el-form-item prop="username">
+							        <el-input v-model="form.username" @keyup.enter="handleLogin(formRef)" class="w-50 m-1 h-[40px]" :placeholder="t('userPlaceholder')">
+							            <template #prefix>
+							                <icon name="element-User" />
+							            </template>
+							        </el-input>
+							    </el-form-item>
+							
+							    <el-form-item prop="password">
+							        <el-input type="password" v-model="form.password" @keyup.enter="handleLogin(formRef)" :show-password="true" class="w-50 m-1 h-[40px]" :placeholder="t('passwordPlaceholder')">
+							            <template #prefix>
+							                <icon name="element-Lock" />
+							            </template>
+							        </el-input>
+							    </el-form-item>
+							
+							    <el-form-item>
+							        <el-button type="primary" class="mt-[30px] h-[40px] w-full" @click="handleLogin(formRef)" :loading="loading">{{loading ? t('logging') : t('login') }}</el-button>
+							    </el-form-item>
+							</el-form>
+						</div>
+						<!-- <img class="w-[15%] max-w-[50px] absolute top-0 right-0" src="@/assets/images/login/site_code.png"/> -->
+					</div>
+				</div>
+			</div>
         </el-main>
 
         <!-- 验证组件 -->
         <verify @success="success" :mode="pop" captchaType="blockPuzzle" :imgSize="{ width: '330px', height: '155px' }" ref="verifyRef"></verify>
-
-        <el-footer></el-footer>
+		<!-- <el-footer></el-footer> -->
     </el-container>
 </template>
 
@@ -181,11 +177,20 @@ const loginFn = (data = {}) => {
     background-repeat: no-repeat;
     background-size: cover;
 }
+.login-site-main {
+	padding: 0 !important;
+}
+.site-warp {
+	background-image: url("@/assets/images/login/site_bg.png");
+	background-color: #fff;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+}
 
 .site-login-wrap {
-    background-image: url('@/assets/images/back_login.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
+    // background-image: url('@/assets/images/back_login.jpg');
+    // background-repeat: no-repeat;
+    // background-size: cover;
 }
 
 .input-with-select .el-input-group__prepend {

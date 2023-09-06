@@ -18,6 +18,9 @@ use app\service\admin\user\UserService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
 use Exception;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\facade\Cache;
 use think\facade\Db;
 
@@ -39,8 +42,8 @@ class SiteService extends BaseAdminService
     /**
      * 获取站点列表
      * @param array $where
-     * @param string $order
-     * @return mixed
+     * @return array
+     * @throws DbException
      */
     public function getPage(array $where = [])
     {
@@ -48,8 +51,7 @@ class SiteService extends BaseAdminService
         $field = 'site_id, site_name, front_end_name, front_end_logo, app_type, keywords, logo, icon, `desc`, status, latitude, longitude, province_id, city_id, 
         district_id, address, full_address, phone, business_hours, create_time, expire_time, group_id';
         $search_model = $this->model->where([ [ 'app_type', '<>', 'admin' ] ])->withSearch([ 'create_time', 'expire_time', 'keywords', 'status', 'group_id' ], $where)->with('groupName')->field($field)->append([ 'status_name' ])->order('create_time desc');
-        $list = $this->pageQuery($search_model);
-        return $list;
+        return $this->pageQuery($search_model);
     }
 
     /**
@@ -69,7 +71,8 @@ class SiteService extends BaseAdminService
      * 添加站点(平台端添加站点，同时添加用户以及密码)
      * @param array $data
      * ['site_name' => '', 'username' => '', 'head_img' => '', 'real_name' => '', 'password' => '']
-     *
+     * @return mixed
+     * @throws DbException
      */
     public function add(array $data)
     {
@@ -105,9 +108,9 @@ class SiteService extends BaseAdminService
 
             Db::commit();
             return $site_id;
-        } catch (Exception $e) {
+        } catch ( Exception $e) {
             Db::rollback();
-            throw new Exception($e->getMessage());
+            throw new AdminException($e->getMessage());
         }
     }
 
@@ -128,7 +131,7 @@ class SiteService extends BaseAdminService
     /**
      * 站点数量
      * @return int
-     * @throws \think\db\exception\DbException
+     * @throws DbException
      */
     public function getCount(array $where = [])
     {
@@ -149,31 +152,23 @@ class SiteService extends BaseAdminService
                 $where = [
                     [ 'site_id', '=', $site_id ],
                 ];
-                $site = $this->model->where($where)->field('app_type,site_name,front_end_name,front_end_logo,logo,icon,group_id, status, expire_time')->findOrEmpty();
-                if (!$site->isEmpty()) {
-                    $site->append([ 'status_name' ]);
-                }
+                $site = $this->model->where($where)->field('site_id, app_type,site_name,front_end_name,front_end_logo,logo,icon,group_id, status, expire_time')->append([ 'status_name' ])->findOrEmpty();
                 return $site->toArray();
             },
             self::$cache_tag_name . $site_id
         );
-//        return Cache::tag(self::$cache_tag_name . $site_id)->remember($cache_name . $site_id, function() use ($site_id) {
-//            $where = [
-//                [ 'site_id', '=', $site_id ],
-//            ];
-//            $site = $this->model->where($where)->field('app_type,site_name,logo,group_id, status, expire_time')->findOrEmpty();
-//            if (!$site->isEmpty()) {
-//                $site->append([ 'status_name' ]);
-//            }
-//            return $site->toArray();
-//        });
     }
 
 
     /**
      * 通过站点id获取菜单列表
      * @param int $site_id
+     * @param $is_tree
+     * @param $status
      * @return mixed
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function getMenuList(int $site_id, $is_tree, $status)
     {
@@ -199,11 +194,10 @@ class SiteService extends BaseAdminService
     /**
      * 通过站点id获取站点菜单极限
      * @param int $site_id
-     * @param $is_tree
      * @param $status
      * @return array|mixed|string|null
      */
-    public function getMenuIdsBySiteId(int $site_id, $is_tree, $status)
+    public function getMenuIdsBySiteId(int $site_id, $status)
     {
         $site_info = $this->getSiteCache($site_id);
         if (empty($site_info))
@@ -224,6 +218,7 @@ class SiteService extends BaseAdminService
     /**
      * 通过站点id获取菜单列表
      * @param int $site_id
+     * @param $status
      * @return mixed
      */
     public function getApiList(int $site_id, $status)

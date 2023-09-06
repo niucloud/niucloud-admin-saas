@@ -98,14 +98,17 @@ return [
         'status_off' => 'off'
     ],
     //自动任务时间间隔
-    'dict_cron' => [
-        'type_minute' => 'minute',
-        'type_day' => 'day',
-        'type_week' => 'week',
-        'type_month' => 'month',
-
+    'dict_schedule' => [
         'type_cron' => 'time work',
-        'type_crond' => 'period work'
+        'type_crond' => 'period work',
+        'on' => 'on',
+        'off' => 'off',
+        //时间间隔
+        'min' => 'every few minutes',
+        'hour' => 'every few hours',
+        'day' => 'every few day',
+        'week' => 'weekly',
+        'month' => 'monthly',
     ],
     //支付相关
     'dict_pay' => [
@@ -269,5 +272,28 @@ return [
         'sms_setting' => 'sms config',
         'sms_notice_records' => 'send log',
         'map_setting' => 'map config',
+    ],
+    'dict_date' => [
+        //week
+        'mon' => 'monday',
+        'tue' => 'tuesday',
+        'wed' => 'wednesday',
+        'thur' => 'thursday',
+        'fri' => 'friday',
+        'sat' => 'saturday',
+        'sun' => 'sunday',
+        //month
+        'jan' => 'january',
+        'feb' => 'february',
+        'mar' => 'march',
+        'apr' => 'april',
+        'may' => 'may',
+        'jun' => 'june',
+        'jul' => 'july',
+        'aug' => 'august',
+        'sept' => 'sept',
+        'oct' => 'october',
+        'nov' => 'november',
+        'dec' => 'december',
     ],
 ];

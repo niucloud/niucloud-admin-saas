@@ -21,10 +21,6 @@ use core\dict\DictLoader;
 class ComponentDict
 {
 
-    /**
-     * 获取组件
-     * @return array|null
-     */
     public static function getComponent()
     {
         $system_components = [
@@ -174,17 +170,34 @@ class ComponentDict
                             ],
                         ]
                     ],
-                    'Article' => [
-                        'title' => '文章',
-                        'icon' => 'iconfont-iconwenzhang',
-                        'path' => 'edit-article',
+                    'RubikCube' => [
+                        'title' => '魔方',
+                        'icon' => 'iconfont-iconmofang1',
+                        'path' => 'edit-rubik-cube',
                         'support_page' => [],
                         'uses' => 0,
                         'sort' => 10004,
                         'value' => [
-                            'sources' => 'initial',
-                            'count' => 8,
-                            'articleIds' => []
+                            "mode" => "row1-of2",
+                            "imageGap" => 0,
+                            "list" => [
+                                [
+                                    "imageUrl" => "",
+                                    "imgWidth" => 0,
+                                    "imgHeight" => 0,
+                                    "link" => [
+                                        "name" => ""
+                                    ]
+                                ],
+                                [
+                                    "imageUrl" => "",
+                                    "imgWidth" => 0,
+                                    "imgHeight" => 0,
+                                    "link" => [
+                                        "name" => ""
+                                    ]
+                                ]
+                            ]
                         ],
                     ],
                     'HorzBlank' => [
@@ -198,13 +211,40 @@ class ComponentDict
                             'height' => 20
                         ],
                     ],
+                    'HotArea' => [
+                        'title' => '热区',
+                        'icon' => 'iconfont-iconrequ',
+                        'path' => 'edit-hot-area',
+                        'support_page' => [],
+                        'uses' => 0,
+                        'sort' => 10006,
+                        'value' => [
+                            "imageUrl" => "",
+                            "imgWidth" => 0,
+                            "imgHeight" => 0,
+                            "heatMapData" => []
+                        ],
+                    ],
+                    'Article' => [
+                        'title' => '文章',
+                        'icon' => 'iconfont-iconwenzhang',
+                        'path' => 'edit-article',
+                        'support_page' => [],
+                        'uses' => 0,
+                        'sort' => 10007,
+                        'value' => [
+                            'sources' => 'initial',
+                            'count' => 8,
+                            'articleIds' => []
+                        ],
+                    ],
                     'MemberInfo' => [
                         'title' => '会员信息',
                         'icon' => 'iconfont-iconhuiyuanzhongxin',
                         'path' => 'edit-member-info',
                         'support_page' => [ 'DIY_MEMBER_INDEX' ],
                         'uses' => 1,
-                        'sort' => 10006,
+                        'sort' => 10008,
                         'value' => [
                             "style" => "style-1",
                             "styleName" => "风格1",

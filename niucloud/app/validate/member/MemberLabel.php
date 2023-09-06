@@ -22,22 +22,22 @@ class MemberLabel extends Validate
 {
 
 
-    protected $rule =   [
-        'label_name'  => 'require|max:30',
-        'memo'  => 'max:200',
-        'sort'  => 'number',
+    protected $rule = [
+        'label_name' => 'require|max:30',
+        'memo' => 'max:200',
+        'sort' => 'number',
 
     ];
 
-    protected $message  =   [
+    protected $message = [
         'label_name.require' => 'validate_member.label_name_require',
-        'label_name.max'     => 'validate_member.label_name_max',
-        'memo.max'     => 'validate_member.memo_max',
-        'sort.number'     => 'validate_member.sort_number',
+        'label_name.max' => 'validate_member.label_name_max',
+        'memo.max' => 'validate_member.memo_max',
+        'sort.number' => 'validate_member.sort_number',
     ];
 
     protected $scene = [
-        'add'  =>  ['label_name', 'memo', 'sort'],
-        'edit'  =>  ['label_name', 'memo', 'sort'],
+        'add' => ['label_name', 'memo', 'sort'],
+        'edit' => ['label_name', 'memo', 'sort'],
     ];
 }

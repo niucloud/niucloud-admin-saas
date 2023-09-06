@@ -65,8 +65,7 @@ class CoreAgreementService extends BaseCoreService
             ['agreement_key', '=', $key],
             ['site_id', '=', $site_id]
         );
-        $agreement = $this->model->where($where)->findOrEmpty();
-        return $agreement;
+        return $this->model->where($where)->findOrEmpty();
     }
     /**
      * 设置协议

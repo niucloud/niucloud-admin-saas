@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center">
-                <span class="text-[24px]">{{pageName}}</span>
+                <span class="text-[20px]">{{pageName}}</span>
             </div>
             <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="userTableData.searchParam" ref="searchFormRef">
@@ -78,6 +78,7 @@ import { img } from '@/utils/common'
 import type { FormInstance } from 'element-plus'
 import userInfo from '@/views/site/components/user-info.vue'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title;
 

@@ -54,14 +54,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, computed } from 'vue'
-import { bind } from '@/api/auth'
-import { bindMobile } from '@/api/member'
-import useMemberStore from '@/stores/member'
+import { ref, reactive } from 'vue'
 import { getArticleCategory,getArticleList } from '@/api/article'
-import { FormInstance } from 'element-plus'
 import { ArrowRight } from '@element-plus/icons-vue'
-import type { TabsPaneContext } from 'element-plus'
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -78,10 +73,6 @@ const articleTableData = reactive({
         category_id:''
     }
 })
-
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event)
-}
 
 /**
  * 获取文章列表

@@ -2,7 +2,7 @@
 	<div class="main-container attachment-container" v-if="systemService">
 		<el-card class="box-card !border-none" shadow="never">
 			<div class="flex justify-between items-center">
-				<span class="text-[24px]">{{ pageName }}</span>
+				<span class="text-[20px]">{{ pageName }}</span>
 			</div>
 			<div class="bg-[#fff] pb-[20px] mb-3">
 				<p class="pt-[20px] pb-[10px] text-sm">{{ t('serverInformation') }}</p>
@@ -71,6 +71,7 @@ import { ref, reactive } from 'vue'
 import { t } from '@/lang'
 import { getSystem } from '@/api/tools'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title
 

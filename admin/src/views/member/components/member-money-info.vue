@@ -4,17 +4,14 @@
  
             <el-form-item :label="t('headimg')" >
                 <div class="flex items-center">
-
                     <img class="w-[50px] h-[50px] mr-[10px]" v-if="formData.headimg" :src="img(formData.headimg)" alt="" >
                     <img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/assets/images/default_headimg.png" alt="" >
-
                 </div>
             </el-form-item>
 
             <el-form-item :label="t('nickName')" >
                 <div class="input-width"> {{ formData.nickname }} </div>
             </el-form-item>
-
 
             <el-form-item :label="t('mobile')" >
                 <div class="input-width"> {{ formData.mobile }} </div>

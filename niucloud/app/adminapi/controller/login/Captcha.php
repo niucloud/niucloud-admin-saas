@@ -23,7 +23,8 @@ class Captcha extends BaseAdminController
      * 创建验证码
      * @return Response
      */
-    public function create(){
+    public function create()
+    {
         return success((new CaptchaService())->create());
     }
 
@@ -31,7 +32,8 @@ class Captcha extends BaseAdminController
      * 一次校验验证码
      * @return Response
      */
-    public function check(){
+    public function check()
+    {
         return success((new CaptchaService())->check());
     }
 
@@ -39,7 +41,8 @@ class Captcha extends BaseAdminController
      * 二次校验验证码
      * @return Response
      */
-    public function verification(){
+    public function verification()
+    {
         return success((new CaptchaService())->verification());
     }
 

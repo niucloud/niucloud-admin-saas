@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center">
-                <span class="text-[24px]">{{pageName}}</span>
+                <span class="text-[20px]">{{pageName}}</span>
                 <el-button type="primary" class="w-[100px]" @click="addEvent">{{ t('addCode') }}</el-button>
             </div>
 
@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getGenerateTableList, deleteGenerateTable,generateCreate} from '@/api/tools'
 import { img } from '@/utils/common'
@@ -73,6 +73,7 @@ import { ElMessageBox } from 'element-plus'
 import AddTable from '@/views/tools/code/components/add-table.vue'
 import type { FormInstance } from 'element-plus'
 import { useRouter,useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title;
 

@@ -18,7 +18,9 @@ use app\service\admin\auth\LoginService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
 use Exception;
+use think\db\exception\DbException;
 use think\facade\Db;
+use think\Model;
 
 /**
  * 用户服务层
@@ -36,7 +38,7 @@ class UserService extends BaseAdminService
     /**
      * 用户列表
      * @param array $where
-     * @return mixed
+     * @return array
      */
     public function getPage(array $where)
     {
@@ -54,17 +56,14 @@ class UserService extends BaseAdminService
             ['uid', '=', $uid],
         );
         $field = 'uid, username, head_img, real_name, last_ip, last_time, create_time, login_count, status, delete_time, update_time';
-        $user = $this->model->where($where)->field($field)->findOrEmpty();
-        if($user->isEmpty()){
-            return [];
-        }
-        return $user->append(['status_name'])->toArray();
+        $user = $this->model->where($where)->field($field)->append(['status_name'])->findOrEmpty();
+        return $user->toArray();
     }
 
     /**
      * 获取用户列表（用于平台整体用户管理）
      * @param array $where
-     * @return mixed
+     * @return array
      */
     public function getUserAdminPage(array $where)
     {
@@ -76,18 +75,18 @@ class UserService extends BaseAdminService
         return $this->pageQuery($search_model);
 
     }
+
     /**
      * 获取用户列表（用于平台整体用户管理）
-     * @param array $where
-     * @return mixed
+     * @param int $uid
+     * @return array
      */
     public function getUserAdminInfo(int $uid)
     {
         $field = 'uid, username, head_img, real_name, last_ip, last_time, create_time, login_count, status, delete_time, update_time';
-        $res = $this->model->where([['uid', '=', $uid]])->field($field)->with(['roles' => function($query) {
+        return $this->model->where([['uid', '=', $uid]])->field($field)->with(['roles' => function($query) {
             $query->field('uid, site_id, is_admin')->with('siteInfo');
         }])->findOrEmpty()->toArray();
-        return $res;
 
     }
 
@@ -106,8 +105,7 @@ class UserService extends BaseAdminService
             'password' => create_password($data['password'])
         ];
         $user = $this->model->create($user_data);
-        $uid = $user?->uid;
-        return $uid;
+        return $user?->uid;
     }
 
     /**
@@ -163,7 +161,7 @@ class UserService extends BaseAdminService
      * 检测用户名是否重复
      * @param $username
      * @return bool
-     * @throws \think\db\exception\DbException
+     * @throws DbException
      */
     public function checkUsername($username)
     {
@@ -178,7 +176,7 @@ class UserService extends BaseAdminService
     /**
      * 用户模型对象
      * @param int $uid
-     * @return SysUser|array|mixed|\think\Model
+     * @return SysUser|array|mixed|Model
      */
     public function find(int $uid){
 
@@ -231,7 +229,7 @@ class UserService extends BaseAdminService
     /**
      * 删除
      * @param int $uid
-     * @return mixed
+     * @return true
      */
     public function del(int $uid){
         $where = [
@@ -245,10 +243,10 @@ class UserService extends BaseAdminService
     /**
      * 通过账号获取管理员信息
      * @param string $username
-     * @return SysUser|array|mixed|\think\Model
+     * @return SysUser|array|mixed|Model
      */
     public function getUserInfoByUsername(string $username){
-        return $this->model->withSearch(['username'], ['username' => $username])->findOrEmpty();
+        return $this->model->where([['username', '=',$username]])->findOrEmpty();
     }
 
 }

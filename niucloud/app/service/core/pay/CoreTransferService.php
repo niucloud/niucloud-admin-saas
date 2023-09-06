@@ -16,7 +16,10 @@ use app\model\pay\Pay;
 use app\model\pay\Transfer;
 use core\base\BaseCoreService;
 use core\exception\PayException;
+use Exception;
 use think\facade\Db;
+use think\Model;
+use Throwable;
 
 /**
  * 支付转账服务层
@@ -35,16 +38,17 @@ class CoreTransferService extends BaseCoreService
 
     /**
      * 创建转账单据
-     * @param $site_id
+     * @param int $site_id
      * @param string $main_type
      * @param int $main_id
      * @param float $money
      * @param string $trade_type
-     * @param array $data
+     * @param string $remark
      * @return string|null
+     * @throws Exception
      */
     public function create(int $site_id, string $main_type, int $main_id, float $money, string $trade_type, string $remark){
-        $transfer_no = create_no('pay', $main_id);
+        $transfer_no = create_no();
         $transfer_data = array(
             'site_id' => $site_id,
             'money' => $money,
@@ -64,6 +68,7 @@ class CoreTransferService extends BaseCoreService
      * 转账
      * @param int $site_id
      * @param string $transfer_no
+     * @param string $transfer_type
      * @param array $data
      * @return true
      */
@@ -100,7 +105,7 @@ class CoreTransferService extends BaseCoreService
                 //将返回的数据交给转账通知
                 $this->transferNotify($site_id, $transfer_no, $result);
                 return true;
-            }catch(\Throwable $e){
+            }catch( Throwable $e){
                 $this->fail($site_id, $transfer_no, $transfer_type, ['reason' => get_lang($e->getMessage())]);
                 throw new PayException($e->getMessage());
             }
@@ -112,7 +117,7 @@ class CoreTransferService extends BaseCoreService
      * 通过转账单号查询转账
      * @param int $site_id
      * @param string $transfer_no
-     * @return Pay|array|mixed|\think\Model
+     * @return Pay|array|mixed|Model
      */
     public function findTransferByTransferNo(int $site_id, string $transfer_no){
         $where = array(
@@ -174,7 +179,7 @@ class CoreTransferService extends BaseCoreService
             // 提交事务
             Db::commit();
             return true;
-        } catch (\Throwable $e) {
+        } catch ( Throwable $e) {
             // 回滚事务
             Db::rollback();
             throw new PayException($e->getMessage());
@@ -211,12 +216,12 @@ class CoreTransferService extends BaseCoreService
     public function check(int $site_id, array $data){
         $transfer_no = $data['transfer_no'];
         $transfer = $this->findTransferByTransferNo($site_id, $transfer_no);
-        if($transfer->isEmpty()) throw new PayException('');
-        if(!in_array($transfer['status'], [TransferDict::DEALING, TransferDict::WAIT]) )  throw new PayException('');//只有待转账和转账中的订单可以校验
+        if($transfer->isEmpty()) throw new PayException('TRANSFER_ORDER_INVALID');
+        if(!in_array($transfer['status'], [TransferDict::DEALING, TransferDict::WAIT]) )  throw new PayException('TRANFER_IS_CHANGE');//只有待转账和转账中的订单可以校验
 
         //查询第三方支付单据
         $transfer_info = $this->pay_event->init($site_id, $transfer->channel, $transfer->type)->getTransfer($transfer_no);
-        if(empty($transfer_info)) throw new PayException();//查询不到转账信息
+        if(empty($transfer_info)) throw new PayException('TRANSFER_ORDER_INVALID');//查询不到转账信息
         $status = $transfer_info['status'];
         switch($status){
             case TransferDict::SUCCESS:

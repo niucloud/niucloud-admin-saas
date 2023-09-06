@@ -21,7 +21,8 @@ class Config extends BaseAdminController
      * 获取微信小程序配置信息
      * @return Response
      */
-    public function get(){
+    public function get()
+    {
         return success((new WeappConfigService())->getWeappConfig());
     }
 
@@ -29,7 +30,8 @@ class Config extends BaseAdminController
      * 设置微信小程序配置信息
      * @return Response
      */
-    public function set(){
+    public function set()
+    {
         $data = $this->request->params([
             ['weapp_name', ''],
             ['weapp_original', ''],

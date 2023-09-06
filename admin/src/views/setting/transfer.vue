@@ -9,7 +9,7 @@
             </template>
         </el-alert>
         <div class="flex ml-[18px] justify-between items-center mt-[20px]">
-			<span class="text-[24px]">{{pageName}}</span>
+			<span class="text-[20px]">{{pageName}}</span>
 		</div>
         <el-form :model="formData" label-width="200px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
@@ -86,8 +86,9 @@ import { reactive, ref, computed } from 'vue'
 import { t } from '@/lang'
 import { getTransferInfo, setTransferInfo } from '@/api/sys'
 import { useClipboard } from '@vueuse/core'
-import { ElMessage, FormInstance, FormRules } from 'element-plus'
+import { FormInstance, FormRules } from 'element-plus'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title
 

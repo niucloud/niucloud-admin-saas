@@ -21,7 +21,7 @@ class OrderClose extends BaseJob
 {
     public function doJob()
     {
-        Log::write('订单关闭计划任务'.date('Y-m-d h:i:s'));
+        Log::write('订单关闭计划任务' . date('Y-m-d h:i:s'));
         return true;
     }
 }

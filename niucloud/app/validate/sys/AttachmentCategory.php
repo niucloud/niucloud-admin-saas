@@ -12,6 +12,7 @@
 namespace app\validate\sys;
 
 use app\dict\sys\FileDict;
+use think\facade\Lang;
 use think\Validate;
 
 /**
@@ -42,7 +43,7 @@ class AttachmentCategory extends Validate
      * @param $value
      * @param $rule
      * @param array $data
-     * @return bool|string
+     * @return Lang|true
      */
     protected function checkMenuType($value, $rule, $data = [])
     {

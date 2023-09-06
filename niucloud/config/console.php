@@ -11,6 +11,5 @@ return [
         'queue:listen' => 'think\queue\command\Listen',
         'addon:install' => 'app\command\Addon\Install',
         'addon:uninstall' => 'app\command\Addon\Uninstall',
-        'schedule:run'=> 'app\command\Schedule',
     ],
 ];

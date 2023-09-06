@@ -20,6 +20,9 @@ use app\service\api\member\MemberService;
 use app\service\core\member\CoreMemberService;
 use core\base\BaseApiService;
 use core\exception\AuthException;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 
 /**
  * 登录服务层
@@ -37,7 +40,14 @@ class RegisterService extends BaseApiService
 
     /**
      * 会员公共注册
+     * @param string $mobile
      * @param $data
+     * @param string $type
+     * @param bool $is_verify_mobile
+     * @return array
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function register(string $mobile, $data, string $type, bool $is_verify_mobile = true)
     {
@@ -73,8 +83,7 @@ class RegisterService extends BaseApiService
         }
         $member_info = $member_service->findMemberInfo([ 'member_id' => $member_id, 'site_id' => $this->site_id ]);
         if ($member_info->isEmpty()) throw new AuthException('MEMBER_NOT_EXIST');//账号已存在
-        $result = ( new LoginService() )->login($member_info, $type);
-        return $result;
+        return ( new LoginService() )->login($member_info, $type);
     }
 
     /**
@@ -87,7 +96,7 @@ class RegisterService extends BaseApiService
         $chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $username = '';
         for ($i = 0; $i < 6; $i++) {
-            $username .= $chars[ mt_rand(0, strlen($chars)) ];
+            $username .= $chars[ random_int(0, strlen($chars)) ];
         }
 
         return $microtime . strtoupper(base_convert(time() - 1420070400, 10, 36)) . $username;
@@ -98,7 +107,8 @@ class RegisterService extends BaseApiService
      * 账号注册
      * @param string $username
      * @param string $password
-     * @return void
+     * @param $mobile
+     * @return array
      */
     public function account(string $username, string $password, $mobile)
     {
@@ -119,14 +129,13 @@ class RegisterService extends BaseApiService
             'username' => $username,
             'password' => $password_hash,
         );
-        $result = $this->register($mobile, $data, MemberRegisterTypeDict::USERNAME);
-        return $result;
+        return $this->register($mobile, $data, MemberRegisterTypeDict::USERNAME);
     }
 
     /**
      * 手机号注册
      * @param $mobile
-     * @return Member|array|mixed|\think\Model
+     * @return array
      */
     public function mobile($mobile)
     {
@@ -142,8 +151,7 @@ class RegisterService extends BaseApiService
         $data = array (
             'mobile' => $mobile,
         );
-        $result = $this->register($mobile, $data, MemberRegisterTypeDict::MOBILE);
-        return $result;
+        return $this->register($mobile, $data, MemberRegisterTypeDict::MOBILE);
     }
 
     /**

@@ -36,6 +36,7 @@ class Notice extends BaseAdminController
         $res = (new NoticeService())->getInfo($key);
         return success($res);
     }
+
     /**
      * 消息启动与关闭
      * @return Response
@@ -79,13 +80,12 @@ class Notice extends BaseAdminController
     {
         //参数获取
         $sms_type_list = SmsDict::getType();
-        if(!array_key_exists($sms_type, $sms_type_list)) throw new AdminException('SMS_TYPE_NOT_EXIST');
+        if (!array_key_exists($sms_type, $sms_type_list)) throw new AdminException('SMS_TYPE_NOT_EXIST');
         //数据验证
         $data = [
             ['is_use', 0]
         ];
-        foreach ($sms_type_list[$sms_type]['params'] as $k_param => $v_param)
-        {
+        foreach ($sms_type_list[$sms_type]['params'] as $k_param => $v_param) {
             $data[] = [$k_param, ''];
         }
 

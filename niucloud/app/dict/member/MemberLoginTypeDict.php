@@ -19,22 +19,23 @@ namespace app\dict\member;
 class MemberLoginTypeDict
 {
     //用户名密码注册登录
-    const USERNAME   = 'username';
+    public const USERNAME = 'username';
     //手机验证码登录
-    const MOBILE  = 'mobile';
+    public const MOBILE = 'mobile';
     //微信公众号授权登录
-    const WECHAT      = 'wechat';
+    public const WECHAT = 'wechat';
     //微信小程序授权登录
-    const WEAPP      =  'weapp';
+    public const WEAPP = 'weapp';
 
-    public static function getType($type = ''){
+    public static function getType($type = '')
+    {
         $data = [
-            self::USERNAME    => get_lang('dict_member.login_username'),//用户名密码登录
-            self::MOBILE     => get_lang('dict_member.login_mobile'),//手机号验证码登录,
-            self::WECHAT            => get_lang('dict_member.login_wechat'),//'微信公众号授权登录',
-            self::WEAPP            => get_lang('dict_member.login_weapp'),//'微信小程序授权登录',
+            self::USERNAME => get_lang('dict_member.login_username'),//用户名密码登录
+            self::MOBILE => get_lang('dict_member.login_mobile'),//手机号验证码登录,
+            self::WECHAT => get_lang('dict_member.login_wechat'),//'微信公众号授权登录',
+            self::WEAPP => get_lang('dict_member.login_weapp'),//'微信小程序授权登录',
         ];
-        if(empty($type)){
+        if (empty($type)) {
             return $data;
         }
         return $data[$type] ?? '';

@@ -17,7 +17,6 @@ use app\dict\sys\MethodDict;
 use app\service\admin\install\InstallSystemService;
 use app\service\admin\sys\MenuService;
 use core\base\BaseAdminController;
-use think\Exception;
 use think\Response;
 
 class Menu extends BaseAdminController
@@ -27,17 +26,19 @@ class Menu extends BaseAdminController
      * 菜单列表(todo  限制只有平台端可以访问)
      * @return Response
      */
-    public function lists($app_type){
+    public function lists($app_type)
+    {
 
         return success((new MenuService())->getAllMenuList($app_type, 'all', 1));
     }
 
     /**
      * 菜单信息
-     * @param $id
+     * @param $menu_key
      * @return Response
      */
-    public function info($menu_key){
+    public function info($menu_key)
+    {
         return success((new MenuService())->get($menu_key));
     }
 
@@ -45,7 +46,8 @@ class Menu extends BaseAdminController
      * 新增菜单接口
      * @return Response
      */
-    public function add(){
+    public function add()
+    {
         $data = $this->request->params([
             ['menu_name', ''],
             ['menu_type', 0],
@@ -71,7 +73,8 @@ class Menu extends BaseAdminController
     /**
      * 菜单或接口更新
      */
-    public function edit($menu_key){
+    public function edit($menu_key)
+    {
         $data = $this->request->params([
             ['menu_name', ''],
             ['parent_key', ''],
@@ -98,7 +101,8 @@ class Menu extends BaseAdminController
      * 获取菜单类型静态资源
      * @return Response
      */
-    public function getMenuType(){
+    public function getMenuType()
+    {
         return success(MenuTypeDict::getMenuType());
     }
 
@@ -106,7 +110,8 @@ class Menu extends BaseAdminController
      * 获取请求方式
      * @return Response
      */
-    public function getMethodType(){
+    public function getMethodType()
+    {
         return success(MethodDict::getMethodType());
     }
 
@@ -114,14 +119,15 @@ class Menu extends BaseAdminController
      * 删除菜单
      * @param $menu_key
      * @return Response
-     * @throws Exception
      */
-    public function del($menu_key){
+    public function del($menu_key)
+    {
         (new MenuService())->del($menu_key);
         return success('DELETE_SUCCESS');
     }
 
-    public function refreshMenu(){
+    public function refreshMenu()
+    {
         (new InstallSystemService())->install();
         return success('REFRESH_SUCCESS');
     }

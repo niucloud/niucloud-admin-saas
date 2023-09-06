@@ -1,7 +1,6 @@
 <template>
     <el-dialog v-model="showDialog" :title="t('tencentSms')" width="580px" :destroy-on-close="true">
-        <el-form :model="formData" label-width="140px" ref="formRef" :rules="formRules" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="140px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-form-item :label="t('isUse')">
                 <el-radio-group v-model="formData.is_use">
                     <el-radio :label="1">{{ t('startUsing') }}</el-radio>

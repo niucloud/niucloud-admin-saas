@@ -47,6 +47,7 @@ class Article extends BaseApiController
     /**
      * 文章详情
      * @param int $id
+     * @return Response
      */
     public function info(int $id){
         return success((new ArticleService())->getInfo($id));

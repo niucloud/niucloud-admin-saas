@@ -73,7 +73,6 @@
     import {cloneDeep} from 'lodash-es'
     import {getLink} from '@/api/diy';
     import {ElMessage} from 'element-plus'
-import { CollectionTag } from '@element-plus/icons-vue';
 
     const prop = defineProps({
         modelValue: {

@@ -34,6 +34,8 @@ Route::group(function () {
     Route::post('addon/install/execute/:addon', 'addon.Addon/execute');
     //插件安装状态
     Route::get('addon/install/:addon/status/:key', 'addon.Addon/getInstallState');
+    //下载插件
+    Route::post('addon/download/:addon', 'addon.Addon/download');
 
     //卸载插件
     Route::post('addon/uninstall/:addon', 'addon.Addon/uninstall');
@@ -41,6 +43,8 @@ Route::group(function () {
     Route::post('addon/edit/:addon', 'addon.Addon/edit');
     //应用列表(...)
     Route::get('app/list', 'addon.App/getAppList');
+
+
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,

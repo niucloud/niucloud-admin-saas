@@ -27,10 +27,11 @@ class MemberDict extends ChannelDict
      * 会员状态
      * @return array
      */
-    public static function getStatus(){
+    public static function getStatus()
+    {
         return [
             self::ON => get_lang('dict_member.status_on'),//正常
-            self::OFF  => get_lang('dict_member.status_off'),//无效
+            self::OFF => get_lang('dict_member.status_off'),//无效
         ];
     }
 }

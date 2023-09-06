@@ -20,8 +20,11 @@ use app\model\member\MemberCashOut;
 use app\service\core\pay\CoreTransferService;
 use core\base\BaseCoreService;
 use core\exception\CommonException;
+use Exception;
 use think\facade\Cache;
 use think\facade\Db;
+use think\Model;
+use Throwable;
 
 /**
  * 会员提现
@@ -41,7 +44,7 @@ class CoreMemberCashOutService extends BaseCoreService
      * 获取对象
      * @param int $site_id
      * @param int $id
-     * @return MemberCashOut|array|mixed|\think\Model
+     * @return MemberCashOut|array|mixed|Model
      */
     public function find(int $site_id, int $id){
         return $this->model->where([
@@ -51,9 +54,11 @@ class CoreMemberCashOutService extends BaseCoreService
     }
 
     /**
+     * @param int $site_id
      * @param int $id
-     * @param $data
-     * @return void
+     * @param string $action
+     * @param array $data
+     * @return true
      */
     public function audit(int $site_id, int $id, string $action, $data = []){
 
@@ -73,8 +78,9 @@ class CoreMemberCashOutService extends BaseCoreService
 
     /**
      * 审核通过
+     * @param int $site_id
      * @param MemberCashOut $cash_out
-     * @param $data
+     * @param array $data
      * @return true
      */
     public function agree(int $site_id, MemberCashOut $cash_out, array $data = []){
@@ -86,7 +92,7 @@ class CoreMemberCashOutService extends BaseCoreService
         if($config['is_auto_transfer']){
             try {
                 $this->transfer($site_id, $cash_out['id']);
-            } catch (\Throwable $e) {
+            } catch ( Throwable $e) {
 
             }
         }
@@ -95,8 +101,9 @@ class CoreMemberCashOutService extends BaseCoreService
 
     /**
      * 拒绝
+     * @param int $site_id
      * @param MemberCashOut $cash_out
-     * @param $data
+     * @param array $data
      * @return true
      */
     public function refuse(int $site_id, MemberCashOut $cash_out, array $data){
@@ -157,7 +164,7 @@ class CoreMemberCashOutService extends BaseCoreService
      * 提现转账完成
      * @param $site_id
      * @param $transfer_no
-     * @return void
+     * @return true
      */
     public function transferFinish($site_id, $transfer_no){
         $cash_out = $this->model->where(
@@ -169,16 +176,21 @@ class CoreMemberCashOutService extends BaseCoreService
 
         if($cash_out->isEmpty()) throw new CommonException('RECHARGE_LOG_NOT_EXIST');
         if($cash_out['status'] != MemberCashOutDict::WAIT_TRANSFER) throw new CommonException('CASHOUT_STATUS_NOT_IN_WAIT_TRANSFER');
+        //减去提现中金额
+        $this->give($site_id, $cash_out);
         $cash_out->save([
             'status' => MemberCashOutDict::TRANSFERED,
             'transfer_time' => time()
         ]);
+
         return true;
     }
 
     /**
      * 申请提现
-     * @param $data
+     * @param int $site_id
+     * @param int $member_id
+     * @param array $data
      * @return true
      */
     public function apply(int $site_id, int $member_id, array $data){
@@ -239,7 +251,7 @@ class CoreMemberCashOutService extends BaseCoreService
                 $core_member_cash_out_service->audit($site_id, $cash_out->id, 'agree');
             }
             Db::commit();
-        }catch ( \Exception $e) {
+        }catch ( Exception $e) {
             Db::rollback();
             throw new CommonException($e->getMessage());
         }
@@ -278,6 +290,24 @@ class CoreMemberCashOutService extends BaseCoreService
         );
         return true;
     }
+
+    /**
+     * 累加提现金额,累减提现中金额
+     * @param int $site_id
+     * @param MemberCashOut $cash_out
+     * @return true
+     */
+    public function give(int $site_id, MemberCashOut $cash_out){
+        $core_member_service = new CoreMemberService();
+        $member = $core_member_service->find($site_id, $cash_out->member_id);
+        if($member->isEmpty()) throw new CommonException('MEMBER_NOT_EXIST');
+        $member->save(
+            [
+                $cash_out->account_type.'_cash_outing' => $member[$cash_out->account_type.'_cash_outing'] - $cash_out->apply_money
+            ]
+        );
+        return true;
+    }
     /**
      * 创建订单编号
      * @param int $site_id
@@ -291,7 +321,7 @@ class CoreMemberCashOutService extends BaseCoreService
         if (!isset($max_no) || empty($max_no)) {
             $max_no = 1;
         } else {
-            $max_no = $max_no + 1;
+            ++$max_no;
         }
         $cash_out_no = $time_str . $site_id . sprintf('%03d', $max_no);
         Cache::set("cash_out_no_" . $site_id . "_" . $time_str, $max_no);

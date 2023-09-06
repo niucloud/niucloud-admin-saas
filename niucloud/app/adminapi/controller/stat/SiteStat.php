@@ -13,6 +13,7 @@ namespace app\adminapi\controller\stat;
 
 use app\service\admin\stat\SiteStatService;
 use core\base\BaseAdminController;
+use think\Response;
 
 /**
  * 统计数据
@@ -23,7 +24,7 @@ class SiteStat extends BaseAdminController
 {
     /**
      * 首页数据
-     * @return \think\Response
+     * @return Response
      */
     public function index()
     {

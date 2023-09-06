@@ -28,7 +28,6 @@ class CaptchaService extends BaseAdminService
 
     /**
      * 创建验证码
-     * @param array|null $data
      * @return array|null
      */
     public function create(){

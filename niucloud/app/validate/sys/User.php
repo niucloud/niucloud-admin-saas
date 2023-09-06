@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 
 namespace app\validate\sys;
+
 use think\Validate;
 
 /**
@@ -20,23 +21,23 @@ class User extends Validate
 {
 
     //用户名或密码的规范可能是从数据库中获取的
-    protected $rule =   [
-        'username'  => 'require|unique:sys_user',
-        'real_name'   => 'requireWithout:field|requireIf:field,real_name',
+    protected $rule = [
+        'username' => 'require|unique:sys_user',
+        'real_name' => 'requireWithout:field|requireIf:field,real_name',
         'password' => 'require',
     ];
 
-    protected $message  =   [
+    protected $message = [
         'username.require' => 'validate_user.username_require',
         'username.unique' => 'validate_user.username_unique',
-        'username.max'     => 'validate_user.username_max',
-        'real_name.requireWithout'   => 'validate_user.real_name_require',
-        'real_name.requireIf'   => 'validate_user.real_name_require',
-        'password.require'  => 'validate_user.password_require',
+        'username.max' => 'validate_user.username_max',
+        'real_name.requireWithout' => 'validate_user.real_name_require',
+        'real_name.requireIf' => 'validate_user.real_name_require',
+        'password.require' => 'validate_user.password_require',
     ];
 
     protected $scene = [
-        'add'  =>  ['username','password'],
+        'add' => ['username', 'password'],
         'edit' => [],
         'modify' => []
     ];

@@ -2,16 +2,16 @@ import request from '@/utils/request'
 
 /**
  * 登录
- * @param params 
- * @returns 
+ * @param params
+ * @param app_type
  */
 export function login(params: Record<string, any>, app_type: string) {
-    return request.get(`login/${app_type}`, { params })
+    return request.get(`login/${app_type}`, {params})
 }
 
 /**
  * 获取登录用户权限
- * @returns 
+ * @returns
  */
 export function getAuthMenus() {
     return request.get('auth/authmenu')
@@ -19,7 +19,7 @@ export function getAuthMenus() {
 
 /**
  * 获取登录用户权限
- * @returns 
+ * @returns
  */
 export function getSiteInfo() {
     return request.get('auth/site')
@@ -27,7 +27,7 @@ export function getSiteInfo() {
 
 /**
  * 获取登录配置信息
- * @returns 
+ * @returns
  */
 export function getLoginConfig() {
     return request.get('login/config')

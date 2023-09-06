@@ -3,8 +3,7 @@
         <side class="hidden-xs-only" />
     </el-aside>
 
-    <el-drawer v-model="systemStore.menuDrawer" direction="ltr" :with-header="false" custom-class="aside-drawer"
-        size="210px">
+    <el-drawer v-model="systemStore.menuDrawer" direction="ltr" :with-header="false" custom-class="aside-drawer" size="210px">
         <template #default>
             <side />
         </template>

@@ -1,5 +1,5 @@
 <template>
-	<u-popup :show="show" :round="10" @close="handleClose" :closeable="true" bgColor="#fff"
+	<u-popup :show="show" :round="10" @close="handleClose" :closeable="true" bgColor="#fff" zIndex="10081"
 		:closeOnClickOverlay="false">
 		<view class="flex flex-col h-[75vh]" v-if="payInfo">
 			<view class="head">
@@ -63,7 +63,8 @@
 		loading.value = true
 
 		pay({
-			out_trade_no: payInfo.value?.out_trade_no,
+			trade_type: payInfo.value?.trade_type,
+            trade_id: payInfo.value?.trade_id,
 			type: type.value
 		}).then(res => {
 			switch (type.value) {
@@ -73,7 +74,7 @@
 						provider: 'wxpay',
 						...res.data,
 						success: (res) => {
-							redirect({ url: '/pages/pay/result', param: { code: payInfo.value?.out_trade_no }, mode: 'redirectTo' })
+                            toPayResult()
 						},
 						fail: (res) => {
 							loading.value = false
@@ -87,32 +88,30 @@
 						wechat.pay({
 							...res.data,
 							success: () => {
-								redirect({ url: '/pages/pay/result', param: { code: payInfo.value?.out_trade_no }, mode: 'redirectTo' })
+                                toPayResult()
 							},
 							cancel: () => {
 								loading.value = false
 							}
 						})
 					} else {
-						uni.setStorageSync('paymenting', payInfo.value?.out_trade_no)
+						uni.setStorageSync('paymenting', { trade_type: payInfo.value?.trade_type, trade_id: payInfo.value?.trade_id })
 						location.href = res.data.h5_url
-						addListenerPayBack()
 					}
 					// #endif
 					break;
 				case 'alipay':
 					// #ifdef H5
 					if (isWeixinBrowser()) {
-						redirect({ url: '/pages/pay/browser', param: { code: payInfo.value?.out_trade_no, alipay: encodeURIComponent(res.data.url) }, mode: 'redirectTo' })
+						redirect({ url: '/pages/pay/browser', param: { trade_type: payInfo.value?.trade_type, trade_id: payInfo.value?.trade_id, alipay: encodeURIComponent(res.data.url) }, mode: 'redirectTo' })
 					} else {
-						uni.setStorageSync('paymenting', payInfo.value?.out_trade_no)
+						uni.setStorageSync('paymenting', { trade_type: payInfo.value?.trade_type, trade_id: payInfo.value?.trade_id })
 						location.href = res.data.url
-						addListenerPayBack()
 					}
 					// #endif
 					break;
 				default:
-					redirect({ url: '/pages/pay/result', param: { code: payInfo.value?.out_trade_no }, mode: 'redirectTo' })
+                    toPayResult()
 			}
 		}).catch(() => {
 			loading.value = false
@@ -123,10 +122,14 @@
 	 * 检测是否是支付后返回
 	 */
 	uni.$on('checkIsReturnAfterPayment', () => {
+        const data = uni.getStorageSync('paymenting')
 		if (uni.getStorageSync('paymenting')) {
 			redirect({
 				url: '/pages/pay/result',
-				param: { code: uni.getStorageSync('paymenting') },
+				param: { 
+                    trade_type: data.trade_type, 
+                    trade_id: data.trade_id
+                },
 				mode: 'redirectTo',
 				success() {
 					uni.removeStorageSync('paymenting')
@@ -135,28 +138,36 @@
 		}
 	})
 
-	const open = (outTradeNo : string) => {
-		getPayInfo(outTradeNo)
+	const open = (tradeType : string, tradeId : number, payReturn: string = '') => {
+        // 设置支付后跳转页面
+        uni.setStorageSync('payReturn', encodeURIComponent(payReturn))
+        
+		getPayInfo(tradeType, tradeId)
 			.then((res : any) => {
 				let { data } = res
+                payInfo.value = data
+                
 				if (uni.$u.test.isEmpty(data)) {
 					uni.showToast({ title: t('pay.notObtainedInfo'), icon: 'none' })
 					return
 				}
 				if (data.money == 0) {
-					redirect({ url: '/pages/pay/result', param: { code: outTradeNo }, mode: 'redirectTo' })
+                    toPayResult()
 					return
 				}
 				if (data.status != 0) {
 					uni.showToast({ title: t('pay.paymentDocuments') + data.status_name, icon: 'none' })
 					return
 				}
-				payInfo.value = data
 				type.value = data.pay_type_list[0] ? data.pay_type_list[0].key : ''
 				show.value = true
 			})
 			.catch(() => { })
 	}
+    
+    const toPayResult = ()=> {
+        redirect({ url: '/pages/pay/result', param: { trade_type: payInfo.value?.trade_type, trade_id: payInfo.value?.trade_id }, mode: 'redirectTo' })
+    }
 
 	const emits = defineEmits(['close'])
 

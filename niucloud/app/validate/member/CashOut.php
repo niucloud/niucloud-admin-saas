@@ -20,22 +20,23 @@ use think\Validate;
  */
 class CashOut extends Validate
 {
-    protected $rule =  [
+    protected $rule = [
         'apply_money' => 'min:0.01',  // 提现金额
         'account_type' => "checkAccountType",
         'transfer_type' => 'checkTransferType',
         'account_id' => 'checkAccountId'
     ];
 
-    protected $message  =   [
+    protected $message = [
         'apply_money.min' => 'validate_member_cash_out.apply_money_min',
     ];
 
     protected $scene = [
-        'apply'  =>  ['apply_money', 'account_type', 'transfer_type', 'account_id'],
+        'apply' => ['apply_money', 'account_type', 'transfer_type', 'account_id'],
     ];
 
-    protected function checkAccountId($value, $rule, $data = []) {
+    protected function checkAccountId($value, $rule, $data = [])
+    {
         if ($data['transfer_type'] == TransferDict::WECHAT) {
             return true;
         } else {
@@ -43,13 +44,14 @@ class CashOut extends Validate
         }
     }
 
-    protected function checkTransferType($value){
-        $transfer_type = array_keys(TransferDict::getTransferType());
-        return in_array($value, $transfer_type) ? true : 'validate_member_cash_out.not_support_transfer_type';
+    protected function checkTransferType($value)
+    {
+        return array_key_exists($value, TransferDict::getTransferType()) ? true : 'validate_member_cash_out.not_support_transfer_type';
     }
 
-    protected function checkAccountType($value) {
-        $account_type = [ MemberAccountTypeDict::MONEY, MemberAccountTypeDict::COMMISSION ];
+    protected function checkAccountType($value)
+    {
+        $account_type = [MemberAccountTypeDict::MONEY, MemberAccountTypeDict::COMMISSION];
         return in_array($value, $account_type) ? true : 'validate_member_cash_out.not_support_account_type';
     }
 }

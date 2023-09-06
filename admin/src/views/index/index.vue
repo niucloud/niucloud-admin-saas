@@ -160,14 +160,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref,onMounted } from 'vue'
+import { reactive, ref } from 'vue'
 import useSystemStore from '@/stores/modules/system'
 import { t } from '@/lang'
 import { getStatInfo } from '@/api/stat'
-import { ElMessage, FormRules } from 'element-plus'
 import * as echarts from 'echarts'
 import { img } from '@/utils/common'
 import { useRouter } from 'vue-router'
+
 const loading = ref(true)
 const visitStat = ref<any>(null)
 const memberStat = ref<any>(null)

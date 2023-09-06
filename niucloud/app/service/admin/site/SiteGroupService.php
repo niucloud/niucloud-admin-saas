@@ -17,6 +17,9 @@ use app\model\sys\SysMenu;
 use app\service\admin\sys\MenuService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\facade\Cache;
 
 /**
@@ -37,19 +40,21 @@ class SiteGroupService extends BaseAdminService
     /**
      * 站点分组列表
      * @param array $where
-     * @return \think\model\relation\HasOne
+     * @return array
      */
     public function getPage(array $where = [])
     {
         $field = 'group_id, group_name, group_desc, group_roles, app_type, create_time, update_time';
         $search_model = $this->model->withSearch(['keywords'],$where)->field($field)->order('create_time desc');
-        $data = $this->pageQuery($search_model);
-        return $data;
+        return $this->pageQuery($search_model);
     }
 
     /**
      * 获取所有分组
      * @return array
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function getAll()
     {
@@ -85,7 +90,7 @@ class SiteGroupService extends BaseAdminService
      * 修改站点分组
      * @param int $group_id
      * @param array $data
-     * @return SiteGroup
+     * @return true
      */
     public function edit(int $group_id, array $data){
         $this->model->update($data, [['group_id', '=', $group_id]]);
@@ -99,6 +104,7 @@ class SiteGroupService extends BaseAdminService
      * 删除分组
      * @param int $group_id
      * @return bool
+     * @throws DbException
      */
     public function del(int $group_id)
     {
@@ -128,9 +134,6 @@ class SiteGroupService extends BaseAdminService
             },
             [MenuService::$cache_tag_name,self::$cache_tag_name]
         );
-//        return Cache::tag([MenuService::$cache_tag_name,self::$cache_tag_name])->remember($cache_name, function () use ($group_id) {
-//            return $this->model->findOrEmpty($group_id)?->group_roles ?? [];
-//        });
     }
 
     /**

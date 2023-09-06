@@ -13,7 +13,9 @@ namespace app\service\admin\sys;
 
 use app\model\sys\SysArea;
 use core\base\BaseAdminService;
-use think\facade\Cache;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 
 /**
  * 地区服务层
@@ -33,6 +35,9 @@ class AreaService extends BaseAdminService
      * 获取地区信息
      * @param int $pid //上级pid
      * @return mixed
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function getListByPid(int $pid = 0)
     {
@@ -41,22 +46,19 @@ class AreaService extends BaseAdminService
         return cache_remember(
             $cache_name,
             function() use($pid) {
-                $list = $this->model->where([['pid', '=', $pid]])->field('id, pid, name, shortname, longitude, latitude, level, sort, status')->select()->toArray();
-                return $list;
+                return $this->model->where([['pid', '=', $pid]])->field('id, pid, name, shortname, longitude, latitude, level, sort, status')->select()->toArray();
             },
             [self::$cache_tag_name]
         );
-//        return Cache::tag([self::$cache_tag_name])->remember($cache_name,  function() use($pid) {
-//            $list = $this->model->where([['pid', '=', $pid]])->field('id, pid, name, shortname, longitude, latitude, level, sort, status')->select()->toArray();
-//            return $list;
-//        });
-
     }
 
     /**
      * 查询地区树列表
      * @param int $level //层级1,2,3
      * @return mixed
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function getAreaTree(int $level = 3)
     {
@@ -65,17 +67,80 @@ class AreaService extends BaseAdminService
             $cache_name,
             function() use($level) {
                 $list = $this->model->where([['level', '<=', $level]])->field('id, pid, name, shortname, longitude, latitude, level, sort, status')->select()->toArray();
-                $tree = list_to_tree($list, 'id', 'pid');
-                return $tree;
+                return list_to_tree($list);
             },
             [self::$cache_tag_name]
         );
-//        return Cache::tag([self::$cache_tag_name])->remember($cache_name,  function() use($level) {
-//            $list = $this->model->where([['level', '<=', $level]])->field('id, pid, name, shortname, longitude, latitude, level, sort, status')->select()->toArray();
-//            $tree = list_to_tree($list, 'id', 'pid');
-//            return $tree;
-//        });
     }
 
+    /**
+     * @param string $address
+     * @return int|mixed
+     * 地址解析
+     */
+    public function getAddress(string $address){
+        $map = (new ConfigService())->getMap();
+        $url = "https://apis.map.qq.com/ws/geocoder/v1/?address=".$address."&key=".$map['key'];
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 1);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+
+        $res = curl_exec($curl);
+        $res = json_decode($res, true);
+        if($res){
+            curl_close($curl);
+            return $res;
+        }else {
+            $error = curl_errno($curl);
+            curl_close($curl);
+            return $error;
+        }
+    }
+
+    /**
+     * @param string $location
+     * @return int|mixed
+     * 逆地址解析
+     */
+    public function getAddressInfo(string $location){
+        $map = (new ConfigService())->getMap();
+        $url = "https://apis.map.qq.com/ws/geocoder/v1/?location=".$location."&key=".$map['key'];
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, 0);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 1);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+
+        $res = curl_exec($curl);
+        $res = json_decode($res, true);
+        if($res){
+            curl_close($curl);
+            return $res;
+        }else {
+            $error = curl_errno($curl);
+            curl_close($curl);
+            return $error;
+        }
+    }
+
+    public function getAreaId($name, $level){
+        $field = 'id';
+        $info = $this->model->field($field)->where([['name', 'like', '%' . $name . '%' ], ['level', '=', $level]])->findOrEmpty()->toArray();
+        return $info['id'];
+    }
+
+    /**
+     * 获取地址名称
+     */
+    public function getAreaName($id){
+        $info = $this->model->field("name")->where([['id', '=', $id ]])->findOrEmpty()->toArray();
+        return $info['name'];
+    }
 
 }

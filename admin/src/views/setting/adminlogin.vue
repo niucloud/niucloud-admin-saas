@@ -1,7 +1,7 @@
 <template>
     <div class="main-container">
         <div class="flex ml-[18px] justify-between items-center mt-[20px]">
-			<span class="text-[24px]">{{pageName}}</span>
+			<span class="text-[20px]">{{pageName}}</span>
 		</div>
 
         <el-form :model="formData" label-width="150px" ref="ruleFormRef" :rules="formRules" class="page-form" v-loading="loading">
@@ -46,20 +46,20 @@
 import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import {  getConfigLogin, setConfigLogin } from '@/api/sys'
-import { ElMessage, FormRules, FormInstance } from 'element-plus'
+import { FormRules, FormInstance } from 'element-plus'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title
 
 const loading = ref(true),
-      ruleFormRef = ref<FormInstance>(),
-      formData = reactive<Record<string, number | string>>({
-        is_captcha: 0,
-        is_site_captcha: 0,
-        bg: '',
-        site_bg: ''
-      });
-
+  ruleFormRef = ref<FormInstance>(),
+  formData = reactive<Record<string, number | string>>({
+    is_captcha: 0,
+    is_site_captcha: 0,
+    bg: '',
+    site_bg: ''
+  });
 
 const getFormData = async (id: number = 0) => {
     const data = await (await getConfigLogin()).data

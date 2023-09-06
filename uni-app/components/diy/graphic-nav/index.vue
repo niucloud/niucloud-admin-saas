@@ -5,7 +5,7 @@
 			{{diyComponent.navTitle}}
 		</div>
 		<view v-if="diyComponent.layout == 'vertical'" class="graphic-nav">
-			<view class="graphic-nav-item" v-for=" (item, index) in diyComponent.list" :key="item.id">
+			<view class="graphic-nav-item" v-for="(item, index) in diyComponent.list" :key="item.id">
 
 				<app-link :data="item.link" class="flex items-center justify-between  py-[30rpx] px-[32rpx]"
 					:class="[index == 0 ? 'border-t-0':'border-t']">
@@ -39,25 +39,17 @@
 			:style="{ height: swiperHeight }" @change="swiperChange">
 			<swiper-item class="graphic-nav-wrap flex flex-wrap"
 				v-for="(numItem, numIndex) in Math.ceil(diyComponent.list.length / (diyComponent.pageCount * diyComponent.rowCount))">
-				<!-- #ifdef MP-WEIXIN -->
 
-				<view class="graphic-nav-item" :class="[diyComponent.mode]" v-for=" (item, index) in diyComponent.list"
-					:key="item.id"
-					v-if="index >= [(numItem) * (diyComponent.pageCount * diyComponent.rowCount)] && index < [(numItem+1) * (diyComponent.pageCount * diyComponent.rowCount)]"
-					:style="{ width: 100 / diyComponent.rowCount + '%' }">
-					<!-- #endif -->
-					<!-- #ifdef H5 -->
-					<view class="graphic-nav-item" :class="[diyComponent.mode]"
-						v-for=" (item, index) in diyComponent.list" :key="item.id"
-						v-if="index >= [(numItem - 1) * (diyComponent.pageCount * diyComponent.rowCount)] && index < [numItem * (diyComponent.pageCount * diyComponent.rowCount)]"
-						:style="{ width: 100 / diyComponent.rowCount + '%' }">
-						<!-- #endif -->
+				<template v-for="(item, index) in diyComponent.list">
+
+					<view class="graphic-nav-item" :class="[diyComponent.mode]" :key="item.id"
+						v-if="swiperCondition(index,numItem)" :style="{ width: 100 / diyComponent.rowCount + '%' }">
 
 						<app-link :data="item.link" class="flex flex-col items-center box-border py-2">
 
 							<view class="graphic-img relative flex items-center justify-center w-10 h-10"
 								v-if="diyComponent.mode != 'text'"
-								:style="{  width: diyComponent.imageSize * 2 + 'rpx', height: diyComponent.imageSize * 2 + 'rpx' }">
+								:style="{ width: diyComponent.imageSize * 2 + 'rpx', height: diyComponent.imageSize * 2 + 'rpx' }">
 								<image :src="img(item.imageUrl)" mode="aspectFill"
 									:style="{ maxWidth: diyComponent.imageSize * 2 + 'rpx', maxHeight: diyComponent.imageSize * 2 + 'rpx', borderRadius: diyComponent.aroundRadius * 2 + 'rpx' }">
 								</image>
@@ -79,11 +71,12 @@
 						</app-link>
 
 					</view>
+				</template>
 			</swiper-item>
 		</swiper>
 
 		<scroll-view v-else :scroll-x="diyComponent.showStyle == 'singleSlide'"
-			:class="['graphic-nav','graphic-nav-'+diyComponent.showStyle]">
+			:class="['graphic-nav','graphic-nav-' + diyComponent.showStyle]">
 			<!-- #ifdef MP -->
 			<view class="uni-scroll-view-content">
 				<!-- #endif -->
@@ -129,9 +122,9 @@
 	import { ref, onMounted, watch, computed } from 'vue';
 	import { img, diyRedirect, currRoute, getToken } from '@/utils/common';
 	import useDiyStore from '@/stores/diy';
-	import { useLogin } from '@/hooks/useLogin'
+	import { useLogin } from '@/hooks/useLogin';
 
-	const props = defineProps(['component', 'index']);
+	const props = defineProps(['component', 'index', 'pullDownRefresh']);
 
 	const diyStore = useDiyStore();
 
@@ -153,24 +146,46 @@
 		return style;
 	})
 
+	watch(
+		() => props.pullDownRefresh,
+		(newValue, oldValue) => {
+			// 处理下拉刷新业务
+		}
+	)
+
 	const swiperIndex = ref(0);
 
 	const swiperChange = e => {
 		swiperIndex.value = e.detail.current;
 	};
 
+	const swiperCondition = (index, numItem) => {
+		let count = diyComponent.value.pageCount * diyComponent.value.rowCount;
+		let result = true;
+
+		// #ifdef MP-WEIXIN
+		result = index >= [(numItem) * (count)] && index < [(numItem + 1) * (count)];
+		// #endif
+
+		// #ifdef H5
+		result = index >= [(numItem - 1) * (count)] && index < [numItem * (count)];
+		// #endif
+
+		return result;
+	}
+
 	const swiperHeight = ref('');
 
 	const handleData = () => {
 		var height = 0;
 		if (diyComponent.value.mode == 'graphic') {
-			height = (21 + 6 + 14 + 8 + diyComponent.value.imageSize) * diyComponent.value.pageCount; // 21 = 文字高度，8 = 文字上边距，14 = 上下内边距，8 = 外边距
+			height = (21 + 6 + 14 + 8 + diyComponent.value.imageSize) * diyComponent.value.pageCount; // 21 = 文字高度，6 = 文字上边距，14 = 上下内边距，8 = 外边距
 		} else if (diyComponent.value.mode == 'img') {
 			height = (14 + 8 + diyComponent.value.imageSize) * diyComponent.value.pageCount; // 14 = 上下内边距，8 = 外边距
 		} else if (diyComponent.value.mode == 'text') {
 			height = (21 + 14 + 8) * diyComponent.value.pageCount; // 21 = 文字高度，14 = 上下内边距，8 = 外边距
 		}
-		swiperHeight.value = height + 'rpx';
+		swiperHeight.value = (height * 2) + 'rpx';
 	};
 
 	onMounted(() => {

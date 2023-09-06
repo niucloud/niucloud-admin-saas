@@ -13,7 +13,7 @@ class Weapp extends BaseOauth
 
     /**
      * @param array $config
-     * @return mixed|void
+     * @return void
      */
     protected function initialize(array $config = [])
     {

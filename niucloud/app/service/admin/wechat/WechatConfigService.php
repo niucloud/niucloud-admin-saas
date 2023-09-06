@@ -11,8 +11,10 @@
 
 namespace app\service\admin\wechat;
 
+use app\model\sys\SysConfig;
 use app\service\core\wechat\CoreWechatConfigService;
 use core\base\BaseAdminService;
+use think\Model;
 
 /**
  * 微信配置模型
@@ -33,7 +35,7 @@ class WechatConfigService extends BaseAdminService
     /**
      * 设置配置
      * @param array $data
-     * @return \app\model\sys\SysConfig|bool|\think\Model
+     * @return SysConfig|bool|Model
      */
     public function setWechatConfig(array $data){
         return (new CoreWechatConfigService())->setWechatConfig($this->site_id, $data);

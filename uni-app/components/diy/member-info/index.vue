@@ -64,7 +64,7 @@
 </template>
 
 <script lang="ts" setup>
-	import { computed, ref } from 'vue'
+	import { computed, ref, watch } from 'vue'
 	import useMemberStore from '@/stores/member'
 	import { useLogin } from '@/hooks/useLogin'
 	import { img, isWeixinBrowser, redirect, urlDeconstruction, moneyFormat } from '@/utils/common'
@@ -72,7 +72,7 @@
 	import { wechatSync } from '@/api/system'
 	import useDiyStore from '@/stores/diy'
 
-	const props = defineProps(['component', 'index']);
+	const props = defineProps(['component', 'index', 'pullDownRefresh']);
 
 	const diyStore = useDiyStore();
 
@@ -98,6 +98,13 @@
 		if (diyComponent.value.bottomRounded) style += 'border-bottom-right-radius:' + diyComponent.value.bottomRounded * 2 + 'rpx;';
 		return style;
 	})
+
+	watch(
+		() => props.pullDownRefresh,
+		(newValue, oldValue) => {
+			// 处理下拉刷新业务
+		}
+	)
 
 	const memberStore = useMemberStore()
 

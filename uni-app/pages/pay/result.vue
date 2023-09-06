@@ -32,11 +32,13 @@
 
     const payInfo = ref<AnyObject | null>(null)
     const loading = ref(false)
-    let outTradeNo = ''
+    let tradeType = ''
+    let tradeId = 0
     let requestNum = 0
 
     onLoad((data : any) => {
-        outTradeNo = data.code
+        tradeType = data.trade_type
+        tradeId = data.trade_id
         getPayInfo()
     })
 
@@ -44,7 +46,7 @@
      * 获取支付信息
      */
     const getPayInfo = () => {
-        getPayInfoApi(outTradeNo)
+        getPayInfoApi(tradeType, tradeId)
             .then((res : responseResult) => {
                 if (!uni.$u.test.isEmpty(res.data)) {
                     if (res.data.status == 1 && requestNum < 5) {

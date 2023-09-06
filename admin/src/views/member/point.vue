@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center mb-[5px]">
-                <span class="text-[24px]">{{pageName}}</span>
+                <span class="text-[20x]">{{pageName}}</span>
             </div>
             <el-card class="box-card !border-none base-bg !px-[35px]" shadow="never">
 			    <el-row class="flex">
@@ -116,13 +116,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getChangeTypeList,getPointList,getPointSum } from '@/api/member'
 import { ElMessageBox, FormInstance } from 'element-plus'
 import { img } from '@/utils/common'
 import pointInfo from '@/views/member/components/member-point-info.vue'
 import { useRouter,useRoute } from 'vue-router'
+
 const route = useRoute()
 const member_id: number = parseInt(route.query.id || 0)
 const pageName = route.meta.title;

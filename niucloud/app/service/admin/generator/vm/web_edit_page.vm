@@ -67,7 +67,7 @@ const onSave = async (formEl: FormInstance | undefined) => {
            loading.value = true
            let data = formData
 
-           const save = id ? update{UCASE_NAME} : add{UCASE_NAME}
+           const save = id ? edit{UCASE_NAME} : add{UCASE_NAME}
            save(data).then(res => {
                loading.value = false
                history.back()

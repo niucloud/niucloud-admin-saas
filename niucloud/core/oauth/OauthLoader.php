@@ -14,7 +14,7 @@ namespace core\oauth;
 use core\loader\Loader;
 
 /**
- * @see \core\oauth\OauthLoader
+ * @see OauthLoader
  * @package think\facade
  */
 class OauthLoader extends Loader
@@ -26,6 +26,7 @@ class OauthLoader extends Loader
     protected $namespace = '\\core\\oauth\\';
 
     protected $config_name = 'oauth';
+
     /**
      * 默认驱动
      * @return mixed

@@ -12,15 +12,22 @@
 namespace core\template;
 
 use app\service\core\weapp\CoreWeappService;
+use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
+use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use EasyWeChat\Kernel\Support\Collection;
+use EasyWeChat\MiniProgram\SubscribeMessage\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Message\ResponseInterface;
 
 
 class Weapp extends BaseTemplate
 {
 
     protected $site_id;
+
     /**
      * @param array $config
-     * @return mixed|void
+     * @return void
      */
     protected function initialize(array $config = [])
     {
@@ -31,18 +38,23 @@ class Weapp extends BaseTemplate
 
     /**
      * 实例化订阅消息业务
-     * @return \EasyWeChat\MiniProgram\SubscribeMessage\Client
+     * @return Client
      */
-    public function template(){
+    public function template()
+    {
         return CoreWeappService::app($this->site_id)->subscribe_message;
     }
+
     /**
      * 消息发送
-     * @param string $templateId
      * @param array $data
-     * @return mixed|void
+     * @return array|Collection|object|ResponseInterface|string
+     * @throws GuzzleException
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigException
      */
-    public function send(array $data){
+    public function send(array $data)
+    {
         return $this->template()->send([
             'template_id' => $data['template_id'],
             'touser' => $data['openid'],
@@ -54,26 +66,33 @@ class Weapp extends BaseTemplate
     /**
      * 添加模板消息
      * @param array $data
-     * @return mixed|void
+     * @return array|Collection|object|ResponseInterface|string
+     * @throws GuzzleException
+     * @throws InvalidConfigException
      */
-    public function addTemplate(array $data){
-        return $this->template()->addTemplate($data['tid'], $data['kidList'], $data['sceneDesc']);
+    public function addTemplate(array $data)
+    {
+        return $this->template()->addTemplate($data['tid'], $data['kid_list'], $data['scene_desc']);
     }
 
     /**
      * 删除
      * @param array $data
-     * @return mixed|void
+     * @return array|Collection|object|ResponseInterface|string
+     * @throws GuzzleException
+     * @throws InvalidConfigException
      */
-    public function delete(array $data){
+    public function delete(array $data)
+    {
         return $this->template()->deleteTemplate($data['template_id']);
     }
 
     /**
      * 获取
-     * @return mixed|void
+     * @return void
      */
-    public function get(){
+    public function get()
+    {
 
     }
 }

@@ -44,7 +44,7 @@ class Diy extends BaseApiController
 
     /**
      * 分享内容
-     * @return Response|void
+     * @return Response
      */
     public function share()
     {

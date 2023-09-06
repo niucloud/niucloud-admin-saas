@@ -49,7 +49,10 @@
         "yansongda/pay": "v3.2.14",
         "symfony/psr-http-message-bridge": "v2.2.0",
         "fastknife/ajcaptcha": "v1.2.1",
-        "yzh52521/schedule": "^1.0"
+        "kosinix/grafika": "dev-master",
+        "yunwuxin/think-cron": "v3.0.5",
+        "nesbot/carbon": "2.66.0",
+        "ext-zip": "*"
     },
     "require-dev": {
         "symfony/var-dumper": "v4.4.47",
@@ -62,7 +65,6 @@
             "core\\": "core"
         },
         "psr-0": {
-            "": "extend/"
         }
     },
     "config": {

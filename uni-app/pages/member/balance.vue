@@ -138,7 +138,7 @@
 		rechargeLoading.value = true
 
 		createRecharge({ recharge_money: rechargeAmount.value }).then(res => {
-			payRef.value?.open(res.data.out_trade_no)
+			payRef.value?.open(res.data.trade_type, res.data.trade_id)
 		}).catch(() => {
 			rechargeLoading.value = false
 		})

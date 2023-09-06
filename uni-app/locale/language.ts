@@ -1,5 +1,4 @@
 import { nextTick } from 'vue'
-import { setDocumentTitle } from '@/utils/common'
 
 class Language {
     private i18n: any
@@ -20,10 +19,6 @@ class Language {
             this.i18n.global.locale = locale
         }
         uni.setLocale(locale)
-        
-        // #ifdef H5
-        setDocumentTitle(path)
-        // #endif
     }
 
     /**

@@ -31,33 +31,33 @@ class ArticleService extends BaseAdminService
     /**
      * 获取文章列表
      * @param array $where
-     * @param string $order
+     * @return array
      */
     public function getPage(array $where = [])
     {
         $where[] = [ 'site_id', '=', $this->site_id ];
         $field = 'id, category_id, site_id, title, intro, summary, image, author, content, visit, visit_virtual, is_show, sort, create_time, update_time';
         $order = 'create_time desc';
-        $search_model = $this->model->where([ [ 'site_id', '=', $this->site_id ] ])->withSearch([ 'title', 'category_id', 'is_show'], $where)->with('articleCategory')->field($field)->order($order)->append(['article_url']);
-        $list = $this->pageQuery($search_model);
-        return $list;
+        $search_model = $this->model->where([ [ 'site_id', '=', $this->site_id ] ])->withSearch([ 'title', 'category_id', 'is_show'], $where)->with('articleCategory')->field($field)->order($order)->append(['article_url','image_thumb_small']);
+        return $this->pageQuery($search_model);
     }
 
     /**
      * 获取文章信息
      * @param int $id
+     * @return array
      */
     public function getInfo(int $id)
     {
         $field = 'id, category_id, site_id, title, intro, summary, image, author, content, visit, visit_virtual, is_show, sort, create_time, update_time';
 
-        $info = $this->model->where([ [ 'id', '=', $id ], [ 'site_id', '=', $this->site_id ] ])->with('articleCategory')->field($field)->findOrEmpty()->toArray();
-        return $info;
+        return $this->model->where([ [ 'id', '=', $id ], [ 'site_id', '=', $this->site_id ] ])->with('articleCategory')->field($field)->append(['image_thumb_small'])->findOrEmpty()->toArray();
     }
 
     /**
      * 添加文章
      * @param array $data
+     * @return mixed
      */
     public function add(array $data)
     {
@@ -72,6 +72,7 @@ class ArticleService extends BaseAdminService
      * 文章编辑
      * @param int $id
      * @param array $data
+     * @return true
      */
     public function edit(int $id, array $data)
     {
@@ -83,11 +84,11 @@ class ArticleService extends BaseAdminService
     /**
      * 删除文章
      * @param int $id
+     * @return bool
      */
     public function del(int $id)
     {
-        $res = $this->model->where([ [ 'id', '=', $id ], [ 'site_id', '=', $this->site_id ] ])->delete();
-        return $res;
+        return $this->model->where([ [ 'id', '=', $id ], [ 'site_id', '=', $this->site_id ] ])->delete();
     }
 
 }

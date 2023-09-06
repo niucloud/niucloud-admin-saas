@@ -29,21 +29,22 @@ class RefundDict
      * 获取状态
      * @return array
      */
-    public static function getStatus(){
-        $list = [
+    public static function getStatus()
+    {
+        return [
             self::WAIT => get_lang('dict_pay_refund.status_wait'),
             self::DEALING => get_lang('dict_pay_refund.status_dealing'),
             self::SUCCESS => get_lang('dict_pay_refund.status_success'),
             self::FAIL => get_lang('dict_pay_refund.status_fail'),
         ];
-        return $list;
     }
 
     /**
      * 获取退款方式
      * @return array
      */
-    public static function getType(){
+    public static function getType()
+    {
         return [
             self::WECHATPAY => get_lang('dict_pay_refund.wechatpay'),
             self::ALIPAY => get_lang('dict_pay_refund.alipay'),

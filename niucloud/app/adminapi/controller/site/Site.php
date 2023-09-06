@@ -38,6 +38,7 @@ class Site extends BaseAdminController
     /**
      * 站点详情
      * @param int $id
+     * @return Response
      */
     public function info(int $id)
     {
@@ -66,21 +67,6 @@ class Site extends BaseAdminController
     }
 
     /**
-     * 菜单或接口更新
-     */
-    public function edit($id)
-    {
-        $data = $this->request->params([
-            ['site_name', ''],
-            ['group_id', 0],
-            ['expire_time', 0]
-        ]);
-        $this->validate($data, 'app\validate\site\Site.edit');
-        (new SiteService())->edit($id, $data);
-         return success('MODIFY_SUCCESS');
-    }
-
-    /**
      * 站点状态
      * @return Response
      */
@@ -93,7 +79,8 @@ class Site extends BaseAdminController
      * 站点菜单
      * @return Response
      */
-    public function menu(){
+    public function menu()
+    {
         return success((new AuthSiteService())->getMenuList(1, 'all'));
     }
 
@@ -106,7 +93,22 @@ class Site extends BaseAdminController
             ['status', SiteDict::CLOSE],
         ]);
         (new SiteService())->edit($id, $data);
-        return success('SUCCESS');
+        return success();
+    }
+
+    /**
+     * 菜单或接口更新
+     */
+    public function edit($id)
+    {
+        $data = $this->request->params([
+            ['site_name', ''],
+            ['group_id', 0],
+            ['expire_time', 0]
+        ]);
+        $this->validate($data, 'app\validate\site\Site.edit');
+        (new SiteService())->edit($id, $data);
+        return success('MODIFY_SUCCESS');
     }
 
     /**
@@ -118,6 +120,11 @@ class Site extends BaseAdminController
             ['status', SiteDict::ON],
         ]);
         (new SiteService())->edit($id, $data);
-        return success('SUCCESS');
+        return success();
+    }
+
+    public function indexConfig()
+    {
+
     }
 }

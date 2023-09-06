@@ -6,6 +6,7 @@
 
 <script setup lang="ts">
 	import { redirect, diyRedirect, currRoute, getToken } from '@/utils/common'
+	import { useLogin } from '@/hooks/useLogin';
 
 	const prop = defineProps({
 		url: String,

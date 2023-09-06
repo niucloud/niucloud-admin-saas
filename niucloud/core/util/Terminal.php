@@ -9,9 +9,10 @@ class Terminal
      * 执行命令
      * @param string $cwd 要执行命令的初始工作目录
      * @param string $command 要执行的命令
-     * @return \think\Response
+     * @return string|true
      */
-    public static function execute(string $cwd, string $command){
+    public static function execute(string $cwd, string $command)
+    {
         if (!function_exists('proc_open') || !function_exists('proc_close')) return 'Function proc_open or proc_close disabled';
 
         // 设置执行时长
@@ -47,7 +48,7 @@ class Terminal
 
         // 判断命令的执行结果
         if ($status === 0) {
-            return strpos($output, 'Command failed') !== false ? $output : true;
+            return str_contains($output, 'Command failed') ? $output : true;
         } else {
             return $output;
         }

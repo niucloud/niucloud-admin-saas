@@ -17,6 +17,9 @@ use app\model\wechat\WechatReply;
 use core\base\BaseCoreService;
 use core\exception\AdminException;
 use EasyWeChat\Kernel\Messages\Text;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\Model;
 
 
@@ -36,7 +39,7 @@ class CoreWechatReplyService extends BaseCoreService
 
     /**
      *关键字回复列表
-     * @return void
+     * @return array
      */
     public function getKeywordPage(int $site_id, array $data = [])
     {
@@ -50,13 +53,13 @@ class CoreWechatReplyService extends BaseCoreService
         if (!empty($data['name'])) {
             $where[] = ['name', 'like', '%' . $data['name'] . '%'];
         }
-        return $this->getPageList($this->model, $where, 'name,keyword,matching_type,content_type,status,sort,create_time', 'uid desc', []);
+        return $this->getPageList($this->model, $where, 'name,keyword,matching_type,content_type,status,sort,create_time', 'uid desc');
     }
 
     /**
      * 获取关键词回复信息
-     * @param $site_id
-     * @param $id
+     * @param int $site_id
+     * @param int $id
      * @return array
      */
     public function getKeywordInfo(int $site_id, int $id)
@@ -70,9 +73,12 @@ class CoreWechatReplyService extends BaseCoreService
 
     /**
      * 通过关键词查询回复
-     * @param $site_id
-     * @param $keyword
+     * @param int $site_id
+     * @param string $keyword
      * @return void
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function getKeywordInfoByKeyword(int $site_id, string $keyword)
     {
@@ -105,9 +111,9 @@ class CoreWechatReplyService extends BaseCoreService
 
     /**
      * 新增关键词回复
-     * @param $site_id
-     * @param $data
-     * @return WechatReply
+     * @param int $site_id
+     * @param string $data
+     * @return true
      */
     public function addKeyword(int $site_id,string  $data)
     {
@@ -119,9 +125,10 @@ class CoreWechatReplyService extends BaseCoreService
 
     /**
      * 更新关键词回复
-     * @param $site_id
-     * @param $data
-     * @return void
+     * @param int $site_id
+     * @param int $id
+     * @param array $data
+     * @return WechatReply
      */
     public function editKeyword(int $site_id, int $id, array $data)
     {
@@ -152,21 +159,19 @@ class CoreWechatReplyService extends BaseCoreService
 
     /**
      *
-     * @param $where
+     * @param array|string $where
      * @return WechatReply|array|mixed|Model
      */
     public function find(array|string $where)
     {
-        $reply = $this->model->where($where)->findOrEmpty();
-
-        return $reply;
+        return $this->model->where($where)->findOrEmpty();
     }
 
 
     /**
      * 获取默认回复
-     * @param $site_id
-     * @return void
+     * @param int $site_id
+     * @return array
      */
     public function getDefault(int $site_id)
     {
@@ -179,8 +184,8 @@ class CoreWechatReplyService extends BaseCoreService
 
     /**
      * 更新默认回复
-     * @param $site_id
-     * @param $data
+     * @param int $site_id
+     * @param array $data
      * @return void
      */
     public function editDefault(int $site_id, array $data)
@@ -203,8 +208,8 @@ class CoreWechatReplyService extends BaseCoreService
 
     /**
      * 获取关注回复
-     * @param $site_id
-     * @return void
+     * @param int $site_id
+     * @return array
      */
     public function getSubscribe(int $site_id)
     {
@@ -217,8 +222,8 @@ class CoreWechatReplyService extends BaseCoreService
 
     /**
      * 更新关注回复
-     * @param $site_id
-     * @param $data
+     * @param int $site_id
+     * @param array $data
      * @return void
      */
     public function editSubscribe(int $site_id, array $data)
@@ -242,10 +247,13 @@ class CoreWechatReplyService extends BaseCoreService
 
     /**
      * 回复
-     * @param $site_id
-     * @param $event
-     * @param $content
+     * @param int $site_id
+     * @param string $event
+     * @param string $content
      * @return void
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function reply(int $site_id, string $event = '', string $content = '')
     {
@@ -266,8 +274,7 @@ class CoreWechatReplyService extends BaseCoreService
             if ($info['status'] == ReplyDict::STATUS_ON) {
                 switch($info['content_type']) {
                     case ReplyDict::CONTENT_TYPE_TEXT://文本
-                        $text = new Text($info['content']);
-                        return $text;
+                        return new Text($info['content']);
                     case ReplyDict::CONTENT_TYPE_NEW://图文
                         //todo  转化为临时素材或永久素材
                         $items = [

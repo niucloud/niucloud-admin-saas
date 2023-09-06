@@ -21,7 +21,8 @@ class Config extends BaseController
      * 获取登录注册设置
      * @return Response
      */
-    public function getLoginConfig(){
+    public function getLoginConfig()
+    {
 
         return success((new MemberConfigService())->getLoginConfig());
     }

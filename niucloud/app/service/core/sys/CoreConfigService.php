@@ -13,6 +13,7 @@ namespace app\service\core\sys;
 
 use app\model\sys\SysConfig;
 use core\base\BaseCoreService;
+use think\Model;
 
 /**
  * 配置服务层
@@ -30,7 +31,7 @@ class CoreConfigService extends BaseCoreService
      * 获取配置信息
      * @param int $site_id
      * @param string $key
-     * @return mixed
+     * @return array
      */
     public function getConfig(int $site_id, string $key)
     {
@@ -38,15 +39,15 @@ class CoreConfigService extends BaseCoreService
             ['config_key', '=', $key],
             ['site_id', '=', $site_id]
         );
-        $info = $this->model->where($where)->field('id,site_id,config_key,value,status,create_time,update_time')->findOrEmpty()->toArray();
-        return $info;
+        return $this->model->where($where)->field('id,site_id,config_key,value,status,create_time,update_time')->findOrEmpty()->toArray();
     }
 
     /**
      * 设置配置
      * @param int $site_id
      * @param string $key
-     * @param string $value
+     * @param array $value
+     * @return SysConfig|bool|Model
      */
     public function setConfig(int $site_id, string $key, array $value)
     {
@@ -76,6 +77,7 @@ class CoreConfigService extends BaseCoreService
      * @param int $site_id
      * @param int $status
      * @param string $key
+     * @return bool
      */
     public function modifyStatus(int $site_id, int $status, string $key)
     {
@@ -86,7 +88,6 @@ class CoreConfigService extends BaseCoreService
         $data = array(
             'status' => $status,
         );
-        $res = $this->model->where($where)->save($data);
-        return $res;
+        return $this->model->where($where)->save($data);
     }
 }

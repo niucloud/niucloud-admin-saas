@@ -13,6 +13,11 @@ namespace app\service\core\wechat;
 
 use core\base\BaseCoreService;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
+use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use EasyWeChat\Kernel\Support\Collection;
+use EasyWeChat\OfficialAccount\TemplateMessage\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * easywechat主体提供
@@ -24,8 +29,7 @@ class CoreWechatTemplateService extends BaseCoreService
     /**
      * 获取模板消息业务对象
      * @param $site_id
-     * @return \EasyWeChat\OfficialAccount\TemplateMessage\Client
-     * @throws InvalidArgumentException
+     * @return Client
      */
     public function template($site_id){
         return CoreWechatService::app($site_id)->template_message;
@@ -33,18 +37,18 @@ class CoreWechatTemplateService extends BaseCoreService
 
     /**
      * 发送模板消息
-     * @param $site_id
-     * @param $open_id
-     * @param $wechat_template_id
-     * @param $data
-     * @param $first
-     * @param $remark
-     * @param $url
-     * @param $miniprogram
-     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @param int $site_id
+     * @param string $open_id
+     * @param string $wechat_template_id
+     * @param array $data
+     * @param string $first
+     * @param string $remark
+     * @param string $url
+     * @param string $miniprogram
+     * @return array|Collection|object|ResponseInterface|string
      * @throws InvalidArgumentException
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function send(int $site_id, string $open_id, string $wechat_template_id, array $data, string $first, string $remark, string $url = '', $miniprogram = ''){
         if(!empty($first)) $data['first'] = $first;
@@ -64,10 +68,9 @@ class CoreWechatTemplateService extends BaseCoreService
      * 删除
      * @param int $site_id
      * @param string $templateId
-     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     * @throws InvalidArgumentException
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return array|Collection|object|ResponseInterface|string
+     * @throws GuzzleException
+     * @throws InvalidConfigException
      */
     public function deletePrivateTemplate(int $site_id, string $templateId){
         return $this->template($site_id)->deletePrivateTemplate($templateId);
@@ -77,10 +80,9 @@ class CoreWechatTemplateService extends BaseCoreService
      * 添加
      * @param int $site_id
      * @param string $shortId
-     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     * @throws InvalidArgumentException
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return array|Collection|object|ResponseInterface|string
+     * @throws GuzzleException
+     * @throws InvalidConfigException
      */
     public function addTemplate(int $site_id, string $shortId){
         return $this->template($site_id)->addTemplate($shortId);

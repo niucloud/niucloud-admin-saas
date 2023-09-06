@@ -22,7 +22,7 @@ class ControllerGenerator extends BaseGenerator
 {
     /**
      * 替换模板中的变量
-     * @return mixed|void
+     * @return void
      */
     public function replaceText()
     {
@@ -80,7 +80,7 @@ class ControllerGenerator extends BaseGenerator
 
     /**
      * 代码验证
-     * @return false|string
+     * @return string
      */
     public function getValidate()
     {
@@ -89,14 +89,14 @@ class ControllerGenerator extends BaseGenerator
    
     /**
      * 添加字段
-     * @return false|string
+     * @return string
      */
     public function getAddField()
     {
         $str = '';
         $last_field = end($this->table['fields'])['column_name'];
 
-        foreach ($this->table['fields'] as $k => $v){
+        foreach ($this->table['fields'] as $v){
             if(!$v['is_pk'] && $v['is_insert']){
                 $str .= '             ["'.$v['column_name'].'",'.$this->getDefault($v['column_type']).']';
                 if($last_field != $v['column_name']) $str .= ','.PHP_EOL;
@@ -107,13 +107,13 @@ class ControllerGenerator extends BaseGenerator
 
     /**
      * 编辑字段
-     * @return false|string
+     * @return string
      */
     public function getEditField()
     {
         $str = '';
         $last_field = end($this->table['fields'])['column_name'];
-        foreach ($this->table['fields'] as $k => $v){
+        foreach ($this->table['fields'] as $v){
             if(!$v['is_pk'] && $v['is_update']){
                 $str .= '             ["'.$v['column_name'].'",'.$this->getDefault($v['column_type']).']';
                 if($last_field != $v['column_name']) $str .= ','.PHP_EOL;
@@ -130,7 +130,7 @@ class ControllerGenerator extends BaseGenerator
     {
         $str = '';
         $last_field = end($this->table['fields'])['column_name'];
-        foreach ($this->table['fields'] as $k => $v){
+        foreach ($this->table['fields'] as $v){
             if(!$v['is_pk'] && $v['is_search']){
                 if($v['view_type'] == 'datetime'){
                     $str .= '             ["'.$v['column_name'].'",'.'["",""]'.']';

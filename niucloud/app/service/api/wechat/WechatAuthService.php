@@ -26,6 +26,9 @@ use core\base\BaseApiService;
 use core\exception\ApiException;
 use core\exception\AuthException;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 
 
 /**
@@ -46,10 +49,9 @@ class WechatAuthService extends BaseApiService
 
     /**
      * 网页授权
-     * @param $url
-     * @param $scopes
-     * @return string
-     * @throws InvalidArgumentException
+     * @param string $url
+     * @param string $scopes
+     * @return array
      */
     public function authorization(string $url = '', string $scopes = 'snsapi_base')
     {
@@ -59,9 +61,8 @@ class WechatAuthService extends BaseApiService
 
     /**
      * 处理授权回调
-     * @param $code
-     * @return string
-     * @throws InvalidArgumentException
+     * @param string $code
+     * @return array
      */
     public function userFromCode(string $code)
     {
@@ -87,17 +88,24 @@ class WechatAuthService extends BaseApiService
      * 登录通过code
      * @param string $code
      * @return array|string[]|null
-     * @throws InvalidArgumentException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function loginByCode(string $code){
         [$avatar, $nickname, $openid] = $this->userFromCode($code);
         return $this->login($openid, $nickname, $avatar);
     }
+
     /**
      * 公众号登录
-     * @param string $code
+     * @param string $openid
+     * @param string $nickname
+     * @param string $avatar
      * @return array|null
-     * @throws InvalidArgumentException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function login(string $openid, string $nickname = '', string $avatar = '')
     {
@@ -124,7 +132,6 @@ class WechatAuthService extends BaseApiService
      * 同步数据
      * @param string $code
      * @return true
-     * @throws InvalidArgumentException
      */
     public function sync(string $code)
     {
@@ -142,9 +149,14 @@ class WechatAuthService extends BaseApiService
 
     /**
      * 注册
-     * @param string|array $data
-     * @return void
-     * @throws InvalidArgumentException
+     * @param string $openid
+     * @param string $mobile
+     * @param string $nickname
+     * @param string $avatar
+     * @return array
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function register(string $openid, string $mobile = '', string $nickname = '', string $avatar = '')
     {
@@ -152,7 +164,7 @@ class WechatAuthService extends BaseApiService
         $member_info = $member_service->findMemberInfo(['wx_openid' => $openid, 'site_id' => $this->site_id]);
         if (!$member_info->isEmpty()) throw new AuthException('MEMBER_IS_EXIST');//账号已存在, 不能在注册
         $register_service = new RegisterService();
-        $result = $register_service->register($mobile,
+        return $register_service->register($mobile,
             [
                 'wx_openid' => $openid,
                 'nickname' => $nickname,
@@ -160,7 +172,6 @@ class WechatAuthService extends BaseApiService
             ],
             MemberRegisterTypeDict::WECHAT
         );
-        return $result;
 
     }
 

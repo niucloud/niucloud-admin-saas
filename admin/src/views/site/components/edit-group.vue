@@ -1,7 +1,6 @@
 <template>
     <el-dialog v-model="showDialog" :title="popTitle" width="500px" :destroy-on-close="true">
-        <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-form-item :label="t('groupName')" prop="group_name">
                 <el-input v-model="formData.group_name" :placeholder="t('groupNamePlaceholder')" clearable :disabled="formData.uid" class="input-width" maxlength="20" :show-word-limit="true" />
             </el-form-item>
@@ -199,7 +198,6 @@ function checked(menu_key:string,data:any,newArr:any) {
         }
     } )
 }
-
 
 defineExpose({
     showDialog,

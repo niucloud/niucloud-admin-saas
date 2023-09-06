@@ -4,7 +4,7 @@ import NProgress from 'nprogress'
 
 interface App {
     route: string,
-    routeRefrehTag: boolean,
+    routeRefreshTag: boolean,
     pageReturn: boolean
 }
 
@@ -12,17 +12,17 @@ const useAppStore = defineStore('app', {
     state: (): App => {
         return {
             route: '',
-            routeRefrehTag: true,
+            routeRefreshTag: true,
             pageReturn: false
         }
     },
     actions: {
         refreshRouterView() {
-            this.routeRefrehTag = false
+            this.routeRefreshTag = false
             NProgress.start()
 
             nextTick(() => {
-                this.routeRefrehTag = true
+                this.routeRefreshTag = true
                 NProgress.done()
             })
         }

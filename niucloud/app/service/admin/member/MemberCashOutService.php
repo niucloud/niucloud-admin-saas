@@ -30,7 +30,7 @@ class MemberCashOutService extends BaseAdminService
     /**
      * 会员提现列表
      * @param array $where
-     * @return mixed
+     * @return array
      */
     public function getPage(array $where = [])
     {
@@ -44,8 +44,7 @@ class MemberCashOutService extends BaseAdminService
         $search_model = $this->model->where([['member_cash_out.site_id', '=', $this->site_id]])->withSearch(['member_id','status', 'join_create_time' => 'create_time', 'audit_time', 'transfer_time', 'transfer_type', 'cash_out_no'],$where)->with(['transfer'])->withJoin(["member" => function($query){
                 $query->field("member.nickname, member.headimg, member.mobile, member.member_id, member.member_no");
             }])->where($member_where)->field($field)->order('create_time desc')->append(['status_name', 'transfer_status_name', 'transfer_type_name', 'account_type_name']);
-        $list = $this->pageQuery($search_model);
-        return $list;
+        return $this->pageQuery($search_model);
     }
 
     /**
@@ -61,8 +60,9 @@ class MemberCashOutService extends BaseAdminService
 
     /**
      * @param int $id
+     * @param string $action
      * @param $data
-     * @return void
+     * @return true|null
      */
     public function audit(int $id, string $action, $data){
         $core_member_cash_out_service = new CoreMemberCashOutService();
@@ -72,8 +72,8 @@ class MemberCashOutService extends BaseAdminService
 
     /**
      * 转账
-     * @param $id
-     * @param $data
+     * @param int $id
+     * @param array $data
      * @return true
      */
     public function transfer(int $id, array $data){

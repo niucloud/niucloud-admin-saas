@@ -14,7 +14,10 @@ namespace app\service\core\member;
 use app\model\member\Member;
 use app\model\site\Site;
 use core\base\BaseCoreService;
+use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
+use think\Model;
 
 /**
  * 会员信息服务层
@@ -35,7 +38,7 @@ class CoreMemberService extends BaseCoreService
      * @param int $member_id
      * @param string $field
      * @param $data
-     * @return mixed
+     * @return Member
      */
     public function modify(int $site_id, int $member_id, string $field, $data)
     {
@@ -57,7 +60,7 @@ class CoreMemberService extends BaseCoreService
      * 通过会员查询openid
      * @param int $site_id
      * @param int $member_id
-     * @return void
+     * @return array
      */
     public function getInfoByMemberId(int $site_id, int $member_id){
         $where = array(
@@ -71,7 +74,7 @@ class CoreMemberService extends BaseCoreService
      * 查询会员实例
      * @param int $site_id
      * @param int $member_id
-     * @return Member|array|mixed|\think\Model
+     * @return Member|array|mixed|Model
      */
     public function find(int $site_id, int $member_id){
         $where = array(
@@ -106,7 +109,10 @@ class CoreMemberService extends BaseCoreService
     /**
      * 生成会员编码
      * @param int $site_id
-     * @return void
+     * @return string
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public static function createMemberNo(int $site_id) {
         $site = (new Site())->where([ ['site_id', '=', $site_id] ])->find();
@@ -129,7 +135,11 @@ class CoreMemberService extends BaseCoreService
     /**
      * 设置会员会员码
      * @param int $site_id
+     * @param int $member_id
      * @return void
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public static function setMemberNo(int $site_id, int $member_id) {
         $site = (new Site())->where([ ['site_id', '=', $site_id] ])->find();

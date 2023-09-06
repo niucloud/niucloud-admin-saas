@@ -3,7 +3,7 @@
         <el-card class="box-card !border-none" shadow="never">
 
             <div class="flex justify-between items-center">
-                <span class="text-[24px]">{{ pageName }}</span>
+                <span class="text-[20px]">{{ pageName }}</span>
                 <el-button type="primary" class="w-[100px]" @click="addEvent">
                     {{ t('addSite') }}
                 </el-button>
@@ -88,8 +88,7 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="create_time" :label="t('createTime')" min-width="140" :show-overflow-tooltip="true" />
-                    <el-table-column prop="expire_time" :label="t('expireTime')" min-width="140"
-                        :show-overflow-tooltip="true">
+                    <el-table-column prop="expire_time" :label="t('expireTime')" min-width="140" :show-overflow-tooltip="true">
                         <template #default="{ row }">
                             <div v-if="row.expire_time == 0">永久</div>
                             <div v-else>{{ row.expire_time }}</div>
@@ -125,6 +124,7 @@ import { getSiteList, getSiteGroupAll, getStatusList, closeSite, openSite } from
 import { FormInstance } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
 import EditSite from '@/views/site/components/edit-site.vue'
+
 const route = useRoute()
 const pageName = route.meta.title
 

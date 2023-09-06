@@ -14,6 +14,7 @@ namespace app\model\sys;
 use app\dict\sys\UserDict;
 use core\base\BaseModel;
 use think\model\concern\SoftDelete;
+use think\model\relation\HasMany;
 
 /**
  * 系统用户模型
@@ -26,7 +27,7 @@ class SysUser extends BaseModel
     use SoftDelete;
 
     protected $type = [
-        'last_time'  =>  'timestamp',
+        'last_time' => 'timestamp',
     ];
     /**
      * 数据表主键
@@ -58,7 +59,7 @@ class SysUser extends BaseModel
 
     /**
      * 权限组
-     * @return mixed
+     * @return HasMany
      */
     public function roles()
     {
@@ -68,11 +69,13 @@ class SysUser extends BaseModel
     /**
      * 状态字段转化
      * @param $value
+     * @param $data
      * @return mixed
      */
     public function getStatusNameAttr($value, $data)
     {
-        return UserDict::getStatus()[$data['status'] ?? ''] ?? '';
+        if (empty($data['status'])) return '';
+        return UserDict::getStatus()[$data['status']] ?? '';
     }
 
     public function getCreateTimeAttr($value, $data)
@@ -82,31 +85,33 @@ class SysUser extends BaseModel
 
     /**
      * 账号搜索器
+     * @param $query
      * @param $value
      */
     public function searchUsernameAttr($query, $value)
     {
         if ($value) {
-            $query->whereLike('username', '%'.$value.'%');
+            $query->whereLike('username', '%' . $value . '%');
         }
 
     }
 
     /**
      * 用户实际姓名搜索器
+     * @param $query
      * @param $value
      */
     public function searchRealnameAttr($query, $value)
     {
         if ($value) {
-            $query->whereLike('real_name', '%'.$value.'%');
+            $query->whereLike('real_name', '%' . $value . '%');
         }
 
     }
 
     /**
      * 是否删除搜索器
-     * @param $value
+     * @param $query
      */
     public function searchIsDelAttr($query)
     {
@@ -115,6 +120,7 @@ class SysUser extends BaseModel
 
     /**
      * 状态搜索器
+     * @param $query
      * @param $value
      */
     public function searchStatusAttr($query, $value)
@@ -125,17 +131,19 @@ class SysUser extends BaseModel
 
     /**
      * 创建时间搜索器
+     * @param $query
      * @param $value
+     * @param $data
      */
     public function searchCreateTimeAttr($query, $value, $data)
     {
-        $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
-        $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
-        if($start_time > 0 && $end_time > 0){
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
+        if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('sys_user.create_time', $start_time, $end_time);
-        }else if($start_time > 0 && $end_time == 0){
+        } else if ($start_time > 0 && $end_time == 0) {
             $query->where([['sys_user.create_time', '>=', $start_time]]);
-        }else if($start_time == 0 && $end_time > 0){
+        } else if ($start_time == 0 && $end_time > 0) {
             $query->where([['sys_user.create_time', '<=', $end_time]]);
         }
     }

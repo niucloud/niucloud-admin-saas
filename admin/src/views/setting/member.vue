@@ -1,7 +1,6 @@
 <template>
     <div class="main-container">
-        <el-form :model="formData" label-width="150px" ref="ruleFormRef" :rules="formRules" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="150px" ref="ruleFormRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
                 <h3 class="panel-title">{{ t('memberNoRule') }}</h3>
 
@@ -15,7 +14,7 @@
                     <div class="form-tip">{{ t('lengthTips') }}</div>
                 </el-form-item>
 
-                <el-form-item  >
+                <el-form-item >
                     <div class="text-lg">{{ memberNo }}</div>
                 </el-form-item>
             </el-card>
@@ -64,8 +63,6 @@ const formRules = reactive<FormRules>({
     ]
 })
 
-
-
 const formData = reactive<Record<string, number | string>>({
     prefix: '',
     length: 10
@@ -81,8 +78,6 @@ const setFormData = async () => {
 }
 setFormData()
 
-
-
 const getMemberNo = async (formEl: FormInstance | undefined) => {
     await formEl.validate((valid) => {
         if (valid) {
@@ -93,7 +88,6 @@ const getMemberNo = async (formEl: FormInstance | undefined) => {
         }
     })
 }
-
 
 const onSave = async (formEl: FormInstance | undefined) => {
     if (loading.value || !formEl) return
@@ -108,9 +102,6 @@ const onSave = async (formEl: FormInstance | undefined) => {
         }
     })
 }
-
-
-
 </script>
 
 <style lang="scss" scoped>

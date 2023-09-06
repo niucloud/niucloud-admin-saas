@@ -14,6 +14,7 @@ namespace app\api\controller\login;
 use app\service\api\captcha\CaptchaService;
 use app\service\api\login\LoginService;
 use core\base\BaseController;
+use Exception;
 use think\Response;
 
 class Login extends BaseController
@@ -22,7 +23,8 @@ class Login extends BaseController
      * 登录
      * @return Response
      */
-    public function login(){
+    public function login()
+    {
 
         $data = $this->request->params([
             ['username', ''],
@@ -31,7 +33,7 @@ class Login extends BaseController
         //参数验证
         //验证码验证
         $result = (new LoginService())->account($data['username'], $data['password']);
-        if(!$result){
+        if (!$result) {
             //账号密码错误, 重置验证码
             return fail('ACCOUNT_OR_PASSWORD_ERROR');
         }
@@ -43,7 +45,8 @@ class Login extends BaseController
      * 登出
      * @return Response
      */
-    public function logout(){
+    public function logout()
+    {
         (new LoginService)->logout();
         return success('MEMBER_LOGOUT');
     }
@@ -52,28 +55,33 @@ class Login extends BaseController
      * 创建验证码
      * @return Response
      */
-    public function captcha(){
+    public function captcha()
+    {
         return success((new CaptchaService())->create());
     }
 
     /**
      * 发送手机验证码
-     * @return void
+     * @param $type
+     * @return Response
+     * @throws Exception
      */
-    public function sendMobileCode($type){
+    public function sendMobileCode($type)
+    {
         $data = $this->request->params([
-            ['mobile',  ''],
+            ['mobile', ''],
         ]);
         return success((new LoginService())->sendMobileCode($data['mobile'], $type));
     }
 
     /**
      * 手机号登录
-     * @return void
+     * @return Response
      */
-    public function mobile(){
+    public function mobile()
+    {
         $data = $this->request->params([
-            ['mobile',  ''],
+            ['mobile', ''],
         ]);
         return success((new LoginService())->mobile($data['mobile']));
     }
@@ -82,9 +90,10 @@ class Login extends BaseController
      * 重置密码
      * @return Response
      */
-    public function resetPassword(){
+    public function resetPassword()
+    {
         $data = $this->request->params([
-            ['mobile',  ''],
+            ['mobile', ''],
             ['password', '']
         ]);
         //参数验证

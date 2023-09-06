@@ -12,6 +12,7 @@
 namespace app\model\order;
 
 use core\base\BaseModel;
+use think\model\relation\HasOne;
 
 /**
  * 订单项目模型
@@ -40,24 +41,26 @@ class RechargeOrderItem extends BaseModel
     {
         return $this->hasOne(RechargeOrder::class, 'order_id', 'order_id')->joinType('left')->withField('order_id, order_no')->bind(['order_no' => 'order_no']);
     }
+
     /**
      * 数量字段处理
      * @param $value
-     * @return mixed
+     * @param $data
+     * @return string|void
      */
     public function getNumAttr($value, $data)
     {
-        if(isset($data['num']))
-        {
-            return number_format($data['num'], 0);
+        if (isset($data['num'])) {
+            return number_format($data['num']);
         }
     }
 
     /**
      * 关联订单主表
-     * @return void
+     * @return HasOne
      */
-    public function ordermain(){
+    public function ordermain()
+    {
         return $this->hasOne(RechargeOrder::class, 'order_id')->joinType('inner');
     }
 }

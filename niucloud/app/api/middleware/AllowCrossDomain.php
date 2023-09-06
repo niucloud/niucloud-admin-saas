@@ -13,7 +13,6 @@ namespace app\api\middleware;
 
 use app\Request;
 use Closure;
-use core\exception\ServerException;
 
 /**
  * http跨域请求中间件

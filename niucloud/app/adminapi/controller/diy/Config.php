@@ -13,6 +13,7 @@ namespace app\adminapi\controller\diy;
 
 use app\service\admin\diy\DiyConfigService;
 use core\base\BaseAdminController;
+use think\Response;
 
 
 /**
@@ -24,24 +25,24 @@ class Config extends BaseAdminController
 {
     /**
      * 获取底部导航
-     * @return \think\Response
+     * @return Response
      */
     public function getBottom()
     {
-        return success(( new DiyConfigService() )->getBottomConfig());
+        return success((new DiyConfigService())->getBottomConfig());
     }
 
     /**
      * 设置底部导航
-     * @return \think\Response
+     * @return Response
      */
     public function setBottom()
     {
         $data = $this->request->params([
-            [ 'menu', [] ]
+            ['menu', []]
         ]);
-        ( new DiyConfigService() )->setBottomConfig($data[ 'menu' ]);
-        return success('SUCCESS');
+        (new DiyConfigService())->setBottomConfig($data['menu']);
+        return success();
     }
 
 }

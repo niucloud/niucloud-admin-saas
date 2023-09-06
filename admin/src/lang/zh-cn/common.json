@@ -46,11 +46,13 @@
     "root": "上传",
     "selectimage": "选择图片",
     "selectvideo": "选择视频",
+    "selecticon": "选择图标",
     "uploadimage": "上传图片",
     "uploadvideo": "上传视频",
     "addAttachmentCategory": "添加分组",
     "attachmentCategoryPlaceholder": "请输入分组名称",
     "attachmentEmpty": "暂无附件，请点击上传按钮上传",
+    "iconEmpty": "暂无图标",
     "deleteCategoryTips": "确定要删除该分组吗？",
     "deleteAttachmentTips": "确定要删除所选附件吗？如所选附件已被使用删除将会受到影响，请谨慎操作！",
     "move": "移动",
@@ -58,6 +60,7 @@
     "moveTo": "移动至",
     "placeholderimageName": "请输入图片名称",
     "placeholdervideoName": "请输入视频名称",
+    "placeholdericonName": "请输入图标名称",
     "success": "上传成功",
     "triggerUpperLimit": "可选数量已达上限"
   },
@@ -73,7 +76,8 @@
     "themeColor": "主题颜色",
     "detectionLoginOperation": "确定",
     "detectionLoginContent": "已检测到有其他账号登录，需要刷新后才能继续操作。",
-    "detectionLoginTip": "提示"
+    "detectionLoginTip": "提示",
+    "layoutStyle": "布局风格"
   },
   "axios": {
     "unknownError": "未知错误",
@@ -90,7 +94,9 @@
     "503": "服务不可用",
     "504": "网络超时",
     "505": "http版本不支持该请求",
-    "timeout": "网络请求超时！"
+    "timeout": "网络请求超时！",
+    "requestError": "请求错误",
+    "errNetwork": "网络请求错误"
   },
   "linkPlaceholder": "请选择跳转链接",
   "selectLinkTips": "链接选择",
@@ -105,5 +111,8 @@
   "emptyApp": "暂未安装任何应用",
   "newInfo": "最新消息",
   "mapSetting": "地图设置",
-  "mapKey": "腾讯地图KEY"
+  "mapKey": "腾讯地图KEY",
+  "indexTemplate": "首页模版",
+  "indexSwitch": "切换首页",
+  "indexWarning": "你确定要切换首页吗？"
 }

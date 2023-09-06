@@ -1,5 +1,5 @@
 import { RouteRecordRaw, RouterView } from 'vue-router'
-import Default from '@/layout/default/index.vue'
+import Default from '@/layout/index.vue'
 import Decorate from '@/layout/decorate/index.vue'
 
 // 静态路由
@@ -122,7 +122,8 @@ const createRoute = function (route: Route, parentRoute: RouteRecordRaw | null =
             icon: route.icon,
             type: route.menu_type,
             show: route.is_show,
-            app: route.app_type
+            app: route.app_type,
+            view: route.view_path
         }
     }
     if (route.menu_type == 0) {

@@ -20,6 +20,10 @@ use app\service\core\member\CoreMemberAccountService;
 use app\service\core\pay\CoreRefundService;
 use core\base\BaseCoreService;
 use core\exception\CommonException;
+use Exception;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\facade\Db;
 
 /**
@@ -35,7 +39,10 @@ class CoreRechargeRefundService extends BaseCoreService
      * 创建充值订单退款
      * @param int $site_id
      * @param int $order_id
-     * @return void
+     * @return true
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function create(int $site_id, int $order_id) {
         $order_model = (new RechargeOrderItem())->where([ ['site_id', '=', $site_id], ['order_id', '=', $order_id], ['item_type', '=', $this->order_type ] ])->with('ordermain')->find();
@@ -43,7 +50,7 @@ class CoreRechargeRefundService extends BaseCoreService
         $order_info = (new RechargeOrder())->where([ ['site_id', '=', $site_id], ['order_id', '=', $order_id] ])->field("order_no")->find();
         if (empty($order)) throw new CommonException('ORDER_NOT_EXIST');
         if (!$order['ordermain']['is_enable_refund']) throw new CommonException('NOT_ALLOW_APPLY_REFUND');
-        if (!in_array($order['ordermain']['order_status'], [RechargeOrderDict::FINISH])) throw new CommonException('ORDER_UNPAID_NOT_ALLOW_APPLY_REFUND');
+        if ($order['ordermain']['order_status'] != RechargeOrderDict::FINISH) throw new CommonException('ORDER_UNPAID_NOT_ALLOW_APPLY_REFUND');
         if ($order['refund_status'] != RechargeOrderDict::NOT_APPLAY) throw new CommonException('REFUND_HAD_APPLIED');
 
         Db::startTrans();
@@ -87,7 +94,7 @@ class CoreRechargeRefundService extends BaseCoreService
             Db::commit();
 
             return true;
-        } catch (\Exception $e) {
+        } catch ( Exception $e) {
             Db::rollback();
             throw new CommonException($e->getMessage());
         }
@@ -107,7 +114,11 @@ class CoreRechargeRefundService extends BaseCoreService
 
     /**
      * 退款完成
-     * @return void
+     * @param $refund_no
+     * @return true
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function refundComplete($refund_no){
         $model = (new RechargeOrderItemRefund())->where([ ['refund_no', '=', $refund_no ] ])->find();
@@ -122,7 +133,7 @@ class CoreRechargeRefundService extends BaseCoreService
             (new CoreRechargeOrderService())->close($model->site_id, $model->order_id);
             Db::commit();
             return true;
-        } catch (\Exception $e) {
+        } catch ( Exception $e) {
             Db::rollback();
             throw new CommonException($e->getMessage());
         }

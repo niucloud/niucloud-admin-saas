@@ -45,11 +45,12 @@ class Addon extends BaseModel
      */
     public function getStatusNameAttr($value, $data)
     {
-        return AddonDict::getStatus()[ $data[ 'status' ] ?? '' ] ?? '';
+        return AddonDict::getStatus()[$data['status']] ?? '';
     }
 
     /**
      * 插件名称搜索器
+     * @param $query
      * @param $value
      * @param $data
      */

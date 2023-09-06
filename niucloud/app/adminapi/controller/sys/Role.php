@@ -14,11 +14,13 @@ namespace app\adminapi\controller\sys;
 use app\dict\sys\RoleStatusDict;
 use app\service\admin\sys\RoleService;
 use core\base\BaseAdminController;
+use think\db\exception\DbException;
 use think\Response;
 
 class Role extends BaseAdminController
 {
-    public function lists(){
+    public function lists()
+    {
         $data = $this->request->params([
             ['role_name', ''],
         ]);
@@ -29,10 +31,11 @@ class Role extends BaseAdminController
 
     /**
      * 用户组详情
-     * @param $uid
+     * @param $role_id
      * @return Response
      */
-    public function info($role_id){
+    public function info($role_id)
+    {
         return success((new RoleService())->getInfo($role_id));
     }
 
@@ -40,14 +43,17 @@ class Role extends BaseAdminController
      * 获取全部权限
      * @return Response
      */
-    public function all(){
+    public function all()
+    {
         return success((new RoleService())->getAll());
     }
+
     /**
      * 新增用户组
      * @return Response
      */
-    public function add(){
+    public function add()
+    {
         $data = $this->request->params([
             ['role_name', ''],
             ['rules', []],
@@ -62,7 +68,8 @@ class Role extends BaseAdminController
     /**
      * 更新用户组
      */
-    public function edit($role_id){
+    public function edit($role_id)
+    {
         $data = $this->request->params([
             ['role_name', ''],
             ['rules', []],
@@ -76,9 +83,12 @@ class Role extends BaseAdminController
 
     /**
      * 删除单个用户组
-     * @param $uid
+     * @param $role_id
+     * @return Response
+     * @throws DbException
      */
-    public function del($role_id){
+    public function del($role_id)
+    {
         (new RoleService())->del($role_id);
         return success('DELETE_SUCCESS');
     }

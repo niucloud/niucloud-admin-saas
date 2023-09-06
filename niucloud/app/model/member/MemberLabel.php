@@ -12,6 +12,7 @@
 namespace app\model\member;
 
 use core\base\BaseModel;
+use think\db\exception\DbException;
 
 /**
  * 会员标签模型
@@ -36,26 +37,28 @@ class MemberLabel extends BaseModel
     /**
      * 获取对应标签的会员数量
      * @param $value
-     * @return mixed
+     * @param $data
+     * @return int
+     * @throws DbException
      */
     public function getMemberNumAttr($value, $data)
     {
-        if(isset($data['label_id']))
-        {
-            return (new Member())->where([['member_label', 'like', '%"' . $data['label_id'] . '"%' ]])->count();
-        }else
+        if (isset($data['label_id'])) {
+            return (new Member())->where([['member_label', 'like', '%"' . $data['label_id'] . '"%']])->count();
+        } else
             return 0;
     }
 
     /**
      * 会员标签
+     * @param $query
      * @param $value
      * @param $data
      */
     public function searchLabelNameAttr($query, $value, $data)
     {
         if ($value) {
-            $query->where('label_name','like', '%'.$value.'%');
+            $query->where('label_name', 'like', '%' . $value . '%');
         }
     }
 

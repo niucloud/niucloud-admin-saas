@@ -13,6 +13,7 @@ namespace app\service\api\weapp;
 
 use app\dict\member\MemberLoginTypeDict;
 use app\dict\member\MemberRegisterTypeDict;
+use app\model\member\Member;
 use app\service\api\login\LoginService;
 use app\service\api\login\RegisterService;
 use app\service\api\member\MemberConfigService;
@@ -22,6 +23,12 @@ use core\base\BaseApiService;
 use core\exception\ApiException;
 use core\exception\AuthException;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
+use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use GuzzleHttp\Exception\GuzzleException;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
+use think\Model;
 
 
 /**
@@ -42,10 +49,8 @@ class WeappAuthService extends BaseApiService
     /**
      * 通过code获取微信小程序用户信息
      * @param string $code
-     * @param string $iv
-     * @param string $encrypted_data
      * @return array
-     * @throws InvalidArgumentException
+     * @throws InvalidConfigException
      */
     public function getUserInfoByCode(string $code){
 //        $iv = $this->request->param('iv', '');
@@ -72,8 +77,7 @@ class WeappAuthService extends BaseApiService
     /**
      * 登录
      * @param string $code
-     * @return \app\model\member\Member|array|mixed|\think\Model
-     * @throws InvalidArgumentException
+     * @return array
      */
     public function login(string $code)
     {
@@ -108,10 +112,15 @@ class WeappAuthService extends BaseApiService
 
     /**
      * 注册
-     * @param string|array $data
+     * @param string $openid
      * @param string $mobile
-     * @return \app\model\member\Member|array|mixed|\think\Model
-     * @throws InvalidArgumentException
+     * @param string $mobile_code
+     * @return array
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws GuzzleException
+     * @throws InvalidConfigException
+     * @throws ModelNotFoundException
      */
     public function register(string $openid, string $mobile = '', string $mobile_code = ''){
 
@@ -136,14 +145,13 @@ class WeappAuthService extends BaseApiService
 
         if(!$member_info->isEmpty()) throw new AuthException('MEMBER_IS_EXIST');//账号已存在, 不能在注册
         $register_service = new RegisterService();
-        $result = $register_service->register($mobile ?? '',
+        return $register_service->register($mobile ?? '',
             [
                 'weapp_openid' => $openid
             ],
             MemberRegisterTypeDict::WEAPP,
             $is_verify_mobile ?? false
         );
-        return $result;
 
     }
 

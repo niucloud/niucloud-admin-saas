@@ -2,7 +2,7 @@
  * 获取验证码
  */
 export function getCaptcha() {
-    return request.get('captcha', {})
+    return request.get('captcha', { time: (new Date().getTime()) })
 }
 
 /**

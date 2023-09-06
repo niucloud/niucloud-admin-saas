@@ -1,10 +1,9 @@
 <template>
     <div class="main-container">
         <div class="flex ml-[18px] justify-between items-center mt-[20px] mb-[5px]">
-			<span class="text-[24px]">{{pageName}}</span>
+			<span class="text-[20px]">{{pageName}}</span>
 		</div>
-        <el-form :model="formData" label-width="150px" ref="formRef" :rules="formRules" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="150px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
                 <h3 class="panel-title !text-sm">{{ t('websiteInfo') }}</h3>
 
@@ -13,11 +12,17 @@
                 </el-form-item>
 
                 <el-form-item :label="t('logo')">
-                    <upload-image v-model="formData.logo" />
+					<div>
+						<upload-image v-model="formData.logo" />
+						<p class="text-[12px] text-[#a9a9a9]">{{ t('logoPlaceholder') }}</p>
+					</div>
                 </el-form-item>
 
                 <el-form-item :label="t('icon')">
-                    <upload-image v-model="formData.icon" />
+					<div>
+						<upload-image v-model="formData.icon" />
+						<p class="text-[12px] text-[#a9a9a9]">{{ t('iconPlaceholder') }}</p>
+					</div>
                 </el-form-item>
 
                 <el-form-item :label="t('keywords')">
@@ -68,9 +73,9 @@ import { FormInstance, FormRules } from 'element-plus'
 import storage from '@/utils/storage'
 import { getAppType } from '@/utils/common'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title
-
 const loading = ref(true)
 const app_type = ref()
 const formData = reactive<Record<string, string>>({
@@ -110,9 +115,6 @@ const setFormData = async (id: number = 0) => {
     loading.value = false
 }
 setFormData()
-
-
-
 
 const formRef = ref<FormInstance>()
 

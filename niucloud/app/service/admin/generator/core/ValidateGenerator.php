@@ -24,7 +24,7 @@ class ValidateGenerator extends BaseGenerator
 
     /**
      * 替换模板中的变量
-     * @return mixed|void
+     * @return void
      */
     public function replaceText()
     {
@@ -59,7 +59,7 @@ class ValidateGenerator extends BaseGenerator
 
     /**
      * 验证规则
-     * @return mixed|string
+     * @return string
      */
     public function getRule()
     {
@@ -76,7 +76,7 @@ class ValidateGenerator extends BaseGenerator
 
     /**
      * 验证提示
-     * @return mixed|string
+     * @return string
      */
     public function getMessage()
     {
@@ -85,7 +85,7 @@ class ValidateGenerator extends BaseGenerator
 
     /**
      * 验证字段
-     * @return mixed|string
+     * @return string
      */
     public function getScene()
     {

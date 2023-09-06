@@ -1,7 +1,6 @@
 <template>
     <el-dialog v-model="showDialog" :title="popTitle" width="500px" :destroy-on-close="true">
-        <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
 
             <el-form-item :label="t('memberNo')" prop="member_no">
                 <el-input v-model="formData.member_no" clearable maxlength="20" :placeholder="t('memberNoPlaceholder')" class="input-width" />
@@ -34,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, computed, watch } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
 import { addMember, getMemberList, getMemberNo } from '@/api/member'
@@ -81,6 +80,7 @@ const formRules = computed(() => {
         ]
     }
 })
+
 // 验证手机号格式
 const mobileVerify = (rule: any, value: any, callback: any) => {
     if (value && !/^1[3-9]\d{9}$/.test(value)) {

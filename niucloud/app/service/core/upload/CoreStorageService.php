@@ -23,7 +23,7 @@ class CoreStorageService extends BaseCoreService
 
     /**
      * 获取当前启用的存储方式以及配置
-     * @param $site_id
+     * @param int $site_id
      * @return void
      */
     public function getDefaultStorage(int $site_id = 0)
@@ -57,7 +57,7 @@ class CoreStorageService extends BaseCoreService
     }
     /**
      * 获取存储配置
-     * @param $site_id
+     * @param int $site_id
      * @return void
      */
     public function getStorageConfig(int $site_id){
@@ -69,8 +69,10 @@ class CoreStorageService extends BaseCoreService
 
 
     }
+
     /**
      * 获取云存储列表
+     * @param int $site_id
      * @return array
      */
     public function getStorageList(int $site_id = 0)

@@ -13,6 +13,7 @@ namespace app\service\api\upload;
 
 use app\service\core\upload\CoreBase64Service;
 use core\base\BaseApiService;
+use Exception;
 
 /**
  * 用户服务层
@@ -26,8 +27,9 @@ class Base64Service extends BaseApiService
 
     /**
      * 远程拉取图片
-     * @param $url
+     * @param string $content
      * @return array
+     * @throws Exception
      */
     public function image(string $content){
 

@@ -23,6 +23,7 @@ use core\base\BaseApiService;
 class ScanService extends BaseApiService
 {
     private $core_scan_service;
+
     public function __construct()
     {
         parent::__construct();
@@ -35,7 +36,8 @@ class ScanService extends BaseApiService
      * @param string $key
      * @return mixed
      */
-    public function checkScan(string $key){
+    public function checkScan(string $key)
+    {
         return $this->core_scan_service->checkScan($this->site_id, $key);
     }
 

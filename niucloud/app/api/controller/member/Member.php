@@ -15,6 +15,9 @@ use app\service\api\login\AuthService;
 use app\service\api\member\MemberLogService;
 use app\service\api\member\MemberService;
 use core\base\BaseApiController;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\Response;
 
 class Member extends BaseApiController
@@ -38,7 +41,6 @@ class Member extends BaseApiController
 
     /**
      * 修改会员
-     * @param $member_id
      * @param $field
      * @return Response
      */
@@ -67,7 +69,7 @@ class Member extends BaseApiController
 
     /**
      * 绑定手机号
-     * @return void
+     * @return Response
      */
     public function mobile(){
         $data = $this->request->params([
@@ -88,6 +90,13 @@ class Member extends BaseApiController
             ['pre_route', '']
         ]);
         (new MemberLogService())->log($data);
-        return success('SUCCESS');
+        return success();
+    }
+
+    /**
+     * 获取会员码
+     */
+    public function qrcode(){
+        return success((new MemberService())->getQrcode());
     }
 }

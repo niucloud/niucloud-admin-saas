@@ -24,7 +24,7 @@ class Addon extends BaseAdminController
      */
     public function getLocalAddonList()
     {
-        return success(( new CoreAddonService() )->getLocalAddonList());
+        return success((new CoreAddonService())->getLocalAddonList());
     }
 
     /**
@@ -33,36 +33,38 @@ class Addon extends BaseAdminController
      */
     public function install($addon)
     {
-        return ( new AddonService() )->install($addon);
+        return (new AddonService())->install($addon);
     }
 
     /**
      * 执行安装
      * @param $addon
-     * @return void
+     * @return Response
      */
     public function execute($addon)
     {
-        return ( new AddonService() )->executeInstall($addon);
+        return (new AddonService())->executeInstall($addon);
     }
 
     /**
      * 插件安装环境检测
      * @param $addon
-     * @return mixed
+     * @return Response
      */
     public function installCheck($addon)
     {
-        return ( new AddonService() )->installCheck($addon);
+        return (new AddonService())->installCheck($addon);
     }
 
     /**
      * 查询插件安装状态
      * @param $addon
+     * @param $key
+     * @return Response
      */
     public function getInstallState($addon, $key)
     {
-        return success(( new AddonService() )->getInstallState($addon, $key));
+        return success((new AddonService())->getInstallState($addon, $key));
     }
 
     /**
@@ -71,7 +73,7 @@ class Addon extends BaseAdminController
      */
     public function uninstall($addon)
     {
-        ( new AddonService() )->uninstall($addon);
+        (new AddonService())->uninstall($addon);
         return success('ADDON_UNINSTALL_SUCCESS');
     }
 
@@ -82,18 +84,19 @@ class Addon extends BaseAdminController
     public function lists()
     {
         $data = $this->request->params([
-            [ 'title', '' ],
+            ['title', ''],
         ]);
-        return success(( new AddonService() )->getPage($data));
+        return success((new AddonService())->getPage($data));
     }
 
     /**
      * 插件详情
      * @param int $id
+     * @return Response
      */
     public function info(int $id)
     {
-        return success(( new AddonService() )->getInfo($id));
+        return success((new AddonService())->getInfo($id));
     }
 
     /**
@@ -104,9 +107,28 @@ class Addon extends BaseAdminController
      */
     public function setStatus(int $id, int $status)
     {
-        ( new AddonService() )->setStatus($id, $status);
+        (new AddonService())->setStatus($id, $status);
         return success('SET_SUCCESS');
     }
 
+    /**
+     * 下载插件
+     * @param $app_key
+     * @return Response
+     */
+    public function download($addon){
+        (new AddonService())->download($addon);
+        return success('DOWNLOAD_SUCCESS');
+    }
+
+    /**
+     * 更新插件
+     * @param $app_key
+     * @return Response
+     */
+    public function update($addon){
+        (new AddonService())->update($addon);
+        return success('DOWNLOAD_SUCCESS');
+    }
 
 }

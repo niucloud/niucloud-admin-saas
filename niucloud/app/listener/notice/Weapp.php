@@ -20,33 +20,29 @@ class Weapp
         $to = $data['to'];//发送对象主题
 
         //完全信任消息的设置, 不再依赖support_type
-        if($template['is_weapp']) {
+        if ($template['is_weapp']) {
             $member_id = $to['member_id'] ?? 0;
-            if($member_id > 0){//查询openid
+            if ($member_id > 0) {//查询openid
                 $info = (new CoreMemberService())->getInfoByMemberId($site_id, $member_id);
                 $openid = $info['weapp_openid'] ?? '';
                 $nickname = $info['nickname'] ?? '';
             }
-            if(!empty($openid)) {
+            if (!empty($openid)) {
                 $weapp_template_id = $template['weapp_template_id'];
                 $weapp = $template['weapp'];
                 $weapp_content = $weapp['content'];
                 $weapp_data = [];
-                foreach($weapp_content as $k => $v){
+                foreach ($weapp_content as $k => $v) {
                     $search_content = $v[1];
-                    foreach($vars as $item_k => $item_v){
-                        $search_content = str_replace('{'.$item_k.'}', $item_v, $search_content);
+                    foreach ($vars as $item_k => $item_v) {
+                        $search_content = str_replace('{' . $item_k . '}', $item_v, $search_content);
                     }
                     $weapp_data[$v[2]]['value'] = $search_content;
                 }
-                $url = '';
-                if(!empty($url)){
-                    //todo 拼装h5端的链接
-                    $url = $vars['__weapp_page'];
-                }
+                $url = $vars['__weapp_page'] ?? '';
                 $log_data = array(
                     'key' => $key,
-                    'message_type' => NoticeTypeDict::WEAPP,
+                    'notice_type' => NoticeTypeDict::WEAPP,
                     'uid' => $data['uid'] ?? 0,
                     'member_id' => $member_id,
                     'nickname' => $nickname ?? '',

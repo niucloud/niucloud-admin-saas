@@ -3,6 +3,9 @@ declare(strict_types=1);
 /**
  * 请将该文件放置于config目录
  */
+
+use think\facade\Cache;
+
 return [
     'font_file' => '', //自定义字体包路径， 不填使用默认值
     //文字验证码
@@ -22,6 +25,6 @@ return [
         'text' => ''
     ],
     'cache' => [
-        'constructor' => [\think\facade\Cache::class, 'instance']
+        'constructor' => [Cache::class, 'instance']
     ]
 ];

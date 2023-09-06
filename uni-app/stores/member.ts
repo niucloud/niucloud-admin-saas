@@ -22,6 +22,7 @@ const useMemberStore = defineStore('member', {
             await this.getMemberInfo()
         },
         async getMemberInfo() {
+            if (!this.token) return
             await getMemberInfo()
                 .then((res : any) => {
                     this.info = res.data
@@ -31,6 +32,7 @@ const useMemberStore = defineStore('member', {
                 })
         },
         async logout(isRedirect : boolean = false) {
+            if (!this.token) return
             await logout().then(() => {
                 this.$reset()
                 removeToken()

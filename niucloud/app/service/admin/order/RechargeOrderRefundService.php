@@ -15,6 +15,7 @@ use app\dict\order\RechargeOrderDict;
 use app\model\order\RechargeOrderItemRefund;
 use app\service\core\order\recharge\CoreRechargeRefundService;
 use core\base\BaseAdminService;
+use Exception;
 
 /**
  * 充值订单
@@ -33,7 +34,7 @@ class RechargeOrderRefundService extends BaseAdminService
         try {
             (new CoreRechargeRefundService())->create($this->site_id, $order_id);
             return true;
-        } catch (\Exception $e) {
+        } catch ( Exception $e) {
             return $e->getMessage();
         }
     }
@@ -41,7 +42,7 @@ class RechargeOrderRefundService extends BaseAdminService
     /**
      * 查询退款列表
      * @param array $where
-     * @return mixed
+     * @return array
      */
     public function getPage(array $where) {
 
@@ -64,27 +65,25 @@ class RechargeOrderRefundService extends BaseAdminService
     /**
      * 查询退款详情
      * @param int $refund_id
-     * @return void
+     * @return array
      */
     public function getDetail(int $refund_id) {
         $field = 'refund_id,num,money,refund_no,status,create_time,audit_time,transfer_time,item_type,order_item_id, order_id,member_id';
-        $detail = $this->model->where([ ['site_id', '=', $this->site_id], ['refund_id', '=', $refund_id]])->field($field)->with(['item' => function($query) {
+        return $this->model->where([ ['site_id', '=', $this->site_id], ['refund_id', '=', $refund_id]])->field($field)->with(['item' => function($query) {
             $query->field('order_item_id, item_name, item_image');
         }, 'member' => function($query) {
             $query->field('member_id, nickname, mobile, headimg');
         }, 'payrefund' => function($query) {
             $query->field('refund_no');
         }])->append(['status_name', 'payrefund.type_name'])->findOrEmpty()->toArray();
-        return $detail;
     }
 
     /**
      * 获取退款状态
-     * @return void
+     * @return array|array[]|string
      */
     public function getStatus(){
-        $status = RechargeOrderDict::getRefundStatus();
-        return $status;
+        return RechargeOrderDict::getRefundStatus();
     }
 
     /**
@@ -95,7 +94,7 @@ class RechargeOrderRefundService extends BaseAdminService
         $status = RechargeOrderDict::getRefundStatus();
         $all = 0;
         $have = 0;
-        foreach ($status as $k => $v)
+        foreach ($status as $k => &$v)
         {
             $money = $this->model->where([['status', '=', $v['status']], ['site_id', '=', $this->site_id]])->sum("money");
             if($money == null)
@@ -103,10 +102,10 @@ class RechargeOrderRefundService extends BaseAdminService
                 $money = 0;
             }
             if($k == 1 || $k == 2){
-                $have = $have + $money;
+                $have += $money;
             }
-            $status[$k]['money'] = number_format($money, 2);
-            $all = $all + $money;
+            $v['money'] = number_format($money, 2);
+            $all += $money;
         }
         $status['all'] = [
             'name' => get_lang('dict_refund.all'),

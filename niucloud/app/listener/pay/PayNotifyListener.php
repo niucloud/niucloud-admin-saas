@@ -20,6 +20,6 @@ class PayNotifyListener
 {
     public function handle($member)
     {
-        return ;
+        return;
     }
 }

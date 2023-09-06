@@ -11,8 +11,10 @@
 
 namespace app\service\admin\member;
 
+use app\model\sys\SysConfig;
 use app\service\core\member\CoreMemberConfigService;
 use core\base\BaseAdminService;
+use think\Model;
 
 /**
  * 会员设置
@@ -31,7 +33,8 @@ class MemberConfigService extends BaseAdminService
 
     /**
      * 注册登录设置
-     * @param $data
+     * @param array $data
+     * @return true
      */
     public function setLoginConfig(array $data){
         return (new CoreMemberConfigService())->setLoginConfig($this->site_id, $data);
@@ -46,7 +49,8 @@ class MemberConfigService extends BaseAdminService
 
     /**
      * 提现设置
-     * @param $data
+     * @param array $data
+     * @return true
      */
     public function setCashOutConfig(array $data){
         return (new CoreMemberConfigService())->setCashOutConfig($this->site_id, $data);
@@ -61,7 +65,8 @@ class MemberConfigService extends BaseAdminService
 
     /**
      * 会员设置
-     * @param $data
+     * @param array $data
+     * @return true
      */
     public function setMemberConfig(array $data){
         return (new CoreMemberConfigService())->setMemberConfig($this->site_id, $data);

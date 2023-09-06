@@ -13,6 +13,7 @@ namespace app\validate\sys;
 
 use app\dict\sys\MenuTypeDict;
 use app\dict\sys\MethodDict;
+use think\facade\Lang;
 use think\Validate;
 
 /**
@@ -51,7 +52,7 @@ class Menu extends Validate
      * @param $value
      * @param $rule
      * @param array $data
-     * @return bool|string
+     * @return Lang|true
      */
     protected function checkMenuType($value, $rule, $data = [])
     {
@@ -63,7 +64,7 @@ class Menu extends Validate
      * @param $value
      * @param $rule
      * @param array $data
-     * @return bool|string
+     * @return Lang|true
      */
     protected function checkMethodType($value, $rule, $data = [])
     {

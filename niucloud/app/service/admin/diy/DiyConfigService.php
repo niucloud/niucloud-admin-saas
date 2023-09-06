@@ -11,8 +11,10 @@
 
 namespace app\service\admin\diy;
 
+use app\model\sys\SysConfig;
 use app\service\core\diy\CoreDiyConfigService;
 use core\base\BaseAdminService;
+use think\Model;
 
 /**
  * 自定义页面相关配置服务层
@@ -34,7 +36,7 @@ class DiyConfigService extends BaseAdminService
     /**
      * 底部导航配置
      * @param $data
-     * @return \app\model\sys\SysConfig|bool|\think\Model
+     * @return SysConfig|bool|Model
      */
     public function setBottomConfig($data)
     {

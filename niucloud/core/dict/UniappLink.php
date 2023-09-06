@@ -22,7 +22,7 @@ class UniappLink extends BaseDict
     {
         $addons = $this->getLocalAddons();
         $link_files = [];
-        foreach ($addons as $k => $v) {
+        foreach ($addons as $v) {
             $link_path = $this->getAddonDictPath($v) . "diy" . DIRECTORY_SEPARATOR . "links.php";
             if (is_file($link_path)) {
                 $link_files[] = $link_path;

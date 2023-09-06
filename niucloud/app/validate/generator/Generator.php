@@ -36,7 +36,7 @@ class Generator extends Validate
 
     protected $scene = [
         'add' => ['table_name'],
-        "edit" => ['table_name','table_content','class_name', 'module_name', 'table_column'],
+        "edit" => ['table_name', 'table_content', 'class_name', 'module_name', 'table_column'],
         "create" => ['id'],
     ];
 }

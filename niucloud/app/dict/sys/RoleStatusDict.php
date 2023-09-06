@@ -22,10 +22,11 @@ class RoleStatusDict
      * 角色状态
      * @return array
      */
-    public static function getStatus(){
+    public static function getStatus()
+    {
         return [
             self::ON => get_lang('dict_role.status_on'),//启用
-            self::OFF  => get_lang('dict_role.status_off'),//关闭
+            self::OFF => get_lang('dict_role.status_off'),//关闭
         ];
     }
 

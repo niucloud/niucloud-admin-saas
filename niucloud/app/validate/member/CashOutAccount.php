@@ -20,20 +20,20 @@ use think\Validate;
 class CashOutAccount extends Validate
 {
     protected $rule = [
-        'account_type'  => 'checkAccountType',
+        'account_type' => 'checkAccountType',
         'bank_name' => 'checkBankName',
         'account_no' => 'require',
         'realname' => 'require'
     ];
 
-    protected $message  =   [
+    protected $message = [
         'account_type.require' => 'validate_member_cash_out_account.account_type_require',
         'account_no.require' => 'validate_member_cash_out_account.account_no_require',
         'realname.require' => 'validate_member_cash_out_account.realname_require',
     ];
 
     protected $scene = [
-        'addOrEdit'  =>  ['account_type', 'bank_name', 'account_no', 'realname'],
+        'addOrEdit' => ['account_type', 'bank_name', 'account_no', 'realname'],
     ];
 
     protected function checkBankName($value, $rule, $data = [])
@@ -41,8 +41,8 @@ class CashOutAccount extends Validate
         return $data['account_type'] != 'bank' || !empty($value) ? true : 'validate_member_cash_out_account.bank_name_require';
     }
 
-    protected function checkAccountType($value){
-        $transfer_type = array_keys(TransferDict::getTransferType());
-        return in_array($value, $transfer_type) ? true : 'validate_member_cash_out_account.not_support_transfer_type';
+    protected function checkAccountType($value)
+    {
+        return array_key_exists($value, TransferDict::getTransferType()) ? true : 'validate_member_cash_out_account.not_support_transfer_type';
     }
 }

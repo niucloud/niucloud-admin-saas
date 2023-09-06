@@ -3,7 +3,6 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import { useCssVar, useTitle } from '@vueuse/core'
 import colorFunction from 'css-color-function'
 import storage from './storage'
-import { useRoute } from 'vue-router'
 
 /**
  * 全局注册element-icon

@@ -5,10 +5,10 @@
 
 <script setup lang="ts">
 	// 辅助空白
-	import { computed } from 'vue';
+	import { computed, watch } from 'vue';
 	import useDiyStore from '@/stores/diy';
 
-	const props = defineProps(['component', 'index']);
+	const props = defineProps(['component', 'index', 'pullDownRefresh']);
 
 	const diyStore = useDiyStore();
 
@@ -26,6 +26,13 @@
 		if (diyComponent.value.componentBgColor) style += 'background-color:' + diyComponent.value.componentBgColor + ';';
 		return style;
 	})
+
+	watch(
+		() => props.pullDownRefresh,
+		(newValue, oldValue) => {
+			// 处理下拉刷新业务
+		}
+	)
 </script>
 
 <style></style>

@@ -8,7 +8,7 @@ import request from '@/utils/request'
  * @returns
  */
 export function getGenerateTableList(params: Record<string, any>) {
-    return request.get(`generator/generator`, { params })
+    return request.get(`generator/generator`, {params})
 }
 
 /**
@@ -26,17 +26,15 @@ export function getGenerateTableInfo(id: number) {
  * @returns
  */
 export function addGenerateTable(params: Record<string, any>) {
-    return request.post('generator/generator', params, { showSuccessMessage: true })
+    return request.post('generator/generator', params, {showSuccessMessage: true})
 }
 
 /**
  * 编辑代码生成
- * @param id
  * @param params
- * @returns
  */
 export function editGenerateTable(params: Record<string, any>) {
-    return request.put(`generator/generator/${params.id}`, params, { showSuccessMessage: true })
+    return request.put(`generator/generator/${params.id}`, params, {showSuccessMessage: true})
 }
 
 /**
@@ -45,7 +43,7 @@ export function editGenerateTable(params: Record<string, any>) {
  * @returns
  */
 export function deleteGenerateTable(id: number) {
-    return request.delete(`generator/generator/${id}`, { showSuccessMessage: true })
+    return request.delete(`generator/generator/${id}`, {showSuccessMessage: true})
 }
 
 /**
@@ -59,8 +57,6 @@ export function generateCreate(params: Record<string, any>) {
 
 /**
  * 数据表
- * @param file
- * @returns
  */
 export function generateTable() {
     return request.get(`generator/table`)
@@ -68,8 +64,6 @@ export function generateTable() {
 
 /**
  * 获取服务器环境配置
- * @param file
- * @returns
  */
 export function getSystem() {
     return request.get(`sys/system`)

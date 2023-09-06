@@ -28,11 +28,12 @@ class CoreWechatConfigService extends BaseCoreService
 {
     /**
      * 获取微信公众号配置
-     * @param $site_id
+     * @param int $site_id
+     * @return array
      */
     public function getWechatConfig(int $site_id){
         $info = (new CoreConfigService())->getConfig($site_id, ConfigKeyDict::WECHAT)['value'] ?? [];
-        $config = [
+        return [
             'wechat_name' => $info['wechat_name'] ?? '',//公众号名称
             'wechat_original' => $info['wechat_original'] ?? '',//原始ID
             'app_id'            => $info['app_id'] ?? '',//AppID
@@ -42,13 +43,12 @@ class CoreWechatConfigService extends BaseCoreService
             'encoding_aes_key'  => $info['encoding_aes_key'] ?? '',
             'encryption_type'   => $info['encryption_type'] ?? 'not_encrypt',//加解密模式   not_encrypt 明文   compatible 兼容  safe 安全
         ];
-        return $config;
     }
 
     /**
      * 设置微信公众号配置
-     * @param $site_id
-     * @param $data
+     * @param int $site_id
+     * @param array $data
      * @return SysConfig|bool|Model
      */
     public function setWechatConfig(int $site_id, array $data){

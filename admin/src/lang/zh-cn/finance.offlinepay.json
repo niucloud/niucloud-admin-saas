@@ -1,0 +1,18 @@
+{
+    "money":"支付金额",
+    "outTradeNo": "交易流水号",
+    "voucher": "支付凭证",
+    "body": "支付内容",
+    "pass": "通过",
+    "refuse": "拒绝",
+    "refuseReason": "拒绝原因",
+    "passTips": "确认要通过该支付单据吗？",
+    "startDate": "开始时间",
+	"endDate": "结束时间",
+    "outTradeNoPlaceholder":"请输入交易流水号",
+    "detail": "详情",
+    "waitAudit": "待审核",
+    "passed": "已通过",
+    "notPass": "未通过",
+    "all": "全部"
+}

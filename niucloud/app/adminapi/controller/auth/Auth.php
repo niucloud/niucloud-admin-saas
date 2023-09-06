@@ -14,6 +14,10 @@ namespace app\adminapi\controller\auth;
 use app\service\admin\auth\AuthService;
 use app\service\admin\auth\AuthSiteService;
 use core\base\BaseAdminController;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
+use think\Response;
 
 
 class Auth extends BaseAdminController
@@ -22,15 +26,17 @@ class Auth extends BaseAdminController
     /**
      * 登录用户菜单列表的接口
      */
-    public function authMenuList(){
+    public function authMenuList()
+    {
         return success((new AuthService())->getAuthMenuList(1));
     }
 
     /**
      * 获取登录用户信息
-     * @return \think\Response
+     * @return Response
      */
-    public function get(){
+    public function get()
+    {
         return success((new AuthService())->getAuthInfo());
     }
 
@@ -38,9 +44,10 @@ class Auth extends BaseAdminController
     /**
      * 修改登录用户信息
      * @param $field
-     * @return \think\Response
+     * @return Response
      */
-    public function modify($field){
+    public function modify($field)
+    {
         $data = $this->request->params([
             ['value', ''],
             ['field', $field]
@@ -54,7 +61,8 @@ class Auth extends BaseAdminController
     /**
      * 更新用户
      */
-    public function edit(){
+    public function edit()
+    {
         $data = $this->request->params([
             ['real_name', ''],
             ['head_img', ''],
@@ -67,9 +75,22 @@ class Auth extends BaseAdminController
 
     /**
      * 获取当前登录站点信息
-     * @return \think\Response
+     * @return Response
      */
-    public function site(){
+    public function site()
+    {
         return success((new AuthSiteService())->getSiteInfo());
+    }
+
+    /**
+     * 选择可以选择的页面
+     * @return Response
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
+     */
+    public function getShowMenuList()
+    {
+        return success((new AuthSiteService())->getShowMenuList());
     }
 }

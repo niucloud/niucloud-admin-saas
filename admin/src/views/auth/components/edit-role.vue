@@ -1,7 +1,6 @@
 <template>
     <el-dialog v-model="showDialog" :title="popTitle" width="500px" :destroy-on-close="true">
-        <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="90px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-form-item :label="t('roleName')" prop="role_name">
                 <el-input v-model="formData.role_name" :placeholder="t('roleNamePlaceholder')" clearable :disabled="formData.uid" class="input-width" maxlength="10" :show-word-limit="true" />
             </el-form-item>

@@ -29,7 +29,7 @@ class NoticeLogService extends BaseAdminService
     /**
      * 消息发送记录
      * @param $where
-     * @return mixed
+     * @return array
      */
     public function getPage($where)
     {

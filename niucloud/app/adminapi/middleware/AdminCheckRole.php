@@ -13,7 +13,6 @@ namespace app\adminapi\middleware;
 
 
 use app\Request;
-
 use app\service\admin\auth\AuthService;
 use Closure;
 

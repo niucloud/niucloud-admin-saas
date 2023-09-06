@@ -9,7 +9,8 @@ class BaseNoticeTemplate
      * @param $to 发送对象
      * @return array
      */
-    public function toReturn($vars, $to){
+    public function toReturn($vars, $to)
+    {
         return [
             'vars' => $vars,
             'to' => $to,

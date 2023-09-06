@@ -15,20 +15,19 @@ use core\loader\Storage;
 
 /**
  * Class BaseTemplate
- * @package 
+ * @package
  */
 abstract class BaseTemplate extends Storage
 {
     /**
      * 初始化
      * @param array $config
-     * @return mixed|void
+     * @return void
      */
     protected function initialize(array $config = [])
     {
 
     }
-
 
 
     /**
@@ -39,14 +38,14 @@ abstract class BaseTemplate extends Storage
 
     /**
      * 增加模板消息
-     * @param string $shortId
+     * @param array $data
      * @return mixed
      */
     abstract protected function addTemplate(array $data);
 
     /**
      * 删除消息模板
-     * @param string $templateId
+     * @param array $data
      * @return mixed
      */
     abstract protected function delete(array $data);

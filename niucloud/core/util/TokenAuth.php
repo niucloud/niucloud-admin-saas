@@ -14,6 +14,7 @@ namespace core\util;
 use Firebase\JWT\JWT;
 use think\facade\Cache;
 use think\facade\Env;
+use think\Response;
 
 
 /**
@@ -23,7 +24,6 @@ use think\facade\Env;
  */
 class TokenAuth
 {
-    private $token;
 
     /**
      *创建token
@@ -69,7 +69,7 @@ class TokenAuth
     {
         $payload = JWT::decode($token, Env::get('app.app_key', 'niucloud456$%^'), ['HS256']);
         if (!empty($payload)) {
-            $token_info = json_decode(json_encode($payload), true);
+            $token_info = json_decode(json_encode($payload), true, 512, JSON_THROW_ON_ERROR);
 
             if (explode("_", $token_info['jti'])[1] != $type) {
                 return [];
@@ -87,6 +87,8 @@ class TokenAuth
      * 清理token
      * @param int $id
      * @param string $type
+     * @param string|null $token
+     * @return Response
      */
     public static function clearToken(int $id, string $type, ?string $token = '')
     {

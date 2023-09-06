@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 /**
  * 获取微信配置
- * @returns 
+ * @returns
  */
 export function getWechatConfig() {
     return request.get('wechat/config')
@@ -10,8 +10,6 @@ export function getWechatConfig() {
 
 /**
  * 微信配置所需的静态信息
- * @param uid 用户uid
- * @returns 
  */
 export function getWechatStatic() {
     return request.get('wechat/static');
@@ -19,16 +17,16 @@ export function getWechatStatic() {
 
 /**
  * 编辑微信配置
- * @param params 
- * @returns 
+ * @param params
+ * @returns
  */
 export function editWechatConfig(params: Record<string, any>) {
-    return request.put('wechat/config', params, { showSuccessMessage: true })
+    return request.put('wechat/config', params, {showSuccessMessage: true})
 }
 
 /**
  * 获取微信菜单
- * @returns 
+ * @returns
  */
 export function getWechatMenu() {
     return request.get('wechat/menu')
@@ -36,16 +34,16 @@ export function getWechatMenu() {
 
 /**
  * 编辑微信菜单
- * @param params 
- * @returns 
+ * @param params
+ * @returns
  */
 export function editWechatMenu(params: Record<string, any>) {
-    return request.put('wechat/menu', params, { showSuccessMessage: true })
+    return request.put('wechat/menu', params, {showSuccessMessage: true})
 }
 
 /**
  * 获取消息模板列表
- * @returns 
+ * @returns
  */
 export function getTemplateList() {
     return request.get('wechat/template')
@@ -54,11 +52,11 @@ export function getTemplateList() {
 
 /**
  * 获取同步
- * @param params 
- * @returns 
+ * @param params
+ * @returns
  */
 export function getBatchAcquisition(params: Record<string, any>) {
-    return request.put('wechat/template/sync', params, { showSuccessMessage: true })
+    return request.put('wechat/template/sync', params, {showSuccessMessage: true})
 }
 
 

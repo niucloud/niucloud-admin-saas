@@ -13,6 +13,7 @@ namespace app\adminapi\controller\weapp;
 
 use app\service\admin\weapp\WeappTemplateService;
 use core\base\BaseAdminController;
+use think\Response;
 
 /**
  * 微信小程序订阅消息
@@ -22,9 +23,10 @@ class Template extends BaseAdminController
 
     /**
      * 订阅消息
-     * @return \think\Response
+     * @return Response
      */
-    public function lists(){
+    public function lists()
+    {
         $wechat_template_service = new WeappTemplateService();
         return success($wechat_template_service->getList());
     }
@@ -32,9 +34,10 @@ class Template extends BaseAdminController
 
     /**
      * 菜单信息
-     * @return \think\Response
+     * @return Response
      */
-    public function sync(){
+    public function sync()
+    {
         $data = $this->request->params([
             ['keys', []]
         ]);

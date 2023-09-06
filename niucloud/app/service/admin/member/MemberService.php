@@ -17,7 +17,9 @@ use app\model\member\Member;
 use app\service\core\member\CoreMemberService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
+use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 
 /**
  * 会员服务层
@@ -35,17 +37,16 @@ class MemberService extends BaseAdminService
     /**
      * 会员列表
      * @param array $where
-     * @return mixed
+     * @return array
      */
     public function getPage(array $where = [])
     {
 
         $field = 'member_id, member_no, site_id, username, mobile, password, register_channel, register_type, nickname, headimg, member_level, member_label, wx_openid, weapp_openid, wx_unionid, ali_openid, douyin_openid, login_ip, login_type, login_channel, login_count, login_time, create_time, last_visit_time, last_consum_time, sex, status, birthday, point, point_get, balance, balance_get, growth, growth_get, is_member, member_time, is_del, province_id, city_id, district_id, address, location, delete_time, money, money_get, commission, commission_get, commission_cash_outing';
         $search_model = $this->model->where([['site_id', '=', $this->site_id]])->withSearch(['keyword','register_type', 'create_time', 'is_del', 'member_label', 'register_channel'],$where)->field($field)->order('member_id desc')->append(['register_channel_name', 'register_type_name', 'sex_name', 'login_channel_name', 'login_type_name', 'status_name']);
-        $data = $this->pageQuery($search_model, function ($item, $key) {
+        return $this->pageQuery($search_model, function ($item, $key) {
             $item = $this->makeUp($item);
         });
-        return $data;
     }
 
     /**
@@ -53,8 +54,8 @@ class MemberService extends BaseAdminService
      * @param array $where
      * @return array
      * @throws DbException
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws ModelNotFoundException
      */
     public function getList(array $where = [])
     {
@@ -64,7 +65,7 @@ class MemberService extends BaseAdminService
     /**
      * 会员详情
      * @param int $member_id
-     * @return array
+     * @return array|null
      */
     public function getInfo(int $member_id)
     {
@@ -90,7 +91,7 @@ class MemberService extends BaseAdminService
                 throw new AdminException('MEMBER_NO_IS_EXIST');
         }else{
             if(!$this->model->where([['site_id', '=', $this->site_id], ['member_no', '=', $data['member_no']]])->findOrEmpty()->isEmpty()){
-                $data['member_no'] = $this->getMemberNo($this->site_id);
+                $data['member_no'] = $this->getMemberNo();
             }
         }
 
@@ -191,13 +192,12 @@ class MemberService extends BaseAdminService
      */
     public function getSum($field)
     {
-        $sum = $this->model->where([['site_id', '=', $this->site_id] ])->sum($field);
-        return $sum;
+        return $this->model->where([['site_id', '=', $this->site_id] ])->sum($field);
     }
 
     /**
      * 创建会员编码
-     * @return string|void
+     * @return string|null
      */
     public function getMemberNo()
     {
@@ -207,6 +207,7 @@ class MemberService extends BaseAdminService
     /**
      * 删除会员
      * @param int $member_id
+     * @return true
      */
     public function deleteMember(int $member_id)
     {

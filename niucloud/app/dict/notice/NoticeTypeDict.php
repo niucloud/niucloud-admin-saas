@@ -14,18 +14,19 @@ namespace app\dict\notice;
 class NoticeTypeDict
 {
     //短信
-    const SMS = 'sms';
+    public const SMS = 'sms';
     //微信公众号
-    const WECHAT = 'wechat';
+    public const WECHAT = 'wechat';
     //微信小程序
-    const WEAPP = 'weapp';
+    public const WEAPP = 'weapp';
 
 
     /**
      * 获取消息类型
      * @return array
      */
-    public static function getType(){
+    public static function getType()
+    {
         return [
             self::SMS => get_lang('dict_notice.type_sms'),//短信
             self::WECHAT => get_lang('dict_notice.type_wechat'),//微信公众号

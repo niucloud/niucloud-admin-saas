@@ -6,10 +6,10 @@
                 <img src="@/assets/images/app_store/local_icon_select.png" class="mr-1.5 w-3.5 h-3.5 mb-0.5">
                 {{ t('localAppText') }}
             </div>
-            <div class="border rounded-sm switch-btn px-4 py-1 ml-3 cursor-pointer flex items-center" @click="market()">
+<!--            <div class="border rounded-sm switch-btn px-4 py-1 ml-3 cursor-pointer flex items-center" @click="market()">
                 <img src="@/assets/images/app_store/market_icon.png" class="mr-1.5 w-3.5 h-3.5 mb-0.5">
                 {{ t('marketAppText') }}
-            </div>
+            </div> -->
         </div>
         <div class="relative">
             <div class="absolute right-0 top-[2px] flex items-center cursor-pointer z-20 border	border-inherit">
@@ -20,13 +20,13 @@
                     <img src="@/assets/images/app_store/switch_icon_2.png" class="w-[16px] h-[16px] ">
                 </div>
             </div>
-            <el-tabs v-model="activeName" class="demo-tabs " @tab-click="handleClick">
+            <el-tabs v-model="activeName" class="demo-tabs"  @tab-click="handleClick">
 
                 <el-tab-pane :label="installLabel" name="installed">
                     <div class="flex flex-wrap px-2 plug-list pb-10">
                         <div v-for="(item, index) in localList.installed" :key="index + 'a'" class="flex items-center cursor-pointer  w-[295px] relative plug-item mr-4 mb-4" @click="getAddonDetialFn(item)" v-if="showType == 'small'">
                             <div class="p-3">
-                                <img class="w-[44px] h-[44px] rounded-sm" v-if="item.icon" :src="img(item.icon)" alt="">
+                                <img class="w-[44px] h-[44px] rounded-sm" v-if="item.icon" :src="item.icon" alt="">
                                 <img class="w-[44px] h-[44px] rounded-sm" v-else src="@/assets/images/icon-addon.png" alt="">
                             </div>
                             <div class="flex items-center w-[220px] border-b py-3 justify-between">
@@ -41,7 +41,7 @@
                         <div class="flex flex-wrap plug-list pb-10 plug-large" v-if="showType == 'large'">
                             <div class="app-item cursor-pointer mr-4 mt-[20px] pb-2 bg-[#f7f7f7]" v-for="(item, index) in localList.installed" :key="index + 'a'" @click="getAddonDetialFn(item)">
                                 <div class="flex justify-center items-center">
-                                    <img class="w-[240px] h-[120px]" v-if="item.cover" :src="img(item.cover)" />
+                                    <img class="w-[240px] h-[120px]" v-if="item.cover" :src="item.cover" />
                                     <img v-else class="w-[240px] h-[120px]" src="@/assets/images/app_store/app_store_default.png" />
                                 </div>
                                 <div class="flex w-[240px] h-[46px]">
@@ -65,25 +65,25 @@
 
                         <div v-for="(item, index) in localList.uninstalled" :key="index + 'a'" class="flex items-center cursor-pointer  w-[295px] relative plug-item mr-4 mb-4" @click="getAddonDetialFn(item)" v-if="showType == 'small'">
                             <div class="p-3">
-                                <!-- <img class="w-[44px] h-[44px] rounded-sm" v-if="item.icon" :src="img(item.icon)" alt=""> -->
-                                <img class="w-[44px] h-[44px] rounded-sm" src="@/assets/images/icon-addon.png" alt="">
+                                <img v-if="item.icon" class="w-[44px] h-[44px] rounded-sm" :src="img(item.icon)" alt="">
+                                <img v-else class="w-[44px] h-[44px] rounded-sm" src="@/assets/images/icon-addon.png" alt="">
                             </div>
                             <div class="flex items-center w-[220px] border-b py-3 justify-between">
                                 <div class="flex flex-col">
                                     <span class="text-[14px] truncate w-[160px]">{{ item.title }}</span>
                                     <span class="text-xs text-gray-400 truncate w-[160px] mt-[4px]">{{ item.desc }}</span>
                                 </div>
-                                <span class="w-max flex items-center plug-item-operate border rounded-2xl px-3.5 py-1.5 leading-none" @click.stop="installAddonFn(item.key)">{{ t('install') }}</span>
+								<span v-if="item.is_download" class="w-max flex items-center plug-item-operate border rounded-2xl px-3.5 py-1.5 leading-none" @click.stop="installAddonFn(item.key)">{{ t('install') }}</span>
+                                <span v-else class="w-max flex items-center plug-item-operate border rounded-2xl px-3.5 py-1.5 leading-none" @click.stop="downEvent(item.key)">{{ t('down') }}</span>
                             </div>
                         </div>
-
+						
                         <div class="flex flex-wrap plug-list pb-10 plug-large" v-if="showType == 'large'">
                             <div class="app-item cursor-pointer mr-4 mt-[20px] pb-2 bg-[#f7f7f7]" v-for="(item, index) in localList.uninstalled" :key="index + 'a'" @click="getAddonDetialFn(item)">
                                 <div class="flex justify-center items-center">
-                                    <!-- <img class="w-[240px] h-[120px]" v-if="item.cover" :src="img(item.cover)"/> -->
-
-                                    <img class="w-[240px] h-[120px]" src="@/assets/images/app_store/app_store_default.png" />
-
+                                    <img v-if="item.cover && !item.is_download" class="w-[240px] h-[120px]" :src="img(item.cover)"/>
+									<img v-else-if="item.cover && item.is_download" class="w-[240px] h-[120px]" :src="item.cover"/>
+                                    <img v-else class="w-[240px] h-[120px]" src="@/assets/images/app_store/app_store_default.png" />
                                 </div>
                                 <div class="flex w-[240px] h-[46px]">
                                     <div class="text-left mt-2 w-[190px]">
@@ -91,9 +91,9 @@
                                         <p class="app-text text-[12px] text-[#999] pl-2">{{ item.desc }}</p>
                                     </div>
                                     <div class="flex items-center pr-2">
-                                        <span class="w-max flex items-center plug-item-operate border rounded-2xl	px-2 py-1 leading-none mt-[10px]" @click.stop="installAddonFn(item.key)">{{ t('install') }}</span>
+										<span v-if="item.is_download" class="w-max flex items-center plug-item-operate border rounded-2xl px-2 py-1 leading-none mt-[10px]" @click.stop="installAddonFn(item.key)">{{ t('install') }}</span>
+                                        <span v-else class="w-max flex items-center plug-item-operate border rounded-2xl px-2 py-1 leading-none mt-[10px]" @click.stop="downEvent(item.key)">{{ t('down') }}</span>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -101,6 +101,49 @@
                         <el-empty :description="t('noPlug')" v-if="!localList.uninstalled.length && !loading" class="mx-auto" />
                     </div>
                 </el-tab-pane>
+				<el-tab-pane :label="allLabel" name="buy">
+				    <div class="flex flex-wrap px-2 plug-list pb-10">
+				
+				        <div v-for="(item, index) in localList.all" :key="index + 'a'" class="flex items-center cursor-pointer  w-[295px] relative plug-item mr-4 mb-4" @click="getAddonDetialFn(item)" v-if="showType == 'small'">
+				            <div class="p-3">
+				                <img v-if="item.icon" class="w-[44px] h-[44px] rounded-sm" :src="img(item.icon)" alt="">
+				                <img v-else class="w-[44px] h-[44px] rounded-sm" src="@/assets/images/icon-addon.png" alt="">
+				            </div>
+				            <div class="flex items-center w-[220px] border-b py-3 justify-between">
+				                <div class="flex flex-col">
+				                    <span class="text-[14px] truncate w-[160px]">{{ item.title }}</span>
+				                    <span class="text-xs text-gray-400 truncate w-[160px] mt-[4px]">{{ item.desc }}</span>
+				                </div>
+								<span v-if="item.install_info && Object.keys(item.install_info)?.length" class="w-max flex items-center plug-item-operate border rounded-2xl px-3.5 py-1.5 leading-none " @click.stop="uninstallAddonFn(item.key)">{{ t('unload') }}</span>
+								<span v-else-if="item.is_download && item.install_info <= 0" class="w-max flex items-center plug-item-operate border rounded-2xl px-3.5 py-1.5 leading-none" @click.stop="installAddonFn(item.key)">{{ t('install') }}</span>
+				                <span v-else class="w-max flex items-center plug-item-operate border rounded-2xl px-3.5 py-1.5 leading-none" @click.stop="downEvent(item.key)">{{ t('down') }}</span>
+				            </div>
+				        </div>
+						
+				        <div class="flex flex-wrap plug-list pb-10 plug-large" v-if="showType == 'large'">
+				            <div class="app-item cursor-pointer mr-4 mt-[20px] pb-2 bg-[#f7f7f7]" v-for="(item, index) in localList.all" :key="index + 'a'" @click="getAddonDetialFn(item)">
+				                <div class="flex justify-center items-center">
+				                    <img v-if="item.cover && !item.is_download" class="w-[240px] h-[120px]" :src="img(item.cover)"/>
+									<img v-else-if="item.cover && item.is_download" class="w-[240px] h-[120px]" :src="item.cover"/>
+				                    <img v-else class="w-[240px] h-[120px]" src="@/assets/images/app_store/app_store_default.png" />
+				                </div>
+				                <div class="flex w-[240px] h-[46px]">
+				                    <div class="text-left mt-2 w-[190px]">
+				                        <p class="app-text text-[14px] text-[#222] pl-2">{{ item.title }}</p>
+				                        <p class="app-text text-[12px] text-[#999] pl-2">{{ item.desc }}</p>
+				                    </div>
+				                    <div class="flex items-center pr-2">
+										<span v-if="item.install_info && Object.keys(item.install_info)?.length" class="w-max flex items-center plug-item-operate border rounded-2xl px-3.5 py-1.5 leading-none " @click.stop="uninstallAddonFn(item.key)">{{ t('unload') }}</span>
+										<span v-else-if="item.is_download && item.install_info <= 0" class="w-max flex items-center plug-item-operate border rounded-2xl px-2 py-1 leading-none mt-[10px]" @click.stop="installAddonFn(item.key)">{{ t('install') }}</span>
+				                        <span v-else class="w-max flex items-center plug-item-operate border rounded-2xl px-2 py-1 leading-none mt-[10px]" @click.stop="downEvent(item.key)">{{ t('down') }}</span>
+				                    </div>
+				                </div>
+				            </div>
+				        </div>
+
+				        <el-empty :description="t('noPlug')" v-if="!localList.all.length && !loading" class="mx-auto" />
+				    </div>
+				</el-tab-pane>
             </el-tabs>
         </div>
 
@@ -279,20 +322,26 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch, computed } from 'vue'
+import { ref, watch, computed, reactive } from 'vue'
 import { t } from '@/lang'
 import { getAddonLocal, uninstallAddon, installAddon, preInstallCheck, getAddonInstallTaskState, executeInstall } from '@/api/addon'
+import { downloadVersion } from '@/api/module'
 import { TabsPaneContext, ElMessageBox } from 'element-plus'
 import { img } from '@/utils/common'
 import { Terminal, api as terminalApi } from 'vue-web-terminal'
+import { useRouter, useRoute } from 'vue-router'
 
+const route = useRoute()
+const router = useRouter()
 const activeName = ref('installed')
-
 const loading = ref<Boolean>(false)
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-}
-
 const showType = ref('large')
+
+const downEvent = (key: string) => {
+	downloadVersion(key).then(()=>{
+		localListFn()
+	})
+}
 
 const installLabel = computed(() => {
     let text = t('installLabel')
@@ -306,34 +355,57 @@ const uninstalledLabel = computed(() => {
     return text
 })
 
+const allLabel = computed(() => {
+    let text = t('buyLabel')
+    localList.value.all.length && (text += ` (${localList.value.all.length})`)
+    return text
+})
+
 /**
  * 本地下载的插件列表
  */
 const localList = ref({
     installed: [],
-    uninstalled: []
+    uninstalled: [],
+	all: [],
+	error: ''
 })
 const localListFn = () => {
     loading.value = true
     getAddonLocal({}).then(res => {
-        const data = res.data
-
+        const data = res.data.list
+		localList.value.error = res.data.error
         localList.value.installed = []
         localList.value.uninstalled = []
+		for(let i in data){
+			
+			if(data[i].is_local == false) localList.value.all.push(data[i])
+			
+			if (data[i].install_info && Object.keys(data[i].install_info)?.length) {
+				localList.value.installed.push(data[i])
+			} else {
+				if(data[i].is_download == true) localList.value.uninstalled.push(data[i])
+			}
+			
+		}
 
-        data.forEach(element => {
-            if (element.install_info && Object.keys(element.install_info)?.length) {
-                localList.value.installed.push(element)
-            } else {
-                localList.value.uninstalled.push(element)
-            }
-        })
         loading.value = false
+		
     }).catch(() => {
         loading.value = false
     })
 }
 localListFn()
+
+const handleClick = (tab: TabsPaneContext, event: Event) => {
+	if(tab.paneName == 'buy' && localList.value.error != ''){
+		ElMessage({
+		    message: localList.value.error,
+		    grouping: true,
+		    type: 'error'
+		})
+	}
+}
 
 const currAddon = ref('')
 // 安装面板弹窗

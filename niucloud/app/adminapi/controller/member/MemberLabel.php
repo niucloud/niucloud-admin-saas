@@ -13,6 +13,9 @@ namespace app\adminapi\controller\member;
 
 use app\service\admin\member\MemberLabelService;
 use core\base\BaseAdminController;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\Response;
 
 class MemberLabel extends BaseAdminController
@@ -21,7 +24,8 @@ class MemberLabel extends BaseAdminController
      * 会员标签列表
      * @return Response
      */
-    public function lists(){
+    public function lists()
+    {
         $data = $this->request->params([
 
             ['label_name', ''],
@@ -32,8 +36,10 @@ class MemberLabel extends BaseAdminController
     /**
      * 会员标签详情
      * @param int $id
+     * @return Response
      */
-    public function info(int $id){
+    public function info(int $id)
+    {
         return success((new MemberLabelService())->getInfo($id));
     }
 
@@ -41,7 +47,8 @@ class MemberLabel extends BaseAdminController
      * 添加会员标签
      * @return Response
      */
-    public function add(){
+    public function add()
+    {
         $data = $this->request->params([
 
             ['label_name', ''],
@@ -56,7 +63,8 @@ class MemberLabel extends BaseAdminController
     /**
      * 菜单或接口更新
      */
-    public function edit($id){
+    public function edit($id)
+    {
         $data = $this->request->params([
             ['label_name', ''],
             ['memo', ''],
@@ -70,8 +78,10 @@ class MemberLabel extends BaseAdminController
     /**
      * 会员标签删除
      * @param int $id
+     * @return Response
      */
-    public function del(int $id){
+    public function del(int $id)
+    {
 
         (new MemberLabelService())->del($id);
         return success('DELETE_SUCCESS');
@@ -79,9 +89,13 @@ class MemberLabel extends BaseAdminController
 
     /**
      * 获取标签
-     * @return void
+     * @return Response
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
-    public function getAll(){
+    public function getAll()
+    {
         return success((new MemberLabelService())->getAll());
     }
 

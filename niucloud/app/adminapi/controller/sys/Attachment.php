@@ -48,7 +48,8 @@ class Attachment extends BaseAdminController
      * 批量删除
      * @return Response
      */
-    public function batchDel(){
+    public function batchDel()
+    {
         $data = $this->request->params([
             ['att_ids', []],
         ]);
@@ -110,7 +111,7 @@ class Attachment extends BaseAdminController
 
     /**
      * 移动图片分组
-     * @return void
+     * @return Response
      */
     public function moveCategory($att_id)
     {
@@ -118,12 +119,11 @@ class Attachment extends BaseAdminController
             ['cate_id', '']
         ]);
         (new AttachmentService())->modifyCategory($att_id, $data['cate_id']);
-        return success('SUCCESS');
+        return success();
     }
 
     /**
      * 批量移动图片分组
-     * @param $att_ids
      * @return Response
      */
     public function batchMoveCategory()
@@ -133,7 +133,32 @@ class Attachment extends BaseAdminController
             ['att_ids', []]
         ]);
         (new AttachmentService())->batchModifyCategory($data['att_ids'], $data['cate_id']);
-        return success('SUCCESS');
+        return success();
+    }
+
+    /**
+     * 获取图标库分类列表
+     */
+    public function getIconCategoryList()
+    {
+        $data = $this->request->params([
+            ['name', ''],
+        ]);
+        return success((new AttachmentService())->getIconCategoryList($data));
+    }
+
+    /**
+     * 获取图标库列表
+     */
+    public function getIconList()
+    {
+        $data = $this->request->params([
+            ['page', 0],
+            ['limit', 0],
+            ['cate_id', 0],
+            ['real_name', ''],
+        ]);
+        return success((new AttachmentService())->getIconList($data));
     }
 
 }

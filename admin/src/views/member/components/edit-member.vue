@@ -13,7 +13,7 @@
             </el-form-item>
             <el-form-item :label="t('sex')" v-if="type == 'sex'">
                 <el-select v-model="saveData.sex" clearable :placeholder="t('sexPlaceholder')" class="input-width">
-                    <el-option :label="item['name']" :value="item['id']" v-for="item in sexSeleteData" />
+                    <el-option :label="item['name']" :value="item['id']" v-for="item in sexSelectData" />
                 </el-select>
             </el-form-item>
             <el-form-item :label="t('memberLabel')" v-if="type == 'member_label'">
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
 import { editMemberDetail, getMemberLabelAll } from '@/api/member'
@@ -45,7 +45,7 @@ let title = ref('')
 let memberId = ref('')
 let showDialog = ref(false)
 const loading = ref(false)
-let sexSeleteData = ref([
+const sexSelectData = ref([
     {
         id: 0,
         name: t('secrecySex')
@@ -65,7 +65,6 @@ const getMemberLabelAllFn = async () => {
     labelSelectData.value = await (await getMemberLabelAll()).data
 }
 getMemberLabelAllFn();
-
 
 
 /**

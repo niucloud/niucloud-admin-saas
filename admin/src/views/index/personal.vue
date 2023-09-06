@@ -32,10 +32,9 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance, FormRules, ElNotification } from 'element-plus'
-import { useRoute, useRouter } from 'vue-router'
 import { img } from '@/utils/common'
 import { getUserInfo,setUserInfo } from '@/api/personal'
 

@@ -32,7 +32,8 @@ class CoreAddonLogService extends CoreAddonBaseService
      * @param array $params
      * @return true
      */
-    public function add(array $params){
+    public function add(array $params)
+    {
         $data = array(
             'type' => $params['type'],
             'key' => $params['key'],

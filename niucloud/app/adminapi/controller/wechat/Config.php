@@ -21,7 +21,8 @@ class Config extends BaseAdminController
      * 获取微信配置信息
      * @return Response
      */
-    public function get(){
+    public function get()
+    {
         return success((new WechatConfigService())->getWechatConfig());
     }
 
@@ -29,7 +30,8 @@ class Config extends BaseAdminController
      * 设置微信配置信息
      * @return Response
      */
-    public function set(){
+    public function set()
+    {
         $data = $this->request->params([
             ['wechat_name', ''],
             ['wechat_original', ''],
@@ -49,7 +51,8 @@ class Config extends BaseAdminController
      * 获取微信静态资源
      * @return Response
      */
-    public function static(){
+    public function static()
+    {
         return success((new WechatConfigService())->getWechatStaticInfo());
     }
 

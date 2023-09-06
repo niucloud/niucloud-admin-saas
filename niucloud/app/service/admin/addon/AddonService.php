@@ -12,9 +12,13 @@
 namespace app\service\admin\addon;
 
 
+use app\service\core\addon\CoreAddonDownloadService;
 use app\service\core\addon\CoreAddonInstallService;
 use app\service\core\addon\CoreAddonService;
+use app\service\core\niucloud\CoreModuleService;
 use core\base\BaseAdminService;
+use Exception;
+use think\Response;
 
 
 /**
@@ -26,6 +30,9 @@ class AddonService extends BaseAdminService
     {
         parent::__construct();
 
+    }
+    public function getList(){
+        return (new CoreAddonService())->getLocalAddonList();
     }
 
     /**
@@ -40,14 +47,14 @@ class AddonService extends BaseAdminService
     /**
      * 安装插件
      * @param string $addon
-     * @return true
+     * @return Response
      */
     public function install(string $addon)
     {
         try {
             $data = (new CoreAddonInstallService($addon))->install();
             return success('SUCCESS', $data);
-        } catch (\Exception $e) {
+        } catch ( Exception $e) {
             return fail($e->getMessage());
         }
     }
@@ -55,13 +62,13 @@ class AddonService extends BaseAdminService
     /**
      * 执行安装
      * @param string $addon
-     * @return \think\Response
+     * @return Response
      */
     public function executeInstall(string $addon) {
         try {
             $data = (new CoreAddonInstallService($addon))->executeInstall();
             return success('SUCCESS', $data);
-        } catch (\Exception $e) {
+        } catch ( Exception $e) {
             return fail($e->getMessage());
         }
     }
@@ -69,7 +76,7 @@ class AddonService extends BaseAdminService
     /**
      * 安装插件检测安装环境
      * @param string $addon
-     * @return \think\Response
+     * @return Response
      */
     public function installCheck(string $addon) {
         $data = (new CoreAddonInstallService($addon))->installCheck();
@@ -79,6 +86,7 @@ class AddonService extends BaseAdminService
     /**
      * 获取插件安装状态
      * @param string $addon
+     * @param string $key
      * @return mixed
      */
     public function getInstallState(string $addon, string $key)
@@ -99,7 +107,7 @@ class AddonService extends BaseAdminService
     /**
      * 获取插件列表
      * @param array $where
-     * @param string $order
+     * @return array
      */
     public function getPage(array $where = [])
     {
@@ -109,6 +117,7 @@ class AddonService extends BaseAdminService
     /**
      * 获取插件信息
      * @param int $id
+     * @return array
      */
     public function getInfo(int $id)
     {
@@ -125,5 +134,22 @@ class AddonService extends BaseAdminService
         return (new CoreAddonService())->setStatus($id, $status);
     }
 
+    /**
+     * 下载应用
+     * @param string $app_key
+     * @return true
+     */
+    public function download(string $app_key){
+        return (new CoreAddonDownloadService())->download($app_key);
+    }
+
+    /**
+     * 更新应用
+     * @param string $app_key
+     * @return null
+     */
+    public function update(string $app_key){
+        return (new CoreAddonDownloadService())->update($app_key);
+    }
 
 }

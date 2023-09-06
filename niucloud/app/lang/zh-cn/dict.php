@@ -42,7 +42,20 @@ return [
         'status_on' => '正常',
         'status_experience' => '体验期',
         'status_expire' => '已到期',
-        'status_close' => '已停止'
+        'status_close' => '已停止',
+        'pay' => '收款',
+        'refund' => '退款',
+        'transfer' => '转账',
+    ],
+    // 站点
+    'dict_site_index' => [
+        //站点类型
+        'system' => '框架首页',
+    ],
+    // 平台首页
+    'dict_admin_index' => [
+        //站点类型
+        'system' => '框架首页',
     ],
     'dict_notice' => [
         'type_sms' => '短信',
@@ -85,15 +98,15 @@ return [
         'login_mobile' => '手机验证码登录',
         'login_wechat' => '微信公众号授权登录',
         'login_weapp' => '微信小程序授权登录',
-        'account_point_adjust' => '积分调整',
+        'account_point_adjust' => '账户调整',
         'account_point_recharge_give' => '充值赠送',
-        'account_balance_adjust' => '余额调整',
-        'account_balance_recharge' => '余额充值',
+        'account_balance_adjust' => '账户调整',
+        'account_balance_recharge' => '账户充值',
         'account_money_award' => '活动奖励',
-        'account_money_cash_out' => '余额提现',
-        'account_money_adjust' => '零钱调整',
+        'account_money_cash_out' => '账户提现',
+        'account_money_adjust' => '账户调整',
         'account_commission_award' => '活动奖励',
-        'account_commission_cash_out' => '佣金提现',
+        'account_commission_cash_out' => '账户提现',
         'status_on' => '正常',
         'status_off' => '锁定',
         'account_balance_recharge_refund' => '充值订单退款',
@@ -125,14 +138,18 @@ return [
         'status_off' => '停用'
     ],
     //自动任务时间间隔
-    'dict_cron' => [
-        'type_minute' => '分钟',
-        'type_day' => '天',
-        'type_week' => '星期',
-        'type_month' => '月',
-
+    'dict_schedule' => [
         'type_cron' => '定时任务',
-        'type_crond' => '周期任务'
+        'type_crond' => '周期任务',
+        'on' => '启用',
+        'off' => '关闭',
+
+        'min' => '每隔几分钟',
+        'hour' => '每隔几小时',
+        'day' => '每隔几天',
+        'week' => '每周',
+        'month' => '每月',
+
     ],
     //支付相关
     'dict_pay' => [
@@ -146,6 +163,7 @@ return [
         'status_ing' => '支付中',
         'status_ed' => '已支付',
         'status_cancle' => '已取消',
+        'status_audit' => '待审核'
     ],
     //转账相关
     'dict_transfer' => [
@@ -263,6 +281,33 @@ return [
         'mysql_ask' => '大于等于5.7',
         'php_authority_ask' => '开启',
         'file_authority_ask' => '可读可写'
-    ]
+    ],
+    //日期
+    'dict_date' => [
+        //星期
+        'mon' => '周一',
+        'tue' => '周二',
+        'wed' => '周三',
+        'thur' => '周四',
+        'fri' => '周五',
+        'sat' => '周六',
+        'sun' => '周日',
+        //月份
+        'jan' => '1月',
+        'feb' => '2月',
+        'mar' => '3月',
+        'apr' => '4月',
+        'may' => '5月',
+        'jun' => '6月',
+        'jul' => '7月',
+        'aug' => '8月',
+        'sept' => '9月',
+        'oct' => '10月',
+        'nov' => '11月',
+        'dec' => '12月',
 
+    ],
+    'dict_site_layout' => [
+        'default' => '默认'
+    ]
 ];

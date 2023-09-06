@@ -35,13 +35,14 @@ class ArticleCategory extends BaseModel
 
     /**
      * 文章分类名称搜索器
+     * @param $query
      * @param $value
      * @param $data
      */
     public function searchNameAttr($query, $value, $data)
     {
         if ($value) {
-            $query->where([ ['name', 'like', "%$value%" ]]);
+            $query->where([['name', 'like', "%$value%"]]);
         }
     }
 
@@ -49,7 +50,6 @@ class ArticleCategory extends BaseModel
     {
         return (new Article())->where([['category_id', '=', $data['category_id']]])->count();
     }
-
 
 
 }

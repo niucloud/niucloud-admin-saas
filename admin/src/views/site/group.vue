@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center">
-                <span class="text-[24px]">{{pageName}}</span>
+                <span class="text-[20px]">{{pageName}}</span>
                 <el-button type="primary" class="w-[100px]" @click="addEvent">
                     {{ t('addSiteGroup') }}
                 </el-button>
@@ -58,9 +58,9 @@ import { getSiteGroupList,deleteSiteGroup } from '@/api/site'
 import { ElMessageBox, FormInstance } from 'element-plus'
 import EditGroup from '@/views/site/components/edit-group.vue'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title;
-
 
 const searchFormRef = ref<FormInstance>();
 
@@ -103,7 +103,6 @@ const loadSiteGroupList = (page: number = 1) => {
     })
 }
 loadSiteGroupList()
-
 
 const editSiteGroupDialog: Record<string, any> | null = ref(null)
 

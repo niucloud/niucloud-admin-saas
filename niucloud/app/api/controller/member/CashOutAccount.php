@@ -13,6 +13,7 @@ namespace app\api\controller\member;
 
 use app\service\api\member\MemberCashOutAccountService;
 use core\base\BaseApiController;
+use think\Response;
 
 class CashOutAccount extends BaseApiController
 {
@@ -30,7 +31,7 @@ class CashOutAccount extends BaseApiController
     /**
      * 提现账户信息
      * @param int $account_id
-     * @return \think\Response
+     * @return Response
      */
     public function info(int $account_id){
         return success((new MemberCashOutAccountService())->getInfo($account_id));
@@ -38,7 +39,7 @@ class CashOutAccount extends BaseApiController
 
     /**
      * 查询首条提现账户按账户类型
-     * @return void
+     * @return Response
      */
     public function firstInfo(){
         $data = $this->request->params([
@@ -49,7 +50,7 @@ class CashOutAccount extends BaseApiController
 
     /**
      * 添加提现账号
-     * @return void
+     * @return Response
      */
     public function add(){
         $data = $this->request->params([
@@ -66,7 +67,7 @@ class CashOutAccount extends BaseApiController
     /**
      * 编辑提现账号
      * @param int $account_id
-     * @return void
+     * @return Response
      */
     public function edit(int $account_id){
         $data = $this->request->params([
@@ -83,7 +84,7 @@ class CashOutAccount extends BaseApiController
     /**
      * 删除提现账号
      * @param int $account_id
-     * @return \think\Response
+     * @return Response
      */
     public function del(int $account_id){
         (new MemberCashOutAccountService())->del($account_id);

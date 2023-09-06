@@ -21,11 +21,11 @@ class AppManageListener
 {
     /**
      * 应用管理
-     * @param $data
+     * @return array
      */
     public function handle()
     {
-        $data = [
+        return [
             "category" => [
                 //插件如果要单独分类展示，需要专门定义
                 [
@@ -43,6 +43,5 @@ class AppManageListener
                 "url" => "/hello_world"
             ],
         ];
-        return $data;
     }
 }

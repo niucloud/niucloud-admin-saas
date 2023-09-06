@@ -41,10 +41,10 @@
 			uni.showToast({ title: t('pleaseEnterNumber'), icon: 'none' });
 			return;
 		}
-		if (formData.siteId > 9999999) {
-			uni.showToast({ title: t('maximumCannotExceed') + '9999999', icon: 'none' });
-			return;
-		}
+		// if (formData.siteId > 9999999) {
+		// 	uni.showToast({ title: t('maximumCannotExceed') + '9999999', icon: 'none' });
+		// 	return;
+		// }
 
 		uni.setStorageSync('wap_site_id', formData.siteId);
 

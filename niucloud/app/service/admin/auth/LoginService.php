@@ -17,10 +17,12 @@ use app\service\admin\captcha\CaptchaService;
 use app\service\admin\site\SiteService;
 use app\service\admin\user\UserRoleService;
 use app\service\admin\user\UserService;
+use app\service\core\sys\CoreConfigService;
 use core\base\BaseAdminService;
 use core\exception\AuthException;
 use core\util\TokenAuth;
 use Exception;
+use Throwable;
 
 /**
  * 登录服务层
@@ -40,13 +42,12 @@ class LoginService extends BaseAdminService
      * 用户登录
      * @param string $username
      * @param string $password
+     * @param string $app_type
      * @return array|bool
-     * @throws AuthException
      */
     public function login(string $username, string $password, string $app_type)
     {
-
-        if(!in_array($app_type, array_keys(AppTypeDict::getAppType()))) throw new AuthException('APP_TYPE_NOT_EXIST');
+        if(!array_key_exists($app_type, AppTypeDict::getAppType())) throw new AuthException('APP_TYPE_NOT_EXIST');
 
         $config = (new ConfigService())->getConfig();
         switch($app_type){
@@ -70,7 +71,6 @@ class LoginService extends BaseAdminService
             throw new AuthException('USER_LOCK');
         }
 
-
         if($app_type == AppTypeDict::ADMIN){
             $default_site_id = $this->request->defaultSiteId();
             $userrole = (new UserRoleService())->getUserRole($default_site_id, $userinfo->uid);
@@ -78,7 +78,8 @@ class LoginService extends BaseAdminService
         }else if($app_type == AppTypeDict::SITE){
             $default_site_id = (new UserRoleService())->getUserDefaultSiteId($userinfo->uid);
             if(!($default_site_id > 0)) throw new AuthException('ADMIN_USER_CAN_NOT_LOGIN_IN_SITE');
-
+        }else{
+            throw new AuthException('APP_TYPE_NOT_EXIST');
         }
         //修改用户登录信息
         $userinfo->last_time = time();
@@ -99,12 +100,15 @@ class LoginService extends BaseAdminService
             'site_id' => $default_site_id,
         ];
         $data['site_info'] = (new SiteService())->getInfo($data['site_id']);
+        // 获取站点布局
+        $layout_config = (new CoreConfigService())->getConfig($data['site_id'], 'SITE_LAYOUT');
+        $data['layout'] = empty($layout_config) ? 'default' : $layout_config['value']['key'];
         return $data;
     }
 
     /**
      * 登陆退出(当前账户) (todo 这儿应该登出当前token, (登出一个账号还是全端口登出))
-     * @return void
+     * @return true
      */
     public function logout()
     {
@@ -114,20 +118,21 @@ class LoginService extends BaseAdminService
 
     /**
      * 创建token
-     * @param $userinfo
+     * @param SysUser $userinfo
+     * @param string $app_type
      * @return array
      */
     public function createToken(SysUser $userinfo, string $app_type)
     {
         $expire_time = env('system.admin_token_expire_time') ?? 3600;
-        $token_info = TokenAuth::createToken($userinfo->uid, AppTypeDict::ADMIN, ['uid' => $userinfo->uid, 'username' => $userinfo->username], $expire_time);
-        return $token_info;
+        return TokenAuth::createToken($userinfo->uid, AppTypeDict::ADMIN, ['uid' => $userinfo->uid, 'username' => $userinfo->username], $expire_time);
     }
 
     /**
      * 清理token
-     * @param $uid
-     * @param string $type
+     * @param int $uid
+     * @param string|null $type
+     * @param string|null $token
      */
     public static function clearToken(int $uid, ?string $type = '', ?string $token = '')
     {
@@ -142,9 +147,8 @@ class LoginService extends BaseAdminService
 
     /**
      * 解析token
-     * @param string $token
-     * @return mixed
-     * @throws Exception
+     * @param string|null $token
+     * @return array
      */
     public function parseToken(?string $token)
     {
@@ -155,7 +159,7 @@ class LoginService extends BaseAdminService
         //暴力操作,截停所有异常覆盖为token失效
         try {
             $token_info = TokenAuth::parseToken($token, AppTypeDict::ADMIN);
-        } catch ( \Throwable $e ) {
+        } catch ( Throwable $e ) {
 //            if(env('app_debug', false)){
 //                throw new AuthException($e->getMessage(), 401);
 //            }else{

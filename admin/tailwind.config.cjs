@@ -39,7 +39,7 @@ module.exports = {
 				overlay: 'var(--el-bg-color-overlay)'
 			},
 			fontFamily: {
-				sans: ['PingFang SC', 'Arial', 'Hiragino Sans GB', 'Microsoft YaHei', 'sans-serif']
+				sans: ['PingFang SC', 'Microsoft YaHei', 'Arial', 'Hiragino Sans GB', 'sans-serif']
 			},
 			boxShadow: {
 				DEFAULT: 'var(--el-box-shadow)',

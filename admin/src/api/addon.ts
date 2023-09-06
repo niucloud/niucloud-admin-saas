@@ -2,15 +2,15 @@ import request from '@/utils/request'
 
 /**
  * 本地下载的插件列表
- * @returns 
+ * @returns
  */
 export function getAddonLocal(params: Record<string, any>) {
-    return request.get('addon/local', params, { showSuccessMessage: true })
+    return request.get('addon/local', params, {showSuccessMessage: true})
 }
 
 /**
  * 插件详情
- * @returns 
+ * @returns
  */
 export function getAddonDetial(id: number) {
     return request.get(`addon/${id}`)
@@ -27,27 +27,27 @@ export function installAddon(params: Record<string, any>) {
 
 /**
  * 卸载插件
- * @param params 
+ * @param params
  * @returns
  */
 export function uninstallAddon(params: Record<string, any>) {
-    return request.post(`addon/uninstall/${params.addon}`, params, { showSuccessMessage: true })
+    return request.post(`addon/uninstall/${params.addon}`, params, {showSuccessMessage: true})
 }
 
 /**
  * 插件安装前检测
- * @param addon 
- * @returns 
+ * @param addon
+ * @returns
  */
 export function preInstallCheck(addon: string) {
-    return request.get(`addon/install/check/${addon}`, { timeout: 30 * 1000 })
+    return request.get(`addon/install/check/${addon}`, {timeout: 30 * 1000})
 }
 
 /**
  * 获取插件安装任务执行状态
- * @param addon 
- * @param key 
- * @returns 
+ * @param addon
+ * @param key
+ * @returns
  */
 export function getAddonInstallTaskState(addon: string, key: string) {
     return request.get(`addon/install/${addon}/status/${key}`)
@@ -55,8 +55,7 @@ export function getAddonInstallTaskState(addon: string, key: string) {
 
 /**
  * 执行安装任务
- * @param params 
- * @returns 
+ * @param addon
  */
 export function executeInstall(addon: string) {
     return request.post(`addon/install/execute/${addon}`, {})

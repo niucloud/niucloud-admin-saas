@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 
 namespace app\validate\sys;
+
 use think\Validate;
 
 /**
@@ -20,16 +21,16 @@ class Role extends Validate
 {
 
     //用户名或密码的规范可能是从数据库中获取的
-    protected $rule =   [
-        'role_name'  => 'require',
+    protected $rule = [
+        'role_name' => 'require',
     ];
 
-    protected $message  =   [
+    protected $message = [
         'role_name.require' => 'validate_role.role_name_require',
     ];
 
     protected $scene = [
-        'add'  =>  ['role_name'],
+        'add' => ['role_name'],
         'edit' => ['role_name']
     ];
 }

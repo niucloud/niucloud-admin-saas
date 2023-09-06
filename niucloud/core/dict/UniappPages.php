@@ -22,7 +22,7 @@ class UniappPages extends BaseDict
     {
         $addons = $this->getLocalAddons();
         $page_files = [];
-        foreach ($addons as $k => $v) {
+        foreach ($addons as $v) {
             $page_path = $this->getAddonDictPath($v) . "diy" . DIRECTORY_SEPARATOR . "pages.php";
             if (is_file($page_path)) {
                 $page_files[] = $page_path;

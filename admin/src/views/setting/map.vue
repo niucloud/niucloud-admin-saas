@@ -1,7 +1,6 @@
 <template>
     <div class="main-container">
-        <el-form :model="formData" label-width="150px" ref="formRef" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="150px" ref="formRef" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
                 <h3 class="panel-title">{{ t('mapSetting') }}</h3>
                 <el-form-item :label="t('mapKey')" prop="site_name">
@@ -22,9 +21,10 @@
 import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { setMap, getMap } from '@/api/sys'
-import { FormInstance, } from 'element-plus'
+import { FormInstance } from 'element-plus'
 
 const loading = ref(false)
+const formRef = ref<FormInstance>()
 const formData = reactive<Record<string, string>>({
 	key : ''
 })
@@ -39,7 +39,6 @@ setFormData()
  */
 const save = async (formEl: FormInstance | undefined) => {
     if (loading.value || !formEl) return
-
     setMap(formData).then(() => {
         loading.value = false
     }).catch(() => {

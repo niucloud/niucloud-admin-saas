@@ -16,6 +16,7 @@ use app\dict\member\MemberCashOutDict;
 use app\dict\pay\TransferDict;
 use app\model\pay\Transfer;
 use core\base\BaseModel;
+use think\model\relation\HasOne;
 
 /**
  * 会员提现
@@ -35,33 +36,33 @@ class MemberCashOut extends BaseModel
      */
     protected $name = 'member_cash_out';
     protected $type = [
-        'audit_time' =>  'timestamp',
+        'audit_time' => 'timestamp',
         'transfer_time' => 'timestamp',
     ];
 
     /**
      * 会员信息
-     * @return \think\model\relation\HasOne
+     * @return HasOne
      */
     public function memberInfo()
     {
-        return $this->hasOne( Member::class, 'member_id', 'member_id')->joinType('left')
+        return $this->hasOne(Member::class, 'member_id', 'member_id')->joinType('left')
             ->withField('member_id, member_no, username, mobile, nickname, headimg')
             ->bind(['username', 'mobile', 'nickname', 'headimg', 'member_no']);
     }
 
     /**
      * 会员信息关联列表查询
-     * @return \think\model\relation\HasOne
+     * @return HasOne
      */
     public function member()
     {
-        return $this->hasOne( Member::class, 'member_id', 'member_id')->joinType('left');
+        return $this->hasOne(Member::class, 'member_id', 'member_id')->joinType('left');
     }
 
     /**
      * 转账信息
-     * @return \think\model\relation\HasOne
+     * @return HasOne
      */
     public function transfer()
     {
@@ -75,18 +76,26 @@ class MemberCashOut extends BaseModel
      * @param $data
      * @return mixed|string
      */
-    public function getAccountTypeNameAttr($value, $data){
-        return MemberAccountTypeDict::getType()[ $data[ 'account_type' ] ?? '' ] ?? '';
+    public function getAccountTypeNameAttr($value, $data)
+    {
+        if (empty($data['account_type']))
+            return '';
+        return MemberAccountTypeDict::getType()[$data['account_type']] ?? '';
     }
+
     /**
      * 提现状态名称
      * @param $value
      * @param $data
      * @return mixed|string
      */
-    public function getStatusNameAttr($value, $data){
-        return MemberCashOutDict::getStatus()[ $data[ 'status' ] ?? '' ] ?? '';
+    public function getStatusNameAttr($value, $data)
+    {
+        if (empty($data['status']))
+            return '';
+        return MemberCashOutDict::getStatus()[$data['status']] ?? '';
     }
+
     /**
      * 转账方式名称
      * @param $value
@@ -95,7 +104,10 @@ class MemberCashOut extends BaseModel
      */
     public function getTransferTypeNameAttr($value, $data)
     {
-        return TransferDict::getTransferType()[ $data[ 'transfer_type' ] ?? '' ]['name'] ?? '';
+        if (empty($data['transfer_type']))
+            return '';
+        $temp = TransferDict::getTransferType()[$data['transfer_type']] ?? [];
+        return $temp['name'] ?? '';
     }
 
     /**
@@ -104,11 +116,16 @@ class MemberCashOut extends BaseModel
      * @param $data
      * @return mixed|string
      */
-    public function getTransferStatusNameAttr($value, $data){
-        return TransferDict::getStatus()[ $data[ 'transfer_status' ] ?? '' ] ?? '';
+    public function getTransferStatusNameAttr($value, $data)
+    {
+        if (empty($data['transfer_status']))
+            return '';
+        return TransferDict::getStatus()[$data['transfer_status']] ?? '';
     }
+
     /**
      * 会员搜索
+     * @param $query
      * @param $value
      * @param $data
      */
@@ -121,6 +138,7 @@ class MemberCashOut extends BaseModel
 
     /**
      * 状态搜索
+     * @param $query
      * @param $value
      * @param $data
      */
@@ -133,6 +151,7 @@ class MemberCashOut extends BaseModel
 
     /**
      *
+     * @param $query
      * @param $value
      * @param $data
      */
@@ -145,6 +164,7 @@ class MemberCashOut extends BaseModel
 
     /**
      *
+     * @param $query
      * @param $value
      * @param $data
      */
@@ -157,68 +177,76 @@ class MemberCashOut extends BaseModel
 
     /**
      * 创建时间搜索器
+     * @param $query
      * @param $value
+     * @param $data
      */
     public function searchCreateTimeAttr($query, $value, $data)
     {
-        $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
-        $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
-        if($start_time > 0 && $end_time > 0){
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
+        if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('create_time', $start_time, $end_time);
-        }else if($start_time > 0 && $end_time == 0){
+        } else if ($start_time > 0 && $end_time == 0) {
             $query->where([['create_time', '>=', $start_time]]);
-        }else if($start_time == 0 && $end_time > 0){
+        } else if ($start_time == 0 && $end_time > 0) {
             $query->where([['create_time', '<=', $end_time]]);
         }
     }
 
     /**
      * 创建时间搜索器
+     * @param $query
      * @param $value
+     * @param $data
      */
     public function searchJoinCreateTimeAttr($query, $value, $data)
     {
-        $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
-        $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
-        if($start_time > 0 && $end_time > 0){
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
+        if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('member_cash_out.create_time', $start_time, $end_time);
-        }else if($start_time > 0 && $end_time == 0){
+        } else if ($start_time > 0 && $end_time == 0) {
             $query->where([['member_cash_out.create_time', '>=', $start_time]]);
-        }else if($start_time == 0 && $end_time > 0){
+        } else if ($start_time == 0 && $end_time > 0) {
             $query->where([['member_cash_out.create_time', '<=', $end_time]]);
         }
     }
 
     /**
      * 审核时间搜索器
+     * @param $query
      * @param $value
+     * @param $data
      */
     public function searchAuditTimeAttr($query, $value, $data)
     {
-        $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
-        $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
-        if($start_time > 0 && $end_time > 0){
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
+        if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('audit_time', $start_time, $end_time);
-        }else if($start_time > 0 && $end_time == 0){
+        } else if ($start_time > 0 && $end_time == 0) {
             $query->where([['audit_time', '>=', $start_time]]);
-        }else if($start_time == 0 && $end_time > 0){
+        } else if ($start_time == 0 && $end_time > 0) {
             $query->where([['audit_time', '<=', $end_time]]);
         }
     }
 
     /**
      * 审核时间搜索器
+     * @param $query
      * @param $value
+     * @param $data
      */
     public function searchTransferTimeAttr($query, $value, $data)
     {
-        $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
-        $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
-        if($start_time > 0 && $end_time > 0){
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
+        if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('transfer_time', $start_time, $end_time);
-        }else if($start_time > 0 && $end_time == 0){
+        } else if ($start_time > 0 && $end_time == 0) {
             $query->where([['transfer_time', '>=', $start_time]]);
-        }else if($start_time == 0 && $end_time > 0){
+        } else if ($start_time == 0 && $end_time > 0) {
             $query->where([['transfer_time', '<=', $end_time]]);
         }
     }

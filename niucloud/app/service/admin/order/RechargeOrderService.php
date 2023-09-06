@@ -31,7 +31,7 @@ class RechargeOrderService extends BaseAdminService
     /**
      * 充值订单分页列表
      * @param array $where
-     * @return mixed
+     * @return array
      */
     public function getPage(array $where)
     {
@@ -58,8 +58,8 @@ class RechargeOrderService extends BaseAdminService
 
     /**
      * 充值订单详情
-     * @param array $where
-     * @return mixed
+     * @param int $order_id
+     * @return array
      */
     public function getDetail(int $order_id)
     {
@@ -90,7 +90,8 @@ class RechargeOrderService extends BaseAdminService
 
     /**
      * 充值订单
-     * @return array|array[]|string
+     * @param array $data
+     * @return int[]
      */
     public function stat(array $data = [])
     {

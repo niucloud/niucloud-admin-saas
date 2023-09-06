@@ -32,14 +32,18 @@ export function logout() {
  * 用户名注册
  */
 export function usernameRegister(data : AnyObject) {
-    return request.post('register', data, { showErrorMessage: true })
+    let url = 'register'
+    data.pid && (url += `?pid=${data.pid}`)
+    return request.post(url, data, { showErrorMessage: true })
 }
 
 /**
  * 手机号注册
  */
 export function mobileRegister(data : AnyObject) {
-    return request.post('register/mobile', data, { showErrorMessage: true })
+    let url = 'register/mobile'
+    data.pid && (url += `?pid=${data.pid}`)
+    return request.post(url, data, { showErrorMessage: true })
 }
 
 /**
@@ -60,7 +64,9 @@ export function weappLogin(data : AnyObject) {
  * 绑定手机号
  */
 export function bind(data : AnyObject) {
-    return request.post('bind', data, { showErrorMessage: true })
+    let url = 'bind'
+    data.pid && (url += `?pid=${data.pid}`)
+    return request.post(url, data, { showErrorMessage: true })
 }
 
 /**

@@ -12,7 +12,11 @@
 namespace app\service\core\weapp;
 
 use core\base\BaseCoreService;
+use EasyWeChat\Kernel\Exceptions\DecryptException;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
+use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use EasyWeChat\Kernel\Support\Collection;
+use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -27,10 +31,9 @@ class CoreWeappAuthService extends BaseCoreService
     /**
      * 网页授权
      * @param int $site_id
-     * @param string $url
-     * @param string $scopes
+     * @param string|null $code
      * @return string
-     * @throws InvalidArgumentException
+     * @throws InvalidConfigException
      */
     public function session(int $site_id, ?string $code)
     {
@@ -39,10 +42,12 @@ class CoreWeappAuthService extends BaseCoreService
 
     /**
      * 开发者后台校验与解密开放数据
+     * @param int $site_id
      * @param string $session
      * @param string $iv
-     * @param string $encryptedData
-     * @return void
+     * @param string $encrypted_data
+     * @return array
+     * @throws DecryptException
      */
     public function decryptData(int $site_id, string $session, string $iv, string $encrypted_data){
         return CoreWeappService::app($site_id)->encryptor->decryptData($session, $iv, $encrypted_data);
@@ -52,9 +57,9 @@ class CoreWeappAuthService extends BaseCoreService
      * 获取小程序手机号
      * @param int $site_id
      * @param string $code
-     * @return array|\EasyWeChat\Kernel\Support\Collection|object|ResponseInterface|string
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return array|Collection|object|ResponseInterface|string
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function getUserPhoneNumber(int $site_id,string $code){
         return CoreWeappService::app($site_id)->phone_number->getUserPhoneNumber($code);

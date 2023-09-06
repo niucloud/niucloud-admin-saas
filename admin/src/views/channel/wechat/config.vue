@@ -1,7 +1,7 @@
 <template>
     <div class="main-container">
         <div class="flex ml-[18px] justify-between items-center mt-[20px]">
-			<span class="text-[24px]">{{pageName}}</span>
+			<span class="text-[20px]">{{pageName}}</span>
 		</div>
         
         <el-form :model="formData" label-width="150px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
@@ -44,8 +44,7 @@
                 <el-form-item label="URL">
                     <el-input :model-value="wechatStatic.serve_url" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
-                            <div class="cursor-pointer" @click="copyEvent(wechatStatic.serve_url)">{{ t('copy') }}
-                            </div>
+                            <div class="cursor-pointer" @click="copyEvent(wechatStatic.serve_url)">{{ t('copy') }}</div>
                         </template>
                     </el-input>
                 </el-form-item>
@@ -84,8 +83,7 @@
                 <el-form-item :label="t('businessDomain')">
                     <el-input :model-value="wechatStatic.business_domain" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
-                            <div class="cursor-pointer" @click="copyEvent(wechatStatic.business_domain)">{{ t('copy') }}
-                            </div>
+                            <div class="cursor-pointer" @click="copyEvent(wechatStatic.business_domain)">{{ t('copy') }}</div>
                         </template>
                     </el-input>
                 </el-form-item>
@@ -93,8 +91,7 @@
                 <el-form-item :label="t('jsSecureDomain')">
                     <el-input :model-value="wechatStatic.js_secure_domain" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
-                            <div class="cursor-pointer" @click="copyEvent(wechatStatic.business_domain)">{{ t('copy') }}
-                            </div>
+                            <div class="cursor-pointer" @click="copyEvent(wechatStatic.business_domain)">{{ t('copy') }}</div>
                         </template>
                     </el-input>
                 </el-form-item>
@@ -102,8 +99,7 @@
                 <el-form-item :label="t('webAuthDomain')">
                     <el-input :model-value="wechatStatic.web_auth_domain" placeholder="Please input" class="input-width" :readonly="true">
                         <template #append>
-                            <div class="cursor-pointer" @click="copyEvent(wechatStatic.business_domain)">{{ t('copy') }}
-                            </div>
+                            <div class="cursor-pointer" @click="copyEvent(wechatStatic.business_domain)">{{ t('copy') }}</div>
                         </template>
                     </el-input>
                 </el-form-item>
@@ -126,6 +122,7 @@ import { getWechatConfig, getWechatStatic, editWechatConfig } from '@/api/wechat
 import { useClipboard } from '@vueuse/core'
 import { ElMessage, FormInstance, FormRules } from 'element-plus'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title
 

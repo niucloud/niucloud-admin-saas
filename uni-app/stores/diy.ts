@@ -3,6 +3,7 @@ import { toRaw } from 'vue'
 
 interface Diy {
 	mode : string, // 模式：decorate 装修，为空表示正常
+	pageMode : string, // 页面展示模式，diy：自定义，fixed：固定
 	currentIndex : number,
 	global : {
 		title : string,
@@ -17,6 +18,7 @@ const useDiyStore = defineStore('diy', {
 	state: () : Diy => {
 		return {
 			mode: '',
+			pageMode: 'diy',
 			currentIndex: -99,
 			global: {
 				title: "",
@@ -46,6 +48,7 @@ const useDiyStore = defineStore('diy', {
 				try {
 					let data = JSON.parse(event.data);
 					this.currentIndex = data.currentIndex;
+					this.pageMode = data.pageMode;
 					if (data.global) this.global = data.global;
 					if (data.value) this.value = data.value;
 

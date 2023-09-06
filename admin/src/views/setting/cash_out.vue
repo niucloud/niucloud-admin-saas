@@ -1,7 +1,7 @@
 <template>
     <div class="main-container">
         <div class="flex ml-[18px] justify-between items-center mt-[20px]">
-			<span class="text-[24px]">{{pageName}}</span>
+			<span class="text-[20px]">{{pageName}}</span>
 		</div>
         <el-form :model="formData" label-width="150px" ref="ruleFormRef" :rules="rules" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
@@ -52,8 +52,9 @@
 import { reactive, ref } from 'vue'
 import { t } from '@/lang' 
 import { getCashOutConfig, setCashOutConfig, getTransfertype } from '@/api/member'
-import { ElMessage, FormRules, FormInstance } from 'element-plus'
+import { FormRules, FormInstance } from 'element-plus'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title
 

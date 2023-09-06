@@ -15,6 +15,8 @@ use app\dict\common\ChannelDict;
 use app\model\member\Member;
 use app\model\pay\Pay;
 use core\base\BaseModel;
+use think\model\relation\HasMany;
+use think\model\relation\HasOne;
 
 /**
  * 充值订单模型
@@ -38,20 +40,20 @@ class RechargeOrder extends BaseModel
 
     //类型
     protected $type = [
-        'pay_time'     =>  'timestamp',
-        'close_time'  =>  'timestamp',
+        'pay_time' => 'timestamp',
+        'close_time' => 'timestamp',
     ];
 
 
     /**
      * 登录渠道字段转化
      * @param $value
+     * @param $data
      * @return mixed
      */
     public function getOrderFromNameAttr($value, $data)
     {
-        if(isset($data['order_from']))
-        {
+        if (isset($data['order_from'])) {
             return ChannelDict::getType()[$data['order_from']] ?? '';
         }
 
@@ -132,7 +134,7 @@ class RechargeOrder extends BaseModel
     public function searchOrderMoneyAttr($query, $value, $data)
     {
         if (!empty($data['start_money']) && !empty($data['end_money'])) {
-            $money = [ $data['start_money'], $data['end_money'] ];
+            $money = [$data['start_money'], $data['end_money']];
             sort($money);
             $query->where('order_money', 'between', $money);
         } else if (!empty($data['start_money'])) {
@@ -154,19 +156,22 @@ class RechargeOrder extends BaseModel
             $query->where('order_status', '=', $value);
         }
     }
+
     /**
      * 创建时间搜索器
+     * @param $query
      * @param $value
+     * @param $data
      */
     public function searchCreateTimeAttr($query, $value, $data)
     {
-        $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
-        $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
-        if($start_time > 0 && $end_time > 0){
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
+        if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('create_time', $start_time, $end_time);
-        }else if($start_time > 0 && $end_time == 0){
+        } else if ($start_time > 0 && $end_time == 0) {
             $query->where([['create_time', '>=', $start_time]]);
-        }else if($start_time == 0 && $end_time > 0){
+        } else if ($start_time == 0 && $end_time > 0) {
             $query->where([['create_time', '<=', $end_time]]);
         }
     }
@@ -180,40 +185,41 @@ class RechargeOrder extends BaseModel
      */
     public function searchPayTimeAttr($query, $value, $data)
     {
-        $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
-        $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
-        if($start_time > 0 && $end_time > 0){
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
+        if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('pay_time', $start_time, $end_time);
-        }else if($start_time > 0 && $end_time == 0){
+        } else if ($start_time > 0 && $end_time == 0) {
             $query->where([['pay_time', '>=', $start_time]]);
-        }else if($start_time == 0 && $end_time > 0){
+        } else if ($start_time == 0 && $end_time > 0) {
             $query->where([['pay_time', '<=', $end_time]]);
         }
     }
 
     /**
      * 订单项目
-     * @return \think\model\relation\HasMany
+     * @return HasMany
      */
     public function item()
     {
-        return $this->hasMany(RechargeOrderItem::class,'order_id', 'order_id');
+        return $this->hasMany(RechargeOrderItem::class, 'order_id', 'order_id');
     }
 
     /**
      * 订单会员
-     * @return \think\model\relation\HasOne
+     * @return HasOne
      */
     public function member()
     {
-        return $this->hasOne(Member::class,'member_id', 'member_id');
+        return $this->hasOne(Member::class, 'member_id', 'member_id');
     }
 
     /**
      * 支付记录
-     * @return \think\model\relation\HasOne
+     * @return HasOne
      */
-    public function pay() {
-        return $this->hasOne(Pay::class,'out_trade_no', 'out_trade_no')->bind(['pay_type_name' => 'type_name']);
+    public function pay()
+    {
+        return $this->hasOne(Pay::class, 'out_trade_no', 'out_trade_no')->bind(['pay_type_name' => 'type_name']);
     }
 }

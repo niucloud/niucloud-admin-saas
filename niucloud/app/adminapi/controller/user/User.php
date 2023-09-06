@@ -17,7 +17,8 @@ use think\Response;
 
 class User extends BaseAdminController
 {
-    public function lists(){
+    public function lists()
+    {
         $data = $this->request->params([
             ['username', ''],
             ['real_name', '']
@@ -33,7 +34,8 @@ class User extends BaseAdminController
      * @param $uid
      * @return Response
      */
-    public function info($uid){
+    public function info($uid)
+    {
         return success((new UserService())->getUserAdminInfo($uid));
     }
 

@@ -21,20 +21,16 @@ use core\dict\DictLoader;
 class PagesDict
 {
 
-    /**
-     * 获取页面数据
-     * @param string $type
-     * @return array|string|null
-     */
-    public static function getPages($type = '')
+    public static function getPages($params = [])
     {
         $system_pages = [
             'DIY_INDEX' => [
                 'default_index' => [ // 页面标识
                     "title" => "首页", // 页面名称
-                    'cover' => '', // 页面封面图
+                    'cover' => 'static/resource/images/diy/template/default_index_cover.png', // 页面封面图
                     'preview' => '', // 页面预览图
-                    'desc' => '', // 页面描述
+                    'desc' => '官方推出的系统首页', // 页面描述
+                    'mode' => 'diy', // 页面模式：diy：自定义，fixed：固定
                     // 页面数据源
                     "data" => [
                         "global" => [
@@ -255,14 +251,67 @@ class PagesDict
                             ]
                         ]
                     ]
-                ]
+                ],
+//                'tourism' => [
+//                    "title" => "固定模板示例", // 页面名称
+//                    'cover' => 'static/resource/images/diy/template/tourism_cover.png', // 页面封面图
+//                    'preview' => '', // 页面预览图
+//                    'desc' => '描述固定模板', // 页面描述
+//                    'mode' => 'fixed', // 页面模式：diy：自定义，fixed：固定
+//                    'data' => [
+//                        "global" => [
+//                            'component' => 'demo-index', // 模板组件名称 DemoIndex
+//                            "title" => "固定模板示例",
+//                            "pageBgColor" => "#F8F8F8",
+//                            'bgUrl' => '',
+//                            'imgWidth' => '',
+//                            'imgHeight' => '',
+//                            "bottomTabBarSwitch" => true,
+//                            "template" => [
+//                                'textColor' => "#303133",
+//                                "pageBgColor" => "",
+//                                "componentBgColor" => "",
+//                                "topRounded" => 0,
+//                                "bottomRounded" => 0,
+//                                "elementBgColor" => "",
+//                                "topElementRounded" => 0,
+//                                "bottomElementRounded" => 0,
+//                                "margin" => [
+//                                    "top" => 0,
+//                                    "bottom" => 0,
+//                                    "both" => 0
+//                                ]
+//                            ],
+//                            'topStatusBar' => [
+//                                'bgColor' => "#ffffff",
+//                                'isTransparent' => false,
+//                                'isShow' => true,
+//                                'style' => 'style-1',
+//                                'textColor' => "#333333",
+//                                'textAlign' => 'center',
+//                            ],
+//                            'popWindow' => [
+//                                'imgUrl' => "",
+//                                'imgWidth' => '',
+//                                'imgHeight' => '',
+//                                'count' => -1,
+//                                'show' => 0,
+//                                'link' => [
+//                                    'name' => ""
+//                                ],
+//                            ]
+//                        ],
+//                        "value" => []
+//                    ]
+//                ]
             ],
             'DIY_MEMBER_INDEX' => [
                 'default_member_index_one' => [
                     "title" => "个人中心（风格一）", // 页面名称
-                    'cover' => '', // 页面封面图
+                    'cover' => 'static/resource/images/diy/template/default_member_index_one_cover.png', // 页面封面图
                     'preview' => '', // 页面预览图
-                    'desc' => '', // 页面描述
+                    'desc' => '官方推出个人中心（风格一）', // 页面描述
+                    'mode' => 'diy',
                     // 页面数据源
                     "data" => [
                         "global" => [
@@ -583,9 +632,10 @@ class PagesDict
                 ],
                 'default_member_index_two' => [
                     "title" => "个人中心（风格二）", // 页面名称
-                    'cover' => '', // 页面封面图
+                    'cover' => 'static/resource/images/diy/template/default_member_index_two_cover.png', // 页面封面图
                     'preview' => '', // 页面预览图
-                    'desc' => '', // 页面描述
+                    'desc' => '官方推出个人中心（风格二）', // 页面描述
+                    'mode' => 'diy',
                     // 页面数据源
                     "data" => [
                         "global" => [
@@ -904,14 +954,40 @@ class PagesDict
 
                         ]
                     ]
-                ]
+                ],
+//                'tourism' => [
+//                    "title" => "旅游", // 页面名称
+//                    'cover' => 'static/resource/images/diy/template/tourism_member_index_cover.png', // 页面封面图
+//                    'preview' => '', // 页面预览图
+//                    'desc' => '酒店旅游住宿门票景点', // 页面描述
+//                    'mode' => 'fixed', // 页面模式：diy：自定义，fixed：固定
+//                    'data' => [
+//                        'component' => 'tourism-member', // 模板组件名称
+//                        'link' => '' // 装修链接
+//                    ]
+//                ]
             ]
         ];
-        $pages = ( new DictLoader("UniappPages") )->load($system_pages);
-        if (empty($type)) {
-            return $pages;
+
+        $pages = (new DictLoader("UniappPages"))->load($system_pages);
+        if (!empty($params['type'])) {
+            if (!empty($pages[$params['type']])) {
+                $temp = $pages[$params['type']];
+                if (isset($params['mode']) && !empty($params['mode'])) {
+                    foreach ($temp as $k => $v) {
+                        if ($params['mode'] != $v['mode']) {
+                            unset($temp[$k]);
+                        }
+                    }
+                }
+                return $temp;
+            } else {
+                return [];
+            }
+
         }
-        return $pages[ $type ] ?? '';
+
+        return $pages;
     }
 
 }

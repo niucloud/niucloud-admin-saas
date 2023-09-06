@@ -13,21 +13,22 @@ namespace app\dict\site;
 
 class SiteDict
 {
-    const EXPIRE = 2;//过期
+    public const EXPIRE = 2;//过期
 
-    const ON = 1;//正常
-    const CLOSE = 3;//停止
+    public const ON = 1;//正常
+    public const CLOSE = 3;//停止
 
 
     /**
      * 站点状态
      * @return array
      */
-    public static function getStatus(){
+    public static function getStatus()
+    {
         return [
             self::ON => get_lang('dict_site.status_on'),//正常
-            self::EXPIRE  => get_lang('dict_site.status_expire'),//过期
-            self::CLOSE  => get_lang('dict_site.status_close'),//停止
+            self::EXPIRE => get_lang('dict_site.status_expire'),//过期
+            self::CLOSE => get_lang('dict_site.status_close'),//停止
         ];
     }
 

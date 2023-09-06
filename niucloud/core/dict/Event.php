@@ -15,19 +15,17 @@ class Event extends BaseDict
 {
     /**
      * 加载事件
-     * @param array $system_event 系统事件
+     * @param array $data
      * @return array|mixed
      */
     public function load(array $data)
     {
-        $addons  = $this->getLocalAddons();
+        $addons = $this->getLocalAddons();
         $event_files = [];
 
-        foreach ($addons as $k => $v)
-        {
-            $event_path = $this->getAddonAppPath($v)."event.php";
-            if(is_file($event_path))
-            {
+        foreach ($addons as $v) {
+            $event_path = $this->getAddonAppPath($v) . "event.php";
+            if (is_file($event_path)) {
                 $event_files[] = $event_path;
             }
         }

@@ -32,7 +32,7 @@ class CaptchaService extends BaseApiService
      * @return array|null
      */
     public function create(?array $data = []){
-        return (new CoreCaptchaService())->create(0);
+        return (new CoreCaptchaService())->create();
     }
 
     /**
@@ -40,7 +40,7 @@ class CaptchaService extends BaseApiService
      * @return true
      */
     public function check(){
-        return (new CoreCaptchaService())->check(0);
+        return (new CoreCaptchaService())->check();
     }
 
 }

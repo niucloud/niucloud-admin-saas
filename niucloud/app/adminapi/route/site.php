@@ -70,7 +70,15 @@ Route::group('site', function () {
     Route::get('log/:id', 'site.UserLog/info');
     /***************************************************** 站点菜单 **************************************************/
     Route::get('site/menu', 'site.Site/menu');
-
+    /***************************************************** 站点账单 *************************************************/
+    //站点账单列表
+    Route::get('account', 'site.SiteAccount/lists');
+    //站点账单详情
+    Route::get('account/:id', 'site.SiteAccount/info');
+    //账单统计
+    Route::get('account/stat', 'site.SiteAccount/stat');
+    //账单类型
+    Route::get('account/type', 'site.SiteAccount/accountType');
 
 })->middleware([
     AdminCheckToken::class,

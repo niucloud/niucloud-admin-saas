@@ -11,7 +11,6 @@
 
 namespace app\listener\site;
 
-use app\service\admin\install\InstallArticleService;
 
 /**
  * 添加站点成功后事件
@@ -26,10 +25,5 @@ class AddSiteAfterListener
      */
     public function handle($data)
     {
-
-        // 初始化文章数据
-//        ( new InstallArticleService() )->install([ 'site_id' => $data[ 'site_id' ] ]);
-        //加载插件语言包
-        return;
     }
 }

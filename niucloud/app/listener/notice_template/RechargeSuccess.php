@@ -19,7 +19,7 @@ class RechargeSuccess extends BaseNoticeTemplate
 
             $core_order_service = new CoreRechargeOrderService();
             $order = $core_order_service->orderInfo($site_id, $order_id);
-            if (!empty($order)){
+            if (!empty($order)) {
                 $member = (new CoreMemberService())->getInfoByMemberId($site_id, $order['member_id']);
                 //通过订单id查询订单信息
                 return $this->toReturn(

@@ -13,6 +13,9 @@ namespace app\service\core\member;
 
 use app\model\member\MemberLabel;
 use core\base\BaseCoreService;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\facade\Cache;
 
 /**
@@ -34,9 +37,9 @@ class CoreMemberLabelService extends BaseCoreService
      * @param int $site_id
      * @param array $label_ids
      * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function getMemberLabelListByLabelIds(int $site_id, array $label_ids){
         sort($label_ids);
@@ -48,18 +51,15 @@ class CoreMemberLabelService extends BaseCoreService
             },
             self::$cache_tag_name.$site_id
         );
-//        return Cache::tag(self::$cache_tag_name.$site_id)->remember($cache_name, function () use ($site_id, $label_ids) {
-//            return array_keys_search($this->getAll($site_id), $label_ids, 'label_id');
-//        });
     }
 
     /**
      * 获取全部会员标签
-     * @param $site_id
+     * @param int $site_id
      * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function getAll(int $site_id){
         $cache_name = __METHOD__ . $site_id;
@@ -72,11 +72,6 @@ class CoreMemberLabelService extends BaseCoreService
             },
             self::$cache_tag_name.$site_id
         );
-//        return Cache::tag(self::$cache_tag_name.$site_id)->remember($cache_name, function () use ($site_id) {
-//            $field = 'label_id, label_name';
-//            return $this->model->where([['site_id', '=', $site_id]])->field($field)->select()->toArray();
-//
-//        });
     }
 
     /**

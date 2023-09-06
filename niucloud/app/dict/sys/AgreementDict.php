@@ -27,7 +27,8 @@ class AgreementDict
      * 获取协议类型
      * @return string[]
      */
-    public static function getType(){
+    public static function getType()
+    {
         return [
             self::SERVICE => get_lang('dict_agreement.service'),//服务协议,
             self::PRIVACY => get_lang('dict_agreement.privacy'),//隐私协议

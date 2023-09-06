@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 
 namespace app\validate\sys;
+
 use think\Validate;
 
 /**
@@ -17,16 +18,15 @@ use think\Validate;
  * Class Page
  * @package app\validate\sys
  */
-
 class Page extends Validate
 {
 
-    protected $rule =   [
-        'page'  => 'number|min:1',
-        'limit'  => 'number|between:1,120',
+    protected $rule = [
+        'page' => 'number|min:1',
+        'limit' => 'number|between:1,120',
     ];
 
-    protected $message  =   [
+    protected $message = [
         'page.number' => 'validate_page.page_error',
         'page.min' => 'validate_page.page_error',
         'limit.number' => 'validate_page.limit_number',

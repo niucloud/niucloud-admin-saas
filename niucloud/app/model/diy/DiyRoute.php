@@ -36,6 +36,7 @@ class DiyRoute extends BaseModel
 
     /**
      * 搜索器:自定义路由表
+     * @param $query
      * @param $value
      * @param $data
      */
@@ -48,6 +49,7 @@ class DiyRoute extends BaseModel
 
     /**
      * 搜索器:自定义路由表页面名称
+     * @param $query
      * @param $value
      * @param $data
      */
@@ -60,6 +62,7 @@ class DiyRoute extends BaseModel
 
     /**
      * 搜索器:自定义路由表页面标识
+     * @param $query
      * @param $value
      * @param $data
      */
@@ -72,6 +75,7 @@ class DiyRoute extends BaseModel
 
     /**
      * 搜索器:自定义路由表页面路径
+     * @param $query
      * @param $value
      * @param $data
      */
@@ -84,6 +88,7 @@ class DiyRoute extends BaseModel
 
     /**
      * 搜索器:自定义路由表分享内容
+     * @param $query
      * @param $value
      * @param $data
      */
@@ -93,8 +98,10 @@ class DiyRoute extends BaseModel
             $query->where("share", $value);
         }
     }
+
     /**
      * 搜索器:自定义路由表是否支持分享
+     * @param $query
      * @param $value
      * @param $data
      */

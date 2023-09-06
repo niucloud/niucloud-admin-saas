@@ -1,9 +1,13 @@
-<script lang="ts">
-import { createVNode, resolveComponent, defineComponent } from 'vue'
+<template>
+	<el-icon v-if="type=='element'" :style="style" :class="['icon el-icon',props.class]">
+		<component :is="name"/>
+	</el-icon>
+	<i v-else :class="[type,name,props.class]" :style="style"></i>
+</template>
+<script lang="ts" setup>
+    import {watch, ref, reactive} from 'vue'
 
-export default defineComponent({
-    name: 'Icon',
-    props: {
+    const props = defineProps({
         name: {
             type: String,
             required: true
@@ -20,23 +24,25 @@ export default defineComponent({
             type: String,
             default: '16px'
         },
-    },
-    setup(props) {
-        let [type, name] = props.name.split(/-(.*)/)
+    })
 
-        let style = {
-            color: props.color,
-            fontSize: props.size
-        }
+    const type = ref('');
+    const name = ref('');
 
-        switch (type) {
-            case 'element':
-                return () => createVNode('el-icon', { class: ['icon el-icon', props.class], style: style }, [createVNode(resolveComponent(name))])
-                break;
-            case 'iconfont':
-                return () => createVNode('i', { class: [name, 'iconfont', props.class], style: style })
-                break;
-        }
-    }
-})
+    const style = reactive({
+        color: props.color,
+        fontSize: props.size
+    });
+
+    const load = () => {
+        let arr = props.name.split(/-(.*)/);
+        type.value = arr[0];
+        name.value = arr[1];
+    };
+
+    load();
+
+    watch(() => props.name, () => {
+        load();
+    })
 </script>

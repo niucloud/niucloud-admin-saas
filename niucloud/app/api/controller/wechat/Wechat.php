@@ -14,6 +14,9 @@ namespace app\api\controller\wechat;
 use app\service\api\wechat\WechatAuthService;
 use core\base\BaseController;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\Response;
 
 class Wechat extends BaseController
@@ -23,7 +26,6 @@ class Wechat extends BaseController
     /**
      * 获取跳转获取code
      * @return Response
-     * @throws InvalidArgumentException
      */
     public function getCodeUrl(){
         $data = $this->request->params([
@@ -36,7 +38,10 @@ class Wechat extends BaseController
 
     /**
      * 授权登录
-     * @return void
+     * @return Response
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function login(){
         $data = $this->request->params([
@@ -49,7 +54,6 @@ class Wechat extends BaseController
     /**
      * 注册
      * @return Response
-     * @throws InvalidArgumentException
      */
     public function register(){
         $data = $this->request->params([
@@ -67,7 +71,6 @@ class Wechat extends BaseController
     /**
      * 同步
      * @return Response
-     * @throws InvalidArgumentException
      */
     public function sync(){
         $data = $this->request->params([
@@ -91,7 +94,7 @@ class Wechat extends BaseController
 
     /**
      * 扫码登录
-     * @return void
+     * @return Response
      */
     public function scanLogin(){
         $wechat_auth_service = new WechatAuthService();

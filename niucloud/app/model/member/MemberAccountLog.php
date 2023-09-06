@@ -14,6 +14,7 @@ namespace app\model\member;
 use app\dict\member\MemberAccountChangeTypeDict;
 use app\dict\member\MemberAccountTypeDict;
 use core\base\BaseModel;
+use think\model\relation\HasOne;
 
 /**
  * 会员账户流水（账单）模型
@@ -42,29 +43,31 @@ class MemberAccountLog extends BaseModel
      * @param $data
      * @return string
      */
-    public function getAccountTypeNameAttr($value,$data)
+    public function getAccountTypeNameAttr($value, $data)
     {
-        return MemberAccountTypeDict::getType()[$data['account_type'] ?? ''] ?? '';
+        if (empty($data['account_type']))
+            return '';
+        return MemberAccountTypeDict::getType()[$data['account_type']] ?? '';
     }
 
     /**
      * 会员信息
-     * @return \think\model\relation\HasOne
+     * @return HasOne
      */
     public function memberInfo()
     {
-        return $this->hasOne( Member::class, 'member_id', 'member_id')->joinType('left')
+        return $this->hasOne(Member::class, 'member_id', 'member_id')->joinType('left')
             ->withField('member_id,member_no, username, mobile, nickname, headimg')
             ->bind(['username', 'mobile', 'nickname', 'headimg']);
     }
 
     /**
      * 会员关联
-     * @return \think\model\relation\HasOne
+     * @return HasOne
      */
     public function member()
     {
-        return $this->hasOne( Member::class, 'member_id', 'member_id')->withField('member_id, member_no, username, mobile, nickname, headimg')->joinType('inner');
+        return $this->hasOne(Member::class, 'member_id', 'member_id')->withField('member_id, member_no, username, mobile, nickname, headimg')->joinType('inner');
     }
 
     /**
@@ -73,9 +76,9 @@ class MemberAccountLog extends BaseModel
      * @param $data
      * @return int
      */
-    public function getAccountDataAttr($value,$data)
+    public function getAccountDataAttr($value, $data)
     {
-        if($data['account_type'] == 'point'|| $data['account_type'] == 'growth')
+        if ($data['account_type'] == 'point' || $data['account_type'] == 'growth')
             return (int)$data['account_data'];
         else
             return $data['account_data'];
@@ -87,9 +90,9 @@ class MemberAccountLog extends BaseModel
      * @param $data
      * @return int
      */
-    public function getAccountSumAttr($value,$data)
+    public function getAccountSumAttr($value, $data)
     {
-        if($data['account_type'] == 'point'|| $data['account_type'] == 'growth')
+        if ($data['account_type'] == 'point' || $data['account_type'] == 'growth')
             return (int)$data['account_sum'];
         else
             return $data['account_sum'];
@@ -101,15 +104,17 @@ class MemberAccountLog extends BaseModel
      * @param $data
      * @return array|mixed|string
      */
-    public function getFromTypeNameAttr($value,$data)
+    public function getFromTypeNameAttr($value, $data)
     {
-        if(isset($data['from_type'])&& isset($data['account_type']))
+        if (isset($data['from_type'], $data['account_type']))
             return MemberAccountChangeTypeDict::getType($data['account_type'])[$data['from_type']]['name'];
         else
             return '';
     }
+
     /**
      * 会员搜索
+     * @param $query
      * @param $value
      * @param $data
      */
@@ -122,6 +127,7 @@ class MemberAccountLog extends BaseModel
 
     /**
      * 会员搜索(用于关联表查询)
+     * @param $query
      * @param $value
      * @param $data
      */
@@ -134,6 +140,7 @@ class MemberAccountLog extends BaseModel
 
     /**
      * 类型搜索
+     * @param $query
      * @param $value
      * @param $data
      */
@@ -143,8 +150,10 @@ class MemberAccountLog extends BaseModel
             $query->where('from_type', $value);
         }
     }
+
     /**
      * 账户类型搜索
+     * @param $query
      * @param $value
      * @param $data
      */
@@ -154,36 +163,41 @@ class MemberAccountLog extends BaseModel
             $query->where('account_type', $value);
         }
     }
+
     /**
      * 创建时间搜索器
+     * @param $query
      * @param $value
+     * @param $data
      */
     public function searchCreateTimeAttr($query, $value, $data)
     {
-        $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
-        $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
-        if($start_time > 0 && $end_time > 0){
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
+        if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('create_time', $start_time, $end_time);
-        }else if($start_time > 0 && $end_time == 0){
+        } else if ($start_time > 0 && $end_time == 0) {
             $query->where([['create_time', '>=', $start_time]]);
-        }else if($start_time == 0 && $end_time > 0){
+        } else if ($start_time == 0 && $end_time > 0) {
             $query->where([['create_time', '<=', $end_time]]);
         }
     }
 
     /**
      * 创建关联表时间搜索器
+     * @param $query
      * @param $value
+     * @param $data
      */
     public function searchJoinCreateTimeAttr($query, $value, $data)
     {
-        $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
-        $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
-        if($start_time > 0 && $end_time > 0){
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
+        if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('member_account_log.create_time', $start_time, $end_time);
-        }else if($start_time > 0 && $end_time == 0){
+        } else if ($start_time > 0 && $end_time == 0) {
             $query->where([['member_account_log.create_time', '>=', $start_time]]);
-        }else if($start_time == 0 && $end_time > 0){
+        } else if ($start_time == 0 && $end_time > 0) {
             $query->where([['member_account_log.create_time', '<=', $end_time]]);
         }
     }

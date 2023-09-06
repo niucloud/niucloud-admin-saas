@@ -35,15 +35,14 @@ class GenerateService extends BaseAdminService
     /**
      * 获取代码生成列表
      * @param array $where
-     * @return HasOne
+     * @return array
      */
     public function getPage(array $where = [])
     {
         $field = 'id,table_name,table_content,class_name,edit_type,create_time';
         $order = 'create_time desc';
         $search_model = (new GenerateTable())->withSearch(['table_name', 'table_content'], $where)->field($field)->order($order);
-        $list = $this->pageQuery($search_model);
-        return $list;
+        return $this->pageQuery($search_model);
     }
 
     /**
@@ -129,7 +128,7 @@ class GenerateService extends BaseAdminService
             return $table_id;
         } catch ( Exception $e) {
             Db::rollback();
-            throw new Exception($e->getMessage());
+            throw new AdminException($e->getMessage());
         }
 
     }
@@ -225,7 +224,7 @@ class GenerateService extends BaseAdminService
 
             $flag = array_unique(array_column($table_info, 'table_name'));
             $flag = implode(',', $flag);
-            $generator->setFlag(md5($flag . time()), false);
+            $generator->setFlag(md5($flag . time()));
 
             $generator->generate($table_info);
 
@@ -272,7 +271,7 @@ class GenerateService extends BaseAdminService
      */
     public static function getDbFieldType(string $type): string
     {
-        if (0 === strpos($type, 'set') || 0 === strpos($type, 'dict')) {
+        if (str_starts_with($type, 'set') || str_starts_with($type, 'dict')) {
             $result = 'string';
         } elseif (preg_match('/(double|float|decimal|real|numeric)/is', $type)) {
             $result = 'float';
@@ -280,11 +279,11 @@ class GenerateService extends BaseAdminService
             $result = 'int';
         } elseif (preg_match('/bool/is', $type)) {
             $result = 'bool';
-        } elseif (0 === strpos($type, 'timestamp')) {
+        } elseif (str_starts_with($type, 'timestamp')) {
             $result = 'timestamp';
-        } elseif (0 === strpos($type, 'datetime')) {
+        } elseif (str_starts_with($type, 'datetime')) {
             $result = 'datetime';
-        } elseif (0 === strpos($type, 'date')) {
+        } elseif (str_starts_with($type, 'date')) {
             $result = 'date';
         } else {
             $result = 'string';
@@ -306,8 +305,7 @@ class GenerateService extends BaseAdminService
         if (!empty($params['comment'])) {
             $sql .= "AND comment LIKE '%" . $params['comment'] . "%'";
         }
-        $table = Db::query($sql);
-        return $table;
+        return Db::query($sql);
     }
 
 }

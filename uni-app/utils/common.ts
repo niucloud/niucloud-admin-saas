@@ -176,7 +176,13 @@ export function isUrl(str : string) : boolean {
 * @returns 
 */
 export function img(path : string) : string {
+    // #ifdef H5
 	return isUrl(path) ? path : `${import.meta.env.VITE_IMG_DOMAIN || location.origin}/${path}`
+    // #endif
+    
+    // #ifndef H5
+    return isUrl(path) ? path : `${import.meta.env.VITE_IMG_DOMAIN}/${path}`
+    // #endif
 }
 
 /**
@@ -224,7 +230,7 @@ export function mobileConceal(mobile : string) : string {
  */
 export function getSiteId(siteid : number) {
     // #ifdef H5
-    const match = location.href.match(/\/s(\d*)\//);
+    const match = location.href.match(/\/wap\/(\d*)\//);
     if (match) return match[1]
     else return siteid
     // #endif
@@ -232,31 +238,4 @@ export function getSiteId(siteid : number) {
     // #ifndef H5
     return siteid
     // #endif
-}
-
-/**
- * 设置html标题
- * @param {Object} route
- */
-export function setDocumentTitle(route: string) {
-    if (process.env.NODE_ENV != 'production') return
-    try {
-        const locale: AnyObject = {
-            'zh-Hans': pagesZh,
-            'en': pagesEn
-        }
-        const key = route.replace('/', '').replaceAll('/', '.')
-        if (locale[ uni.getLocale() ][key]) {
-            setTimeout(() => {
-                uni.setNavigationBarTitle({ 
-                    title: locale[ uni.getLocale() ][key],
-                    fail(e) {
-                        setDocumentTitle(route)
-                    }
-                })
-            }, 500)
-        }
-    } catch (e) {
-        console.log(e)
-    } 
 }

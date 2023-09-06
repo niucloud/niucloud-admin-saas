@@ -30,7 +30,7 @@ class BaseInstall extends BaseController
      * @access protected
      * @param string $template 模板文件名
      * @param array $vars 模板输出变量
-     * @return mixed
+     * @return string
      */
     protected function fetch($template = '', $vars = [])
     {
@@ -41,7 +41,7 @@ class BaseInstall extends BaseController
      * @access protected
      * @param mixed $name 要显示的模板变量
      * @param mixed $value 变量的值
-     * @return $this
+     * @return void
      */
     protected function assign($name, $value = '')
     {
@@ -50,7 +50,7 @@ class BaseInstall extends BaseController
 
     public function setInstallRoot()
     {
-        $this->install_root = realpath(__DIR__ . '/../' );
+        $this->install_root = dirname(__DIR__) . '/';
     }
 
     public function str_replace_first($search, $replace, $subject)

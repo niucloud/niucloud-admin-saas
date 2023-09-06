@@ -18,7 +18,7 @@ use think\facade\Route;
 /**
  * 会员个人信息管理
  */
-Route::group('member', function() {
+Route::group('member', function () {
 
     /***************************************************** 会员管理 ****************************************************/
     //会员个人详情
@@ -31,6 +31,8 @@ Route::group('member', function() {
     Route::put('edit', 'member.Member/edit');
     //绑定手机号
     Route::put('mobile', 'member.Member/mobile');
+    //获取会员码
+    Route::get('qrcode', 'member.Member/qrcode');
 
     /***************************************************** 会员账户 ****************************************************/
     //会员积分流水
@@ -76,7 +78,7 @@ Route::group('member', function() {
     ->middleware(ApiLog::class);
 
 
-Route::group('member', function() {
+Route::group('member', function () {
 
     /***************************************************** 会员管理 ****************************************************/
     //会员日志

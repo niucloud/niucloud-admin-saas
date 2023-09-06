@@ -13,6 +13,7 @@ namespace app\adminapi\controller\sys;
 
 use app\service\admin\sys\AppService;
 use core\base\BaseAdminController;
+use think\Response;
 
 /**
  * 应用管理
@@ -21,9 +22,10 @@ class App extends BaseAdminController
 {
     /**
      * 获取应用链接列表
-     * @return \think\Response
+     * @return Response
      */
-    public function getAppList(){
+    public function getAppList()
+    {
         return success((new AppService())->getAppList());
     }
 

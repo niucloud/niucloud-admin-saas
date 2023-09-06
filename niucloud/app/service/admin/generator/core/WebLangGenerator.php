@@ -26,7 +26,7 @@ class WebLangGenerator extends BaseGenerator
 
     /**
      * 替换模板中的变量
-     * @return mixed|void
+     * @return void
      */
     public function replaceText()
     {
@@ -51,11 +51,11 @@ class WebLangGenerator extends BaseGenerator
             }
 
             if($this->table['edit_type'] == 1 && ($column['is_insert'] || $column['is_update'])){
-                if(strpos($lang, '"'.Str::camel($column['column_name']).'"') === false){
+                if(!str_contains($lang, '"' . Str::camel($column['column_name']) . '"')){
                     $lang .= '"' . Str::camel($column['column_name']) . '":"' . $column['column_comment'] . '",' . PHP_EOL;
                 }
                 $placeholder_text = '请输入';
-                if(strpos($lang, '"'.Str::camel($column['column_name']).'Placeholder"') === false){
+                if(!str_contains($lang, '"' . Str::camel($column['column_name']) . 'Placeholder"')){
                     $lang .= '"'.Str::camel($column['column_name']) .'Placeholder":"'.$placeholder_text.$column['column_comment'].'",'.PHP_EOL;
                 }
 
@@ -71,7 +71,7 @@ class WebLangGenerator extends BaseGenerator
 
     /**
      * 获取文件生成到模块的文件夹路径
-     * @return mixed|void
+     * @return string
      */
     public function getModuleOutDir()
     {
@@ -100,7 +100,7 @@ class WebLangGenerator extends BaseGenerator
     public function getFileName()
     {
         if($this->className){
-            return $this->moduleName.'.'.Str::lower($this->className).'.json';
+            return $this->moduleName.'.'.Str::lower($this->className).'_list.json';
         }
         return $this->moduleName.'.list.json';
     }

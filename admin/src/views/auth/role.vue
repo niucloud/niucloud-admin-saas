@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center">
-                <span class="text-[24px]">{{pageName}}</span>
+                <span class="text-[20px]">{{pageName}}</span>
                 <el-button type="primary" class="w-[100px]" @click="addEvent">{{ t('addRole') }}</el-button>
             </div>
 
@@ -55,6 +55,7 @@ import { t } from '@/lang'
 import { getRoleList, deleteRole } from '@/api/sys'
 import { ElMessageBox, FormInstance } from 'element-plus'
 import EditRole from '@/views/auth/components/edit-role.vue'
+
 import { useRoute } from 'vue-router'
 const route = useRoute()
 const pageName = route.meta.title;

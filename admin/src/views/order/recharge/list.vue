@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center mb-[5px]">
-                <span class="text-[24px]">{{pageName}}</span>
+                <span class="text-[20px]">{{pageName}}</span>
             </div>
 
             <el-card class="box-card !border-none table-search-wra base-bg !px-[35px]" shadow="never">
@@ -46,9 +46,7 @@
                     </el-form-item>
 
                     <el-form-item :label="t('createTime')" prop="create_time">
-                        <el-date-picker v-model="orderTableData.searchParam.create_time" type="datetimerange"
-                            value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')"
-                            :end-placeholder="t('endDate')" />
+                        <el-date-picker v-model="orderTableData.searchParam.create_time" type="datetimerange" value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')" :end-placeholder="t('endDate')" />
                     </el-form-item>
 
                     <el-form-item :label="t('rechargeMoney')">
@@ -64,9 +62,7 @@
                     </el-form-item>
 
                     <el-form-item :label="t('payTime')">
-                        <el-date-picker v-model="orderTableData.searchParam.pay_time" type="datetimerange"
-                            value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')"
-                            :end-placeholder="t('endDate')" />
+                        <el-date-picker v-model="orderTableData.searchParam.pay_time" type="datetimerange" value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')" :end-placeholder="t('endDate')" />
                     </el-form-item>
 
                     <el-form-item>
@@ -85,7 +81,7 @@
                     <el-table-column :show-overflow-tooltip="true" :label="t('member')" align="left" min-width="140">
                         <template #default="{ row }">
                             <div class="flex items-center cursor-pointer " @click="toMember(row.member.member_id)">
-                                <img class="w-[50px] h-[50px] mr-[10px]" v-if="row.headimg" :src="img(row.member.headimg)" alt="">
+                                <img class="w-[50px] h-[50px] mr-[10px]" v-if="row.member.headimg" :src="img(row.member.headimg)" alt="">
                                 <img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/assets/images/default_headimg.png" alt="">
                                 <div class="flex flex flex-col">
                                     <span class="">{{ row.member.nickname || '' }}</span>
@@ -161,6 +157,7 @@ import { getRechargeOrderStatusList, getRechargeOrderList, rechargeRefund, getRe
 import { getChannelType } from '@/api/sys'
 import { useRouter, useRoute } from 'vue-router'
 import { AnyObject } from '@/types/global'
+import type { FormInstance } from 'element-plus'
 
 const route = useRoute()
 const router = useRouter()

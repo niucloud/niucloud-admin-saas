@@ -21,12 +21,12 @@
 
 <script setup lang="ts">
 	// 文章
-	import { ref, computed } from 'vue';
+	import { ref, computed, watch } from 'vue';
 	import { redirect, img } from '@/utils/common';
 	import useDiyStore from '@/stores/diy';
 	import { getArticleAll } from '@/api/article';
 
-	const props = defineProps(['component', 'index']);
+	const props = defineProps(['component', 'index', 'pullDownRefresh']);
 	const diyStore = useDiyStore();
 	const articleList = ref<Array<any>>([]);
 
@@ -57,6 +57,13 @@
 		if (diyComponent.value.bottomElementRounded) style += 'border-bottom-right-radius:' + diyComponent.value.bottomElementRounded * 2 + 'rpx;';
 		return style;
 	})
+
+	watch(
+		() => props.pullDownRefresh,
+		(newValue, oldValue) => {
+			// 处理下拉刷新业务
+		}
+	)
 
 	const getArticleListFn = () => {
 		interface dataStructure {

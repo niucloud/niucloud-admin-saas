@@ -35,5 +35,4 @@ class GenerateColumn extends BaseModel
     protected $name = 'generate_column';
 
 
-
 }

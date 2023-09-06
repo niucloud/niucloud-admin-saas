@@ -17,6 +17,12 @@ use app\dict\pay\TransferDict;
 use core\base\BaseCoreService;
 use core\exception\PayException;
 use core\pay\PayLoader;
+use Exception;
+use Psr\Http\Message\ResponseInterface;
+use think\Response;
+use Yansongda\Pay\Exception\ContainerException;
+use Yansongda\Pay\Exception\InvalidParamsException;
+use Yansongda\Pay\Exception\ServiceNotFoundException;
 use Yansongda\Supports\Collection;
 
 /**
@@ -58,7 +64,7 @@ class CorePayEventService extends BaseCoreService
      * 获取实例化应用
      * @param string $action
      * @return PayLoader
-     * @throws \Exception
+     * @throws Exception
      */
     public function app(string $action = 'query')
     {
@@ -71,15 +77,17 @@ class CorePayEventService extends BaseCoreService
 
     /**
      * 去支付
-     * @param $out_trade_no
-     * @param $money
-     * @param $boby
-     * @param $refund_url
-     * @param $quit_url
-     * @param $buyer_id
+     * @param string $out_trade_no
+     * @param float $money
+     * @param string $boby
+     * @param string $refund_url
+     * @param string $quit_url
+     * @param string $buyer_id
+     * @param string $openid
      * @return mixed
+     * @throws Exception
      */
-    public function pay(string $out_trade_no, float $money, string $boby, string $refund_url = '', string $quit_url = '', string $buyer_id = '', string $openid = '')
+    public function pay(string $out_trade_no, float $money, string $boby, string $refund_url = '', string $quit_url = '', string $buyer_id = '', string $openid = '', string $voucher = '')
     {
         $pay_fun = '';
 
@@ -91,11 +99,13 @@ class CorePayEventService extends BaseCoreService
             'refund_url' => $refund_url,
             'quit_url' => $quit_url,
             'buyer_id' => $buyer_id,
-            'openid' => $openid
+            'openid' => $openid,
+            'site_id' => $this->site_id,
+            'voucher' => $voucher
         );
         switch ($this->type) {
             case PayDict::WECHATPAY:
-                $params['money'] = $params['money'] * 100;
+                $params['money'] *= 100;
 
                 switch ($this->channel) {
                     case ChannelDict::H5://h5
@@ -116,7 +126,7 @@ class CorePayEventService extends BaseCoreService
                         $pay_fun = 'app';
                         break;
                 }
-
+                if (empty($pay_fun)) throw new PayException('PAYMENT_METHOD_NOT_SCENE');
                 break;
             case PayDict::ALIPAY:
                 switch ($this->channel) {
@@ -133,32 +143,39 @@ class CorePayEventService extends BaseCoreService
                         $pay_fun = 'wap';
                         break;
                 }
+                if (empty($pay_fun)) throw new PayException('PAYMENT_METHOD_NOT_SCENE');
+                break;
         }
-        if (empty($pay_fun)) throw new PayException('PAYMENT_METHOD_NOT_SCENE');
+
+        if (empty($pay_fun)) $pay_fun = 'pay';
+
         return $this->app('pay')->$pay_fun($params);
     }
 
 
     /**
      * 转账
-     * @param $site_id
-     * @param $from_no
-     * @param $product_code 支付宝用
-     * @param $scene
-     * @param $to_no
-     * @param $to_type 支付宝用
-     * @param $to_name
-     * @return mixed|Collection
+     * @param float $money
+     * @param string $transfer_no
+     * @param string $to_no
+     * @param string $to_name
+     * @param string $remark
+     * @param array $transfer_list
+     * @param string $to_type 支付宝用
+     * @param string $product_code 支付宝用
+     * @param string $scene
+     * @return array
+     * @throws Exception
      */
     public function transfer(float $money, string $transfer_no, string $to_no, string $to_name, string $remark, array $transfer_list = [], string $to_type = '', string $product_code = '', string $scene = '')
     {
         $transfer_type = TransferDict::getPayTypeByTransfer($this->type);
         switch ($transfer_type) {
             case PayDict::WECHATPAY:
-                $money = $money * 100;
+                $money *= 100;
                 break;
             case PayDict::ALIPAY:
-
+                break;
         }
         return $this->app('transfer')->transfer([
             'transfer_no' => $transfer_no,
@@ -177,6 +194,7 @@ class CorePayEventService extends BaseCoreService
      * 关闭支付
      * @param string $out_trade_no
      * @return null
+     * @throws Exception
      */
     public function close(string $out_trade_no)
     {
@@ -185,28 +203,38 @@ class CorePayEventService extends BaseCoreService
 
     /**
      * 退款
-     * @param $site_id
-     * @param $out_trade_no
-     * @param $money
-     * @return void
+     * @param string $out_trade_no
+     * @param float $money
+     * @param float $total
+     * @param string $refund_no
+     * @param string $voucher
+     * @return array
+     * @throws ContainerException
+     * @throws InvalidParamsException
+     * @throws ServiceNotFoundException
      */
-    public function refund(string $out_trade_no, float $money, float $total, string $refund_no)
+    public function refund(string $out_trade_no, float $money, float $total, string $refund_no, $voucher = '')
     {
         if ($this->type == PayDict::WECHATPAY) {
-            $money = $money * 100;
-            $total = $total * 100;
+            $money *= 100;
+            $total *= 100;
         }
         return $this->app('refund')->refund([
+            'site_id' => $this->site_id,
             'out_trade_no' => $out_trade_no,
             'money' => $money,
             'total' => $total,
-            'refund_no' => $refund_no
+            'refund_no' => $refund_no,
+            'voucher' => $voucher
         ]);
     }
 
     /**
      * 支付异步通知
-     * @return void
+     * @param string $action
+     * @param callable $callback
+     * @return ResponseInterface|Response
+     * @throws Exception
      */
     public function notify(string $action, callable $callback)
     {
@@ -215,8 +243,11 @@ class CorePayEventService extends BaseCoreService
 
     /**
      * 查询普通支付订单
-     * @param $out_trade_no
+     * @param string $out_trade_no
      * @return null
+     * @throws ContainerException
+     * @throws InvalidParamsException
+     * @throws ServiceNotFoundException
      */
     public function getOrder(string $out_trade_no)
     {
@@ -225,9 +256,10 @@ class CorePayEventService extends BaseCoreService
 
     /**
      * 查询退款订单
-     * @param $out_trade_no
-     * @param $refund_no
+     * @param string $out_trade_no
+     * @param string $refund_no
      * @return null
+     * @throws Exception
      */
     public function getRefund(string $out_trade_no, string $refund_no)
     {
@@ -236,8 +268,9 @@ class CorePayEventService extends BaseCoreService
 
     /**
      * 查询转账订单
-     * @param $transfer_no
+     * @param string $transfer_no
      * @return null
+     * @throws Exception
      */
     public function getTransfer(string $transfer_no)
     {

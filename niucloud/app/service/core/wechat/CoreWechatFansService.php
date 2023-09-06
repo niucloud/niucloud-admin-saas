@@ -33,8 +33,8 @@ class CoreWechatFansService extends BaseCoreService
 
     /**
      * 新增微信粉丝
-     * @param $site_id
-     * @param $data
+     * @param int $site_id
+     * @param array $data
      * @return void
      */
     public function add(int $site_id, array $data)
@@ -47,16 +47,15 @@ class CoreWechatFansService extends BaseCoreService
 
     public function find(array|string $where)
     {
-        $fans = $this->model->where($where)->findOrEmpty();
-        return $fans;
+        return $this->model->where($where)->findOrEmpty();
     }
 
     /**
      * 修改微信粉丝
-     * @param $site_id
-     * @param $open_id  //可以是UnionID  也可以是openid
-     * @param $data
-     * @return void
+     * @param int $site_id
+     * @param string $open_id //可以是UnionID  也可以是openid
+     * @param array $data
+     * @return true
      */
     public function edit(int $site_id, string $open_id, array $data)
     {
@@ -113,9 +112,10 @@ class CoreWechatFansService extends BaseCoreService
 
     /**
      * 粉丝关注事件
-     * @param $site_id
-     * @param $from_user_uame
-     * @return void
+     * @param int $site_id
+     * @param string $app_id
+     * @param string $from_user_name
+     * @return true
      */
     public function subscribe(int $site_id, string $app_id, string $from_user_name)
     {
@@ -137,9 +137,9 @@ class CoreWechatFansService extends BaseCoreService
 
     /**
      * 粉丝取消关注事件
-     * @param $site_id
-     * @param $from_user_uame
-     * @return void
+     * @param int $site_id
+     * @param string $from_user_name
+     * @return true
      */
     public function unsubscribe(int $site_id, string $from_user_name)
     {

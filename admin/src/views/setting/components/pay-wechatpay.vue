@@ -4,12 +4,14 @@
             v-loading="loading">
 
             <el-form-item :label="t('mchId')" prop="config.mch_id">
-                <el-input v-model="formData.config.mch_id" :placeholder="t('mchIdPlaceholder')" class="input-width" maxlength="32" show-word-limit clearable />
+                <el-input v-model="formData.config.mch_id" :placeholder="t('mchIdPlaceholder')" class="input-width"
+                    maxlength="32" show-word-limit clearable />
                 <div class="form-tip">{{ t('mchIdTips') }}</div>
             </el-form-item>
 
             <el-form-item :label="t('mchSecretKey')" prop="config.mch_secret_key">
-                <el-input v-model="formData.config.mch_secret_key" :placeholder="t('mchSecretKeyPlaceholder')" class="input-width" maxlength="32" show-word-limit clearable />
+                <el-input v-model="formData.config.mch_secret_key" :placeholder="t('mchSecretKeyPlaceholder')"
+                    class="input-width" maxlength="32" show-word-limit clearable />
                 <div class="form-tip">{{ t('mchSecretKeyTips') }}</div>
             </el-form-item>
 
@@ -32,7 +34,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
-                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{t('confirm')}}</el-button>
+                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{ t('confirm') }}</el-button>
             </span>
         </template>
     </el-dialog>
@@ -52,7 +54,7 @@ const loading = ref(true)
  */
 const initialFormData = {
     type: 'wechatpay',
-    config:{
+    config: {
         mch_id: '',
         mch_secret_key: '',
         mch_secret_cert: '',
@@ -93,9 +95,9 @@ const emit = defineEmits(['complete'])
 const confirm = async (formEl: FormInstance | undefined) => {
     if (loading.value || !formEl) return
     await formEl.validate(async (valid) => {
-        if(valid){
-            emit('complete',formData);
-            showDialog.value = false;
+        if (valid) {
+            emit('complete', formData)
+            showDialog.value = false
         }
     })
 }
@@ -107,8 +109,8 @@ const setFormData = async (data: any = null) => {
         Object.keys(formData).forEach((key: string) => {
             if (data[key] != undefined) formData[key] = data[key]
         })
-        formData['channel'] = data['redio_key'].split('_')[0];
-        formData['status'] = Number(formData['status']);
+        formData.channel = data.redio_key.split('_')[0]
+        formData.status = Number(formData.status)
     }
     loading.value = false
 }

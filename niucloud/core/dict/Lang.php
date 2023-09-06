@@ -21,7 +21,7 @@ class Lang extends BaseDict
     public function load(array $data)
     {
         $addons = $this->getLocalAddons();
-        $system_lang_path = $this->getAppPath() . "lang" . DIRECTORY_SEPARATOR . $data[ 'lang_type' ] . DIRECTORY_SEPARATOR;
+        $system_lang_path = $this->getAppPath() . "lang" . DIRECTORY_SEPARATOR . $data['lang_type'] . DIRECTORY_SEPARATOR;
         $lang_files = [
             $system_lang_path . "api.php",
             $system_lang_path . "dict.php",
@@ -29,8 +29,8 @@ class Lang extends BaseDict
         ];
 
 
-        foreach ($addons as $k => $v) {
-            $lang_path = $this->getAddonAppPath($v) . "lang" . DIRECTORY_SEPARATOR . $data[ 'lang_type' ] . DIRECTORY_SEPARATOR;
+        foreach ($addons as $v) {
+            $lang_path = $this->getAddonAppPath($v) . "lang" . DIRECTORY_SEPARATOR . $data['lang_type'] . DIRECTORY_SEPARATOR;
 
             $api_path = $lang_path . "api.php";
             $dict_path = $lang_path . "dict.php";

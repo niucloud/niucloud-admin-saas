@@ -19,11 +19,25 @@ namespace app\dict\sys;
 class SmsDict
 {
     //阿里云短信
-    const ALISMS = 'aliyun';
+    public const ALISMS = 'aliyun';
     //腾讯云短信
-    const TENCENTSMS = 'tencent';
+    public const TENCENTSMS = 'tencent';
+    public const SENDING = 'sending';
+    public const SUCCESS = 'success';
+    public const FAIL = 'fail';
+    public const LOGIN = 'login';
+    public const REGISTER = 'register';
+    public const BIND_MOBILE = 'bind_mobile';
+    public const FIND_PASS = 'find_pass';
+    public const SCENE_TYPE = [
+        self::LOGIN,
+        self::REGISTER,
+        self::BIND_MOBILE,
+        self::FIND_PASS
+    ];
 
-    public static function getType(){
+    public static function getType()
+    {
         return [
             self::ALISMS => [
                 'name' => '阿里云短信',
@@ -48,31 +62,15 @@ class SmsDict
         ];
     }
 
+    //支持的短信场景
 
-    const SENDING = 'sending';
-    const SUCCESS = 'success';
-    const FAIL = 'fail';
-
-    public function getStatusType(){
+    public static function getStatusType()
+    {
         return [
             self::SENDING => 'dict_sms.status_sending',
             self::SUCCESS => 'dict_sms.status_success',
             self::FAIL => 'dict_sms.status_fail',
         ];
     }
-
-    const LOGIN = 'login';
-    const REGISTER = 'register';
-    const BIND_MOBILE = 'bind_mobile';
-
-
-    const FIND_PASS = 'find_pass';
-    //支持的短信场景
-    const SCENE_TYPE = [
-        self::LOGIN,
-        self::REGISTER,
-        self::BIND_MOBILE,
-        self::FIND_PASS
-    ];
 
 }

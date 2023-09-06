@@ -24,7 +24,7 @@ class ServiceGenerator extends BaseGenerator
 
     /**
      * 替换模板中的变量
-     * @return mixed|void
+     * @return void
      */
     public function replaceText()
     {
@@ -70,7 +70,7 @@ class ServiceGenerator extends BaseGenerator
     {
         $field = [];
         foreach ($this->tableColumn as $column) {
-            if ($column['is_lists'] || $column['is_insert'] || $column['is_update']) {
+            if ($column['is_query']) {
                 $field[] = $column['column_name'];
             }
         }

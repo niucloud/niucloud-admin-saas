@@ -26,6 +26,7 @@ use core\util\TokenAuth;
 use Exception;
 use think\facade\Cache;
 use think\facade\Log;
+use Throwable;
 
 /**
  * 登录服务层
@@ -55,7 +56,7 @@ class LoginService extends BaseApiService
     /**
      * 登录操作
      * @param Member $member_info
-     * @param string $type  登录的操作终端类型
+     * @param string $login_type
      * @return array
      */
     public function login(Member $member_info, string $login_type)
@@ -83,12 +84,12 @@ class LoginService extends BaseApiService
      * 账号登录
      * @param string $username
      * @param string $password
-     * @return void
+     * @return array|false
      */
     public function account(string $username, string $password)
     {
         $member_service = new MemberService();
-        $member_info = $member_service->findMemberInfo(['username' => $username, 'site_id' => $this->site_id]);
+        $member_info = $member_service->findMemberInfo(['username|mobile' => $username, 'site_id' => $this->site_id]);
         if ($member_info->isEmpty()) throw new AuthException('MEMBER_NOT_EXIST');//账号不存在
         if (!check_password($password, $member_info->password)) return false;//密码与账号不匹配
         return $this->login($member_info, MemberLoginTypeDict::USERNAME);
@@ -113,16 +114,16 @@ class LoginService extends BaseApiService
 
         return $this->login($member_info, MemberLoginTypeDict::MOBILE);
     }
+
     /**
      * 生成token
      * @param $member_info
-     * @return array
+     * @return array|null
      */
     public function createToken($member_info): ?array
     {
         $expire_time = env('system.api_token_expire_time') ?? 3600;//todo  不一定和管理端合用这个token时限
-        $token_info = TokenAuth::createToken($member_info->member_id, AppTypeDict::API, ['member_id' => $member_info->member_id, 'username' => $member_info->username, 'site_id' => $member_info->site_id], $expire_time);
-        return $token_info;
+        return TokenAuth::createToken($member_info->member_id, AppTypeDict::API, ['member_id' => $member_info->member_id, 'username' => $member_info->username, 'site_id' => $member_info->site_id], $expire_time);
     }
 
     /**
@@ -137,6 +138,8 @@ class LoginService extends BaseApiService
     /**
      * 清理token
      * @param int $member_id
+     * @param string|null $token
+     * @return bool|null
      */
     public static function clearToken(int $member_id, ?string $token = ''): ?bool
     {
@@ -147,9 +150,8 @@ class LoginService extends BaseApiService
 
     /**
      * 解析token
-     * @param string $token
-     * @return mixed
-     * @throws Exception
+     * @param string|null $token
+     * @return array
      */
     public function parseToken(?string $token){
         if(empty($token))
@@ -160,7 +162,7 @@ class LoginService extends BaseApiService
 
         try {
             $token_info = TokenAuth::parseToken($token, AppTypeDict::API);
-        } catch ( \Throwable $e ) {
+        } catch ( Throwable $e ) {
 //            if(env('app_debug', false)){
 //                throw new AuthException($e->getMessage(), 401);
 //            }else{
@@ -205,12 +207,11 @@ class LoginService extends BaseApiService
         $cache_tag_name = "mobile_key".$mobile.$type;
         Cache::tag($cache_tag_name)->clear();
     }
+
     /**
      * 校验手机验证码
-     * @param $mobile
-     * @param $code
-     * @param $member_key
-     * @return void
+     * @param string $mobile
+     * @return true
      */
     public function checkMobileCode(string $mobile){
         if(empty($mobile)) throw new AuthException('MOBILE_NEEDED');
@@ -283,7 +284,9 @@ class LoginService extends BaseApiService
         $data = array(
             'password' => $password_hash,
         );
-        return $member_service->editByFind($member_info, $data);
+        $member_service->editByFind($member_info, $data);
+        self::clearToken($member_info['member_id'], $this->request->apiToken());
+        return true;
     }
 
     public function loginScanCode(){

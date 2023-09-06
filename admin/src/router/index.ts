@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteLocationRaw } from 'vue-router'
+import { createRouter, createWebHistory, RouteLocationRaw, RouteLocationNormalizedLoaded } from 'vue-router'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { STATIC_ROUTES, NO_LOGIN_ROUTES, ROOT_ROUTER, ADMIN_ROUTE, SITE_ROUTE, DECORATE_ROUTER, findFirstValidRoute } from './routers'
@@ -24,6 +24,17 @@ router.push = (to: RouteLocationRaw) => {
     return originPush(route)
 }
 
+/**
+ * 重写resolve方法
+ */
+const originResolve = router.resolve
+router.resolve = (to: RouteLocationRaw, currentLocation?: RouteLocationNormalizedLoaded) => {
+    const route = typeof to == 'string' ? urlToRouteRaw(to) : to
+    const paths = route.path.split('/').filter((item: string) => { return item })
+    route.path = ['admin', 'site', 'decorate'].indexOf(paths[0]) == -1 ? `/${getAppType()}${route.path}` : route.path
+    return originResolve(route, currentLocation)
+}
+
 // 全局前置守卫
 router.beforeEach(async (to, from, next) => {
     NProgress.configure({ showSpinner: false })
@@ -39,7 +50,7 @@ router.beforeEach(async (to, from, next) => {
     setWindowTitle(title)
 
     // 加载语言包
-    await language.loadLocaleMessages(to.path, useSystemStore().lang);
+    await language.loadLocaleMessages((to.meta.view || to.path), useSystemStore().lang);
 
     let matched: any = to.matched;
 

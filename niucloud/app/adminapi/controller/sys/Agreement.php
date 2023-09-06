@@ -48,7 +48,8 @@ class Agreement extends BaseAdminController
      * @param string $key
      * @return Response
      */
-    public function edit(string $key){
+    public function edit(string $key)
+    {
         $data = $this->request->params([
             ['title', ''],
             ['content', ''],

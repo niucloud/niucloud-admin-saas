@@ -71,4 +71,8 @@
 	})
 </script>
 
-<style></style>
+<style>
+    uni-page-head {
+        display: none!important;
+    }
+</style>

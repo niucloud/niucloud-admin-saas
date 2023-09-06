@@ -32,7 +32,7 @@ class BindDispatch extends Controller
                 $controller = 'weapp.Weapp';
                 $action = 'register';
                 break;
-        };
+        }
 
 
         $this->controller = $controller ?? '';

@@ -15,14 +15,14 @@ use core\loader\Storage;
 
 /**
  * Class BaseSms
- * @package 
+ * @package
  */
 abstract class BaseSms extends Storage
 {
     /**
      * 初始化
      * @param array $config
-     * @return mixed|void
+     * @return void
      */
     protected function initialize(array $config = [])
     {
@@ -43,6 +43,7 @@ abstract class BaseSms extends Storage
      * @return mixed
      */
     abstract public function modify(string $sign = null, string $mobile, string $code);
+
     /**
      * 短信模板
      * @param int $page

@@ -1,0 +1,12 @@
+{
+  "preview": "预览",
+  "weapp": "微信小程序",
+  "wechat": "微信公众号",
+  "link": "链接",
+  "copy": "复制",
+  "copySuccess": "复制成功",
+  "weappNotSet": "小程序未配置",
+  "developTitle": "开发环境配置",
+  "wapDomain": "wap域名（WAP_DOMAIN）",
+  "wapDomainPlaceholder": "请输入wap域名"
+}

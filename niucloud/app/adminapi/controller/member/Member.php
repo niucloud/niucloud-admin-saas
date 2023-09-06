@@ -16,6 +16,9 @@ use app\dict\member\MemberRegisterChannelDict;
 use app\dict\member\MemberRegisterTypeDict;
 use app\service\admin\member\MemberService;
 use core\base\BaseAdminController;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\Response;
 
 class Member extends BaseAdminController
@@ -38,7 +41,7 @@ class Member extends BaseAdminController
 
     /**
      * 会员详情
-     * @param int $member_id
+     * @param int $id
      * @return Response
      */
     public function info(int $id)
@@ -113,7 +116,7 @@ class Member extends BaseAdminController
 
     /**
      * 会员使用场景
-     * @return array|mixed|string
+     * @return Response
      */
     public function getMemberRegisterType()
     {
@@ -123,6 +126,9 @@ class Member extends BaseAdminController
     /**
      * 会员列表
      * @return Response
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function getMemberList()
     {
@@ -144,9 +150,10 @@ class Member extends BaseAdminController
     /**
      * 设置会员的状态
      * @param $status
-     * @return void
+     * @return Response
      */
-    public function setStatus($status){
+    public function setStatus($status)
+    {
         $data = $this->request->params([
             ['member_ids', []],
 
@@ -160,7 +167,8 @@ class Member extends BaseAdminController
      * 获取状态枚举
      * @return Response
      */
-    public function getStatusList(){
+    public function getStatusList()
+    {
         return success(MemberDict::getStatus());
     }
 
@@ -168,7 +176,8 @@ class Member extends BaseAdminController
      * 获取会员编码
      * @return Response
      */
-    public function getMemberNo(){
+    public function getMemberNo()
+    {
         $member_no = (new MemberService())->getMemberNo();
         return success('SUCCESS', $member_no);
     }

@@ -11,10 +11,10 @@
 :small_blue_diamond:  :small_orange_diamond:  :small_blue_diamond:  :small_blue_diamond:  :small_orange_diamond:  :small_blue_diamond:
 <br>
 
-### niucloud-admin是什么？
+### niucloud-admin介绍
 niucloud-admin是一款快速开发SaaS通用管理系统后台框架，前端采用最新的技术栈Vite+TypeScript+Vue3+ElementPlus最流行技术架构，后台结合PHP8、Java SDK、Python等主流后端语言搭建，内置集成Saas多站点、多租户套餐、用户权限、代码生成器、表单设计、云存储、短信发送、素材中心、微信及公众号、支付宝小程序、Api模块一系列开箱即用功能，是一款快速可以开发企业级应用的软件系统。
 
-### niucloud-admin产品特性说明
+### 产品特性说明
 
 1.niucloud-admin 软件开发框架内置各种基础功能，可大量节省SaaS系统开发周期，快速完成交付。
 
@@ -29,7 +29,7 @@ niucloud-admin是一款快速开发SaaS通用管理系统后台框架，前端�
 6.niucloud-admin是一款真正的二次开发神器！
 
 
-### niucloud-admin技术说明
+### 技术说明
 
 - 后台php采用thinkphp6+php8+mysql,支持composer快速安装扩展，支持redis缓存以及消息队列，支持多语言设计开发，同时开发采用严格的restful的api设计开发。
 
@@ -55,13 +55,19 @@ niucloud-admin是一款快速开发SaaS通用管理系统后台框架，前端�
 
 - 手机端使用uniapp ，同时使用uview页面展示，可以开发出丰富的手机样式，同时不需要专门学习小程序，app等开发语言，只需要通过uniapp编译就可以。
 
-### 操作指南
- [官网地址](https://www.niucloud.com)
- | [服务市场](https://www.niucloud.com)
- | [使用手册](https://www.kancloud.cn/niucloud/niucloud-admin-develop/3153336)
- | [二开手册](https://www.kancloud.cn/niucloud/niucloud-admin-develop/3153336)
- | [API接口手册](https://www.niucloud.com/apidoc.html)
- | [论坛地址](https://www.niucloud.com/bbs)
+
+### 官网地址
+https://www.niucloud.com
+### 应用市场
+https://www.niucloud.com
+### 使用手册
+https://www.kancloud.cn/niucloud/niucloud-admin-develop/3153336
+### 二开手册
+https://www.kancloud.cn/niucloud/niucloud-admin-develop/3153336
+### API接口手册
+https://www.niucloud.com/apidoc.html
+### 论坛地址
+https://www.niucloud.com/bbs
 
 ### 演示地址
 - 电脑端演示网址：[<a href='https://demo.niucloud.com/web/s2/' target="_blank"> 查看 </a>]       
@@ -71,104 +77,20 @@ niucloud-admin是一款快速开发SaaS通用管理系统后台框架，前端�
 - 平台后台演示网址：[<a href='https://demo.niucloud.com/admin/login' target="_blank"> 查看 </a>]       
 <a href='https://demo.niucloud.com/admin/login' target="_blank">https://demo.niucloud.com/admin/login</a>  账号：admin  密码：123456
 
+
 - 前端演示二维码
 
 ![输入图片说明](https://www.niucloud.com/img/readme/%E6%BC%94%E7%A4%BA%E5%89%8D%E7%AB%AF-new.png)
 
-### 安装部署
-#### 宝塔部署
-- 1.环境要求<br/>
+
+环境要求<br/>
 php 8.0  <br/>    mysql5.6及以上  <br/>      启用redis   <br/>      Nignx/Apache
-- 2.登录网站【<a href='https://gitee.com/niucloud-team/niucloud-admin.git' target="_blank">https://gitee.com/niucloud-team/niucloud-admin/</a>】下载框架源码。
-- 3.源码放置到宝塔根目录，访问域名/niucloud/public/index.php，进入安装界面，点击下一步，输入数据库安装信息，下一步完成安装。详细教程查看 :arrow_right: <a href='https://www.kancloud.cn/niucloud/niucloud-admin-develop/3148343' target="_blank">【开发手册】 :arrow_left: </a>
-- 4.redis配置：<br/>
- ①安装redis，如下图：
-![输入图片说明](https://www.niucloud.com/img/readme/%E5%AE%9D%E5%A1%94%E5%AE%89%E8%A3%85redis.png)
-②安装php的扩展redis，如下图所示：
-![输入图片说明](https://www.niucloud.com/img/readme/php%E6%89%A9%E5%B1%95%E5%AE%89%E8%A3%85redis%E6%89%A9%E5%B1%95.png)
-③将redis密码填入到niucloud/.env文件中，如下图：
-![输入图片说明](https://www.niucloud.com/img/readme/%E9%85%8D%E7%BD%AEredis%E5%AF%86%E7%A0%81.png)
 
-- 5.配置伪静态<br/>
-可直接复制下方代码：
-Nginx配置
-
-```html
-location / {
-    if (!-e $request_filename) {
-        rewrite  ^(.*)$  /index.php/$1  last;
-     break;
-   }
-}
-```
-
-apache配置
-```
-<IfModule mod_rewrite.c>
-Options +FollowSymlinks -Multiviews
-  RewriteEngine On
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteRule ^(.*)$ index.php?/$1 [QSA,PT,L]
-  RewriteEngine on RewriteCond % !^$
-</IfModule>
-```
-粘贴位置如下图：
-![输入图片说明](https://www.niucloud.com/img/readme/%E6%B7%BB%E5%8A%A0%E4%BC%AA%E9%9D%99%E6%80%81%E4%BD%8D%E7%BD%AE.png)
-
-#### docker快速部署
-- 1.启动docker，打开终端输入命令行，回车执行命令。
-
-```
-docker run -d --name niucloudadmin_php -p 20221:80 niucloud/niucloudadmin_php:1.6.0
-```
-- 2.访问配置的虚拟域名或者localhost或者127.0.0.1/niucloud/public/index.php即可进入安装界面。
-
-#### 前端运行
-- 1.拉取代码
-
-```
-git clone https://gitee.com/niucloud-team/niucloud-admin.git
-```
-- 2.安装依赖
-
-```
-cd niucloud-admin template
-npm install
-```
-
-- 3.本地运行
-
-```
-npm run dev
-```
-
-- 4.前端代码打包
-
-```
-npm run build
-```
-
-快来添加属于你的专属客服吧~
 
 ![输入图片说明](https://www.niucloud.com/img/readme/%E6%B7%BB%E5%8A%A0%E5%AE%A2%E6%9C%8D-old.png)
-#### 扫描下方二维码加入niucloud-admin开发者交流群
-![输入图片说明](https://www.niucloud.com/img/readme/%E5%BC%80%E5%8F%91%E8%80%85%E4%BA%A4%E6%B5%81%E7%BE%A4-old.png)
+扫描下方二维码加入niucloud-admin开发者交流群
+![输入图片说明](https://www.niucloud.com/img/readme/%E5%BC%80%E5%8F%91%E8%80%85%E4%BA%A4%E6%B5%81%E7%BE%A4.png)
 
-### 框架管理端部分页面展示
-
-- 管理端控制台页面，可直观体现站点会员数量、平台拥有的站点数、所有访客数量统计；同时也加入了统计走势图，便于平台根据需求制定或者调整运营策略；主要快捷入口可方便快速打开需要处理的业务数据
-![输入图片说明](https://www.niucloud.com/img/readme/%E6%8E%A7%E5%88%B6%E5%8F%B0.png)
-- 系统性设置，可助力平台更好的运营
-![输入图片说明](https://www.niucloud.com/img/readme/%E7%9F%AD%E4%BF%A1%E3%80%81%E6%8F%90%E7%8E%B0%E8%AE%BE%E7%BD%AE.png)
-![输入图片说明](https://www.niucloud.com/img/readme/%E7%BD%91%E7%AB%99%E3%80%81%E7%89%88%E6%9D%83%E8%AE%BE%E7%BD%AE.png)
-![输入图片说明](https://www.niucloud.com/img/readme/%E5%AD%98%E5%82%A8%E3%80%82.png)
-- 文章模块管理页面展示
-![输入图片说明](https://www.niucloud.com/img/readme/%E6%96%87%E7%AB%A0%E5%88%97%E8%A1%A8.png)
-- 可自动生成代码
-![输入图片说明](https://www.niucloud.com/img/readme/%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90.png)
-- 素材管理
-![输入图片说明](https://www.niucloud.com/img/readme/%E7%B4%A0%E6%9D%90%E7%AE%A1%E7%90%86.png)
 
 ### 开源使用须知
 
@@ -183,9 +105,6 @@ npm run build
 5.商用请仔细审查代码和漏洞，不得用于任一国家许可范围之外的商业应用，产生的一切任何后果责任自负;
 
 6.一切事物有个人喜好的标准，本开源代码意在分享，不喜勿喷。
-
-### 战略合作伙伴
-![输入图片说明](https://www.niucloud.com/img/readme/%E5%90%88%E4%BD%9C%E4%BC%99%E4%BC%B4.png)
 
 ### 版权信息
 版权所有Copyright  2015-2035 niucloud-admin 版权所有

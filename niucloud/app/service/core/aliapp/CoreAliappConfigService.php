@@ -31,7 +31,7 @@ class  CoreAliappConfigService extends BaseCoreService
      */
     public function getAliappConfig(int $site_id){
         $info = (new CoreConfigService())->getConfig($site_id, ConfigKeyDict::ALIAPP)['value'] ?? [];
-        $config = [
+        return [
             'name' => $info['name'] ?? '',
             'app_id' => $info['app_id'] ?? '',
             'private_key'            => $info['private_key'] ?? '',
@@ -41,8 +41,6 @@ class  CoreAliappConfigService extends BaseCoreService
             'alipay_with_crt' =>  $info['alipay_with_crt'] ?? '',
             'qrcode' => $info['qrcode'] ?? ''
         ];
-
-        return $config;
     }
 
     /**

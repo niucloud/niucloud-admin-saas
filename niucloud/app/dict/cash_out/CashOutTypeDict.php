@@ -18,8 +18,7 @@ namespace app\dict\cash_out;
 class CashOutTypeDict
 {
     //会员零钱提现
-    const MEMBER_CASH_OUT   = 'member_cash_out';
-
+    public const MEMBER_CASH_OUT = 'member_cash_out';
 
 
 }

@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center">
-                <span class="text-[24px]">{{ pageName }}</span>
+                <span class="text-[20px]">{{ pageName }}</span>
                 <el-button type="primary" @click="addEvent">{{ t('addArticleCategory') }}</el-button>
             </div>
 
@@ -59,6 +59,7 @@ import { ElMessageBox, FormInstance } from 'element-plus'
 import EditCategory from '@/views/article/components/edit-category.vue'
 import { debounce } from '@/utils/common'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title
 

@@ -11,8 +11,7 @@
                         </div>
                     </div>
                     <div class="flex-1 flex w-0">
-                        <div class="menu-item py-[15px] flex items-center justify-center cursor-pointer"
-                            :class="{ 'size-1': button.length == 1, 'size-2-3': button.length > 1, 'active': index == buttonIndex, 'curr': index == buttonIndex && subButtonIndex == -1 }"
+                        <div class="menu-item py-[15px] flex items-center justify-center cursor-pointer" :class="{ 'size-1': button.length == 1, 'size-2-3': button.length > 1, 'active': index == buttonIndex, 'curr': index == buttonIndex && subButtonIndex == -1 }"
                             v-for="(item, index) in button" :key="index" @click="selectButton(index)">
                             <div class="menu-name px-[10px] border-r border-color w-full leading-[40px] text-base truncate text-center">{{ item.name }}</div>
                             <div class="active-shade"></div>

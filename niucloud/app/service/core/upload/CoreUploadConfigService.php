@@ -27,7 +27,7 @@ class CoreUploadConfigService extends BaseCoreService
 
     /**
      * 上传配置
-     * @param $site_id
+     * @param int $site_id
      * @return mixed|string[]
      */
     public function getUploadConfig(int $site_id)

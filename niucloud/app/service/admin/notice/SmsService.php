@@ -61,8 +61,8 @@ class SmsService extends BaseAdminService
 
     /**
      * 获取短信配置
-     * @param $sms_type
-     * @return array|Response
+     * @param string $sms_type
+     * @return array
      */
     public function getConfig(string $sms_type)
     {
@@ -93,7 +93,7 @@ class SmsService extends BaseAdminService
 
     /**
      * 短信配置
-     * @param $sms_type
+     * @param string $sms_type
      * @param array $data
      * @return bool
      */
@@ -121,8 +121,7 @@ class SmsService extends BaseAdminService
             $config[$sms_type][$k_param] = $data[$k_param] ?? '';
         }
 
-        $res = (new CoreConfigService())->setConfig($this->site_id, 'SMS', $config);
-        return $res;
+        return (new CoreConfigService())->setConfig($this->site_id, 'SMS', $config);
     }
 
 

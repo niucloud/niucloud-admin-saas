@@ -24,6 +24,7 @@ class BaseAdminService extends BaseService
     protected $uid;
 
     protected $app_type;
+
     public function __construct()
     {
         parent::__construct();

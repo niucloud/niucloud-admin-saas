@@ -20,26 +20,27 @@ namespace app\dict\common;
 class ChannelDict
 {
     //微信小程序
-    const WEAPP   = 'weapp';
+    public const WEAPP = 'weapp';
     //微信公众号
-    const WECHAT  = 'wechat';
+    public const WECHAT = 'wechat';
     //手机端H5
-    const H5      = 'h5';
+    public const H5 = 'h5';
     //电脑端PC
-    const PC      =  'pc';
+    public const PC = 'pc';
     //app端
-    const APP     =   'app';
+    public const APP = 'app';
 
 
-    public static function getType($type = ''){
+    public static function getType($type = '')
+    {
         $data = [
-            self::WEAPP    => get_lang('dict_channel.channel_weapp'),//微信小程序
-            self::WECHAT     => get_lang('dict_channel.channel_wechat'),//'微信公众号',
-            self::H5            => get_lang('dict_channel.channel_h5'),//'手机H5',
-            self::PC            => get_lang('dict_channel.channel_pc'),//'电脑PC',
-            self::APP           => get_lang('dict_channel.channel_app'),//'手机app',
+            self::WEAPP => get_lang('dict_channel.channel_weapp'),//微信小程序
+            self::WECHAT => get_lang('dict_channel.channel_wechat'),//'微信公众号',
+            self::H5 => get_lang('dict_channel.channel_h5'),//'手机H5',
+            self::PC => get_lang('dict_channel.channel_pc'),//'电脑PC',
+            self::APP => get_lang('dict_channel.channel_app'),//'手机app',
         ];
-        if(empty($type)){
+        if (empty($type)) {
             return $data;
         }
         return $data[$type] ?? '';

@@ -12,7 +12,7 @@
 
     onLoad((data : AnyObject) => {
         if (!isWeixinBrowser() && data.alipay) {
-            uni.setStorageSync('paymenting', data.code)
+            uni.setStorageSync('paymenting', { trade_type: data.trade_type, trade_id: data.trade_id })
             location.href = decodeURIComponent(data.alipay)
         }
     })

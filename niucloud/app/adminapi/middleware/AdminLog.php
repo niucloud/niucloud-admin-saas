@@ -26,8 +26,7 @@ class AdminLog
     public function handle(Request $request, Closure $next)
     {
         //写入日志
-        if($request->method() != 'GET')
-        {
+        if ($request->method() != 'GET') {
             $data = [
                 'uid' => $request->uid(),
                 'username' => $request->username(),

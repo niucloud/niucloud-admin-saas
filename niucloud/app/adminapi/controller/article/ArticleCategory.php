@@ -21,7 +21,8 @@ class ArticleCategory extends BaseAdminController
      * 文章分类列表
      * @return Response
      */
-    public function lists(){
+    public function lists()
+    {
         $data = $this->request->params([
             ['name', ''],
         ]);
@@ -32,15 +33,18 @@ class ArticleCategory extends BaseAdminController
      * 查询所有分类(文章添加，编辑，索引)
      * @return Response
      */
-    public function all(){
+    public function all()
+    {
         return success((new ArticleCategoryService())->getAll());
     }
 
     /**
      * 文章分类详情
      * @param int $id
+     * @return Response
      */
-    public function info(int $id){
+    public function info(int $id)
+    {
         return success((new ArticleCategoryService())->getInfo($id));
     }
 
@@ -48,7 +52,8 @@ class ArticleCategory extends BaseAdminController
      * 添加文章分类
      * @return Response
      */
-    public function add(){
+    public function add()
+    {
         $data = $this->request->params([
             ['name', ''],
             ['is_show', 1],
@@ -61,10 +66,11 @@ class ArticleCategory extends BaseAdminController
 
     /**
      * 文章分类编辑
-     * @param int $category_id  //分类id
+     * @param int $category_id //分类id
      * @return Response
      */
-    public function edit(int $category_id){
+    public function edit(int $category_id)
+    {
         $data = $this->request->params([
             ['name', ''],
             ['is_show', 1],
@@ -78,8 +84,10 @@ class ArticleCategory extends BaseAdminController
     /**
      * 文章分类删除
      * @param int $category_id
+     * @return Response
      */
-    public function del(int $category_id){
+    public function del(int $category_id)
+    {
         (new ArticleCategoryService())->del($category_id);
         return success('DELETE_SUCCESS');
     }

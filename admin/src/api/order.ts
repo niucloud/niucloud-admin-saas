@@ -8,7 +8,7 @@ import request from '@/utils/request'
  * @returns
  */
 export function getRechargeOrderList(params: Record<string, any>) {
-    return request.get(`order/recharge`, { params })
+    return request.get(`order/recharge`, {params})
 }
 
 /**
@@ -17,7 +17,7 @@ export function getRechargeOrderList(params: Record<string, any>) {
  * @returns
  */
 export function getRechargeStat(params: Record<string, any>) {
-    return request.get(`order/recharge/stat`, { params })
+    return request.get(`order/recharge/stat`, {params})
 }
 
 /**
@@ -42,7 +42,7 @@ export function getRechargeOrderStatusList() {
  * @returns
  */
 export function getRechargeRefund(params: Record<string, any>) {
-    return request.get(`order/recharge/refund`, { params })
+    return request.get(`order/recharge/refund`, {params})
 }
 
 /**
@@ -54,15 +54,15 @@ export function getRechargeRefundStatus() {
 }
 
 /**
-* 充值订单发起退款
+ * 充值订单发起退款
  * @returns
  */
 export function rechargeRefund(id: number) {
-    return request.put(`order/recharge/refund/${id}`, {}, { showSuccessMessage: true });
+    return request.put(`order/recharge/refund/${id}`, {}, {showSuccessMessage: true});
 }
 
 /**
-* 获取退款统计
+ * 获取退款统计
  * @returns
  */
 export function getRechargeRefundStat() {

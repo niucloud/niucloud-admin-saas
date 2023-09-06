@@ -9,6 +9,7 @@ return [
 
         //应用管理
         'AppManage' => ['addon\hello_world\app\listener\AppManageListener'],
+        'SiteLayout' => ['addon\hello_world\app\listener\SiteLayout']
     ],
 
     'subscribe' => [

@@ -32,13 +32,14 @@ class AddonDict
     // 执行成功
     const INSTALL_SUCCESS = 'success';
     // 执行失败
-    CONST INSTALL_FAIL = 'fail';
+    const INSTALL_FAIL = 'fail';
 
     /**
      * 插件操作方式
      * @return array
      */
-    public static function getActionType(){
+    public static function getActionType()
+    {
         return [
             self::INSTALL => get_lang('dict_addon.install'),
             self::UNINSTALL => get_lang('dict_addon.uninstall'),
@@ -50,10 +51,11 @@ class AddonDict
      * 状态
      * @return array
      */
-    public static function getStatus(){
+    public static function getStatus()
+    {
         return [
             self::ON => get_lang('dict_addon.status_on'),//展示
-            self::OFF  => get_lang('dict_addon.status_off'),//隐藏
+            self::OFF => get_lang('dict_addon.status_off'),//隐藏
         ];
     }
 }

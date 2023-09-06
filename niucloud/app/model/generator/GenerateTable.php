@@ -37,25 +37,27 @@ class GenerateTable extends BaseModel
 
     /**
      * 表名搜索器
+     * @param $query
      * @param $value
      * @param $data
      */
     public function searchTableNameAttr($query, $value, $data)
     {
         if ($value) {
-            $query->where('table_name', 'like', '%'.$value.'%');
+            $query->where('table_name', 'like', '%' . $value . '%');
         }
     }
 
     /**
      * 描述搜索器
+     * @param $query
      * @param $value
      * @param $data
      */
     public function searchTableContentAttr($query, $value, $data)
     {
         if ($value) {
-            $query->where('table_content', 'like', '%'.$value.'%');
+            $query->where('table_content', 'like', '%' . $value . '%');
         }
     }
 

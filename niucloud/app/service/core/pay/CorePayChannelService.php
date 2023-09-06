@@ -17,6 +17,9 @@ use app\model\pay\PayChannel;
 use app\service\core\weapp\CoreWeappConfigService;
 use app\service\core\wechat\CoreWechatConfigService;
 use core\base\BaseCoreService;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\Model;
 
 
@@ -34,6 +37,7 @@ class CorePayChannelService extends BaseCoreService
 
     /**
      * 查询实例
+     * @param int $site_id
      * @param array $where
      * @return PayChannel|array|mixed|Model
      */
@@ -48,12 +52,12 @@ class CorePayChannelService extends BaseCoreService
      * @param string $channel
      * @param string $trade_type
      * @return array|array[]
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function getAllowPayTypeByChannel(int $site_id, string $channel, string $trade_type = ''){
-        $channel_pay_list = $this->model->where([['site_id', '=', $site_id], ['channel', '=', $channel], ['status', '=', 1]])->field('type')->order('sort asc')->select()->toArray();
+        $channel_pay_list = $this->model->where([['site_id', '=', $site_id], ['channel', '=', $channel], ['status', '=', 1]])->field('type,config')->order('sort asc')->select()->toArray();
 
         if(!empty($channel_pay_list)){
             $temp_channel_pay_list = array_column($channel_pay_list, 'type');
@@ -62,6 +66,11 @@ class CorePayChannelService extends BaseCoreService
         //充值订单不支持余额支付
         if(!empty($pay_type_list) &&  $trade_type == 'recharge'){
             unset($pay_type_list[PayDict::BALANCEPAY]);
+        }
+        // 线下支付做处理
+        if (!empty($pay_type_list) && isset($pay_type_list[PayDict::OFFLINEPAY])) {
+            $temp_channel_pay_list = array_column($channel_pay_list, null, 'type');
+            $pay_type_list[PayDict::OFFLINEPAY]['config'] = $temp_channel_pay_list[PayDict::OFFLINEPAY]['config'];
         }
         return $pay_type_list ?? [];
 
@@ -88,8 +97,8 @@ class CorePayChannelService extends BaseCoreService
 
     /**
      * 获取完整的微信支付配置(根据场景)
-     * @param $site_id
-     * @return void
+     * @param int $site_id
+     * @return array
      */
     public function getWechatPayFullConfig(int $site_id){
         //TODO 先判断是否是开放平台授权,然后再决定使用什么appid

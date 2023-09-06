@@ -2,7 +2,7 @@
 	<view class="image-ads" :style="warpCss">
 		<view v-if="diyComponent.list.length == 1" class="leading-0 overflow-hidden" :style="swiperWarpCss">
 			<app-link :data="diyComponent.list[0].link">
-				<image :src="img(diyComponent.list[0].imageUrl)" :style="{height: imgHeight}" mode="scaleToFill"
+				<image :src="img(diyComponent.list[0].imageUrl)" :style="{height: imgHeight}" mode="heightFix"
 					class="w-full" :show-menu-by-longpress="true"></image>
 			</app-link>
 		</view>
@@ -27,7 +27,7 @@
 	import { img } from '@/utils/common';
 	import useDiyStore from '@/stores/diy';
 
-	const props = defineProps(['component', 'index']);
+	const props = defineProps(['component', 'index', 'pullDownRefresh']);
 
 	const diyStore = useDiyStore();
 
@@ -54,6 +54,13 @@
 		return style;
 	})
 
+	watch(
+		() => props.pullDownRefresh,
+		(newValue, oldValue) => {
+			// 处理下拉刷新业务
+		}
+	)
+
 	const imgHeight = computed(() => {
 		return (diyComponent.value.imageHeight * 2) + 'rpx';
 	})
@@ -62,9 +69,6 @@
 
 	const swiperChange = e => {
 		swiperIndex.value = e.detail.current;
-	};
-
-	const handleData = () => {
 	};
 
 	onMounted(() => {
@@ -93,7 +97,6 @@
 				}
 			});
 		}
-		handleData()
 	}
 </script>
 

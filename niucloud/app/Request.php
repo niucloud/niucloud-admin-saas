@@ -28,13 +28,19 @@ class Request extends \think\Request
         $filter_rule = '';
         foreach ($params as $param) {
             $key = $param[0];
+            // 解析name
+            if (strpos($key, '/')) {
+                [$name, $type] = explode('/', $key);
+            }else{
+                $name = $key;
+            }
             $default = $param[1];
             $item_filter = $param[2] ?? $filter;
             $input[$key] = $this->paramFilter($this->param($key, $default, $filter_rule ?? ''), $item_filter);
             //过滤后产生空字符串，按照默认值
-            if($input[$key] === '')
+            if($input[$name] === '')
             {
-                $input[$key] = $default;
+                $input[$name] = $default;
             }
         }
         return $input;
@@ -55,13 +61,13 @@ class Request extends \think\Request
             "/(<[^>]*)on[a-zA-Z]+\s*=([^>]*>)/isU",
             "/select|join|where|drop|like|modify|rename|insert|update|table|database|alter|truncate|\'|\/\*|\.\.\/|\.\/|union|into|load_file|outfile/is"
         ];
-        $param = preg_replace($filter_rule, '', $param);
-        return $param;
+        return preg_replace($filter_rule, '', $param);
     }
 
     /**
      * 获取登录用户的uid
-     * @param $params
+     * @param int $uid
+     * @return int|mixed|void
      */
     public function uid(int $uid = 0)
     {
@@ -87,7 +93,7 @@ class Request extends \think\Request
 
     /**
      * 站点id
-     * @param int $site_id
+     * @param int|string|null $site_id
      * @return int
      */
     public function siteId(int|string|null $site_id = 0)
@@ -116,7 +122,7 @@ class Request extends \think\Request
 
     /**
      * 定义站点类型
-     * @param string $site_type
+     * @param string $app_type
      * @return mixed|string
      */
     public function appType(string $app_type = ''){
@@ -129,7 +135,7 @@ class Request extends \think\Request
 
     /**
      * 获取管理端token
-     * @return void
+     * @return array|string|null
      */
     public function adminToken(){
         return $this->header(system_name('admin_token_name'));
@@ -149,7 +155,7 @@ class Request extends \think\Request
      * @return array|string|null
      */
     public function adminSiteId(){
-        return $this->header(system_name('admin_site_id_name')) ?? $this->defaultSiteId();
+        return $this->header(system_name('admin_site_id_name'));
     }
 
     /**
@@ -157,7 +163,7 @@ class Request extends \think\Request
      * @return array|string|null
      */
     public function apiSiteId(){
-        return $this->header(system_name('api_site_id_name')) ?? $this->defaultSiteId();
+        return $this->header(system_name('api_site_id_name'));
     }
 
     /**
@@ -194,5 +200,19 @@ class Request extends \think\Request
     public function pushHeader($data){
         $param = $this->header();
         $this->withHeader(array_merge($param, $data));
+    }
+
+    /**
+     * 授权信息
+     * @param $key
+     * @param $value
+     * @return mixed|string|void
+     */
+    public function auth($key, $value = ''){
+        if (!empty($value)) {
+            static::$auth_info[$key] = $value;
+        } else {
+            return static::$auth_info[$key] ?? '';
+        }
     }
 }

@@ -18,6 +18,9 @@ use app\model\pay\PayChannel;
 use app\service\core\pay\CorePayChannelService;
 use core\base\BaseAdminService;
 use core\exception\PayException;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 
 /**
  * 支付配置服务层
@@ -36,7 +39,10 @@ class PayChannelService extends BaseAdminService
 
     /**
      * 添加模板
+     * @param string $channel
+     * @param string $type
      * @param array $data
+     * @return true
      */
     public function set(string $channel, string $type, array $data)
     {
@@ -44,9 +50,9 @@ class PayChannelService extends BaseAdminService
             'type' => $type,
             'channel' => $channel
         );
-        if (!in_array($type, array_keys(PayDict::getPayType()))) throw new PayException('PATMENT_METHOD_INVALID');
+        if (!array_key_exists($type, PayDict::getPayType())) throw new PayException('PATMENT_METHOD_INVALID');
         if ($channel != 'transfer') {
-            if (!in_array($channel, array_keys(ChannelDict::getType()))) throw new PayException('CHANNEL_MARK_INVALID');
+            if (!array_key_exists($channel, ChannelDict::getType())) throw new PayException('CHANNEL_MARK_INVALID');
         }
         $pay_channel = $this->core_pay_channel_service->find($this->site_id, $where);
         if ($pay_channel->isEmpty()) {
@@ -64,7 +70,10 @@ class PayChannelService extends BaseAdminService
 
     /**
      * 用于后端支付渠道
-     * @return void
+     * @return array
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function getChannelList()
     {
@@ -99,9 +108,9 @@ class PayChannelService extends BaseAdminService
      * 通过渠道获取配置
      * @param string $channel
      * @return array
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function getListByChannel(string $channel)
     {
@@ -137,6 +146,14 @@ class PayChannelService extends BaseAdminService
                     'app_public_cert_path' => $data['app_public_cert_path'] ?? '',//必填-应用公钥证书 路径
                     'alipay_public_cert_path' => $data['alipay_public_cert_path'] ?? '',//必填-支付宝公钥证书 路径
                     'alipay_root_cert_path' => $data['alipay_root_cert_path'] ?? '',// 必填-支付宝根证书 路径
+                ];
+                break;
+            case PayDict::OFFLINEPAY:
+                $config = [
+                    'collection_name' => $data['collection_name'] ?? '',// 必填-收款账户名称
+                    'collection_bank' => $data['collection_bank'] ?? '',//必填-收款银行
+                    'collection_account' => $data['collection_account'] ?? '',//必填-收款账号
+                    'collection_desc' => $data['collection_desc'] ?? '',// 必填-转账说明
                 ];
                 break;
         }

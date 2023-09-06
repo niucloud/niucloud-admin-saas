@@ -13,10 +13,11 @@ abstract class BaseOauth extends Storage
 {
     protected $config;//配置
     protected $site_id;
+
     /**
      * 初始化
      * @param array $config
-     * @return mixed|void
+     * @return void
      */
     protected function initialize(array $config = [])
     {
@@ -25,7 +26,7 @@ abstract class BaseOauth extends Storage
 
     /**
      * 获取粉丝信息
-     * @param string $openid
+     * @param string|null $openid
      * @return mixed
      */
     abstract public function getFansInfo(string $openid = null);
@@ -37,8 +38,6 @@ abstract class BaseOauth extends Storage
      * @return mixed
      */
     abstract public function oauth(string $code = null, array $options = []);
-
-
 
 
 }

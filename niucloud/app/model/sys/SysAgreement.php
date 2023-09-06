@@ -41,10 +41,12 @@ class SysAgreement extends BaseModel
     /**
      * 字段转化
      * @param $value
-     * @return mixed
+     * @param $data
+     * @return string
      */
     public function getAgreementKeyNameAttr($value, $data)
     {
-        return AgreementDict::getType()[$data['agreement_key'] ?? ''] ?? '';
+        if (empty($data['agreement_key'])) return '';
+        return AgreementDict::getType()[$data['agreement_key']] ?? '';
     }
 }

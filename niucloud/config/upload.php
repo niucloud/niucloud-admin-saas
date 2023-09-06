@@ -54,20 +54,29 @@ return [
             ],
             'size' => 2097152
         ],
+        'applet' => [
+            'ext' => ['zip', 'rar'],
+            'mime' => [
+                'application/zip',
+                'application/vnd.rar',
+                'application/x-zip-compressed'
+            ],
+            'size' => 2097152
+        ]
     ],
     'thumb' => [
         'thumb_type' => [
             'big' => [
+                'width' => 800,
+                'height' => 800,
+            ],
+            'mid' => [
                 'width' => 400,
                 'height' => 400,
             ],
-            'mid' => [
-                'width' => 100,
-                'height' => 100,
-            ],
             'small' => [
-                'width' => 50,
-                'height' => 50,
+                'width' => 200,
+                'height' => 200,
             ],
         ]
 

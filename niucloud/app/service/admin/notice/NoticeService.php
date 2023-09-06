@@ -17,6 +17,7 @@ use app\model\sys\SysNotice;
 use app\service\core\notice\CoreNoticeService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
+use think\Response;
 
 /**
  * 消息管理服务层
@@ -41,6 +42,7 @@ class NoticeService extends BaseAdminService
     /**
      * 获取消息内容
      * @param string $key
+     * @return array
      */
     public function getInfo(string $key)
     {
@@ -52,7 +54,7 @@ class NoticeService extends BaseAdminService
      * @param string $key
      * @param string $field_type
      * @param $value
-     * @return void
+     * @return bool
      */
     public function modify(string $key, string $field_type, $value){
         $data = array(
@@ -66,7 +68,7 @@ class NoticeService extends BaseAdminService
      * @param string $key
      * @param string $type
      * @param int $status
-     * @return \think\Response
+     * @return Response
      */
     public function editMessageStatus(string $key, string $type, int $status)
     {
@@ -80,7 +82,7 @@ class NoticeService extends BaseAdminService
      * @param string $key
      * @param string $type
      * @param array $data
-     * @return \think\Response
+     * @return Response
      */
     public function edit(string $key, string $type, array $data)
     {

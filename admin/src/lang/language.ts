@@ -44,7 +44,6 @@ class Language {
             this.setI18nLanguage(locale)
             return nextTick()
         } catch (e) {
-            console.log(e)
             this.setI18nLanguage(locale)
             return nextTick()
         }

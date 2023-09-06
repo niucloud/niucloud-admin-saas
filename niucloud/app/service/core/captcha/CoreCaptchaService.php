@@ -50,7 +50,6 @@ class CoreCaptchaService extends BaseCoreService
 
     /**
      * 核验验证码
-     * @param Request $request
      * @return true
      */
     public function check(){

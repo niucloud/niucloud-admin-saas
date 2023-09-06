@@ -12,7 +12,6 @@
 namespace app\adminapi\controller\login;
 
 use app\service\admin\auth\ConfigService;
-use app\service\core\upload\CoreImageService;
 use core\base\BaseAdminController;
 use think\Response;
 
@@ -27,7 +26,7 @@ class Config extends BaseAdminController
      */
     public function getConfig()
     {
-        return success(( new ConfigService() )->getConfig());
+        return success((new ConfigService())->getConfig());
     }
 
     /**
@@ -37,12 +36,12 @@ class Config extends BaseAdminController
     public function setConfig()
     {
         $data = $this->request->params([
-            [ 'is_captcha', 0 ],
-            [ 'is_site_captcha', 0 ],
-            [ 'bg', '' ],
-            [ 'site_bg', '' ],
+            ['is_captcha', 0],
+            ['is_site_captcha', 0],
+            ['bg', ''],
+            ['site_bg', ''],
         ]);
-        ( new ConfigService() )->setConfig($data);
+        (new ConfigService())->setConfig($data);
         return success('MODIFY_SUCCESS');
     }
 }

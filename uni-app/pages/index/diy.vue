@@ -1,17 +1,31 @@
 <template>
 	<view>
-		<u-loading-page :loading="loading" loadingText=""></u-loading-page>
-		<view v-show="!loading"
-			:style="{ backgroundColor: data.global.pageBgColor,minHeight: 'calc(100vh - 50px)',backgroundImage : data.global.bgUrl ? 'url(' +  img(data.global.bgUrl) + ')' : '' }"
-			class="bg-index">
-			<diy-group :data="data"></diy-group>
+		<u-loading-page :loading="loading" loadingText="" bg-color="#f7f7f7"></u-loading-page>
+
+		<view v-show="!loading">
+
+			<!-- 自定义模板渲染 -->
+			<view class="diy-template-wrap bg-index" v-if="data.pageMode != 'fixed'"
+				:style="{ backgroundColor: data.global.pageBgColor,minHeight: 'calc(100vh - 50px)',backgroundImage : data.global.bgUrl ? 'url(' +  img(data.global.bgUrl) + ')' : '' }">
+
+				<diy-group :data="data" :pullDownRefresh="pullDownRefresh"></diy-group>
+
+			</view>
+
+			<!-- 固定模板渲染 -->
+			<view class="fixed-template-wrap" v-if="data.pageMode == 'fixed'">
+
+				<fixed-group :data="data" :pullDownRefresh="pullDownRefresh"></fixed-group>
+
+			</view>
+
 		</view>
 	</view>
 </template>
 
 <script setup lang="ts">
 	import { ref, reactive, computed } from 'vue';
-	import { onLoad, onShow } from '@dcloudio/uni-app';
+	import { onLoad, onShow, onPullDownRefresh } from '@dcloudio/uni-app';
 	import { getDiyInfo } from '@/api/diy';
 	import useDiyStore from '@/stores/diy';
 	import { useShare } from '@/hooks/useShare'
@@ -23,8 +37,11 @@
 
 	const loading = ref(true);
 	const diyStore = useDiyStore();
+	const pullDownRefresh = ref(0)
 
 	const diyData = reactive({
+		pageMode: 'diy',
+		title: '',
 		global: {},
 		value: []
 	})
@@ -52,6 +69,12 @@
 		name.value = option.name || '';
 	});
 
+	// 监听下拉刷新事件
+	onPullDownRefresh(() => {
+		pullDownRefresh.value++;
+		uni.stopPullDownRefresh();
+	})
+
 	onShow(() => {
 		// 装修模式
 		if (diyStore.mode == 'decorate') {
@@ -62,7 +85,11 @@
 				name: name.value
 			}).then((res : any) => {
 				if (res.data.value) {
-					let sources = JSON.parse(res.data.value);
+					let data = res.data;
+					diyData.pageMode = data.mode;
+					diyData.title = data.title;
+
+					let sources = JSON.parse(data.value);
 					diyData.global = sources.global;
 					diyData.value = sources.value;
 					diyData.value.forEach((item, index) => {
@@ -76,7 +103,7 @@
 						}
 					});
 					uni.setNavigationBarTitle({
-						title: diyData.global.title
+						title: diyData.title
 					})
 				}
 

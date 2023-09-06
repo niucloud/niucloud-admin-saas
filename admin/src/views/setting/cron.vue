@@ -7,12 +7,6 @@
                     <el-form-item :label="t('title')" prop="title">
                         <el-input v-model="cronTableData.searchParam.title" :placeholder="t('titlePlaceholder')" />
                     </el-form-item>
-                    <el-form-item :label="t('type')" prop="type">
-                        <el-select v-model="cronTableData.searchParam.type" clearable class="input-width">
-                            <el-option :label="t('selectPlaceholder')" value="" />
-                            <el-option :label="item" :value="key" v-for="(item, key) in typeList" />
-                        </el-select>
-                    </el-form-item>
                     <el-form-item :label="t('lastTime')" prop="last_time">
                         <el-date-picker
                             v-model="cronTableData.searchParam.last_time"
@@ -80,11 +74,11 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import { t } from '@/lang'
-import { getCronList,getCronType } from '@/api/sys'
+import { getCronList } from '@/api/sys'
 import { img } from '@/utils/common'
-import { ElMessageBox } from 'element-plus'
+import { FormInstance } from 'element-plus'
 import { useRouter } from 'vue-router'
 import CronInfo from '@/views/setting/components/cron-info.vue'
 
@@ -100,14 +94,8 @@ const cronTableData = reactive({
         last_time:''
     }
 })
-const typeList = ref([])
 
 const searchFormRef = ref<FormInstance>()
-
-const setTypeList = async () => {
-    typeList.value = await (await getCronType()).data
-}
-setTypeList()
 
 /**
  * 获取任务列表

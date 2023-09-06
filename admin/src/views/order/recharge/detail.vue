@@ -64,7 +64,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
 import { getRechargeOrderInfo } from '@/api/order'

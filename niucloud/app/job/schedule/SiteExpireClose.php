@@ -13,6 +13,7 @@ namespace app\job\schedule;
 
 use app\service\core\site\CoreSiteService;
 use core\base\BaseJob;
+use think\facade\Log;
 
 /**
  * 站点到期自动关闭
@@ -23,12 +24,12 @@ class SiteExpireClose extends BaseJob
     {
         $core_site_service = new CoreSiteService();
         $list = $core_site_service->getExpireSiteList();
-        if(!empty($list)){
-            foreach($list as $k => $v){
+        if (!empty($list)) {
+            foreach ($list as $k => $v) {
                 $core_site_service->expire($v['site_id']);
             }
         }
-//        Log::write('站点到期自动关闭'.date('Y-m-d h:i:s'));
+        Log::write('站点到期自动关闭' . date('Y-m-d h:i:s'));
         return true;
     }
 }

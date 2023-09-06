@@ -14,10 +14,12 @@ namespace app\service\core\wechat;
 use core\base\BaseCoreService;
 use EasyWeChat\Kernel\Exceptions\BadRequestException;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
+use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
 use EasyWeChat\Kernel\Exceptions\RuntimeException;
 use Overtrue\Socialite\Contracts\UserInterface;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -35,13 +37,11 @@ class CoreWechatServeService extends BaseCoreService
      * @param string $url
      * @param string $scopes
      * @return string
-     * @throws InvalidArgumentException
      */
     public function authorization(int $site_id, string $url = '', string $scopes = 'snsapi_base')
     {
         $oauth = CoreWechatService::app($site_id)->oauth;
-        $redirect_url = $oauth->scopes([$scopes])->redirect($url);
-        return $redirect_url;
+        return $oauth->scopes([$scopes])->redirect($url);
     }
 
     /**
@@ -49,13 +49,11 @@ class CoreWechatServeService extends BaseCoreService
      * @param int $site_id
      * @param string $code
      * @return UserInterface
-     * @throws InvalidArgumentException
      */
     public function userFromCode(int $site_id, string $code)
     {
         $oauth = CoreWechatService::app($site_id)->oauth;
-        $user = $oauth->userFromCode($code);
-        return $user;
+        return $oauth->userFromCode($code);
     }
 
     public function getUser($user)
@@ -75,13 +73,12 @@ class CoreWechatServeService extends BaseCoreService
 
     /**
      * 事件推送
-     * @param $site_id
-     * @return ResponseInterface
+     * @param int $site_id
+     * @return Response
      * @throws BadRequestException
      * @throws InvalidArgumentException
-     * @throws RuntimeException
      * @throws ReflectionException
-     * @throws Throwable
+     * @throws InvalidConfigException
      */
     public function serve(int $site_id)
     {
@@ -92,14 +89,13 @@ class CoreWechatServeService extends BaseCoreService
             // ...
         });
         $response = $app->server->serve();
-        $response->send();
+        return $response->send();
     }
 
     public function jssdkConfig(int $site_id, string $url = '')
     {
         $jssdk = CoreWechatService::app($site_id)->jssdk;
-        $config = $jssdk->setUrl($url)->buildConfig([], false, false, false);
-        return $config;
+        return $jssdk->setUrl($url)->buildConfig([], false, false, false);
     }
 
     public function scan(int $site_id, string $key, int $expire_seconds = 6 * 24 * 3600){

@@ -13,6 +13,7 @@ namespace core\base;
 
 
 use app\validate\sys\Page;
+use think\db\exception\DbException;
 use think\Model;
 
 /**
@@ -33,11 +34,13 @@ abstract class BaseService
     {
         $this->request = request();
     }
+
     /**
      * 分页列表参数(页码和每页多少条)
      * @return mixed
      */
-    public function getPageParam(){
+    public function getPageParam()
+    {
 
         $page = request()->params([
             ['page', 1],
@@ -50,29 +53,31 @@ abstract class BaseService
 
     /**
      * 分页列表
+     * @param Model $model
      * @param array $where
      * @param string $field
      * @param string $order
-     * @param int $page
-     * @param int $limit
+     * @param array $append
      * @param null $with //数组可以是数组  function($query) use ($with){$query->with($with);}
      * @param null $each //闭包匿名函数  function($item, $key){$item['nickname'] = 'think';return $item;}
-     * @return mixed
+     * @return array
+     * @throws DbException
      */
-    public function getPageList(Model $model, array $where, string $field = '*', string $order = '', array $append = [], $with = null, $each = null){
+    public function getPageList(Model $model, array $where, string $field = '*', string $order = '', array $append = [], $with = null, $each = null)
+    {
         $page_params = $this->getPageParam();
         $page = $page_params['page'];
         $limit = $page_params['limit'];
 
-        $list = $model->where($where)->when($append, function($query) use ($append){
+        $list = $model->where($where)->when($append, function ($query) use ($append) {
             $query->append($append);
-        })->when($with, function ($query) use($with){
+        })->when($with, function ($query) use ($with) {
             $query->with($with);
         })->field($field)->order($order)->paginate([
             'list_rows' => $limit,
             'page' => $page,
         ]);
-        if(!empty($each)){
+        if (!empty($each)) {
             $list = $list->each($each);
         }
         return $list->toArray();
@@ -81,8 +86,9 @@ abstract class BaseService
     /**
      * 分页数据查询，传入model（查询后结果）
      * @param $model BaseModel
-     * @param $each
-     * @return mixed
+     * @param null $each
+     * @return array
+     * @throws DbException
      */
     public function pageQuery($model, $each = null)
     {
@@ -93,7 +99,7 @@ abstract class BaseService
             'list_rows' => $limit,
             'page' => $page,
         ]);
-        if(!empty($each)){
+        if (!empty($each)) {
             $list = $list->each($each);
         }
         return $list->toArray();
@@ -109,22 +115,23 @@ abstract class BaseService
      * @param null $with
      * @param null $each
      * @return array
-     * @throws \think\db\exception\DbException
+     * @throws DbException
      */
-    public function getPageViewList(Model $model, array $where, string $field = '*', string $order = '', array $append = [], $with = null, $each = null){
+    public function getPageViewList(Model $model, array $where, string $field = '*', string $order = '', array $append = [], $with = null, $each = null)
+    {
         $page_params = $this->getPageParam();
         $page = $page_params['page'];
         $limit = $page_params['limit'];
 
-        $list = $model->where($where)->when($append, function($query) use ($append){
+        $list = $model->where($where)->when($append, function ($query) use ($append) {
             $query->append($append);
-        })->when($with, function ($query) use($with){
+        })->when($with, function ($query) use ($with) {
             $query->withJoin($with);
         })->field($field)->order($order)->paginate([
             'list_rows' => $limit,
             'page' => $page,
         ]);
-        if(!empty($each)){
+        if (!empty($each)) {
             $list = $list->each($each);
         }
         return $list->toArray();

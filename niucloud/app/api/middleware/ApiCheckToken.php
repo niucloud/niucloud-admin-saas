@@ -30,11 +30,11 @@ class ApiCheckToken
     /**
      * @param Request $request
      * @param Closure $next
-     * @param bool $exception 是否把错误抛出
+     * @param bool $is_throw_exception 是否把错误抛出
      * @return mixed
      * @throws Exception
      */
-    public function handle(Request $request, Closure $next, bool $exception = false)
+    public function handle(Request $request, Closure $next, bool $is_throw_exception = false)
     {
         $request->appType(AppTypeDict::API);
         //检测站点
@@ -45,8 +45,8 @@ class ApiCheckToken
             $token_info = ( new LoginService() )->parseToken($token);
         } catch (AuthException $e) {
             //是否将登录错误抛出
-            if ($exception)
-                return fail($e->getMessage());
+            if ($is_throw_exception)
+                return fail($e->getMessage(), [], $e->getCode());
         }
         if (!empty($token_info)) {
             $request->memberId($token_info[ 'member_id' ]);

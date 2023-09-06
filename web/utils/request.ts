@@ -1,28 +1,27 @@
 import { breakpointsTailwind } from '@vueuse/core'
 import { ElMessage } from 'element-plus'
+import useMemberStore from '@/stores/member'
 
-interface ShowMessageConfig {
+interface ConfigOption {
     showErrorMessage?: boolean
-    showSuccessMessage?: boolean
+    showSuccessMessage?: boolean,
+    headers?: Headers
 }
 
 interface FetchOptions {
     baseURL: string
-    method: string
-    query?: Record<string, any>,
-    body?: RequestInit['body'] | Record<string, any>
-    headers: Record<string, any>,
-    onRequest?: (data: any) => void,
-    onResponse?: (data: any) => void,
-    onResponseError?: (data: any) => void,
-    showMessageConfig?: ShowMessageConfig,
+    headers: Record<string, any>
+    onRequest?: (data: any) => void
+    onResponse?: (data: any) => void
+    onResponseError?: (data: any) => void
+    showErrorMessage?: boolean
+    showSuccessMessage?: boolean
     watch: boolean
 }
 
 class Http {
     private options: FetchOptions = {
         baseURL: '',
-        method: '',
         headers: {},
         watch: false
     }
@@ -38,9 +37,6 @@ class Http {
             this.options.headers[runtimeConfig.public.VITE_REQUEST_HEADER_SITEID_KEY] = useCookie('siteId').value || runtimeConfig.public.VITE_SITE_ID
             this.options.headers[runtimeConfig.public.VITE_REQUEST_HEADER_CHANNEL_KEY] = 'pc'
             if (getToken()) this.options.headers[runtimeConfig.public.VITE_REQUEST_HEADER_TOKEN_KEY] = getToken()
-
-            delete this.options.body
-            delete this.options.query
         }
 
         /**
@@ -51,31 +47,32 @@ class Http {
             this.handleNetworkError(response)
             if (data.code != undefined) {
                 if (data.code == 1) {
-                    if (options.showMessageConfig.showSuccessMessage) ElMessage({ message: data.msg, type: 'success' })
+                    if (options.showSuccessMessage) ElMessage({ message: data.msg, type: 'success' })
                 } else {
-                    ElMessage({ message: data.msg, type: 'error' })
+                    if (data.code == 0) {
+                        ElMessage({ message: data.msg, type: 'error' })
+                    } else {
+                        this.handleAuthError(data.code)
+                    }
                 }
             }
         }
     }
 
-    public get(url: string, query = {}, showMessageConfig: ShowMessageConfig = {}) {
-        this.options.query = query
-        return this.request(url, 'GET', showMessageConfig)
+    public get(url: string, query = {}, config: ConfigOption = {}) {
+        return this.request(url, 'GET', { query }, config)
     }
 
-    public post(url: string, body = {}, showMessageConfig: ShowMessageConfig = {}) {
-        this.options.body = body
-        return this.request(url, 'POST', showMessageConfig)
+    public post(url: string, body = {}, config: ConfigOption = {}) {
+        return this.request(url, 'POST', { body }, config)
     }
 
-    public put(url: string, body = {}, showMessageConfig: ShowMessageConfig = {}) {
-        this.options.body = body
-        return this.request(url, 'PUT', showMessageConfig)
+    public put(url: string, body = {}, config: ConfigOption = {}) {
+        return this.request(url, 'PUT', { body }, config)
     }
 
-    public delete(url: string, showMessageConfig: ShowMessageConfig = {}) {
-        return this.request(url, 'DELETE', showMessageConfig)
+    public delete(url: string, config: ConfigOption = {}) {
+        return this.request(url, 'DELETE', {}, config)
     }
 
     /**
@@ -85,24 +82,35 @@ class Http {
      * @param showMessageConfig 
      * @returns 
      */
-    private request(url: string, method: string, showMessageConfig: ShowMessageConfig = {}) {
-        this.options.method = method
-        this.options.showMessageConfig = showMessageConfig
-
+    private request(url: string, method: string, param: AnyObject = {}, config: ConfigOption = {}) {
         return new Promise((resolve, reject) => {
             setTimeout(() => {
                 // 处理首次请求baseurl空的问题
                 const runtimeConfig = useRuntimeConfig()
                 !this.options.baseURL && (this.options.baseURL = runtimeConfig.public.VITE_APP_BASE_URL || `${location.origin}/api/`)
+                this.options.baseURL.substr(-1) != '/' && (this.options.baseURL += '/')
 
-                useFetch(url, { ...this.options }).then((response) => {
+                // 处理数组格式
+                for (const key in param.query) {
+                    if (param.query[key] instanceof Array) {
+                        param.query[key].forEach((item, index) => {
+                            param.query[`${key}[${index}]`] = item
+                        });
+                        delete param.query[key]
+                    }
+                }
+
+                useFetch(url, { ...this.options, method, ...config, ...param }).then((response) => {
                     const { data: { value }, error } = response
-
                     if (value) {
-                        if (value.code == 1) {
+                        if (value.code && value.code == 1) {
                             resolve(value)
                         } else {
-                            reject(value)
+                            if (value.type && value.type == 'application/zip') {
+                                resolve(value)
+                            } else {
+                                reject(value)
+                            }
                         }
                     } else {
                         reject(error)
@@ -112,6 +120,14 @@ class Http {
                 })
             }, this.options.baseURL ? 0 : 500);
         })
+    }
+
+    private handleAuthError(code: number) {
+        switch (code) {
+            case 401:
+                useMemberStore().logout()
+                break;
+        }
     }
 
     private handleNetworkError(err: any) {

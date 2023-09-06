@@ -22,12 +22,13 @@ class Register extends BaseController
      * 账号密码注册
      * @return Response
      */
-    public function account(){
+    public function account()
+    {
 
         $data = $this->request->params([
             ['username', ''],
             ['password', ''],
-            ['mobile',  ''],
+            ['mobile', ''],
         ]);
         //参数验证
         $this->validate($data, 'app\validate\member\Member.account_register');
@@ -40,9 +41,10 @@ class Register extends BaseController
      * 手机号注册
      * @return Response
      */
-    public function mobile(){
+    public function mobile()
+    {
         $data = $this->request->params([
-            ['mobile',  ''],
+            ['mobile', ''],
         ]);
         //参数验证
         $this->validate($data, [
@@ -52,11 +54,6 @@ class Register extends BaseController
         $result = (new RegisterService())->mobile($data['mobile']);
         return success($result);
     }
-
-
-
-
-
 
 
 }

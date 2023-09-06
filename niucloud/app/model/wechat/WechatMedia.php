@@ -34,5 +34,4 @@ class WechatMedia extends BaseModel
     protected $name = 'wechat_media';
 
 
-
 }

@@ -23,12 +23,14 @@ class Dispatch
      * 加入队列
      * @param $action
      * @param array $data
+     * @param int $secs
      * @param string|null $queue_name
+     * @param bool $is_async
      * @return mixed
      */
     public static function invoke($action, array $data = [], int $secs = 0, string $queue_name = null, bool $is_async = true)
     {
-        $class = get_called_class();//调用主调类
+        $class = static::class;//调用主调类
         if ($is_async) {
             $queue = Queue::instance()->job($class)->secs($secs);
             if (is_array($action)) {

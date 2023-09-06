@@ -26,7 +26,7 @@ class WebApiGenerator extends BaseGenerator
 
     /**
      * 替换模板中的变量
-     * @return mixed|void
+     * @return void
      */
     public function replaceText()
     {
@@ -35,6 +35,7 @@ class WebApiGenerator extends BaseGenerator
             '{NOTES}',
             '{UCASE_CLASS_NAME}',
             '{LCASE_CLASS_NAME}',
+            '{ROUTE_NAME}',
             '{PK}',
             '{UCASE_NAME}',
             '{MODULE_NAME}',
@@ -43,7 +44,8 @@ class WebApiGenerator extends BaseGenerator
         $new = [
             $this->table['table_content'],
             $this->getUCaseClassName(),
-            $this->getLCaseClassName(),
+            strtolower($this->getLCaseClassName()),
+            $this->getRouteName(),
             $this->getPk(),
             $this->getUCaseName(),
             $this->moduleName,
@@ -54,10 +56,22 @@ class WebApiGenerator extends BaseGenerator
 
         $this->setText($text);
     }
-
+    /**
+     * 路由名称
+     * @return string
+     */
+    public function getRouteName()
+    {
+        //如果是某个模块下的功能，公用一个路由
+        if($this->moduleName && ($this->getLCaseTableName() != $this->moduleName) && $this->className){
+            return Str::lower($this->className);
+        }else{
+            return $this->getLCaseTableName();
+        }
+    }
     /**
      * 获取文件生成到模块的文件夹路径
-     * @return mixed|void
+     * @return string
      */
     public function getModuleOutDir()
     {

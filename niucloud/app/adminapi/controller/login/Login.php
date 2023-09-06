@@ -26,12 +26,12 @@ class Login extends BaseAdminController
     {
 
         $data = $this->request->params([
-            [ 'username', '' ],
-            [ 'password', '' ],
+            ['username', ''],
+            ['password', ''],
         ]);
         //参数验证
         //验证码验证
-        $result = ( new LoginService() )->login($data[ 'username' ], $data[ 'password' ], $app_type);
+        $result = (new LoginService())->login($data['username'], $data['password'], $app_type);
         if (!$result) {
             //账号密码错误...., 重置验证码
             return fail('USER_ERROR');
@@ -46,10 +46,9 @@ class Login extends BaseAdminController
      */
     public function logout()
     {
-        ( new LoginService )->logout();
+        (new LoginService)->logout();
         return success('LOGOUT');
     }
-
 
 
     /**
@@ -58,6 +57,6 @@ class Login extends BaseAdminController
      */
     public function getConfig()
     {
-        return success(( new ConfigService() )->getConfig());
+        return success((new ConfigService())->getConfig());
     }
 }

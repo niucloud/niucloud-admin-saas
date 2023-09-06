@@ -312,11 +312,12 @@ abstract class BaseGenerator
 
     /**
      * 获取缺省值
-     * @param $type
+     * @param string $type
+     * @return int|string
      */
     public function getDefault(string $type)
     {
-        if (0 === strpos($type, 'set') || 0 === strpos($type, 'dict')) {
+        if (str_starts_with($type, 'set') || str_starts_with($type, 'dict')) {
             $result = '""';
         } elseif (preg_match('/(int|serial|bit)/is', $type)) {
             $result = '0';
@@ -324,11 +325,11 @@ abstract class BaseGenerator
             $result = '0.00';
         } elseif (preg_match('/bool/is', $type)) {
             $result = 'false';
-        } elseif (0 === strpos($type, 'timestamp')) {
+        } elseif (str_starts_with($type, 'timestamp')) {
             $result = time();
-        } elseif (0 === strpos($type, 'datetime')) {
+        } elseif (str_starts_with($type, 'datetime')) {
             $result = date('Y-m-d H:i:s');
-        } elseif (0 === strpos($type, 'date')) {
+        } elseif (str_starts_with($type, 'date')) {
             $result = date('Y-m-d H:i:s');
         } else {
             $result = '""';
@@ -348,7 +349,7 @@ abstract class BaseGenerator
 
     /**
      * 代码生成备注时间
-     * @return false|string
+     * @return string
      */
     public function getNoteDate()
     {

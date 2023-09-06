@@ -54,7 +54,7 @@ class CashOut extends BaseAdminController
             ['refuse_reason', ''],
         ]);
         (new MemberCashOutService())->audit($id, $action, $data);
-        return success('SUCCESS');
+        return success();
     }
 
     /**
@@ -79,14 +79,15 @@ class CashOut extends BaseAdminController
             ['transfer_type', '']
         ]);
         (new MemberCashOutService())->transfer($id, $data);
-        return success('SUCCESS');
+        return success();
     }
 
     /**
      * 状态
      * @return Response
      */
-    public function getStatusList(){
+    public function getStatusList()
+    {
         return success(MemberCashOutDict::getStatus());
     }
 

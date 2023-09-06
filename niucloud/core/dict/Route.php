@@ -16,17 +16,15 @@ class Route extends BaseDict
     /**
      * 加载路由
      * @param array $data 传入路由端口
-     * @return array|mixed
+     * @return true
      */
     public function load(array $data)
     {
-        $addons  = $this->getLocalAddons();
+        $addons = $this->getLocalAddons();
 
-        foreach ($addons as $k => $v)
-        {
-            $route_path = $this->getAddonAppPath($v). DIRECTORY_SEPARATOR. $data['app_type']. DIRECTORY_SEPARATOR. "route". DIRECTORY_SEPARATOR. "route.php";
-            if(is_file($route_path))
-            {
+        foreach ($addons as $k => $v) {
+            $route_path = $this->getAddonAppPath($v) . DIRECTORY_SEPARATOR . $data['app_type'] . DIRECTORY_SEPARATOR . "route" . DIRECTORY_SEPARATOR . "route.php";
+            if (is_file($route_path)) {
                 include $route_path;
             }
         }

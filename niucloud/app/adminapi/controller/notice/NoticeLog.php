@@ -25,18 +25,18 @@ class NoticeLog extends BaseAdminController
     public function lists()
     {
         $data = $this->request->params([
-            [ 'key', '' ],
-            [ 'receiver', '' ],
-            [ 'create_time', [] ]
+            ['key', ''],
+            ['receiver', ''],
+            ['create_time', []]
         ]);
 
-        $res = ( new NoticeLogService() )->getPage($data);
+        $res = (new NoticeLogService())->getPage($data);
         return success($res);
     }
 
     public function info($id)
     {
-        $res = ( new NoticeLogService() )->getInfo($id);
+        $res = (new NoticeLogService())->getInfo($id);
         return success($res);
     }
 

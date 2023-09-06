@@ -15,7 +15,7 @@ class Wechat extends BaseOauth
 
     /**
      * @param array $config
-     * @return mixed|void
+     * @return void
      */
     protected function initialize(array $config = [])
     {
@@ -27,9 +27,11 @@ class Wechat extends BaseOauth
         // TODO: Implement getFansInfo() method.
     }
 
-    public function instance(){
+    public function instance()
+    {
         return CoreWechatService::app($this->site_id)->oauth;
     }
+
     public function oauth(string $code = null, array $options = [])
     {
 //        $this->instance()->

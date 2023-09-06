@@ -19,22 +19,23 @@ namespace app\dict\sys;
 class StorageDict
 {
     //本地存储
-    const LOCAL = 'local';
+    public const LOCAL = 'local';
 
     //七牛云存储
-    const QINIU = 'qiniu';
+    public const QINIU = 'qiniu';
 
     //阿里云存储
-    const ALI = 'aliyun';
+    public const ALI = 'aliyun';
 
     //腾讯云存储
-    const TENCENT = 'tencent';
+    public const TENCENT = 'tencent';
 
-    const ON = '1';//开启
-    const OFF = '0';//关闭
+    public const ON = '1';//开启
+    public const OFF = '0';//关闭
 
 
-    public static function getType(){
+    public static function getType()
+    {
         return [
             self::LOCAL => [
                 'name' => '本地存储',
@@ -50,7 +51,7 @@ class StorageDict
                     'bucket' => '存储空间',
                     'access_key' => 'ACCESS_KEY',
                     'secret_key' => 'SECRET_KEY',
-                    'domain'     => '空间域名'
+                    'domain' => '空间域名'
                 ]
             ],
 
@@ -61,8 +62,8 @@ class StorageDict
                     'bucket' => '存储空间',
                     'access_key' => 'ACCESS_KEY_ID',
                     'secret_key' => 'ACCESS_KEY_SECRET',
-                    'endpoint'     => 'Endpoint',
-                    'domain'     => '空间域名'
+                    'endpoint' => 'Endpoint',
+                    'domain' => '空间域名'
                 ]
             ],
 
@@ -74,7 +75,7 @@ class StorageDict
                     'region' => 'REGION',
                     'access_key' => 'SECRET_ID',
                     'secret_key' => 'SECRET_KEY',
-                    'domain'     => '空间域名'
+                    'domain' => '空间域名'
                 ]
             ],
 

@@ -26,7 +26,7 @@ class WebEditLangGenerator extends BaseGenerator
 
     /**
      * 替换模板中的变量
-     * @return mixed|void
+     * @return void
      */
     public function replaceText()
     {
@@ -70,7 +70,7 @@ class WebEditLangGenerator extends BaseGenerator
 
     /**
      * 获取文件生成到模块的文件夹路径
-     * @return mixed|void
+     * @return string
      */
     public function getModuleOutDir()
     {
@@ -108,9 +108,9 @@ class WebEditLangGenerator extends BaseGenerator
             return '';
         }
         if($this->className){
-            return $this->moduleName.'.'.Str::lower($this->className).'.edit.json';
+            return $this->moduleName.'.'.Str::lower($this->className).'_edit.json';
         }
-        return $this->moduleName.'.edit.json';
+        return $this->moduleName.'.'.'edit.json';
     }
 
 }

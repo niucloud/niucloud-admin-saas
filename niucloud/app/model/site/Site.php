@@ -14,6 +14,7 @@ namespace app\model\site;
 use app\dict\site\SiteDict;
 use core\base\BaseModel;
 use think\db\Query;
+use think\model\relation\HasOne;
 
 /**
  * 站点模型
@@ -24,7 +25,7 @@ class Site extends BaseModel
 {
 
     protected $type = [
-        'expire_time'  =>  'timestamp',
+        'expire_time' => 'timestamp',
     ];
     /**
      * 数据表主键
@@ -42,12 +43,16 @@ class Site extends BaseModel
     /**
      * 状态字段转化
      * @param $value
+     * @param $data
      * @return mixed
      */
     public function getStatusNameAttr($value, $data)
     {
-        return SiteDict::getStatus()[$data['status'] ?? ''] ?? '';
+        if (empty($data['status']))
+            return '';
+        return SiteDict::getStatus()[$data['status']] ?? '';
     }
+
     /**
      * 关键字搜索
      * @param $query
@@ -89,45 +94,49 @@ class Site extends BaseModel
 
     /**
      * 分组名称
-     * @return \think\model\relation\HasOne
+     * @return HasOne
      */
     public function groupName()
     {
-        return $this->hasOne( SiteGroup::class, 'group_id', 'group_id')->joinType('left')->withField('group_id, group_name')->bind(['group_name' => 'group_name']);
+        return $this->hasOne(SiteGroup::class, 'group_id', 'group_id')->joinType('left')->withField('group_id, group_name')->bind(['group_name' => 'group_name']);
     }
 
 
     /**
      * 创建时间搜索器
+     * @param Query $query
      * @param $value
+     * @param $data
      */
     public function searchCreateTimeAttr(Query $query, $value, $data)
     {
-        $start_time = empty($value[ 0 ]) ? 0 : strtotime($value[ 0 ]);
-        $end_time = empty($value[ 1 ]) ? 0 : strtotime($value[ 1 ]);
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
         if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('create_time', $start_time, $end_time);
         } else if ($start_time > 0 && $end_time == 0) {
-            $query->where([ [ 'create_time', '>=', $start_time ] ]);
+            $query->where([['create_time', '>=', $start_time]]);
         } else if ($start_time == 0 && $end_time > 0) {
-            $query->where([ [ 'create_time', '<=', $end_time ] ]);
+            $query->where([['create_time', '<=', $end_time]]);
         }
     }
 
     /**
      * 到期时间搜索器
+     * @param Query $query
      * @param $value
+     * @param $data
      */
     public function searchExpireTimeAttr(Query $query, $value, $data)
     {
-        $start_time = empty($value[ 0 ]) ? 0 : strtotime($value[ 0 ]);
-        $end_time = empty($value[ 1 ]) ? 0 : strtotime($value[ 1 ]);
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
         if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('expire_time', $start_time, $end_time);
         } else if ($start_time > 0 && $end_time == 0) {
-            $query->where([ [ 'expire_time', '>=', $start_time ] ]);
+            $query->where([['expire_time', '>=', $start_time]]);
         } else if ($start_time == 0 && $end_time > 0) {
-            $query->where([ [ 'expire_time', '<=', $end_time ] ]);
+            $query->where([['expire_time', '<=', $end_time]]);
         }
     }
 

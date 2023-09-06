@@ -13,6 +13,9 @@ namespace app\service\core\weapp;
 
 use core\base\BaseCoreService;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
+use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use EasyWeChat\Kernel\Support\Collection;
+use GuzzleHttp\Exception\GuzzleException;
 use Psr\Http\Message\ResponseInterface;
 
 /**
@@ -30,12 +33,15 @@ class CoreWeappTemplateService extends BaseCoreService
 
     /**
      * 订阅消息发送
-     * @param $site_id
-     * @param $data
-     * @return array|\EasyWeChat\Kernel\Support\Collection|object|ResponseInterface|string
+     * @param int $site_id
+     * @param string $template_id
+     * @param string $touser
+     * @param array $data
+     * @param string $page
+     * @return array|Collection|object|ResponseInterface|string
+     * @throws GuzzleException
      * @throws InvalidArgumentException
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws InvalidConfigException
      */
     public function send(int $site_id, string $template_id, string $touser, array $data, string $page = ''){
 
@@ -53,10 +59,9 @@ class CoreWeappTemplateService extends BaseCoreService
      * @param $tid
      * @param $kidList
      * @param $sceneDesc
-     * @return array|\EasyWeChat\Kernel\Support\Collection|object|ResponseInterface|string
-     * @throws InvalidArgumentException
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return array|Collection|object|ResponseInterface|string
+     * @throws GuzzleException
+     * @throws InvalidConfigException
      */
     public function addTemplate(int $site_id, $tid, $kidList, $sceneDesc){
 //        $tid = 563;     // 模板标题 id，可通过接口获取，也可登录小程序后台查看获取
@@ -70,10 +75,9 @@ class CoreWeappTemplateService extends BaseCoreService
      * 删除帐号下的个人模板
      * @param int $site_id
      * @param $template_id
-     * @return array|\EasyWeChat\Kernel\Support\Collection|object|ResponseInterface|string
-     * @throws InvalidArgumentException
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @return array|Collection|object|ResponseInterface|string
+     * @throws InvalidConfigException
+     * @throws GuzzleException
      */
     public function deleteTemplate(int $site_id, $template_id){
         return $this->template($site_id)->deleteTemplate($template_id);

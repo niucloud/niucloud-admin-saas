@@ -77,6 +77,7 @@ return [
         'is_auth_register_between' => 'is_auth_register must be 0 or 1',
         'is_bind_mobile_number' => 'is_bind_mobile must be a number',
         'is_bind_mobile_between' => 'is_bind_mobile must be 0 or 1',
+        'username_cannot_pure_number' => 'The account cannot be a pure number'
     ],
     'validate_article' => [
         'title_require' => 'title is require',
@@ -131,5 +132,10 @@ return [
         'appid_require' => 'appid is require',
         'appsecret_require' => 'appsecret is require',
     ],
-
+    //计划任务
+    'validate_schedule' => [
+        'schedule_require' => 'schedule is require',
+        'schedule_unique' => 'schedule is exist',
+        'not_exit_schedule_type' => 'not exit schedule type',
+    ],
 ];

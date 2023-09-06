@@ -21,10 +21,7 @@ class ScanDict
     const FAIL = 'fail';
 
 
-
     const WECHAT_LOGIN = 'wechat_login';//微信登录
-
-
 
 
 }

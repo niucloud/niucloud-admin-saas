@@ -15,6 +15,7 @@ use core\base\BaseCoreService;
 use core\exception\WechatException;
 use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
+use EasyWeChat\OfficialAccount\Application;
 
 /**
  * easywechat主体提供
@@ -25,9 +26,8 @@ class CoreWechatService extends BaseCoreService
 {
     /**
      * 获取公众号的handle
-     * @param $site_id
-     * @return
-     * @throws InvalidArgumentException
+     * @param int $site_id
+     * @return Application
      */
     public static function app(int $site_id)
     {
@@ -41,9 +41,6 @@ class CoreWechatService extends BaseCoreService
             'token' => $wechat_config['token'],
             'aes_key' => $wechat_config['encoding_aes_key'],// 明文模式请勿填写 EncodingAESKey
             'encryption_type'   => $wechat_config['encryption_type'],//消息加解密方式
-            'http' => [
-                'throw' => true,//默认不抛出,还是有系统业务决定是否抛出
-            ],
             // 指定 API 调用返回结果的类型：array(default)/collection/object/raw/自定义类名
             'response_type' => 'array',
             /**
@@ -80,11 +77,11 @@ class CoreWechatService extends BaseCoreService
                 'max_retries' => 1,
                 'retry_delay' => 500,
                 'timeout' => 5.0,
+                'throw' => true,//默认不抛出,还是有系统业务决定是否抛出
                 // 'base_uri' => 'https://api.weixin.qq.com/', // 如果你在国外想要覆盖默认的 url 的时候才使用，根据不同的模块配置不同的 uri
             ],
         );
-        $app = Factory::officialAccount($config);
-        return $app;
+        return Factory::officialAccount($config);
     }
 
 }

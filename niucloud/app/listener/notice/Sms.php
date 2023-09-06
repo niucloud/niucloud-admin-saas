@@ -21,26 +21,26 @@ class Sms
         $mobile = $to['mobile'] ?? '';
         //完全信任消息的设置, 不再依赖support_type
         if ($template['is_sms']) {
-                $sms_id = $template['sms_id'];//发送模板id
-                $content = $template['sms_content'];
-                $member_id = $to['member_id'] ?? 0;
-                $uid = $to['uid'] ?? 0;
-                if (!$mobile) {
-                    //会员的
-                    if ($member_id > 0) {//查询openid
-                        $info = (new CoreMemberService())->getInfoByMemberId($site_id, $member_id);
-                        $mobile = $info['mobile'] ?? '';
-                        $nickname = $info['nickname'] ?? '';
-                    }
+            $sms_id = $template['sms_id'];//发送模板id
+            $content = $template['sms_content'];
+            $member_id = $to['member_id'] ?? 0;
+            $uid = $to['uid'] ?? 0;
+            if (!$mobile) {
+                //会员的
+                if ($member_id > 0) {//查询openid
+                    $info = (new CoreMemberService())->getInfoByMemberId($site_id, $member_id);
+                    $mobile = $info['mobile'] ?? '';
+                    $nickname = $info['nickname'] ?? '';
                 }
+            }
 
-            try{
+            try {
                 if (empty($mobile)) throw new NoticeException('NOTICE_SMS_EMPTY');//没有手机号不能发送短信
                 $core_sms_service = new CoreSmsService();
                 //消息日志
                 $log_data = array(
                     'key' => $key,
-                    'message_type' => NoticeTypeDict::SMS,
+                    'notice_type' => NoticeTypeDict::SMS,
                     'uid' => $uid ?? 0,
                     'member_id' => $member_id ?? 0,
                     'nickname' => $nickname ?? '',

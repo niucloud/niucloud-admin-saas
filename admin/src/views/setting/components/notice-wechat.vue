@@ -1,7 +1,6 @@
 <template>
     <el-dialog v-model="showDialog" :title="t('noticeSetting')" width="550px" :destroy-on-close="true">
-        <el-form :model="formData" label-width="110px" ref="formRef" :rules="formRules" class="page-form"
-            v-loading="loading">
+        <el-form :model="formData" label-width="110px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-form-item :label="t('status')">
                 <el-radio-group v-model="formData.is_wechat">
                     <el-radio :label="1">{{ t('startUsing') }}</el-radio>

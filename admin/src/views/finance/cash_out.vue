@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center mb-[5px]">
-                <span class="text-[24px]">{{pageName}}</span>
+                <span class="text-[20px]">{{pageName}}</span>
             </div>
             <el-card class="box-card !border-none base-bg !px-[35px]" shadow="never">
 			    <el-row class="flex">
@@ -203,12 +203,11 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getCashOutList, getTransfertype, memberTransfer, memberAudit, getCashOutDetail, getCashOutStatusList,getCashOutStat } from '@/api/member'
 import { img } from '@/utils/common'
 import { ElMessageBox, FormInstance } from 'element-plus'
-import { data } from 'dom7'
 import { useRouter, useRoute } from 'vue-router'
 
 const cashOutStatusList = ref([])

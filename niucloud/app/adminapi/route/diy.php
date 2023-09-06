@@ -18,11 +18,19 @@ use think\facade\Route;
 /**
  * 自定义页面控制器
  */
-Route::group('diy', function() {
+Route::group('diy', function () {
 
     /***************************************************** 自定义页面管理 ****************************************************/
-    //自定义页面列表
+    //自定义页面分页列表
     Route::get('diy', 'diy.Diy/lists');
+
+    Route::get('list', 'diy.Diy/getList');
+
+    // 页面装修列表
+    Route::get('decorate', 'diy.Diy/getDecoratePage');
+
+    // 切换模板
+    Route::put('change', 'diy.Diy/changeTemplate');
 
     //自定义页面详情
     Route::get('diy/:id', 'diy.Diy/info');
@@ -60,6 +68,8 @@ Route::group('diy', function() {
     // 编辑自定义页面分享内容
     Route::put('diy/share', 'diy.Diy/modifyShare');
 
+    // 获取页面预览数据
+    Route::put('preview', 'diy.Diy/getPreviewData');
 
     /***************************************************** 配置相关 *****************************************************/
 

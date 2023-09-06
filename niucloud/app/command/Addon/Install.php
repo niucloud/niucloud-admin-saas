@@ -1,13 +1,14 @@
 <?php
-declare (strict_types = 1);
+declare (strict_types=1);
 
 namespace app\command\Addon;
 
 use app\service\core\addon\CoreAddonInstallService;
+use Exception;
 use think\console\Command;
 use think\console\Input;
-use think\console\Output;
 use think\console\input\Option;
+use think\console\Output;
 
 class Install extends Command
 {
@@ -28,7 +29,7 @@ class Install extends Command
         try {
             $instance->$step();
             $output->writeln("Command executed successfully");
-        } catch (\Exception $e) {
+        } catch ( Exception $e ) {
             $output->writeln("Command failed " . $e->getMessage());
         }
     }

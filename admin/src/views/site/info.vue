@@ -46,7 +46,7 @@
             </el-card>
 
         </el-form>
-        <edit-site ref="editSiteDialog" @complete="loadSiteinfo()" />
+        <edit-site ref="editSiteDialog" @complete="loadSiteInfo()" />
         <div class="fixed-footer-wrap">
             <div class="fixed-footer">
                 <el-button type="primary" @click="onSave(formRef)">{{ t('confirm') }}</el-button>
@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
 import { img } from '@/utils/common'
@@ -112,7 +112,7 @@ const setFormData = async (id: number = 0) => {
 if (id) setFormData(id)
 else loading.value = false
 
-const loadSiteinfo = () => {
+const loadSiteInfo = () => {
     setFormData(id)
 }
 

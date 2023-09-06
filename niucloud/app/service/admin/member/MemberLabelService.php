@@ -14,6 +14,10 @@ namespace app\service\admin\member;
 use app\model\member\MemberLabel;
 use app\service\core\member\CoreMemberLabelService;
 use core\base\BaseAdminService;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
+use think\Response;
 
 /**
  * 会员标签
@@ -32,40 +36,42 @@ class MemberLabelService extends BaseAdminService
      * 获取会员标签列表
      * @param array $where
      * @param string $order
+     * @return array
      */
     public function getPage(array $where = [], string $order = 'create_time desc')
     {
         $field = 'label_id, site_id, label_name, memo, sort, create_time, update_time';
         $search_model = $this->model->where([ [ 'site_id', '=', $this->site_id ] ])->withSearch([ 'label_name'], $where)->field($field)->append(["member_num"])->order($order);
-        $list = $this->pageQuery($search_model);
-        return $list;
+        return $this->pageQuery($search_model);
     }
 
     /**
      * 获取会员标签信息
      * @param int $label_id
+     * @return array
      */
     public function getInfo(int $label_id)
     {
         $field = 'label_id, site_id, label_name, memo, sort, create_time, update_time';
 
-        $info = $this->model->field($field)->where([['label_id', '=', $label_id], ['site_id', '=', $this->site_id]])->findOrEmpty()->toArray();
-        return $info;
+        return $this->model->field($field)->where([['label_id', '=', $label_id], ['site_id', '=', $this->site_id]])->findOrEmpty()->toArray();
     }
 
     /**
      * 获取标签
      * @return array
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function getAll(){
         return (new CoreMemberLabelService())->getAll($this->site_id);
     }
+
     /**
      * 添加会员标签
      * @param array $data
+     * @return mixed
      */
     public function add(array $data)
     {
@@ -80,6 +86,7 @@ class MemberLabelService extends BaseAdminService
      * 会员标签编辑
      * @param int $label_id
      * @param array $data
+     * @return true
      */
     public function edit(int $label_id, array $data)
     {
@@ -92,6 +99,7 @@ class MemberLabelService extends BaseAdminService
     /**
      * 删除会员标签
      * @param int $label_id
+     * @return bool
      */
     public function del(int $label_id)
     {
@@ -103,7 +111,10 @@ class MemberLabelService extends BaseAdminService
     /**
      * 通过标签id获取标签列表
      * @param array $label_ids
-     * @return \think\Response
+     * @return Response
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function getMemberLabelListByLabelIds(array $label_ids){
         return (new CoreMemberLabelService())->getMemberLabelListByLabelIds($this->site_id, $label_ids);

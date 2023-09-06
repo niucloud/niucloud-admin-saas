@@ -26,13 +26,13 @@ class Account extends BaseAdminController
     public function point()
     {
         $data = $this->request->params([
-            [ 'member_id', '' ],
-            [ 'from_type', '' ],
-            [ 'create_time', [] ],
-            [ 'keywords', '' ],
+            ['member_id', ''],
+            ['from_type', ''],
+            ['create_time', []],
+            ['keywords', ''],
         ]);
-        $data[ 'account_type' ] = 'point';
-        return success(( new MemberAccountService() )->getPage($data));
+        $data['account_type'] = 'point';
+        return success((new MemberAccountService())->getPage($data));
     }
 
     /**
@@ -41,23 +41,22 @@ class Account extends BaseAdminController
     public function sumPoint()
     {
         $data = $this->request->params([
-            [ 'member_id', '' ],
+            ['member_id', ''],
         ]);
         $member_account_service = new MemberAccountService();
         $member_service = new MemberService();
 
-        if(empty($data['member_id']))
-        {
+        if (empty($data['member_id'])) {
             $commission_data = [
                 'point_get' => $member_service->getSum('point_get'),//累计
                 'point_use' => abs($member_account_service->getExpensesSumAccount(MemberAccountTypeDict::POINT)),
             ];
             return success($commission_data);
-        }else{
+        } else {
             $info = $member_account_service->getMemberAccountInfo($data['member_id']);
             $commission_data = [
                 'point_get' => $info['point_get'],
-                'point_use' => abs($member_account_service->getExpensesSumAccount(MemberAccountTypeDict::POINT,$data['member_id'])),
+                'point_use' => abs($member_account_service->getExpensesSumAccount(MemberAccountTypeDict::POINT, $data['member_id'])),
             ];
             return success($commission_data);
         }
@@ -70,13 +69,13 @@ class Account extends BaseAdminController
     public function balance()
     {
         $data = $this->request->params([
-            [ 'member_id', '' ],
-            [ 'from_type', '' ],
-            [ 'create_time', [] ],
-            [ 'keywords', '' ],
+            ['member_id', ''],
+            ['from_type', ''],
+            ['create_time', []],
+            ['keywords', ''],
         ]);
-        $data[ 'account_type' ] = 'balance';
-        return success(( new MemberAccountService() )->getPage($data));
+        $data['account_type'] = 'balance';
+        return success((new MemberAccountService())->getPage($data));
     }
 
     /**
@@ -86,13 +85,13 @@ class Account extends BaseAdminController
     public function money()
     {
         $data = $this->request->params([
-            [ 'member_id', '' ],
-            [ 'from_type', '' ],
-            [ 'create_time', [] ],
-            [ 'keywords', '' ],
+            ['member_id', ''],
+            ['from_type', ''],
+            ['create_time', []],
+            ['keywords', ''],
         ]);
-        $data[ 'account_type' ] = 'money';
-        return success(( new MemberAccountService() )->getPage($data));
+        $data['account_type'] = 'money';
+        return success((new MemberAccountService())->getPage($data));
     }
 
     /**
@@ -101,12 +100,12 @@ class Account extends BaseAdminController
     public function adjustPoint()
     {
         $data = $this->request->params([
-            [ 'member_id', '' ],
-            [ 'account_data', 0 ],
-            [ 'memo', '' ],
+            ['member_id', ''],
+            ['account_data', 0],
+            ['memo', ''],
         ]);
-        $res = ( new MemberAccountService() )->adjustPoint($data);
-        return success('SUCCESS', [ 'id' => $res ]);
+        $res = (new MemberAccountService())->adjustPoint($data);
+        return success('SUCCESS', ['id' => $res]);
     }
 
     /**
@@ -115,12 +114,12 @@ class Account extends BaseAdminController
     public function adjustBalance()
     {
         $data = $this->request->params([
-            [ 'member_id', '' ],
-            [ 'account_data', 0 ],
-            [ 'memo', '' ],
+            ['member_id', ''],
+            ['account_data', 0],
+            ['memo', ''],
         ]);
-        $res = ( new MemberAccountService() )->adjustBalance($data);
-        return success('SUCCESS', [ 'id' => $res ]);
+        $res = (new MemberAccountService())->adjustBalance($data);
+        return success('SUCCESS', ['id' => $res]);
     }
 
     /**
@@ -130,12 +129,12 @@ class Account extends BaseAdminController
     public function adjustMoney()
     {
         $data = $this->request->params([
-            [ 'member_id', '' ],
-            [ 'account_data', 0 ],
-            [ 'memo', '' ],
+            ['member_id', ''],
+            ['account_data', 0],
+            ['memo', ''],
         ]);
-        $res = ( new MemberAccountService() )->adjustMoney($data);
-        return success('SUCCESS', [ 'id' => $res ]);
+        $res = (new MemberAccountService())->adjustMoney($data);
+        return success('SUCCESS', ['id' => $res]);
     }
 
     /**
@@ -145,13 +144,13 @@ class Account extends BaseAdminController
     public function commission()
     {
         $data = $this->request->params([
-            [ 'member_id', '' ],
-            [ 'from_type', '' ],
-            [ 'create_time', [] ],
-            [ 'keywords', '' ],
+            ['member_id', ''],
+            ['from_type', ''],
+            ['create_time', []],
+            ['keywords', ''],
         ]);
-        $data[ 'account_type' ] = 'commission';
-        return success(( new MemberAccountService() )->getPage($data));
+        $data['account_type'] = 'commission';
+        return success((new MemberAccountService())->getPage($data));
     }
 
     /**
@@ -160,13 +159,12 @@ class Account extends BaseAdminController
     public function sumCommission()
     {
         $data = $this->request->params([
-            [ 'member_id', '' ],
+            ['member_id', ''],
         ]);
         $member_account_service = new MemberAccountService();
         $member_service = new MemberService();
 
-        if(empty($data['member_id']))
-        {
+        if (empty($data['member_id'])) {
             $commission_data = [
                 'total_commission' => $member_service->getSum('commission_get'),//累计
                 'commission' => $member_service->getSum('commission'),//未提现
@@ -174,7 +172,7 @@ class Account extends BaseAdminController
                 'commission_cash_outing' => $member_service->getSum('commission_cash_outing'),//提现中
             ];
             return success($commission_data);
-        }else{
+        } else {
             $info = $member_account_service->getMemberAccountInfo($data['member_id']);
             $commission_data = [
                 'commission' => $info['commission'],
@@ -192,29 +190,29 @@ class Account extends BaseAdminController
     public function sumBalance()
     {
         $data = $this->request->params([
-            [ 'member_id', '' ],
+            ['member_id', ''],
         ]);
         $member_account_service = new MemberAccountService();
-        if(empty($data['member_id']))
-        {
+        if (empty($data['member_id'])) {
 
             $balance_data = [
                 MemberAccountTypeDict::BALANCE => number_format($member_account_service->getSumAccount(MemberAccountTypeDict::BALANCE), 2),
                 MemberAccountTypeDict::MONEY => number_format($member_account_service->getSumAccount(MemberAccountTypeDict::MONEY), 2),
             ];
             return success($balance_data);
-        }else{
+        } else {
             return success($member_account_service->getMemberAccountInfo($data['member_id']));
         }
     }
 
     /**
      * 账户变化类型
-     * @param $account_type
+     * @param string $account_type
+     * @return Response
      */
     public function changeType(string $account_type)
     {
-        $res = ( new MemberAccountService() )->getFromType($account_type);
+        $res = (new MemberAccountService())->getFromType($account_type);
         return success($res);
     }
 

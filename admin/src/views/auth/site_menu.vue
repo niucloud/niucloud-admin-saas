@@ -3,7 +3,7 @@
         <el-card class="box-card !border-none" shadow="never">
 
             <div class="flex justify-between items-center">
-                <span class="text-[24px]">{{ pageName }}</span>
+                <span class="text-[20px]">{{ pageName }}</span>
                 <!-- <el-button type="primary" class="w-[100px]" @click="addEvent">
                     {{ t('addMenu') }}
                 </el-button> -->
@@ -35,7 +35,6 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="sort" :label="t('sort')" min-width="100" />
-                    <el-table-column prop="create_time" :label="t('createTime')" width="180" />
                     <el-table-column :label="t('operation')" fixed="right" width="130">
                         <template #default="{ row }">
                             <!-- <el-button type="primary" link @click="editEvent(row)">{{ t('edit') }}</el-button>
@@ -56,6 +55,7 @@ import { getMenus, deleteMenu } from '@/api/sys'
 import { t } from '@/lang'
 import { ElMessageBox } from 'element-plus'
 import EditMenu from '@/views/auth/components/edit-menu.vue'
+
 import { useRoute } from 'vue-router'
 const route = useRoute()
 const pageName = route.meta.title

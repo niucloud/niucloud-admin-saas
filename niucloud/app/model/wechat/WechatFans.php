@@ -34,5 +34,4 @@ class WechatFans extends BaseModel
     protected $name = 'wechat_fans';
 
 
-
 }

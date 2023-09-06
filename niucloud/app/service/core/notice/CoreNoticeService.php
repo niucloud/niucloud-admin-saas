@@ -16,6 +16,9 @@ use app\dict\notice\NoticeDict;
 use app\model\sys\SysNotice;
 use core\base\BaseCoreService;
 use core\exception\NoticeException;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 
 
 /**
@@ -33,10 +36,14 @@ class CoreNoticeService extends BaseCoreService
     }
 
 
-
     /**
      * 获取当前站点消息
+     * @param int $site_id
+     * @param array $keys
      * @return array
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function getList(int $site_id, array $keys = [])
     {
@@ -77,7 +84,9 @@ class CoreNoticeService extends BaseCoreService
 
     /**
      * 获取消息内容(可以做缓存)
+     * @param int $site_id
      * @param string $key
+     * @return array
      */
     public function getInfo(int $site_id, string $key)
     {

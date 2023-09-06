@@ -13,6 +13,7 @@ namespace app\adminapi\controller\wechat;
 
 use app\service\admin\wechat\WechatTemplateService;
 use core\base\BaseAdminController;
+use think\Response;
 
 /**
  * 微信公众号管理菜单
@@ -22,9 +23,10 @@ class Template extends BaseAdminController
 
     /**
      * 菜单信息
-     * @return void
+     * @return Response
      */
-    public function sync(){
+    public function sync()
+    {
         $data = $this->request->params([
             ['keys', []]
         ]);
@@ -34,9 +36,10 @@ class Template extends BaseAdminController
 
     /**
      * 模板消息
-     * @return \think\Response
+     * @return Response
      */
-    public function lists(){
+    public function lists()
+    {
         $wechat_template_service = new WechatTemplateService();
         return success($wechat_template_service->getList());
     }

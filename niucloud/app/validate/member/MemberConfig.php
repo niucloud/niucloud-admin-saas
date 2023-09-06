@@ -11,6 +11,7 @@
 
 namespace app\validate\member;
 
+use think\facade\Lang;
 use think\Validate;
 
 /**
@@ -20,17 +21,32 @@ use think\Validate;
  */
 class MemberConfig extends Validate
 {
-    protected $rule =   [
-        'length'  => 'number|min:10,max:20'
+    protected $rule = [
+        'length' => 'number|checkLength'
     ];
 
-    protected $message  =   [
+    protected $message = [
         'length.number' => 'validate_member_config.length_number',
-        'length.min' => 'validate_member_config.length_min',
-        'max.20' => 'validate_member_config.length_max'
     ];
 
     protected $scene = [
-        'set'  =>  ['length'],
+        'set' => ['length'],
     ];
+
+    /**
+     * 自定义验证 长度
+     * @param $value
+     * @param $rule
+     * @param array $data
+     * @return Lang|true
+     */
+    protected function checkLength($value, $rule, $data = [])
+    {
+        $length = (int)$value;
+        $prefix_len = strlen($data['prefix'] ?? '');
+        if (empty($length)) return get_lang("validate_member_config.length_number");
+        if (($length - $prefix_len < 4) || $length > 30) return get_lang("validate_member_config.length_between");
+        return true;
+    }
+
 }

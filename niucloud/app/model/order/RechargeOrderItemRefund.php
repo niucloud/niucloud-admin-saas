@@ -15,6 +15,7 @@ use app\dict\order\RechargeOrderDict;
 use app\model\member\Member;
 use app\model\pay\Refund;
 use core\base\BaseModel;
+use think\model\relation\HasOne;
 
 /**
  * 订单项目模型
@@ -25,9 +26,9 @@ class RechargeOrderItemRefund extends BaseModel
 {
     //类型
     protected $type = [
-        'create_time'     =>  'timestamp',
-        'audit_time'  =>  'timestamp',
-        'transfer_time'  =>  'timestamp',
+        'create_time' => 'timestamp',
+        'audit_time' => 'timestamp',
+        'transfer_time' => 'timestamp',
     ];
 
     /**
@@ -45,36 +46,42 @@ class RechargeOrderItemRefund extends BaseModel
     /**
      * 退款状态字段处理
      * @param $value
+     * @param $data
      * @return mixed
      */
     public function getStatusNameAttr($value, $data)
     {
-        return  RechargeOrderDict::getRefundStatus()[$data['status'] ?? '']['name'] ?? '';
+        if (empty($data['status']))
+            return '';
+        $temp = RechargeOrderDict::getRefundStatus()[$data['status']] ?? [];
+        return $temp['name'] ?? '';
     }
 
     /**
      *
-     * @return \think\model\relation\HasOne
+     * @return HasOne
      */
-    public function item() {
+    public function item()
+    {
         return $this->hasOne(RechargeOrderItem::class, 'order_item_id', 'order_item_id')->joinType('inner');
     }
 
     /**
      * 订单会员
-     * @return \think\model\relation\HasOne
+     * @return HasOne
      */
     public function member()
     {
-        return $this->hasOne( Member::class, 'member_id', 'member_id')->withField('member_id, username, mobile, nickname, headimg')->joinType('left');
+        return $this->hasOne(Member::class, 'member_id', 'member_id')->withField('member_id, username, mobile, nickname, headimg')->joinType('left');
     }
 
     /**
      * 关联退款支付记录表
-     * @return \think\model\relation\HasOne
+     * @return HasOne
      */
-    public function payrefund(){
-        return $this->hasOne(Refund::class,'refund_no', 'refund_no');
+    public function payrefund()
+    {
+        return $this->hasOne(Refund::class, 'refund_no', 'refund_no');
     }
 
     /**
@@ -171,34 +178,38 @@ class RechargeOrderItemRefund extends BaseModel
 
     /**
      * 创建时间搜索器
+     * @param $query
      * @param $value
+     * @param $data
      */
     public function searchCreateTimeAttr($query, $value, $data)
     {
-        $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
-        $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
-        if($start_time > 0 && $end_time > 0){
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
+        if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('create_time', $start_time, $end_time);
-        }else if($start_time > 0 && $end_time == 0){
+        } else if ($start_time > 0 && $end_time == 0) {
             $query->where([['create_time', '>=', $start_time]]);
-        }else if($start_time == 0 && $end_time > 0){
+        } else if ($start_time == 0 && $end_time > 0) {
             $query->where([['create_time', '<=', $end_time]]);
         }
     }
 
     /**
      * 创建时间搜索器
+     * @param $query
      * @param $value
+     * @param $data
      */
     public function searchJoinCreateTimeAttr($query, $value, $data)
     {
-        $start_time = empty($value[0]) ? 0 : strtotime($value[0]) ;
-        $end_time = empty($value[1]) ? 0 : strtotime($value[1]) ;
-        if($start_time > 0 && $end_time > 0){
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
+        if ($start_time > 0 && $end_time > 0) {
             $query->whereBetweenTime('recharge_order_item_refund.create_time', $start_time, $end_time);
-        }else if($start_time > 0 && $end_time == 0){
+        } else if ($start_time > 0 && $end_time == 0) {
             $query->where([['recharge_order_item_refund.create_time', '>=', $start_time]]);
-        }else if($start_time == 0 && $end_time > 0){
+        } else if ($start_time == 0 && $end_time > 0) {
             $query->where([['recharge_order_item_refund.create_time', '<=', $end_time]]);
         }
     }

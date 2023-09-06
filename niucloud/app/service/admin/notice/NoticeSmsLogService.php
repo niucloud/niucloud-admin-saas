@@ -12,12 +12,11 @@
 namespace app\service\admin\notice;
 
 use app\model\sys\SysNoticeLog;
-use app\service\core\notice\CoreNoticeLogService;
 use app\service\core\notice\CoreNoticeSmsLogService;
 use core\base\BaseAdminService;
 
 /**
- * 消息管理服务层
+ * 短信消息管理服务层
  */
 class NoticeSmsLogService extends BaseAdminService
 {
@@ -38,10 +37,11 @@ class NoticeSmsLogService extends BaseAdminService
 
     /**
      * 获取消息内容
-     * @param string $key
+     * @param int $id
+     * @return array
      */
-    public function getInfo(string $key)
+    public function getInfo(int $id)
     {
-        return (new CoreNoticeLogService())->getInfo($this->site_id, $key);
+        return (new CoreNoticeSmsLogService())->getInfo($this->site_id, $id);
     }
 }

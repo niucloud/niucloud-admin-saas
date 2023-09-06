@@ -13,6 +13,12 @@ namespace app\api\controller\wechat;
 
 use app\service\api\wechat\WechatServeService;
 use core\base\BaseController;
+use EasyWeChat\Kernel\Exceptions\BadRequestException;
+use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
+use EasyWeChat\Kernel\Exceptions\RuntimeException;
+use ReflectionException;
+use Symfony\Component\HttpFoundation\Response;
+use Throwable;
 
 /**
  * 微信服务端通信以及网页授权
@@ -22,7 +28,13 @@ class Serve extends BaseController
 
     /**
      * 接收消息并推送
-     * @return void
+     * @param $site_id
+     * @return Response
+     * @throws BadRequestException
+     * @throws InvalidArgumentException
+     * @throws RuntimeException
+     * @throws ReflectionException
+     * @throws Throwable
      */
     public function serve($site_id){
 

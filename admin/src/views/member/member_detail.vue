@@ -171,8 +171,7 @@
 			<div class="flex items-center mt-[15px]">
 				<span class="text-[14px] w-[130px] text-right mr-[20px]">{{ t('memberLabel') }}</span>
 				<span class="text-[14px] text-[#666666]">
-					{{ formData.member_label_name.toString() || t('notAvailable') }}<el-icon
-						@click="editMemberInfo('member_label')" class="-bottom-[2px] -right-[4px] cursor-pointer">
+					{{ formData.member_label_name.toString() || t('notAvailable') }}<el-icon @click="editMemberInfo('member_label')" class="-bottom-[2px] -right-[4px] cursor-pointer">
 						<EditPen color="#273CE2" />
 					</el-icon>
 				</span>
@@ -180,8 +179,7 @@
 			<div class="flex items-center mt-[15px]">
 				<span class="text-[14px] w-[130px] text-right mr-[20px]">{{ t('birthday') }}</span>
 				<span class="text-[14px] text-[#666666]">
-					{{ formData.birthday || t('notAvailable') }}<el-icon @click="editMemberInfo('birthday')"
-						class="-bottom-[2px] -right-[4px] cursor-pointer">
+					{{ formData.birthday || t('notAvailable') }}<el-icon @click="editMemberInfo('birthday')" class="-bottom-[2px] -right-[4px] cursor-pointer">
 						<EditPen color="#273CE2" />
 					</el-icon>
 				</span>
@@ -189,8 +187,7 @@
 			<div class="flex items-center mt-[15px]">
 				<span class="text-[14px] w-[130px] text-right mr-[20px]">{{ t('sex') }}</span>
 				<span class="text-[14px] text-[#666666]">
-					{{ formData.sex == 1 && t('manSex') || formData.sex == 2 && t('girlSex') || t('secrecySex') }}<el-icon
-						@click="editMemberInfo('sex')" class="-bottom-[2px] -right-[4px] cursor-pointer">
+					{{ formData.sex == 1 && t('manSex') || formData.sex == 2 && t('girlSex') || t('secrecySex') }}<el-icon @click="editMemberInfo('sex')" class="-bottom-[2px] -right-[4px] cursor-pointer">
 						<EditPen color="#273CE2" />
 					</el-icon>
 				</span>

@@ -4,10 +4,8 @@
  
             <el-form-item :label="t('headimg')" >
                 <div class="flex items-center">
-
                     <img class="w-[50px] h-[50px] mr-[10px]" v-if="formData.member.headimg" :src="img(formData.member.headimg)" alt="" >
                     <img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/assets/images/default_headimg.png" alt="" >
-
                 </div>
             </el-form-item>
 

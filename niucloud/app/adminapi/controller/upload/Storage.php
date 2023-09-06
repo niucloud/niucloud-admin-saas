@@ -12,7 +12,7 @@
 namespace app\adminapi\controller\upload;
 
 use app\dict\sys\StorageDict;
-use app\service\admin\file\StorageConfigService;
+use app\service\admin\upload\StorageConfigService;
 use core\base\BaseAdminController;
 use core\exception\AdminException;
 use think\Response;

@@ -3,6 +3,8 @@
 namespace core\pay;
 
 use core\loader\Storage;
+use Psr\Http\Message\MessageInterface;
+use Yansongda\Supports\Collection;
 
 /**
  * 文件管理驱动类
@@ -15,7 +17,7 @@ abstract class BasePay extends Storage
     /**
      * 初始化
      * @param array $config
-     * @return mixed|void
+     * @return void
      */
     protected function initialize(array $config = [])
     {
@@ -24,52 +26,56 @@ abstract class BasePay extends Storage
 
     /**
      * 网页支付
-     * @param $save_dir
+     * @param array $params
      * @return mixed
      */
     abstract protected function web(array $params);
 
     /**
      * 手机网站支付
-     * @param $dir
+     * @param array $params
      * @return mixed
      */
     abstract protected function wap(array $params);
 
     /**
      * app支付
-     * @param $dir
+     * @param array $params
      * @return mixed
      */
     abstract protected function app(array $params);
 
     /**
      * 小程序支付
-     * @param $dir
+     * @param array $params
      * @return mixed
      */
     abstract protected function mini(array $params);
+
     /**
      * 付款码支付
-     * @param $dir
+     * @param array $params
      * @return mixed
      */
     abstract protected function pos(array $params);
+
     /**
      * 扫码支付
-     * @param $dir
+     * @param array $params
      * @return mixed
      */
     abstract protected function scan(array $params);
+
     /**
      * 转账
-     * @param $dir
+     * @param array $params
      * @return mixed
      */
     abstract protected function transfer(array $params);
+
     /**
      * 公众号支付
-     * @param $dir
+     * @param array $params
      * @return mixed
      */
     abstract protected function mp(array $params);
@@ -90,10 +96,11 @@ abstract class BasePay extends Storage
 
     /**
      * 支付通知
+     * @param string $action
      * @param callable $callback
      * @return mixed
      */
-    abstract protected function notify(string $action, Callable $callback);
+    abstract protected function notify(string $action, callable $callback);
 
     /**
      * 查询支付订单
@@ -104,7 +111,7 @@ abstract class BasePay extends Storage
 
     /**
      * 查询退款订单
-     * @param string|null $out_trade_no
+     * @param string $out_trade_no
      * @param string|null $refund_no
      * @return mixed
      */
@@ -123,18 +130,19 @@ abstract class BasePay extends Storage
      * @param string $type
      * @return mixed
      */
-    protected function payConfig(array $config, string $type){
+    protected function payConfig(array $config, string $type)
+    {
         return array_merge(
             [
                 'logger' => [
                     'enable' => true,
-                    'file' => root_path('runtime') . 'paylog'.DIRECTORY_SEPARATOR.date('Ym').DIRECTORY_SEPARATOR.date('d').'.log',
+                    'file' => root_path('runtime') . 'paylog' . DIRECTORY_SEPARATOR . date('Ym') . DIRECTORY_SEPARATOR . date('d') . '.log',
                     'level' => env('app_debug') ? 'debug' : 'info', // 建议生产环境等级调整为 info，开发环境为 debug
                     'type' => 'single', // optional, 可选 daily.
                     'max_file' => 30, // optional, 当 type 为 daily 时有效，默认 30 天
                 ],
                 'http' => [ // optional
-                        'timeout' => 5.0,
+                    'timeout' => 5.0,
                 ]
             ],
             [
@@ -147,12 +155,13 @@ abstract class BasePay extends Storage
         );
     }
 
-    public function returnFormat($param){
-        if($param instanceof \Psr\Http\Message\MessageInterface){
+    public function returnFormat($param)
+    {
+        if ($param instanceof MessageInterface) {
             return $param->getBody()->getContents();
-        }else if($param instanceof \Yansongda\Supports\Collection){
+        } else if ($param instanceof Collection) {
             return $param->all();
-        }else{
+        } else {
             return $param;
         }
     }
@@ -162,14 +171,17 @@ abstract class BasePay extends Storage
      * @param $our_trade_no
      * @param $refund_no
      * @param $status
+     * @param int $success_time
+     * @param string $reason
      * @return array
      */
-    public function getRefundData($our_trade_no, $refund_no, $status, $success_time = 0, $reason = ''){
+    public function getRefundData($our_trade_no, $refund_no, $status, $success_time = 0, $reason = '')
+    {
         return [
             'our_trade_no' => $our_trade_no,
             'refund_no' => $refund_no,
             'status' => $status,
-            'success_time' =>$success_time,
+            'success_time' => $success_time,
             'reason' => $reason
         ];
     }
@@ -181,10 +193,10 @@ abstract class BasePay extends Storage
      * @param $reason
      * @return void
      */
-    public function getTransferData($transfer_no, $status, $reason){
+    public function getTransferData($transfer_no, $status, $reason)
+    {
 
     }
-
 
 
 }

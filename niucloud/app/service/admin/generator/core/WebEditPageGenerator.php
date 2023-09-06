@@ -25,7 +25,7 @@ class WebEditPageGenerator extends BaseGenerator
 
     /**
      * 替换模板中的变量
-     * @return mixed|void
+     * @return false|void
      */
     public function replaceText()
     {
@@ -126,8 +126,8 @@ class WebEditPageGenerator extends BaseGenerator
                 if (in_array($column['column_type'], $intFieldValue)) {
                     $vmItemValue = 'parseInt(item.value)';
                 }
-                array_push($old, '{ITEM_VALUE}');
-                array_push($new, $vmItemValue);
+                $old[] = '{ITEM_VALUE}';
+                $new[] = $vmItemValue;
             }
 
             $content .= $this->replaceFileText($old, $new, $vmPath) . PHP_EOL;
@@ -138,8 +138,7 @@ class WebEditPageGenerator extends BaseGenerator
             $content = substr($content, 0, -1);
         }
 
-        $content = $this->setBlankSpace($content, '                ');
-        return $content;
+        return $this->setBlankSpace($content, '                ');
     }
 
 
@@ -178,7 +177,7 @@ class WebEditPageGenerator extends BaseGenerator
 
     /**
      * 表单验证内容
-     * @return false|string
+     * @return string
      */
     public function getFormValidate()
     {
@@ -216,14 +215,13 @@ class WebEditPageGenerator extends BaseGenerator
 
             $isExist[] = $column['column_name'];
         }
-        $content = substr($content, 0, -2);
-        return $content;
+        return substr($content, 0, -2);
     }
 
 
     /**
      * 获取文件生成到模块的文件夹路径
-     * @return mixed|void
+     * @return string
      */
     public function getModuleOutDir()
     {
@@ -265,7 +263,7 @@ class WebEditPageGenerator extends BaseGenerator
         if($this->className){
             return Str::lower($this->className).'_edit.vue';
         }
-        return Str::lower($this->getTableName()).'_edit.vue';
+        return 'edit.vue';
     }
 
 }

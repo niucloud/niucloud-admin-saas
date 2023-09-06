@@ -21,7 +21,8 @@ class UserLog extends BaseAdminController
      * 操作日志列表
      * @return Response
      */
-    public function lists(){
+    public function lists()
+    {
         $data = $this->request->params([
             ['uid', 0],
             ['create_time', []],
@@ -41,7 +42,8 @@ class UserLog extends BaseAdminController
      * @param $id
      * @return Response
      */
-    public function info($id){
+    public function info($id)
+    {
         return success((new UserLogService())->getInfo($id));
     }
 

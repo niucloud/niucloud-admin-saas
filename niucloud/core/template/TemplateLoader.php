@@ -14,13 +14,13 @@ namespace core\template;
 use core\loader\Loader;
 
 /**
- * @see \core\template\TemplateLoader
+ * @see TemplateLoader
  * @package think\facade
- * @mixin \core\template\Wechat
- * @method  string|null send(string $phone, string $templateId, array $data) 发送短信
- * @method  mixed open(null|string $name = null, mixed $default = null) 开启服务
- * @method  mixed apply(string $title, string $content, int $type) 申请模板
- * @method  mixed applys(int $tempType, int $page, int $limit) 模板记录
+ * @mixin Wechat
+ * @method  string|null send(array $data) 发送
+ * @method  mixed addTemplate(array $data) 增加
+ * @method  mixed delete(array $data) 删除
+ * @method  mixed get() 模板记录
  */
 class TemplateLoader extends Loader
 {
@@ -33,6 +33,7 @@ class TemplateLoader extends Loader
     protected $namespace = '\\core\\template\\';
 
     protected $config_name = 'template';
+
     /**
      * 默认驱动
      * @return mixed

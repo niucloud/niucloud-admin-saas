@@ -1,6 +1,5 @@
 <template>
-    <el-container class="w-100 h-screen"
-        :class="[{ 'sidebar-dark-mode': systemStore.sidebar == 'twoType' }, { 'sidebar-brightness-mode': systemStore.sidebar == 'oneType' }]">
+    <el-container class="w-100 h-screen" :class="[{ 'sidebar-dark-mode': systemStore.sidebar == 'twoType' }, { 'sidebar-brightness-mode': systemStore.sidebar == 'oneType' }]">
         <el-header class="logo-wrap w-100">
             <div class="logo flex items-center m-auto max-w-[210px] h-[30px]" v-if="!systemStore.menuIsCollapse">
                 <img class="max-h-full max-w-full" v-if="storage.get('siteInfo').logo" :src="img(siteInfo.logo)" alt="">
@@ -13,10 +12,8 @@
 
         <el-main class="menu-wrap">
             <el-scrollbar>
-                <el-menu :default-active="menuActive" :router="true" class="aside-menu h-full" unique-opened="true"
-                    :collapse="systemStore.menuIsCollapse">
-                    <menu-item v-for="(route, index) in userStore.routers" :routes="route" :route-path="route.path"
-                        :key="index" />
+                <el-menu :default-active="menuActive" :router="true" class="aside-menu h-full" unique-opened="true" :collapse="systemStore.menuIsCollapse">
+                    <menu-item v-for="(route, index) in userStore.routers" :routes="route" :route-path="route.path" :key="index" />
                 </el-menu>
                 <div class="h-[48px]"></div>
             </el-scrollbar>

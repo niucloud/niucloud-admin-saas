@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center">
-                <span class="text-[24px]">{{pageName}}</span>
+                <span class="text-[20px]">{{pageName}}</span>
             </div>
             <div class="mt-[20px]">
                 <el-table :data="smsTableData.data" size="large" v-loading="smsTableData.loading">
@@ -33,12 +33,13 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getSmsList,getSmsInfo } from '@/api/notice'
 import Ali from '@/views/setting/components/sms-ali.vue'
 import Tencent from '@/views/setting/components/sms-tencent.vue'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title;
 

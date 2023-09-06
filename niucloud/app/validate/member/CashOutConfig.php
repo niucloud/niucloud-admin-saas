@@ -20,16 +20,16 @@ class CashOutConfig extends Validate
 {
 
 
-    protected $rule =  [
+    protected $rule = [
         'is_open' => 'in:0,1',  //是否开启
         'min' => 'min:0',    //最低提现金额
         'rate' => 'between:0,100',      //提现手续费比率
         'is_auto_verify' => 'in:0,1',  //是否自动审核
         'is_auto_transfer' => 'in:0,1',  //是否自动转账
-        'transfer_type'  => 'require',
+        'transfer_type' => 'require',
     ];
 
-    protected $message  =   [
+    protected $message = [
         'is_open.in' => 'validate_member.cash_out_is_open_in',
         'min.min' => 'validate_member.cash_out_min_min',
         'rate.between' => 'validate_member.cash_out_rate_between',
@@ -39,6 +39,6 @@ class CashOutConfig extends Validate
     ];
 
     protected $scene = [
-        'set'  =>  ['is_open', 'min', 'rate', 'is_auto_verify', 'is_auto_transfer', 'transfer_type'],
+        'set' => ['is_open', 'min', 'rate', 'is_auto_verify', 'is_auto_transfer', 'transfer_type'],
     ];
 }

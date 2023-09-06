@@ -23,7 +23,7 @@ class Request {
 
     constructor() {
         this.instance = axios.create({
-            baseURL: import.meta.env.VITE_APP_BASE_URL,
+            baseURL: import.meta.env.VITE_APP_BASE_URL.substr(-1) == '/' ? import.meta.env.VITE_APP_BASE_URL : `${import.meta.env.VITE_APP_BASE_URL}/`,
             timeout: 30000,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded;',
@@ -49,15 +49,18 @@ class Request {
         // 全局响应拦截器
         this.instance.interceptors.response.use(
             (response: requestResponse) => {
-                const res = response.data
-                if (res.code != 1) {
-                    this.handleAuthError(res.code)
-                    if (res.code != 401) ElMessage({ message: res.msg, type: 'error' })
-                    return Promise.reject(new Error(res.msg || 'Error'))
-                } else {
-                    if (response.config.showSuccessMessage) ElMessage({ message: res.msg, type: 'success' })
-                    return res
-                }
+				if (response.request.responseType != 'blob') {
+					const res = response.data
+					if (res.code != 1) {
+					    this.handleAuthError(res.code)
+					    if (res.code != 401) ElMessage({ message: res.msg, type: 'error' })
+					    return Promise.reject(new Error(res.msg || 'Error'))
+					} else {
+					    if (response.config.showSuccessMessage) ElMessage({ message: res.msg, type: 'success' })
+					    return res
+					}
+				}
+				return response.data
             },
             (err: any) => {
                 this.handleNetworkError(err)
@@ -111,7 +114,7 @@ class Request {
      * @param err 
      */
     private handleNetworkError(err: any) {
-        let errMessage = t('axios.requestError')
+        let errMessage = ''
 
         if (err.response && err.response.status) {
             const errStatus = err.response.status
@@ -158,8 +161,9 @@ class Request {
                     break
             }
         }
-        if (err.message.includes('timeout')) errMessage = t('axios.timeout')
-        ElMessage({ message: errMessage, type: 'error' })
+        err.message.includes('timeout') && (errMessage = t('axios.timeout'))
+        err.code == 'ERR_NETWORK' && (errMessage = err.config.baseURL + t('axios.errNetwork'))
+        errMessage && ElMessage({ message: errMessage, type: 'error' })
     }
 
     private handleAuthError(code: number) {

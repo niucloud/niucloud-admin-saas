@@ -13,6 +13,9 @@ namespace app\service\api\article;
 
 use app\model\article\Article;
 use core\base\BaseApiService;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 
 /**
  * 文章服务层
@@ -31,44 +34,43 @@ class ArticleService extends BaseApiService
     /**
      * 获取文章列表
      * @param array $where
-     * @param string $order
+     * @return array
      */
     public function getPage(array $where = [])
     {
         $where[] = [ 'site_id', '=', $this->site_id ];
         $field = 'id, category_id, site_id, title, intro, summary, image, author, content, visit, visit_virtual, is_show, sort, create_time, update_time';
         $order = 'create_time desc';
-        $search_model = $this->model->where([ [ 'site_id', '=', $this->site_id ] ])->withSearch([ 'title', 'category_id'], $where)->with('articleCategory')->field($field)->order($order);
-        $list = $this->pageQuery($search_model);
-        return $list;
+        $search_model = $this->model->where([ [ 'site_id', '=', $this->site_id ] ])->withSearch([ 'title', 'category_id'], $where)->with('articleCategory')->field($field)->order($order)->append(['image_thumb_mid']);
+        return $this->pageQuery($search_model);
     }
 
     /**
      * 文章列表
      * @param array $where
-     * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @param int $limit
+     * @return array
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function getAll(array $where = [], int $limit = 0){
         $where[] = [ 'site_id', '=', $this->site_id ];
         $field = 'id, category_id, site_id, title, intro, summary, image, author, content, visit, visit_virtual, is_show, sort, create_time, update_time';
         $order = 'create_time desc';
-        $list = $this->model->where([ [ 'site_id', '=', $this->site_id ] , ['is_show', '=', 1]])->withSearch([ 'title', 'category_id', 'ids' ], $where)->limit($limit)->with('articleCategory')->field($field)->order($order)->select()->toArray();
-        return $list;
+        return $this->model->where([ [ 'site_id', '=', $this->site_id ] , ['is_show', '=', 1]])->withSearch([ 'title', 'category_id', 'ids' ], $where)->limit($limit)->with('articleCategory')->field($field)->append(['image_thumb_mid'])->order($order)->select()->toArray();
     }
 
     /**
      * 获取文章信息
      * @param int $id
+     * @return array
      */
     public function getInfo(int $id)
     {
         $field = 'id, category_id, site_id, title, intro, summary, image, author, content, visit, visit_virtual, is_show, sort, create_time, update_time';
 
-        $info = $this->model->with('articleCategory')->field($field)->where([ [ 'id', '=', $id ], [ 'site_id', '=', $this->site_id ] ])->findOrEmpty()->toArray();
-        return $info;
+        return $this->model->with('articleCategory')->field($field)->where([ [ 'id', '=', $id ], [ 'site_id', '=', $this->site_id ] ])->append(['image_thumb_big'])->findOrEmpty()->toArray();
     }
 
 }

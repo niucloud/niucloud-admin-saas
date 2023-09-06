@@ -18,6 +18,7 @@ use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
 use EasyWeChat\Kernel\Exceptions\RuntimeException;
 use Psr\Http\Message\ResponseInterface;
 use ReflectionException;
+use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
 /**
@@ -37,10 +38,9 @@ class WechatServeService extends BaseApiService
 
     /**
      * 消息与时间推送
-     * @return ResponseInterface
+     * @return Response
      * @throws BadRequestException
      * @throws InvalidArgumentException
-     * @throws RuntimeException
      * @throws ReflectionException
      * @throws Throwable
      */

@@ -26,7 +26,9 @@ Route::group('pay',function () {
     //去支付
     Route::post('', 'pay.Pay/pay');
     //支付信息
-    Route::get('info/:out_trade_no', 'pay.Pay/info');
+    Route::get('info/:trade_type/:trade_id', 'pay.Pay/info');
+    //
+    Route::get('type/:trade_type', 'pay.Pay/getPayType');
 
 })->middleware(ApiChannel::class)
     ->middleware(ApiCheckToken::class)

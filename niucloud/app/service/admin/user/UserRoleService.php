@@ -18,6 +18,7 @@ use app\service\admin\sys\RoleService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
 use think\facade\Cache;
+use think\Model;
 
 /**
  * 用户服务层
@@ -98,24 +99,16 @@ class UserRoleService extends BaseAdminService
                     ['uid', '=', $uid],
                     ['site_id', '=', $site_id]
                 );
-                return $user_role_model::where($where)->findOrEmpty()->toArray();
+                return $user_role_model->where($where)->findOrEmpty()->toArray();
             },
             [self::$role_cache_name, RoleService::$cache_tag_name.$this->site_id]
         );
-//        return Cache::tag([self::$role_cache_name, RoleService::$cache_tag_name.$this->site_id])->remember($cache_name,  function() use($uid, $site_id) {
-//            $user_role_model = new SysUserRole();
-//            $where = array(
-//                ['uid', '=', $uid],
-//                ['site_id', '=', $site_id]
-//            );
-//            return $user_role_model::where($where)->findOrEmpty()->toArray();
-//        });
     }
 
     /**
      * 获取用户默认站点(切勿用于平台管理端)
      * @param int $uid
-     * @return SysUserRole|array|mixed|\think\Model
+     * @return SysUserRole|array|mixed|Model
      */
     public function getUserDefaultSiteId(int $uid){
         $user_role_model = new SysUserRole();
@@ -125,8 +118,8 @@ class UserRoleService extends BaseAdminService
 
     /**
      * 通过角色id组获取角色
-     * @param $role_ids
-     * @param $site_id
+     * @param array $role_ids
+     * @param int $site_id
      * @return mixed
      */
     public function getRoleByUserRoleIds(array $role_ids, int $site_id){
@@ -143,32 +136,7 @@ class UserRoleService extends BaseAdminService
             },
             [self::$role_cache_name, RoleService::$cache_tag_name.$this->site_id]
         );
-//        return Cache::tag([self::$role_cache_name, RoleService::$cache_tag_name.$this->site_id])->remember($cache_name,  function() use($role_ids, $site_id) {
-//            $where = array(
-//                ['role_id', 'in', $role_ids],
-//                ['site_id', '=', $site_id]
-//            );
-//            return SysRole::where($where)->column('role_name');
-//        });
     }
 
-//    public function getFirstMenuByUser(int $site_id, int $uid){
-//        $role_service = (new RoleService())->getMenuIdsByRoleIds();
-//        $userrole = $this->getUserRole($site_id, $uid);
-//        $site_info = (new SiteService())->getSiteCache($site_id);
-//        if(empty($userrole)) throw new AuthException('SITE_USER_CAN_NOT_LOGIN_IN_ADMIN');
-//        if($userrole->is_admin){
-//            if($site_info->app_type == AppTypeDict::SITE){
-//
-//            }else if($site_info->app_type == AppTypeDict::ADMIN){
-//
-//            }
-//        }else{
-//            $user_role_ids = $userrole->role_ids;
-//            $menu_keys = (new RoleService())->getMenuIdsByRoleIds($site_id, $user_role_ids);
-//            if(in_array('siteindex', $menu_keys)){
-//
-//            }
-//        }
-//    }
+
 }

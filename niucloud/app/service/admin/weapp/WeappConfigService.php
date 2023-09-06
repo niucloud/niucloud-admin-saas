@@ -11,8 +11,10 @@
 
 namespace app\service\admin\weapp;
 
+use app\model\sys\SysConfig;
 use app\service\core\weapp\CoreWeappConfigService;
 use core\base\BaseAdminService;
+use think\Model;
 
 /**
  * 微信小程序设置
@@ -28,15 +30,14 @@ class WeappConfigService extends BaseAdminService
     public function getWeappConfig()
     {
         $config_info = (new CoreWeappConfigService())->getWeappConfig($this->site_id);
-        $config_info = array_merge($config_info, $this->getWeappStaticInfo());
-        return $config_info;
+        return array_merge($config_info, $this->getWeappStaticInfo());
 
     }
 
     /**
      * 设置配置
      * @param array $data
-     * @return \app\model\sys\SysConfig|bool|\think\Model
+     * @return SysConfig|bool|Model
      */
     public function setWeappConfig(array $data){
         return (new CoreWeappConfigService())->setWeappConfig($this->site_id, $data);

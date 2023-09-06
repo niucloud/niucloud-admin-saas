@@ -28,7 +28,7 @@ class MemberCashOutAccountService extends BaseApiService
     /**
      * 会员提现账户列表
      * @param array $where
-     * @return mixed
+     * @return array
      */
     public function getPage(array $where = [])
     {
@@ -37,8 +37,7 @@ class MemberCashOutAccountService extends BaseApiService
         $field = 'account_id,site_id,member_id,account_type,bank_name,realname,account_no';
         $search_model = $this->model->where($where)->field($field)->order('create_time desc');
 
-        $list = $this->pageQuery($search_model);
-        return $list;
+        return $this->pageQuery($search_model);
     }
 
     /**
@@ -55,6 +54,8 @@ class MemberCashOutAccountService extends BaseApiService
     /**
      * 获取首条信息
      * @param array $where
+     * @param string $order_field
+     * @param string $order
      * @return array
      */
     public function getFirstInfo(array $where, $order_field = 'create_time', string $order = 'desc'){
@@ -93,8 +94,8 @@ class MemberCashOutAccountService extends BaseApiService
 
     /**
      * 删除
-     * @param int $uid
-     * @return mixed
+     * @param int $account_id
+     * @return true
      */
     public function del(int $account_id)
     {

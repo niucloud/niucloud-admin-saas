@@ -11,12 +11,13 @@
 
 namespace app\model\sys;
 
+use app\dict\notice\NoticeDict;
 use app\dict\sys\SmsDict;
 use core\base\BaseModel;
 
 /**
  * 系统短信消息发送记录
- * Class SysMessageLog
+ * Class SysNoticeSmsLog
  * @package app\model\sys
  */
 class SysNoticeSmsLog extends BaseModel
@@ -35,7 +36,7 @@ class SysNoticeSmsLog extends BaseModel
     protected $name = 'sys_notice_sms_log';
 
     protected $type = [
-        'send_time'  =>  'timestamp',
+        'send_time' => 'timestamp',
     ];
 
     // 设置json类型字段
@@ -49,24 +50,31 @@ class SysNoticeSmsLog extends BaseModel
      * @param $data
      * @return string
      */
-    public function getResultAttr($value,$data)
+    public function getResultAttr($value, $data)
     {
-        $temp = json_decode($value);
-        if(!$temp){
+        if ($value) {
+            $temp = json_decode($value, true);
+        }
+        if (empty($temp)) {
             $temp = $value;
         }
-        return  $temp;
+        return $temp ?? '';
     }
+
     /**
      * 名称
      * @param $value
      * @param $data
      * @return string
      */
-    public function getNameAttr($value,$data)
+    public function getNameAttr($value, $data)
     {
-        $temp = \app\dict\notice\NoticeDict::getNotice()[$data['key'] ?? ''];
-        return  $temp['name'] ?? '';
+        $name = '';
+        if (!empty($data['key'])) {
+            $temp = NoticeDict::getNotice()[$data['key']] ?? [];
+            $name = $temp['name'] ?? '';
+        }
+        return $name;
     }
 
     /**
@@ -75,9 +83,13 @@ class SysNoticeSmsLog extends BaseModel
      * @param $data
      * @return string
      */
-    public function getStatusNameAttr($value,$data)
+    public function getStatusNameAttr($value, $data)
     {
-        return SmsDict::getStatusType()[$data['status'] ?? ''] ?? '';
+        $name = '';
+        if (!empty($data['status'])) {
+            $name = SmsDict::getStatusType()[$data['status']] ?? '';
+        }
+        return $name;
     }
 
     /**
@@ -86,15 +98,31 @@ class SysNoticeSmsLog extends BaseModel
      * @param $data
      * @return string
      */
-    public function getSmsTypesNameAttr($value,$data)
+    public function getSmsTypesNameAttr($value, $data)
     {
-        $temp = SmsDict::getType()[$data['sms_type'] ?? ''] ?? [];
+        if (empty($data['sms_type'])) return '';
+        $temp = SmsDict::getType()[$data['sms_type']] ?? [];
         return $temp['name'] ?? '';
     }
+
+    /**
+     * 消息标识
+     * @param $query
+     * @param $value
+     * @return void
+     */
+    public function searchKeyAttr($query, $value)
+    {
+        if ($value) {
+            $query->where('key', $value);
+        }
+    }
+
     /**
      * 短信方式
+     * @param $query
      * @param $value
-     * @return mixed
+     * @return void
      */
     public function searchSmsTypeAttr($query, $value)
     {
@@ -105,8 +133,9 @@ class SysNoticeSmsLog extends BaseModel
 
     /**
      * 手机号
+     * @param $query
      * @param $value
-     * @return mixed
+     * @return void
      */
     public function searchMobileAttr($query, $value)
     {

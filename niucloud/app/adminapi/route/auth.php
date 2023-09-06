@@ -32,6 +32,8 @@ Route::group('auth', function () {
     Route::put('edit', 'auth.Auth/edit');
     //授权站点信息
     Route::get('site', 'auth.Auth/site');
+    //站点可以显示的菜单
+    Route::get('site/showmenu', 'auth.Auth/getShowMenuList');
 
 })->middleware([
     AdminCheckToken::class,

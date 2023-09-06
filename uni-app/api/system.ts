@@ -76,3 +76,10 @@ export function fetchBase64Image(data : AnyObject) {
 export function getSiteInfo() {
     return request.get('site')
 }
+
+/**
+ * 获取微信小程序订阅消息模板id
+ */
+export function getWeappTemplateId(keys: string) {
+    return request.get('weapp/subscribemsg', { keys })
+}

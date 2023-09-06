@@ -13,7 +13,6 @@ namespace app\adminapi\middleware;
 
 use app\Request;
 use Closure;
-use core\exception\ServerException;
 
 /**
  * http跨域请求中间件
@@ -30,7 +29,7 @@ class AllowCrossDomain
             system_name('channel_name'),
             'lang'
         ];
-        header("Access-Control-Allow-Headers: Authorization, Sec-Fetch-Mode, DNT, X-Mx-ReqToken, Keep-Alive, User-Agent, If-Match, If-None-Match, If-Unmodified-Since, X-Requested-With, If-Modified-Since, Cache-Control, Content-Type, Accept-Language, Origin, Accept-Encoding,Access-Token,version,".implode(',', $allow_header));
+        header("Access-Control-Allow-Headers: Authorization, Sec-Fetch-Mode, DNT, X-Mx-ReqToken, Keep-Alive, User-Agent, If-Match, If-None-Match, If-Unmodified-Since, X-Requested-With, If-Modified-Since, Cache-Control, Content-Type, Accept-Language, Origin, Accept-Encoding,Access-Token,version," . implode(',', $allow_header));
         header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, post');
         header('Access-Control-Max-Age: 1728000');
         header('Access-Control-Allow-Credentials:true');

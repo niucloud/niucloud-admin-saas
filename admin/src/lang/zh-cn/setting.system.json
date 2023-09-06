@@ -3,7 +3,7 @@
 	"contactAddress":"联系地址",
 	"siteName": "站点名称",
 	"keywords": "网站关键字",
-	"logo": "网站Logo",
+	"logo": "长方形Logo",
 	"desc": "网站简介",
 	"province": "省",
 	"city": "市",
@@ -15,7 +15,6 @@
 	"contactAddressPlaceholder":"联系地址",
 	"siteNamePlaceholder": "站点名称",
 	"keywordsPlaceholder": "网站关键字",
-	"logoPlaceholder": "网站Logo",
 	"descPlaceholder": "网站简介",
 	"addressPlaceholder": "详细地址",
 	"phonePlaceholder": "客服电话",
@@ -25,10 +24,12 @@
 	"frontEndName": "前台名称",
 	"frontEndNamePlaceholder": "请输入前台名称",
 	"frontEndLogo": "前台Logo",
-	"icon": "网站图标",
+	"icon": "正方形Logo",
 	"serviceInformation": "服务信息",
 	"wechatCode": "公众号二维码",
 	"customerServiceCode": "客服二维码",
 	"contactsTel": "联系电话",
-	"contactsTelPlaceholder": "请输入联系电话"
+	"contactsTelPlaceholder": "请输入联系电话",
+	"logoPlaceholder": "建议图片尺寸：210*30像素；图片格式：jpg、png、jpeg。",
+	"iconPlaceholder": "建议图片尺寸：100*100像素；图片格式：jpg、png、jpeg。"
 }

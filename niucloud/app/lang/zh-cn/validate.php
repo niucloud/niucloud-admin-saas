@@ -85,12 +85,14 @@ return [
         'cash_out_is_auto_verify_in' => '是否启用审核必须是0或1',
         'cash_out_is_auto_transfer_in' => '是否启用转账必须是0或1',
         'status_require' => '会员状态必须填写',
-        'not_exit_status' => '不存在的会员状态'
+        'not_exit_status' => '不存在的会员状态',
+        'username_cannot_pure_number' => '账号不能是纯数字'
     ],
     'validate_member_config' => [
         'length_number' => '会员编码必须是整数',
         'length_min' => '会员编码长度不能小于10',
         'length_max' => '会员编码长度不能大于于20',
+        'length_between' => '会员编码长度去除前缀后最少不能低于4位,最多不能超过30位',
     ],
     'validate_article' => [
         'title_require' => '文章标题必须填写',
@@ -171,5 +173,11 @@ return [
         'not_support_account_type' => '该账户不支持提现',
         'not_support_transfer_type' => '不支持该提现方式',
         'account_id_require' => '请选择提现账户'
-    ]
+    ],
+    //计划任务
+    'validate_schedule' => [
+        'schedule_require' => '计划任务必须选择',
+        'schedule_unique' => '当前计划任务已存在',
+        'not_exit_schedule_type' => '不是有效的任务类型',
+    ],
 ];

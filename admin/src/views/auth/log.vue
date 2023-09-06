@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center">
-                <span class="text-[24px]">{{pageName}}</span>
+                <span class="text-[20px]">{{pageName}}</span>
             </div>
             <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="sysUserLogTableData.searchParam" ref="searchFormRef">
@@ -61,6 +61,7 @@ import { getLogList } from '@/api/site'
 import UserLogDetail from '@/views/auth/components/user-log-detail.vue'
 import { useRoute } from 'vue-router'
 import { FormInstance } from 'element-plus'
+
 const route = useRoute()
 const pageName = route.meta.title;
 

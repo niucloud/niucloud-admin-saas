@@ -13,6 +13,7 @@ namespace app\adminapi\controller\sys;
 
 use app\service\admin\sys\SystemService;
 use core\base\BaseAdminController;
+use think\Response;
 
 /**
  * 系统信息查询
@@ -23,7 +24,7 @@ class System extends BaseAdminController
 {
     /**
      * 获取当前系统信息
-     * @return array|mixed
+     * @return Response
      */
     public function info()
     {
@@ -32,7 +33,7 @@ class System extends BaseAdminController
 
     /**
      * 获取当前url配置
-     * @return array|mixed
+     * @return Response
      */
     public function url()
     {
@@ -41,33 +42,59 @@ class System extends BaseAdminController
 
     /**
      * 获取系统环境配置
-     * @return \think\Response
+     * @return Response
      */
-    public function getSystemInfo(){
+    public function getSystemInfo()
+    {
         return success((new SystemService())->getSystemInfo());
     }
 
     /**
      * 清理缓存，更新菜单
      */
-    public function schemaCache(){
+    public function schemaCache()
+    {
 
         return success((new SystemService())->schemaCache());
     }
 
     /**
      * 校验消息队列是否正常运行
-     * @return \think\Response
+     * @return Response
      */
-    public function checkJob(){
-        return success(data:(new SystemService())->checkJob());
+    public function checkJob()
+    {
+        return success(data: (new SystemService())->checkJob());
     }
 
     /**
      * 校验计划任务是否正常运行
-     * @return \think\Response
+     * @return Response
      */
-    public function checkSchedule(){
-        return success(data:(new SystemService())->checkSchedule());
+    public function checkSchedule()
+    {
+        return success(data: (new SystemService())->checkSchedule());
+    }
+
+    /**
+     * 获取布局
+     * @return Response
+     */
+    public function layout() {
+        $layouts = event('SiteLayout');
+        if (count($layouts) > 1) {
+            array_multisort(array_column($layouts, 'sort'), SORT_ASC, $layouts);
+        }
+        return success($layouts);
+    }
+
+    /**
+     *
+     * 设置布局
+     * @return Response
+     */
+    public function setLayout(){
+        $key = input('key', '');
+        return success(data: (new SystemService())->setLayout($key));
     }
 }

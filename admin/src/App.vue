@@ -12,7 +12,6 @@ import useSystemStore from '@/stores/modules/system'
 import useAppStore from '@/stores/modules/app'
 import { useDark, useToggle } from '@vueuse/core'
 import { setThemeColor } from '@/utils/common'
-import { language } from '@/lang'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -20,15 +19,14 @@ const route = useRoute()
 // 初始化设置语言
 const systemStore = useSystemStore()
 const locale = computed(() => (systemStore.lang === 'zh-cn' ? zhCn : en))
-language.loadLocaleMessages(route.path, systemStore.lang)
 
 const toggleDark = useToggle(useDark())
 
 watch(route, () => {
     useAppStore().$patch(state => {
-        state.route = route.path
+        state.route = route.meta.view || route.path
     })
-})
+}, { immediate: true })
 
 onMounted(() => {
     // 设置主题色

@@ -34,5 +34,4 @@ class SysArea extends BaseModel
     protected $name = 'sys_area';
 
 
-
 }

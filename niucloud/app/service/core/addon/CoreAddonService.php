@@ -12,6 +12,9 @@
 namespace app\service\core\addon;
 
 use app\model\addon\Addon;
+use app\service\core\niucloud\CoreModuleService;
+use think\db\exception\DbException;
+use Throwable;
 
 /**
  * 安装服务层
@@ -33,26 +36,49 @@ class CoreAddonService extends CoreAddonBaseService
      */
     public function getLocalAddonList()
     {
-        $files = get_files_by_dir($this->addon_path);
         $list = [];
-        if(!empty($files)){
-            $install_addon_list = $this->model->append(['status_name'])->column('title, icon, key, desc, status, author, version, install_time, update_time, cover', 'key');
-            foreach($files as $path) {
+        $online_app_list = [];
+        $install_addon_list = $this->model->append(['status_name'])->column('title, icon, key, desc, status, author, version, install_time, update_time, cover', 'key');
+        try {
+            $niucloud_module_list = (new CoreModuleService())->getModuleList()['data'] ?? [];
+            foreach ($niucloud_module_list as $v) {
+                $data = array(
+                    'title' => $v['app']['app_name'],
+                    'desc' => $v['app']['app_desc'],
+                    'key' => $v['app']['app_key'] ?? '',
+                    'version' => $v['version'] ?? '',
+                    'author' => $v['app']['app_name'],
+                    'type' => $v['app']['app_type'],
+                    'support_app' => $v['app']['support_channel'] ?? [],
+                    'is_download' => false,
+                    'is_local' => false,
+                    'icon' => $v['app']['app_logo'],
+                    'cover' => $v['app']['window_logo'][0],
+                );
+                $data['install_info'] = $install_addon_list[$v['app']['app_key']] ?? [];
+                $list[$v['app']['app_key']] = $data;
+            }
+            $online_app_list = array_column($list, 'key');
+        } catch ( Throwable $e ) {
+            $error = $e->getMessage();
+        }
+        $files = get_files_by_dir($this->addon_path);
+        if (!empty($files)) {
+            foreach ($files as $path) {
                 $data = $this->getAddonConfig($path);
-                if(isset($data['key']))
-                {
-                    $icon = addon_resource($data['key'], "icon.png");
-                    $data['icon'] = is_file($icon) ? $icon : '';
-                    $cover = addon_resource($data['key'], "cover.png");
-                    $data['cover'] = is_file($cover) ? $cover : '';
+                if (isset($data['key'])) {
+                    $data['icon'] = is_file($data['icon']) ? image_to_base64($data['icon']) : '';
+                    $data['cover'] = is_file($data['cover']) ? image_to_base64($data['cover']) : '';
                     $key = $data['key'];
                     $data['install_info'] = $install_addon_list[$key] ?? [];
-                    $list[] = $data;
+                    $data['is_download'] = true;
+                    $data['is_local'] = in_array($data['key'], $online_app_list) ? false : true;
+                    $list[$key] = $data;
                 }
 
             }
         }
-        return $list;
+        return ['list' => $list, 'error' => $error ?? ''];
     }
 
     /**
@@ -69,22 +95,26 @@ class CoreAddonService extends CoreAddonBaseService
      * 获取已安装插件数量
      * @param array $where
      * @return int
-     * @throws \think\db\exception\DbException
+     * @throws DbException
      */
-    public function getCount(array $where = []){
+    public function getCount(array $where = [])
+    {
 
         return $this->model->where($where)->count();
     }
+
     /**
      * 安装的插件分页
      * @param array $where
-     * @return mixed
+     * @return array
+     * @throws DbException
+     * @throws DbException
      */
-    public function getPage(array $where){
+    public function getPage(array $where)
+    {
         $field = 'id, title, key, desc, version, status, icon, create_time, install_time';
-        $search_model = $this->model->where([])->withSearch(['title'],$where)->field($field)->order('id desc');
-        $data = $this->pageQuery($search_model);
-        return $data;
+        $search_model = $this->model->where([])->withSearch(['title'], $where)->field($field)->order('id desc');
+        return $this->pageQuery($search_model);
     }
 
     /**
@@ -92,7 +122,8 @@ class CoreAddonService extends CoreAddonBaseService
      * @param int $id
      * @return array
      */
-    public function getInfo(int $id){
+    public function getInfo(int $id)
+    {
         return $this->model->where([['id', '=', $id]])->findOrEmpty()->toArray();
     }
 
@@ -101,7 +132,8 @@ class CoreAddonService extends CoreAddonBaseService
      * @param array $params
      * @return true
      */
-    public function set(array $params){
+    public function set(array $params)
+    {
         $title = $params['title'];
         $key = $params['key'];
         $addon = $this->model->where([
@@ -118,10 +150,10 @@ class CoreAddonService extends CoreAddonBaseService
             'icon' => $icon,
             'key' => $key
         );
-        if($addon->isEmpty()){
+        if ($addon->isEmpty()) {
             $data['install_time'] = time();
             $this->model->create($data);
-        }else{
+        } else {
             $data['update_time'] = time();
             $addon->save($data);
         }
@@ -133,15 +165,18 @@ class CoreAddonService extends CoreAddonBaseService
      * @param string $key
      * @return array
      */
-    public function getInfoByKey(string $key){
+    public function getInfoByKey(string $key)
+    {
         return $this->model->where([['key', '=', $key]])->findOrEmpty()->toArray();
     }
+
     /**
      * 通过插件名删除插件
      * @param string $key
      * @return true
      */
-    public function delByKey(string $key){
+    public function delByKey(string $key)
+    {
         $this->model->where([['key', '=', $key]])->delete();
         return true;
     }
@@ -150,14 +185,16 @@ class CoreAddonService extends CoreAddonBaseService
      * 修改插件状态
      * @param int $id
      * @param int $status
-     * @return void
+     * @return true
      */
-    public function setStatus(int $id, int $status){
+    public function setStatus(int $id, int $status)
+    {
         $this->model->where([['id', '=', $id]])->update(['status' => $status]);
         return true;
     }
 
-    public function getAppList(){
+    public function getAppList()
+    {
         return event('addon', []);
     }
 }

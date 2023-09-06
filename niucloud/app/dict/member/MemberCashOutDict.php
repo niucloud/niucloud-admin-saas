@@ -18,23 +18,24 @@ namespace app\dict\member;
  */
 class MemberCashOutDict
 {
-    const WAIT_AUDIT = 1;//待审核
-    const WAIT_TRANSFER = 2;//待转账
-    const TRANSFERED = 3;//已转账
-    const REFUSE = -1;//已拒绝
-    const CANCEL = -2;//已取消
+    public const WAIT_AUDIT = 1;//待审核
+    public const WAIT_TRANSFER = 2;//待转账
+    public const TRANSFERED = 3;//已转账
+    public const REFUSE = -1;//已拒绝
+    public const CANCEL = -2;//已取消
 
     /**
      * 提现状态
      * @return array
      */
-    public static function getStatus(){
+    public static function getStatus()
+    {
         return [
             self::WAIT_AUDIT => get_lang('dict_member_cash_out.status_wait_audit'),//待审核
-            self::WAIT_TRANSFER  => get_lang('dict_member_cash_out.status_wait_transfer'),//待转账
+            self::WAIT_TRANSFER => get_lang('dict_member_cash_out.status_wait_transfer'),//待转账
             self::TRANSFERED => get_lang('dict_member_cash_out.status_transfered'),//已转账
-            self::REFUSE  => get_lang('dict_member_cash_out.status_refuse'),//已拒绝
-            self::CANCEL  => get_lang('dict_member_cash_out.status_cancel'),//已取消
+            self::REFUSE => get_lang('dict_member_cash_out.status_refuse'),//已拒绝
+            self::CANCEL => get_lang('dict_member_cash_out.status_cancel'),//已取消
         ];
     }
 

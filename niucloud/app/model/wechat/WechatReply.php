@@ -41,7 +41,7 @@ class WechatReply extends BaseModel
      * @param $data
      * @return string
      */
-    public function getContentAttr($value,$data)
+    public function getContentAttr($value, $data)
     {
 
         return $data['content_type'] == ReplyDict::CONTENT_TYPE_TEXT ? $value : json_decode($value, true);

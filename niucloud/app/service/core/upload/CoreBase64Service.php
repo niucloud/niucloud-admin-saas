@@ -12,6 +12,7 @@
 namespace app\service\core\upload;
 
 use core\exception\UploadFileException;
+use Exception;
 
 /**
  * 上传服务层
@@ -27,12 +28,12 @@ class CoreBase64Service extends CoreFileService
     }
 
     /**
-     * 图片上传
-     * @param $site_id
-     * @param $cate_id
-     * @param $app_type
-     * @param $file_path
+     * base64图片上传
+     * @param string $content
+     * @param int $site_id
+     * @param string $file_dir
      * @return array
+     * @throws Exception
      */
     public function image(string $content, int $site_id, string $file_dir)
     {

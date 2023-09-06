@@ -14,12 +14,13 @@ namespace app\dict\sys;
 class MethodDict
 {
 
-    const GET = 'get';
-    const POST = 'post';
-    const DELETE = 'delete';
-    const PUT = 'put';
+    public const GET = 'get';
+    public const POST = 'post';
+    public const DELETE = 'delete';
+    public const PUT = 'put';
 
-    public static function getMethodType(){
+    public static function getMethodType()
+    {
         return [
             self::GET => 'GET',
             self::POST => 'POST',

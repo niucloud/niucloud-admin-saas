@@ -49,7 +49,6 @@
     import Sortable from 'sortablejs'
     import {img} from '@/utils/common'
     import {range} from 'lodash-es'
-
     import useDiyStore from '@/stores/modules/diy'
 
     const diyStore = useDiyStore()
@@ -118,14 +117,14 @@
                     var ratio = item.imgHeight / item.imgWidth;
                     item.width = 375;
                     item.height = item.width * ratio;
-                    diyStore.editComponent.imageHeight = item.height;
+                    diyStore.editComponent.imageHeight = parseInt(item.height);
                 }
             };
         });
     }
 
     const blurImageHeight = ()=> {
-        diyStore.editComponent.imageHeight = parseFloat(diyStore.editComponent.imageHeight).toFixed(2);
+        diyStore.editComponent.imageHeight = parseInt(diyStore.editComponent.imageHeight);
     }
 
     const imageBoxRef = ref()

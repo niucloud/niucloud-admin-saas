@@ -12,15 +12,22 @@
 namespace core\template;
 
 use app\service\core\wechat\CoreWechatService;
+use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
+use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use EasyWeChat\Kernel\Support\Collection;
+use EasyWeChat\OfficialAccount\TemplateMessage\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use Psr\Http\Message\ResponseInterface;
 
 
 class Wechat extends BaseTemplate
 {
 
     protected $site_id;
+
     /**
      * @param array $config
-     * @return mixed|void
+     * @return void
      */
     protected function initialize(array $config = [])
     {
@@ -31,19 +38,23 @@ class Wechat extends BaseTemplate
 
     /**
      * 实例化模板消息业务
-     * @return \EasyWeChat\OfficialAccount\TemplateMessage\Client
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @return Client
      */
-    public function template(){
+    public function template()
+    {
         return CoreWechatService::app($this->site_id)->template_message;
     }
+
     /**
      * 消息发送
-     * @param string $templateId
      * @param array $data
-     * @return mixed|void
+     * @return array|Collection|object|ResponseInterface|string
+     * @throws GuzzleException
+     * @throws InvalidArgumentException
+     * @throws InvalidConfigException
      */
-    public function send(array $data){
+    public function send(array $data)
+    {
         $openid = $data['openid'];
         $template_id = $data['template_id'];
         $template_data = $data['data'];
@@ -52,8 +63,8 @@ class Wechat extends BaseTemplate
         $url = $data['url'];
         $miniprogram = $data['miniprogram'];
 
-        if(!empty($first)) $template_data['first'] = $first;
-        if(!empty($remark)) $template_data['remark'] = $remark;
+        if (!empty($first)) $template_data['first'] = $first;
+        if (!empty($remark)) $template_data['remark'] = $remark;
         return $this->template()->send([
             'touser' => $openid,
             'template_id' => $template_id,
@@ -65,27 +76,34 @@ class Wechat extends BaseTemplate
 
     /**
      * 添加模板消息
-     * @param string $shortId
-     * @return mixed|void
+     * @param array $data
+     * @return array|Collection|object|ResponseInterface|string
+     * @throws GuzzleException
+     * @throws InvalidConfigException
      */
-    public function addTemplate(array $data){
+    public function addTemplate(array $data)
+    {
         return $this->template()->addTemplate($data['shortId']);
     }
 
     /**
      * 删除
-     * @param string $templateId
-     * @return mixed|void
+     * @param array $data
+     * @return array|Collection|object|ResponseInterface|string
+     * @throws GuzzleException
+     * @throws InvalidConfigException
      */
-    public function delete(array $data){
+    public function delete(array $data)
+    {
         return $this->template()->deletePrivateTemplate($data['templateId']);
     }
 
     /**
      * 获取
-     * @return mixed|void
+     * @return void
      */
-    public function get(){
+    public function get()
+    {
 
     }
 }

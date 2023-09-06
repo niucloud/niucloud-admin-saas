@@ -11,8 +11,9 @@
 
 namespace core\util;
 
-use think\facade\Queue as ThinkQueue;
+use Exception;
 use think\facade\Log;
+use think\facade\Queue as ThinkQueue;
 
 /**
  * Class Queue
@@ -78,6 +79,7 @@ class Queue
      * @var static
      */
     protected static $instance;
+
     protected function __construct()
     {
         $this->default_method = $this->method;
@@ -122,7 +124,7 @@ class Queue
         if (!$res) {
             $res = ThinkQueue::{$this->action()}(...$jodValue);
             if (!$res) {
-                Log::error('队列推送失败，参数：' . json_encode($jodValue));
+                Log::error('队列推送失败，参数：' . json_encode($jodValue, JSON_THROW_ON_ERROR));
             }
         }
         $this->clean();
@@ -161,7 +163,7 @@ class Queue
         $jobData['method'] = $this->method;
         $jobData['error_count'] = $this->error_count;
         if ($this->method != $this->default_method) {
-            $this->job .= '@'.$this->method;
+            $this->job .= '@' . $this->method;
         }
         if ($this->secs) {
             return [$this->secs, $this->job, $jobData, $this->queue_name];
@@ -172,9 +174,12 @@ class Queue
 
     /**
      * 不可访问时调用
-     * @param $name
+     * @param $method
      * @param $arguments
      * @return $this
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
      */
     public function __call($method, $arguments)
     {
@@ -186,7 +191,7 @@ class Queue
             }
             return $this;
         } else {
-            throw new \Exception('Method does not exist' . __CLASS__ . '->' . $method . '()');
+            throw new Exception('Method does not exist' . __CLASS__ . '->' . $method . '()');
         }
     }
 

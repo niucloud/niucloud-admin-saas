@@ -9,6 +9,7 @@
 // | Author: Niucloud Team
 // +----------------------------------------------------------------------
 
+use core\dict\DictLoader;
 use think\facade\Route;
 
 /**
@@ -30,4 +31,4 @@ Route::group(function () {
 });
 
 //加载插件路由
-(new \core\dict\DictLoader("Route"))->load(['app_type' => 'adminapi']);
+(new DictLoader("Route"))->load(['app_type' => 'adminapi']);

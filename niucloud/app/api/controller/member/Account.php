@@ -15,6 +15,7 @@ use app\dict\member\MemberAccountChangeTypeDict;
 use app\dict\member\MemberAccountTypeDict;
 use app\service\api\member\MemberAccountService;
 use core\base\BaseApiController;
+use think\db\exception\DbException;
 use think\Response;
 
 /**
@@ -28,7 +29,8 @@ class Account extends BaseApiController
      * 积分流水
      * @return Response
      */
-    public function point(){
+    public function point(): Response
+    {
         $data = $this->request->params([
             ['from_type', '']
         ]);
@@ -40,7 +42,8 @@ class Account extends BaseApiController
      * 余额流水
      * @return Response
      */
-    public function balance(){
+    public function balance(): Response
+    {
         $data = $this->request->params([
             ['from_type', '']
         ]);
@@ -52,7 +55,8 @@ class Account extends BaseApiController
      * 零钱流水
      * @return Response
      */
-    public function money(){
+    public function money(): Response
+    {
         $data = $this->request->params([
             ['from_type', '']
         ]);
@@ -63,8 +67,10 @@ class Account extends BaseApiController
     /**
      * 账户记录数量
      * @return Response
+     * @throws DbException
      */
-    public function count(){
+    public function count(): Response
+    {
         $data = $this->request->params([
             ['from_type', ''],
             ['account_type', '']
@@ -76,7 +82,8 @@ class Account extends BaseApiController
      * 佣金流水
      * @return Response
      */
-    public function commission(){
+    public function commission(): Response
+    {
         $data = $this->request->params([
             ['from_type', '']
         ]);
@@ -89,7 +96,8 @@ class Account extends BaseApiController
      * @param $account_type
      * @return Response
      */
-    public function getFromType($account_type){
+    public function getFromType($account_type): Response
+    {
 
         return success(MemberAccountChangeTypeDict::getType($account_type));
     }

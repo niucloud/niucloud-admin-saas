@@ -94,7 +94,6 @@
     import {ref, reactive} from 'vue'
     import {img} from '@/utils/common'
     import {getArticleList} from '@/api/article'
-    import {ElTable} from 'element-plus'
 
     const diyStore = useDiyStore()
     diyStore.editComponent.ignore = []; // 忽略公共属性

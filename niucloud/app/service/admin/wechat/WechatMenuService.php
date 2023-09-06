@@ -17,6 +17,8 @@ use app\service\core\wechat\CoreWechatApiService;
 use core\base\BaseAdminService;
 use core\exception\WechatException;
 use EasyWeChat\Kernel\Exceptions\InvalidArgumentException;
+use EasyWeChat\Kernel\Exceptions\InvalidConfigException;
+use GuzzleHttp\Exception\GuzzleException;
 use think\Model;
 
 /**
@@ -32,16 +34,16 @@ class WechatMenuService extends BaseAdminService
      */
     public function getInfo(){
         $core_config_service = new CoreConfigService();
-        $menu = $core_config_service->getConfig($this->site_id, 'WECHAT_MENU')['value'] ?? [];
-        return $menu;
+        return $core_config_service->getConfig($this->site_id, 'WECHAT_MENU')['value'] ?? [];
     }
 
 
     /**
      * 更新微信菜单
-     * @param $data
+     * @param array $data
      * @return SysConfig|bool|Model
-     * @throws InvalidArgumentException
+     * @throws GuzzleException
+     * @throws InvalidConfigException
      */
     public function edit(array $data){
         $core_wechat_api_service = new CoreWechatApiService();

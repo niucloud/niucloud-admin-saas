@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center">
-                <span class="text-[24px]">{{pageName}}</span>
+                <span class="text-[20px]">{{pageName}}</span>
                 <el-button type="primary" @click="addEvent">{{ t('addMemberLabel') }}</el-button>
             </div>
 
@@ -57,6 +57,7 @@ import { getMemberLabelList, deleteMemberLabel } from '@/api/member'
 import { ElMessageBox, FormInstance } from 'element-plus'
 import EditMemberLabel from '@/views/member/components/edit-label.vue'
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title;
 
@@ -72,8 +73,6 @@ let memberLabelTableData = reactive({
 })
 
 const searchFormRef = ref<FormInstance>()
-
-
 
 const resetForm = (formEl: FormInstance | undefined)=>{
     if (!formEl) return

@@ -13,6 +13,7 @@ namespace app\adminapi\controller\diy;
 
 use app\service\admin\diy\DiyRouteService;
 use core\base\BaseAdminController;
+use think\Response;
 
 
 /**
@@ -24,80 +25,81 @@ class DiyRoute extends BaseAdminController
 {
     /**
      * @notes 获取自定义路由表列表
-     * @return \think\Response
+     * @return Response
      */
     public function lists()
     {
         $data = $this->request->params([
-            [ "title", "" ],
+            ["title", ""],
         ]);
-        return success(( new DiyRouteService() )->getList($data));
+        return success((new DiyRouteService())->getList($data));
     }
 
     /**
      * 自定义路由表详情
      * @param int $id
-     * @return \think\Response
+     * @return Response
      */
     public function info(int $id)
     {
-        return success(( new DiyRouteService() )->getInfo($id));
+        return success((new DiyRouteService())->getInfo($id));
     }
 
     /**
      * 自定义路由表详情
      * @param string $name
+     * @return Response
      */
     public function getInfoByName(string $name)
     {
-        return success(( new DiyRouteService() )->getInfoByName($name));
+        return success((new DiyRouteService())->getInfoByName($name));
     }
 
     /**
      * 添加自定义路由表
-     * @return \think\Response
+     * @return Response
      */
     public function add()
     {
         $data = $this->request->params([
-            [ "title", "" ],
-            [ "name", "" ],
-            [ "page", "" ],
-            [ "share", "" ],
-            [ "is_share", "" ]
+            ["title", ""],
+            ["name", ""],
+            ["page", ""],
+            ["share", ""],
+            ["is_share", ""]
         ]);
         $this->validate($data, 'app\validate\diy\DiyRoute.add');
-        $id = ( new DiyRouteService() )->add($data);
-        return success('ADD_SUCCESS', [ 'id' => $id ]);
+        $id = (new DiyRouteService())->add($data);
+        return success('ADD_SUCCESS', ['id' => $id]);
     }
 
     /**
      * 自定义路由表编辑
      * @param $id
-     * @return \think\Response
+     * @return Response
      */
     public function edit($id)
     {
         $data = $this->request->params([
-            [ "title", "" ],
-            [ "name", "" ],
-            [ "page", "" ],
-            [ "share", "" ],
-            [ "is_share", "" ]
+            ["title", ""],
+            ["name", ""],
+            ["page", ""],
+            ["share", ""],
+            ["is_share", ""]
         ]);
         $this->validate($data, 'app\validate\diy\DiyRoute.edit');
-        ( new DiyRouteService() )->edit($id, $data);
+        (new DiyRouteService())->edit($id, $data);
         return success('MODIFY_SUCCESS');
     }
 
     /**
      * 自定义路由表删除
-     * @param $id
-     * @return \think\Response
+     * @param int $id
+     * @return Response
      */
     public function del(int $id)
     {
-        ( new DiyRouteService() )->del($id);
+        (new DiyRouteService())->del($id);
         return success('DELETE_SUCCESS');
     }
 
@@ -107,14 +109,14 @@ class DiyRoute extends BaseAdminController
     public function modifyShare()
     {
         $data = $this->request->params([
-            [ 'share', '' ],
-            [ 'title', '' ],
-            [ 'name', '' ],
-            [ 'page', '' ],
-            [ 'is_share', 0 ],
-            [ 'sort', 0 ]
+            ['share', ''],
+            ['title', ''],
+            ['name', ''],
+            ['page', ''],
+            ['is_share', 0],
+            ['sort', 0]
         ]);
-        ( new DiyRouteService() )->modifyShare($data);
+        (new DiyRouteService())->modifyShare($data);
         return success('MODIFY_SUCCESS');
     }
 

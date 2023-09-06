@@ -33,7 +33,7 @@ class MemberCashOutService extends BaseApiService
     /**
      * 会员提现列表
      * @param array $where
-     * @return mixed
+     * @return array
      */
     public function getPage(array $where = [])
     {
@@ -42,8 +42,7 @@ class MemberCashOutService extends BaseApiService
         $field = 'id,site_id,cash_out_no,member_id,account_type,transfer_type,transfer_realname,transfer_mobile,transfer_bank,transfer_account,transfer_status,transfer_time,apply_money,rate,service_money,money,audit_time,status,remark,create_time,refuse_reason';
         $search_model = $this->model->where($where)->withSearch(['member_id','status', 'create_time'],$where)->with(['memberInfo', 'transfer'])->field($field)->append(['account_type_name', 'transfer_type_name', 'status_name', 'transfer_status_name'])->order('create_time desc');
 
-        $list = $this->pageQuery($search_model);
-        return $list;
+        return $this->pageQuery($search_model);
     }
 
     /**
@@ -60,7 +59,7 @@ class MemberCashOutService extends BaseApiService
 
     /**
      * 申请提现
-     * @param $data
+     * @param array $data
      * @return true
      */
     public function apply(array $data){
@@ -71,8 +70,6 @@ class MemberCashOutService extends BaseApiService
 
     /**
      * 撤销提现申请
-     * @param int $site_id
-     * @param int $member_id
      * @param int $id
      * @return true
      */

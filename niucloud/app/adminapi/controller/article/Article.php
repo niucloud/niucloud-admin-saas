@@ -29,21 +29,22 @@ class Article extends BaseAdminController
     public function lists()
     {
         $data = $this->request->params([
-            [ 'title', '' ],
-            [ 'category_id', '' ],
-            [ 'sort', '' ],
-            [ 'is_show', '' ],
+            ['title', ''],
+            ['category_id', ''],
+            ['sort', ''],
+            ['is_show', ''],
         ]);
-        return success(( new ArticleService() )->getPage($data));
+        return success((new ArticleService())->getPage($data));
     }
 
     /**
      * 文章详情
      * @param int $id
+     * @return Response
      */
     public function info(int $id)
     {
-        return success(( new ArticleService() )->getInfo($id));
+        return success((new ArticleService())->getInfo($id));
     }
 
     /**
@@ -53,20 +54,20 @@ class Article extends BaseAdminController
     public function add()
     {
         $data = $this->request->params([
-            [ 'title', '' ],
-            [ 'category_id', '' ],
-            [ 'intro', '' ],
-            [ 'summary', '' ],
-            [ 'image', '' ],
-            [ 'author', '' ],
-            [ 'content', '' , false],
-            [ 'visit_virtual', 0 ],
-            [ 'is_show', 1 ],
-            [ 'sort', 0 ],
+            ['title', ''],
+            ['category_id', ''],
+            ['intro', ''],
+            ['summary', ''],
+            ['image', ''],
+            ['author', ''],
+            ['content', '', false],
+            ['visit_virtual', 0],
+            ['is_show', 1],
+            ['sort', 0],
         ]);
         $this->validate($data, 'app\validate\article\Article.add');
-        $id = ( new ArticleService() )->add($data);
-        return success('ADD_SUCCESS', [ 'id' => $id ]);
+        $id = (new ArticleService())->add($data);
+        return success('ADD_SUCCESS', ['id' => $id]);
     }
 
     /**
@@ -77,30 +78,31 @@ class Article extends BaseAdminController
     public function edit(int $id)
     {
         $data = $this->request->params([
-            [ 'title', '' ],
-            [ 'category_id', '' ],
-            [ 'intro', '' ],
-            [ 'summary', '' ],
-            [ 'image', '' ],
-            [ 'author', '' ],
-            [ 'content', '' , false],
-            [ 'visit_virtual', 0 ],
-            [ 'is_show', 1 ],
-            [ 'sort', 0 ],
+            ['title', ''],
+            ['category_id', ''],
+            ['intro', ''],
+            ['summary', ''],
+            ['image', ''],
+            ['author', ''],
+            ['content', '', false],
+            ['visit_virtual', 0],
+            ['is_show', 1],
+            ['sort', 0],
         ]);
         $this->validate($data, 'app\validate\article\Article.edit');
-        ( new ArticleService() )->edit($id, $data);
+        (new ArticleService())->edit($id, $data);
         return success('EDIT_SUCCESS');
     }
 
     /**
      * 文章删除
      * @param int $id
+     * @return Response
      */
     public function del(int $id)
     {
 
-        ( new ArticleService() )->del($id);
+        (new ArticleService())->del($id);
         return success('DELETE_SUCCESS');
     }
 

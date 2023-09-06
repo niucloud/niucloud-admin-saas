@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 /**
  * 获取支付宝小程序配置
- * @returns 
+ * @returns
  */
 export function getAliappConfig() {
     return request.get('aliapp/config')
@@ -10,16 +10,16 @@ export function getAliappConfig() {
 
 /**
  * 编辑支付宝小程序配置
- * @param params 
- * @returns 
+ * @param params
+ * @returns
  */
 export function setAliappConfig(params: Record<string, any>) {
-    return request.put('aliapp/config', params, { showSuccessMessage: true })
+    return request.put('aliapp/config', params, {showSuccessMessage: true})
 }
 
 /**
  * 获取支付宝小程序静态资源
- * @returns 
+ * @returns
  */
 export function getAliappStatic() {
     return request.get('aliapp/static')

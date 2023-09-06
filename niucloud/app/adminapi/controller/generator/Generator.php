@@ -13,6 +13,10 @@ namespace app\adminapi\controller\generator;
 
 use app\service\admin\generator\GenerateService;
 use core\base\BaseController;
+use Exception;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\Response;
 
 /**
@@ -30,34 +34,38 @@ class Generator extends BaseController
     {
 
         $data = $this->request->params([
-            [ 'table_name', '' ],
-            [ 'table_content', '' ],
+            ['table_name', ''],
+            ['table_content', ''],
         ]);
-        return success(( new GenerateService() )->getPage($data));
+        return success((new GenerateService())->getPage($data));
     }
 
     /**
      * 代码生成详情
      * @param int $id
      * @return Response
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function info(int $id)
     {
-        return success(( new GenerateService() )->getInfo($id));
+        return success((new GenerateService())->getInfo($id));
     }
 
     /**
      * 添加代码生成
      * @return Response
+     * @throws Exception
      */
     public function add()
     {
         $data = $this->request->params([
-            [ "table_name", "" ],
+            ["table_name", ""],
         ], false);
         $this->validate($data, 'app\validate\generator\Generator.add');
-        $id = ( new GenerateService() )->add($data);
-        return success('ADD_SUCCESS', [ 'id' => $id ]);
+        $id = (new GenerateService())->add($data);
+        return success('ADD_SUCCESS', ['id' => $id]);
     }
 
     /**
@@ -68,15 +76,15 @@ class Generator extends BaseController
     public function edit($id)
     {
         $data = $this->request->params([
-            [ "table_name", "" ],
-            [ "table_content", "" ],
-            [ "class_name", "" ],
-            [ "module_name", "" ],
-            [ "edit_type", "1" ],
-            [ "table_column", "" ],
+            ["table_name", ""],
+            ["table_content", ""],
+            ["class_name", ""],
+            ["module_name", ""],
+            ["edit_type", "1"],
+            ["table_column", ""],
         ], false);
         $this->validate($data, 'app\validate\generator\Generator.edit');
-        ( new GenerateService() )->edit($id, $data);
+        (new GenerateService())->edit($id, $data);
         return success('MODIFY_SUCCESS');
     }
 
@@ -87,7 +95,7 @@ class Generator extends BaseController
      */
     public function del(int $id)
     {
-        ( new GenerateService() )->del($id);
+        (new GenerateService())->del($id);
         return success('DELETE_SUCCESS');
     }
 
@@ -98,10 +106,10 @@ class Generator extends BaseController
     public function create()
     {
         $data = $this->request->params([
-            [ 'id', '' ],
+            ['id', ''],
         ]);
 
-        $data = ( new GenerateService() )->generate($data);
+        $data = (new GenerateService())->generate($data);
         return success('ADD_SUCCESS', $data);
     }
 
@@ -112,10 +120,10 @@ class Generator extends BaseController
     public function tableList()
     {
         $data = $this->request->params([
-            [ "name", "" ],
-            [ "comment", "" ],
+            ["name", ""],
+            ["comment", ""],
         ]);
-        $list = ( new GenerateService() )->tableList($data);
+        $list = (new GenerateService())->tableList($data);
         return success('ADD_SUCCESS', $list);
     }
 

@@ -1,1 +1,0 @@
-import{aJ as t}from"./index-6ae98f60.js";function r(r){return t.get("article/article",r)}function e(r){return t.get("article/article/all",r)}function a(r){return t.get(`article/article/${r}`)}function c(){return t.get("article/category")}export{r as a,a as b,e as c,c as g};

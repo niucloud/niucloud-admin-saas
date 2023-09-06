@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
            <div class="flex justify-between items-center">
-                <span class="text-[24px]">{{pageName}}</span>
+                <span class="text-[20px]">{{pageName}}</span>
             </div>
             <div class="mt-[20px]">
                 <el-table :data="agreementTableData.data" size="large" v-loading="agreementTableData.loading">
@@ -35,10 +35,11 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive } from 'vue'
 import { t } from '@/lang'
 import { getAgreementList } from '@/api/sys'
 import { useRouter,useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title;
  

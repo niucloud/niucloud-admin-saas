@@ -76,7 +76,7 @@ return [
     'OSS_TYPE_NOT_EXIST' => '云存储类型不存在',
     'URL_FILE_NOT_EXIST' => '获取不到网址指向的文件',
     'PLEACE_SELECT_IMAGE' => '请选择要删除的图片',
-    'CERT_TYPE_ERROR' => '不是有效的证书类型',
+    'UPLOAD_TYPE_ERROR' => '不是有效的上传类型',
 
 
     //消息管理
@@ -121,5 +121,6 @@ return [
     500000 => '你选择的支付方式未启用',
     //站点相关
     'SITE_GROUP_IS_EXIST' => '站点分组已存在站点，请调整站点后重试',
-
+    //小程序版本
+    'APPLET_VERSION_NOT_EXISTS' => 'applet version not exists',
 ];

@@ -13,6 +13,7 @@ namespace core\base;
 
 use core\job\Dispatch;
 use think\queue\Job;
+use Throwable;
 
 /**
  * 队列
@@ -43,7 +44,7 @@ abstract class BaseJob extends Dispatch
             $data = $params['data'] ?? [];//数据
             $error_count = $params['error_count'] ?? 0;//执行任务错误的最大重试次数
             $this->runJob($action, $job, $data, $error_count);
-        } catch ( \Throwable $e ) {
+        } catch ( Throwable $e ) {
             $job->delete();
         }
     }

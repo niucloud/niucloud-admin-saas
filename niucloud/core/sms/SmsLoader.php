@@ -14,9 +14,9 @@ namespace core\sms;
 use core\loader\Loader;
 
 /**
- * @see \core\sms\SmsLoader
+ * @see SmsLoader
  * @package think\facade
- * @mixin \core\sms\BaseSms
+ * @mixin BaseSms
  * @method  string|null send(string $mobile, string $template_id, array $data) 发送短信
  */
 class SmsLoader extends Loader
@@ -30,6 +30,7 @@ class SmsLoader extends Loader
     protected $namespace = '\\core\\sms\\';
 
     protected $config_name = 'sms';
+
     /**
      * 默认驱动
      * @return mixed

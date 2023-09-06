@@ -20,13 +20,14 @@ use app\dict\common\ChannelDict;
 class MemberRegisterChannelDict extends ChannelDict
 {
     //手动添加
-    const MANUAL  = 'manual';
+    const MANUAL = 'manual';
 
-    public static function getType($type = ''){
+    public static function getType($type = '')
+    {
 
         $data = ChannelDict::getType($type);
         $data[self::MANUAL] = get_lang('dict_member.register_manual');//手动添加
-        if(empty($type)){
+        if (empty($type)) {
             return $data;
         }
         return $data[$type] ?? '';

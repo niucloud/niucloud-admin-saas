@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
            <div class="flex justify-between items-center">
-                <span class="text-[24px]">{{pageName}}</span>
+                <span class="text-[20px]">{{pageName}}</span>
             </div>
             <div class="mt-[16px]">
                 <el-table :data="storageTableData.data" size="large" v-loading="loading">
@@ -38,7 +38,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getStorageList,getStorageInfo } from '@/api/sys'
 import storageLocal from '@/views/setting/components/storage-local.vue'
@@ -46,6 +46,7 @@ import storageQiniu from '@/views/setting/components/storage-qiniu.vue'
 import storageAli from '@/views/setting/components/storage-ali.vue'
 import storageTencent from '@/views/setting/components/storage-tencent.vue'
 import { useRouter,useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title;
 

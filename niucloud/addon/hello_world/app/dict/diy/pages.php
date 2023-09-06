@@ -7,6 +7,7 @@ return [
             'cover' => '', // 页面封面图
             'preview' => '', // 页面预览图
             'desc' => '', // 页面描述
+            'mode' => 'diy', // 页面模式：diy：自定义，fixed：固定
             // 页面数据源
             "data" => [
                 "global" => [
