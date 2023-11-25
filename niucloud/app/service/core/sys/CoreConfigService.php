@@ -90,4 +90,19 @@ class CoreConfigService extends BaseCoreService
         );
         return $this->model->where($where)->save($data);
     }
+
+    /**
+     * 返回config信息
+     * @param string $key
+     * @return array|mixed
+     */
+    public function getConfigValue(int $site_id, string  $key)
+    {
+        $config_info = $this->getConfig($site_id, $key);
+        if(empty($config_info))
+        {
+            return [];
+        }
+        return $config_info['value'];
+    }
 }

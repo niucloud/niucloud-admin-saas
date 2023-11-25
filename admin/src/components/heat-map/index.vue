@@ -11,7 +11,7 @@
 			<div class="flex">
 
 				<div class="content-box relative bg-cover bg-gray-100 border border-dashed border-gray-500" :style="{ backgroundImage : 'url(' + img(value.imageUrl) + ')',width : contentBoxWidth + 'px', height : contentBoxHeight + 'px' }">
-					<div v-for="(item,index) in dragBoxArr" :id="'box_' + index" class="area-box cursor-move border border-solid border-[#ccc] w-[100px] h-[100px] absolute top-0 left-0 select-none p-[5px]" :style="{ left : item.left + item.unit, top : item.top + item.unit }" @mousedown="mouseDown($event,index)">
+					<div v-for="(item,index) in dragBoxArr" :id="'box_' + index" class="area-box cursor-move border border-solid border-[#ccc] w-[100px] h-[100px] absolute top-0 left-0 select-none p-[5px]" :style="{ left : item.left + item.unit, top : item.top + item.unit, width : item.width + item.unit, height : item.height + item.unit }" @mousedown="mouseDown($event,index)">
 						<span>{{ index + 1 }}</span>
 						<template v-if="item.link.title">
 							<span class="p-[4px]">|</span>
@@ -132,6 +132,12 @@
             if (e.clientY - disY > contentBoxHeight.value - box.offsetHeight) {
                 box.style.top = contentBoxHeight.value - box.offsetHeight + 'px';
             }
+
+            dragBoxArr[index].left = box.offsetLeft;
+            dragBoxArr[index].top = box.offsetTop;
+            dragBoxArr[index].width = box.offsetWidth;
+            dragBoxArr[index].height = box.offsetHeight;
+            dragBoxArr[index].unit = 'px';
         };
 
         // 鼠标抬起时
@@ -581,7 +587,12 @@
                 box.style.width = width + 'px';
                 box.style.height = height + 'px';
             }
-            dragBoxArr[index].unit = 'px'
+
+            dragBoxArr[index].left = box.offsetLeft;
+            dragBoxArr[index].top = box.offsetTop;
+            dragBoxArr[index].width = box.offsetWidth;
+            dragBoxArr[index].height = box.offsetHeight;
+            dragBoxArr[index].unit = 'px';
 
         };
 

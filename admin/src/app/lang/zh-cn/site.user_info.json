@@ -1,0 +1,17 @@
+{
+    "userInfo": "用户信息",
+    "siteInfo": "站点信息",
+    "uid": "用户ID",
+    "username": "账号",
+    "realname": "真实姓名",
+    "siteId": "站点ID",
+    "siteName": "站点名称",
+    "isAdmin": "是否是超级管理员",
+    "addTime": "添加时间",
+    "createTime":"创建时间",
+    "expireTime":"到期时间",
+    "lastLoginTime": "最后登录时间",
+    "lastLoginIP": "最后登录IP",
+    "yes": "是",
+    "no": "否"
+}

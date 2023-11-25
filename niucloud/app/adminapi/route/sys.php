@@ -55,6 +55,10 @@ Route::group('sys', function () {
     Route::post('menu/refresh', 'sys.Menu/refreshMenu');
 
     Route::get('menu/mothod', 'sys.Menu/getMethodType');
+
+    Route::get('menu/system_menu', 'sys.Menu/getSystem');
+
+    Route::get('menu/addon_menu/:app_key', 'sys.Menu/getAddonMenu');
     /***************************************************** 设置 ****************************************************/
     //网站设置
     Route::get('config/website', 'sys.Config/getWebsite');
@@ -159,7 +163,8 @@ Route::group('sys', function () {
     Route::get('job', 'sys.System/checkJob');
     //校验计划任务
     Route::get('schedule', 'sys.System/checkSchedule');
-
+    //环境变量
+    Route::get('env', 'sys.System/getEnvInfo');
 
     /***************************************************** 计划任务 ****************************************************/
     //计划任务列表

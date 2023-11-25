@@ -24,18 +24,18 @@ class SiteGroup extends Validate
 
     protected $rule = [
         'group_name' => 'require|max:20',
-        'group_roles' => 'require',
+        'app' => 'require',
     ];
 
     protected $message = [
         'group_name.require' => 'validate_site.group_name_require',
         'group_name.max' => 'validate_site.group_name_max',
-        'group_roles.require' => 'validate_site.group_roles_require',
+        'app.require' => 'validate_site.app_require',
 
     ];
 
     protected $scene = [
-        'add' => ['group_name', 'group_roles'],
-        'edit' => ['group_name', 'group_roles'],
+        'add' => ['group_name', 'app'],
+        'edit' => ['group_name'],
     ];
 }

@@ -21,13 +21,13 @@ class Notice extends BaseDict
     public function load(array $data)
     {
         $template_files = [];
-        $system_path = $this->getDictPath() . "notice" . DIRECTORY_SEPARATOR . $data['type'] . ".php";
+        $system_path = $this->getDictPath() . "notice" . DIRECTORY_SEPARATOR . $data[ 'type' ] . ".php";
         if (is_file($system_path)) {
             $template_files[] = $system_path;
         }
         $addons = $this->getLocalAddons();
         foreach ($addons as $v) {
-            $template_path = $this->getAddonDictPath($v) . "notice" . DIRECTORY_SEPARATOR . $data['type'] . ".php";
+            $template_path = $this->getAddonDictPath($v) . "notice" . DIRECTORY_SEPARATOR . $data[ 'type' ] . ".php";
             if (is_file($template_path)) {
                 $template_files[] = $template_path;
             }

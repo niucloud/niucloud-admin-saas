@@ -36,6 +36,9 @@ class  CoreDiyConfigService extends BaseCoreService
 
             $info = [
                 'backgroundColor' => '#ffffff',
+                'textColor' => '#606266',
+                'textHoverColor' => '#007aff',
+                'type' => 1,
                 'list' => [
                     [
                         "text" => "首页",
@@ -43,21 +46,10 @@ class  CoreDiyConfigService extends BaseCoreService
                             "parent" => "SYSTEM_LINK",
                             "name" => "INDEX",
                             "title" => "首页",
-                            "url" => "/pages/index/index"
+                            "url" => "/app/pages/index/index"
                         ],
                         "iconPath" => "static/resource/images/tabbar/index.png",
                         "iconSelectPath" => "static/resource/images/tabbar/index-selected.png"
-                    ],
-                    [
-                        "text" => "文章",
-                        "link" => [
-                            "parent" => "SYSTEM_LINK",
-                            "name" => "ARTICLE_LIST",
-                            "title" => "文章资讯",
-                            "url" => "/pages/article/list"
-                        ],
-                        "iconPath" => "static/resource/images/tabbar/article.png",
-                        "iconSelectPath" => "static/resource/images/tabbar/article-selected.png"
                     ],
                     [
                         "text" => "会员",
@@ -65,15 +57,12 @@ class  CoreDiyConfigService extends BaseCoreService
                             "parent" => "MEMBER_LINK",
                             "name" => "MEMBER_CENTER",
                             "title" => "个人中心",
-                            "url" => "/pages/member/index"
+                            "url" => "/app/pages/member/index"
                         ],
                         "iconPath" => "static/resource/images/tabbar/my.png",
                         "iconSelectPath" => "static/resource/images/tabbar/my-selected.png"
                     ]
-                ],
-                'textColor' => '#606266',
-                'textHoverColor' => '#007aff',
-                'type' => 1
+                ]
             ];
         }
         return $info;

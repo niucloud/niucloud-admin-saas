@@ -27,9 +27,10 @@ class CoreModuleService extends BaseNiucloudClient
     public function getModuleList()
     {
         $params = [
-            'app_type' => ''
+            'app_type' => '',
+            'code' => $this->code,
+            'secret' => $this->secret
         ];
-
         return $this->httpGet('member_app_all', $params);
     }
 
@@ -41,7 +42,12 @@ class CoreModuleService extends BaseNiucloudClient
      */
     public function getAuthInfo()
     {
-        return $this->httpGet('member_app');
+        $params = [
+            'app_type' => '',
+            'code' => $this->code,
+            'secret' => $this->secret
+        ];
+        return $this->httpGet('member_app', $params);
     }
 
     /**
@@ -61,8 +67,21 @@ class CoreModuleService extends BaseNiucloudClient
         return $this->download('member_app_download/' . $app_key, [], $path);
     }
 
-    public function update($app_key, $version_id)
+    public function upgrade($app_key, $version_id)
     {
 
+    }
+
+
+    /**
+     * 操作token
+     * @param $action
+     * @param $data
+     * @return array|\core\util\niucloud\Response|object|ResponseInterface
+     * @throws GuzzleException
+     */
+    public function getActionToken($action, $data)
+    {
+        return $this->httpGet('member_app_action/'.$action, $data);
     }
 }

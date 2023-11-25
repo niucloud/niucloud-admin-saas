@@ -2,19 +2,16 @@
 
 namespace core\util\niucloud;
 
-use app\service\admin\niucloud\NiucloudService;
 use app\service\core\niucloud\CoreNiucloudConfigService;
 use Closure;
 use core\exception\NiucloudException;
 use core\util\niucloud\http\AccessToken;
 use core\util\niucloud\http\HasHttpRequests;
-use core\util\niucloud\http\Response;
 use core\util\niucloud\http\Token;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Middleware;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use think\facade\Cache;
 
 
 class BaseNiucloudClient
@@ -37,7 +34,7 @@ class BaseNiucloudClient
 
     protected $config;
 
-
+    const PRODUCT = 'saas';
 
     /**
      *官网服务主域名
@@ -102,7 +99,7 @@ class BaseNiucloudClient
             $this->registerHttpMiddlewares();
         }
         $response = $this->toRequest($url, $method, $options);
-        return $returnRaw ? $response : $this->responseToType($response, config('niucloud.response_type'));
+        return $response;
     }
 
     /**
@@ -211,30 +208,6 @@ class BaseNiucloudClient
     }
 
     /**
-     * @param ResponseInterface $response
-     * @param $type
-     * @return array|Response|object
-     */
-    public function responseToType(ResponseInterface $response, $type = null)
-    {
-        $response = Response::buildFromPsrResponse($response);
-        $response->getBody()->rewind();
-
-        switch ($type ?? 'array') {
-            case 'collection':
-                return $response->toCollection();
-            case 'array':
-                return $response->toArray();
-            case 'object':
-                return $response->toObject();
-            case 'raw':
-                return $response;
-            default:
-                throw new NiucloudException(sprintf('Config key "response_type" not found', $type));
-        }
-    }
-
-    /**
      * @param string $url
      * @param array $data
      * @param array $query
@@ -288,8 +261,6 @@ class BaseNiucloudClient
      * @param string $url
      * @param string $method
      * @param array $options
-     *
-     * @return Response
      * @throws GuzzleException
      */
     public function requestRaw(string $url, string $method = 'GET', array $options = [])

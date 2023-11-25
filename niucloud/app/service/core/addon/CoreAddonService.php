@@ -11,7 +11,10 @@
 
 namespace app\service\core\addon;
 
+use app\dict\addon\AddonDict;
+use app\dict\sys\AppTypeDict;
 use app\model\addon\Addon;
+use app\service\admin\site\SiteGroupService;
 use app\service\core\niucloud\CoreModuleService;
 use think\db\exception\DbException;
 use Throwable;
@@ -148,7 +151,10 @@ class CoreAddonService extends CoreAddonBaseService
             'status' => 1,
             'desc' => $desc,
             'icon' => $icon,
-            'key' => $key
+            'key' => $key,
+            'compile' => $params['compile'] ?? [],
+            'type' => $params['type'],
+            'support_app' => $params['support_app'] ?? ''
         );
         if ($addon->isEmpty()) {
             $data['install_time'] = time();
@@ -197,4 +203,73 @@ class CoreAddonService extends CoreAddonBaseService
     {
         return event('addon', []);
     }
+
+    /**
+     * 查询已安装的有效的应用
+     * @return array
+     */
+    public function getInstallAddonList(){
+        return $this->model->where([['status', '=', AddonDict::ON]])->append(['status_name'])->column('title, icon, key, desc, status, type, support_app', 'key');
+    }
+
+    /**
+     * 开发者插件
+     * @return array
+     */
+    public function getAddonDevelopList(string $search = '')
+    {
+        $list = [];
+
+        $install_addon_list = (new Addon())->append(['status_name', 'type_name'])->column('title, icon, key, desc, status, author, version, install_time, update_time, cover, type', 'key');
+        $files = get_files_by_dir($this->addon_path);
+        if (!empty($files)) {
+            $core_addon_service = new CoreAddonService();
+            foreach ($files as $path) {
+                $data = $core_addon_service->getAddonConfig($path);
+                if (isset($data['key'])) {
+                    $key = $data['key'];
+                    $data['install_info'] = $install_addon_list[$key] ?? [];
+                    $data['icon'] = is_file($data['icon']) ? image_to_base64($data['icon']) : '';
+                    $data['cover'] = is_file($data['cover']) ? image_to_base64($data['cover']) : '';
+                    $data['is_download'] = true;
+                    $data['type_name'] = empty($data['type']) ? '' : AddonDict::getType()[$data['type']] ?? '';
+                    $list[$key] = $data;
+                }
+            }
+        }
+
+        if ($search) {
+            foreach ($list as $k => $v) {
+                if (!str_contains($v['title'], $search)) unset($list[$k]);
+            }
+        }
+        return array_values($list);
+    }
+
+    /**
+     * 应用详情
+     * @param string $key
+     * @return array
+     */
+    public function getAddonDevelopInfo(string $key)
+    {
+        $dir = $this->addon_path . $key . DIRECTORY_SEPARATOR;
+        if (!is_dir($dir)) return [];
+        $core_addon_service = new CoreAddonService();
+
+        $data = $core_addon_service->getAddonConfig($key);
+        if (isset($data['key'])) {
+            $data['icon'] = is_file($data['icon']) ? image_to_base64($data['icon']) : '';
+            $data['cover'] = is_file($data['icon']) ? image_to_base64($data['cover']) : '';
+            $data['type_name'] = empty($data['type']) ? '' : AddonDict::getType()[$data['type']] ?? '';
+        }
+        if(isset($data['support_app']) && !empty($data['support_app']))
+        {
+            $data['support_type'] = 2;
+        }else{
+            $data['support_type'] = 1;
+        }
+        return $data;
+    }
+
 }

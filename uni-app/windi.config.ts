@@ -18,7 +18,9 @@ export default defineConfig({
             },
             colors: {
                 primary: {
-                    DEFAULT: 'var(--primary-color)'
+                    DEFAULT: 'var(--primary-color)',
+                    dark: 'var(--primary-color-dark)',
+                    light: 'var(--primary-color-light)'
                 },
                 red: {
                     DEFAULT: '#ED1B26',
@@ -44,12 +46,14 @@ export default defineConfig({
                     subtitle: '#757575',
                     description: '#AFAFAF',
                     skeleton: '#2c2c2c',
-                    indicator: '#353535'
+                    indicator: '#353535',
+                    placeholder: '#c0c4cc'
                 },
                 white: '#FFFFFF',
                 background: '#282828',
                 border: 'rgba(117, 117, 117, 0.1)',
-                page: 'var(--page-bg-color)'
+                page: 'var(--page-bg-color)',
+                price: '#fc5227'
             },
             spacing: {
                 half: '50%',

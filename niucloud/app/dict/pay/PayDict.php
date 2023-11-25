@@ -68,11 +68,11 @@ class PayDict
 //                'key' => self::UNIPAY,
 //                'icon' => self::UNIPAY_ICON
 //            ],//银联支付
-            self::OFFLINEPAY => [
-                'name' => get_lang('dict_pay.type_offline'),
-                'key' => self::OFFLINEPAY,
-                'icon' => self::OFFLINEPAY_ICON
-            ],//线下支付
+//            self::OFFLINEPAY => [
+//                'name' => get_lang('dict_pay.type_offline'),
+//                'key' => self::OFFLINEPAY,
+//                'icon' => self::OFFLINEPAY_ICON
+//            ],//线下支付
             self::BALANCEPAY => [
                 'name' => get_lang('dict_pay.type_balancepay'),
                 'key' => self::BALANCEPAY,

@@ -1,8 +1,8 @@
 <?php
 // +----------------------------------------------------------------------
-// | Niucloud-admin 企业快速开发的saas管理平台
+// | Niucloud-admin 企业快速开发的多应用管理平台
 // +----------------------------------------------------------------------
-// | 官方网址：https://www.niucloud-admin.com
+// | 官方网址：https://www.niucloud.com
 // +----------------------------------------------------------------------
 // | niucloud团队 版权所有 开源版本可自由商用
 // +----------------------------------------------------------------------
@@ -13,7 +13,6 @@ return [
     //端口管理
     'dict_app' => [
         'type_admin' => '平台管理端',
-        'type_site' => '站点管理端',
         'type_api' => '客户端',
     ],
     'dict_menu' => [
@@ -23,7 +22,10 @@ return [
         'type_button' => '按钮',
         //菜单状态
         'status_on' => '正常',
-        'status_off' => '停用'
+        'status_off' => '停用',
+        'source_system' => '系统文件',
+        'source_create' => '新建菜单',
+        'source_generator' => '代码生成器'
     ],
     'dict_user' => [
         //用户状态
@@ -43,9 +45,7 @@ return [
         'status_experience' => '体验期',
         'status_expire' => '已到期',
         'status_close' => '已停止',
-        'pay' => '收款',
-        'refund' => '退款',
-        'transfer' => '转账',
+
     ],
     // 站点
     'dict_site_index' => [
@@ -56,6 +56,12 @@ return [
     'dict_admin_index' => [
         //站点类型
         'system' => '框架首页',
+    ],
+    // 手机端首页
+    'dict_wap_index' => [
+        //站点类型
+        'system' => '框架首页',
+        'system_desc' => '系统默认首页',
     ],
     'dict_notice' => [
         'type_sms' => '短信',
@@ -99,9 +105,7 @@ return [
         'login_wechat' => '微信公众号授权登录',
         'login_weapp' => '微信小程序授权登录',
         'account_point_adjust' => '账户调整',
-        'account_point_recharge_give' => '充值赠送',
         'account_balance_adjust' => '账户调整',
-        'account_balance_recharge' => '账户充值',
         'account_money_award' => '活动奖励',
         'account_money_cash_out' => '账户提现',
         'account_money_adjust' => '账户调整',
@@ -109,20 +113,16 @@ return [
         'account_commission_cash_out' => '账户提现',
         'status_on' => '正常',
         'status_off' => '锁定',
-        'account_balance_recharge_refund' => '充值订单退款',
+
         'account_balance_order' => '订单消费',
         'account_balance_order_refund' => '订单退款',
     ],
     'dict_order' => [
-        //订单类型
-        'order_type_recharge' => '充值订单',
-        'trade_type_recharge' => '会员充值',
+
 
     ],
     'dict_refund' => [
         //订单类型
-        'order_type_recharge' => '充值订单',
-        'trade_type_recharge' => '会员充值',
         'wait' => '待审核',
         'wait_transfer' => "待转账",
         "success" => "退款成功",
@@ -161,9 +161,12 @@ return [
 
         'status_wait' => '待支付',
         'status_ing' => '支付中',
-        'status_ed' => '已支付',
+        'status_finish' => '已支付',
         'status_cancle' => '已取消',
-        'status_audit' => '待审核'
+        'status_audit' => '待审核',
+        'pay' => '收款',
+        'refund' => '退款',
+        'transfer' => '转账',
     ],
     //转账相关
     'dict_transfer' => [
@@ -201,9 +204,9 @@ return [
         'page_diy' => '自定义页面',
         'component_type_basic' => '基础组件',
 
+        'system_title' => '系统',
         'system_link' => '系统页面',
         'system_link_index' => '首页',
-        'system_link_article_list' => '文章资讯',
 
         'member_link' => '会员页面',
         'member_index' => '个人中心',
@@ -211,6 +214,7 @@ return [
         'member_my_point' => '我的积分',
         'member_my_commission' => '我的佣金',
         'member_my_personal' => '个人资料',
+        'member_my_address' => '收货地址',
 
         'diy_page' => '自定义页面',
         'diy_link' => '自定义链接'
@@ -249,6 +253,15 @@ return [
         'update' => '更新',
         'status_on' => '启用',
         'status_off' => '关闭',
+
+        'type_app' => '应用',
+        'type_addon' => '插件',
+
+        'install_after_admin_update' => '该插件admin端引用了新的依赖需在项目根目录下admin目录执行 npm install 更新依赖',
+        'install_after_composer_update' => '该插件引用了新的composer依赖需在项目根目录下niucloud目录执行 composer update 更新依赖',
+        'install_after_wap_update' => '该插件wap端引用了新的依赖需在项目根目录下uni-app目录执行 npm install 更新依赖',
+        'install_after_web_update' => '该插件web端引用了新的依赖需在项目根目录下web目录执行 npm install 更新依赖',
+        'install_after_update' => '本地安装成功后会将admin，web，wap端的插件代码进行安装，但是不会进行编译，请手动编译对应admin，web，wap端的代码',
     ],
     // 退款支付状态
     'dict_pay_refund' => [
@@ -261,6 +274,7 @@ return [
         'unipay' => '银联原路退款',
         'offline' => '线下退款',
         'balance' => '退款到余额',
+        'back' => '原路退款',
     ],
     'dict_order_refund' => [
         'refunding' => '退款中',
@@ -270,7 +284,6 @@ return [
     'dict_app_manage' => [
         'system_app' => '基础应用',
         'message_manage' => '消息管理',
-        'member_recharge' => '会员充值',
     ],
     'dict_setting' => [
         'server_system' => '服务器系统',
@@ -309,5 +322,10 @@ return [
     ],
     'dict_site_layout' => [
         'default' => '默认'
+    ],
+    'dict_cloud_applet' => [
+        'uploading' => '上传中',
+        'upload_success' => '上传成功',
+        'upload_fail' => '上传失败',
     ]
 ];

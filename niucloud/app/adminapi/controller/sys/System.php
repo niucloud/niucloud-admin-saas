@@ -97,4 +97,13 @@ class System extends BaseAdminController
         $key = input('key', '');
         return success(data: (new SystemService())->setLayout($key));
     }
+
+    /**
+     * 环境变量查询
+     * @return Response
+     */
+    public function getEnvInfo()
+    {
+        return success(['app_debug' => env('app_debug', false)]);
+    }
 }

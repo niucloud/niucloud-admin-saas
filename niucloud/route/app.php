@@ -25,7 +25,11 @@ Route::rule('admin/:any', function () {
     return view(app()->getRootPath() . 'public/admin/index.html');
 })->pattern(['any' => '\w+']);
 // 站点端
-Route::rule('site/:any', function () {
+Route::rule('site', function () {
+    return view(app()->getRootPath() . 'public/admin/index.html');
+})->pattern(['any' => '\w+']);
+// 站点管理端
+Route::rule('home', function () {
     return view(app()->getRootPath() . 'public/admin/index.html');
 })->pattern(['any' => '\w+']);
 // 装修端

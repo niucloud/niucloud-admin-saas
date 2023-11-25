@@ -246,7 +246,8 @@ class Alipay extends BasePay
                     $temp_data = array(
                         'mchid' => $result['seller_id'],
                         'trade_no' => $result['trade_no'],
-                        'result' => $result
+                        'result' => $result,
+                        'status' => OnlinePayDict::getAliPayStatus($result['trade_status'])
                     );
                     $callback_result = $callback($result['out_trade_no'], $temp_data);
                     if (is_bool($callback_result) && $callback_result) {

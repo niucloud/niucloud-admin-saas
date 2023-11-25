@@ -1,8 +1,8 @@
 <?php
 // +----------------------------------------------------------------------
-// | Niucloud-admin 企业快速开发的saas管理平台
+// | Niucloud-admin 企业快速开发的多应用管理平台
 // +----------------------------------------------------------------------
-// | 官方网址：https://www.niucloud-admin.com
+// | 官方网址：https://www.niucloud.com
 // +----------------------------------------------------------------------
 // | niucloud团队 版权所有 开源版本可自由商用
 // +----------------------------------------------------------------------
@@ -18,11 +18,23 @@ use think\facade\Route;
 /**
  * 自定义页面控制器
  */
-Route::group('diy', function () {
+Route::group('diy', function() {
 
     /***************************************************** 自定义页面管理 ****************************************************/
-    //自定义页面分页列表
+    // 自定义页面分页列表
     Route::get('diy', 'diy.Diy/lists');
+
+    // 添加自定义页面
+    Route::post('diy', 'diy.Diy/add');
+
+    // 编辑自定义页面
+    Route::put('diy/:id', 'diy.Diy/edit');
+
+    // 自定义页面详情
+    Route::get('diy/:id', 'diy.Diy/info');
+
+    // 删除自定义页面
+    Route::delete('diy/:id', 'diy.Diy/del');
 
     Route::get('list', 'diy.Diy/getList');
 
@@ -31,18 +43,6 @@ Route::group('diy', function () {
 
     // 切换模板
     Route::put('change', 'diy.Diy/changeTemplate');
-
-    //自定义页面详情
-    Route::get('diy/:id', 'diy.Diy/info');
-
-    //添加自定义页面
-    Route::post('diy', 'diy.Diy/add');
-
-    //编辑自定义页面
-    Route::put('diy/:id', 'diy.Diy/edit');
-
-    //删除自定义页面
-    Route::delete('diy/:id', 'diy.Diy/del');
 
     // 页面初始化数据
     Route::get('init', 'diy.Diy/getPageInit');
@@ -68,15 +68,12 @@ Route::group('diy', function () {
     // 编辑自定义页面分享内容
     Route::put('diy/share', 'diy.Diy/modifyShare');
 
-    // 获取页面预览数据
-    Route::put('preview', 'diy.Diy/getPreviewData');
-
     /***************************************************** 配置相关 *****************************************************/
 
-    //底部导航查询
+    // 底部导航查询
     Route::get('bottom', 'diy.Config/getBottom');
 
-    //底部导航配置
+    // 底部导航配置
     Route::post('bottom', 'diy.Config/setBottom');
 
 })->middleware([

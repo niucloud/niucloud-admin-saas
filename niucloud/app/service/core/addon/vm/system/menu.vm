@@ -1,0 +1,33 @@
+<?php
+
+return  [
+    [
+        'menu_name' => '{title}',
+        'menu_key' => '{key}',
+        'menu_type' => 0,
+        'icon' => '',
+        'api_url' => '',
+        'router_path' => '{key}',
+        'view_path' => '',
+        'methods' => '',
+        'sort' => 100,
+        'status' => 1,
+        'is_show' => 1,
+        'children' => [
+            [
+                'menu_name' => '{title}',
+                'menu_key' => '{key}_hello_world',
+                'menu_type' => 1,
+                'icon' => '',
+                'api_url' => '{key}/hello_world',
+                'router_path' => 'hello_world',
+                'view_path' => 'hello_world/index',
+                'methods' => 'get',
+                'sort' => 100,
+                'status' => 1,
+                'is_show' => 1,
+                'children' => []
+            ],
+        ]
+    ]
+];

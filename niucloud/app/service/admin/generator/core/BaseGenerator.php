@@ -1,8 +1,8 @@
 <?php
 // +----------------------------------------------------------------------
-// | Niucloud-admin 企业快速开发的saas管理平台
+// | Niucloud-admin 企业快速开发的多应用管理平台
 // +----------------------------------------------------------------------
-// | 官方网址：https://www.niucloud-admin.com
+// | 官方网址：https://www.niucloud.com
 // +----------------------------------------------------------------------
 // | niucloud团队 版权所有 开源版本可自由商用
 // +----------------------------------------------------------------------
@@ -50,7 +50,10 @@ abstract class BaseGenerator
      */
     protected $tableColumn;
 
-
+    /**
+     * 插件名
+     */
+    protected $addonName;
     /**
      * 文件的文字
      * @var string
@@ -83,6 +86,12 @@ abstract class BaseGenerator
      */
     protected $outDir;
 
+    /**
+     * 文件路径
+     * @var string
+     */
+    protected $rootDir;
+
         /**
      * 获取文件生成到模块的文件夹路径
      * @return mixed
@@ -111,15 +120,18 @@ abstract class BaseGenerator
     abstract public function getFileName();
 
 
+    abstract public function getFilePath();
+
 
     public function __construct()
     {
+
         $this->basePath = base_path();
         $this->rootPath = root_path();
         $this->vmDir = $this->basePath . 'service/admin/generator/vm/';
         $this->outDir = $this->rootPath . 'public/upload/generator/';
         $this->checkDir($this->outDir);
-
+        $this->rootDir = dirname(root_path());
     }
 
 
@@ -135,6 +147,8 @@ abstract class BaseGenerator
         $this->setModuleName($table['module_name'] ?? '');
         // 设置类名
         $this->setClassName($table['class_name'] ?? '');
+        // 设置插件名
+        $this->setAddonName($table['addon_name'] ?? '');
         // 替换模板中的文本
         $this->replaceText();
     }
@@ -145,10 +159,21 @@ abstract class BaseGenerator
      */
     public function generate()
     {
-        // 生成到runtime目录
-        $path = $this->getRuntimeOutDir() . $this->getFileName();
+        if($this->table['generate_type'] == 2)
+        {
+            // 生成到runtime目录(下载)
+            $path = $this->getRuntimeOutDir() . $this->getFileName();
+        }else if($this->table['generate_type'] == 3){
+            // 生成到代码中
+            $path = $this->getObjectOutDir() . $this->getFileName();
+        }
+
         // 写入内容
-        if($path) file_put_contents($path, $this->text);
+        if(!empty($this->getFileName()))
+        {
+            file_put_contents($path, $this->text);
+        }
+
     }
 
 
@@ -158,11 +183,19 @@ abstract class BaseGenerator
      */
     public function fileInfo(): array
     {
-        return [
-            'name' => $this->getFileName(),
-            'type' => 'php',
-            'content' => $this->text
-        ];
+        if(!empty($this->getFileName()))
+        {
+            return
+            [
+                'name' => $this->getFileName(),
+                'type' => 'php',
+                'content' => $this->text,
+                'file_dir' => $this->getFilePath(),
+            ];
+        }else{
+            return [];
+        }
+
     }
 
     /**
@@ -207,7 +240,14 @@ abstract class BaseGenerator
         $this->className = $className;
     }
 
-
+    /**
+     * 设置插件
+     * @param string $addonName
+     */
+    public function setAddonName(string $addonName): void
+    {
+        $this->addonName = $addonName;
+    }
     /**
      * 设置生成文件的文本内容
      * @param string $text
@@ -258,7 +298,7 @@ abstract class BaseGenerator
         return Str::lower($this->getTableName());
     }
 
-    
+
     /**
      * 类名称大写
      * @return string
@@ -328,9 +368,9 @@ abstract class BaseGenerator
         } elseif (str_starts_with($type, 'timestamp')) {
             $result = time();
         } elseif (str_starts_with($type, 'datetime')) {
-            $result = date('Y-m-d H:i:s');
+            $result = '"'.date('Y-m-d H:i:s').'"';
         } elseif (str_starts_with($type, 'date')) {
-            $result = date('Y-m-d H:i:s');
+            $result = '"'.date('Y-m-d H:i:s').'"';
         } else {
             $result = '""';
         }
@@ -385,5 +425,6 @@ abstract class BaseGenerator
     {
         return str_replace($old, $new, file_get_contents($template));
     }
+
 
 }

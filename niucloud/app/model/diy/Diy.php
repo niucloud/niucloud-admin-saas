@@ -1,8 +1,8 @@
 <?php
 // +----------------------------------------------------------------------
-// | Niucloud-admin 企业快速开发的saas管理平台
+// | Niucloud-admin 企业快速开发的多应用管理平台
 // +----------------------------------------------------------------------
-// | 官方网址：https://www.niucloud-admin.com
+// | 官方网址：https://www.niucloud.com
 // +----------------------------------------------------------------------
 // | niucloud团队 版权所有 开源版本可自由商用
 // +----------------------------------------------------------------------
@@ -11,6 +11,7 @@
 
 namespace app\model\diy;
 
+use app\dict\diy\PagesDict;
 use app\dict\diy\TemplateDict;
 use core\base\BaseModel;
 
@@ -46,10 +47,39 @@ class Diy extends BaseModel
      * @param $data
      * @return mixed
      */
+    public function getTypePageAttr($value, $data)
+    {
+        if (!empty($data[ 'type' ])) {
+            return TemplateDict::getTemplate([ 'type' => [ $data[ 'type' ] ] ])[ $data[ 'type' ] ][ 'page' ] ?? '';
+        }
+        return '';
+    }
+
+    /**
+     * 状态字段转化
+     * @param $value
+     * @param $data
+     * @return mixed
+     */
     public function getTypeNameAttr($value, $data)
     {
-        if (!empty($data['type'])) {
-            return TemplateDict::getTemplate(['type' => $data['type']])[$data['type']]['title'] ?? '';
+        if (!empty($data[ 'type' ])) {
+            return TemplateDict::getTemplate([ 'type' => [ $data[ 'type' ] ] ])[ $data[ 'type' ] ][ 'title' ] ?? '';
+        }
+        return '';
+    }
+
+    /**
+     * 状态字段转化
+     * @param $value
+     * @param $data
+     * @return mixed
+     */
+    public function getTemplateNameAttr($value, $data)
+    {
+        if (!empty($data[ 'template' ])) {
+            $page = PagesDict::getPages([ 'type' => $data[ 'type' ] ])[ $data[ 'template' ] ][ 'title' ];
+            return $page ?? '';
         }
         return '';
     }
@@ -62,20 +92,20 @@ class Diy extends BaseModel
      */
     public function getShareAttr($value, $data)
     {
-        if (empty($data['share'])) {
-            $data['share'] = json_encode([
+        if (empty($data[ 'share' ])) {
+            $data[ 'share' ] = json_encode([
                 'wechat' => [
-                    'title' => $data['title'],
+                    'title' => $data[ 'title' ],
                     'desc' => '',
                     'url' => ''
                 ],
                 'weapp' => [
-                    'title' => $data['title'],
+                    'title' => $data[ 'title' ],
                     'url' => ''
                 ]
             ]);
         }
-        return $data['share'] ?? '';
+        return $data[ 'share' ] ?? '';
     }
 
     /**
@@ -91,18 +121,6 @@ class Diy extends BaseModel
         }
     }
 
-    /**
-     * 搜索器:自定义页面站点id
-     * @param $query
-     * @param $value
-     * @param $data
-     */
-    public function searchSiteIdAttr($query, $value, $data)
-    {
-        if ($value) {
-            $query->where("site_id", $value);
-        }
-    }
 
     /**
      * 搜索器:自定义页面名称
@@ -233,6 +251,5 @@ class Diy extends BaseModel
             $query->where("update_time", $value);
         }
     }
-
 
 }

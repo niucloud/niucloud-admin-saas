@@ -12,7 +12,10 @@
 namespace app\service\core\site;
 
 use app\dict\site\SiteDict;
+use app\dict\sys\AppTypeDict;
 use app\model\site\Site;
+use app\service\admin\site\SiteGroupService;
+use app\service\admin\site\SiteService;
 use core\base\BaseCoreService;
 use core\exception\CommonException;
 use think\db\exception\DataNotFoundException;
@@ -101,4 +104,26 @@ class CoreSiteService extends BaseCoreService
         return true;
     }
 
+    /**
+     * 获取站点支持的应用插件
+     * @param int $site_id
+     * @return array
+     */
+    public function getAddonKeysBySiteId(int $site_id){
+        $site_info = (new SiteService())->getSiteCache($site_id);
+        if (empty($site_info))
+            return [];
+        $app_type = $site_info[ 'app_type' ];
+        if ($app_type == AppTypeDict::SITE) {
+            $group_id = $site_info[ 'group_id' ] ?? 0;
+            if ($group_id > 0) {
+                $group_addon_keys = ( new SiteGroupService() )->getGroupAddon($group_id);
+            } else {
+                $group_addon_keys = [];
+            }
+        }
+        //在查询站点所拥有的应用插件,两者结合
+        $site_addon_keys = $site_info['addons'] ?? [];
+        return array_merge($group_addon_keys ?? [], $site_addon_keys);
+    }
 }

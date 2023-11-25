@@ -79,7 +79,8 @@ Route::group('site', function () {
     Route::get('account/stat', 'site.SiteAccount/stat');
     //账单类型
     Route::get('account/type', 'site.SiteAccount/accountType');
-
+    // 获取店铺包含的插件
+    Route::get('addons', 'site.Site/addons');
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,

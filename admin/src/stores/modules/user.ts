@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { getToken, setToken, removeToken, getAppType } from '@/utils/common'
-import { login, getAuthMenus } from '@/api/auth'
+import { login, getAuthMenus } from '@/app/api/auth'
 import storage from '@/utils/storage'
 import router from '@/router'
 import { formatRouters } from '@/router/routers'
@@ -21,21 +21,29 @@ const useSystemStore = defineStore('user', {
             userInfo: storage.get('userinfo') || {},
             siteInfo: storage.get('siteInfo') || {},
             routers: [],
-            rules: []
+            rules: [],
+            routeGather: {
+                stairRoute: '',
+                secondRoute: ''
+            }
         }
     },
     actions: {
+        setRoute(type, data) {
+            this.routeGather[type] = data;
+        },
         login(form: object, app_type: any) {
             return new Promise((resolve, reject) => {
                 login(form, app_type)
                     .then((res) => {
                         this.token = res.data.token
                         this.userInfo = res.data.userinfo
+                        this.siteInfo = res.data.site_info || {}
                         setToken(res.data.token)
                         storage.set({ key: 'userinfo', data: res.data.userinfo })
-                        storage.set({ key: 'siteId', data: res.data.site_info.site_id })
-                        storage.set({ key: 'siteInfo', data: res.data.site_info })
-                        storage.set({ key: 'comparisonSiteIdStorage', data: res.data.site_info.site_id })
+                        storage.set({ key: 'siteId', data: res.data.site_id || 0 })
+                        storage.set({ key: 'siteInfo', data: res.data.site_info || {} })
+                        storage.set({ key: 'comparisonSiteIdStorage', data: res.data.site_id || 0 })
                         storage.set({ key: 'comparisonTokenStorage', data: res.data.token })
                         storage.set({ key: 'layout', data: (res.data.layout || 'default') })
                         resolve(res)
@@ -54,11 +62,12 @@ const useSystemStore = defineStore('user', {
             this.routers = []
             // 清除tabbar
             useTabbarStore().clearTab()
-            router.push(`/${getAppType()}/login`)
+            const login = getAppType() == 'admin' ? '/admin/login' : '/site/login'
+            router.push(login)
         },
         getAuthMenus() {
             return new Promise((resolve, reject) => {
-                getAuthMenus()
+                getAuthMenus({})
                     .then((res) => {
                         this.routers = formatRouters(res.data)
                         resolve(res)

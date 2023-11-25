@@ -47,6 +47,26 @@ class Addon extends BaseModel
     {
         return AddonDict::getStatus()[$data['status']] ?? '';
     }
+    /**
+     * logo图
+     * @param $value
+     * @param $data
+     * @return string
+     */
+    public function getIconAttr($value, $data)
+    {
+        return addon_resource($data['key'], 'icon.png');
+    }
+    /**
+     * 封面图
+     * @param $value
+     * @param $data
+     * @return string
+     */
+    public function getCoverAttr($value, $data)
+    {
+        return addon_resource($data['key'], 'cover.png');
+    }
 
     /**
      * 插件名称搜索器

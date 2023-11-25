@@ -1,8 +1,8 @@
 <?php
 // +----------------------------------------------------------------------
-// | Niucloud-admin 企业快速开发的saas管理平台
+// | Niucloud-admin 企业快速开发的多应用管理平台
 // +----------------------------------------------------------------------
-// | 官方网址：https://www.niucloud-admin.com
+// | 官方网址：https://www.niucloud.com
 // +----------------------------------------------------------------------
 // | niucloud团队 版权所有 开源版本可自由商用
 // +----------------------------------------------------------------------
@@ -48,15 +48,16 @@ class WebIndexGenerator extends BaseGenerator
             '{EDIT_DIALOG}',
             '{ADD_EVENT}',
             '{EDIT_EVENT}',
-
+            '{API_PATH}',
+            '{DICT_LIST}'
         ];
 
         $new = [
             $this->getSearch(),
             $this->getSearchParams(),
             $this->getTable(),
-            $this->table['table_content'],
-            $this->getUCaseName(),
+            $this->getNotes(),
+            $this->getUCaseClassName(),
             $this->getLCaseName(),
             $this->getUCaseClassName(),
             $this->getLCaseClassName(),
@@ -67,6 +68,9 @@ class WebIndexGenerator extends BaseGenerator
             $this->getEditDialog(),
             $this->getAddEvent(),
             $this->getEditEvent(),
+            $this->getApiPath(),
+//            $this->getDictDataContent(),
+            $this->getDictList(),
         ];
 
         $vmPath = $this->getvmPath('web_index');
@@ -77,6 +81,22 @@ class WebIndexGenerator extends BaseGenerator
     }
 
     /**
+     * 获取注释名称
+     * @return string
+     */
+    public function getNotes()
+    {
+        $end_str = substr($this->table['table_content'],-3);
+        if($end_str == '表')
+        {
+            return substr($this->table['table_content'],0,strlen($this->table['table_content'])-3);
+        }else{
+            return $this->table['table_content'];
+        }
+    }
+
+
+    /**
      * 编辑框路径
      * @return string
      */
@@ -84,11 +104,17 @@ class WebIndexGenerator extends BaseGenerator
     {
         if($this->table['edit_type'] == 2) return "import { useRouter } from 'vue-router'";
         $path = 'components/';
-        $file_name = str_replace('_', '-', Str::lower($this->getTableName())).'-edit.vue';
-        if($this->className){
-            $file_name = Str::lower($this->className) . '-edit.vue';
+//        $file_name = str_replace('_', '-', Str::lower($this->getTableName())).'-edit.vue';
+        $file_name = 'edit.vue';
+//        if($this->className){
+//            $file_name = Str::lower($this->className) . '-edit.vue';
+//        }
+        if(!empty($this->addonName))
+        {
+            return "import "."Edit from '@/".$this->addonName."/views/".$this->moduleName."/".$path.$file_name."'";
+        }else{
+            return "import "."Edit from '@/app/views/".$this->moduleName."/".$path.$file_name."'";
         }
-        return "import ".$this->getUCaseClassName()."Edit from '@/views/".$this->moduleName."/".$path.$file_name."'";
     }
 
     /**
@@ -98,13 +124,8 @@ class WebIndexGenerator extends BaseGenerator
     public function getEditView()
     {
         if($this->table['edit_type'] == 2) return '';
-
-        $file_name = str_replace('_', '-', Str::lower($this->getTableName())).'-edit';
-        if($this->className){
-            $file_name = Str::lower($this->className) . '-edit';
-        }
-
-        return '<'.$file_name.' ref="edit'.$this->getUCaseClassName().'Dialog" @complete="load'.$this->getUCaseName().'List" />';
+        $file_name = 'edit';
+        return '<'.$file_name.' ref="edit'.$this->getUCaseClassName().'Dialog" @complete="load'.$this->getUCaseClassName().'List" />';
     }
 
     /**
@@ -126,7 +147,7 @@ class WebIndexGenerator extends BaseGenerator
         $class_name = $this->className ? '/'.Str::lower($this->className) : '';
         if($this->table['edit_type'] == 2){
             //打开新页面
-            $content = "router.push('/".$this->moduleName.$class_name."/edit')";
+            $content = "router.push('/".$this->moduleName."/edit')";
         }else{
             $content = 'edit'.$this->getUCaseClassName().'Dialog.value.setFormData()'.PHP_EOL.'edit'.$this->getUCaseClassName().'Dialog.value.showDialog = true';
         }
@@ -143,7 +164,7 @@ class WebIndexGenerator extends BaseGenerator
     {
         $class_name = $this->className ? '/'.Str::lower($this->className) : '';
         if($this->table['edit_type'] == 2){
-            $content = "router.push('/".$this->moduleName.$class_name."/edit?id='+data.".$this->getPk().")";
+            $content = "router.push('/".$this->moduleName."/edit?id='+data.".$this->getPk().")";
         }else{
             $content = 'edit'.$this->getUCaseClassName().'Dialog.value.setFormData(data)'.PHP_EOL.'edit'.$this->getUCaseClassName().'Dialog.value.showDialog = true';
         }
@@ -169,17 +190,39 @@ class WebIndexGenerator extends BaseGenerator
                 '{LCASE_CLASS_NAME}',
                 '{LCASE_COLUMN_NAME}',
             ];
-            $new = [
-                $column['column_comment'],
-                $column['column_name'],
-                $column['dict_type'],
-                $this->getLCaseClassName(),
-                Str::camel($column['column_name']),
-            ];
+            if(empty($column['dict_type']))
+            {
+                $new = [
+                    $column['column_comment'],
+                    $column['column_name'],
+                    $column['dict_type'],
+                    $this->getLCaseClassName(),
+                    Str::camel($column['column_name']),
+                ];
+            }else{
+                $new = [
+                    $column['column_comment'],
+                    $column['column_name'],
+                    $column['column_name'].'List',
+                    $this->getLCaseClassName(),
+                    Str::camel($column['column_name']),
+                ];
+            }
+
 
             $searchVmType = $column['view_type'];
             if ($column['view_type'] == 'radio') {
                 $searchVmType = 'select';
+            }
+            if(empty($column['dict_type']))
+            {
+                if ($column['view_type'] == 'radio' || $column['view_type'] == 'select' || $column['view_type'] == 'checkbox' ) {
+                    $searchVmType = 'select2';
+                }
+            }else{
+                if ($column['view_type'] == 'radio') {
+                    $searchVmType = 'select';
+                }
             }
 
             $vmPath = $this->getvmPath('search/' . $searchVmType);
@@ -275,7 +318,7 @@ class WebIndexGenerator extends BaseGenerator
         $content = '';
         $queryDate = false;
         foreach ($this->tableColumn as $column) {
-            if (!$column['is_query'] || $column['is_pk']) {
+            if (!$column['is_pk']) {
                 continue;
             }
             $content .= $column['column_name'] . ": ''," . PHP_EOL;
@@ -311,22 +354,118 @@ class WebIndexGenerator extends BaseGenerator
      */
     public function getRuntimeOutDir()
     {
-        $dir = $this->outDir . 'admin/src/views/' . $this->moduleName . '/';
+        if(!empty($this->addonName))
+        {
+            $dir = $this->outDir . 'addon/'.$this->addonName.'/admin/src/views/' . $this->moduleName . '/';
+
+        }else{
+            $dir = $this->outDir . 'admin/src/views/' . $this->moduleName . '/';
+        }
+
+
         $this->checkDir($dir);
 
         return $dir;
     }
 
+    /**
+     * 获取文件生成到项目中
+     * @return string
+     */
+    public function getObjectOutDir()
+    {
+        if(!empty($this->addonName))
+        {
+            $dir = $this->rootDir . '/admin/src/'.$this->addonName.'/views/'. $this->moduleName . '/';
+        }else{
+            $dir = $this->rootDir . '/admin/src/app/views/' . $this->moduleName . '/';
+        }
 
+        $this->checkDir($dir);
+        return $dir;
+    }
+
+    public function getFilePath()
+    {
+        if(!empty($this->addonName))
+        {
+            $dir = 'addon/'.$this->addonName.'/admin/'.$this->addonName.'/views/' . $this->moduleName . '/';
+
+        }else{
+            $dir = 'admin/app/views/' . $this->moduleName . '/';
+        }
+        return $dir;
+    }
     /**
      * 生成的文件名
      * @return string
      */
     public function getFileName()
     {
-        if($this->className) return Str::lower($this->className).'_list.vue';
+//        if($this->className) return Str::lower($this->className).'_list.vue';
         return 'list.vue';
     }
 
+    /**
+     * 生成的API路径
+     * @return string
+     */
+    public function getApiPath()
+    {
+        if(!empty($this->addonName))
+        {
+            return '/'.$this->addonName.'/api/'.$this->moduleName;
+        }else{
+            return '/app/api/'.$this->moduleName;
+        }
+    }
 
+    public function getDictDataContent()
+    {
+        $content = '';
+        $isExist = [];
+        foreach ($this->tableColumn as $column) {
+            if (empty($column['dict_type']) || $column['is_pk']) {
+                continue;
+            }
+            if (in_array($column['dict_type'], $isExist)) {
+                continue;
+            }
+            $content .= $column['dict_type'] . ': ' . "[]," . PHP_EOL;
+            $isExist[] = $column['dict_type'];
+        }
+        if (!empty($content)) {
+            $content = substr($content, 0, -1);
+        }
+        return $this->setBlankSpace($content, '    ');
+    }
+
+
+    /**
+     * 调用字典方法
+     * @return void
+     */
+    public function getDictList()
+    {
+        $content = '';
+        foreach ($this->tableColumn as $column)
+        {
+            if(empty($column['dict_type']))
+            {
+                continue;
+            }
+            if($column['view_type'] == 'select')
+            {
+                $content.= 'let '.$column['column_name'].'List = ref([])'.PHP_EOL.'const '.$column['column_name'].'DictList = async () => {'.PHP_EOL.$column['column_name'].'List.value = await (await useDictionary(' ."'".$column['dict_type']."'".')).data.dictionary'.PHP_EOL.'}'.PHP_EOL. $column['column_name'].'DictList();'.PHP_EOL;
+
+            }
+        }
+
+        if(!empty($content))
+        {
+            $content = substr($content, 0, -1);
+        }
+
+        return $this->setBlankSpace($content, '    ');
+    }
 }

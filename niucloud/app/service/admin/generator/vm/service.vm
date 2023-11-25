@@ -1,8 +1,8 @@
 <?php
 // +----------------------------------------------------------------------
-// | Niucloud-admin 企业快速开发的saas管理平台
+// | Niucloud-admin 企业快速开发的多应用管理平台
 // +----------------------------------------------------------------------
-// | 官方网址：https://www.niucloud-admin.com
+// | 官方网址：https://www.niucloud.com
 // +----------------------------------------------------------------------
 // | niucloud团队 版权所有 开源版本可自由商用
 // +----------------------------------------------------------------------
@@ -14,10 +14,11 @@
 {USE}
 use core\base\BaseAdminService;
 
+
 /**
  * {NOTES}服务层
  * Class {UCASE_NAME}Service
- * @package app\service\admin{PACKAGE_NAME}
+ * @package {PACKAGE_NAME}
  */
 class {UCASE_NAME}Service extends BaseAdminService
 {
@@ -34,11 +35,10 @@ class {UCASE_NAME}Service extends BaseAdminService
      */
     public function getPage(array $where = [])
     {
-        $where[] = ['site_id', '=', $this->site_id];
         $field = '{FIELDS}';
-        $order = '';
+        $order = '{ORDER}';
 
-        $search_model = $this->model->where([['site_id', '=', $this->site_id]])->withSearch([{SEARCH_FIELDS}], $where)->field($field)->order($order);
+        $search_model = $this->model->withSearch([{SEARCH_FIELDS}], $where)->field($field)->order($order);
         $list = $this->pageQuery($search_model);
         return $list;
     }
@@ -52,7 +52,7 @@ class {UCASE_NAME}Service extends BaseAdminService
     {
         $field = '{FIELDS}';
 
-        $info = $this->model->field($field)->where([['{PK}', '=', $id], ['site_id', '=', $this->site_id]])->findOrEmpty()->toArray();
+        $info = $this->model->field($field)->where([['{PK}', '=', $id]])->findOrEmpty()->toArray();
         return $info;
     }
 
@@ -63,7 +63,6 @@ class {UCASE_NAME}Service extends BaseAdminService
      */
     public function add(array $data)
     {
-        $data['site_id'] = $this->site_id;
         $res = $this->model->create($data);
         return $res->{PK};
 
@@ -78,7 +77,7 @@ class {UCASE_NAME}Service extends BaseAdminService
     public function edit(int $id, array $data)
     {
 
-        $this->model->where([['{PK}', '=', $id], ['site_id', '=', $this->site_id]])->update($data);
+        $this->model->where([['{PK}', '=', $id]])->update($data);
         return true;
     }
 
@@ -89,7 +88,8 @@ class {UCASE_NAME}Service extends BaseAdminService
      */
     public function del(int $id)
     {
-        $res = $this->model->where([['{PK}', '=', $id], ['site_id', '=', $this->site_id]])->delete();
+        $model = $this->model->where([['{PK}', '=', $id]])->find();
+        $res = $model->delete();
         return $res;
     }
 

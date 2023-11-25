@@ -65,7 +65,7 @@ trait AccessToken
      */
     public function refreshAccessToken()
     {
-        $access_token_info = $this->httpGet('auth', ['code' => $this->code, 'secret' => $this->secret, 'token' => $this->createToken(), 'redirect_uri' => $this->getDomain(false)]);
+        $access_token_info = $this->httpGet('auth', ['code' => $this->code, 'secret' => $this->secret, 'token' => $this->createToken(), 'product_key' => self::PRODUCT, 'redirect_uri' => $this->getDomain(false)]);
         if (isset($access_token_info['code']) && $access_token_info['code'] != 1) throw new NiucloudException($access_token_info['msg']);
     }
 

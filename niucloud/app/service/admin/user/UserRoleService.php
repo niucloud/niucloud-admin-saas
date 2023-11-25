@@ -17,6 +17,7 @@ use app\model\sys\SysUserRole;
 use app\service\admin\sys\RoleService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
+use core\exception\CommonException;
 use think\facade\Cache;
 use think\Model;
 
@@ -44,6 +45,9 @@ class UserRoleService extends BaseAdminService
      */
     public function add(int $uid, array $data, int $site_id = 0){
         $user_role_model = new SysUserRole();
+        $is_exist = $user_role_model->where([ ['uid', '=', $uid], ['site_id', '=', $site_id] ])->count();
+        if ($is_exist) throw new CommonException('SITE_USER_EXIST');
+
         $is_admin = $data['is_admin'] ?? 0;
         $role_data = array(
             'uid' => $uid,

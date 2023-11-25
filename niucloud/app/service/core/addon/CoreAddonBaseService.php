@@ -96,6 +96,7 @@ class CoreAddonBaseService extends BaseCoreService
     protected function writeArrayToJsonFile(array $content, string $file_path)
     {
         $content_json = json_encode($content, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        $content_json = preg_replace('/\[\]/', '{}', $content_json);
         $result = @file_put_contents($file_path, $content_json);
         if (!$result) {
             throw new CommonException($file_path . '文件不存在或者权限不足');

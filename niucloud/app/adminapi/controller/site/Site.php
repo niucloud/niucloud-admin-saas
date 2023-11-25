@@ -31,6 +31,7 @@ class Site extends BaseAdminController
             ['group_id', 0],
             ['create_time', []],
             ['expire_time', []],
+            ['app', ''],
         ]);
         return success((new SiteService())->getPage($data));
     }
@@ -54,6 +55,7 @@ class Site extends BaseAdminController
     {
         $data = $this->request->params([
             ['site_name', ''],
+            ['uid', 0],
             ['username', ''],
             ['real_name', ''],
             ['password', ''],
@@ -61,7 +63,7 @@ class Site extends BaseAdminController
             ['expire_time', 0]
         ]);
         $this->validate($data, 'app\validate\site\Site.add');
-        $this->validate($data, 'app\validate\sys\User.add');
+        if (empty($data['uid'])) $this->validate($data, 'app\validate\sys\User.add');
         $site_id = (new SiteService())->add($data);
         return success('ADD_SUCCESS', ['site_id' => $site_id]);
     }
@@ -103,7 +105,6 @@ class Site extends BaseAdminController
     {
         $data = $this->request->params([
             ['site_name', ''],
-            ['group_id', 0],
             ['expire_time', 0]
         ]);
         $this->validate($data, 'app\validate\site\Site.edit');
@@ -127,4 +128,17 @@ class Site extends BaseAdminController
     {
 
     }
+
+    /**
+     * 获取站点拥有的应用
+     * @return Response
+     */
+    public function addons() {
+        $data = $this->request->params([
+            ['title', ''],
+        ]);
+        $data = (new SiteService())->getSiteAddons($data);
+        return success(data:$data);
+    }
+
 }

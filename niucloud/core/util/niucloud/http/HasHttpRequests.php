@@ -82,7 +82,7 @@ trait HasHttpRequests
      * @return ResponseInterface
      * @throws GuzzleException
      */
-    public function toRequest($url, string $method = 'GET', array $options = []): ResponseInterface
+    public function toRequest($url, string $method = 'GET', array $options = [])
     {
         $method = strtoupper($method);
 
@@ -93,9 +93,10 @@ trait HasHttpRequests
         if (property_exists($this, 'baseUri') && !is_null($this->baseUri)) {
             $options['base_uri'] = $this->baseUri;
         }
+        $options['connect_timeout'] = config('niucloud.http.connect_timeout', 3);
         $response = $this->getHttpClient()->request($method, $url, $options);
         $response->getBody()->rewind();
-        return $response;
+        return json_decode($response->getBody()->getContents(), true);
     }
 
     /**

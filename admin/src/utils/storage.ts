@@ -11,12 +11,12 @@ class Storage {
     private prefix = ''
 
     public constructor() {
-        this.prefix = getAppType()
+        this.prefix = getAppType() == 'admin' ? 'admin' : 'site'
     }
 
     /**
      * 设置缓存
-     * @param param 
+     * @param param
      */
     public set(param: setParam) {
         try {
@@ -29,8 +29,8 @@ class Storage {
 
     /**
      * 获取缓存
-     * @param key 
-     * @returns 
+     * @param key
+     * @returns
      */
     public get(key: string) {
         try {
@@ -43,7 +43,7 @@ class Storage {
 
     /**
      * 移除指定缓存
-     * @param key 
+     * @param key
      */
     public remove(key: string | string[]) {
         if (typeof key == 'string') window.localStorage.removeItem(`${this.prefix}.${key}`)

@@ -441,14 +441,14 @@ class DiyService extends BaseAdminService
                 if (!empty($page_data)) {
                     if ($info[ 'is_change' ] == 1) {
                         // 修改过模板，预览实际内容
-                        $use_template[ 'url' ] = '/' . $v[ 'page' ] . '?id=' . $info[ 'id' ];
+                        $use_template[ 'url' ] = $v[ 'page' ] . '?id=' . $info[ 'id' ];
                     } else {
                         $use_template[ 'cover' ] = $page_data[ 'cover' ]; // 默认图
                         $use_template[ 'desc' ] = $page_data[ 'desc' ];
                     }
                 } else {
                     // 自定义页面，实时预览效果
-                    $use_template[ 'url' ] = '/pages/index/diy?id=' . $info[ 'id' ];
+                    $use_template[ 'url' ] = '/app/pages/index/diy?id=' . $info[ 'id' ];
                     // 清空模板信息
                     $use_template[ 'cover' ] = ''; // 默认图
                     $use_template[ 'template' ] = '';

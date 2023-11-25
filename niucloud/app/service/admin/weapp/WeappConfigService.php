@@ -55,6 +55,7 @@ class WeappConfigService extends BaseAdminService
             'socket_url'   => "wss://".request()->host(),
             'upload_url'  => $domain,
             'download_url'   => $domain,
+            'upload_ip' => '8.140.96.55'
         ];
     }
 }

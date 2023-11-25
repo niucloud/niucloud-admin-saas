@@ -7,10 +7,12 @@ import useUserStore from '@/stores/modules/user'
 import storage from '@/utils/storage'
 
 interface RequestConfig extends AxiosRequestConfig {
+    showErrorMessage?: boolean
     showSuccessMessage?: boolean
 }
 
 interface InternalRequestConfig extends InternalAxiosRequestConfig {
+    showErrorMessage?: boolean
     showSuccessMessage?: boolean
 }
 
@@ -53,7 +55,7 @@ class Request {
 					const res = response.data
 					if (res.code != 1) {
 					    this.handleAuthError(res.code)
-					    if (res.code != 401) ElMessage({ message: res.msg, type: 'error' })
+					    if (res.code != 401 && response.config.showErrorMessage !== false) ElMessage({ message: res.msg, type: 'error' })
 					    return Promise.reject(new Error(res.msg || 'Error'))
 					} else {
 					    if (response.config.showSuccessMessage) ElMessage({ message: res.msg, type: 'success' })
@@ -71,9 +73,9 @@ class Request {
 
     /**
      * 发送get请求
-     * @param url 
-     * @param config 
-     * @returns 
+     * @param url
+     * @param config
+     * @returns
      */
     public get<T = any, R = AxiosResponse<T>>(url: string, config?: RequestConfig): Promise<R> {
         return this.instance.get(url, config)
@@ -81,9 +83,9 @@ class Request {
 
     /**
      * 发送get请求
-     * @param url 
-     * @param config 
-     * @returns 
+     * @param url
+     * @param config
+     * @returns
      */
     public post<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: RequestConfig): Promise<R> {
         return this.instance.post(url, data, config)
@@ -91,9 +93,9 @@ class Request {
 
     /**
      * 发送get请求
-     * @param url 
-     * @param config 
-     * @returns 
+     * @param url
+     * @param config
+     * @returns
      */
     public put<T = any, R = AxiosResponse<T>, D = any>(url: string, data?: D, config?: RequestConfig): Promise<R> {
         return this.instance.put(url, data, config)
@@ -101,9 +103,9 @@ class Request {
 
     /**
      * 发送get请求
-     * @param url 
-     * @param config 
-     * @returns 
+     * @param url
+     * @param config
+     * @returns
      */
     public delete<T = any, R = AxiosResponse<T>>(url: string, config?: RequestConfig): Promise<R> {
         return this.instance.delete(url, config)
@@ -111,7 +113,7 @@ class Request {
 
     /**
      * 处理网络请求错误
-     * @param err 
+     * @param err
      */
     private handleNetworkError(err: any) {
         let errMessage = ''
@@ -129,8 +131,8 @@ class Request {
                     errMessage = t('axios.403')
                     break
                 case 404:
-                    const baseURL = isUrl(err.response.config.baseURL) ? err.response.config.baseURL : location.origin
-                    errMessage = baseURL + t('axios.404')
+                    const baseURL = isUrl(err.response.config.baseURL) ? err.response.config.baseURL : `${location.origin}${err.response.config.baseURL}`
+                    errMessage = baseURL + t('axios.baseUrlError')
                     break
                 case 405:
                     errMessage = t('axios.405')
@@ -162,7 +164,10 @@ class Request {
             }
         }
         err.message.includes('timeout') && (errMessage = t('axios.timeout'))
-        err.code == 'ERR_NETWORK' && (errMessage = err.config.baseURL + t('axios.errNetwork'))
+        if (err.code == 'ERR_NETWORK') {
+            const baseURL = isUrl(err.config.baseURL) ? err.config.baseURL : `${location.origin}${err.config.baseURL}`
+            errMessage = baseURL + t('axios.baseUrlError')
+        }
         errMessage && ElMessage({ message: errMessage, type: 'error' })
     }
 

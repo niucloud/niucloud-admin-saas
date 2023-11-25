@@ -42,6 +42,8 @@
   "cityPlaceholder": "请选择市",
   "districtPlaceholder": "请选择区/县",
   "emptyData": "暂无数据",
+  "emptyQrCode": "暂无二维码",
+  "fileErr": "无法显示",
   "upload": {
     "root": "上传",
     "selectimage": "选择图片",
@@ -96,7 +98,8 @@
     "505": "http版本不支持该请求",
     "timeout": "网络请求超时！",
     "requestError": "请求错误",
-    "errNetwork": "网络请求错误"
+    "errNetwork": "网络请求错误",
+    "baseUrlError": " 接口请求错误,请检查VITE_APP_BASE_URL参数配置或者伪静态配置"
   },
   "linkPlaceholder": "请选择跳转链接",
   "selectLinkTips": "链接选择",
@@ -114,5 +117,14 @@
   "mapKey": "腾讯地图KEY",
   "indexTemplate": "首页模版",
   "indexSwitch": "切换首页",
-  "indexWarning": "你确定要切换首页吗？"
+  "indexWarning": "你确定要切换首页吗？",
+  "originalPassword": "原始密码",
+  "newPassword": "新密码",
+  "passwordCopy": "确认密码",
+  "passwordTip": "修改密码时必填.不修改密码时留空",
+  "originalPasswordPlaceholder": "请输入原始密码",
+  "passwordPlaceholder": "请输入新密码",
+  "originalPasswordHint": "原始密码不能为空",
+  "newPasswordHint": "请输入确认密码",
+  "doubleCipherHint": "两次新密码不同"
 }

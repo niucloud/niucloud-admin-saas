@@ -12,6 +12,7 @@
 namespace app\model\site;
 
 use app\dict\site\SiteDict;
+use app\model\addon\Addon;
 use core\base\BaseModel;
 use think\db\Query;
 use think\model\relation\HasOne;
@@ -39,6 +40,7 @@ class Site extends BaseModel
      */
     protected $name = 'site';
 
+    protected $json = ['addons'];
 
     /**
      * 状态字段转化
@@ -63,6 +65,19 @@ class Site extends BaseModel
     {
         if ($value) {
             $query->where('site_name|keywords', 'like', '%' . $value . '%');
+        }
+    }
+
+    /**
+     * 关键字搜索
+     * @param $query
+     * @param $value
+     * @param $data
+     */
+    public function searchAppAttr($query, $value, $data)
+    {
+        if ($value) {
+            $query->where('app', '=', $value);
         }
     }
 
@@ -101,6 +116,9 @@ class Site extends BaseModel
         return $this->hasOne(SiteGroup::class, 'group_id', 'group_id')->joinType('left')->withField('group_id, group_name')->bind(['group_name' => 'group_name']);
     }
 
+    public function addon() {
+        return $this->hasOne(Addon::class, 'key', 'app')->bind(['app_name' => 'title']);
+    }
 
     /**
      * 创建时间搜索器

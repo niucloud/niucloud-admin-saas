@@ -1,1 +1,0 @@
-const a="文章列表",e="~ 暂无数据 ~",l="全部",t="-- 到底了 --",o="请输入搜索关键词",s={list:"文章列表",noData:"~ 暂无数据 ~",all:"全部",end:"-- 到底了 --",searchPlaceholder:"请输入搜索关键词"};export{l as all,s as default,t as end,a as list,e as noData,o as searchPlaceholder};

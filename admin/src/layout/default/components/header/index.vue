@@ -4,10 +4,10 @@
             <el-col :span="12">
                 <div class="left-panel h-full flex items-center">
                     <!-- 左侧菜单折叠 -->
-                    <div class="navbar-item flex items-center h-full cursor-pointer" @click="toggleMenuCollapse">
+                    <!-- <div class="navbar-item flex items-center h-full cursor-pointer" @click="toggleMenuCollapse">
                         <icon name="element-Expand" v-if="systemStore.menuIsCollapse" />
                         <icon name="element-Fold" v-else />
-                    </div>
+                    </div> -->
                     <!-- 刷新当前页 -->
                     <div class="navbar-item flex items-center h-full cursor-pointer" @click="refreshRouter">
                         <icon name="element-Refresh" />
@@ -23,7 +23,6 @@
             <el-col :span="12">
                 <div class="right-panel h-full flex items-center justify-end">
                     <!-- 预览 只有站点时展示-->
-					
                     <i class="iconfont iconlingdang-xianxing cursor-pointer px-[8px]" :title="t('newInfo')" v-if="appType == 'site'"></i>
 					<!-- 切换首页 -->
 					<div class="navbar-item flex items-center h-full cursor-pointer"  v-if="appType == 'site'" @click="checkIndexList">
@@ -60,7 +59,7 @@
                 </span>
             </template>
         </el-dialog>
-		
+
 		<el-dialog v-model="showDialog" :title="t('indexTemplate')" width="550px" :destroy-on-close="true" >
 			<div class="flex flex-wrap">
 				<div v-for="(items, index) in indexList" :key="index" v-if="index_path == ''">
@@ -94,7 +93,7 @@ import useAppStore from '@/stores/modules/app'
 import { useRoute, useRouter } from 'vue-router'
 import { t } from '@/lang'
 import storage from '@/utils/storage'
-import { getIndexList, setIndexList } from '@/api/sys'
+import { getIndexList, setIndexList } from '@/app/api/sys'
 
 const router = useRouter()
 const appType = storage.get('app_type')
@@ -142,25 +141,25 @@ onMounted(() => {
     }
 })
 
-watch(screenWidth, () => {
-    if (screenWidth.value < 992) {
-        if (!systemStore.menuIsCollapse) systemStore.toggleMenuCollapse(true)
-    } else {
-        if (systemStore.menuIsCollapse) systemStore.toggleMenuCollapse(false)
-    }
-})
+// watch(screenWidth, () => {
+//     if (screenWidth.value < 992) {
+//         if (!systemStore.menuIsCollapse) systemStore.toggleMenuCollapse(true)
+//     } else {
+//         if (systemStore.menuIsCollapse) systemStore.toggleMenuCollapse(false)
+//     }
+// })
 
-// 菜单栏展开折叠
-const toggleMenuCollapse = () => {
-    systemStore.$patch((state) => {
-        if (screenWidth.value < 768) {
-            state.menuDrawer = true
-            state.menuIsCollapse = false
-        } else {
-            systemStore.toggleMenuCollapse(!systemStore.menuIsCollapse)
-        }
-    })
-}
+// // 菜单栏展开折叠
+// const toggleMenuCollapse = () => {
+//     systemStore.$patch((state) => {
+//         if (screenWidth.value < 768) {
+//             state.menuDrawer = true
+//             state.menuIsCollapse = false
+//         } else {
+//             systemStore.toggleMenuCollapse(!systemStore.menuIsCollapse)
+//         }
+//     })
+// }
 
 // 刷新路由
 const refreshRouter = () => {

@@ -39,5 +39,22 @@ class User extends BaseAdminController
         return success((new UserService())->getUserAdminInfo($uid));
     }
 
+    public function pages()
+    {
+        $data = $this->request->params([
+            ['username', ''],
+            ['realname', ''],
+            ['create_time', []],
+        ]);
+        $list = (new UserService())->getUserAllPage($data);
+        return success($list);
+    }
 
+    public function checkUserIsExist() {
+        $data = $this->request->params([
+            ['username', ''],
+        ]);
+        $is_exist = (new UserService())->checkUsername($data['username']);
+        return success(data:$is_exist);
+    }
 }

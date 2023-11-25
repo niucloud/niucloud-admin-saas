@@ -16,7 +16,9 @@ use app\dict\sys\AppTypeDict;
 use app\dict\sys\MenuTypeDict;
 use app\model\site\Site;
 use app\model\sys\SysMenu;
+use app\service\admin\addon\AddonService;
 use app\service\admin\site\SiteService;
+use app\service\core\addon\CoreAddonService;
 use core\base\BaseAdminService;
 use think\Collection;
 use think\db\exception\DataNotFoundException;
@@ -44,24 +46,6 @@ class AuthSiteService extends BaseAdminService
         return (new SiteService())->getSiteCache($this->site_id);
     }
 
-    /**
-     * 获取授权用户旗下的站点列表
-     */
-    public function getSiteList(){
-        //通过用户id获取
-        $cache_name = 'site_list'.'_'.$this->uid;
-        return cache_remember(
-            $cache_name,
-            function (){
-                $auth_service = new AuthService();
-                $user_role_list = $auth_service->getAuthSiteRoleList();
-                $site_ids = array_column($user_role_list, 'site_id');
-                return $this->model->where([['site_id', 'in', $site_ids]])->field('app_type,site_name,logo')->column('site_id, site_name, logo, app_type');
-            },
-            SiteService::$cache_tag_name
-        );
-
-    }
 
     /**
      * 通过站点id获取菜单列表
@@ -69,8 +53,8 @@ class AuthSiteService extends BaseAdminService
      * @param int|string $status
      * @return mixed
      */
-    public function getMenuList(int $is_tree, int|string $status){
-        return (new SiteService())->getMenuList($this->site_id, $is_tree, $status);
+    public function getMenuList(int $is_tree, int|string $status, $addon = 'all'){
+        return (new SiteService())->getMenuList($this->site_id, $is_tree, $status, $addon);
     }
 
     /**
@@ -92,5 +76,16 @@ class AuthSiteService extends BaseAdminService
     public function getShowMenuList(){
         $menu_keys = (new SiteService())->getMenuIdsBySiteId($this->site_id, 1);
         return (new SysMenu())->where([['menu_key', 'in', $menu_keys], ['menu_type', '=', MenuTypeDict::MENU], ['app_type', '=', AppTypeDict::SITE],['is_show', '=', 1]])->select()->toArray();
+    }
+
+    /**
+     * 获取站点支持
+     * @return array|mixed|string|null
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
+     */
+    public function getAuthAddonList(){
+        return (new AddonService())->getAddonListBySiteId($this->site_id);
     }
 }

@@ -1,8 +1,8 @@
 <?php
 // +----------------------------------------------------------------------
-// | Niucloud-admin 企业快速开发的saas管理平台
+// | Niucloud-admin 企业快速开发的多应用管理平台
 // +----------------------------------------------------------------------
-// | 官方网址：https://www.niucloud-admin.com
+// | 官方网址：https://www.niucloud.com
 // +----------------------------------------------------------------------
 // | niucloud团队 版权所有 开源版本可自由商用
 // +----------------------------------------------------------------------
@@ -16,7 +16,7 @@
 /**
  * {CLASS_COMMENT}
  * Class {UCASE_CLASS_NAME}
- * @package app\adminapi\controller{PACKAGE_NAME}
+ * @package {PACKAGE_NAME}
  */
 class {UCASE_CLASS_NAME} extends BaseAdminController
 {

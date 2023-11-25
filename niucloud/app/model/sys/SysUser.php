@@ -11,6 +11,7 @@
 
 namespace app\model\sys;
 
+use app\dict\sys\RoleStatusDict;
 use app\dict\sys\UserDict;
 use core\base\BaseModel;
 use think\model\concern\SoftDelete;
@@ -66,17 +67,6 @@ class SysUser extends BaseModel
         return $this->hasMany(SysUserRole::class, 'uid', 'uid');
     }
 
-    /**
-     * 状态字段转化
-     * @param $value
-     * @param $data
-     * @return mixed
-     */
-    public function getStatusNameAttr($value, $data)
-    {
-        if (empty($data['status'])) return '';
-        return UserDict::getStatus()[$data['status']] ?? '';
-    }
 
     public function getCreateTimeAttr($value, $data)
     {
@@ -110,6 +100,18 @@ class SysUser extends BaseModel
     }
 
     /**
+     * 角色状态
+     * @param $value
+     * @param $data
+     * @return string
+     */
+    public function getStatusNameAttr($value, $data)
+    {
+        if (empty($data['status'])) return '';
+        return RoleStatusDict::getStatus()[$data['status']] ?? '';
+    }
+
+    /**
      * 是否删除搜索器
      * @param $query
      */
@@ -117,17 +119,6 @@ class SysUser extends BaseModel
     {
         $query->where('is_del', 0);
     }
-
-    /**
-     * 状态搜索器
-     * @param $query
-     * @param $value
-     */
-    public function searchStatusAttr($query, $value)
-    {
-        $query->where('status', $value);
-    }
-
 
     /**
      * 创建时间搜索器

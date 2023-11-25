@@ -24,7 +24,7 @@ const toggleDark = useToggle(useDark())
 
 watch(route, () => {
     useAppStore().$patch(state => {
-        state.route = route.meta.view || route.path
+        state.route = route
     })
 }, { immediate: true })
 

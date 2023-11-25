@@ -22,13 +22,15 @@ Route::group('auth', function () {
     /***************************************************** 授权信息 ****************************************************/
     Route::put('logout', 'login.Login/logout');
     /***************************************************** 授权信息 ****************************************************/
-    //授权用户菜单
+    //授权用户站点菜单
     Route::get('authmenu', 'auth.Auth/authMenuList');
-    //授权用户菜单
+    //授权用户站点应用
+    Route::get('authaddon', 'auth.Auth/getAuthAddonList');
+    //授权用户信息
     Route::get('get', 'auth.Auth/get');
-    //授权用户菜单
+    //授权用户信息
     Route::put('modify/:field', 'auth.Auth/modify');
-    //授权用户菜单
+    //授权用户信息
     Route::put('edit', 'auth.Auth/edit');
     //授权站点信息
     Route::get('site', 'auth.Auth/site');

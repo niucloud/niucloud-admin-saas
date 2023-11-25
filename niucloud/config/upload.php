@@ -39,7 +39,7 @@ return [
             'size' => 2097152
         ],
         'wechat' => [
-            'ext' => ['pem'],
+            'ext' => ['pem', 'key'],
             'mime' => [
                 'application/x-x509-ca-cert',
                 'application/octet-stream'

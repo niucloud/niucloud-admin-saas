@@ -58,4 +58,19 @@ class AddonDict
             self::OFF => get_lang('dict_addon.status_off'),//隐藏
         ];
     }
+
+    const APP = 'app';
+    const ADDON = 'addon';
+
+    /**
+     * 插件类型
+     * @return array
+     */
+    public static function getType()
+    {
+        return [
+            self::APP => get_lang('dict_addon.type_app'),//应用
+            self::ADDON => get_lang('dict_addon.type_addon'),//插件
+        ];
+    }
 }

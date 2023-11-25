@@ -1,0 +1,204 @@
+{
+	"pages": [ // pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "app/pages/index/index",
+			"style": {
+				"navigationBarTitleText": "%pages.index.index%",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "app/pages/auth/agreement",
+			"style": {
+				"navigationBarTitleText": "%pages.auth.agreement%"
+			}
+		},
+		{
+			"path": "app/pages/auth/bind",
+			"style": {
+				"navigationBarTitleText": "%pages.auth.bind%"
+			}
+		},
+		{
+			"path": "app/pages/auth/login",
+			"style": {
+				"navigationBarTitleText": "%pages.auth.login%"
+			}
+		},
+		{
+			"path": "app/pages/auth/register",
+			"style": {
+				"navigationBarTitleText": "%pages.auth.register%"
+			}
+		},
+		{
+			"path": "app/pages/auth/resetpwd",
+			"style": {
+				"navigationBarTitleText": "%pages.auth.resetpwd%"
+			}
+		},
+		{
+			"path": "app/pages/index/diy",
+			"style": {
+				"navigationBarTitleText": "%pages.index.diy%",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "app/pages/index/close",
+			"style": {
+				"navigationBarTitleText": "%pages.index.close%"
+			}
+		},
+		{
+			"path": "app/pages/index/nosite",
+			"style": {
+				"navigationBarTitleText": "%pages.index.nosite%"
+			}
+		},
+		{
+			"path": "app/pages/member/apply_cash_out",
+			"style": {
+				"navigationBarTitleText": "%pages.member.apply_cash_out%"
+			},
+			"needLogin": true
+		},
+		{
+			"path": "app/pages/member/commission",
+			"style": {
+				"navigationBarTitleText": "%pages.member.commission%"
+			},
+			"needLogin": true
+		},
+		{
+			"path": "app/pages/member/balance",
+			"style": {
+				"navigationBarTitleText": "%pages.member.balance%"
+			},
+			"needLogin": true
+		},
+		{
+			"path": "app/pages/member/recharge_record",
+			"style": {
+				"navigationBarTitleText": "%pages.member.recharge_record%"
+			},
+			"needLogin": true
+		},
+		{
+			"path": "app/pages/member/recharge_record_detail",
+			"style": {
+				"navigationBarTitleText": "%pages.member.recharge_record_detail%"
+			},
+			"needLogin": true
+		},
+		{
+			"path": "app/pages/member/detailed_account",
+			"style": {
+				"navigationBarTitleText": "%pages.member.detailed_account%"
+			}
+		},
+		{
+			"path": "app/pages/member/cash_out",
+			"style": {
+				"navigationBarTitleText": "%pages.member.cash_out%"
+			}
+		},
+		{
+			"path": "app/pages/member/cash_out_detail",
+			"style": {
+				"navigationBarTitleText": "%pages.member.cash_out_detail%"
+			}
+		},
+		{
+			"path": "app/pages/member/index",
+			"style": {
+				"navigationBarTitleText": "%pages.member.index%",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "app/pages/member/personal",
+			"style": {
+				"navigationBarTitleText": "%pages.member.personal%"
+			},
+			"needLogin": true
+		},
+		{
+			"path": "app/pages/member/point",
+			"style": {
+				"navigationBarTitleText": "%pages.member.point%"
+			},
+			"needLogin": true
+		},
+		{
+			"path": "app/pages/member/account",
+			"style": {
+				"navigationBarTitleText": "%pages.member.account%"
+			},
+			"needLogin": true
+		},
+		{
+			"path": "app/pages/member/account_edit",
+			"style": {
+				"navigationBarTitleText": "%pages.member.account_edit%"
+			},
+			"needLogin": true
+		},
+		{
+			"path": "app/pages/pay/browser",
+			"style": {
+				"navigationBarTitleText": "%pages.pay.browser%"
+			}
+		},
+		{
+			"path": "app/pages/pay/result",
+			"style": {
+				"navigationBarTitleText": "%pages.pay.result%"
+			}
+		},
+		{
+			"path": "app/pages/setting/index",
+			"style": {
+				"navigationBarTitleText": "%pages.setting.index%"
+			},
+			"needLogin": true
+		},
+		{
+			"path": "app/pages/webview/index",
+			"style": {
+				"navigationBarTitleText": "%pages.webview.index%"
+			}
+		},
+		{
+			"path": "app/pages/index/develop",
+			"style": {
+				"navigationBarTitleText": "%pages.index.develop%"
+			}
+		} // {{PAGE}}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "",
+		"navigationBarBackgroundColor": "#ffffff",
+		"backgroundColor": "#F8F8F8",
+		"backgroundColorTop": "#F8F8F8",
+		"backgroundColorBottom": "#F8F8F8"
+	},
+	"tabBar": {
+		"list": [{
+				"pagePath": "app/pages/index/index"
+			},
+			{
+				"pagePath": "app/pages/member/index"
+			}
+		]
+	},
+	"uniIdRouter": {},
+	"easycom": {
+		"custom": {
+			"^u-(.*)": "uview-plus/components/u-$1/u-$1.vue",
+			"diy-(\W.*)": "@/app/components/diy/$1/index.vue",
+			"fixed-(\W.*)": "@/app/components/fixed/$1/index.vue"
+		}
+	}
+}

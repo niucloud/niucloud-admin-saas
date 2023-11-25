@@ -12,12 +12,20 @@
 namespace app\service\admin\addon;
 
 
+use app\dict\addon\AddonDict;
+use app\dict\sys\AppTypeDict;
+use app\model\addon\Addon;
+use app\service\admin\site\SiteGroupService;
+use app\service\admin\site\SiteService;
+use app\service\core\addon\CoreAddonCloudService;
 use app\service\core\addon\CoreAddonDownloadService;
 use app\service\core\addon\CoreAddonInstallService;
 use app\service\core\addon\CoreAddonService;
 use app\service\core\niucloud\CoreModuleService;
+use app\service\core\site\CoreSiteService;
 use core\base\BaseAdminService;
 use Exception;
+use think\db\exception\DbException;
 use think\Response;
 
 
@@ -26,9 +34,11 @@ use think\Response;
  */
 class AddonService extends BaseAdminService
 {
+    public static $cache_tag_name = 'addon_cache';
     public function __construct()
     {
         parent::__construct();
+        $this->model = new Addon();
 
     }
     public function getList(){
@@ -51,26 +61,36 @@ class AddonService extends BaseAdminService
      */
     public function install(string $addon)
     {
-        try {
-            $data = (new CoreAddonInstallService($addon))->install();
-            return success('SUCCESS', $data);
-        } catch ( Exception $e) {
-            return fail($e->getMessage());
-        }
+        return ( new CoreAddonInstallService($addon) )->install();
     }
 
     /**
-     * 执行安装
+     * 云安装插件
      * @param string $addon
      * @return Response
      */
-    public function executeInstall(string $addon) {
-        try {
-            $data = (new CoreAddonInstallService($addon))->executeInstall();
-            return success('SUCCESS', $data);
-        } catch ( Exception $e) {
-            return fail($e->getMessage());
-        }
+    public function cloudInstall(string $addon)
+    {
+        return ( new CoreAddonInstallService($addon) )->install('cloud');
+    }
+
+    /**
+     * 云安装日志
+     * @param string $addon
+     * @return null
+     */
+    public function cloudInstallLog(string $addon)
+    {
+        return ( new CoreAddonCloudService() )->getBuildLog($addon);
+    }
+
+    /**
+     * 获取安装任务
+     * @return mixed
+     */
+    public function getInstallTask()
+    {
+        return ( new CoreAddonInstallService('') )->getInstallTask();
     }
 
     /**
@@ -78,20 +98,27 @@ class AddonService extends BaseAdminService
      * @param string $addon
      * @return Response
      */
-    public function installCheck(string $addon) {
-        $data = (new CoreAddonInstallService($addon))->installCheck();
-        return success('SUCCESS', $data);
+    public function installCheck(string $addon)
+    {
+        return ( new CoreAddonInstallService($addon) )->installCheck();
     }
 
     /**
-     * 获取插件安装状态
+     * 取消安装任务
      * @param string $addon
-     * @param string $key
-     * @return mixed
+     * @return Response
      */
-    public function getInstallState(string $addon, string $key)
+    public function cancleInstall(string $addon)
     {
-        return CoreAddonInstallService::instance($addon)->getInstallState($key);
+        return ( new CoreAddonInstallService($addon) )->cancleInstall();
+    }
+
+    /**
+     * @param string $addon
+     * @return void
+     */
+    public function uninstallCheck(string $addon) {
+        return ( new CoreAddonInstallService($addon) )->uninstallCheck();
     }
 
     /**
@@ -148,8 +175,64 @@ class AddonService extends BaseAdminService
      * @param string $app_key
      * @return null
      */
-    public function update(string $app_key){
-        return (new CoreAddonDownloadService())->update($app_key);
+    public function upgrade(string $app_key){
+        return (new CoreAddonDownloadService())->upgrade($app_key);
     }
 
+    /**
+     * 查询已安装应用
+     * @return array
+     */
+    public function getInstallList(){
+        return (new CoreAddonService())->getInstallAddonList();
+    }
+
+
+    /**
+     * 获取站点拥有的应用列表
+     * @param int $site_id
+     * @return array|mixed|string|void
+     * @throws DbException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function getAddonListBySiteId(int $site_id){
+        $addon_keys = $this->getAddonKeysBySiteId($site_id);
+        return $this->getAddonListByKeys($addon_keys);
+
+
+    }
+    /**
+     * 应用key缓存
+     * @param $keys
+     * @return mixed|string
+     * @throws DbException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function getAddonListByKeys($keys){
+        sort($keys);
+        $cache_name = 'addon_list'.implode('_', $keys);
+        return cache_remember(
+            $cache_name,
+            function () use ($keys) {
+                $where = [
+                    ['key', 'in', $keys],
+                    ['status', '=', AddonDict::ON]
+                ];
+                return $this->model->where($where)->field('title, icon, key, desc, status, cover')->select()->toArray();
+
+            },
+            self::$cache_tag_name
+        );
+    }
+
+    /**
+     * 获取站点支持的应用插件
+     * @param int $site_id
+     * @return array
+     */
+    public function getAddonKeysBySiteId(int $site_id){
+        return (new CoreSiteService())->getAddonKeysBySiteId($site_id);
+    }
 }

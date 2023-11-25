@@ -25,7 +25,7 @@ class Site extends Validate
     protected $rule = [
         'site_name' => 'require|max:20',
         'group_id' => 'require|number',
-        'expire_time' => 'date',
+        'expire_time' => 'date'
     ];
 
     protected $message = [

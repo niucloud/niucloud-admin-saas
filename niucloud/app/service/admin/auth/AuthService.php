@@ -104,7 +104,7 @@ class AuthService extends BaseAdminService
         $menu_service = new MenuService();
         if($is_admin){//查询全部启用的权限
             //获取站点信息
-            return  (new AuthSiteService())->getApiList(1);
+            return (new AuthSiteService())->getApiList(1);
         }else{
             $user_role_ids = $user_role_info['role_ids'];
             $role_service = new RoleService();
@@ -119,20 +119,19 @@ class AuthService extends BaseAdminService
      * 当前授权用户菜单权限
      * @return array
      */
-    public function getAuthMenuList(int $is_tree = 0){
+    public function getAuthMenuList(int $is_tree = 0, $addon = 'all'){
         $user_role_info = $this->getAuthRole($this->site_id);
         if(empty($user_role_info))
             return [];
         $is_admin = $user_role_info['is_admin'];//是否是超级管理员组
         $menu_service = new MenuService();
         if($is_admin){//查询全部启用的权限
-            return (new AuthSiteService())->getMenuList($is_tree, 1);
-//            return $menu_service->getAllMenuList($this->app_type, 1, $is_tree, 1);
+            return (new AuthSiteService())->getMenuList($is_tree, 1, $addon);
         }else{
             $user_role_ids = $user_role_info['role_ids'];
             $role_service = new RoleService();
             $menu_keys = $role_service->getMenuIdsByRoleIds($this->site_id, $user_role_ids);
-            return $menu_service->getMenuListByMenuKeys($menu_keys, $this->app_type, $is_tree);
+            return $menu_service->getMenuListByMenuKeys($this->site_id, $menu_keys, $this->app_type, $is_tree, $addon);
         }
     }
 
@@ -168,5 +167,7 @@ class AuthService extends BaseAdminService
         }
         return (new UserService())->edit($this->uid, $data);
     }
+
+
 
 }

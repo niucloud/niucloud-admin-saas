@@ -2,6 +2,7 @@
 
 namespace core\pay;
 
+use core\exception\PayException;
 use core\loader\Storage;
 use Psr\Http\Message\MessageInterface;
 use Yansongda\Supports\Collection;
@@ -158,12 +159,16 @@ abstract class BasePay extends Storage
     public function returnFormat($param)
     {
         if ($param instanceof MessageInterface) {
-            return $param->getBody()->getContents();
+            $return_value =  $param->getBody()->getContents();
         } else if ($param instanceof Collection) {
-            return $param->all();
+            $return_value = $param->all();
         } else {
-            return $param;
+            $return_value = $param;
         }
+        if(isset($return_value['code'])){
+            throw new PayException($return_value['message']);
+        }
+        return $return_value;
     }
 
     /**

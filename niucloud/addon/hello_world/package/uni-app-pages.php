@@ -3,21 +3,21 @@ return [
     'pages' => <<<EOT
         // PAGE_BEGIN
         {
-            "path": "pages/hello_world/index",
+            "path": "{{addon_name}}/pages/index",
             "style": {
                 // #ifdef H5
                 "navigationStyle": "custom",
                 // #endif
-                "navigationBarTitleText": "%pages.hello_world.index%"
+                "navigationBarTitleText": "%{{addon_name}}.pages.index%"
             }
         },
         {
-            "path": "pages/hello_world/info",
+            "path": "{{addon_name}}/pages/info",
             "style": {
                 // #ifdef H5
                 "navigationStyle": "custom",
                 // #endif
-                "navigationBarTitleText": "%pages.hello_world.info%"
+                "navigationBarTitleText": "%{{addon_name}}.pages.info%"
             }
         }
         // PAGE_END

@@ -1,8 +1,8 @@
 <?php
 // +----------------------------------------------------------------------
-// | Niucloud-admin 企业快速开发的saas管理平台
+// | Niucloud-admin 企业快速开发的多应用管理平台
 // +----------------------------------------------------------------------
-// | 官方网址：https://www.niucloud-admin.com
+// | 官方网址：https://www.niucloud.com
 // +----------------------------------------------------------------------
 // | niucloud团队 版权所有 开源版本可自由商用
 // +----------------------------------------------------------------------
@@ -44,7 +44,7 @@ class ComponentDict
                             "textColor" => "#303133",
                             "fontSize" => 16,
                             "fontWeight" => "normal",
-                            "textAlign" => "left",
+                            "textAlign" => "center",
                             "subTitle" => [
                                 "text" => "副标题",
                                 "color" => "#999999",
@@ -94,6 +94,11 @@ class ComponentDict
                         'value' => [
                             "layout" => "horizontal",
                             "navTitle" => "",
+                            "subNavTitle" => "",
+                            "subNavTitleLink" => [
+                                "name" => ""
+                            ],
+                            "subNavColor" => "#999999",
                             "mode" => "graphic",
                             "type" => "img",
                             "showStyle" => "fixed",
@@ -225,19 +230,6 @@ class ComponentDict
                             "heatMapData" => []
                         ],
                     ],
-                    'Article' => [
-                        'title' => '文章',
-                        'icon' => 'iconfont-iconwenzhang',
-                        'path' => 'edit-article',
-                        'support_page' => [],
-                        'uses' => 0,
-                        'sort' => 10007,
-                        'value' => [
-                            'sources' => 'initial',
-                            'count' => 8,
-                            'articleIds' => []
-                        ],
-                    ],
                     'MemberInfo' => [
                         'title' => '会员信息',
                         'icon' => 'iconfont-iconhuiyuanzhongxin',
@@ -253,6 +245,37 @@ class ComponentDict
                             'bgColorEnd' => ''
                         ],
                     ],
+                    'AddonList' => [
+                        'title' => '应用',
+                        'icon' => 'iconfont-iconyingyong1',
+                        'path' => 'edit-addon-list',
+                        'support_page' => [],
+                        'uses' => 0,
+                        'sort' => 10009,
+                        'value' => [
+                            'list' => []
+                        ],
+                    ],
+                    'Notice' => [
+                        'title' => '公告',
+                        'icon' => 'iconfont-icongonggao',
+                        'path' => 'edit-notice',
+                        'support_page' => [],
+                        'uses' => 0,
+                        'sort' => 10010,
+                        'value' => [
+                            "list" => [
+                                "link" => [
+                                    "name" => ""
+                                ],
+                                "text" => ""
+                            ],
+                            "iconType" => "system",
+                            "systemIcon" => "style_01",
+                            "showType" => "popup",
+                            "imageUrl" => ""
+                        ],
+                    ]
                 ],
             ],
         ];

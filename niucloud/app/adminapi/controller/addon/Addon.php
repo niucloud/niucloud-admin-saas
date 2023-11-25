@@ -11,6 +11,7 @@
 
 namespace app\adminapi\controller\addon;
 
+use app\dict\addon\AddonDict;
 use app\service\admin\addon\AddonService;
 use app\service\core\addon\CoreAddonService;
 use core\base\BaseAdminController;
@@ -33,17 +34,34 @@ class Addon extends BaseAdminController
      */
     public function install($addon)
     {
-        return (new AddonService())->install($addon);
+        return success((new AddonService())->install($addon));
     }
 
     /**
-     * 执行安装
+     * 云安装插件
      * @param $addon
      * @return Response
      */
-    public function execute($addon)
+    public function cloudInstall($addon)
     {
-        return (new AddonService())->executeInstall($addon);
+        return success(data:(new AddonService())->cloudInstall($addon));
+    }
+
+    /**
+     * 获取安装任务
+     * @return Response
+     */
+    public function getInstallTask() {
+        return success(data:(new AddonService())->getInstallTask());
+    }
+
+    /**
+     * 获取云安装日志
+     * @param $addon
+     * @return mixed
+     */
+    public function cloudInstallLog($addon) {
+        return success(data:(new AddonService())->cloudInstallLog($addon));
     }
 
     /**
@@ -53,18 +71,17 @@ class Addon extends BaseAdminController
      */
     public function installCheck($addon)
     {
-        return (new AddonService())->installCheck($addon);
+        return success(data:(new AddonService())->installCheck($addon));
     }
 
     /**
-     * 查询插件安装状态
+     * 取消安装
      * @param $addon
-     * @param $key
-     * @return Response
+     * @return mixed
      */
-    public function getInstallState($addon, $key)
+    public function cancleInstall($addon)
     {
-        return success((new AddonService())->getInstallState($addon, $key));
+        return success(data:(new AddonService())->cancleInstall($addon));
     }
 
     /**
@@ -75,6 +92,16 @@ class Addon extends BaseAdminController
     {
         (new AddonService())->uninstall($addon);
         return success('ADDON_UNINSTALL_SUCCESS');
+    }
+
+    /**
+     * 插件安装环境检测
+     * @param $addon
+     * @return Response
+     */
+    public function uninstallCheck($addon)
+    {
+        return success(data:(new AddonService())->uninstallCheck($addon));
     }
 
     /**
@@ -126,9 +153,32 @@ class Addon extends BaseAdminController
      * @param $app_key
      * @return Response
      */
-    public function update($addon){
-        (new AddonService())->update($addon);
+    public function upgrade($addon){
+        (new AddonService())->upgrade($addon);
         return success('DOWNLOAD_SUCCESS');
     }
 
+    /**
+     * 查询已安装插件
+     * @return Response
+     */
+    public function getInstallList(){
+        return success(data:(new AddonService())->getInstallList());
+    }
+
+    /**
+     * 查询已安装有效应用
+     */
+    public function getAddonList()
+    {
+        return success((new CoreAddonService())->getInstallAddonList());
+    }
+
+    /**
+     * 插件类型
+     * @return Response
+     */
+    public function getType(){
+        return success(AddonDict::getType());
+    }
 }

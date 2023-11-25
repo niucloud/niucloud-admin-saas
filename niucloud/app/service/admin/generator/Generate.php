@@ -1,8 +1,8 @@
 <?php
 // +----------------------------------------------------------------------
-// | Niucloud-admin 企业快速开发的saas管理平台
+// | Niucloud-admin 企业快速开发的多应用管理平台
 // +----------------------------------------------------------------------
-// | 官方网址：https://www.niucloud-admin.com
+// | 官方网址：https://www.niucloud.com
 // +----------------------------------------------------------------------
 // | niucloud团队 版权所有 开源版本可自由商用
 // +----------------------------------------------------------------------
@@ -24,7 +24,7 @@ use app\service\admin\generator\core\WebEditPageGenerator;
 use app\service\admin\generator\core\WebApiGenerator;
 use app\service\admin\generator\core\WebLangGenerator;
 use app\service\admin\generator\core\WebEditLangGenerator;
-
+use app\service\admin\generator\core\MenuSqlGenerator;
 
 /**
  * 代码生成器
@@ -109,6 +109,7 @@ class Generate
             ServiceGenerator::class,
             ModelGenerator::class,
             ValidateGenerator::class,
+            MenuSqlGenerator::class,
             AdminApiRouteGenerator::class,
             WebIndexGenerator::class,
             WebEditGenerator::class,
@@ -191,12 +192,39 @@ class Generate
     public function preview(array $table)
     {
         $data = [];
-        foreach ($this->getClassGenerator() as $item) {
+        foreach ($this->getGenerator() as $item) {
             $generator = app()->make($item);
             $generator->init($table);
-            $data[] = $generator->fileInfo();
+
+            $file_info = $generator->fileInfo();
+            if(!empty($file_info))
+            {
+                $data[] = $file_info;
+            }
+
         }
+
         return $data;
+    }
+
+
+
+    public function getGenerator()
+    {
+        return [
+            ControllerGenerator::class,
+            ModelGenerator::class,
+            ServiceGenerator::class,
+            ValidateGenerator::class,
+            MenuSqlGenerator::class,
+            AdminApiRouteGenerator::class,
+            WebApiGenerator::class,
+            WebLangGenerator::class,
+            WebEditGenerator::class,
+            WebIndexGenerator::class,
+            WebEditPageGenerator::class,
+            WebEditLangGenerator::class
+        ];
     }
 
 

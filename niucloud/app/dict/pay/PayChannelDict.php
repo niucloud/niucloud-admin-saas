@@ -37,7 +37,7 @@ class PayChannelDict
             $list[$k] = [
                 'name' => $v,
                 'key' => $k,
-                'pay_type' => $k == ChannelDict::PC ? $pay_type : array_diff_key($pay_type, [ PayDict::OFFLINEPAY => ''])
+                'pay_type' => $pay_type
             ];
         }
         return $list;

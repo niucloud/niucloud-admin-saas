@@ -22,9 +22,12 @@ Route::group('user', function () {
     /***************************************************** 用户 ****************************************************/
     //用户列表
     Route::get('user', 'user.user/lists');
+    //全部用户列表
+    Route::get('user_all', 'user.user/pages');
     //用户详情
     Route::get('user/:uid', 'user.user/info');
-
+    // 查询账号是否存在
+    Route::get('isexist', 'user.user/checkUserIsExist');
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,

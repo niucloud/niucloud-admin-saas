@@ -105,6 +105,9 @@ class Application extends ServiceContainer
         Shop\Delivery\ServiceProvider::class,
         Shop\Aftersale\ServiceProvider::class,
         Business\ServiceProvider::class,
+
+        //小程序发货信息管理
+        OrderShipping\ServiceProvider::class
     ];
 
     /**

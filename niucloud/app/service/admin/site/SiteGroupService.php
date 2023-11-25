@@ -11,10 +11,12 @@
 
 namespace app\service\admin\site;
 
+use app\model\addon\Addon;
 use app\model\site\Site;
 use app\model\site\SiteGroup;
 use app\model\sys\SysMenu;
 use app\service\admin\sys\MenuService;
+use app\service\core\addon\CoreAddonService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
 use think\db\exception\DataNotFoundException;
@@ -44,9 +46,10 @@ class SiteGroupService extends BaseAdminService
      */
     public function getPage(array $where = [])
     {
-        $field = 'group_id, group_name, group_desc, group_roles, app_type, create_time, update_time';
+        $field = 'group_id, group_name, group_desc, app, addon, create_time, update_time';
         $search_model = $this->model->withSearch(['keywords'],$where)->field($field)->order('create_time desc');
-        return $this->pageQuery($search_model);
+        $list = $this->pageQuery($search_model);
+        return $list;
     }
 
     /**
@@ -58,10 +61,10 @@ class SiteGroupService extends BaseAdminService
      */
     public function getAll()
     {
-        $field = 'group_id, group_name, group_desc, group_roles, app_type, create_time, update_time';
+        $field = 'group_id, group_name, group_desc, create_time, update_time, app';
         return $this->model->field($field)->select()->toArray();
-
     }
+
     /**
      * 分组详情
      * @param int $group_id
@@ -69,7 +72,7 @@ class SiteGroupService extends BaseAdminService
      */
     public function getInfo(int $group_id)
     {
-        $field = 'group_id, group_name, group_desc, group_roles, app_type, create_time, update_time';
+        $field = 'group_id, group_name, group_desc, app, addon, create_time, update_time';
         return $this->model->where([['group_id', '=', $group_id]])->field($field)->findOrEmpty()->toArray();
 
     }
@@ -81,7 +84,8 @@ class SiteGroupService extends BaseAdminService
      */
     public function add(array $data)
     {
-
+        //判断应用是否全部是有效的已安装应用
+        $this->checkAddon(array_merge($data['addon'], [ $data['app'] ] ));
         $res = $this->model->create($data);
         return $res->group_id;
     }
@@ -93,6 +97,8 @@ class SiteGroupService extends BaseAdminService
      * @return true
      */
     public function edit(int $group_id, array $data){
+        //判断应用是否全部是有效的已安装应用
+        $this->checkAddon($data['addon']);
         $this->model->update($data, [['group_id', '=', $group_id]]);
         //删除缓存
         $cache_name = self::$cache_name . $group_id;
@@ -100,6 +106,12 @@ class SiteGroupService extends BaseAdminService
         return true;
     }
 
+    public function checkAddon($group_roles){
+        $install_addon_list = (new CoreAddonService())->getInstallAddonList();
+        $install_addon_keys = array_column($install_addon_list, 'key');
+        if(count(array_intersect($install_addon_keys, $group_roles)) != count($group_roles)) throw new AdminException('SITE_GROUP_APP_NOT_EXIST');
+        return true;
+    }
     /**
      * 删除分组
      * @param int $group_id
@@ -121,16 +133,21 @@ class SiteGroupService extends BaseAdminService
     }
 
     /**
-     * 通过站点分组获取站点权限菜单
+     * 通过站点分组获取站点包含的权限和应用
      * @param $group_id
      * @return void
      */
-    public function getMenuIdsByGroupId($group_id){
+    public function getGroupAddon($group_id){
         $cache_name = self::$cache_name . $group_id;
         return cache_remember(
             $cache_name,
             function () use ($group_id) {
-                return $this->model->findOrEmpty($group_id)?->group_roles ?? [];
+                $group = $this->model->findOrEmpty($group_id);
+                $addon = [];
+                if (!$group->isEmpty()) {
+                    $addon = array_merge([ $group['app'] ], $group['addon']);
+                }
+                return $addon;
             },
             [MenuService::$cache_tag_name,self::$cache_tag_name]
         );
@@ -141,11 +158,12 @@ class SiteGroupService extends BaseAdminService
      */
     public function addAllMenuGroup()
     {
-        $menus = (new SysMenu())->where([['app_type', '=', 'site']])->column("menu_key");
+//        $menus = (new SysMenu())->where([['app_type', '=', 'site']])->column("menu_key");
         $data = [
             'group_name' => "默认套餐",
             'group_desc' => '',
-            'group_roles' => json_encode($menus),
+            'app' => '',
+            'addon' => []
         ];
         return $this->add($data);
     }

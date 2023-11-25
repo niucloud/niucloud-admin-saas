@@ -1,8 +1,8 @@
 <?php
 // +----------------------------------------------------------------------
-// | Niucloud-admin 企业快速开发的saas管理平台
+// | Niucloud-admin 企业快速开发的多应用管理平台
 // +----------------------------------------------------------------------
-// | 官方网址：https://www.niucloud-admin.com
+// | 官方网址：https://www.niucloud.com
 // +----------------------------------------------------------------------
 // | niucloud团队 版权所有 开源版本可自由商用
 // +----------------------------------------------------------------------
@@ -36,7 +36,14 @@ Route::group('generator', function () {
     Route::post('download', 'generator.generator/create');
     //表列表
     Route::get('table', 'generator.generator/tableList');
-
+    //代码生成预览
+    Route::get('preview/:id', 'generator.generator/preview');
+    //代码验证
+    Route::get('check_file', 'generator.generator/checkFile');
+    //关联信息
+    Route::get('table_column', 'generator.generator/getTableColumn');
+    //全部模型
+    Route::get('all_model', 'generator.generator/getModels');
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,

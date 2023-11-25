@@ -183,7 +183,7 @@
         moveAttachment,
         getIconCategoryList,
         getIconList
-    } from '@/api/sys'
+    } from '@/app/api/sys'
     import {debounce, img, getToken} from '@/utils/common'
     import {ElMessage, UploadFile, UploadFiles, ElMessageBox} from 'element-plus'
     import storage from '@/utils/storage'

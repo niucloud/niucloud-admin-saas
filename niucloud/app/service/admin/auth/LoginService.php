@@ -67,18 +67,15 @@ class LoginService extends BaseAdminService
         if (empty($userinfo)) return false;
 
         if (!check_password($password, $userinfo->password)) return false;
-        if (!$userinfo->status) {
-            throw new AuthException('USER_LOCK');
-        }
 
         if($app_type == AppTypeDict::ADMIN){
             $default_site_id = $this->request->defaultSiteId();
             $userrole = (new UserRoleService())->getUserRole($default_site_id, $userinfo->uid);
-            if(empty($userrole)) throw new AuthException('SITE_USER_CAN_NOT_LOGIN_IN_ADMIN');
-        }else if($app_type == AppTypeDict::SITE){
-            $default_site_id = (new UserRoleService())->getUserDefaultSiteId($userinfo->uid);
-            if(!($default_site_id > 0)) throw new AuthException('ADMIN_USER_CAN_NOT_LOGIN_IN_SITE');
-        }else{
+            if (empty($userrole)) throw new AuthException('SITE_USER_CAN_NOT_LOGIN_IN_ADMIN');
+            if (!$userrole['status']) throw new AuthException('USER_LOCK');
+        } else if($app_type == AppTypeDict::SITE){
+            $default_site_id = $this->site_id;
+        } else {
             throw new AuthException('APP_TYPE_NOT_EXIST');
         }
         //修改用户登录信息
@@ -98,8 +95,12 @@ class LoginService extends BaseAdminService
                 'username' => $userinfo->username,
             ],
             'site_id' => $default_site_id,
+            'site_info' => null
         ];
-        $data['site_info'] = (new SiteService())->getInfo($data['site_id']);
+        if ($app_type == AppTypeDict::ADMIN || ($app_type == AppTypeDict::SITE && $data['site_id']) ) {
+            $data['site_info'] = (new SiteService())->getInfo($data['site_id']);
+        }
+
         // 获取站点布局
         $layout_config = (new CoreConfigService())->getConfig($data['site_id'], 'SITE_LAYOUT');
         $data['layout'] = empty($layout_config) ? 'default' : $layout_config['value']['key'];

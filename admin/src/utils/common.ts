@@ -54,8 +54,7 @@ export function getAppType() {
     if (!path.length) {
         return 'admin'
     } else {
-        const app = path[0]
-        return app == 'decorate' ? 'site' : app
+        return path[0]
     }
 }
 
@@ -149,16 +148,44 @@ export function strByteLength(str: string = ''): number {
 
 /**
  * url 转 route
- * @param url 
+ * @param url
  */
 export function urlToRouteRaw(url: string) {
     const query = {}
-	const [path, param] = url.split('?')
+    const [path, param] = url.split('?')
 
-	param && param.split('&').forEach((str : string) => {
-		let [name, value] = str.split('=')
-		query[name] = value
-	})
+    param && param.split('&').forEach((str: string) => {
+        let [name, value] = str.split('=')
+        query[name] = value
+    })
 
-	return { path, query }
+    return { path, query }
+}
+
+const isArray = (value: any) => {
+    if (typeof Array.isArray === 'function') {
+        return Array.isArray(value)
+    }
+    return Object.prototype.toString.call(value) === '[object Array]'
+}
+
+/**
+ * @description 深度克隆
+ * @param {object} obj 需要深度克隆的对象
+ * @returns {*} 克隆后的对象或者原值（不是对象）
+ */
+export function deepClone(obj: object) {
+    // 对常见的“非”值，直接返回原来值
+    if ([null, undefined, NaN, false].includes(obj)) return obj
+    if (typeof obj !== 'object' && typeof obj !== 'function') {
+        // 原始类型直接返回
+        return obj
+    }
+    const o = isArray(obj) ? [] : {}
+    for (const i in obj) {
+        if (obj.hasOwnProperty(i)) {
+            o[i] = typeof obj[i] === 'object' ? deepClone(obj[i]) : obj[i]
+        }
+    }
+    return o
 }

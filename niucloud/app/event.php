@@ -61,7 +61,7 @@ $system_event = [
         //消息模板数据内容
         'NoticeData' => [
             'app\listener\notice_template\VerifyCode',//手机验证码
-            'app\listener\notice_template\MemberVerifySuccess',//
+            'app\listener\notice_template\MemberVerifySuccess',
             'app\listener\notice_template\RechargeSuccess',
         ],
         //全场景消息发送

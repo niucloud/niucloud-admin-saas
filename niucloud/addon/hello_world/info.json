@@ -4,6 +4,6 @@
   "key": "hello_world",
   "version": "1.0.1",
   "author": "niucloud",
-  "type": "addon",
-  "support_app": "niucloud"
+  "type": "app",
+  "support_app": ""
 }

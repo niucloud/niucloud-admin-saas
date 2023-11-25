@@ -40,30 +40,38 @@ class SiteUserService extends BaseAdminService
      */
     public function getPage(array $where)
     {
+        $site_id = $this->site_id;
+        $field = 'id,SysUserRole.uid,site_id,role_ids,SysUserRole.create_time,is_admin,SysUserRole.status,count(site_id) as site_num';
+        $order = 'SysUserRole.create_time desc';
+        $search_model = (new SysUserRole())
+            ->field($field)
+            ->order($order)
+            ->with('userinfo')
+            ->hasWhere('userinfo', function ($query) use ($where, $site_id) {
+                $condition = [
+                    ['SysUserRole.site_id', '>', 0 ]
+                ];
+                if (!empty($where['username'])) $condition[] = ['username', 'like', "%{$where['username']}%"];
+                if (!empty($where['realname'])) $condition[] = ['realname', 'like', "%{$where['realname']}%"];
 
-        $field = 'uid,username,head_img,real_name,last_ip,last_time,login_count,status';
-        $user_search = [
-            'username' => $where['username'],
-            'realname' => $where['realname'],
-            'create_time' => $where['create_time']
-        ];
-        $role_search = [
-            ['userrole.site_id', '=', $this->site_id],
-        ];
-        if (!empty($where['role'])) {
-            $role_search[] = ['userrole.role_ids', 'like', '%"' . $where['role'] . '"%'];
-        }
+                //最后登录时间
+                if (!empty($where['last_time'])) {
+                    $start_time = empty($where['last_time'][0]) ? 0 : strtotime($where['last_time'][0]);
+                    $end_time = empty($where['last_time'][1]) ? 0 : strtotime($where['last_time'][1]);
+                    if ($start_time > 0 && $end_time > 0) {
+                        $condition[] = ['last_time', 'between', [$start_time, $end_time]];
+                    } else if ($start_time > 0 && $end_time == 0) {
+                        $condition[] = ['last_time', '>=', $start_time];
+                    } else if ($start_time == 0 && $end_time > 0) {
+                        $condition[] = ['last_time', '<=', $end_time];
+                    }
+                }
+                $query->where($condition);
+            })
+            ->group('SysUserRole.uid')
+            ->append(['status_name']);
 
-        $search_model = $this->model->withSearch(['username', 'realname', 'create_time'], $user_search)->field($field)->withJoin(['userrole'])->where($role_search)->order('uid desc')->append(['status_name']);
-        return $this->pageQuery($search_model, function ($item, $key) {
-            $userrole = $item?->userrole;
-            //先实现
-            if (!empty($userrole)) {
-                $item_role_ids = json_decode($userrole->role_ids, true) ?? [];
-                $item->userrole->role_ids = $item_role_ids;
-                $item->userrole->role_array = (new UserRoleService())->getRoleByUserRoleIds($item_role_ids, $this->site_id);
-            }
-        });
+        return $this->pageQuery($search_model);
     }
 
     /**
@@ -73,19 +81,16 @@ class SiteUserService extends BaseAdminService
      */
     public function getInfo(int $uid)
     {
-        $where = array(
-            ['uid', '=', $uid],
-        );
-        $field = 'uid, username, head_img, real_name, last_ip, last_time, create_time, login_count, status, is_del, delete_time, update_time';
-        $user = $this->model->where($where)->field($field)->with(['userrole'])->findOrEmpty();
-        if ($user->isEmpty())
-            return [];
-
-        if (!empty($user?->userrole)) {
-            $user->userrole->appendData(['role_array' => (new UserRoleService())->getRoleByUserRoleIds($user->userrole->role_ids ?? [], $this->site_id)]);
+        $field = 'uid, username, head_img, real_name, last_ip, last_time, create_time, login_count, delete_time, update_time';
+        $info = $this->model->where([ ['uid', '=', $uid] ])->field($field)->with(['roles' => function($query) {
+            $query->field('uid, site_id, is_admin')->with('siteInfo');
+        }])->findOrEmpty()->toArray();
+        if (!empty($info)) {
+            $info['roles'] = array_filter(array_map(function ($item) {
+                if ($item['site_id']) return $item;
+            }, $info['roles']));
         }
-
-        return $user->append(['status_name'])->toArray();
+        return $info;
     }
 
     /**
@@ -147,7 +152,7 @@ class SiteUserService extends BaseAdminService
      * @return bool|true
      */
     public function lock(int $uid){
-        return (new UserService())->edit($uid, ['status' => UserDict::OFF]);
+        return (new UserService())->statusChange($uid, UserDict::OFF);
     }
 
     /**
@@ -156,6 +161,6 @@ class SiteUserService extends BaseAdminService
      * @return bool|true
      */
     public function unlock(int $uid){
-        return (new UserService())->edit($uid, ['status' => UserDict::ON]);
+        return (new UserService())->statusChange($uid, UserDict::ON);
     }
 }

@@ -1,9 +1,10 @@
 <template>
-    <el-container class="w-100 h-screen" :class="[{ 'sidebar-dark-mode': systemStore.sidebar == 'twoType' }, { 'sidebar-brightness-mode': systemStore.sidebar == 'oneType' }]">
-        <el-header class="logo-wrap w-100">
+    <el-container class="w-100 h-screen">
+        <el-header class="logo-wrap w-100 border-0 border-b-[1px] border-solid border-[e5e7eb]">
             <div class="logo flex items-center m-auto max-w-[210px] h-[30px]" v-if="!systemStore.menuIsCollapse">
-                <img class="max-h-full max-w-full" v-if="storage.get('siteInfo').logo" :src="img(siteInfo.logo)" alt="">
-                <img class="max-h-full max-w-full" v-else src="@/assets/images/login_logo.png" alt="">
+                <img class="max-h-[40px] max-w-[40px] rounded-full" v-if="storage.get('siteInfo').logo" :src="img(siteInfo.logo)" alt="">
+                <img class="max-h-[40px] max-w-[40px] rounded-full" v-else src="@/app/assets/images/icon-addon.png" alt="">
+                <span class="ml-[8px] text-[16px]">{{siteInfo.site_name}}</span>
             </div>
             <div class="logo flex items-center justify-center w-[64px] h-[30px]" v-else>
                 <i class="text-3xl iconfont iconyunkongjian"></i>
@@ -30,34 +31,68 @@ import menuItem from './menu-item.vue'
 import storage from '@/utils/storage'
 import { img } from '@/utils/common'
 
-const logo = ref('assets/images/login_logo.png')
+const logo = ref('@/app/assets/images/login_logo.png')
 const systemStore = useSystemStore()
 const userStore = useUserStore()
 const route = useRoute()
 const siteInfo = storage.get('siteInfo') || false
-
 const menuActive = computed(() => String(route.name))
 
+let currAppData = ref([]);
 userStore.routers.forEach((item, index) => {
-    item.meta.class = 1
-    if (item.children) {
-        item.children.forEach((subItem, subIndex) => {
-            subItem.meta.class = 2
-            if (subItem.children) {
-                subItem.children.forEach((threeItem, threeIndex) => {
-                    threeItem.meta.class = 3
-                })
-            }
-        })
+    if(item.name != siteInfo.app){
+        item.meta.class = 1
+        if (item.children) {
+            item.children.forEach((subItem, subIndex) => {
+                subItem.meta.class = 2
+                if (subItem.children) {
+                    subItem.children.forEach((threeItem, threeIndex) => {
+                        threeItem.meta.class = 3
+                    })
+                }
+            })
+        }
+    }else{
+        if (item.children) {
+            item.children.forEach((subItem, subIndex) => {
+                subItem.meta.class = 1
+                subItem.path = item.path + '/' + subItem.path;
+                if (subItem.children) {
+                    subItem.children.forEach((threeItem, threeIndex) => {
+                        threeItem.meta.class = 2
+                    })
+                }
+            })
+        }
+        currAppData.value = userStore.routers.splice(index,1);
     }
 })
+
+if (currAppData.value[0] && currAppData.value[0].children) {
+    currAppData.value[0].children.reverse();
+    currAppData.value[0].children.forEach((item,index) => {
+        if( index == 0 ){
+            item.is_border = true;
+        }
+        userStore.routers.unshift(item);
+    });
+}
 </script>
 
 <style lang="scss">
 .aside-menu:not(.el-menu--collapse) {
     width: var(--aside-width);
+    .el-menu-item{
+        height: 40px;
+        margin-bottom: 4px;
+    }
+    .el-sub-menu{
+        .el-sub-menu__title{
+            height: 40px;
+            margin-bottom: 4px;
+        }
+    }
 }
-
 .logo-wrap {
     padding: 0;
     display: flex;
@@ -77,7 +112,6 @@ userStore.routers.forEach((item, index) => {
         font-size: var(--el-font-size-base);
     }
 }
-
 .menu-wrap {
     flex: 1 !important;
     height: 0 !important;
@@ -85,56 +119,6 @@ userStore.routers.forEach((item, index) => {
 
     .el-menu {
         border-right: 0 !important;
-    }
-}
-
-.sidebar-dark-mode {
-    background-color: #191a23;
-
-    &>.logo-wrap {
-        .logo>i {
-            font-size: 20px;
-        }
-
-        border-bottom: 2px solid #101117;
-    }
-
-    .el-menu {
-        background-color: #191a23;
-
-        .el-sub-menu {
-            background: transparent !important;
-        }
-
-        .el-sub-menu__title,
-        .el-menu-item {
-            background: transparent !important;
-            color: #B7B7ba;
-
-            &:hover {
-                background-color: transparent !important;
-                color: #fff !important;
-            }
-        }
-
-        .el-menu-item.is-active {
-            color: #fff !important;
-            background-color: var(--el-color-primary) !important;
-        }
-
-        li::after {
-            content: "";
-            width: 0;
-            height: 0;
-        }
-    }
-}
-
-.sidebar-brightness-mode {
-    &>.logo-wrap {
-        .logo>i {
-            font-size: 20px;
-        }
     }
 }
 </style>

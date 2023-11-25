@@ -322,11 +322,17 @@ class Wechatpay extends BasePay
             } else if ($action == 'refund') {//退款
                 if ($result['event_type'] == 'REFUND.SUCCESS') {
                     $refund_trade_data = $result['resource']['ciphertext'];
+                    $refund_status_array = [
+                        'SUCCESS' => RefundDict::SUCCESS,
+                        'CLOSED' => RefundDict::FAIL,
+                        'PROCESSING' => RefundDict::DEALING,
+                        'ABNORMAL' => RefundDict::FAIL,
+                    ];
                     $temp_params = [
                         'trade_no' => $refund_trade_data['transaction_id'],
                         'mch_id' => $refund_trade_data['mchid'],
                         'refund_no' => $refund_trade_data['out_refund_no'],
-                        'status' => OnlinePayDict::getWechatPayStatus($refund_trade_data['refund_status'])
+                        'status' => $refund_status_array[$refund_trade_data['refund_status']],
                     ];
 
                     $callback_result = $callback($refund_trade_data['out_trade_no'], $temp_params);

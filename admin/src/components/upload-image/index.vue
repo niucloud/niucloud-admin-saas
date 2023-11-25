@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-wrap">
         <template v-if="limit == 1">
-            <div class="rounded cursor-pointer overflow-hidden relative border border-dashed border-color image-wrap mr-[10px]" :style="style">
+            <div class="rounded cursor-pointer overflow-hidden relative border border-solid border-color image-wrap mr-[10px]" :style="style">
                 <div class="w-full h-full relative" v-if="images.data.length">
                     <div class="w-full h-full flex items-center justify-center">
                         <el-image :src="img(images.data[0])" fit="contain"></el-image>
@@ -20,7 +20,7 @@
             </div>
         </template>
         <template v-else>
-            <div class="rounded cursor-pointer overflow-hidden relative border border-dashed border-color image-wrap mr-[10px]" :style="style" v-for="(item, index) in images.data" :key="index">
+            <div class="rounded cursor-pointer overflow-hidden relative border border-solid border-color image-wrap mr-[10px]" :style="style" v-for="(item, index) in images.data" :key="index">
                 <div class="w-full h-full relative">
                     <div class="w-full h-full flex items-center justify-center">
                         <el-image :src="img(item)" fit="contain"></el-image>

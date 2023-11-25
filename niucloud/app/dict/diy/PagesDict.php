@@ -1,8 +1,8 @@
 <?php
 // +----------------------------------------------------------------------
-// | Niucloud-admin 企业快速开发的saas管理平台
+// | Niucloud-admin 企业快速开发的多应用管理平台
 // +----------------------------------------------------------------------
-// | 官方网址：https://www.niucloud-admin.com
+// | 官方网址：https://www.niucloud.com
 // +----------------------------------------------------------------------
 // | niucloud团队 版权所有 开源版本可自由商用
 // +----------------------------------------------------------------------
@@ -27,7 +27,7 @@ class PagesDict
             'DIY_INDEX' => [
                 'default_index' => [ // 页面标识
                     "title" => "首页", // 页面名称
-                    'cover' => 'static/resource/images/diy/template/default_index_cover.png', // 页面封面图
+                    'cover' => '', // 页面封面图
                     'preview' => '', // 页面预览图
                     'desc' => '官方推出的系统首页', // 页面描述
                     'mode' => 'diy', // 页面模式：diy：自定义，fixed：固定
@@ -76,24 +76,14 @@ class PagesDict
                         ],
                         "value" => [
                             [
-                                "path" => "edit-image-ads",
-                                "id" => "4640ld4k1pu0",
-                                "componentName" => "ImageAds",
-                                "componentTitle" => "图片广告",
+                                "path" => "edit-addon-list",
                                 "uses" => 0,
-                                "imageHeight" => 160,
-                                "list" => [
-                                    [
-                                        "link" => [
-                                            "name" => ""
-                                        ],
-                                        "imageUrl" => "static/resource/images/diy/banner.png",
-                                        "imgWidth" => 750,
-                                        "imgHeight" => 320,
-                                        "id" => "2xuytp7622w0"
-                                    ]
-                                ],
+                                "id" => "2zcflqtzwn80",
+                                "componentName" => "AddonList",
+                                "componentTitle" => "应用",
                                 "ignore" => [],
+                                "list" => [],
+                                "textColor" => "#303133",
                                 "pageBgColor" => "",
                                 "componentBgColor" => "",
                                 "topRounded" => 0,
@@ -105,154 +95,12 @@ class PagesDict
                                     "top" => 0,
                                     "bottom" => 0,
                                     "both" => 0
-                                ]
-                            ],
-                            [
-                                "path" => "edit-graphic-nav",
-                                "id" => "282cpxba4534",
-                                "componentName" => "GraphicNav",
-                                "componentTitle" => "图文导航",
-                                "uses" => 0,
-                                "layout" => "horizontal",
-                                "navTitle" => "",
-                                "mode" => "graphic",
-                                "showStyle" => "fixed",
-                                "rowCount" => 4,
-                                "pageCount" => 2,
-                                "carousel" => [
-                                    "type" => "circle",
-                                    "color" => "#FFFFFF"
                                 ],
-                                "imageSize" => 40,
-                                "aroundRadius" => 25,
-                                "font" => [
-                                    "size" => 14,
-                                    "weight" => "normal",
-                                    "color" => "#303133"
-                                ],
-                                "ignore" => [],
-                                "pageBgColor" => "",
-                                "componentBgColor" => "rgba(255, 255, 255, 1)",
-                                "topRounded" => 0,
-                                "bottomRounded" => 0,
-                                "elementBgColor" => "",
-                                "topElementRounded" => 0,
-                                "bottomElementRounded" => 0,
-                                "margin" => [
-                                    "top" => 0,
-                                    "bottom" => 0,
-                                    "both" => 0
-                                ],
-                                "list" => [
-                                    [
-                                        "title" => "文章资讯",
-                                        "link" => [
-                                            "parent" => "SYSTEM_LINK",
-                                            "name" => "ARTICLE_LIST",
-                                            "title" => "文章资讯",
-                                            "url" => "/pages/article/list"
-                                        ],
-                                        "imageUrl" => "static/resource/images/diy/article_list.png",
-                                        "label" => [
-                                            "control" => false,
-                                            "text" => "热门",
-                                            "textColor" => "#FFFFFF",
-                                            "bgColorStart" => "#F83287",
-                                            "bgColorEnd" => "#FE3423"
-                                        ],
-                                        "id" => "66rwqy8vxog0",
-                                        "imgWidth" => 176,
-                                        "imgHeight" => 176
-                                    ],
-                                    [
-                                        "title" => "个人资料",
-                                        "link" => [
-                                            "parent" => "MEMBER_LINK",
-                                            "name" => "MEMBER_PERSONAL",
-                                            "title" => "个人资料",
-                                            "url" => "/pages/member/personal"
-                                        ],
-                                        "imageUrl" => "static/resource/images/diy/my_personal.png",
-                                        "label" => [
-                                            "control" => false,
-                                            "text" => "热门",
-                                            "textColor" => "#FFFFFF",
-                                            "bgColorStart" => "#F83287",
-                                            "bgColorEnd" => "#FE3423"
-                                        ],
-                                        "id" => "30cdezm3f6e0",
-                                        "imgWidth" => 176,
-                                        "imgHeight" => 176
-                                    ],
-                                    [
-                                        "title" => "我的余额",
-                                        "link" => [
-                                            "parent" => "MEMBER_LINK",
-                                            "name" => "MEMBER_BALANCE",
-                                            "title" => "我的余额",
-                                            "url" => "/pages/member/balance"
-                                        ],
-                                        "imageUrl" => "static/resource/images/diy/my_balance.png",
-                                        "label" => [
-                                            "control" => false,
-                                            "text" => "热门",
-                                            "textColor" => "#FFFFFF",
-                                            "bgColorStart" => "#F83287",
-                                            "bgColorEnd" => "#FE3423"
-                                        ],
-                                        "id" => "20l5hypbzvfk",
-                                        "imgWidth" => 176,
-                                        "imgHeight" => 176
-                                    ],
-                                    [
-                                        "title" => "我的积分",
-                                        "link" => [
-                                            "parent" => "MEMBER_LINK",
-                                            "name" => "MEMBER_POINT",
-                                            "title" => "我的积分",
-                                            "url" => "/pages/member/point"
-                                        ],
-                                        "imageUrl" => "static/resource/images/diy/my_point.png",
-                                        "label" => [
-                                            "control" => false,
-                                            "text" => "热门",
-                                            "textColor" => "#FFFFFF",
-                                            "bgColorStart" => "#F83287",
-                                            "bgColorEnd" => "#FE3423"
-                                        ],
-                                        "id" => "7bdb8wyt3g00",
-                                        "imgWidth" => 176,
-                                        "imgHeight" => 176
-                                    ]
-                                ]
-                            ],
-                            [
-                                "path" => "edit-article",
-                                "id" => "524jcssmp8c0",
-                                "componentName" => "Article",
-                                "componentTitle" => "文章",
-                                "uses" => 0,
-                                "sources" => "initial",
-                                "count" => 8,
-                                "articleIds" => [],
-                                "ignore" => [],
-                                "pageBgColor" => "",
-                                "componentBgColor" => "rgba(255, 255, 255, 1)",
-                                "topRounded" => 0,
-                                "bottomRounded" => 0,
-                                "elementBgColor" => "",
-                                "topElementRounded" => 0,
-                                "bottomElementRounded" => 0,
-                                "margin" => [
-                                    "top" => 0,
-                                    "bottom" => 0,
-                                    "both" => 0
-                                ]
                             ]
                         ]
                     ]
                 ],
-//                'tourism' => [
+//                'recharge' => [
 //                    "title" => "固定模板示例", // 页面名称
 //                    'cover' => 'static/resource/images/diy/template/tourism_cover.png', // 页面封面图
 //                    'preview' => '', // 页面预览图
@@ -375,8 +223,12 @@ class PagesDict
                                     "bottom" => 6,
                                     "both" => 16
                                 ],
+                                "style" => "style-1",
+                                "styleName" => "风格1",
                                 "textColor" => "#FFFFFF",
-                                "bgUrl" => "static/resource/images/diy/member_style1_bg.png"
+                                "bgUrl" => "static/resource/images/diy/member_style1_bg.png",
+                                "bgColorStart" => "",
+                                "bgColorEnd" => ""
                             ],
                             [
                                 "path" => "edit-graphic-nav",
@@ -386,6 +238,11 @@ class PagesDict
                                 "uses" => 0,
                                 "layout" => "horizontal",
                                 "navTitle" => "我的服务",
+                                "subNavTitle" => "",
+                                "subNavTitleLink" => [
+                                    "name" => ""
+                                ],
+                                "subNavColor" => "#999999",
                                 "mode" => "graphic",
                                 "showStyle" => "fixed",
                                 "rowCount" => 4,
@@ -421,7 +278,7 @@ class PagesDict
                                             "parent" => "MEMBER_LINK",
                                             "name" => "MEMBER_PERSONAL",
                                             "title" => "个人资料",
-                                            "url" => "/pages/member/personal"
+                                            "url" => "/app/pages/member/personal"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/horz_m_personal.png",
                                         "label" => [
@@ -441,7 +298,7 @@ class PagesDict
                                             "parent" => "MEMBER_LINK",
                                             "name" => "MEMBER_BALANCE",
                                             "title" => "我的余额",
-                                            "url" => "/pages/member/balance"
+                                            "url" => "/app/pages/member/balance"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/horz_m_balance.png",
                                         "label" => [
@@ -461,7 +318,7 @@ class PagesDict
                                             "parent" => "MEMBER_LINK",
                                             "name" => "MEMBER_POINT",
                                             "title" => "我的积分",
-                                            "url" => "/pages/member/point"
+                                            "url" => "/app/pages/member/point"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/horz_m_point.png",
                                         "label" => [
@@ -503,6 +360,11 @@ class PagesDict
                                 "ignore" => [],
                                 "layout" => "vertical",
                                 "navTitle" => "",
+                                "subNavTitle" => "",
+                                "subNavTitleLink" => [
+                                    "name" => ""
+                                ],
+                                "subNavColor" => "#999999",
                                 "mode" => "graphic",
                                 "showStyle" => "fixed",
                                 "rowCount" => 4,
@@ -525,7 +387,7 @@ class PagesDict
                                             "parent" => "MEMBER_LINK",
                                             "name" => "MEMBER_PERSONAL",
                                             "title" => "个人资料",
-                                            "url" => "/pages/member/personal"
+                                            "url" => "/app/pages/member/personal"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/vert_m_personal.png",
                                         "label" => [
@@ -545,7 +407,7 @@ class PagesDict
                                             "parent" => "MEMBER_LINK",
                                             "name" => "MEMBER_BALANCE",
                                             "title" => "我的余额",
-                                            "url" => "/pages/member/balance"
+                                            "url" => "/app/pages/member/balance"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/vert_m_balance.png",
                                         "label" => [
@@ -565,7 +427,7 @@ class PagesDict
                                             "parent" => "MEMBER_LINK",
                                             "name" => "MEMBER_POINT",
                                             "title" => "我的积分",
-                                            "url" => "/pages/member/point"
+                                            "url" => "/app/pages/member/point"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/vert_m_point.png",
                                         "label" => [
@@ -700,7 +562,11 @@ class PagesDict
                                     "both" => 0
                                 ],
                                 "textColor" => "#FFFFFF",
-                                "bgUrl" => ""
+                                "bgUrl" => "",
+                                "style" => "style-1",
+                                "styleName" => "风格1",
+                                "bgColorStart" => "",
+                                "bgColorEnd" => ""
                             ],
                             [
                                 "path" => "edit-graphic-nav",
@@ -710,6 +576,11 @@ class PagesDict
                                 "uses" => 0,
                                 "layout" => "horizontal",
                                 "navTitle" => "我的服务",
+                                "subNavTitle" => "",
+                                "subNavTitleLink" => [
+                                    "name" => ""
+                                ],
+                                "subNavColor" => "#999999",
                                 "mode" => "graphic",
                                 "showStyle" => "fixed",
                                 "rowCount" => 4,
@@ -745,7 +616,7 @@ class PagesDict
                                             "parent" => "MEMBER_LINK",
                                             "name" => "MEMBER_PERSONAL",
                                             "title" => "个人资料",
-                                            "url" => "/pages/member/personal"
+                                            "url" => "/app/pages/member/personal"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/horz_m_personal.png",
                                         "label" => [
@@ -765,7 +636,7 @@ class PagesDict
                                             "parent" => "MEMBER_LINK",
                                             "name" => "MEMBER_BALANCE",
                                             "title" => "我的余额",
-                                            "url" => "/pages/member/balance"
+                                            "url" => "/app/pages/member/balance"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/horz_m_balance.png",
                                         "label" => [
@@ -785,7 +656,7 @@ class PagesDict
                                             "parent" => "MEMBER_LINK",
                                             "name" => "MEMBER_POINT",
                                             "title" => "我的积分",
-                                            "url" => "/pages/member/point"
+                                            "url" => "/app/pages/member/point"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/horz_m_point.png",
                                         "label" => [
@@ -827,6 +698,11 @@ class PagesDict
                                 "ignore" => [],
                                 "layout" => "vertical",
                                 "navTitle" => "",
+                                "subNavTitle" => "",
+                                "subNavTitleLink" => [
+                                    "name" => ""
+                                ],
+                                "subNavColor" => "#999999",
                                 "mode" => "graphic",
                                 "showStyle" => "fixed",
                                 "rowCount" => 4,
@@ -849,7 +725,7 @@ class PagesDict
                                             "parent" => "MEMBER_LINK",
                                             "name" => "MEMBER_PERSONAL",
                                             "title" => "个人资料",
-                                            "url" => "/pages/member/personal"
+                                            "url" => "/app/pages/member/personal"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/vert_m_personal.png",
                                         "label" => [
@@ -869,7 +745,7 @@ class PagesDict
                                             "parent" => "MEMBER_LINK",
                                             "name" => "MEMBER_BALANCE",
                                             "title" => "我的余额",
-                                            "url" => "/pages/member/balance"
+                                            "url" => "/app/pages/member/balance"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/vert_m_balance.png",
                                         "label" => [
@@ -889,7 +765,7 @@ class PagesDict
                                             "parent" => "MEMBER_LINK",
                                             "name" => "MEMBER_POINT",
                                             "title" => "我的积分",
-                                            "url" => "/pages/member/point"
+                                            "url" => "/app/pages/member/point"
                                         ],
                                         "imageUrl" => "static/resource/images/diy/vert_m_point.png",
                                         "label" => [
@@ -954,29 +830,18 @@ class PagesDict
 
                         ]
                     ]
-                ],
-//                'tourism' => [
-//                    "title" => "旅游", // 页面名称
-//                    'cover' => 'static/resource/images/diy/template/tourism_member_index_cover.png', // 页面封面图
-//                    'preview' => '', // 页面预览图
-//                    'desc' => '酒店旅游住宿门票景点', // 页面描述
-//                    'mode' => 'fixed', // 页面模式：diy：自定义，fixed：固定
-//                    'data' => [
-//                        'component' => 'tourism-member', // 模板组件名称
-//                        'link' => '' // 装修链接
-//                    ]
-//                ]
+                ]
             ]
         ];
 
-        $pages = (new DictLoader("UniappPages"))->load($system_pages);
-        if (!empty($params['type'])) {
-            if (!empty($pages[$params['type']])) {
-                $temp = $pages[$params['type']];
-                if (isset($params['mode']) && !empty($params['mode'])) {
+        $pages = ( new DictLoader("UniappPages") )->load($system_pages);
+        if (!empty($params[ 'type' ])) {
+            if (!empty($pages[ $params[ 'type' ] ])) {
+                $temp = $pages[ $params[ 'type' ] ];
+                if (isset($params[ 'mode' ]) && !empty($params[ 'mode' ])) {
                     foreach ($temp as $k => $v) {
-                        if ($params['mode'] != $v['mode']) {
-                            unset($temp[$k]);
+                        if ($params[ 'mode' ] != $v[ 'mode' ]) {
+                            unset($temp[ $k ]);
                         }
                     }
                 }

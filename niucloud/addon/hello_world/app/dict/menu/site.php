@@ -10,7 +10,7 @@
             'router_path' => 'hello_world',
             'view_path' => 'hello_world/site',
             'methods' => '',
-            'sort' => 90,
+            'sort' => 100,
             'status' => 1,
             'is_show' => 1,
         ],

@@ -32,7 +32,7 @@ class Module extends BaseAdminController
             ['auth_code', ''],
             ['auth_secret', '']
         ]);
-
+        $this->validate($data, 'app\validate\niucloud\Module.set');
         return success("SUCCESS",  (new NiucloudService())->setAuthorize($data));
     }
 

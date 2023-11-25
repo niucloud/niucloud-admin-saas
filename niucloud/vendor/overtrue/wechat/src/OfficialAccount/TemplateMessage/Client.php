@@ -42,7 +42,7 @@ class Client extends BaseClient
      *
      * @var array
      */
-    protected $required = ['touser', 'template_id'];
+    protected $required = [ 'touser', 'template_id' ];
 
     /**
      * Set industry.
@@ -80,18 +80,19 @@ class Client extends BaseClient
 
     /**
      * Add a template and get template ID.
-     *
-     * @param string $shortId
-     *
-     * @return \Psr\Http\Message\ResponseInterface|\EasyWeChat\Kernel\Support\Collection|array|object|string
-     *
+     * 
+     * @param $shortId
+     * @param $keyword_name_list
+     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
      * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
      * @throws \GuzzleHttp\Exception\GuzzleException
      */
-    public function addTemplate($shortId)
+    public function addTemplate($shortId, $keyword_name_list)
     {
-        $params = ['template_id_short' => $shortId];
-
+        $params = [
+            'template_id_short' => $shortId, // 模板库中模板的编号，有“TM**”和“OPENTMTM**”等形式,对于类目模板，为纯数字ID
+            'keyword_name_list' => $keyword_name_list // 选用的类目模板的关键词,按顺序传入,如果为空，或者关键词不在模板库中，会返回40246错误码
+        ];
         return $this->httpPostJson('cgi-bin/template/api_add_template', $params);
     }
 
@@ -120,7 +121,7 @@ class Client extends BaseClient
      */
     public function deletePrivateTemplate($templateId)
     {
-        $params = ['template_id' => $templateId];
+        $params = [ 'template_id' => $templateId ];
 
         return $this->httpPostJson('cgi-bin/template/del_private_template', $params);
     }
@@ -177,14 +178,14 @@ class Client extends BaseClient
         $params = array_merge($this->message, $data);
 
         foreach ($params as $key => $value) {
-            if (in_array($key, $this->required, true) && empty($value) && empty($this->message[$key])) {
+            if (in_array($key, $this->required, true) && empty($value) && empty($this->message[ $key ])) {
                 throw new InvalidArgumentException(sprintf('Attribute "%s" can not be empty!', $key));
             }
 
-            $params[$key] = empty($value) ? $this->message[$key] : $value;
+            $params[ $key ] = empty($value) ? $this->message[ $key ] : $value;
         }
 
-        $params['data'] = $this->formatData($params['data'] ?? []);
+        $params[ 'data' ] = $this->formatData($params[ 'data' ] ?? []);
 
         return $params;
     }
@@ -201,15 +202,15 @@ class Client extends BaseClient
         foreach ($data as $key => $value) {
             if (is_array($value)) {
                 if (\array_key_exists('value', $value)) {
-                    $formatted[$key] = $value;
+                    $formatted[ $key ] = $value;
 
                     continue;
                 }
 
                 if (count($value) >= 2) {
                     $value = [
-                        'value' => $value[0],
-                        'color' => $value[1],
+                        'value' => $value[ 0 ],
+                        'color' => $value[ 1 ],
                     ];
                 }
             } else {
@@ -218,7 +219,7 @@ class Client extends BaseClient
                 ];
             }
 
-            $formatted[$key] = $value;
+            $formatted[ $key ] = $value;
         }
 
         return $formatted;
@@ -229,6 +230,6 @@ class Client extends BaseClient
      */
     protected function restoreMessage()
     {
-        $this->message = (new ReflectionClass(static::class))->getDefaultProperties()['message'];
+        $this->message = ( new ReflectionClass(static::class) )->getDefaultProperties()[ 'message' ];
     }
 }

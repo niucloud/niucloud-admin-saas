@@ -40,7 +40,8 @@ class Config extends BaseAdminController
             ['token', ''],
             ['encoding_aes_key', ''],
             ['qr_code', ''],
-            ['encryption_type', '']
+            ['encryption_type', ''],
+            ['upload_private_key', '']
         ]);
         $this->validate($data, 'app\validate\channel\Weapp.set');
         (new WeappConfigService())->setWeappConfig($data);

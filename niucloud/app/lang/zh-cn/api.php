@@ -45,6 +45,8 @@ return [
     'LAYOUT_NOT_EXIST' => '该布局不存在',
     'ZIP_FILE_NOT_FOUND' => '找不到可用的压缩文件',
     'DOWNLOAD_SUCCESS' => '下载成功',
+    'APP_NOT_ALLOW_UNINSTALL' => '该应用下存在站点不允许卸载',
+    'ADDON_INSTALL_FAIL' => '插件安装失败',
     //登录注册重置账号....
 
     'LOGIN_SUCCESS' => '登录成功',
@@ -53,6 +55,7 @@ return [
     'LOGIN_STATE_ERROR' => '登录状态有误,请重新登录',
     'USER_LOCK' => '账号被锁定',
     'USER_ERROR' => '账号或密码错误',
+    'USER_NOT_EXIST' => '账号不存在',
     'NO_SITE_PERMISSION' => '您没有当前站点的访问权限',
     'SITE_NOT_EXIST' => '站点不存在',
     'LOGOUT' => '登陆退出',
@@ -79,7 +82,7 @@ return [
     'NO_SITE_USER_ROLE' => '用户不存在关联权限',
     'ADMIN_NOT_ALLOW_EDIT_ROLE' => '超级管理员不允许改动权限',
     'USERNAME_REPEAT' => '用户名重复',
-
+    'SITE_USER_EXIST' => '该用户已存在',
 
     //角色管理
     'USER_ROLE_NOT_EXIST' => '角色不存在',
@@ -141,6 +144,7 @@ return [
     'MOBILE_NOT_EXIST_MEMBER' => '当前填写的手机号不存在账号',
     'MOBILE_IS_BIND_MEMBER' => '当前账号已绑定手机号',
     'QRCODE_EXPIRE' => '登录二维码失效',
+    'PASSWORD_REQUIRE' => '密码不能为空',
 
     //会员提现
     'CASHOUT_NOT_OPEN' => '会员提现业务未开启',
@@ -167,12 +171,14 @@ return [
     'WEAPP_NOT_EXIST' => '微信小程序未配置完善',
     'WEAPP_EMPOWER_NOT_EXIST' => '微信小程序授信信息不存在',
     'WEAPP_EMPOWER_TEL_NOT_EXIST' => '微信小程序授信手机号不存在',
+    'CURR_SITE_IS_NOT_OPEN_SSL' => '微信小程序请求域名只支持https请先配置ssl',
 
     //站点相关
     'SITE_GROUP_IS_EXIST' => '当前套餐存在站点，请调整站点对应套餐后重试',
     'SITE_EXPIRE' => '站点已过期',
     'SITE_EXPIRE_NOT_ALLOW' => '站点已打烊，续费后可继续使用此项功能',
     'SITE_CLOSE_NOT_ALLOW' => '站点已停止',
+    'SITE_GROUP_APP_NOT_EXIST' => '存在无效的应用',
 
     //支付相关(todo  注意:7段不共享)
     'ALIPAY_TRANSACTION_NO_NOT_EXIST' => '无效的支付交易号',
@@ -227,4 +233,10 @@ return [
     //验证码
     'CAPTCHA_INVALID' => '无效的验证码',
 
+    // 授权相关
+    'AUTH_NOT_EXISTS' => '未获取到授权信息',
+
+
+    /********************************************************* home端专用 **************************************/
+    'USER_ROLE_NOT_HAS_SITE' => '当前登录用户下没有此项站点',
 ];

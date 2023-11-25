@@ -131,4 +131,20 @@ class Menu extends BaseAdminController
         (new InstallSystemService())->install();
         return success('REFRESH_SUCCESS');
     }
+
+    /**
+     * 查询菜单信息
+     */
+    public function getSystem()
+    {
+        return success( (new MenuService())->getSystemMenu('all', 1));
+    }
+
+    /**
+     * 查询应用权限信息
+     */
+    public function getAddonMenu($app_key)
+    {
+        return success( (new MenuService())->getAddonMenu($app_key,'all', 1));
+    }
 }

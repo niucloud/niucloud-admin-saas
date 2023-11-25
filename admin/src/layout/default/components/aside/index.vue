@@ -15,6 +15,7 @@ import { watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import side from './side.vue'
 import useSystemStore from '@/stores/modules/system'
+import storage from '@/utils/storage'
 
 const systemStore = useSystemStore()
 const dark = computed(() => {
@@ -35,25 +36,14 @@ watch(route, () => {
     border-right: 1px solid var(--el-border-color-lighter);
 
     &.bright {
-        background-color: #F5F7F9;
+        // background-color: #F5F7F9;
 
         li {
-            background-color: #F5F7F9;
+            // background-color: #F5F7F9;
 
             &.is-active:not(.is-opened) {
                 position: relative;
-                color: #333;
-                background-color: #fff;
-
-                &::after {
-                    content: "";
-                    position: absolute;
-                    top: 0;
-                    bottom: 0;
-                    left: 0;
-                    width: 2px;
-                    background-color: var(--el-menu-active-color);
-                }
+                color: var(--el-color-primary);
             }
         }
     }
@@ -63,4 +53,5 @@ watch(route, () => {
     .el-drawer__body {
         padding: 0px !important;
     }
-}</style>
+}
+</style>

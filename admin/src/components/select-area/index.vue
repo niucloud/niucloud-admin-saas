@@ -17,7 +17,7 @@
 
 <script lang="ts" setup>
 import { reactive, onBeforeMount, computed, watch,ref, toRaw,onMounted } from 'vue'
-import { getAreaListByPid } from '@/api/sys'
+import { getAreaListByPid } from '@/app/api/sys'
 import { t } from '@/lang'
 import { da } from 'element-plus/es/locale'
 
@@ -39,11 +39,11 @@ const prop = defineProps({
         }
     }
 })
- 
+
 const emits = defineEmits<{
   (e: 'areaChange', value: any):void
 }>()
- 
+
 const state = reactive({
   // 用于展示的省市区数据
     provinceList: [] as areaType[],
@@ -106,7 +106,7 @@ const emitsArea = () => {
 }
 
 const changeArea = async (data : any) => {
-    
+
     if(data == 'province'){
         state.city = ""
         state.area = ""
@@ -135,5 +135,5 @@ const changeArea = async (data : any) => {
 </script>
 
 <style lang="scss" scoped>
- 
+
 </style>

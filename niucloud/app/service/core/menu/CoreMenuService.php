@@ -42,20 +42,6 @@ class CoreMenuService extends BaseCoreService
     {
         $addon_loader = new DictLoader("Menu");
 
-        //获取插件删除替换的菜单key
-        $addon_admin_tree = $addon_loader->load(["addon" => $addon, "app_type" => "admin"]);
-
-        if (isset($addon_admin_tree["delete"])) {
-            //软删除数据
-            $this->model->where([["menu_key", "in", $addon_admin_tree["delete"]], ["app_type", "=", "admin"]])->update(["delete_time" => 0]);
-        }
-
-        $addon_site_tree = $addon_loader->load(["addon" => $addon, "app_type" => "site"]);
-
-        if (isset($addon_site_tree["delete"])) {
-            //软删除数据
-            $this->model->where([["menu_key", "in", $addon_site_tree["delete"]], ["app_type", "=", "site"]])->update(["delete_time" => 0]);
-        }
         $this->deleteByAddon($addon);
         // 清除缓存
         Cache::tag(MenuService::$cache_tag_name)->clear();
@@ -71,7 +57,6 @@ class CoreMenuService extends BaseCoreService
     public function deleteByAddon(string $addon)
     {
         Db::name("sys_menu")->where([['addon', '=', $addon]])->delete();
-        //$this->model->where([['addon', '=', $addon]])->delete();
         return true;
     }
 
@@ -97,33 +82,19 @@ class CoreMenuService extends BaseCoreService
     {
         $addon_loader = new DictLoader("Menu");
 
-        //获取插件删除替换的菜单key
         $addon_admin_tree = $addon_loader->load(["addon" => $addon, "app_type" => "admin"]);
-
-        if (isset($addon_admin_tree["delete"])) {
-            //软删除数据
-            $this->model->where([["menu_key", "in", $addon_admin_tree["delete"]], ["app_type", "=", "admin"]])->useSoftDelete('delete_time', time())->delete();
-            unset($addon_admin_tree["delete"]);
-        }
-        $menu = [];
-        if (!empty($addon_admin_tree)) {
-            $menu = $this->loadMenu($addon_admin_tree, "admin", $addon);
-        }
-
         $addon_site_tree = $addon_loader->load(["addon" => $addon, "app_type" => "site"]);
 
-        if (isset($addon_site_tree["delete"])) {
-            //软删除数据
-            $this->model->where([["menu_key", "in", $addon_site_tree["delete"]], ["app_type", "=", "site"]])->useSoftDelete('delete_time', time())->delete();
-            unset($addon_site_tree["delete"]);
+        if (!empty($addon_site_tree)) {
+            $admin_menu = $this->loadMenu($addon_admin_tree, "admin", $addon);
+            $site_menu = $this->loadMenu($addon_site_tree, "site", $addon);
+            $this->deleteByAddon($addon);
+            if(!empty($site_menu))
+            {
+                $this->install(array_merge($admin_menu, $site_menu));
+            }
         }
 
-        if (!empty($addon_site_tree)) {
-            $site_menu = $this->loadMenu($addon_site_tree, "site", $addon);
-            $menu = array_merge($menu, $site_menu);
-        }
-        $this->deleteByAddon($addon);
-        $this->install($menu);
         return true;
 
     }

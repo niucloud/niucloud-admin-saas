@@ -67,6 +67,19 @@ class SysMenu extends BaseModel
     }
 
     /**
+     * 菜单类型
+     * @param $value
+     * @param $data
+     * @return string
+     */
+    public function getMenuShortNameAttr($value, $data)
+    {
+        if (empty($data['menu_short_name']))
+            return $data['menu_name'];
+        return $data['menu_short_name'];
+    }
+
+    /**
      * 菜单状态
      * @param $value
      * @param $data

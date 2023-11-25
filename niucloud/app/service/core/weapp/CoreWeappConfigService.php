@@ -40,6 +40,7 @@ class  CoreWeappConfigService extends BaseCoreService
             'token'             => $info['token'] ?? '',
             'encoding_aes_key'  => $info['encoding_aes_key'] ?? '',
             'encryption_type'   => $info['encryption_type'] ?? 'not_encrypt',//加解密模式   not_encrypt 明文   compatible 兼容  safe 安全
+            'upload_private_key'=> $info['upload_private_key'] ?? ''
         ];
     }
 
@@ -59,6 +60,7 @@ class  CoreWeappConfigService extends BaseCoreService
             'token'             => $data['token'] ?? '',
             'encoding_aes_key'  => $data['encoding_aes_key'] ?? '',
             'encryption_type'   => $data['encryption_type'] ?? 'not_encrypt',//加解密模式   not_encrypt 明文   compatible 兼容  safe 安全
+            'upload_private_key'=> $data['upload_private_key'] ?? ''
         ];
         return (new CoreConfigService())->setConfig($site_id, ConfigKeyDict::WEAPP, $config);
     }

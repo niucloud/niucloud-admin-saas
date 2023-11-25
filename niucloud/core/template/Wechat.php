@@ -32,7 +32,7 @@ class Wechat extends BaseTemplate
     protected function initialize(array $config = [])
     {
         parent::initialize($config);
-        $this->site_id = $config['site_id'] ?? '';
+        $this->site_id = $config[ 'site_id' ] ?? '';
 
     }
 
@@ -55,16 +55,16 @@ class Wechat extends BaseTemplate
      */
     public function send(array $data)
     {
-        $openid = $data['openid'];
-        $template_id = $data['template_id'];
-        $template_data = $data['data'];
-        $first = $data['first'];
-        $remark = $data['remark'];
-        $url = $data['url'];
-        $miniprogram = $data['miniprogram'];
+        $openid = $data[ 'openid' ];
+        $template_id = $data[ 'template_id' ];
+        $template_data = $data[ 'data' ];
+        $first = $data[ 'first' ];
+        $remark = $data[ 'remark' ];
+        $url = $data[ 'url' ];
+        $miniprogram = $data[ 'miniprogram' ];
 
-        if (!empty($first)) $template_data['first'] = $first;
-        if (!empty($remark)) $template_data['remark'] = $remark;
+        if (!empty($first)) $template_data[ 'first' ] = $first;
+        if (!empty($remark)) $template_data[ 'remark' ] = $remark;
         return $this->template()->send([
             'touser' => $openid,
             'template_id' => $template_id,
@@ -83,7 +83,7 @@ class Wechat extends BaseTemplate
      */
     public function addTemplate(array $data)
     {
-        return $this->template()->addTemplate($data['shortId']);
+        return $this->template()->addTemplate($data[ 'shortId' ], $data[ 'keyword_name_list' ]);
     }
 
     /**
@@ -95,7 +95,7 @@ class Wechat extends BaseTemplate
      */
     public function delete(array $data)
     {
-        return $this->template()->deletePrivateTemplate($data['templateId']);
+        return $this->template()->deletePrivateTemplate($data[ 'templateId' ]);
     }
 
     /**

@@ -7,7 +7,7 @@
         </div>
         <template #dropdown>
             <el-dropdown-menu>
-                <el-dropdown-item command="usercenter"><router-link to="/user/center">个人中心</router-link></el-dropdown-item>
+                <el-dropdown-item @click="toSiteLink">切换站点</el-dropdown-item>
                 <el-dropdown-item command="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
         </template>
@@ -15,10 +15,12 @@
 </template>
 
 <script lang="ts" setup>
-import { UserFilled } from '@element-plus/icons-vue'
+import { CollectionTag, UserFilled } from '@element-plus/icons-vue'
 import useUserStore from '@/stores/modules/user'
+import { useRouter } from 'vue-router'
 
 const userStore = useUserStore()
+const router = useRouter()
 
 const clickEvent = (command: string) => {
     switch (command) {
@@ -26,6 +28,10 @@ const clickEvent = (command: string) => {
             userStore.logout()
             break
     }
+}
+
+const toSiteLink = ()=>{
+    router.push('/home/index');
 }
 </script>
 

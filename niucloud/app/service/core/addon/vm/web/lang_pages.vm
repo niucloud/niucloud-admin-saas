@@ -1,0 +1,9 @@
+{
+    "pages": {
+        "{key}": {
+            "hello_world": {
+                "index": "hello_world"
+            }
+        }
+    }
+}

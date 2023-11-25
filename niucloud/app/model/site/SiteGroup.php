@@ -11,6 +11,7 @@
 
 namespace app\model\site;
 
+use app\model\addon\Addon;
 use core\base\BaseModel;
 
 /**
@@ -27,7 +28,7 @@ class SiteGroup extends BaseModel
     protected $pk = 'group_id';
 
     // 设置json类型字段
-    protected $json = ['group_roles'];
+    protected $json = ['addon'];
 
     // 设置JSON数据返回数组
     protected $jsonAssoc = true;
@@ -38,6 +39,22 @@ class SiteGroup extends BaseModel
      */
     protected $name = 'site_group';
 
+
+    /**
+     * 关联应用
+     * @param $value
+     * @param $data
+     * @return Addon[]|array|\think\Collection
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function getGroupRolesDataAttr($value, $data)
+    {
+        if (empty($data['addon']))
+            return [];
+        return (new Addon())->where([['key', 'in', $data['addon']]])->select();
+    }
     /**
      * 关键字搜索
      * @param $query
@@ -50,4 +67,5 @@ class SiteGroup extends BaseModel
             $query->where('group_name', 'like', '%' . $value . '%');
         }
     }
+
 }

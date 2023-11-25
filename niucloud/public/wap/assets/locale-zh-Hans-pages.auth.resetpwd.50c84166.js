@@ -1,1 +1,0 @@
-const r="找回密码",o="请输入密码",s="请再次确认密码",a="两次输入的密码不一致",d={findPassword:"找回密码",passwordPlaceholder:"请输入密码",confirmPasswordPlaceholder:"请再次确认密码",confirmPasswordError:"两次输入的密码不一致"};export{a as confirmPasswordError,s as confirmPasswordPlaceholder,d as default,r as findPassword,o as passwordPlaceholder};

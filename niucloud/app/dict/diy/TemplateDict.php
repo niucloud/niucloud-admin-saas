@@ -1,8 +1,8 @@
 <?php
 // +----------------------------------------------------------------------
-// | Niucloud-admin 企业快速开发的saas管理平台
+// | Niucloud-admin 企业快速开发的多应用管理平台
 // +----------------------------------------------------------------------
-// | 官方网址：https://www.niucloud-admin.com
+// | 官方网址：https://www.niucloud.com
 // +----------------------------------------------------------------------
 // | niucloud团队 版权所有 开源版本可自由商用
 // +----------------------------------------------------------------------
@@ -26,32 +26,37 @@ class TemplateDict
         $system_pages = [
             'DIY_INDEX' => [
                 'title' => get_lang('dict_diy.page_index'),
-                'page' => 'pages/index/index',
+                'page' => '/app/pages/index/index',
                 'action' => 'decorate' // 页面是否装修标识，为空标识不装修，decorate：装修
             ],
             'DIY_MEMBER_INDEX' => [
                 'title' => get_lang('dict_diy.page_member_index'),
-                'page' => 'pages/member/index',
+                'page' => '/app/pages/member/index',
                 'action' => 'decorate'
             ],
             'DIY_PAGE' => [
                 'title' => get_lang('dict_diy.page_diy'),
-                'page' => 'pages/index/diy',
+                'page' => '/app/pages/index/diy',
                 'action' => ''
             ]
         ];
 
-        $pages = (new DictLoader("UniappTemplate"))->load($system_pages);
-
-        if (!empty($params['type']) && !empty($pages[$params['type']])) {
-            return [$params['type'] => $pages[$params['type']]];
+        $pages = ( new DictLoader("UniappTemplate") )->load($system_pages);
+        if (!empty($params[ 'type' ])) {
+            $temp = [];
+            foreach ($params[ 'type' ] as $k => $v) {
+                if (!empty($pages[ $v ])) {
+                    $temp[ $v ] = $pages[ $v ];
+                }
+            }
+            return $temp;
         }
 
-        if (!empty($params['action'])) {
+        if (!empty($params[ 'action' ])) {
             $temp = [];
             foreach ($pages as $k => $v) {
-                if (isset($v['action']) && $params['action'] == $v['action']) {
-                    $temp[$k] = $v;
+                if (isset($v[ 'action' ]) && $params[ 'action' ] == $v[ 'action' ]) {
+                    $temp[ $k ] = $v;
                 }
 
             }

@@ -12,8 +12,10 @@
 namespace app\service\admin\niucloud;
 
 use app\dict\sys\ConfigKeyDict;
+use app\service\core\niucloud\CoreAuthService;
 use app\service\core\sys\CoreConfigService;
 use core\base\BaseAdminService;
+use core\exception\CommonException;
 
 /**
  * 消息管理服务层
@@ -40,6 +42,8 @@ class NiucloudService extends BaseAdminService
             'auth_code' => $data['auth_code'],
             'auth_secret' => $data['auth_secret']
         ];
+        $auth_info = (new CoreAuthService($data['auth_code'], $data['auth_secret']))->getAuthInfo()['data'] ?? [];
+        if (empty($auth_info)) throw new CommonException('AUTH_NOT_EXISTS');
         return $this->core_config_service->setConfig(0,ConfigKeyDict::NIUCLOUD_CONFIG, $data);
     }
 

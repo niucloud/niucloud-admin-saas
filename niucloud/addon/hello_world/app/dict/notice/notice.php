@@ -1,15 +1,19 @@
 <?php
 return [
-    'hello_world_test' => [
-        'key' => 'hello_world_test',
-        'app_type' => 'site',
+    //充值成功通知，站点端发送
+    'recharge_success' => [
+        'addon' => 'hello_world',
+        'key' => 'recharge_success',
         'receiver_type' => 1,
-        'async' => false,
-        'name' => 'hello world消息',
-        'title' => 'hello world演示插件消息',
-        'variable' =>[
-            'name' => '消息内容'
+        'name' => '充值成功通知',
+        'title' => '会员充值成功后发送',
+        'async' => true,
+        'variable' => [
+            'price' => '充值金额',
+            'balance' => '充值后账户',
+            'time' => '充值时间',
+            'trade_no' => '交易单号'
         ],
-    ],
+    ]
 
 ];

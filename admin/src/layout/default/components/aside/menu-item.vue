@@ -16,9 +16,9 @@
             <template #title>
 				<div class="relative">
 					<span :class="['ml-[10px]', {'text-[15px]': routes.meta.class == 1}, {'text-[14px]': routes.meta.class != 1}]">{{ meta.title }}</span>
-					<div v-if="routes.path == '/site/siteindex'" class="absolute  top-[50%] -translate-y-[50%] right-[-180%]" @click="checkIndexList">
-						<img class="w-[12px] h-[12px]" src="@/assets/images/index/model_tag.png"/>
-					</div>
+					<!-- <div v-if="routes.path == '/site/siteindex'" class="absolute  top-[50%] -translate-y-[50%] right-[-180%]" @click="checkIndexList">
+						<img class="w-[12px] h-[12px]" src="@/app/assets/images/index/model_tag.png"/>
+					</div> -->
 				</div>
             </template>
         </el-menu-item>
@@ -27,6 +27,8 @@
                 <span :class="[{'text-[15px]': routes.meta.class == 1}, {'text-[14px]': routes.meta.class != 1}, {'ml-[10px]': routes.meta.class == 2, 'ml-[15px]': routes.meta.class == 3}]">{{ meta.title }}</span>
             </template>
         </el-menu-item>
+
+		<div v-if="routes.is_border" class="!border-0 !border-t-[1px] border-solid mx-[25px] bg-[#f7f7f7] my-[5px]"></div>
     </template>
 	<el-dialog v-model="showDialog" :title="t('indexTemplate')" width="550px" :destroy-on-close="true" >
 		<div class="flex flex-wrap">
@@ -51,7 +53,7 @@
 
 <script lang="ts" setup>
 import { t } from '@/lang'
-import { getIndexList, setIndexList } from '@/api/sys'
+import { getIndexList, setIndexList } from '@/app/api/sys'
 import { useRoute, useRouter } from 'vue-router'
 import { ref, computed } from 'vue'
 import menuItem from './menu-item.vue'

@@ -11,6 +11,7 @@
 
 namespace app\model\sys;
 
+use app\dict\sys\UserDict;
 use app\model\site\Site;
 use core\base\BaseModel;
 use think\model\relation\HasOne;
@@ -46,9 +47,9 @@ class SysUserRole extends BaseModel
      */
     public function userinfo()
     {
-        return $this->hasOne(SysUser::class, 'uid', 'uid')->joinType('left')
-            ->withField('uid,username,head_img,real_name,last_ip,last_time,login_count,status,create_time')
-            ->bind(['username', 'head_img', 'real_name', 'last_ip', 'last_time', 'login_count', 'status']);
+        return $this->hasOne(SysUser::class, 'uid', 'uid')->joinType('inner')
+            ->withField('uid,username,head_img,real_name,last_ip,last_time,login_count,create_time')
+            ->bind(['username', 'head_img', 'real_name', 'last_ip', 'last_time', 'login_count']);
     }
 
     /**
@@ -59,6 +60,18 @@ class SysUserRole extends BaseModel
     {
         return $this->hasOne(Site::class, 'site_id', 'site_id')->joinType('inner')
             ->withField('site_id, site_name, app_type, status, expire_time')
-            ->bind(['site_name', 'app_type', 'status', 'expire_time']);
+            ->bind(['site_name', 'app_type', 'status', 'expire_time', 'status_name'])->append(['status_name']);
+    }
+
+    /**
+     * 状态字段转化
+     * @param $value
+     * @param $data
+     * @return mixed
+     */
+    public function getStatusNameAttr($value, $data)
+    {
+        if (!isset($data['status']) || empty($data['status'])) return '';
+        return UserDict::getStatus()[$data['status']] ?? '';
     }
 }

@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
 import { nextTick } from 'vue'
 import NProgress from 'nprogress'
+import { RouteRecordRaw } from 'vue-router'
 
 interface App {
-    route: string,
+    route: RouteRecordRaw | object,
     routeRefreshTag: boolean,
     pageReturn: boolean
 }
@@ -11,7 +12,7 @@ interface App {
 const useAppStore = defineStore('app', {
     state: (): App => {
         return {
-            route: '',
+            route: {},
             routeRefreshTag: true,
             pageReturn: false
         }

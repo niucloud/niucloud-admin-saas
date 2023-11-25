@@ -28,9 +28,22 @@ class Auth extends BaseAdminController
      */
     public function authMenuList()
     {
-        return success((new AuthService())->getAuthMenuList(1));
+        $data = $this->request->params([
+            ['addon', 'all'],
+        ]);
+        return success((new AuthService())->getAuthMenuList(1, $data['addon']));
     }
 
+    /**
+     * 获取当前站点支持的应用
+     * @return Response
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
+     */
+    public function getAuthAddonList(){
+        return success((new AuthSiteService())->getAuthAddonList());
+    }
     /**
      * 获取登录用户信息
      * @return Response

@@ -55,7 +55,8 @@ class SiteGroup extends BaseAdminController
         $data = $this->request->params([
             ['group_name', ''],
             ['group_desc', ''],
-            ['group_roles', ''],
+            ['app', ''],
+            ['addon', []],
         ]);
         $this->validate($data, 'app\validate\site\SiteGroup.add');
         $group_id = (new SiteGroupService())->add($data);
@@ -72,9 +73,8 @@ class SiteGroup extends BaseAdminController
         $data = $this->request->params([
             ['group_name', ''],
             ['group_desc', ''],
-            ['group_roles', ''],
+            ['addon', []],
         ]);
-        $this->validate($data, 'app\validate\site\SiteGroup.add');
         (new SiteGroupService())->edit($group_id, $data);
         return success('EDIT_SUCCESS');
     }

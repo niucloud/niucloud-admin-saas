@@ -1,11 +1,11 @@
 <?php
 return [
     'recharge_success' => [
-        'temp_key' => 'OPENTM111',
-        'first' => '',
+        'temp_key' => '52552',
+        'keyword_name_list' => [ '充值时间', '充值金额' ],
         'content' => [
-            ['消息内容', '{name}', 'keyword1'],
-        ],
-        'remark' => ''
+            [ '充值时间', '{time}', 'time1' ],
+            [ '充值金额', '{price}', 'amount3' ],
+        ]
     ]
 ];

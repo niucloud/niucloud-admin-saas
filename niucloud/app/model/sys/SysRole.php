@@ -11,7 +11,6 @@
 
 namespace app\model\sys;
 
-use app\dict\sys\RoleStatusDict;
 use core\base\BaseModel;
 
 /**
@@ -38,17 +37,11 @@ class SysRole extends BaseModel
     // 设置JSON数据返回数组
     protected $jsonAssoc = true;
 
-    /**
-     * 角色状态
-     * @param $value
-     * @param $data
-     * @return string
-     */
-    public function getStatusNameAttr($value, $data)
-    {
-        if (empty($data['status'])) return '';
-        return RoleStatusDict::getStatus()[$data['status']] ?? '';
+    public function getStatusNameAttr($value, $data) {
+        if (isset($data['status'])) {
+            return $data['status'] ? get_lang('dict_role.status_on') : get_lang('dict_role.status_off');
+        }
+        return '';
     }
-
 
 }

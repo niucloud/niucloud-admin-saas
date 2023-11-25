@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 	import { computed } from 'vue';
-	import useDiyStore from '@/stores/diy';
+	import useDiyStore from '@/app/stores/diy';
 
 	const props = defineProps(['component', 'index']);
 

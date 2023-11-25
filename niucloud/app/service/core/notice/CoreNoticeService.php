@@ -47,23 +47,20 @@ class CoreNoticeService extends BaseCoreService
      */
     public function getList(int $site_id, array $keys = [])
     {
-        $list = $this->model->where([['site_id', '=', $site_id]])->select()->toArray();
-        if(!empty($list))
-        {
+        $list = $this->model->where([ [ 'site_id', '=', $site_id ] ])->select()->toArray();
+        if (!empty($list)) {
             $list_key = array_column($list, 'key');
             $list = array_combine($list_key, $list);
         }
         $notice = NoticeDict::getNotice();
-        foreach ($notice as $k => $v)
-        {
-            if(!empty($keys) && !in_array($v['key'], $keys)){
-                unset($notice[$k]);
+        foreach ($notice as $k => $v) {
+            if (!empty($keys) && !in_array($v[ 'key' ], $keys)) {
+                unset($notice[ $k ]);
                 continue;
             }
-            if(array_key_exists($k, $list))
-            {
-                $notice[$k] = array_merge($v, $list[$k]);
-            }else{
+            if (array_key_exists($k, $list)) {
+                $notice[ $k ] = array_merge($v, $list[ $k ]);
+            } else {
                 $data = [
                     'site_id' => $site_id,
                     'sms_content' => '',
@@ -76,7 +73,7 @@ class CoreNoticeService extends BaseCoreService
                     'wechat_first' => '',
                     'wechat_remark' => ''
                 ];
-                $notice[$k] = array_merge($v, $data);
+                $notice[ $k ] = array_merge($v, $data);
             }
         }
         return $notice;
@@ -90,12 +87,11 @@ class CoreNoticeService extends BaseCoreService
      */
     public function getInfo(int $site_id, string $key)
     {
-        if(!array_key_exists($key, NoticeDict::getNotice())) throw new NoticeException('NOTICE_TYPE_NOT_EXIST');
-        $info = $this->model->where([['site_id', '=', $site_id], ['key', '=', $key]])->findOrEmpty()->toArray();
-        if(!empty($info))
-        {
+        if (!array_key_exists($key, NoticeDict::getNotice())) throw new NoticeException('NOTICE_TYPE_NOT_EXIST');
+        $info = $this->model->where([ [ 'site_id', '=', $site_id ], [ 'key', '=', $key ] ])->findOrEmpty()->toArray();
+        if (!empty($info)) {
             $notice = array_merge(NoticeDict::getNotice($key), $info);
-        }else{
+        } else {
             $data = [
                 'site_id' => $site_id,
                 'sms_content' => '',
@@ -116,7 +112,7 @@ class CoreNoticeService extends BaseCoreService
 
     public function find(int $site_id, string $key)
     {
-        return $this->model->where([ ['site_id', '=', $site_id], ['key', '=', $key] ])->findOrEmpty();
+        return $this->model->where([ [ 'site_id', '=', $site_id ], [ 'key', '=', $key ] ])->findOrEmpty();
     }
 
     /**
@@ -129,17 +125,17 @@ class CoreNoticeService extends BaseCoreService
     public function edit(int $site_id, string $key, array $data)
     {
         $notice = $this->find($site_id, $key);
-        if($notice->isEmpty()){
+        if ($notice->isEmpty()) {
             $notice_template = NoticeDict::getNotice($key);
-            $wechat = $notice_template['wechat'] ?? [];
+            $wechat = $notice_template[ 'wechat' ] ?? [];
             $this->model->create(array_merge([
                 'site_id' => $site_id,
                 'key' => $key,
-                'sms_content' => $notice_template['sms_default_content'] ?? '',
-                'wechat_first' => $data['wechat_first'] ?? ($wechat['first'] ?? ''),
-                'wechat_remark' => $data['wechat_remark'] ?? ($wechat['remark'] ?? ''),
+                'sms_content' => $notice_template[ 'sms_default_content' ] ?? '',
+                'wechat_first' => $data[ 'wechat_first' ] ?? ( $wechat[ 'first' ] ?? '' ),
+                'wechat_remark' => $data[ 'wechat_remark' ] ?? ( $wechat[ 'remark' ] ?? '' ),
             ], $data));
-        }else{
+        } else {
             $notice->save($data);
         }
         return true;

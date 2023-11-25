@@ -47,7 +47,7 @@ return [
         'expire_time_number' => '到期时间必须是时间戳',
         'group_name_require' => '站点分组名称必须填写',
         'group_name_max' => '站点分组名称不能超过20字符',
-        'group_roles_require' => '分组权限必须填写',
+        'app_require' => '套餐主应用必须选择',
         'front_end_name_require' => '前台名称必须填写',
         'front_end_name_max' => '前台名称最多不能超过20个字符',
     ],
@@ -180,4 +180,11 @@ return [
         'schedule_unique' => '当前计划任务已存在',
         'not_exit_schedule_type' => '不是有效的任务类型',
     ],
+    //插件
+    'validate_addon' => [
+        'key_require' => '插件标识不能为空',
+        'type_require' => '请选择插件类型',
+        'not_exit_type' => '无效的插件类型',
+        'key_regex' => '插件标识格式有误',
+    ]
 ];

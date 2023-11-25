@@ -13,6 +13,7 @@ namespace app\adminapi\controller\login;
 
 use app\service\admin\auth\ConfigService;
 use app\service\admin\auth\LoginService;
+use app\service\core\weapp\CoreWeappCloudService;
 use core\base\BaseAdminController;
 use think\Response;
 
@@ -58,5 +59,13 @@ class Login extends BaseAdminController
     public function getConfig()
     {
         return success((new ConfigService())->getConfig());
+    }
+
+    public function test(){
+        (new CoreWeappCloudService())->uploadWeapp([
+            'site_id' => 43,
+            'version' => '0.0.1',
+            'desc' => ''
+        ]);
     }
 }

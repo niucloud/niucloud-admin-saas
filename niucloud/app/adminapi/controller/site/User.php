@@ -32,6 +32,7 @@ class User extends BaseAdminController
             ['realname', ''],
             ['role', ''],
             ['create_time', []],
+            ['last_time', []],
         ]);
         $list = (new SiteUserService())->getPage($data);
         return success($list);
@@ -56,6 +57,7 @@ class User extends BaseAdminController
     public function add()
     {
         $data = $this->request->params([
+            ['uid', 0],
             ['username', ''],
             ['password', ''],
             ['real_name', ''],
@@ -63,7 +65,7 @@ class User extends BaseAdminController
             ['status', UserDict::ON],
             ['role_ids', []]
         ]);
-        $this->validate($data, 'app\validate\sys\User.add');
+        if (!$data['uid']) $this->validate($data, 'app\validate\sys\User.add');
         $uid = (new SiteUserService())->add($data);
         return success('ADD_SUCCESS', ['uid' => $uid]);
     }

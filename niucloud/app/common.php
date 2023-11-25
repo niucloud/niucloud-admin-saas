@@ -497,20 +497,29 @@ function get_files_by_dir($dir)
  * @param string $src 来源文件夹
  * @param string $dst 目的地文件夹
  * @param array $files 文件夹集合
+ * @param array $exclude_dirs 排除无需拷贝的文件夹
+ * @param array $exclude_files 排除无需拷贝的文件
  * @return bool
  */
-function dir_copy(string $src = '', string $dst = '', &$files = [])
+function dir_copy(string $src = '', string $dst = '', &$files = [], $exclude_dirs = [], $exclude_files = [])
 {
     if (empty($src) || empty($dst)) {
         return false;
     }
+    if (!file_exists($src)) {
+        return false;
+    }
     $dir = opendir($src);
     dir_mkdir($dst);
-    while (false !== ($file = readdir($dir))) {
-        if (($file != '.') && ($file != '..')) {
+    while (false !== ( $file = readdir($dir) )) {
+        if (( $file != '.' ) && ( $file != '..' )) {
             if (is_dir($src . '/' . $file)) {
+                // 排除目录
+                if (count($exclude_dirs) && in_array($file, $exclude_dirs)) continue;
                 dir_copy($src . '/' . $file, $dst . '/' . $file, $files);
             } else {
+                // 排除文件
+                if (count($exclude_files) && in_array($file, $exclude_files)) continue;
                 copy($src . '/' . $file, $dst . '/' . $file);
                 $files[] = $dst . '/' . $file;
             }
@@ -795,4 +804,29 @@ function version_to_string($ver) {
  */
 function check_file_is_remote(string $file_path){
     return str_contains($file_path, 'https://') || str_contains($file_path, 'http://') || str_contains($file_path, '.com');
+}
+
+/**
+ * 文件拷贝
+ * @param string $source_file
+ * @param string $to_file
+ * @return void
+ */
+function file_copy(string $source_file, string $to_file) {
+    if (!file_exists($source_file)) return false;
+
+    // 检查目标文件是否存在
+    if (!file_exists($to_file)) {
+        // 创建目录
+        $directory = dirname($to_file);
+        if (!file_exists($directory)) {
+            mkdir($directory, 0777, true);
+        }
+    }
+
+    if (copy($source_file, $to_file)) {
+        return true;
+    } else {
+        return false;
+    }
 }

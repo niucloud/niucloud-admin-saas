@@ -8,7 +8,8 @@ interface System {
     dark: boolean,
     theme: string,
     lang: string,
-    sidebar: string
+    sidebar: string,
+    sidebarStyle: string
 }
 
 const theme = storage.get('theme') ?? {}
@@ -16,15 +17,21 @@ const theme = storage.get('theme') ?? {}
 const useSystemStore = defineStore('system', {
     state: (): System => {
         return {
-            menuIsCollapse: storage.get('menuiscollapse') ?? false,
+            // menuIsCollapse: storage.get('menuiscollapse') ?? false,
+            menuIsCollapse: false,
             menuDrawer: false,
             dark: theme.dark ?? false,
             theme: theme.theme ?? '#273de3',
             sidebar: theme.sidebar ?? 'oneType',
-            lang: storage.get('lang') ?? 'zh-cn'
+            lang: storage.get('lang') ?? 'zh-cn',
+            sidebarStyle: theme.sidebarStyle ?? 'threeType',
+            currHeadMenuName: ''
         }
     },
     actions: {
+        setHeadMenu(value: any) {
+            this.currHeadMenuName = value
+        },
         setTheme(state: string, value: any) {
             this[state] = value
             theme[state] = value

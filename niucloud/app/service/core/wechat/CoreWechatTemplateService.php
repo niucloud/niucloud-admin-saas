@@ -31,7 +31,8 @@ class CoreWechatTemplateService extends BaseCoreService
      * @param $site_id
      * @return Client
      */
-    public function template($site_id){
+    public function template($site_id)
+    {
         return CoreWechatService::app($site_id)->template_message;
     }
 
@@ -50,9 +51,10 @@ class CoreWechatTemplateService extends BaseCoreService
      * @throws InvalidConfigException
      * @throws GuzzleException
      */
-    public function send(int $site_id, string $open_id, string $wechat_template_id, array $data, string $first, string $remark, string $url = '', $miniprogram = ''){
-        if(!empty($first)) $data['first'] = $first;
-        if(!empty($remark)) $data['remark'] = $remark;
+    public function send(int $site_id, string $open_id, string $wechat_template_id, array $data, string $first, string $remark, string $url = '', $miniprogram = '')
+    {
+        if (!empty($first)) $data[ 'first' ] = $first;
+        if (!empty($remark)) $data[ 'remark' ] = $remark;
 
         return $this->template($site_id)->send([
             'touser' => $open_id,
@@ -72,7 +74,8 @@ class CoreWechatTemplateService extends BaseCoreService
      * @throws GuzzleException
      * @throws InvalidConfigException
      */
-    public function deletePrivateTemplate(int $site_id, string $templateId){
+    public function deletePrivateTemplate(int $site_id, string $templateId)
+    {
         return $this->template($site_id)->deletePrivateTemplate($templateId);
     }
 
@@ -80,12 +83,14 @@ class CoreWechatTemplateService extends BaseCoreService
      * 添加
      * @param int $site_id
      * @param string $shortId
+     * @param string $keyword_name_list
      * @return array|Collection|object|ResponseInterface|string
      * @throws GuzzleException
      * @throws InvalidConfigException
      */
-    public function addTemplate(int $site_id, string $shortId){
-        return $this->template($site_id)->addTemplate($shortId);
+    public function addTemplate(int $site_id, string $shortId, string $keyword_name_list)
+    {
+        return $this->template($site_id)->addTemplate($shortId, $keyword_name_list);
     }
 
 }

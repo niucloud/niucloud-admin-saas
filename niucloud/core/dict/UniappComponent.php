@@ -11,6 +11,8 @@
 namespace core\dict;
 
 
+use app\service\admin\addon\AddonService;
+
 class UniappComponent extends BaseDict
 {
     /**
@@ -20,7 +22,7 @@ class UniappComponent extends BaseDict
      */
     public function load(array $data)
     {
-        $addons = $this->getLocalAddons();
+        $addons = (new AddonService())->getAddonKeysBySiteId(request()->siteId());
         $components_files = [];
         foreach ($addons as $v) {
             $components_path = $this->getAddonDictPath($v) . "diy" . DIRECTORY_SEPARATOR . "components.php";

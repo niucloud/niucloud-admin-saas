@@ -71,7 +71,7 @@
     import {t} from '@/lang'
     import {ref, computed} from 'vue'
     import {cloneDeep} from 'lodash-es'
-    import {getLink} from '@/api/diy';
+    import {getLink} from '@/app/api/diy';
     import {ElMessage} from 'element-plus'
 
     const prop = defineProps({
