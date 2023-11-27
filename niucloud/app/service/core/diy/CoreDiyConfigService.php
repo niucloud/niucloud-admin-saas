@@ -79,4 +79,27 @@ class  CoreDiyConfigService extends BaseCoreService
         return ( new CoreConfigService() )->setConfig($site_id, ConfigKeyDict::DIY_BOTTOM, $data);
     }
 
+    /**
+     * 设置启动页
+     * @param array $data
+     * @return SysConfig|bool|Model
+     */
+    public function setStartUpPageConfig(int $site_id, array $data)
+    {
+        return ( new CoreConfigService() )->setConfig($site_id,'START_UP_PAGE_' . strtoupper($data[ 'type' ]), $data);
+    }
+
+    /**
+     * 获取启动页配置
+     * @param $name
+     * @return array
+     */
+    public function getStartUpPageConfig(int $site_id, string $type)
+    {
+        $info = ( new CoreConfigService() )->getConfig($site_id, 'START_UP_PAGE_' . strtoupper($type))[ 'value' ] ?? [];
+        if (!empty($info)) {
+            $info[ 'name' ] = isset($info[ 'name' ]) ? $info[ 'name' ] : '';
+        }
+        return $info;
+    }
 }

@@ -166,8 +166,8 @@ class AddonService extends BaseAdminService
      * @param string $app_key
      * @return true
      */
-    public function download(string $app_key){
-        return (new CoreAddonDownloadService())->download($app_key);
+    public function download(string $app_key, string $version){
+        return (new CoreAddonDownloadService())->download($app_key, $version);
     }
 
     /**

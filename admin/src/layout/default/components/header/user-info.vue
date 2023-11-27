@@ -7,8 +7,18 @@
         </div>
         <template #dropdown>
             <el-dropdown-menu>
-                <el-dropdown-item @click="toSiteLink">切换站点</el-dropdown-item>
-                <el-dropdown-item command="logout">退出登录</el-dropdown-item>
+                <el-dropdown-item @click="toSiteLink">
+                    <div class="flex items-center leading-[1] py-[5px]">
+                        <span class="iconfont iconqiehuan ml-[4px] !text-[14px] mr-[10px]"></span>
+                        <span class="text-[14px]">切换站点</span>
+                    </div>
+                </el-dropdown-item>
+                <el-dropdown-item command="logout">
+                    <div class="flex items-center leading-[1] py-[2px]">
+                        <span class="iconfont icontuichudenglu !text-[21px] mr-[8px]"></span>
+                        <span class="text-[14px]">退出登录</span>
+                    </div>
+                </el-dropdown-item>
             </el-dropdown-menu>
         </template>
     </el-dropdown>
@@ -35,4 +45,8 @@ const toSiteLink = ()=>{
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.el-popper .el-dropdown-menu{
+    width: 150px;
+}
+</style>

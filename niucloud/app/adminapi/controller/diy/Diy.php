@@ -201,12 +201,16 @@ class Diy extends BaseAdminController
     public function changeTemplate()
     {
         $data = $this->request->params([
-            ["id", ""],
-            ['type', ''], // 页面类型
-            ['mode', ''], //  页面展示模式，diy：自定义，fixed：固定
-            ['template', ''] // 模板名称
+            [ "id", "" ],
+            [ 'type', '' ], // 页面类型
+            [ 'name', '' ], // 页面名称标识
+            [ 'mode', '' ], //  页面展示模式，diy：自定义，fixed：固定，other：其他页面
+            [ 'template', '' ], // 模板名称
+            [ 'page', '' ], // 页面路由
+            [ 'title', '' ], // 页面标题
+            [ 'action', '' ] // 是否存在操作，decorate 表示支持装修
         ]);
-        return success((new DiyService())->changeTemplate($data));
+        return success(( new DiyService() )->changeTemplate($data));
     }
 
     /**
@@ -221,5 +225,4 @@ class Diy extends BaseAdminController
         $res = (new DiyService())->getPreviewData($data);
         return success($res);
     }
-
 }

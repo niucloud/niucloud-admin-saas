@@ -125,6 +125,7 @@ class CoreMenuService extends BaseCoreService
             foreach ($tree as $key => $value) {
                 $item = [
                     'menu_name' => $value['menu_name'],
+                    'menu_short_name' => $value['menu_short_name'] ?? '',
                     'menu_key' => $value['menu_key'],
                     'app_type' => $app_type,
                     'addon' => $addon,

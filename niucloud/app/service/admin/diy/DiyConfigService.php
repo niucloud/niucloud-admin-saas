@@ -43,4 +43,24 @@ class DiyConfigService extends BaseAdminService
         return (new CoreDiyConfigService())->setBottomConfig($this->site_id, $data);
     }
 
+    /**
+     * 设置启动页
+     * @param $data
+     * @return SysConfig|bool|Model
+     */
+    public function setStartUpPageConfig($data)
+    {
+        return ( new CoreDiyConfigService() )->setStartUpPageConfig($this->site_id, $data);
+    }
+
+    /**
+     * 获取启动页配置
+     * @param $name
+     * @return array
+     */
+    public function getStartUpPageConfig($name)
+    {
+        return ( new CoreDiyConfigService() )->getStartUpPageConfig($this->site_id, $name);
+    }
+
 }

@@ -41,21 +41,20 @@ class CoreAddonDownloadService extends CoreAddonBaseService
      * @throws GuzzleException
      * @throws GuzzleException
      */
-    public function download($app_key)
+    public function download($app_key, $version)
     {
-        $app_path = $this->addon_path . $app_key . '/';
+        $app_path = $this->addon_path . $app_key . DIRECTORY_SEPARATOR;
         //先判断当前的应用在本地是否存在
 //        if(is_dir($app_path)) throw new NiucloudException();
-        $app_download_path = $this->addon_download_path . $app_key . '/';
         //下载文件到本地
-        $zip_file = (new CoreModuleService())->downloadModule($app_key, $app_download_path);
+        $zip_file = (new CoreAddonCloudService())->downloadAddon($app_key, $version);
         //解压到应用addon下
         //删除旧版本文件
         del_target_dir($app_path, true);
         //解压文件
         $this->unzip($zip_file, $this->addon_path);
         //删除压缩包
-        @unlink($zip_file);
+        @del_target_dir(dirname($zip_file), true);
         return true;
     }
 

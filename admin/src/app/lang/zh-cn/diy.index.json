@@ -16,6 +16,7 @@
   "refreshPage": "刷新",
   "placeholderTemplate": "请选择一个模板",
   "placeholderMyPage": "请选择一个微页面",
+  "placeholderOtherPage": "请选择一个页面",
   "developTitle": "开发环境配置",
   "wapDomain": "wap域名（WAP_DOMAIN）",
   "wapDomainPlaceholder": "请输入wap域名"

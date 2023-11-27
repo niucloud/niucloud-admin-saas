@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3883393 */
-  src: url('//at.alicdn.com/t/c/font_3883393_ppfj41ck5w.woff2?t=1699092341669') format('woff2'),
-       url('//at.alicdn.com/t/c/font_3883393_ppfj41ck5w.woff?t=1699092341669') format('woff'),
-       url('//at.alicdn.com/t/c/font_3883393_ppfj41ck5w.ttf?t=1699092341669') format('truetype');
+  src: url('//at.alicdn.com/t/c/font_3883393_46xoryy5l7v.woff2?t=1701067532618') format('woff2'),
+       url('//at.alicdn.com/t/c/font_3883393_46xoryy5l7v.woff?t=1701067532618') format('woff'),
+       url('//at.alicdn.com/t/c/font_3883393_46xoryy5l7v.ttf?t=1701067532618') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,26 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icontuichudenglu:before {
+  content: "\e64a";
+}
+
+.iconhuojian:before {
+  content: "\e6ff";
+}
+
+.iconicon_huojian1:before {
+  content: "\e6fe";
+}
+
+.iconrili1:before {
+  content: "\e62e";
+}
+
+.iconrili:before {
+  content: "\e664";
 }
 
 .iconshouquanliebiao:before {

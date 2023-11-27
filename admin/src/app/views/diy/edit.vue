@@ -540,7 +540,7 @@
         save((id: number) => {
             id = diyStore.id || id;
             let url = router.resolve({
-                path: '/preview/wap',
+                path: '/site/preview/wap',
                 query: {
                     page: page.value + '?id=' + id
                 }

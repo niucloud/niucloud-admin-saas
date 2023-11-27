@@ -144,7 +144,10 @@ class Addon extends BaseAdminController
      * @return Response
      */
     public function download($addon){
-        (new AddonService())->download($addon);
+        $data = $this->request->params([
+            ['version', '']
+        ]);
+        (new AddonService())->download($addon, $data['version']);
         return success('DOWNLOAD_SUCCESS');
     }
 

@@ -1,7 +1,7 @@
 <template>
 	<div class="main-container w-[375px] mx-auto mt-[20px] mb-[40px] relative">
 
-		<div class="flex h-full">
+		<div class="flex full-container">
 			<iframe v-show="loadingIframe" class="w-[375px]" :src="wapPreview" frameborder="0"
 			        id="previewIframe"></iframe>
 			<div v-show="loadingDev" class="w-[375px] border border-slate-100 bg-body pt-[20px] px-[20px]">
@@ -121,6 +121,7 @@
     const setDomain = () => {
         if (route.query.page) {
             wapPreview.value = `${wapUrl.value}${route.query.page}`;
+            console.log(wapPreview.value)
             // errorCorrectionLevel：密度容错率L（低）H(高)
             QRCode.toDataURL(wapPreview.value, {errorCorrectionLevel: 'L', margin: 0, width: 100}).then(url => {
                 wapImage.value = url
