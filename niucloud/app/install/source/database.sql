@@ -517,7 +517,7 @@ CREATE TABLE `site`  (
   `app` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '站点主应用',
   `addons` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '站点包含的插件',
   PRIMARY KEY (`site_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10000 utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '站点表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10000 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '站点表' ROW_FORMAT = Dynamic;
 
 DROP TABLE IF EXISTS `site_account_log`;
 CREATE TABLE `site_account_log`  (
@@ -775,7 +775,7 @@ CREATE TABLE `sys_user`  (
   `update_time` int(11) NOT NULL DEFAULT 0 COMMENT '更新时间',
   PRIMARY KEY (`uid`) USING BTREE,
   INDEX `uid`(`uid` ASC) USING BTREE
-) ENGINE = InnoDB utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '后台管理员表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '后台管理员表' ROW_FORMAT = Dynamic;
 
 DROP TABLE IF EXISTS `sys_user_log`;
 CREATE TABLE `sys_user_log`  (
