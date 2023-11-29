@@ -644,7 +644,7 @@ CREATE TABLE `sys_dict`  (
   `create_time` int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
   `update_time` int(11) NOT NULL DEFAULT 0 COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据字典表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '数据字典表' ROW_FORMAT = Dynamic;
 
 DROP TABLE IF EXISTS `sys_menu`;
 CREATE TABLE `sys_menu`  (
