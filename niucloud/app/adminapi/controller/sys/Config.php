@@ -173,6 +173,18 @@ class Config extends BaseAdminController
     }
 
     /**
+     * 获取手机端首页列表
+     */
+    public function getWapIndexList()
+    {
+        $data = $this->request->params([
+            [ 'title', '' ],
+            [ 'key', '' ] // 多个查询，逗号隔开
+        ]);
+        return success(( new ConfigService() )->getWapIndexList($data));
+    }
+
+    /**
      * 设置快捷菜单
      */
     public function setShortcutMenu()

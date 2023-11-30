@@ -14,6 +14,7 @@ namespace app\service\core\site;
 use app\dict\site\SiteDict;
 use app\dict\sys\AppTypeDict;
 use app\model\site\Site;
+use app\model\site\SiteGroup;
 use app\service\admin\site\SiteGroupService;
 use app\service\admin\site\SiteService;
 use core\base\BaseCoreService;
@@ -110,20 +111,23 @@ class CoreSiteService extends BaseCoreService
      * @return array
      */
     public function getAddonKeysBySiteId(int $site_id){
-        $site_info = (new SiteService())->getSiteCache($site_id);
-        if (empty($site_info))
-            return [];
+        $site_info = (new Site())->where([ ['site_id', '=', $site_id] ])->field('group_id,app_type,addons')->findOrEmpty();
+        if ($site_info->isEmpty()) return [];
+
         $app_type = $site_info[ 'app_type' ];
+        $group_addon_keys = [];
+
         if ($app_type == AppTypeDict::SITE) {
             $group_id = $site_info[ 'group_id' ] ?? 0;
             if ($group_id > 0) {
-                $group_addon_keys = ( new SiteGroupService() )->getGroupAddon($group_id);
-            } else {
-                $group_addon_keys = [];
+                $group = (new SiteGroup())->field('app,addon')->findOrEmpty($group_id);
+                if (!$group->isEmpty()) {
+                    $group_addon_keys = array_merge([ $group['app'] ], $group['addon']);
+                }
             }
         }
         //在查询站点所拥有的应用插件,两者结合
-        $site_addon_keys = $site_info['addons'] ?? [];
+        $site_addon_keys = is_array($site_info['addons']) ? $site_info['addons'] : [];
         return array_merge($group_addon_keys ?? [], $site_addon_keys);
     }
 }

@@ -29,7 +29,7 @@
                             <template #description>
                                 <span class="text-[#999]">{{ t("describe1") }}</span>
                                 <div class="mt-[20px] mb-[40px] h-[32px]">
-                                    <el-button type="primary" @click="router.push({ path: '/setting/tools/addon_edit' })">{{t("btn1") }}</el-button>
+                                    <el-button type="primary" @click="router.push({ path: '/tools/addon_edit' })">{{t("btn1") }}</el-button>
                                 </div>
                             </template>
                         </el-step>
@@ -248,7 +248,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
     getAddonDevelopFn();
 }
 const editEvent = (key: any) => {
-    router.push({ path: '/setting/tools/addon_edit', query: { key } })
+    router.push({ path: '/tools/addon_edit', query: { key } })
 }
 const linkEvent = (url: string) => {
     window.open(url, "_blank")

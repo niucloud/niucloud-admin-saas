@@ -60,7 +60,7 @@ class SiteService extends BaseAdminService
         $condition = [
             [ 'app_type', '<>', 'admin' ]
         ];
-        $search_model = $this->model->where($condition)->withSearch([ 'create_time', 'expire_time', 'keywords', 'status', 'group_id', 'app' ], $where)->with(['groupName', 'addon'])->field($field)->append([ 'status_name' ])->order('create_time desc');
+        $search_model = $this->model->where($condition)->withSearch([ 'create_time', 'expire_time', 'keywords', 'status', 'group_id', 'app' ], $where)->with(['groupName', 'addonName'])->field($field)->append([ 'status_name' ])->order('create_time desc');
         return $this->pageQuery($search_model);
     }
 
@@ -73,8 +73,12 @@ class SiteService extends BaseAdminService
     {
         $field = 'site_id, site_name, front_end_name, front_end_logo, app_type, keywords, logo, icon, `desc`, status, latitude, longitude, province_id, city_id, 
         district_id, address, full_address, phone, business_hours, create_time, expire_time, group_id, app, addons';
-        return $this->model->where([ [ 'site_id', '=', $site_id ] ])->with('groupName')->field($field)->append([ 'status_name' ])->findOrEmpty()->toArray();
-
+        $info = $this->model->where([ [ 'site_id', '=', $site_id ] ])->with([ 'groupName', 'addonName' ])->field($field)->append([ 'status_name' ])->findOrEmpty()->toArray();
+        if (!empty($info)) {
+            $site_addons = (new CoreSiteService())->getAddonKeysBySiteId($site_id);
+            $info['site_addons'] = (new Addon())->where([ ['key', 'in', $site_addons]])->field('key,title,desc,icon')->select()->toArray();
+        }
+        return $info;
     }
 
     /**
@@ -174,7 +178,7 @@ class SiteService extends BaseAdminService
                 $where = [
                     [ 'site_id', '=', $site_id ],
                 ];
-                $site = $this->model->where($where)->field('site_id, app_type,site_name,front_end_name,front_end_logo,logo,icon,group_id, status, expire_time, addons')->append([ 'status_name' ])->findOrEmpty();
+                $site = $this->model->where($where)->field('site_id, app_type,site_name,front_end_name,front_end_logo,logo,icon,group_id, status, expire_time, app, addons')->append([ 'status_name' ])->findOrEmpty();
                 return $site->toArray();
             },
             self::$cache_tag_name . $site_id

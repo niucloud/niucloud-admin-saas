@@ -8,10 +8,34 @@
             </div>
             <template #dropdown>
                 <el-dropdown-menu>
-                    <el-dropdown-item><router-link to="/user/center">账号设置</router-link></el-dropdown-item>
-                    <el-dropdown-item><router-link to="/tools/authorize">授权信息</router-link></el-dropdown-item>
-                    <el-dropdown-item @click="changePasswordDialog=true">修改密码</el-dropdown-item>
-                    <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
+                    <el-dropdown-item>
+                        <router-link to="/user/center">
+                            <div class="flex items-center leading-[1] py-[5px]">
+                                <span class="iconfont iconshezhi1 ml-[4px] !text-[14px] mr-[10px]"></span>
+                                <span class="text-[14px]">账号设置</span>
+                            </div>
+                        </router-link>
+                    </el-dropdown-item>
+                    <el-dropdown-item>
+                        <router-link to="/tools/authorize">
+                            <div class="flex items-center leading-[1] py-[5px]">
+                                <span class="iconfont iconshouquanxinxi2 ml-[4px] !text-[14px] mr-[10px]"></span>
+                                <span class="text-[14px]">授权信息</span>
+                            </div>
+                        </router-link>
+                    </el-dropdown-item>
+                    <el-dropdown-item @click="changePasswordDialog=true">
+                        <div class="flex items-center leading-[1] py-[5px]">
+                            <span class="iconfont iconxiugai ml-[4px] !text-[14px] mr-[10px]"></span>
+                            <span class="text-[14px]">修改密码</span>
+                        </div>
+                    </el-dropdown-item>
+                    <el-dropdown-item @click="logout">
+                        <div class="flex items-center leading-[1] py-[5px]">
+                            <span class="iconfont icontuichudenglu ml-[4px] !text-[14px] mr-[10px]"></span>
+                            <span class="text-[14px]">退出登录</span>
+                        </div>
+                    </el-dropdown-item>
                 </el-dropdown-menu>
             </template>
         </el-dropdown>
@@ -102,8 +126,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
 
             setUserInfo(saveInfo).then((res: any) => {
                 changePasswordDialog.value = false;
-            }).catch((err: any) => {
-                changePasswordDialog.value = false;
             })
         } else {
             return false
@@ -113,4 +135,8 @@ const submitForm = (formEl: FormInstance | undefined) => {
 // 修改密码 --- end
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.el-popper .el-dropdown-menu{
+    width: 150px;
+}
+</style>

@@ -80,7 +80,7 @@ class AuthSiteService extends BaseAdminService
     {
         $field = 'site_id, site_name, front_end_name, front_end_logo, app_type, keywords, logo, icon, `desc`, status, latitude, longitude, province_id, city_id, 
         district_id, address, full_address, phone, business_hours, create_time, expire_time, group_id, app';
-        $search_model = $this->model->where([['site_id', 'in', $this->getSiteIds()]])->withSearch([ 'create_time', 'expire_time', 'keywords', 'status', 'group_id', 'app' ], $where)->with(['groupName', 'addon'])->field($field)->append([ 'status_name' ])->order('create_time desc');
+        $search_model = $this->model->where([['site_id', 'in', $this->getSiteIds()]])->withSearch([ 'create_time', 'expire_time', 'keywords', 'status', 'group_id', 'app' ], $where)->with(['groupName', 'addonName'])->field($field)->append([ 'status_name' ])->order('create_time desc');
         return $this->pageQuery($search_model);
     }
 

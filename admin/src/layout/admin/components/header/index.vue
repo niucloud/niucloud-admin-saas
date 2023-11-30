@@ -25,14 +25,14 @@
                 <icon name="iconfont-iconqiehuan" :title="t('indexSwitch')"/>
             </div>
             <!-- 切换语言 -->
-            <div class="navbar-item flex items-center h-full cursor-pointer">
+            <!-- <div class="navbar-item flex items-center h-full cursor-pointer">
                 <switch-lang />
-            </div>
+            </div> -->
             <!-- 切换全屏 -->
-            <div class="navbar-item flex items-center h-full cursor-pointer" @click="toggleFullscreen">
+            <!-- <div class="navbar-item flex items-center h-full cursor-pointer" @click="toggleFullscreen">
                 <icon name="iconfont-icontuichuquanping" v-if="isFullscreen" />
                 <icon name="iconfont-iconquanping" v-else />
-            </div>
+            </div> -->
             <!-- 布局设置 -->
             <!-- <div class="navbar-item flex items-center h-full cursor-pointer">
                 <layout-setting />
@@ -144,26 +144,6 @@ onMounted(() => {
         })()
     }
 })
-
-watch(screenWidth, () => {
-    if (screenWidth.value < 992) {
-        if (!systemStore.menuIsCollapse) systemStore.toggleMenuCollapse(true)
-    } else {
-        if (systemStore.menuIsCollapse) systemStore.toggleMenuCollapse(false)
-    }
-})
-
-// 菜单栏展开折叠
-const toggleMenuCollapse = () => {
-    systemStore.$patch((state) => {
-        if (screenWidth.value < 768) {
-            state.menuDrawer = true
-            state.menuIsCollapse = false
-        } else {
-            systemStore.toggleMenuCollapse(!systemStore.menuIsCollapse)
-        }
-    })
-}
 
 // 刷新路由
 const refreshRouter = () => {

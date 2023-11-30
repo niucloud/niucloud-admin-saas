@@ -360,4 +360,14 @@ class ConfigService extends BaseAdminService
         }
         return $index_list;
     }
+
+    /**
+     * 获取手机端首页列表
+     * @param $data
+     * @return array
+     */
+    public function getWapIndexList($data)
+    {
+        return ( new CoreSysConfigService() )->getWapIndexList($data);
+    }
 }

@@ -64,4 +64,28 @@ class CoreSysConfigService extends BaseCoreService
         }
         return $info['value'];
     }
+
+    /**
+     * 获取手机端首页列表
+     * @param array $data
+     * @return array
+     */
+    public function getWapIndexList($data = [])
+    {
+        $result = event("WapIndex");
+        $index_list = [];
+        foreach ($result as $v) {
+            $index_list = empty($index_list) ? $v : array_merge($index_list, $v);
+        }
+
+        foreach ($index_list as $k => $v) {
+            if (!empty($data[ 'key' ]) && !in_array($v[ 'key' ], explode(',', $data[ 'key' ]))) {
+                unset($index_list[ $k ]);
+                continue;
+            }
+        }
+
+        $index_list = array_values($index_list);
+        return $index_list;
+    }
 }

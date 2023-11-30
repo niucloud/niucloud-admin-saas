@@ -86,9 +86,9 @@ class SiteUserService extends BaseAdminService
             $query->field('uid, site_id, is_admin')->with('siteInfo');
         }])->findOrEmpty()->toArray();
         if (!empty($info)) {
-            $info['roles'] = array_filter(array_map(function ($item) {
+            $info['roles'] = array_values(array_filter(array_map(function ($item) {
                 if ($item['site_id']) return $item;
-            }, $info['roles']));
+            }, $info['roles'])));
         }
         return $info;
     }

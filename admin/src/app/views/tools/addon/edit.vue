@@ -1,7 +1,7 @@
 <template>
     <div class="main-container mb-80" v-loading="loading">
         <div class="detail-head !mb-[10px]">
-            <div class="left" @click="router.push({ path: '/setting/tools/addon' })">
+            <div class="left" @click="router.push({ path: '/tools/addon' })">
                 <span class="iconfont iconxiangzuojiantou !text-xs"></span>
                 <span class="ml-[1px]">{{ t('returnToPreviousPage') }}</span>
             </div>
@@ -226,7 +226,7 @@ const onSave = async (formEl: FormInstance | undefined) => {
 
                 setTimeout(() => {
                     window.addonActiveName = 'pluginList'
-                    router.push({ path: "/setting/tools/addon" })
+                    router.push({ path: "/tools/addon" })
                 }, 650)
 
             }).catch(() => {

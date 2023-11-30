@@ -81,29 +81,29 @@
                     </el-row>
                 </el-card>
                 <div class="flex justify-between mt-[15px]">
-                    <div class="w-[258px] h-[132px] bg-[#F9F9F9] flex justify-center flex-col items-center cursor-pointer"
+                    <div class="flex-1 h-[145px] bg-[#F9F9F9] flex justify-center flex-col items-center cursor-pointer mr-[25px]"
                         @click="toLink('site/list')">
                         <img class="w-[52px]" src="@/app/assets/images/index/site1.png" />
                         <span class="text-[16px] text-[#333]">{{ t("siteList") }}</span>
                     </div>
-                    <div class="w-[258px] h-[132px] bg-[#F9F9F9] flex justify-center flex-col items-center cursor-pointer"
+                    <div class="flex-1 h-[145px] bg-[#F9F9F9] flex justify-center flex-col items-center cursor-pointer mr-[25px]"
                         @click="toLink('site/group')">
                         <img class="w-[52px]" src="@/app/assets/images/index/site_class1.png" />
                         <span class="text-[16px] text-[#333]">{{ t("sitePackage") }}</span>
                     </div>
-                    <div class="w-[258px] h-[132px] bg-[#F9F9F9] flex justify-center flex-col items-center cursor-pointer"
+                    <div class="flex-1 h-[145px] bg-[#F9F9F9] flex justify-center flex-col items-center cursor-pointer mr-[25px]"
                         @click="toLink('site/list')">
                         <img class="w-[52px]" src="@/app/assets/images/index/new_site1.png" />
                         <span class="text-[16px] text-[#333]">{{ t("newSite") }}</span>
                     </div>
-                    <div class="w-[258px] h-[132px] bg-[#F9F9F9] flex justify-center flex-col items-center cursor-pointer"
+                    <div class="flex-1 h-[145px] bg-[#F9F9F9] flex justify-center flex-col items-center cursor-pointer mr-[25px]"
                         @click="toLink('/admin/site/user')">
                         <img class="w-[52px]" src="@/app/assets/images/index/auth1.png" />
                         <span class="text-[16px] text-[#333]">{{
                             t("administrator")
                         }}</span>
                     </div>
-                    <div class="w-[258px] h-[132px] bg-[#F9F9F9] flex justify-center flex-col items-center cursor-pointer"
+                    <div class="flex-1 h-[145px] bg-[#F9F9F9] flex justify-center flex-col items-center cursor-pointer"
                         @click="toApplication">
                         <img class="w-[52px]" src="@/app/assets/images/index/app1.png" />
                         <span class="text-[16px] text-[#333]">{{
@@ -187,7 +187,7 @@ let statInfo = ref({
     about: [],
     site_stat: {},
     site_group_stat: {},
-    app: {},
+    app: {}
 });
 const getStatInfoFn = async (id: number = 0) => {
     statInfo.value = await (await getStatInfo()).data;
@@ -304,8 +304,7 @@ nowTime()
 
 <style lang="scss" scoped>
 .main-container {
-    width: 1428px;
-    margin: 0 auto;
+    margin: 0 84px;
 }
 
 :deep(.profile-data .el-card__header) {

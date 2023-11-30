@@ -116,7 +116,7 @@ class Site extends BaseModel
         return $this->hasOne(SiteGroup::class, 'group_id', 'group_id')->joinType('left')->withField('group_id, group_name')->bind(['group_name' => 'group_name']);
     }
 
-    public function addon() {
+    public function addonName() {
         return $this->hasOne(Addon::class, 'key', 'app')->bind(['app_name' => 'title']);
     }
 

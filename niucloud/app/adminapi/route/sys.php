@@ -86,6 +86,9 @@ Route::group('sys', function () {
     //获取平台首页加载
     Route::get('config/admin_index', 'sys.Config/getAdminIndexList');
 
+    // 获取手机端首页加载
+    Route::get('config/wap_index', 'sys.Config/getWapIndexList');
+
     //快捷菜单设置
     Route::put('config/shortcut_menu', 'sys.Config/setShortcutMenu');
     //获取快捷菜单

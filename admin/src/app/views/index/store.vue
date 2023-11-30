@@ -294,7 +294,7 @@
                     </div>
                 </div>
                 <div v-show="installStep == 2" class="h-[50vh] mt-[20px]">
-                    <terminal :name="currAddon" :context="currAddon" :init-log="null" :show-header="false"
+                    <terminal ref="terminalRef" :context="currAddon" :init-log="null" :show-header="false"
                         :show-log-time="true" />
                 </div>
                 <div v-show="installStep == 3" class="h-[50vh] mt-[20px] flex flex-col">
@@ -399,6 +399,7 @@ const downloading = ref('')
 const installAfterTips = ref<string[]>([])
 const userStore = useUserStore()
 const unloadHintDialog = ref(false)
+const terminalRef = ref(null)
 
 const currDownData = ref()
 const downEventHintFn = () => {
@@ -635,8 +636,8 @@ const handleCloudInstall = () => {
 
     cloudInstallAddon({ addon: currAddon.value }).then(res => {
         installStep.value = 2
-        terminalApi.execute(currAddon.value, 'clear')
-        terminalApi.pushMessage(currAddon.value, { content: '开始安装插件', class: 'info' })
+        terminalRef.value.execute('clear')
+        terminalRef.value.pushMessage({ content: '开始安装插件', class: 'info' })
         getInstallTask()
         cloudInstalling.value = false
     }).catch((res) => {
@@ -670,11 +671,11 @@ const getCloudInstallLog = () => {
             if (data[0] && data[0].length && installShowDialog.value == true) {
                 data[0].forEach(item => {
                     if (!installLog.includes(item.action)) {
-                        terminalApi.pushMessage(currAddon.value, { content: `正在执行：${item.action}` })
+                        terminalRef.value.pushMessage({ content: `正在执行：${item.action}` })
                         installLog.push(item.action)
 
                         if (item.code == 0) {
-                            terminalApi.pushMessage(currAddon.value, { content: item.msg, class: 'error' })
+                            terminalRef.value.pushMessage({ content: item.msg, class: 'error' })
                         }
                     }
                 })

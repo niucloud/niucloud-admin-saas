@@ -861,7 +861,7 @@ return
                     'menu_name' => '注册登录',
                     'menu_key' => 'setting_login_register',
                     'menu_type' => 1,
-                    'icon' => 'iconfont-icondenglu',
+                    'icon' => 'iconfont-iconzhuceshezhi',
                     'api_url' => 'member/config/login',
                     'router_path' => 'login',
                     'view_path' => 'setting/login',

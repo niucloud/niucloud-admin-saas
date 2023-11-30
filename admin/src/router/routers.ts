@@ -109,7 +109,21 @@ export const SITE_ROUTE: RouteRecordRaw = {
                         type: 1,
                         title: '个人中心'
                     },
-                    component: () => import('@/app/views/index/personal.vue')
+                    component: () => import('@/app/views/site/personal.vue')
+                }
+            ]
+        },
+        {
+            path: 'user',
+            component: Default,
+            children: [
+                {
+                    path: 'edit_center',
+                    meta: {
+                        type: 1,
+                        title: '编辑个人中心'
+                    },
+                    component: () => import('@/app/views/site/edit_personal.vue')
                 }
             ]
         }

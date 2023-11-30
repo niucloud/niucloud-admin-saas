@@ -59,7 +59,7 @@
             <el-table :data="detail.roles" size="large">
                 <el-table-column prop="site_id" :label="t('siteId')" width="100px" />
                 <el-table-column prop="site_name" :label="t('siteName')" />
-                <el-table-column prop="last_time" :label="t('isAdmin')" min-width="180" align="center">
+                <el-table-column prop="is_admin" :label="t('isAdmin')" min-width="180" align="center">
                     <template #default="{ row }">
                         {{ row.is_admin ? t('yes') : t('no') }}
                     </template>

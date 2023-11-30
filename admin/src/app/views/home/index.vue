@@ -15,7 +15,7 @@
         <div class="w-[1200px] m-auto  mt-[62px]">
             <div class="flex justify-between items-center">
                 <span class="text-[24px] font-bold">站点列表</span>
-                <el-button type="primary" class="w-[90px] !h-[34px]">创建站点</el-button>
+                <el-button type="primary" class="w-[90px] !h-[34px]" @click="handleChick">创建站点</el-button>
             </div>
             <div class="flex justify-between items-center mt-[18px]">
                 <div class="flex items-center flex-wrap text-[14px] w-[800px]">
@@ -142,6 +142,10 @@ const addonList = ref([])
 getInstalledAddonList().then(({ data }) => {
     addonList.value = data
 }).catch()
+
+const handleChick = () => {
+	ElMessage('加班加点研发中...')
+}
 </script>
 
 <style lang="scss" scoped>
