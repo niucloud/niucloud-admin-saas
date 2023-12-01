@@ -877,8 +877,6 @@ INSERT INTO `site` VALUES (1, 'niucloud-admin', '0', '', 'admin', '', '', '1', '
 
 UPDATE `site` SET site_id = 0 WHERE  site_id = 1;
 
-ALTER TABLE `site` MODIFY COLUMN site_id INT AUTO_INCREMENT PRIMARY KEY;
-
 INSERT INTO `sys_user` VALUES ('1', '', '', '', '', '', '0', '0', '0', '1', '0', '0', '0');
 
 INSERT INTO `sys_user_role` VALUES ('1', '1', '0', '', '0', '1', '1');
