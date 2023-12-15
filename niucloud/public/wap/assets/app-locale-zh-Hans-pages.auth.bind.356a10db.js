@@ -1,1 +1,0 @@
-const e="绑定手机号",i="绑定",l="绑定中",d="请阅读并同意",o="请勾选已阅读并同意",a="请输入手机号",n="请输入验证码",r="微信用户一键绑定",b={bindMobile:e,bind:"绑定",binding:"绑定中",agreeTips:d,pleaceAgree:o,mobilePlaceholder:a,codePlaceholder:n,weixinUserAuth:r};export{d as agreeTips,i as bind,e as bindMobile,l as binding,n as codePlaceholder,b as default,a as mobilePlaceholder,o as pleaceAgree,r as weixinUserAuth};

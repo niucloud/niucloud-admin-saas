@@ -1,1 +1,0 @@
-const e="个人信息",n="会员头像",c="修改",o="会员昵称",m="取消",t="确定",a={personageInfo:e,memberHeadimg:n,edit:c,nickname:o,cancel:m,confirm:t};export{m as cancel,t as confirm,a as default,c as edit,n as memberHeadimg,o as nickname,e as personageInfo};

@@ -1,4 +1,0 @@
-public function {RELATION_NAME}()
-    {
-        return $this->hasMany({RELATION_MODEL}::class, '{FOREIGN_KEY}', '{LOCAL_KEY}');
-    }

@@ -1,9 +1,0 @@
-{
-  "title": "hello world",
-  "desc": "Niucloud hello world演示插件",
-  "key": "hello_world",
-  "version": "1.0.1",
-  "author": "niucloud",
-  "type": "app",
-  "support_app": ""
-}

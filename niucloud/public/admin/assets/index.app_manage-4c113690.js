@@ -1,1 +1,0 @@
-const n="应用中心",o="暂无安装任何应用,请点击",t="安装应用",i="安装使用",c="Niucloud官网",e="安装应用",s="版本信息:",p="当前版本",r={app:n,descriptionLeft:o,link:t,descriptionRight:i,niucloud:c,appStore:e,versionInfo:s,currentVersion:p};export{n as app,e as appStore,p as currentVersion,r as default,o as descriptionLeft,i as descriptionRight,t as link,c as niucloud,s as versionInfo};

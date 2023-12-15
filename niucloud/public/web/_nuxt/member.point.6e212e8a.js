@@ -1,1 +1,0 @@
-const c="我的积分",e="账户类型",n="金额变化",o="发生方式",t="备注",r="发生时间",m={myPoint:c,accountType:e,changeInAmount:n,modeOfOccurrence:o,remark:t,occurrenceTime:r};export{e as accountType,n as changeInAmount,m as default,o as modeOfOccurrence,c as myPoint,r as occurrenceTime,t as remark};

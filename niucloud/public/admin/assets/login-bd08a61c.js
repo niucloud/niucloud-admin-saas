@@ -1,1 +1,0 @@
-const e="Niucloud Vite Management side",o="Login",l="Logging",n="Please enter your account number",s="Please enter your password",t={title:e,login:o,logging:l,userPlaceholder:n,passwordPlaceholder:s};export{t as default,l as logging,o as login,s as passwordPlaceholder,e as title,n as userPlaceholder};
