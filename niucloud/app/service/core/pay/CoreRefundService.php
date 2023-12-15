@@ -11,6 +11,7 @@
 
 namespace app\service\core\pay;
 
+use app\dict\pay\PayDict;
 use app\dict\pay\RefundDict;
 use app\model\pay\Refund;
 use core\base\BaseCoreService;
@@ -41,7 +42,7 @@ class CoreRefundService extends BaseCoreService
      * @param string $reason
      * @return string|null
      */
-    public function create(int $site_id, string $out_trade_no, float $money, string $reason = ''){
+    public function create(int $site_id, string $out_trade_no, float $money, string $reason = '', $trade_type = '', $trade_id = ''){
         //通过交易流水号获取支付单据
         $pay = (new CorePayService())->findPayInfoByOutTradeNo($site_id, $out_trade_no);
         if($pay->isEmpty()) throw new PayException('ALIPAY_TRANSACTION_NO_NOT_EXIST');//单据不存在
@@ -56,7 +57,9 @@ class CoreRefundService extends BaseCoreService
             'out_trade_no' => $out_trade_no,
             'refund_no' => $refund_no,
             'status' => RefundDict::WAIT,
-            'reason' => $reason
+            'reason' => $reason,
+            'trade_type' => $trade_type,
+            'trade_id' => $trade_id
         );
         $this->model->create($data);
         return $refund_no;
@@ -69,15 +72,23 @@ class CoreRefundService extends BaseCoreService
      * @param string $voucher
      * @return true
      */
-    public function refund(int $site_id, string $refund_no, $voucher = ''){
+    public function refund(int $site_id, string $refund_no, $voucher = '', $refund_type = RefundDict::BACK, $main_type = '', $main_id = 0){
         $refund = $this->findByRefundNo($site_id, $refund_no);
         if($refund->isEmpty()) throw new PayException('REFUND_NOT_EXIST');
         $out_trade_no = $refund->out_trade_no;
         $money = $refund->money;
         try{
-            //判断成功的话,可以直接调用退款成功
-            $pay_result = $this->pay_event->init($site_id, $refund->channel, $refund->type)->refund($out_trade_no, $money, $money, $refund_no, $voucher);
-            $this->refundNotify($site_id, $out_trade_no, $refund->type, $pay_result);
+            //存入退款方式
+            $refund->save(['refund_type' => $refund_type]);
+            if($refund_type == RefundDict::BACK){
+                //判断成功的话,可以直接调用退款成功
+                $pay_result = $this->pay_event->init($site_id, $refund->channel, $refund->type)->refund($out_trade_no, $money, $money, $refund_no, $voucher);
+                $this->refundNotify($site_id, $out_trade_no, $refund->type, $pay_result);
+            }else if($refund_type == RefundDict::OFFLINE){
+                $pay_result = $this->pay_event->init($site_id, $refund->channel, PayDict::OFFLINEPAY)->refund($out_trade_no, $money, $money, $refund_no, $voucher);
+                $this->refundNotify($site_id, $out_trade_no, $refund->type, $pay_result, $main_type, $main_id);
+            }
+
         }catch ( Throwable $e) {
             throw new PayException($e->getMessage());
         }
@@ -99,7 +110,7 @@ class CoreRefundService extends BaseCoreService
 
 
 
-    public function refundNotify(int $site_id, $out_trade_no, string $type, array $params = []){
+    public function refundNotify(int $site_id, $out_trade_no, string $type, array $params = [], $main_type = '', $main_id = 0){
         $refund_no = $params['refund_no'];
 
         $refund = $this->findByRefundNo($site_id, $refund_no);
@@ -116,6 +127,10 @@ class CoreRefundService extends BaseCoreService
                     $this->refundSuccess($site_id, [
                         'out_trade_no' => $out_trade_no,
                         'refund_no' => $refund_no,
+                        'trade_type' => $refund['trade_type'],
+                        'trade_id' => $refund['trade_id'],
+                        'main_type' => $main_type,
+                        'main_id' => $main_id
                     ]);
                     break;
                 case RefundDict::DEALING://退款处理中
@@ -200,7 +215,7 @@ class CoreRefundService extends BaseCoreService
             'status' => RefundDict::SUCCESS
         ]);
         $pay = (new CorePayService())->findPayInfoByOutTradeNo($site_id, $out_trade_no);
-        $result = event('RefundSuccess', ['refund_no' => $refund_no, 'trade_type' => $pay->trade_type, 'site_id' => $site_id]);
+        $result = event('RefundSuccess', ['refund_no' => $refund_no, 'trade_type' => $pay->trade_type, 'site_id' => $site_id, 'trade_id' => $data['trade_id']]);
         if(!check_event_result($result)){
             return false;
         }

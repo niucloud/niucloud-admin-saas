@@ -69,7 +69,9 @@
     }
 
     const complete = () => {
-        redirect({ url: getFirstPage(), param: { code: payInfo.value?.out_trade_no }, mode: 'redirectTo' })
+        const payReturn = decodeURIComponent(uni.getStorageSync('payReturn'))
+        if (payReturn) redirect({ url: payReturn, mode: 'redirectTo' })
+        else redirect({ url: getFirstPage(), param: { code: payInfo.value?.out_trade_no }, mode: 'redirectTo' })
     }
 </script>
 

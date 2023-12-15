@@ -223,7 +223,7 @@ class WebEditGenerator extends BaseGenerator
         $content = '';
         $isExist = [];
         foreach ($this->tableColumn as $column) {
-            if (empty($column['dict_type']) || $column['is_pk']) {
+            if (empty($column['dict_type']) || $column['is_pk'] || $column['column_name'] == 'site_id') {
                 continue;
             }
             if (in_array($column['dict_type'], $isExist)) {
@@ -274,7 +274,6 @@ class WebEditGenerator extends BaseGenerator
         if (!empty($content)) {
             $content = substr($content, 0, -1);
         }
-
         return $this->setBlankSpace($content, '    ');
     }
 
@@ -290,10 +289,7 @@ class WebEditGenerator extends BaseGenerator
         $specDictType = ['input', 'textarea', 'editor'];
 
         foreach ($this->tableColumn as $column) {
-//            if (!$column['is_pk']) {
-//                continue;
-//            }
-            if (!$column['is_insert'] || !$column['is_update'] || $column['column_name'] == 'site_id') {
+            if (!$column['is_insert'] || !$column['is_update'] || $column['is_pk'] || $column['column_name'] == 'site_id') {
                 continue;
             }
             if (in_array($column['column_name'], $isExist)) {
@@ -392,7 +388,7 @@ class WebEditGenerator extends BaseGenerator
         }
         if(!empty($this->addonName))
         {
-            $dir = $this->outDir . '/addon/'.$this->addonName.'/admin/src/views/' . $this->moduleName . '/';
+            $dir = $this->outDir . '/addon/'.$this->addonName.'/admin/views/' . $this->moduleName . '/';
         }else{
             $dir = $this->outDir . 'admin/src/app/views/' . $this->moduleName . '/';
         }
@@ -421,6 +417,16 @@ class WebEditGenerator extends BaseGenerator
         return $dir;
     }
 
+    /**
+     * 获取文件生成到插件中
+     * @return void
+     */
+    public function getAddonObjectOutDir() {
+        $dir = $this->rootDir . '/niucloud/addon/'.$this->addonName.'/admin/views/'. $this->moduleName . '/components/';
+        $this->checkDir($dir);
+        return $dir;
+    }
+
     public function getFilePath()
     {
         if($this->table['edit_type'] != 1) {
@@ -445,6 +451,9 @@ class WebEditGenerator extends BaseGenerator
     {
         if($this->table['edit_type'] != 1) {
             return '';
+        }
+        if($this->className){
+            return str_replace('_', '-', Str::lower($this->className)).'-edit.vue';
         }
         return 'edit.vue';
 
@@ -479,6 +488,9 @@ class WebEditGenerator extends BaseGenerator
                 continue;
             }
             $content.= 'let '.$column['column_name'].'List = ref([])'.PHP_EOL.'const '.$column['column_name'].'DictList = async () => {'.PHP_EOL.$column['column_name'].'List.value = await (await useDictionary(' ."'".$column['dict_type']."'".')).data.dictionary'.PHP_EOL.'}'.PHP_EOL. $column['column_name'].'DictList();'.PHP_EOL;
+            if ($column['view_type'] == 'radio' || $column['view_type'] == 'select') {
+                $content .= 'watch(() => '.$column['column_name'].'List.value, () => { formData.'.$column['column_name'].' = '.$column['column_name'].'List.value[0].value })'.PHP_EOL;
+            }
         }
 
         if(!empty($content))

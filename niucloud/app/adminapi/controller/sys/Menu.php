@@ -37,9 +37,9 @@ class Menu extends BaseAdminController
      * @param $menu_key
      * @return Response
      */
-    public function info($menu_key)
+    public function info($app_type, $menu_key)
     {
-        return success((new MenuService())->get($menu_key));
+        return success((new MenuService())->get($app_type, $menu_key));
     }
 
     /**
@@ -73,7 +73,7 @@ class Menu extends BaseAdminController
     /**
      * 菜单或接口更新
      */
-    public function edit($menu_key)
+    public function edit($app_type, $menu_key)
     {
         $data = $this->request->params([
             ['menu_name', ''],
@@ -92,7 +92,7 @@ class Menu extends BaseAdminController
             ['is_show', 0],
         ]);
         $this->validate($data, 'app\validate\sys\Menu.edit');
-        (new MenuService())->edit($menu_key, $data);
+        (new MenuService())->edit($app_type, $menu_key, $data);
         return success('EDIT_SUCCESS');
     }
 
@@ -120,9 +120,9 @@ class Menu extends BaseAdminController
      * @param $menu_key
      * @return Response
      */
-    public function del($menu_key)
+    public function del($app_type, $menu_key)
     {
-        (new MenuService())->del($menu_key);
+        (new MenuService())->del($app_type, $menu_key);
         return success('DELETE_SUCCESS');
     }
 

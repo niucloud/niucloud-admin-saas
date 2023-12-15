@@ -1,8 +1,6 @@
 {IMPORT}
 
 {BEGIN}
-
-
 /**
  * 获取{NOTES}列表
  * @param params

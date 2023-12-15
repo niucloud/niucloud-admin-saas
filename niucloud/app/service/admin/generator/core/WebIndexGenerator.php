@@ -15,6 +15,7 @@ namespace app\service\admin\generator\core;
 
 
 
+use app\service\core\menu\CoreMenuService;
 use think\helper\Str;
 
 /**
@@ -106,9 +107,9 @@ class WebIndexGenerator extends BaseGenerator
         $path = 'components/';
 //        $file_name = str_replace('_', '-', Str::lower($this->getTableName())).'-edit.vue';
         $file_name = 'edit.vue';
-//        if($this->className){
-//            $file_name = Str::lower($this->className) . '-edit.vue';
-//        }
+        if($this->className){
+            $file_name = str_replace('_', '-', Str::lower($this->className)) . '-edit.vue';
+        }
         if(!empty($this->addonName))
         {
             return "import "."Edit from '@/".$this->addonName."/views/".$this->moduleName."/".$path.$file_name."'";
@@ -146,8 +147,12 @@ class WebIndexGenerator extends BaseGenerator
     {
         $class_name = $this->className ? '/'.Str::lower($this->className) : '';
         if($this->table['edit_type'] == 2){
+            $route = '';
+            if (!empty($this->table['parent_menu'])) {
+                $route = '/' .  (new CoreMenuService())->getRoutePathByMenuKey($this->table['parent_menu']);
+            }
             //打开新页面
-            $content = "router.push('/".$this->moduleName."/edit')";
+            $content = "router.push('".$route."/".$this->moduleName."/". Str::lower($this->className) ."_edit')";
         }else{
             $content = 'edit'.$this->getUCaseClassName().'Dialog.value.setFormData()'.PHP_EOL.'edit'.$this->getUCaseClassName().'Dialog.value.showDialog = true';
         }
@@ -164,7 +169,11 @@ class WebIndexGenerator extends BaseGenerator
     {
         $class_name = $this->className ? '/'.Str::lower($this->className) : '';
         if($this->table['edit_type'] == 2){
-            $content = "router.push('/".$this->moduleName."/edit?id='+data.".$this->getPk().")";
+            $route = '';
+            if (!empty($this->table['parent_menu'])) {
+                $route = '/' . (new CoreMenuService())->getRoutePathByMenuKey($this->table['parent_menu']);
+            }
+            $content = "router.push('".$route."/".$this->moduleName."/". Str::lower($this->className) ."_edit?id='+data.".$this->getPk().")";
         }else{
             $content = 'edit'.$this->getUCaseClassName().'Dialog.value.setFormData(data)'.PHP_EOL.'edit'.$this->getUCaseClassName().'Dialog.value.showDialog = true';
         }
@@ -224,6 +233,9 @@ class WebIndexGenerator extends BaseGenerator
                     $searchVmType = 'select';
                 }
             }
+            if ($column['query_type'] == 'BETWEEN') {
+                $searchVmType = $column['view_type'] == 'datetime' ? 'datetime' :  'rangeInput';
+            }
 
             $vmPath = $this->getvmPath('search/' . $searchVmType);
             if (!file_exists($vmPath)) {
@@ -247,13 +259,18 @@ class WebIndexGenerator extends BaseGenerator
      */
     public function getSearchParams()
     {
+
         $content = '';
         foreach ($this->tableColumn as $column) {
             if (!$column['is_search'] || $column['is_pk']) {
                 continue;
             }
 
-            $content .= '"'.$column['column_name'].'":"",' . PHP_EOL;
+            if ($column['query_type'] == 'BETWEEN') {
+                $content .= '"'.$column['column_name'].'":[],' . PHP_EOL;
+            } else {
+                $content .= '"'.$column['column_name'].'":"",' . PHP_EOL;
+            }
         }
 
         if (!empty($content)) {
@@ -279,12 +296,14 @@ class WebIndexGenerator extends BaseGenerator
             $old = [
                 '{COLUMN_COMMENT}',
                 '{COLUMN_NAME}',
-                '{LANG}'
+                '{LANG}',
+                '{DICT_TYPE}'
             ];
             $new = [
                 $column['column_comment'],
                 $column['column_name'],
-                Str::camel($column['column_name'])
+                Str::camel($column['column_name']),
+                $column['column_name'].'List'
             ];
 
             $vmPath = $this->getvmPath('table/default');
@@ -295,6 +314,11 @@ class WebIndexGenerator extends BaseGenerator
             if ($column['column_type'] == 'int' && $column['view_type'] == 'datetime') {
                 $vmPath = $this->getvmPath('table/datetime');
             }
+
+            if ($column['dict_type']) {
+                $vmPath = $this->getvmPath('table/dictcolumn');
+            }
+
             if (!file_exists($vmPath)) {
                 continue;
             }
@@ -341,7 +365,12 @@ class WebIndexGenerator extends BaseGenerator
      */
     public function getModuleOutDir()
     {
-        $dir = dirname(app()->getRootPath()) . '/admin/src/views/' . $this->moduleName . '/';
+        if(!empty($this->addonName))
+        {
+            $dir = dirname(app()->getRootPath()) . '/admin/src/'. $this->addonName  .'/views/';
+        }else{
+            $dir = dirname(app()->getRootPath()) . '/admin/src/app/views/';
+        }
         $this->checkDir($dir);
 
         return $dir;
@@ -356,10 +385,10 @@ class WebIndexGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = $this->outDir . 'addon/'.$this->addonName.'/admin/src/views/' . $this->moduleName . '/';
+            $dir = $this->outDir . 'addon/'.$this->addonName.'/admin/views/' . $this->moduleName . '/';
 
         }else{
-            $dir = $this->outDir . 'admin/src/views/' . $this->moduleName . '/';
+            $dir = $this->outDir . 'admin/src/app/views/' . $this->moduleName . '/';
         }
 
 
@@ -385,6 +414,16 @@ class WebIndexGenerator extends BaseGenerator
         return $dir;
     }
 
+    /**
+     * 获取文件生成到插件中
+     * @return void
+     */
+    public function getAddonObjectOutDir() {
+        $dir = $this->rootDir . '/niucloud/addon/'.$this->addonName.'/admin/views/'. $this->moduleName . '/';
+        $this->checkDir($dir);
+        return $dir;
+    }
+
     public function getFilePath()
     {
         if(!empty($this->addonName))
@@ -402,7 +441,7 @@ class WebIndexGenerator extends BaseGenerator
      */
     public function getFileName()
     {
-//        if($this->className) return Str::lower($this->className).'_list.vue';
+        if($this->className) return Str::lower($this->className).'.vue';
         return 'list.vue';
     }
 
@@ -454,18 +493,13 @@ class WebIndexGenerator extends BaseGenerator
             {
                 continue;
             }
-            if($column['view_type'] == 'select')
-            {
-                $content.= 'let '.$column['column_name'].'List = ref([])'.PHP_EOL.'const '.$column['column_name'].'DictList = async () => {'.PHP_EOL.$column['column_name'].'List.value = await (await useDictionary(' ."'".$column['dict_type']."'".')).data.dictionary'.PHP_EOL.'}'.PHP_EOL. $column['column_name'].'DictList();'.PHP_EOL;
-
-            }
+            $content.= 'const '.$column['column_name'].'List = ref([])'.PHP_EOL.'const '.$column['column_name'].'DictList = async () => {'.PHP_EOL.$column['column_name'].'List.value = await (await useDictionary(' ."'".$column['dict_type']."'".')).data.dictionary'.PHP_EOL.'}'.PHP_EOL. $column['column_name'].'DictList();'.PHP_EOL;
         }
 
         if(!empty($content))
         {
             $content = substr($content, 0, -1);
         }
-
         return $this->setBlankSpace($content, '    ');
     }
 }

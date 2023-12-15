@@ -105,7 +105,7 @@ class CoreOfflineService extends BaseCoreService
         if ($pay->type != PayDict::OFFLINEPAY) throw new CommonException('ONLY_OFFLINEPAY_CAN_AUDIT');
 
         return (new CorePayService())->paySuccess($site_id, [
-            'status' => PayDict::STATUS_ED,
+            'status' => PayDict::STATUS_FINISH,
             'type' => $pay->type,
             'out_trade_no' => $out_trade_no,
             'voucher' => $pay->voucher

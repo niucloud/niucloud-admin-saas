@@ -78,6 +78,16 @@
                         </template>
                     </el-table-column>
 
+                    <el-table-column :label="t('manager')" width="150" align="left">
+                        <template #default="{ row }">
+                            <div class="flex items-center">
+                                <div class="flex flex flex-col">
+                                    <span>{{ row.admin.username || '' }}</span>
+                                </div>
+                            </div>
+                        </template>
+                    </el-table-column>
+
                     <el-table-column prop="app_name" :label="t('app')" width="150" :show-overflow-tooltip="true" />
                     <el-table-column prop="group_name" :label="t('groupId')" width="150" :show-overflow-tooltip="true" />
                     <el-table-column prop="create_time" :label="t('createTime')" width="250" :show-overflow-tooltip="true" />
@@ -101,8 +111,9 @@
 
                     <el-table-column :label="t('operation')" min-width="250" align="right" fixed="right">
                         <template #default="{ row }">
-                            <el-button type="primary" link @click="toSiteLink">
-                                <a href="javascript:;" title="启动站点" class="iconfont iconicon_huojian"></a>
+                            <el-button type="primary" link @click="toSiteLink(row)">
+<!--                                <a href="javascript:;" title="启动站点" class="iconfont iconicon_huojian"></a>-->
+                                访问站点
                             </el-button>
                             <el-button type="primary" link @click="openClose(row.status, row.site_id)"
                                 v-if="row.status == 1 || row.status == 3">{{ row.status == 1 ? t('closeTxt') : t('openTxt')
@@ -139,8 +150,6 @@ import { CollectionTag } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const pageName = route.meta.title
-
-const siteLink = location.origin + '/site/login'
 
 const groupList = ref({
     all: []
@@ -275,8 +284,9 @@ const editEvent = (data: any) => {
  * 站点登录
  * @param data
  */
-const toSiteLink = () => {
-    window.open(siteLink)
+const toSiteLink = (data: any) => {
+    // window.localStorage.setItem('site.siteId', data.site_id)
+    window.open(`${location.origin}/site/`)
 }
 
 const openClose = (i, site_id) => {

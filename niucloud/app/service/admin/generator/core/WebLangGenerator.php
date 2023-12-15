@@ -76,6 +76,8 @@ class WebLangGenerator extends BaseGenerator
         $lang .= '"add'.$this->getUCaseClassName() .'":"添加'.$table_content.'",'.PHP_EOL;
         $lang .= '"update'.$this->getUCaseClassName() .'":"编辑'.$table_content.'",'.PHP_EOL;
         $lang .= '"'.$this->getLCaseClassName() .'DeleteTips":"确定要删除该数据吗？",'.PHP_EOL;
+        $lang .= '"startDate":"请选择开始时间",'.PHP_EOL;
+        $lang .= '"endDate":"请选择结束时间",'.PHP_EOL;
         $lang = trim(trim($lang), ',');
         return '{'.PHP_EOL.$this->setBlankSpace($lang, "      ").PHP_EOL.'}';
     }
@@ -86,7 +88,12 @@ class WebLangGenerator extends BaseGenerator
      */
     public function getModuleOutDir()
     {
-        $dir = dirname(app()->getRootPath()) . '/admin/src/lang/zh-cn/';
+        if(!empty($this->addonName))
+        {
+            $dir = dirname(app()->getRootPath()) . '/admin/src/'. $this->addonName .'/lang/zh-cn/';
+        } else {
+            $dir = dirname(app()->getRootPath()) . '/admin/src/app/lang/zh-cn/';
+        }
         $this->checkDir($dir);
         return $dir;
     }
@@ -100,10 +107,10 @@ class WebLangGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = $this->outDir . 'addon/'.$this->addonName.'/admin/src/lang/zh-cn/';
+            $dir = $this->outDir . 'addon/'.$this->addonName.'/admin/lang/zh-cn/';
 
         }else{
-            $dir = $this->outDir . 'admin/src/lang/zh-cn/';
+            $dir = $this->outDir . 'admin/src/app/lang/zh-cn/';
         }
 
         $this->checkDir($dir);
@@ -127,11 +134,21 @@ class WebLangGenerator extends BaseGenerator
         return $dir;
     }
 
+    /**
+     * 获取文件生成到插件中
+     * @return void
+     */
+    public function getAddonObjectOutDir() {
+        $dir = $this->rootDir . '/niucloud/addon/'.$this->addonName.'/admin/lang/zh-cn/';
+        $this->checkDir($dir);
+        return $dir;
+    }
+
     public function getFilePath()
     {
         if(!empty($this->addonName))
         {
-            $dir = 'addon/'.$this->addonName.'/admin/'.$this->addonName.'/lang/zh-cn/';
+            $dir = 'addon/'.$this->addonName.'/admin/lang/zh-cn/';
 
         }else{
             $dir = 'admin/app/lang/zh-cn/';
@@ -146,7 +163,7 @@ class WebLangGenerator extends BaseGenerator
     public function getFileName()
     {
         if($this->className){
-            return $this->moduleName.'.'.'list.json';
+            return $this->moduleName.'.'. Str::lower($this->className) .'.json';
         }
         return $this->moduleName.'.list.json';
     }

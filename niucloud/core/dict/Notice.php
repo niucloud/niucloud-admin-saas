@@ -11,6 +11,8 @@
 namespace core\dict;
 
 
+use app\service\admin\addon\AddonService;
+
 class Notice extends BaseDict
 {
     /**
@@ -25,7 +27,7 @@ class Notice extends BaseDict
         if (is_file($system_path)) {
             $template_files[] = $system_path;
         }
-        $addons = $this->getLocalAddons();
+        $addons = (new AddonService())->getAddonKeysBySiteId(request()->siteId());
         foreach ($addons as $v) {
             $template_path = $this->getAddonDictPath($v) . "notice" . DIRECTORY_SEPARATOR . $data[ 'type' ] . ".php";
             if (is_file($template_path)) {

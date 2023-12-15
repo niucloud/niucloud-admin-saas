@@ -39,6 +39,15 @@ Route::group('pay', function () {
     Route::put('refuse/:out_trade_no', 'pay.Pay/refuse');
     // 支付单据详情
     Route::get('detail/:id', 'pay.Pay/detail');
+    /***************************************************** 退款 *************************************************/
+    //退款列表
+    Route::get('refund', 'pay.PayRefund/pages');
+    //退款详情
+    Route::get('refund/:refund_no', 'pay.PayRefund/detail');
+    //退款方式
+    Route::get('refund/type', 'pay.PayRefund/getRefundType');
+    //退款转账
+    Route::post('refund/transfer', 'pay.PayRefund/transfer');
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,

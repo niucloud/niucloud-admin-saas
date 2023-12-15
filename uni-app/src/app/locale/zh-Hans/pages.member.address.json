@@ -1,0 +1,6 @@
+{
+    "address": "快递地址",
+    "locationAddress": "同城配送地址",
+    "createAddress": "新建收货地址",
+    "default": "默认"
+}

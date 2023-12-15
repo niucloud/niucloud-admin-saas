@@ -58,4 +58,12 @@ class Area extends BaseAdminController
         ]);
         return success((new AreaService())->getAddressInfo($data['location']));
     }
+
+    /**
+     *
+     * @return void
+     */
+    public function areaByAreaCode(string $code) {
+        return success((new AreaService())->getAreaByAreaCode($code));
+    }
 }

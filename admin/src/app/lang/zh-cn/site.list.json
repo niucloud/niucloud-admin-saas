@@ -34,7 +34,7 @@
       "siteInlet": "站点入口",
       "enterSite": "访问站点",
       "siteList": "站点列表",
-	"openClose": "开启/停止",
+	  "openClose": "开启/停止",
       "closeTxt":"停止",
       "openTxt":"开启",
       "siteUrlDevelopMessage": "站点域名功能正在开发中",
@@ -45,4 +45,4 @@
       "managerPlaceholder": "请选择站点管理员",
       "newAddManager": "新增管理员",
       "edit": "编辑"
-}	
+}

@@ -84,4 +84,15 @@ class CoreModuleService extends BaseNiucloudClient
     {
         return $this->httpGet('member_app_action/'.$action, $data);
     }
+
+    /**
+     * 校验key是否被占用
+     * @param $key
+     * @return array|Response|object|ResponseInterface
+     * @throws GuzzleException
+     */
+    public function checkKey($key)
+    {
+        return $this->httpGet('store/app_check/'.$key, ['product_key' => self::PRODUCT])['data'] ?? false;
+    }
 }

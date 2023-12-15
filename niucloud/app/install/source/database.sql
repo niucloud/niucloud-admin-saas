@@ -232,25 +232,31 @@ CREATE TABLE `member_account_log`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '会员账单表' ROW_FORMAT = Dynamic;
 
 DROP TABLE IF EXISTS `member_address`;
-CREATE TABLE `member_address`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `member_id` int(11) NOT NULL DEFAULT 0 COMMENT '会员id',
-  `site_id` int(11) NOT NULL DEFAULT 0 COMMENT '站点id',
-  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户姓名',
-  `mobile` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '手机',
-  `telephone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '联系电话',
-  `province_id` int(11) NOT NULL DEFAULT 0 COMMENT '省id',
-  `city_id` int(11) NOT NULL DEFAULT 0 COMMENT '市id',
-  `district_id` int(11) NOT NULL DEFAULT 0 COMMENT '区县id',
-  `community_id` int(11) NOT NULL DEFAULT 0 COMMENT '社区id',
-  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '地址信息',
-  `full_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '详细地址信息',
-  `longitude` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '经度',
-  `latitude` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '纬度',
-  `is_default` tinyint(4) NOT NULL DEFAULT 0 COMMENT '是否是默认地址',
-  `type` int(11) NOT NULL DEFAULT 1 COMMENT '地址类型  1 普通地址  2 定位地址',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '会员收货地址' ROW_FORMAT = Dynamic;
+CREATE TABLE `member_address` (
+   id int UNSIGNED NOT NULL AUTO_INCREMENT,
+   member_id int NOT NULL DEFAULT 0 COMMENT '会员id',
+   site_id int NOT NULL DEFAULT 0 COMMENT '站点id',
+   name varchar(255) NOT NULL DEFAULT '' COMMENT '用户姓名',
+   mobile varchar(255) NOT NULL DEFAULT '' COMMENT '手机',
+   province_id int NOT NULL DEFAULT 0 COMMENT '省id',
+   city_id int NOT NULL DEFAULT 0 COMMENT '市id',
+   district_id int NOT NULL DEFAULT 0 COMMENT '区县id',
+   address varchar(255) NOT NULL DEFAULT '' COMMENT '地址信息',
+   address_name varchar(255) NOT NULL DEFAULT '',
+   full_address varchar(255) NOT NULL DEFAULT '' COMMENT '详细地址信息',
+   lng varchar(255) NOT NULL DEFAULT '' COMMENT '经度',
+   lat varchar(255) NOT NULL DEFAULT '' COMMENT '纬度',
+   is_default tinyint NOT NULL DEFAULT 0 COMMENT '是否是默认地址',
+   type varchar(30) NOT NULL DEFAULT '' COMMENT '地址类型  address 普通地址  location_address 定位地址',
+   PRIMARY KEY (id)
+)
+ENGINE = INNODB,
+CHARACTER SET utf8mb4,
+COLLATE utf8mb4_general_ci,
+COMMENT = '会员收货地址';
+
+ALTER TABLE `member_address`
+    ADD INDEX IDX_member_address (member_id);
 
 DROP TABLE IF EXISTS `member_cash_out`;
 CREATE TABLE `member_cash_out`  (
@@ -376,8 +382,13 @@ CREATE TABLE `pay_refund`  (
   `create_time` int(11) NOT NULL DEFAULT 0 COMMENT '创建时间',
   `refund_time` int(11) NOT NULL DEFAULT 0 COMMENT '支付时间',
   `close_time` int(11) NOT NULL DEFAULT 0 COMMENT '关闭时间',
-  `fail_reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '失败原因',
+  `fail_reason` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '失败原因',
   `voucher` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '支付凭证',
+  `trade_type` varchar(255) NOT NULL DEFAULT '' COMMENT '业务类型',
+  `trade_id` varchar(50) NOT NULL DEFAULT '' COMMENT '业务关联id',
+  `refund_type` varchar(255) NOT NULL DEFAULT '' COMMENT '退款方式',
+  `main_type` varchar(255) NOT NULL DEFAULT '' COMMENT '操作人类型',
+  `main_id` int NOT NULL DEFAULT 0 COMMENT '操作人',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '支付记录表' ROW_FORMAT = Dynamic;
 
@@ -876,6 +887,7 @@ CREATE TABLE `wechat_reply`  (
 INSERT INTO `site` VALUES (1, 'niucloud-admin', '0', '', 'admin', '', '', '1', '', '', '0', '0', '0', '', '', '', '', '0', '0', '', '', '', '0', '', '');
 
 UPDATE `site` SET site_id = 0 WHERE  site_id = 1;
+
 
 INSERT INTO `sys_user` VALUES ('1', '', '', '', '', '', '0', '0', '0', '1', '0', '0', '0');
 

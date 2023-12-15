@@ -1,6 +1,4 @@
 <el-form-item :label="t('{LCASE_COLUMN_NAME}')" prop="{COLUMN_NAME}">
-    <daterange-picker
-        v-model:startTime="{LCASE_CLASS_NAME}Table.searchParam.start_time"
-        v-model:endTime="{LCASE_CLASS_NAME}Table.searchParam.end_time"
-    />
+    <el-date-picker v-model="{LCASE_CLASS_NAME}Table.searchParam.{COLUMN_NAME}" type="datetimerange" format="YYYY-MM-DD hh:mm:ss"
+        :start-placeholder="t('startDate')" :end-placeholder="t('endDate')" />
 </el-form-item>

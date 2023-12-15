@@ -25,8 +25,6 @@ return array(
     '25072dd6e2470089de65ae7bf11d3109' => $vendorDir . '/symfony/polyfill-php72/bootstrap.php',
     '6b998e7ad3182c0d21d23780badfa07b' => $vendorDir . '/yansongda/supports/src/Functions.php',
     '66453932bc1be9fb2f910a27947d11b6' => $vendorDir . '/alibabacloud/client/src/Functions.php',
-    'f0e7e63bbb278a92db02393536748c5f' => $vendorDir . '/overtrue/wechat/src/Kernel/Support/Helpers.php',
-    '6747f579ad6817f318cc3a7e7a0abb93' => $vendorDir . '/overtrue/wechat/src/Kernel/Helpers.php',
     'b33e3d135e5d9e47d845c576147bda89' => $vendorDir . '/php-di/php-di/src/functions.php',
     'cd5441689b14144e5573bf989ee47b34' => $vendorDir . '/qcloud/cos-sdk-v5/src/Common.php',
     '841780ea2e1d6545ea3a253239d59c05' => $vendorDir . '/qiniu/php-sdk/src/Qiniu/functions.php',
@@ -34,5 +32,7 @@ return array(
     '667aeda72477189d0494fecd327c3641' => $vendorDir . '/symfony/var-dumper/Resources/functions/dump.php',
     '1cfd2761b63b0a29ed23657ea394cb2d' => $vendorDir . '/topthink/think-captcha/src/helper.php',
     'cc56288302d9df745d97c934d6a6e5f0' => $vendorDir . '/topthink/think-queue/src/common.php',
+    '313a9b01f294d730dfc8ff43b9e56416' => $vendorDir . '/w7corp/easywechat/src/Kernel/Support/Helpers.php',
+    '8cfe2b61cc956a1edbaf214308e8c9a1' => $vendorDir . '/w7corp/easywechat/src/Kernel/Helpers.php',
     '8c783b3a3de2f6d9177022b5ccdcc841' => $vendorDir . '/yansongda/pay/src/Functions.php',
 );

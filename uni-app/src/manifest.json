@@ -50,11 +50,12 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "wx59e6ba6050bbe7bc",
+        "appid" : "",
         "setting" : {
             "urlCheck" : false
         },
-        "usingComponents" : true
+        "usingComponents" : true,
+        "requiredPrivateInfos" : [ "chooseLocation", "getLocation", "chooseAddress" ]
     },
     "mp-alipay" : {
         "usingComponents" : true
@@ -73,6 +74,13 @@
         "router" : {
             "mode" : "history",
             "base" : "/wap/"
+        },
+        "sdkConfigs" : {
+            "maps" : {
+                "qqmap" : {
+                    "key" : "6ZDBZ-CLSLX-66747-7MVM4-HLK47-XMBXU"
+                }
+            }
         }
     },
     "fallbackLocale" : "zh-Hans"

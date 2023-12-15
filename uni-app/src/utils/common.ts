@@ -186,6 +186,13 @@ export function img(path : string) : string {
 }
 
 /**
+ * 手机号隐藏
+ */
+export function mobileHide(mobile: string) {
+	return mobile.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2')
+}
+
+/**
 * 判断是否是微信浏览器
 */
 export function isWeixinBrowser() : boolean {

@@ -26,8 +26,6 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
         '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         '6b998e7ad3182c0d21d23780badfa07b' => __DIR__ . '/..' . '/yansongda/supports/src/Functions.php',
         '66453932bc1be9fb2f910a27947d11b6' => __DIR__ . '/..' . '/alibabacloud/client/src/Functions.php',
-        'f0e7e63bbb278a92db02393536748c5f' => __DIR__ . '/..' . '/overtrue/wechat/src/Kernel/Support/Helpers.php',
-        '6747f579ad6817f318cc3a7e7a0abb93' => __DIR__ . '/..' . '/overtrue/wechat/src/Kernel/Helpers.php',
         'b33e3d135e5d9e47d845c576147bda89' => __DIR__ . '/..' . '/php-di/php-di/src/functions.php',
         'cd5441689b14144e5573bf989ee47b34' => __DIR__ . '/..' . '/qcloud/cos-sdk-v5/src/Common.php',
         '841780ea2e1d6545ea3a253239d59c05' => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu/functions.php',
@@ -35,6 +33,8 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '1cfd2761b63b0a29ed23657ea394cb2d' => __DIR__ . '/..' . '/topthink/think-captcha/src/helper.php',
         'cc56288302d9df745d97c934d6a6e5f0' => __DIR__ . '/..' . '/topthink/think-queue/src/common.php',
+        '313a9b01f294d730dfc8ff43b9e56416' => __DIR__ . '/..' . '/w7corp/easywechat/src/Kernel/Support/Helpers.php',
+        '8cfe2b61cc956a1edbaf214308e8c9a1' => __DIR__ . '/..' . '/w7corp/easywechat/src/Kernel/Helpers.php',
         '8c783b3a3de2f6d9177022b5ccdcc841' => __DIR__ . '/..' . '/yansongda/pay/src/Functions.php',
     );
 
@@ -132,6 +132,7 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
         ),
         'L' => 
         array (
+            'Location\\' => 9,
             'Laravel\\SerializableClosure\\' => 28,
         ),
         'J' => 
@@ -383,6 +384,10 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
         array (
             0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
         ),
+        'Location\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mjaschen/phpgeo/src',
+        ),
         'Laravel\\SerializableClosure\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/serializable-closure/src',
@@ -437,7 +442,7 @@ class ComposerStaticInitf082efa3600aae2b847c3e8b4e641a4e
         ),
         'EasyWeChat\\' => 
         array (
-            0 => __DIR__ . '/..' . '/overtrue/wechat/src',
+            0 => __DIR__ . '/..' . '/w7corp/easywechat/src',
         ),
         'EasyWeChatComposer\\' => 
         array (

@@ -73,6 +73,29 @@ class AreaService extends BaseAdminService
         );
     }
 
+    public function getAreaByAreaCode($id) {
+        $cache_name = self::$cache_tag_name.'_area_'. $id;
+        return cache_remember(
+            $cache_name,
+            function() use($id) {
+                $level = [1 => 'province', 2 => 'city', 3 => 'district'];
+                $tree = [];
+                $area = $this->model->where([ ['id', '=', $id] ])->field('id,level,pid,name')->findOrEmpty();
+
+                if (!$area->isEmpty()) {
+                    $tree[ $level[ $area['level'] ] ] = $area->toArray();
+
+                    while ($area['level'] > 1) {
+                        $area = $this->model->where([ ['id', '=', $area['pid'] ] ])->field('id,level,pid,name')->findOrEmpty();
+                        $tree[ $level[ $area['level'] ] ] = $area->toArray();
+                    }
+                }
+                return $tree;
+            },
+            [self::$cache_tag_name]
+        );
+    }
+
     /**
      * @param string $address
      * @return int|mixed

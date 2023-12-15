@@ -33,7 +33,7 @@ export const createCircle = (map: any, geometriesData: any) => {
             {
                 styleId: 'circle',
                 center: new LatLng(geometriesData.center.lat, geometriesData.center.lng),
-                radius: geometriesData.radius,
+                radius: parseInt(geometriesData.radius),
                 id: geometriesData.key
             }
         ]
@@ -55,8 +55,8 @@ export const createCircle = (map: any, geometriesData: any) => {
     })
 
     editor.on('adjust_complete', (data: any) => {
-        geometriesData.center = data.center
-        geometriesData.radius = data.radius
+        geometriesData.center = { lat: data.center.lat, lng: data.center.lng }
+        geometriesData.radius = parseInt(data.radius)
     })
 
     geometry[geometriesData.key] = { graphical: multiCircle, editor }
@@ -64,8 +64,8 @@ export const createCircle = (map: any, geometriesData: any) => {
 
 /**
  * 在地图上创建一个多边形
- * @param map 
- * @param geometriesData 
+ * @param map
+ * @param geometriesData
  */
 export const createPolygon = (map: any, geometriesData: any) => {
     const TMap = (window as any).TMap
@@ -121,7 +121,9 @@ export const createPolygon = (map: any, geometriesData: any) => {
     })
 
     editor.on('adjust_complete', (data: any) => {
-        geometriesData.paths = data.paths
+        geometriesData.paths = data.paths.map(item => {
+            return { lat: item.lat, lng: item.lng}
+        })
     })
 
     geometry[geometriesData.key] = { graphical: multiPolygon, editor }
@@ -129,7 +131,7 @@ export const createPolygon = (map: any, geometriesData: any) => {
 
 /**
  * 删除图形
- * @param key 
+ * @param key
  */
 export const deleteGeometry = (key: string) => {
     geometry[key].graphical.remove(key)
@@ -138,7 +140,7 @@ export const deleteGeometry = (key: string) => {
 
 /**
  * 选中图形
- * @param key 
+ * @param key
  */
 export const selectGeometry = (key: string) => {
     geometry[key].editor.select([key])
@@ -146,8 +148,8 @@ export const selectGeometry = (key: string) => {
 
 /**
  * 创建点标记
- * @param map 
- * @returns 
+ * @param map
+ * @returns
  */
 export const createMarker = (map: any) => {
     const TMap = (window as any).TMap
@@ -166,7 +168,7 @@ export const createMarker = (map: any) => {
 
 /**
  * 逆地址解析
- * @param params 
+ * @param params
  */
 export const latLngToAddress = (params: any) => {
     return jsonp(`https://apis.map.qq.com/ws/geocoder/v1/?key=${params.mapKey}&location=${params.lat},${params.lng}&output=jsonp&callback=callback`)

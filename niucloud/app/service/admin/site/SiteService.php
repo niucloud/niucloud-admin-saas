@@ -61,7 +61,12 @@ class SiteService extends BaseAdminService
             [ 'app_type', '<>', 'admin' ]
         ];
         $search_model = $this->model->where($condition)->withSearch([ 'create_time', 'expire_time', 'keywords', 'status', 'group_id', 'app' ], $where)->with(['groupName', 'addonName'])->field($field)->append([ 'status_name' ])->order('create_time desc');
-        return $this->pageQuery($search_model);
+        return $this->pageQuery($search_model, function ($item){
+            $item['admin'] = (new SysUserRole())->where([ ['site_id', '=', $item['site_id'] ], ['is_admin', '=', 1] ])
+                ->field('uid')
+                ->with(['userinfo'])
+                ->find()->toArray();
+        });
     }
 
     /**
@@ -93,7 +98,7 @@ class SiteService extends BaseAdminService
         $user_service = new UserService();
         if ($user_service->checkUsername($data[ 'username' ])) throw new AdminException('USERNAME_REPEAT');
 
-        $site_group = (new SiteGroup())->where([ ['group_id', '=', $data[ 'group_id' ] ] ])->field('app')->findOrEmpty();
+        $site_group = (new SiteGroup())->where([ ['group_id', '=', $data[ 'group_id' ] ] ])->field('app,addon')->findOrEmpty();
 
         $data[ 'app_type' ] = 'site';
         //添加站点
@@ -128,7 +133,7 @@ class SiteService extends BaseAdminService
             }
 
             //添加站点成功事件
-            event("AddSiteAfter", [ 'site_id' => $site_id ]);
+            event("AddSiteAfter", [ 'site_id' => $site_id, 'main_app' => $site_group['app'], 'site_addons' => $site_group['addon'] ]);
 
             Cache::delete('user_role_list_' . $data['uid']);
 
@@ -197,21 +202,21 @@ class SiteService extends BaseAdminService
      * @throws DbException
      * @throws ModelNotFoundException
      */
-    public function getMenuList(int $site_id, $is_tree, $status, $addon = 'all')
+    public function getMenuList(int $site_id, $is_tree, $status, $addon = 'all', int $is_button = 1)
     {
         $site_info = $this->getSiteCache($site_id);
         if (empty($site_info))
             return [];
         $app_type = $site_info[ 'app_type' ];
         if ($app_type == AppTypeDict::ADMIN) {
-            return ( new MenuService() )->getAllMenuList($app_type, $status, $is_tree, 1);
+            return ( new MenuService() )->getAllMenuList($app_type, $status, $is_tree, $is_button);
         } else {
             $addons = ( new AddonService() )->getAddonKeysBySiteId($site_id);
             $addons[] = '';
             if($addon != 'all'){
                 $addons = [$addon];
             }
-            return ( new MenuService() )->getMenuListBySystem($this->app_type, $addons, $is_tree);
+            return ( new MenuService() )->getMenuListBySystem($this->app_type, $addons, $is_tree, $is_button);
         }
 
 

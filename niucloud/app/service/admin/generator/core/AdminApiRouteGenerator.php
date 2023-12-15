@@ -85,7 +85,7 @@ class AdminApiRouteGenerator extends BaseGenerator
         $dir = dirname(root_path());
         if(!empty($this->addonName))
         {
-            $file = $dir.'\niucloud\addon\\'.$this->addonName.'\app/adminapi\route\route.php';
+            $file = $dir.'\niucloud\addon\\'.$this->addonName.'\app\adminapi\route\route.php';
         }else{
             $file = $dir.'\niucloud\app\adminapi\route\\'.$this->moduleName.'php';
         }
@@ -93,12 +93,12 @@ class AdminApiRouteGenerator extends BaseGenerator
         if(file_exists($file))
         {
             $content = file_get_contents($file);
-            $code_begin = 'USER_CODE_BEGIN  -- '.$this->getTableName();
-            $code_end = 'USER_CODE_END -- '.$this->getTableName();
+            $code_begin = 'USER_CODE_BEGIN -- '.$this->getTableName() . PHP_EOL;
+            $code_end = 'USER_CODE_END -- '.$this->getTableName() . PHP_EOL;
             if(strpos($content,$code_begin) !== false && strpos($content,$code_end) !== false)
             {
                 // 清除相应对应代码块
-                $pattern = "/\s+\/\/ {$code_begin}[\S\s]+\/\/ {$code_end}(\n,)?/";
+                $pattern = "/\/\/\s+{$code_begin}[\S\s]+{$code_end}?/";
                 $route = preg_replace($pattern, '', $content);
             }else{
                 $route = $content;

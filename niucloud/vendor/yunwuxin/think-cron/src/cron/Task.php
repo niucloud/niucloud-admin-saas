@@ -36,10 +36,15 @@ abstract class Task
     /** @var App */
     protected $app;
 
-    public function __construct(App $app, Cache $cache)
+    protected $vars;
+
+    public function __construct(App $app, $vars)
     {
+
         $this->app   = $app;
-        $this->cache = $cache;
+//        $this->cache = $cache;
+        $this->cache = $app->cache->store();
+        $this->vars = $vars;
         $this->configure();
     }
 

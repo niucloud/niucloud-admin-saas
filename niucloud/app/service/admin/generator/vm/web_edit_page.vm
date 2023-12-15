@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { t } from '@/lang'
 import { useDictionary } from '@/app/api/dict'
 import type { FormInstance } from 'element-plus'
@@ -34,6 +34,7 @@ const route = useRoute()
 const id:number = parseInt(route.query.id);
 const loading = ref(false)
 const pageName = route.meta.title
+
 
 
 /**

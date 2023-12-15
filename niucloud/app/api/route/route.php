@@ -83,6 +83,14 @@ Route::group(function() {
     Route::get('site', 'sys.Config/site');
     //场景域名
     Route::get('scene_domain', 'sys.Config/getSceneDomain');
+
+    /***************************************************** 地区管理 ****************************************************/
+    //通过pid获取列表
+    Route::get('area/list_by_pid/:pid', 'sys.Area/listByPid');
+    //通过层级获取列表
+    Route::get('area/tree/:level', 'sys.Area/tree');
+    // 获取省市县数据根据地址id
+    Route::get('area/code/:code', 'sys.Area/areaByAreaCode');
 })->middleware(ApiChannel::class)
     ->middleware(ApiCheckToken::class)
     ->middleware(ApiLog::class);

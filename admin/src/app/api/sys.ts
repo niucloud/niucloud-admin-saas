@@ -83,8 +83,8 @@ export function getMenus(type: string) {
  * 获取菜单信息
  * @param menu_key
  */
-export function getMenuInfo(menu_key: string) {
-    return request.get(`sys/menu/info/${menu_key}`);
+export function getMenuInfo(app_type: string, menu_key: string) {
+    return request.get(`sys/menu/${app_type}/info/${menu_key}`);
 }
 
 /**
@@ -101,15 +101,15 @@ export function addMenu(params: Record<string, any>) {
  * @param params
  */
 export function editMenu(params: Record<string, any>) {
-    return request.put(`sys/menu/${params.menu_key}`, params, { showSuccessMessage: true })
+    return request.put(`sys/menu/${params.app_type}/${params.menu_key}`, params, { showSuccessMessage: true })
 }
 
 /**
  * 删除菜单
  * @param menu_key
  */
-export function deleteMenu(menu_key: string) {
-    return request.delete(`sys/menu/${menu_key}`, { showSuccessMessage: true })
+export function deleteMenu(app_type: string, menu_key: string) {
+    return request.delete(`sys/menu/${app_type}/${menu_key}`, { showSuccessMessage: true })
 }
 
 /**
@@ -333,6 +333,13 @@ export function getContraryAddress(params: any) {
     return request.get(`sys/area/contrary`, { params })
 }
 
+/**
+ * 获取地址
+ * @param code
+ */
+export function getAreaByCode(code: number | string) {
+    return request.get(`sys/area/code/${code}`)
+}
 /***************************************************** 存储设置 ****************************************************/
 
 /**

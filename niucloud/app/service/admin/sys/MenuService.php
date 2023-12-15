@@ -61,9 +61,10 @@ class MenuService extends BaseAdminService
      * @param array $data
      * @return SysMenu
      */
-    public function edit(string $menu_key, array $data)
+    public function edit(string $app_type, string $menu_key, array $data)
     {
         $where = array(
+            ['app_type', '=', $app_type],
             ['menu_key', '=', $menu_key]
         );
         $res = $this->model->update($data, $where);
@@ -76,8 +77,8 @@ class MenuService extends BaseAdminService
      * @param string $menu_key
      * @return array
      */
-    public function get(string $menu_key){
-        return $this->model->where([['menu_key', '=', $menu_key]])->findOrEmpty()->toArray();
+    public function get(string $app_type, string $menu_key){
+        return $this->model->where([['app_type', '=', $app_type],['menu_key', '=', $menu_key]])->findOrEmpty()->toArray();
     }
 
     /**
@@ -104,10 +105,10 @@ class MenuService extends BaseAdminService
      * @return bool
      * @throws DbException
      */
-    public function del(string $menu_key){
+    public function del(string $app_type, string $menu_key){
         //查询是否有下级菜单或按钮
-        $menu = $this->find($menu_key);
-        if($this->model->where([['parent_key', '=', $menu_key]])->count() > 0)
+        $menu = $this->find($menu_key, $app_type);
+        if($this->model->where([['parent_key', '=', $menu_key], ['app_type', '=', $app_type]])->count() > 0)
             throw new AdminException('MENU_NOT_ALLOW_DELETE');
 
         $res = $menu->delete();
@@ -480,7 +481,7 @@ class MenuService extends BaseAdminService
      * @throws DbException
      * @throws ModelNotFoundException
      */
-    public function getMenuListBySystem(string $app_type, array $addons, int $is_tree = 0)
+    public function getMenuListBySystem(string $app_type, array $addons, int $is_tree = 0, int $is_button = 1)
     {
         sort($addons);
         $cache_name = 'menu' . md5(implode("_", $addons)) . $is_tree;
@@ -521,7 +522,7 @@ class MenuService extends BaseAdminService
                 $v['view_path'] = $view_path;
             }
         }
-        return $is_tree ? $this->menuToTree($menu_list, 'menu_key', 'parent_key', 'children', 'auth', '', 1) : $menu_list;
+        return $is_tree ? $this->menuToTree($menu_list, 'menu_key', 'parent_key', 'children', 'auth', '', $is_button) : $menu_list;
 
     }
 

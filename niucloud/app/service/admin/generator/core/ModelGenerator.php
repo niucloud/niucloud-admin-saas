@@ -162,14 +162,19 @@ class ModelGenerator extends BaseGenerator
     public function getSearchContent(array $column_info){
         $type = $column_info['query_type'];
         if ($type == 'BETWEEN') {
-            $function_str = '    $start_time = empty($value[0]) ? 0 : strtotime($value[0]);'.PHP_EOL;
-            $function_str .= '    $end_time = empty($value[1]) ? 0 : strtotime($value[1]);'.PHP_EOL;
-            $function_str .= '    if ($start_time > 0 && $end_time > 0) {'.PHP_EOL;
-            $function_str .= '        $query->whereBetweenTime("' . $column_info['column_name'] . '", $start_time, $end_time);'.PHP_EOL;
-            $function_str .= '    } else if ($start_time > 0 && $end_time == 0) {'.PHP_EOL;
-            $function_str .= '        $query->where([["' . $column_info['column_name'] . '", ">=", $start_time]]);'.PHP_EOL;
-            $function_str .= '    } else if ($start_time == 0 && $end_time > 0) {'.PHP_EOL;
-            $function_str .= '        $query->where([["' . $column_info['column_name'] . '", "<=", $end_time]]);'.PHP_EOL;
+            if ($column_info['view_type'] == 'datetime') {
+                $function_str = '    $start = empty($value[0]) ? 0 : strtotime($value[0]);'.PHP_EOL;
+                $function_str .= '    $end = empty($value[1]) ? 0 : strtotime($value[1]);'.PHP_EOL;
+            } else {
+                $function_str = '    $start = empty($value[0]) ? 0 : $value[0];'.PHP_EOL;
+                $function_str .= '    $end = empty($value[1]) ? 0 : $value[1];'.PHP_EOL;
+            }
+            $function_str .= '    if ($start > 0 && $end > 0) {'.PHP_EOL;
+            $function_str .= '         $query->where([["' . $column_info['column_name'] . '", "between", [$start, $end]]]);'.PHP_EOL;
+            $function_str .= '    } else if ($start > 0 && $end == 0) {'.PHP_EOL;
+            $function_str .= '        $query->where([["' . $column_info['column_name'] . '", ">=", $start]]);'.PHP_EOL;
+            $function_str .= '    } else if ($start == 0 && $end > 0) {'.PHP_EOL;
+            $function_str .= '        $query->where([["' . $column_info['column_name'] . '", "<=", $end]]);'.PHP_EOL;
             $function_str .= '    }'.PHP_EOL;
             return $function_str;
         } else {
@@ -345,7 +350,7 @@ class ModelGenerator extends BaseGenerator
 
                 $waitReplace = [
                     $config['name'],
-                    $config['model'],
+                    '\\'. $config['model'],
                     $config['foreign_key'],
                     $config['local_key'],
                 ];

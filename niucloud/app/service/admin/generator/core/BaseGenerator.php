@@ -146,7 +146,7 @@ abstract class BaseGenerator
         // 设置模块名
         $this->setModuleName($table['module_name'] ?? '');
         // 设置类名
-        $this->setClassName($table['class_name'] ?? '');
+        $this->setClassName($table['class_name'] ?? $table['table_name']);
         // 设置插件名
         $this->setAddonName($table['addon_name'] ?? '');
         // 替换模板中的文本
@@ -159,19 +159,24 @@ abstract class BaseGenerator
      */
     public function generate()
     {
+        $paths = [];
         if($this->table['generate_type'] == 2)
         {
             // 生成到runtime目录(下载)
-            $path = $this->getRuntimeOutDir() . $this->getFileName();
+            $paths[] = $this->getRuntimeOutDir() . $this->getFileName();
         }else if($this->table['generate_type'] == 3){
             // 生成到代码中
-            $path = $this->getObjectOutDir() . $this->getFileName();
+            $paths[] = $this->getObjectOutDir() . $this->getFileName();
+            // 生成到插件中
+            if ($this->addonName && method_exists($this, 'getAddonObjectOutDir'))  $paths[] = $this->getAddonObjectOutDir() . $this->getFileName();
         }
 
         // 写入内容
         if(!empty($this->getFileName()))
         {
-            file_put_contents($path, $this->text);
+            foreach ($paths as $path) {
+                file_put_contents($path, $this->text);
+            }
         }
 
     }

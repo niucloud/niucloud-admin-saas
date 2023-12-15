@@ -275,6 +275,10 @@ return [
         'offline' => '线下退款',
         'balance' => '退款到余额',
         'back' => '原路退款',
+        'status_success' => '退款成功',
+        'status_dealing' => '退款中',
+        'status_wait' => '待退款',
+        'status_fail' => '退款失败',
     ],
     'dict_order_refund' => [
         'refunding' => '退款中',

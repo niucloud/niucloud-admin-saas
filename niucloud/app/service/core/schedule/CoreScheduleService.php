@@ -52,7 +52,7 @@ class CoreScheduleService extends BaseCoreService
         $list = $this->model->withSearch(['key','status'],$where)->field($field)->order('id desc')->append(['status_name'])->select()->toArray();
         $template_list = array_column($this->getTemplateList(), null, 'key');
         foreach($list as &$item){
-            $item = array_merge($template_list[$item['key']], $item);
+            $item = array_merge($template_list[$item['key']] ?? [], $item);
         }
         return $list;
     }

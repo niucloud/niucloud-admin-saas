@@ -241,7 +241,6 @@ class CoreAddonInstallService extends CoreAddonBaseService
         }
 
         Cache::set('install_task', null);
-        Cache::set($this->cache_key . '_install_check', null);
     }
 
     /**

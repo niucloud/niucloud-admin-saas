@@ -9,10 +9,6 @@
 	import { useLogin } from '@/hooks/useLogin'
 	import { language } from '@/locale'
 
-	// #ifdef H5
-	if (import.meta.env.VITE_APP_DEBUG) { new window.VConsole() }
-	// #endif
-
 	onLaunch(async (data) => {
 		// 添加初始化拦截器
 		launchInterceptor()

@@ -110,6 +110,7 @@ class ServiceGenerator extends BaseGenerator
             }
             $field[] = '"'.$column['column_name'].'"';
         }
+
         return implode(',', $field);
     }
 

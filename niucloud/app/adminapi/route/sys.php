@@ -40,17 +40,17 @@ Route::group('sys', function () {
     //菜单新增
     Route::post('menu', 'sys.Menu/add');
     //菜单更新
-    Route::put('menu/:menu_key', 'sys.Menu/edit');
+    Route::put('menu/:app_type/:menu_key', 'sys.Menu/edit');
     //菜单列表
     Route::get('menu/:app_type', 'sys.Menu/lists');
     //删除单个菜单
-    Route::delete('menu/:menu_key', 'sys.Menu/del');
+    Route::delete('menu/:app_type/:menu_key', 'sys.Menu/del');
     //菜单类型
     Route::get('menutype', 'sys.Menu/getMenuType');
     //授权用户菜单
     Route::get('authmenu', 'sys.Auth/authMenuList');
     // 获取菜单信息
-    Route::get('menu/info/:menu_key', 'sys.Menu/info');
+    Route::get('menu/:app_type/info/:menu_key', 'sys.Menu/info');
     // 初始化菜单
     Route::post('menu/refresh', 'sys.Menu/refreshMenu');
 
@@ -155,6 +155,8 @@ Route::group('sys', function () {
     //获取地址位置信息
     Route::get('area/get_info', 'sys.Area/addressInfo');
     Route::get('area/contrary', 'sys.Area/contraryAddress');
+    // 获取省市县数据根据地址id
+    Route::get('area/code/:code', 'sys.Area/areaByAreaCode');
 
     /***************************************************** 渠道管理 ****************************************************/
     Route::get('channel', 'sys.Channel/getChannelType');

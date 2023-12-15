@@ -25,6 +25,8 @@ class RefundDict
     const OFFLINE = 'offline';//线下打款
     const BALANCE = 'balance';//线下支付
 
+    CONST BACK = 'back';//原路退款
+
     /**
      * 获取状态
      * @return array
@@ -49,7 +51,8 @@ class RefundDict
             self::WECHATPAY => get_lang('dict_pay_refund.wechatpay'),
             self::ALIPAY => get_lang('dict_pay_refund.alipay'),
             self::OFFLINE => get_lang('dict_pay_refund.offline'),
-            self::BALANCE => get_lang('dict_pay_refund.balance')
+            self::BALANCE => get_lang('dict_pay_refund.balance'),
+            self::BACK => get_lang('dict_pay_refund.back'),
         ];
     }
 }

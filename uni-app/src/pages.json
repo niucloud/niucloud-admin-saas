@@ -145,6 +145,27 @@
 			"needLogin": true
 		},
 		{
+			"path": "app/pages/member/address",
+			"style": {
+				"navigationBarTitleText": "%pages.member.address%"
+			},
+			"needLogin": true
+		},
+		{
+			"path": "app/pages/member/address_edit",
+			"style": {
+				"navigationBarTitleText": "%pages.member.address_edit%"
+			},
+			"needLogin": true
+		},
+		{
+			"path": "app/pages/member/location_address_edit",
+			"style": {
+				"navigationBarTitleText": "%pages.member.address_edit%"
+			},
+			"needLogin": true
+		},
+		{
 			"path": "app/pages/pay/browser",
 			"style": {
 				"navigationBarTitleText": "%pages.pay.browser%"

@@ -9,7 +9,7 @@
             <el-tab-pane :label="t('wechatTemplate')" name="/channel/wechat/message" />
         </el-tabs>
         <div class="flex" v-loading="loading">
-            <div class="preview-wrap w-[300px] h-[550px] mr-[16px] bg-overlay rounded-md flex flex-col justify-between">
+            <div class="preview-wrap w-[300px] h-[550px] mr-[16px] bg-overlay rounded-md flex flex-col justify-between border border-color">
                 <div class="head w-full h-[70px]"></div>
 
                 <div class="menu-list h-[70px] flex border-t border-color">

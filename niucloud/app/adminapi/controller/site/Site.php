@@ -83,7 +83,7 @@ class Site extends BaseAdminController
      */
     public function menu()
     {
-        return success((new AuthSiteService())->getMenuList(1, 'all'));
+        return success((new AuthSiteService())->getMenuList(1, 'all', 'all', 0));
     }
 
     /**

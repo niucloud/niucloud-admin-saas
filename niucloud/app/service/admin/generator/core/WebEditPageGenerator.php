@@ -81,7 +81,7 @@ class WebEditPageGenerator extends BaseGenerator
         $content = '';
         $isExist = [];
         foreach ($this->tableColumn as $column) {
-            if (empty($column['dict_type']) || $column['is_pk']) {
+            if (empty($column['dict_type']) || $column['is_pk'] || $column['column_name'] == 'site_id') {
                 continue;
             }
             if (in_array($column['dict_type'], $isExist)) {
@@ -110,6 +110,9 @@ class WebEditPageGenerator extends BaseGenerator
                 continue;
             }
             $content.= 'let '.$column['column_name'].'List = ref([])'.PHP_EOL.'const '.$column['column_name'].'DictList = async () => {'.PHP_EOL.$column['column_name'].'List.value = await (await useDictionary(' ."'".$column['dict_type']."'".')).data.dictionary'.PHP_EOL.'}'.PHP_EOL. $column['column_name'].'DictList();'.PHP_EOL;
+            if ($column['view_type'] == 'radio' || $column['view_type'] == 'select') {
+                $content .= 'watch(() => '.$column['column_name'].'List.value, () => { formData.'.$column['column_name'].' = '.$column['column_name'].'List.value[0].value })'.PHP_EOL;
+            }
         }
 
         if(!empty($content))
@@ -199,7 +202,7 @@ class WebEditPageGenerator extends BaseGenerator
                 $vmItemValue = 'item.value';
                 $intFieldValue = ['tinyint', 'smallint', 'mediumint', 'int', 'integer', 'bigint'];
                 if (in_array($column['column_type'], $intFieldValue)) {
-                    $vmItemValue = 'parseInt(item.value)';
+                    $vmItemValue = 'item.value';
                 }
                 $old[] = '{ITEM_VALUE}';
                 $new[] = $vmItemValue;
@@ -223,7 +226,6 @@ class WebEditPageGenerator extends BaseGenerator
                     }
                     $old[] = '{RULE}';
                     $new[] = $rule;
-                    dd($rule);
                 }else{
                     $old[] = '{RULE}';
                     $new[] = '';
@@ -249,6 +251,7 @@ class WebEditPageGenerator extends BaseGenerator
     {
         $content = '';
         $isExist = [];
+
         foreach ($this->tableColumn as $column) {
             if ((!$column['is_insert'] || !$column['is_update'] || $column['column_name'] == 'site_id') && !$column['is_pk']) {
                 continue;
@@ -284,13 +287,12 @@ class WebEditPageGenerator extends BaseGenerator
         $content = '';
         $isExist = [];
         $specDictType = ['input', 'textarea', 'editor'];
-        unset($this->tableColumn[1]);
-        unset($this->tableColumn[2]);
-        unset($this->tableColumn[3]);
+
         foreach ($this->tableColumn as $column) {
-            if (!$column['is_insert'] || !$column['is_update'] || $column['column_name'] == 'site_id') {
+            if (!$column['is_insert'] || !$column['is_update'] || $column['is_pk'] || $column['column_name'] == 'site_id') {
                 continue;
             }
+
             if (in_array($column['column_name'], $isExist)) {
                 continue;
             }
@@ -374,7 +376,12 @@ class WebEditPageGenerator extends BaseGenerator
         if($this->table['edit_type'] != 2) {
             return '';
         }
-        $dir = dirname(app()->getRootPath()) . '/admin/src/views/' . $this->moduleName . '/';
+        if(!empty($this->addonName))
+        {
+            $dir = dirname(app()->getRootPath()) . '/admin/src/'. $this->moduleName .'/views/' . $this->moduleName . '/';
+        } else {
+            $dir = dirname(app()->getRootPath()) . '/admin/src/app/views/' . $this->moduleName . '/';
+        }
         $this->checkDir($dir);
         return $dir;
     }
@@ -391,7 +398,7 @@ class WebEditPageGenerator extends BaseGenerator
         }
         if(!empty($this->addonName))
         {
-            $dir = $this->outDir . '/addon/'.$this->addonName.'/admin/src/views/' . $this->moduleName . '/';
+            $dir = $this->outDir . '/addon/'.$this->addonName.'/admin/views/' . $this->moduleName . '/';
         }else{
             $dir = $this->outDir . 'admin/src/app/views/' . $this->moduleName . '/';
         }
@@ -422,6 +429,16 @@ class WebEditPageGenerator extends BaseGenerator
         return $dir;
     }
 
+    /**
+     * 获取文件生成到插件中
+     * @return void
+     */
+    public function getAddonObjectOutDir() {
+        $dir = $this->rootDir . '/niucloud/addon/'.$this->addonName.'/admin/views/'. $this->moduleName . '/';
+        $this->checkDir($dir);
+        return $dir;
+    }
+
     public function getFilePath()
     {
         if($this->table['edit_type'] != 2) {
@@ -447,9 +464,9 @@ class WebEditPageGenerator extends BaseGenerator
         if($this->table['edit_type'] != 2) {
             return '';
         }
-//        if($this->className){
-//            return Str::lower($this->className).'_edit.vue';
-//        }
+        if($this->className){
+            return Str::lower($this->className).'_edit.vue';
+        }
         return 'edit.vue';
     }
 

@@ -33,4 +33,15 @@ class MemberAddress extends BaseModel
      */
     protected $name = 'member_address';
 
+    /**
+     * 搜索器:会员收货地址地址类型  1 普通地址  2 定位地址
+     * @param $value
+     * @param $data
+     */
+    public function searchTypeAttr($query, $value, $data)
+    {
+        if ($value) {
+            $query->where("type", $value);
+        }
+    }
 }

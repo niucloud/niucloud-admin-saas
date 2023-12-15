@@ -1,6 +1,7 @@
 import useMemberStore from '@/stores/member'
 import { t } from '@/locale'
 import { getToken, getAppChannel, getSiteId } from './common'
+import qs from 'qs'
 
 interface RequestConfig {
 	showErrorMessage ?: boolean
@@ -56,23 +57,19 @@ class Request {
 	}
 
 	public get(url : string, data : AnyObject = {}, config : RequestConfig = {}) {
-		Object.assign(this.config, config)
-		return this.request('GET', url, data)
+		return this.request('GET', url, data, config)
 	}
 
 	public post(url : string, data : AnyObject = {}, config : RequestConfig = {}) {
-		Object.assign(this.config, config)
-		return this.request('POST', url, data)
+		return this.request('POST', url, data, config)
 	}
 
 	public put(url : string, data : AnyObject = {}, config : RequestConfig = {}) {
-		Object.assign(this.config, config)
-		return this.request('PUT', url, data)
+		return this.request('PUT', url, data, config)
 	}
 
 	public delete(url : string, config : RequestConfig = {}) {
-		Object.assign(this.config, config)
-		return this.request('DELETE', url)
+		return this.request('DELETE', url, {}, config)
 	}
 
 	/**
@@ -81,7 +78,7 @@ class Request {
 	public upload(url : string, data : AnyObject = {}, config : RequestConfig = {}) {
 		this.requestInterceptors()
 
-		const params = Object.assign(uni.$u.deepClone(this.config), {
+		const params = Object.assign(uni.$u.deepClone(this.config), config, {
 			url: this.baseUrl + url,
 			...data
 		})
@@ -95,8 +92,8 @@ class Request {
 						this.config.showSuccessMessage && uni.showToast({ title: data.msg, icon: 'none' })
 						resolve(data)
 					} else {
-						if (data.code == 0) {
-						    uni.showToast({ title: data.msg, icon: 'none' })
+						if (data.code == 0 || data.code == 400) {
+						    if (this.config.showErrorMessage !== false) uni.showToast({ title: data.msg, icon: 'none' })
 						} else {
 						    this.handleAuthError(data.code)
 						}
@@ -113,14 +110,19 @@ class Request {
 	/**
 	 * 发送请求
 	 */
-	private request(method : string, url : string, data ?: AnyObject) {
+	private request(method : string, url : string, data ?: AnyObject, config : RequestConfig = {}) {
 		this.requestInterceptors()
 
-		const params = Object.assign(uni.$u.deepClone(this.config), {
+		const params = Object.assign(uni.$u.deepClone(this.config), config,{
 			url: this.baseUrl + url,
-			method,
-			data
+			method
 		})
+
+		if (params.method.toUpperCase() == 'GET') {
+			params.url += '?' + qs.stringify(data);
+		} else {
+			params.data = data;
+		}
 
 		return new Promise((resolve, reject) => {
 			uni.request({
@@ -128,12 +130,12 @@ class Request {
 				success: res => {
 					const data = res.data
 					if (data.code == 1) {
-						this.config.showSuccessMessage && uni.showToast({ title: data.msg, icon: 'none' })
+						config.showSuccessMessage && uni.showToast({ title: data.msg, icon: 'none' })
 						resolve(data)
 					} else {
-                        if (data.code == 0) {
-                            uni.showToast({ title: data.msg, icon: 'none' })
-                        } else {
+                        if (data.code == 0 || data.code == 400) {
+						    if (config.showErrorMessage !== false) uni.showToast({ title: data.msg, icon: 'none' })
+						} else {
                             this.handleAuthError(data.code)
                         }
 						reject(data)

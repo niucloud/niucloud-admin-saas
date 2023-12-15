@@ -90,7 +90,12 @@ class WebEditLangGenerator extends BaseGenerator
         if($this->table['edit_type'] != 2) {
             return '';
         }
-        $dir = dirname(app()->getRootPath()) . '/admin/src/lang/zh-cn/';
+        if(!empty($this->addonName))
+        {
+            $dir = $this->outDir . '/addon/'.$this->addonName.'/admin/lang/zh-cn/';
+        }else{
+            $dir = $this->outDir . 'admin/src/app/lang/zh-cn/';
+        }
         $this->checkDir($dir);
         return $dir;
     }
@@ -107,13 +112,10 @@ class WebEditLangGenerator extends BaseGenerator
         }
         if(!empty($this->addonName))
         {
-            $dir = $this->outDir . '/addon/'.$this->addonName.'/admin/src/lang/zh-cn/';
-
+            $dir = $this->outDir . '/addon/'.$this->addonName.'/admin/lang/zh-cn/';
         }else{
-            $dir = $this->outDir . 'admin/src/lang/zh-cn/';
+            $dir = $this->outDir . 'admin/src/app/lang/zh-cn/';
         }
-
-
         $this->checkDir($dir);
         return $dir;
     }
@@ -139,6 +141,16 @@ class WebEditLangGenerator extends BaseGenerator
         return $dir;
     }
 
+    /**
+     * 获取文件生成到插件中
+     * @return void
+     */
+    public function getAddonObjectOutDir() {
+        $dir = $this->rootDir . '/niucloud/addon/'.$this->addonName.'/admin/lang/zh-cn/';
+        $this->checkDir($dir);
+        return $dir;
+    }
+
     public function getFilePath()
     {
         if($this->table['edit_type'] != 2) {
@@ -146,7 +158,7 @@ class WebEditLangGenerator extends BaseGenerator
         }
         if(!empty($this->addonName))
         {
-            $dir = 'addon/'.$this->addonName.'/admin/'.$this->addonName.'/lang/zh-cn/';
+            $dir = 'addon/'.$this->addonName.'/admin/lang/zh-cn/';
 
         }else{
             $dir = 'admin/app/lang/zh-cn/';

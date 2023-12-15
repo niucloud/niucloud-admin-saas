@@ -146,7 +146,7 @@ class ControllerGenerator extends BaseGenerator
         $last_field = end($this->table['fields'])['column_name'];
         foreach ($this->table['fields'] as $v){
             if(!$v['is_pk'] && $v['is_search'] && $v['column_name'] != 'site_id'){
-                if($v['view_type'] == 'datetime'){
+                if($v['query_type'] == 'BETWEEN'){
                     $str .= '             ["'.$v['column_name'].'",'.'["",""]'.']';
                 }else{
                     $str .= '             ["'.$v['column_name'].'",'.'""'.']';

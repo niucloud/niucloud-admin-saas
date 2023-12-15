@@ -11,6 +11,7 @@
 
 namespace app\model\pay;
 
+use app\dict\pay\PayDict;
 use app\dict\pay\RefundDict;
 use core\base\BaseModel;
 
@@ -40,7 +41,7 @@ class Refund extends BaseModel
     ];
 
     /**
-     * 状态字段转化
+     * 支付状态字段转化
      * @param $value
      * @param $data
      * @return mixed
@@ -60,7 +61,77 @@ class Refund extends BaseModel
     public function getTypeNameAttr($value, $data)
     {
         if (empty($data['type'])) return '';
-        return RefundDict::getType()[$data['type']] ?? '';
+        return PayDict::getPayType()[$data['type']]['name'] ?? '';
     }
 
+    /**
+     * 退款方式
+     * @param $value
+     * @param $data
+     * @return mixed|string
+     *
+     */
+    public function getRefundTypeNameAttr($value, $data)
+    {
+        if (empty($data['refund_type'])) return '';
+        return RefundDict::getType()[$data['refund_type']] ?? '';
+    }
+
+    /**
+     * 创建时间搜索器
+     * @param $query
+     * @param $value
+     * @param $data
+     */
+    public function searchCreateTimeAttr($query, $value, $data)
+    {
+        $start_time = empty($value[0]) ? 0 : strtotime($value[0]);
+        $end_time = empty($value[1]) ? 0 : strtotime($value[1]);
+        if ($start_time > 0 && $end_time > 0) {
+            $query->whereBetweenTime('create_time', $start_time, $end_time);
+        } else if ($start_time > 0 && $end_time == 0) {
+            $query->where([['create_time', '>=', $start_time]]);
+        } else if ($start_time == 0 && $end_time > 0) {
+            $query->where([['create_time', '<=', $end_time]]);
+        }
+    }
+
+    /**
+     * 状态
+     * @param $query
+     * @param $value
+     * @param $data
+     */
+    public function searchStatusAttr($query, $value, $data)
+    {
+        if ($value != '') {
+            $query->where('status', '=', $value);
+        }
+    }
+
+    /**
+     * 状态
+     * @param $query
+     * @param $value
+     * @param $data
+     */
+    public function searchOutTradeNoAttr($query, $value, $data)
+    {
+        if ($value != '') {
+            $query->where('out_trade_no', '=', $value);
+        }
+    }
+
+    /**
+     * 状态
+     * @param $query
+     * @param $value
+     * @param $data
+     */
+    public function searchRefundNoAttr($query, $value, $data)
+    {
+        if ($value != '') {
+            $query->where('refund_no', '=', $value);
+        }
+    }
 }

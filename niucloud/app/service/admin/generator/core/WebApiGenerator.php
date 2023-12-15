@@ -85,11 +85,10 @@ class WebApiGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = dirname(app()->getRootPath()) . '/admin/src/api/';
+            $dir = dirname(app()->getRootPath()) . '/admin/src/'. $this->addonName  .'/api/';
         }else{
             $dir = dirname(app()->getRootPath()) . '/admin/src/app/api/';
         }
-
         $this->checkDir($dir);
         return $dir;
     }
@@ -113,14 +112,13 @@ class WebApiGenerator extends BaseGenerator
         {
 
             $content = file_get_contents($file);
-            $code_begin = 'USER_CODE_BEGIN -- '.$this->getTableName();
-            $code_end = 'USER_CODE_END -- '.$this->getTableName();
+            $code_begin = 'USER_CODE_BEGIN -- '.$this->getTableName() . PHP_EOL;
+            $code_end = 'USER_CODE_END -- '.$this->getTableName(). PHP_EOL;
 
             if(strpos($content,$code_begin) !== false && strpos($content,$code_end) !== false)
             {
                 // 清除相应对应代码块
-                $pattern = "/\s+\/\/ {$code_begin}[\S\s]+\/\/ {$code_end}(\n,)?/";
-
+                $pattern = "/\/\/\s+{$code_begin}[\S\s]+{$code_end}?/";
                 $import = preg_replace($pattern, '', $content);
 
             }else{
@@ -153,12 +151,11 @@ class WebApiGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = $this->outDir . '/addon/'.$this->addonName.'/admin/src/api/';
+            $dir = $this->outDir . 'addon/'.$this->addonName.'/admin/api/';
+
         }else{
-            $dir = $this->outDir . 'admin/src/api/';
+            $dir = $this->outDir . 'admin/src/app/api/';
         }
-
-
         $this->checkDir($dir);
         return $dir;
     }
@@ -180,12 +177,21 @@ class WebApiGenerator extends BaseGenerator
         return $dir;
     }
 
+    /**
+     * 获取文件生成到插件中
+     * @return void
+     */
+    public function getAddonObjectOutDir() {
+        $dir = $this->rootDir . '/niucloud/addon/'.$this->addonName.'/admin/api/';
+        $this->checkDir($dir);
+        return $dir;
+    }
 
     public function getFilePath()
     {
         if(!empty($this->addonName))
         {
-            $dir = 'addon/'.$this->addonName.'/admin/'.$this->addonName.'/api/';
+            $dir = 'addon/'.$this->addonName.'/admin/api/';
         }else{
             $dir = 'admin/app/api/';
         }

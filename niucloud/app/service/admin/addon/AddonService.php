@@ -235,4 +235,14 @@ class AddonService extends BaseAdminService
     public function getAddonKeysBySiteId(int $site_id){
         return (new CoreSiteService())->getAddonKeysBySiteId($site_id);
     }
+
+    /**
+     * 获取插件信息
+     * @param int $id
+     * @return array
+     */
+    public function getInfoByKey(string $key)
+    {
+        return $this->model->where([ [ 'key', '=', $key ] ])->field('title, icon, key, desc, status, cover')->findOrEmpty()->toArray();
+    }
 }

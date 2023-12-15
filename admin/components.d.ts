@@ -74,6 +74,7 @@ declare module '@vue/runtime-core' {
     HeatMap: typeof import('./src/components/heat-map/index.vue')['default']
     Icon: typeof import('./src/components/icon/index.vue')['default']
     PopoverInput: typeof import('./src/components/popover-input/index.vue')['default']
+    RangeInput: typeof import('./src/components/range-input/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SelectArea: typeof import('./src/components/select-area/index.vue')['default']

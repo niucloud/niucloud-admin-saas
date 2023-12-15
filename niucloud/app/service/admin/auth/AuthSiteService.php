@@ -53,8 +53,8 @@ class AuthSiteService extends BaseAdminService
      * @param int|string $status
      * @return mixed
      */
-    public function getMenuList(int $is_tree, int|string $status, $addon = 'all'){
-        return (new SiteService())->getMenuList($this->site_id, $is_tree, $status, $addon);
+    public function getMenuList(int $is_tree, int|string $status, $addon = 'all', int $is_button = 1){
+        return (new SiteService())->getMenuList($this->site_id, $is_tree, $status, $addon, $is_button);
     }
 
     /**

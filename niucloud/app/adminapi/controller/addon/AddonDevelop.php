@@ -100,8 +100,7 @@ class AddonDevelop extends BaseAdminController
      * @return void
      */
     public function checkKey($key){
-
-        return success(data:(new AppService())->checkKey($key));
+        return success(data:(new AddonDevelopService())->checkKey($key));
     }
 
     /**
