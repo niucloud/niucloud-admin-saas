@@ -1,0 +1,19 @@
+{
+	"oplatformSetting": "开放平台设置",
+	"appidPlaceholder": "微信第三方平台AppId",
+	"appsecretPlaceholder": "微信第三方平台AppSecret",
+	"oplatformComm": "开放平台通信",
+	"empowerStartDomain": "授权发起页域名",
+	"empowerReceiveUrl": "授权事件接收URL",
+	"messageValidationToken": "消息校验Token",
+	"messageDecryptKey": "消息加解密Key",
+	"messageReceiveUrl": "消息与事件接收URL",
+	"wechatDomain": "公众号开发域名",
+	"weappDomain": "小程序服务器域名",
+	"weappBusinessDomain": "小程序业务域名",
+	"oplatformBuilder": "开发者设置",
+	"builderEmail": "开发者邮箱",
+	"builderMobile": "开发者手机号",
+	"builderQQ": "开发者QQ",
+	"builderWx": "开发者微信"
+}

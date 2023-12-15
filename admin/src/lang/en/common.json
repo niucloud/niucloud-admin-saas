@@ -1,0 +1,38 @@
+{
+    "edit": "Edit",
+    "delete": "Delete",
+    "createTime": "Create Time",
+    "sort": "Sort",
+    "status": "Status",
+    "operation": "Operation",
+    "statusNormal": "Normal",
+    "statusDeactivate": "Deactivate",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "warning": "Warning",
+    "isShow": "Show or not",
+    "show": "show",
+    "hidden": "hidden",
+    "icon": "Icon",
+    "layout": {
+        "layoutSetting": "Layout configuration",
+        "darkMode": "Dark mode",
+        "themeColor": "Theme color"
+    },
+    "axios": {
+        "unknownError": "Unknown Error",
+        "400": "Wrong request            ",
+        "401": "Please login again",
+        "403": "Access denied",
+        "404": "Request error, the resource was not found",
+        "405": "Request method not allowed",
+        "408": "Request timeout",
+        "500": "Server side error",
+        "501": "Network not implemented",
+        "502": "Network error",
+        "503": "Service unavailable",
+        "504": "Network Timeout",
+        "505": "The http version does not support the request",
+        "timeout": "Network request timeout!"
+    }
+}

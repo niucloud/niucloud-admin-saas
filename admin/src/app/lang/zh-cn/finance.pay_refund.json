@@ -1,0 +1,10 @@
+{
+	"refundNo": "退款编号",
+	"refundMoney": "退款金额",
+	"payType": "支付类型",
+	"status": "退款状态",
+	"createTime": "申请时间",
+	"refundNoPlaceholder": "请输入退款编号",
+	"startDate": "开始时间",
+	"endDate": "结束时间"
+}	

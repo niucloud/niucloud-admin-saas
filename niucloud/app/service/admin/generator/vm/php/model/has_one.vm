@@ -1,0 +1,4 @@
+public function {RELATION_NAME}()
+    {
+        return $this->hasOne({RELATION_MODEL}::class, '{FOREIGN_KEY}', '{LOCAL_KEY}');
+    }

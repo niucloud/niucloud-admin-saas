@@ -1,0 +1,18 @@
+{
+      "isOpen": "是否开启",
+      "cashWithdrawalAmount": "最低提现金额",
+      "cashWithdrawalAmountPlaceholder": "请输入提现金额",
+      "cashWithdrawalAmountHint": "最低提现金额不能小于0.01",
+      "commissionRatio": "提现手续费比率",
+      "commissionRatioHint": "提现手续费比率不能超出0-100%的范围",
+      "commissionRatioPlaceholder": "请输入提现手续费比率",
+      "audit": "审核",
+      "transfer": "转账",
+      "transferMode": "转账方式",
+      "automaticAudit": "自动审核",
+      "manualAudit": "手动审核",
+      "automatedTransit": "自动转账",
+      "manualTransfer": "手动转账",
+      "wechat": "微信",
+      "alipay": "支付宝"
+}

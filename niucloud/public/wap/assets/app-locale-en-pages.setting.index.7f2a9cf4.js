@@ -1,0 +1,1 @@
+const t="Personal settings",o="Switch language",s="Version",e="Log out",n={personalSettings:t,switchLang:o,version:s,logout:e};export{n as default,e as logout,t as personalSettings,o as switchLang,s as version};

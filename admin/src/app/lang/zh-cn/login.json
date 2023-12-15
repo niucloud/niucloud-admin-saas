@@ -1,0 +1,12 @@
+{
+    "siteTitle": "NIUCLOUD-ADMIN",
+    "siteDesc": "基于thinkphp6+elementplus+typescript等技术的多端saas通用管理框架，采用restful的api接口设计，前后端完全分离，同时支持多语言开发。",
+    "logging": "登录中",
+    "platform": "管理端",
+    "login" : "登录",
+    "siteLogin": "站点登录",
+    "adminLogin": "平台登录",
+    "userPlaceholder": "请输入您的账号",
+    "passwordPlaceholder": "请输入您的密码",
+	"manageAdminFramework": "管理系统后台框架"
+}

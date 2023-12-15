@@ -1,0 +1,23 @@
+{
+	"weappAccessFlow": "接入流程",
+	"title": "支付宝小程序",
+	"weappInlet": "支付宝小程序接入流程",
+	"weappAttestation": "支付宝小程序认证",
+	"weappAttest": "点击注册打开支付宝小程序官方,注册支付宝小程序后点击企业认证，申请之后等待支付宝官方审核",
+	"clickAccess": "点击注册",
+	"clickAccess2":"扫描二维码进入支付宝小程序",
+	"clickAccess3": "没有小程序马上注册",
+	"weappSetting": "支付宝小程序配置",
+	"weappSettingBtn": "点击配置支付宝小程序",
+	"uploadVersion": "上传小程序",
+	"emplace": "支付宝小程序认证之后按照官方提供的手册进行配置",
+	"settingInfo": "配置信息",
+	"releaseCourse": "版本管理中存放上传的支付宝小程序历更版本，通过uniapp版本编译小程序然后打包上传提交",
+	"completeAccess": "提交审核",
+	"wechatAccess": "提交uniapp对应版本，可以通过支付宝小程序查看版本的审核进度，审核成功后就可以使用了",
+	"wechatAccessBtn": "查看审核进度",
+	"wechatSet": "小程序配置",
+	"subscribeMessage": "订阅消息",
+	"weappRelease": "版本管理",
+	"alert":"您正在体验通用版小程序，不发布你将不可用"
+}

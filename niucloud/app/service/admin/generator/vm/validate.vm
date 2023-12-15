@@ -1,0 +1,28 @@
+<?php
+// +----------------------------------------------------------------------
+// | Niucloud-admin 企业快速开发的多应用管理平台
+// +----------------------------------------------------------------------
+// | 官方网址：https://www.niucloud.com
+// +----------------------------------------------------------------------
+// | niucloud团队 版权所有 开源版本可自由商用
+// +----------------------------------------------------------------------
+// | Author: Niucloud Team
+// +----------------------------------------------------------------------
+
+{NAMESPACE}
+use core\base\BaseValidate;
+/**
+ * {CLASS_COMMENT}
+ * Class {UCASE_NAME}
+ * @package {PACKAGE_NAME}
+ */
+class {UCASE_NAME} extends BaseValidate
+{
+
+       protected $rule = {RULE};
+
+       protected $message = {MESSAGE};
+
+       protected $scene = {SCENE};
+
+}

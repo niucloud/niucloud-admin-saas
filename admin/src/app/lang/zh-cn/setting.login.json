@@ -1,0 +1,15 @@
+{
+	"logonMode": "普通注册方式",
+	"isUsername": "账号密码登录",
+	"isMobile": "手机验证码登录",
+	"isAuthRegister": "第三方自动注册",
+	"isBindMobile": "强制绑定手机",
+	"isUsernameTip": "开启之后可以使用账号+密码进行注册和登录",
+	"isMobileTip": "开启之后可以使用手机+验证码进行注册和登录",
+	"isAuthRegisterTip": "开启之后，微信公众号、小程序等等第三方平台可以自动注册会员。方便会员自动登录",
+	"isBindMobileTip": "开启之后，会员通过账号或者第三方注册账户会强制绑定手机号，方便商家进行管理，同时方便会员在不同端口统一账号",
+	"agreement": "政策协议",
+	"agreementTips": "注册时服务协议和隐私协议是否进行展示",
+	"commonSetting": "通用设置",
+	"tripartiteSetting": "第三方设置"
+}

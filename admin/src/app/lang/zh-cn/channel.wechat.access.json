@@ -1,0 +1,19 @@
+{
+	"wechatAccessFlow": "接入流程",
+	"title": "微信公众号",
+	"wechatInlet": "微信公众号接入流程",
+	"wechatAttestation": "微信公众号认证",
+	"wechatAttestation1": "点击接入打开微信公众号官方,注册微信公众号后申请服务号认证，申请之后等待微信官方审核",
+	"clickAccess": "点击接入",
+	"wechatSetting": "微信公众号配置",
+	"wechatSetting1": "微信公众号认证之后配置微信公众号连接，具体查看配置与发布教程",
+	"settingInfo": "点击配置",
+	"wechatAccess": "微信公众号发布",
+	"releaseCourse": "发布教程",
+	"completeAccess": "完成接入",
+	"wechatSet": "公众号配置",
+	"customMenu": "自定义菜单",
+	"wechatAccessBtn": "查看审核进度",
+	"clickAccess2":"扫描二维码进入微信公众号",
+	"wechatTemplate": "模板消息"
+}

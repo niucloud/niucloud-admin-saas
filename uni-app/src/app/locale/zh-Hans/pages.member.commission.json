@@ -1,0 +1,14 @@
+{
+    "recharge": "充值",
+	"cashOut":"提现",
+    "commissionDetail": "佣金明细",
+	"accountCommission":"账户佣金（元）",
+	"commission":"累计佣金（元）",
+	"money":"提现中佣金（元）",
+    "availableCommission": "可用佣金",
+    "rechargeAmountError": "充值金额错误",
+    "clickRecharge": "立即充值",
+    "rechargeAmountPlaceholder": "请输入充值金额",
+	"yuan":"元",
+	"commissionInfo": "我的佣金"
+}

@@ -1,0 +1,12 @@
+{
+	"addVersion": "上传版本",
+	"version": "版本号",
+	"versionPlaceholder": "请添加版本号",
+	"createTime": "创建时间",
+	"status": "状态",
+	"editVersion": "添加/编辑版本",
+	"file": "文件",
+	"filePlaceholder":"请上传版本文件",
+	"desc": "版本说明",
+	"weappVersionDeleteTips": "确定要删除小程序版本吗"
+}

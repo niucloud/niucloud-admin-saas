@@ -1,0 +1,4 @@
+    {COLUMN_NAME}: [
+        { required: true, message: t('{VALIDATE_MSG}'), trigger: 'blur' },
+        {VERIFY}
+    ]

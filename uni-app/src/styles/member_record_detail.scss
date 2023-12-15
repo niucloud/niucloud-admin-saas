@@ -1,0 +1,25 @@
+page{
+	background-color: #f5f6fa;
+	@apply pt-4;
+}
+.member-record-detail{
+	@apply m-4 mt-0 bg-white rounded-md px-4 py-6;
+	.money-wrap{
+		@apply flex items-center flex-col mb-6;
+		text:first-of-type{
+			@apply text-3xl font-bold mt-1;
+		}
+		text:last-of-type{
+			@apply text-sm mt-3;
+		}
+	}
+	.line-wrap{
+		@apply flex justify-between text-sm mt-3;
+		.label{
+			@apply text-[#878787];
+		}
+		.value{
+			@apply text-[#222];
+		}
+	}
+}

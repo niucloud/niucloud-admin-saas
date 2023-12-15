@@ -1,0 +1,5 @@
+ <el-table-column :label="t('{LANG}')" min-width="180" align="center" :show-overflow-tooltip="true">
+    <template #default="{ row }">
+        {{ row.{COLUMN_NAME} || '' }}
+    </template>
+</el-table-column>

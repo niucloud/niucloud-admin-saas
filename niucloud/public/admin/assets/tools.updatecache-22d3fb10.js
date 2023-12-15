@@ -1,0 +1,1 @@
+const e="刷新",s="刷新菜单",a="新增/修改插件菜单后，需要刷新插件菜单",c="数据缓存",t="新增/修改数据表后，需要清除数据表缓存",r={refresh:e,refreshMenu:s,refreshMenuDesc:a,dataCache:c,dataCacheDesc:t};export{c as dataCache,t as dataCacheDesc,r as default,e as refresh,s as refreshMenu,a as refreshMenuDesc};

@@ -1,0 +1,52 @@
+:root {}
+
+.el-header {
+    --el-header-padding: 0 !important;
+    --el-header-height: 64px !important;
+}
+
+.el-table {
+    --el-table-header-bg-color: #F5F7F9!important;
+    --el-table-header-text-color:#333!important;
+}
+
+.dark {
+    .el-table {
+        --el-table-header-text-color: var(--el-text-color-secondary)!important;
+    }
+}
+
+.el-table thead, .el-table thead th {
+    font-weight: normal !important;
+}
+
+.el-button {
+    background-color: var(--el-button-bg-color, var(--el-color-white));
+}
+
+.el-dialog {
+    max-width: calc(100vw - 50px);
+}
+
+.el-date-editor--daterange, .el-date-editor--timerange, .el-date-editor.el-input, .el-date-editor .el-input__wrapper {
+    --el-date-editor-width: 100%!important;
+    width: 100%;
+}
+
+
+.el-textarea__inner::-webkit-scrollbar {
+    width: 6px ;
+    height: 6px ;
+}
+
+.el-textarea__inner::-webkit-scrollbar-thumb {
+    border-radius: 3px ;
+    -moz-border-radius: 3px ;
+    -webkit-border-radius: 3px ;
+    background-color: #909399;
+    opacity: .3;
+}
+
+.el-textarea__inner::-webkit-scrollbar-track {
+   background-color: transparent ;
+}

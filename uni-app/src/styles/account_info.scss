@@ -1,0 +1,41 @@
+.account-info-wrap{
+	@apply bg-[#F5F6FA] min-h-[100vh];
+	.account-info-head{
+		@apply relative h-40;
+		.name{
+			@apply ml-4 pt-7 text-white text-lg mb-3;
+		}
+		.content{
+			@apply absolute bg-white left-3 right-3 rounded-lg p-5;
+			.money{
+				@apply text-xl font-bold;
+			}
+			.text{
+				@apply text-xs text-slate-500 mt-2;
+			}
+			.money-wrap{
+				@apply mt-5 flex;
+				.money-item{
+					@apply flex-1;
+				}
+				.money{
+					@apply text-lg;
+				}
+				.text{
+					@apply mt-1;
+				}
+			}
+		}
+	}
+	.account-info-btn{
+		@apply flex mt-24 ml-3 mr-3;
+		.btn{
+			&:first-of-type{
+				@apply mr-1 rounded;
+			}
+			&:last-of-type{
+				@apply ml-1 rounded;
+			}
+		}
+	}
+}

@@ -1,0 +1,8 @@
+{
+      "isCaptcha": "是否启用验证码",
+      "bgImg": "登录页广告图",
+      "admin": "平台端",
+      "adminBgImgTip": "建议上传尺寸为450*400px",
+      "site": "站点端",
+      "siteBgImgTip": "建议上传尺寸为450*400px"
+}

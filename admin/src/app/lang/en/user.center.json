@@ -1,0 +1,14 @@
+{
+    "headImg": "head",
+    "realName": "name",
+    "originalPassword": "original password",
+    "password": "new password",
+    "passwordCopy": "confirm password",
+    "passwordTip": "This parameter is mandatory when changing the password. Leave a blank if you do not change the password",
+    "realNamePlaceholder": "Please enter the user name",
+    "headImgPlaceholder": "Please enter the user profile picture",
+    "originalPasswordPlaceholder": "Please enter the original password",
+    "passwordPlaceholder": "Please enter a new password",
+    "save": "save",
+    "cancel": "cancel"
+}

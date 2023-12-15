@@ -1,0 +1,23 @@
+{
+	"totalRechargeRefundMoney":"充值退款（元）",
+	"totalRechargeMoney":"充值金额（元）",
+	"rechargeRefundMoney":"充值退款",
+	"rechargeNo":"充值单号",
+	"orderStatus":"订单状态",
+	"rechargeNoPlaceholder":"请输入充值单号",
+	"createTime":"充值时间",
+	"rechargeMoney":"充值金额",
+	"orderMoney":"订单金额",
+	"member":"会员信息",
+	"orderFromName":"订单来源",
+	"payTypeName":"支付方式",
+	"startDate":"开始时间",
+	"endDate":"结束时间",
+	"namePlaceholder":"请选择",
+	"refundBtn":"退款",
+	"refundContent":"是否确认退款",
+	"payTime": "支付时间",
+	"refundStatus": "退款状态",
+	"startMoney": "起始金额",
+	"endMoney": "结束金额"
+} 

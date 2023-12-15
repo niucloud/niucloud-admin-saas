@@ -1,0 +1,26 @@
+{
+      "channel":"logon mode",
+      "nickname":"Name of member",
+      "mobile":"mobile",
+      "createTime":"creation time",
+      "updateTime":"Update time",
+      "addMember":"add member",
+      "updateMember":"edit member",
+      "nickNamePlaceholder":"Please enter the member name",
+      "mobilePlaceholder":"Please enter your mobile phone number",
+      "channelPlaceholder":"Please select a registration type",
+      "memberDeleteTips" : "Are you sure you want to delete this member?",
+      "detail": "detail",
+      "edit": "edit",
+      "startDate": "start time",
+      "endDate": "end time",
+      "essentialInfo": "essential information",
+      "accountInfo": "account information",
+      "registeredSource": "registered source",
+      "memberLabel": "Member label",
+      "urserName": "user name",
+      "point": "point",
+      "balance": "balance",
+      "growth": "growth"
+
+}

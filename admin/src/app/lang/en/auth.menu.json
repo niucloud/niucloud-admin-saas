@@ -1,0 +1,21 @@
+{
+    "menuName": "Menu name",
+    "menuType": "Type",
+    "authId": "Permission ID",
+    "menuTypeDir": "Dir",
+    "menuTypeMenu": "Menu",
+    "menuTypeButton": "Button",
+    "menuDeleteTips": "Are you sure you want to delete this menu?",
+    "addMenu": "Add menu",
+    "updateMenu": "Update menu",
+    "routePath": "Route path",
+    "viewPath": "Component path",
+    "parentMenu": "Parent menu",
+    "menuIcon": "Menu Icon",
+    "menuNamePlaceholder": "Please enter a menu name",
+    "routePathPlaceholder": "Please enter routing path",
+    "viewPathPlaceholder": "Please enter the component path",
+    "authIdPlaceholder": "Please enter Permission id",
+    "selectIconPlaceholder": "Please select the menu icon",
+    "topLevel": "top-level"
+}

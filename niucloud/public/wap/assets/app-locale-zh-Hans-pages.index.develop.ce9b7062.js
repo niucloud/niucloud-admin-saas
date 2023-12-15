@@ -1,0 +1,1 @@
+const e="开发环境配置",l="API请求地址",t="图片服务器地址",I="站点ID（VITE_SITE_ID）",a="请输入站点ID",d="请输入数字",r="最大不能超过",s={developTitle:e,baseUrl:l,imgUrl:t,siteId:I,siteIdPlaceholder:a,pleaseEnterNumber:d,maximumCannotExceed:r};export{l as baseUrl,s as default,e as developTitle,t as imgUrl,r as maximumCannotExceed,d as pleaseEnterNumber,I as siteId,a as siteIdPlaceholder};
