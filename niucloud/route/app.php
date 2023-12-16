@@ -17,7 +17,7 @@ Route::rule('/', function () {
     if (Request::isMobile()) {
         return redirect('/wap');
     } else {
-        return redirect('/web');
+        return redirect('/admin');
     }
 });
 // 管理后台
