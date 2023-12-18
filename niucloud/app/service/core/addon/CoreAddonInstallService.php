@@ -511,8 +511,10 @@ class CoreAddonInstallService extends CoreAddonBaseService
      */
     public function uninstall()
     {
-        $site_num = (new Site())->where([ ['app', '=', $this->addon] ])->count('site_id');
-        if ($site_num) throw new CommonException('APP_NOT_ALLOW_UNINSTALL');
+        if (!env('app_debug', true)) {
+            $site_num = (new Site())->where([['app', '=', $this->addon]])->count('site_id');
+            if ($site_num) throw new CommonException('APP_NOT_ALLOW_UNINSTALL');
+        }
 
         //执行插件卸载方法
         $class = "addon\\" . $this->addon . "\\" . 'Addon';
