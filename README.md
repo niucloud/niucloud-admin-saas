@@ -40,9 +40,9 @@ niucloud-admin是一款快速开发通用管理后台框架，前端采用最新
 ### 演示地址
 - 站点后台演示网址：[<a href='http://demo-saas.site.niucloud.com/site/' target="_blank"> 查看 </a>]       
 <a href='http://demo-saas.site.niucloud.com/site/' target="_blank">http://demo-saas.site.niucloud.com/site/    
-旅游系统账号：tourtest  密码：123456
-商城系统账号：shoptest  密码：123456
-会员卡系统账号：cardtest  密码：123456
+旅游系统账号：tourtest  密码：123456<br/>
+商城系统账号：shoptest  密码：123456<br/>
+会员卡系统账号：cardtest  密码：123456<br/>
 - 平台后台演示网址：[<a href='http://demo-saas.site.niucloud.com/admin/' target="_blank"> 查看 </a>]       
 <a href='http://demo-saas.site.niucloud.com/admin/' target="_blank">http://demo-saas.site.niucloud.com/admin/  账号：admin  密码：123456
 
