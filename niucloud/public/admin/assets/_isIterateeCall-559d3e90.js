@@ -1,0 +1,1 @@
+import{aL as i,aD as t,aX as f}from"./base-d79f9f62.js";import{l as n}from"./_Uint8Array-bbbfd6ac.js";function p(e,a,r){if(!i(r))return!1;var s=typeof a;return(s=="number"?n(r)&&t(a,r.length):s=="string"&&a in r)?f(r[a],e):!1}export{p as i};

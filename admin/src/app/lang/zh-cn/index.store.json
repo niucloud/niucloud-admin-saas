@@ -67,5 +67,7 @@
 	"addonUninstall": "插件卸载",
 	"appIdentification":"应用标识",
 	"tipText":"标识指开发应用或插件的文件夹名称",
-	"uninstallTips": "卸载插件将会移除admin web uni-app目录下该插件的内容，是否要继续进行卸载？"
+	"uninstallTips": "卸载插件将会移除admin web uni-app目录下该插件的内容，是否要继续进行卸载？",
+	"upgrade": "升级",
+	"newVersion": "最新版本"
 }

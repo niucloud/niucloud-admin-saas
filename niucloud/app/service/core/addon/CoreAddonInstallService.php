@@ -217,6 +217,9 @@ class CoreAddonInstallService extends CoreAddonBaseService
         } catch (\Exception $e) {
             Cache::set('install_task', $this->install_task);
             $this->installExceptionHandle();
+            if (strpos($e->getMessage(), 'open basedir') !== false) {
+                throw new CommonException('OPEN_BASEDIR_ERROR');
+            }
             throw new CommonException($e->getMessage());
         }
     }
@@ -511,10 +514,8 @@ class CoreAddonInstallService extends CoreAddonBaseService
      */
     public function uninstall()
     {
-        if (!env('app_debug', true)) {
-            $site_num = (new Site())->where([['app', '=', $this->addon]])->count('site_id');
-            if ($site_num) throw new CommonException('APP_NOT_ALLOW_UNINSTALL');
-        }
+        $site_num = (new Site())->where([ ['app', '=', $this->addon] ])->count('site_id');
+        if ($site_num) throw new CommonException('APP_NOT_ALLOW_UNINSTALL');
 
         //执行插件卸载方法
         $class = "addon\\" . $this->addon . "\\" . 'Addon';

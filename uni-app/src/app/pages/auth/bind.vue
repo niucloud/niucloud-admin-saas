@@ -80,9 +80,11 @@
     const formData = reactive({
         mobile: '',
         mobile_code: '',
-        mobile_key: '',
-        openid: uni.getStorageSync('openid')
+        mobile_key: ''
     })
+
+    uni.getStorageSync('openid') && (Object.assign(formData, { openid: uni.getStorageSync('openid') }))
+    uni.getStorageSync('pid') && (Object.assign(formData, { pid: uni.getStorageSync('pid') }))
 
     const rules = {
         'mobile': [

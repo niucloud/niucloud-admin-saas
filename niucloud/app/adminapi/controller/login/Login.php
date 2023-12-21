@@ -11,8 +11,14 @@
 
 namespace app\adminapi\controller\login;
 
+use addon\cms\app\model\article\CmsArticle;
+use app\model\sys\SysUser;
 use app\service\admin\auth\ConfigService;
 use app\service\admin\auth\LoginService;
+use app\service\admin\site\SiteService;
+use app\service\core\upgrade\CoreBackupService;
+use app\service\core\upgrade\CoreRestoreService;
+use app\service\core\upgrade\CoreUpgradeService;
 use app\service\core\weapp\CoreWeappCloudService;
 use core\base\BaseAdminController;
 use think\Response;
@@ -62,10 +68,6 @@ class Login extends BaseAdminController
     }
 
     public function test(){
-        (new CoreWeappCloudService())->uploadWeapp([
-            'site_id' => 43,
-            'version' => '0.0.1',
-            'desc' => ''
-        ]);
+        (new CoreUpgradeService())->execute();
     }
 }

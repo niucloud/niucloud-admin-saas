@@ -47,8 +47,13 @@ router.beforeEach(async (to, from, next) => {
     to.redirectedFrom && (to.query = to.redirectedFrom.query)
 
     const userStore = useUserStore()
-    const siteInfo = storage.get('siteInfo') || false
-    let title = (to.meta.title ? (to.meta.title + ' - ') : '') + (siteInfo.site_name ? siteInfo.site_name : '')
+    const siteInfo = userStore.siteInfo
+
+    if (!siteInfo && getAppType() != 'home') {
+        await userStore.getSiteInfo()
+    }
+
+    let title = (to.meta.title ? (to.meta.title + ' - ') : '') + (siteInfo ? siteInfo.site_name : '')
 
     // 设置网站标题
     setWindowTitle(title)
@@ -79,7 +84,7 @@ router.beforeEach(async (to, from, next) => {
             }
         } else {
             try {
-                if (userStore.siteInfo.site_id == undefined) {
+                if (!userStore.siteInfo || userStore.siteInfo.site_id == undefined) {
                     if (to.path === '/home/index') {
                         next()
                     } else {
@@ -132,7 +137,8 @@ router.beforeEach(async (to, from, next) => {
                 }
 
             } catch (err) {
-                userStore.logout()
+                console.log(err)
+                // userStore.logout()
                 next({ path: loginPath, query: { redirect: to.fullPath } })
             }
         }

@@ -13,6 +13,7 @@ namespace app\service\core\site;
 
 use app\dict\site\SiteDict;
 use app\dict\sys\AppTypeDict;
+use app\model\addon\Addon;
 use app\model\site\Site;
 use app\model\site\SiteGroup;
 use app\service\admin\site\SiteGroupService;
@@ -53,8 +54,12 @@ class CoreSiteService extends BaseCoreService
                 $where = [
                     [ 'site_id', '=', $site_id ],
                 ];
-                $site = $this->model->where($where)->field('site_id, app_type,site_name,logo,front_end_name,front_end_logo,group_id, status, expire_time')->append([ 'status_name' ])->findOrEmpty();
-                return $site->toArray();
+                $info = $this->model->where($where)->field('site_id, site_name, front_end_name, front_end_logo, app_type, keywords, logo, icon, `desc`, status, latitude, longitude, province_id, city_id, district_id, address, full_address, phone, business_hours, create_time, expire_time, group_id, app, addons')->append([ 'status_name' ])->findOrEmpty()->toArray();
+                if (!empty($info)) {
+                    $site_addons = (new CoreSiteService())->getAddonKeysBySiteId($site_id);
+                    $info['site_addons'] = (new Addon())->where([ ['key', 'in', $site_addons]])->field('key,title,desc,icon')->select()->toArray();
+                }
+                return $info;
             },
             self::$cache_tag_name . $site_id
         );

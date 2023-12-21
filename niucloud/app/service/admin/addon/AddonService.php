@@ -23,6 +23,7 @@ use app\service\core\addon\CoreAddonInstallService;
 use app\service\core\addon\CoreAddonService;
 use app\service\core\niucloud\CoreModuleService;
 use app\service\core\site\CoreSiteService;
+use app\service\core\upgrade\CoreUpgradeService;
 use core\base\BaseAdminService;
 use Exception;
 use think\db\exception\DbException;
@@ -175,8 +176,8 @@ class AddonService extends BaseAdminService
      * @param string $app_key
      * @return null
      */
-    public function upgrade(string $app_key){
-        return (new CoreAddonDownloadService())->upgrade($app_key);
+    public function upgrade(string $app_key = ''){
+        return (new CoreUpgradeService())->upgrade($app_key);
     }
 
     /**

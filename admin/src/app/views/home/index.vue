@@ -140,7 +140,12 @@ const toLinkFn = (link)=>{
  */
 const addonList = ref([])
 getInstalledAddonList().then(({ data }) => {
-    addonList.value = data
+    const apps = []
+    Object.keys(data).forEach(key => {
+        const addon = data[key]
+        addon.type == 'app' && apps.push(addon)
+    })
+    addonList.value = apps
 }).catch()
 
 const handleChick = () => {

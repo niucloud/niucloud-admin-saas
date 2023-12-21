@@ -44,5 +44,6 @@
       "manager": "站点管理员",
       "managerPlaceholder": "请选择站点管理员",
       "newAddManager": "新增管理员",
-      "edit": "编辑"
+      "edit": "编辑",
+      "siteDeleteTips": "确定要删除该站点吗？该操作将删除该站点和站点相关数据，该操作无法退回，确定要继续删除吗？"
 }

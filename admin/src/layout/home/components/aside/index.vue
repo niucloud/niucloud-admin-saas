@@ -5,7 +5,7 @@
             <el-header class="logo-wrap w-100 h-auto mb-[30px]">
                 <div class="logo flex items-center m-auto max-w-[230px] h-[60px] justify-center"
                     v-if="!systemStore.menuIsCollapse">
-                    <img class="max-h-full max-w-full" v-if="storage.get('siteInfo').logo" :src="img(siteInfo.logo)" alt="">
+                    <img class="max-h-full max-w-full" v-if="siteInfo.logo" :src="img(siteInfo.logo)" alt="">
                     <img class="max-h-full max-w-full" v-else src="@/app/assets/images/login_logo.png" alt="">
                 </div>
                 <div class="logo flex items-center justify-center w-[64px] h-[30px]" v-else>
@@ -42,13 +42,13 @@ import storage from '@/utils/storage'
 
 const userStore = useUserStore()
 const systemStore = useSystemStore()
+const siteInfo = userStore.siteInfo
 const route = useRoute()
 const router = useRouter()
 const menuActive = computed(() => {
-    console.log("route.name", route.name);
     return String(route.name)
 })
-console.log("userStore.routers", userStore.routers, menuActive)
+
 watch(route, () => {
     systemStore.$patch(state => {
         state.menuDrawer = false

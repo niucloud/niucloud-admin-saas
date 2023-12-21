@@ -13,6 +13,7 @@ namespace app\service\admin\niucloud;
 
 use app\dict\sys\ConfigKeyDict;
 use app\service\core\niucloud\CoreAuthService;
+use app\service\core\niucloud\CoreModuleService;
 use app\service\core\sys\CoreConfigService;
 use core\base\BaseAdminService;
 use core\exception\CommonException;
@@ -42,8 +43,10 @@ class NiucloudService extends BaseAdminService
             'auth_code' => $data['auth_code'],
             'auth_secret' => $data['auth_secret']
         ];
-        $auth_info = (new CoreAuthService($data['auth_code'], $data['auth_secret']))->getAuthInfo()['data'] ?? [];
+        $service = (new CoreAuthService($data['auth_code'], $data['auth_secret']));
+        $auth_info = $service->getAuthInfo()['data'] ?? [];
         if (empty($auth_info)) throw new CommonException('AUTH_NOT_EXISTS');
+        $service->clearAccessToken();
         return $this->core_config_service->setConfig(0,ConfigKeyDict::NIUCLOUD_CONFIG, $data);
     }
 
@@ -62,6 +65,15 @@ class NiucloudService extends BaseAdminService
             ];
         }
         return $info['value'];
+    }
+
+    /**
+     * 获取框架最新版本
+     * @return void
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getFrameworkLastVersion() {
+        return (new CoreModuleService())->getFrameworkLastVersion();
     }
 
 }

@@ -37,7 +37,8 @@ Route::group('niucloud', function () {
     Route::get('module/download/:version_id', 'addon.Addon/info');
     //更新
     Route::put('addon/status/:version_id', 'addon.Addon/setStatus');
-
+    // 获取框架最新版本
+    Route::get('framework/newversion', 'niucloud.Module/getFrameworkLastVersion');
 
 })->middleware([
     AdminCheckToken::class,

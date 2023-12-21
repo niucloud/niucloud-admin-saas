@@ -97,13 +97,12 @@
                 <el-tab-pane :label="t('codeList')" name="codeList">
                     <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
                         <el-form :inline="true" :model="codeTableData.searchParam" ref="searchFormRef">
-                            <el-form-item :label="t('addonName')" prop="addon_name">
-                                <el-select v-model="codeTableData.searchParam.addon_name" placeholder="Select" filterable
-                                    remote clearable :remote-method="getAddonDevelopFn">
+                             <el-form-item :label="t('addonName')" prop="addon_name">
+                                <el-select v-model="codeTableData.searchParam.addon_name" placeholder="Select" filterable remote clearable :remote-method="getAddonDevelopFn">
                                     <el-option label="全部" value="" />
                                     <el-option label="系统" value="2" />
                                     <el-option :label="item.title" :value="item.key" v-for="item in addonList"
-                                        :key="item.key" />
+                                            :key="item.key" />
                                 </el-select>
                             </el-form-item>
 
@@ -111,7 +110,7 @@
                                 <el-input v-model="codeTableData.searchParam.table_name"
                                     :placeholder="t('tableNamePlaceholder')" />
                             </el-form-item>
-
+                          
                             <el-form-item>
                                 <el-button type="primary" @click="loadGenerateTableList()">{{ t('search') }}</el-button>
                                 <el-button @click="resetForm(searchFormRef)">{{ t('reset') }}</el-button>
@@ -171,10 +170,9 @@
             <el-dialog v-model="dialogVisible" class="dialog-visible" width="70%" title="代码预览">
                 <div class="flex h-[50vh]" v-loading="codeLoading">
                     <el-scrollbar class="h-[100%] w-[270px]">
-                        <el-tree v-if="treeData.length && treeKey != ''" :data="treeData"
-                            :props="{ label: 'name', value: 'key' }" node-key="key" :current-node-key="treeKey"
-                            :expand-on-click-node="false" highlight-current default-expand-all ref="treeRef"
-                            @node-click="nodeClick">
+                        <el-tree v-if="treeData.length && treeKey != ''" :data="treeData" :props="{ label: 'name', value: 'key' }"
+                            node-key="key" :current-node-key="treeKey" :expand-on-click-node="false" highlight-current
+                            default-expand-all ref="treeRef" @node-click="nodeClick">
                             <template #default="{ node, data }">
                                 <div class="flex items-center">
                                     <el-icon v-if="data.children">
@@ -204,7 +202,7 @@
 <script lang="ts" setup>
 import { reactive, ref, onMounted } from 'vue'
 import { t } from '@/lang'
-import { getGenerateTableList, deleteGenerateTable, generateCreate, generatePreview, generatorCheckFile, getAddonDevelop } from '@/app/api/tools'
+import { getGenerateTableList, deleteGenerateTable, generateCreate, generatePreview, generatorCheckFile,getAddonDevelop } from '@/app/api/tools'
 import { img } from '@/utils/common'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import AddTable from '@/app/views/tools/code/components/add-table.vue'
@@ -212,20 +210,20 @@ import type { FormInstance } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
 
 const route = useRoute()
-const pageName = route.meta.title
+const pageName = route.meta.title;
 
 const router = useRouter()
 const activeName = ref('codeGeneration')
-const codeTableData = reactive({
+let codeTableData = reactive({
     page: 1,
     limit: 10,
     total: 0,
     loading: true,
     data: [],
     searchParam: {
-        table_name: '',
-        table_content: '',
-        addon_name: ''
+        table_name: "",
+        table_content: "",
+        addon_name:""
     }
 })
 
@@ -234,8 +232,8 @@ const searchFormRef = ref<FormInstance>()
 const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
 
-    formEl.resetFields()
-    loadGenerateTableList()
+    formEl.resetFields();
+    loadGenerateTableList();
 }
 onMounted(() => {
     if (window.codeActiveName) {
@@ -265,7 +263,7 @@ const loadGenerateTableList = (page: number = 1) => {
 }
 
 const addonList = ref<Array<any>>([])
-// 获取插件远程搜索
+//获取插件远程搜索
 const getAddonDevelopFn = (search: string) => {
     getAddonDevelop({ search }).then(res => {
         addonList.value = res.data
@@ -273,6 +271,7 @@ const getAddonDevelopFn = (search: string) => {
 }
 
 const addCodeDialog: Record<string, any> | null = ref(null)
+
 
 /**
  * 添加代码生成
@@ -290,7 +289,7 @@ const deleteEvent = (id: number) => {
         {
             confirmButtonText: t('confirm'),
             cancelButtonText: t('cancel'),
-            type: 'warning'
+            type: 'warning',
         }
     ).then(() => {
         deleteGenerateTable(id).then(() => {
@@ -299,6 +298,7 @@ const deleteEvent = (id: number) => {
         })
     })
 }
+
 
 /**
  * 编辑
@@ -311,7 +311,7 @@ const editEvent = (data: any) => {
 /**
  * 同步校验
  */
-const generatorCheckFileFn = (id: any) => {
+const generatorCheckFileFn = ((id: any) => {
     generatorCheckFile({ id }).then(res => {
         codeTableData.loading = false
         ElMessageBox.confirm(
@@ -319,7 +319,7 @@ const generatorCheckFileFn = (id: any) => {
             t('warning'),
             {
                 confirmButtonText: t('confirm'),
-                cancelButtonText: t('cancel')
+                cancelButtonText: t('cancel'),
             }
         )
             .then(() => {
@@ -329,7 +329,7 @@ const generatorCheckFileFn = (id: any) => {
     }).catch(() => {
         codeTableData.loading = false
     })
-}
+})
 
 /**
  * 同步or下载
@@ -339,11 +339,12 @@ const generateCreateFn = (id: any, generate_type: any) => {
     generateCreate({ id, generate_type }).then(res => {
         ElMessage({
             type: 'success',
-            message: '操作成功'
+            message: '操作成功',
         })
         if (generate_type != 3) {
             codeTableData.loading = false
             window.open(img(res.data.file), '_blank')
+
         } else {
             loadGenerateTableList()
         }
@@ -374,6 +375,7 @@ const generatePreviewFn = (id: number) => {
         codeLoading.value = false
     }).catch(() => {
         codeLoading.value = false
+
     })
 }
 
@@ -383,32 +385,32 @@ const nodeClick = (node) => {
     })
 }
 const listToTree = (arr) => {
-    const ret = []
+    var ret = [];
     if (Array.isArray(arr)) {
-        for (let i = 0; i < arr.length; ++i) {
-            const path = arr[i].split('/')
-            let _ret = ret
-            for (let j = 0; j < path.length; ++j) {
-                const name = path[j]
-                let obj = null
+        for (var i = 0; i < arr.length; ++i) {
+            var path = arr[i].split("/");
+            var _ret = ret;
+            for (var j = 0; j < path.length; ++j) {
+                var name = path[j];
+                var obj = null;
                 for (var k = 0; k < _ret.length; ++k) {
-                    const _obj = _ret[k]
+                    var _obj = _ret[k];
                     if (_obj.name === name) {
-                        obj = _obj
-                        break
+                        obj = _obj;
+                        break;
                     }
                 }
                 if (!obj) {
-                    obj = { name, path: name.indexOf('.') < 0 ? '' : arr[i], key: 'k' + i + j + k }
-                    if (name.indexOf('.') < 0) obj.children = []
+                    obj = { name: name, path: name.indexOf(".") < 0 ? '' : arr[i], key: 'k' + i + j + k };
+                    if (name.indexOf(".") < 0) obj.children = [];
                     if (obj.path === arr[0]) treeKey.value = obj.key
-                    _ret.push(obj)
+                    _ret.push(obj);
                 }
-                if (obj.children) _ret = obj.children
+                if (obj.children) _ret = obj.children;
             }
         }
     }
-    return ret
+    return ret;
 }
 </script>
 
@@ -449,9 +451,9 @@ const listToTree = (arr) => {
     justify-content: center;
 }
 
-:deep(.dialog-visible .el-scrollbar__view),
-:deep(.dialog-visible .el-scrollbar__view .hljs.ruby) {
+:deep(.dialog-visible .el-scrollbar__view), :deep(.dialog-visible .el-scrollbar__view .hljs.ruby){
     height: 100%;
 }
 </style>
-<style></style>
+<style>
+</style>

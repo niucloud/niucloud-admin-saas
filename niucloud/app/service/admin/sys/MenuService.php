@@ -596,4 +596,38 @@ class MenuService extends BaseAdminService
         $menu_list = (new SysMenu())->where($where)->select()->toArray();
         return $is_tree ? $this->menuToTree($menu_list, 'menu_key', 'parent_key', 'children', 'auth', '', $is_button) : $menu_list;
     }
+
+    /**
+     * 查询菜单类型为目录的菜单
+     * @param string $addon
+     * @return void
+     */
+    public function getMenuByTypeDir(string $addon = 'system') {
+        $cache_name = 'menu_api_by_type_dir' . $addon;
+        $menu_list = cache_remember(
+            $cache_name,
+            function () use ($addon) {
+                $where = [
+                    ['menu_type', '=', 0 ],
+                    ['app_type', '=', 'site']
+                ];
+                //查询应用
+                $where[] = ['addon', '=', $addon == 'system' ? '' : $addon ];
+                return (new SysMenu())->where($where)->order('sort desc')->select()->toArray();
+            },
+            self::$cache_tag_name
+        );
+        foreach ($menu_list as &$v)
+        {
+            $lang_menu_key = 'dict_menu_admin' . '.'. $v['menu_key'];
+            $lang_menu_name = get_lang($lang_menu_key);
+            //语言已定义
+            if($lang_menu_key != $lang_menu_name)
+            {
+                $v['menu_name'] = $lang_menu_name;
+            }
+        }
+
+        return $this->menuToTree($menu_list, 'menu_key', 'parent_key', 'children', 'auth', '', 0);
+    }
 }

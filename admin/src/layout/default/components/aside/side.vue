@@ -2,7 +2,7 @@
     <el-container class="w-100 h-screen">
         <el-header class="logo-wrap w-100 border-0 border-b-[1px] border-solid border-[e5e7eb]">
             <div class="logo flex items-center m-auto max-w-[210px] h-[30px]" v-if="!systemStore.menuIsCollapse">
-                <img class="max-h-[40px] max-w-[40px] rounded-full" v-if="storage.get('siteInfo').logo" :src="img(siteInfo.logo)" alt="">
+                <img class="max-h-[40px] max-w-[40px] rounded-full" v-if="siteInfo.logo" :src="img(siteInfo.logo)" alt="">
                 <img class="max-h-[40px] max-w-[40px] rounded-full" v-else src="@/app/assets/images/icon-addon.png" alt="">
                 <span class="ml-[8px] text-[16px]">{{siteInfo.site_name}}</span>
             </div>
@@ -35,7 +35,7 @@ const logo = ref('@/app/assets/images/login_logo.png')
 const systemStore = useSystemStore()
 const userStore = useUserStore()
 const route = useRoute()
-const siteInfo = storage.get('siteInfo') || false
+const siteInfo = userStore.siteInfo
 const menuActive = computed(() => String(route.name))
 
 let currAppData = ref([]);

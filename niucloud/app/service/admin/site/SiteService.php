@@ -18,12 +18,14 @@ use app\model\site\Site;
 use app\model\site\SiteGroup;
 use app\model\sys\SysUserRole;
 use app\service\admin\addon\AddonService;
+use app\service\admin\generator\GenerateService;
 use app\service\admin\sys\MenuService;
 use app\service\admin\user\UserRoleService;
 use app\service\admin\user\UserService;
 use app\service\core\site\CoreSiteService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
+use core\exception\CommonException;
 use Exception;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
@@ -158,6 +160,39 @@ class SiteService extends BaseAdminService
         return true;
     }
 
+    /**
+     * 删除站点
+     * @param int $site_id
+     * @return void
+     */
+    public function del(int $site_id) {
+        Db::startTrans();
+        try {
+            $site = $this->model->where([ [ 'site_id', '=', $site_id ] ])->findOrEmpty()->toArray();
+
+            // 删除站点相关数据
+            $sys_models = (new GenerateService())->getModels(['addon' => 'system']);
+            $addon_models = (new GenerateService())->getModels(['addon' => $site['app'] ]);
+
+            $models = array_merge($sys_models, $addon_models);
+
+            foreach ($models as $model) {
+                $name = "\\$model";
+                $class = new $name();
+
+                if (in_array('site_id', $class->getTableFields())) {
+                    $class->where([ ['site_id', '=', $site['site_id'] ] ])->delete();
+                }
+            }
+
+            Cache::tag(self::$cache_tag_name . $site_id)->clear();
+            Db::commit();
+            return true;
+        } catch (\Exception $e) {
+            Db::rollback();
+            throw new CommonException($e->getMessage());
+        }
+    }
 
     /**
      * 站点数量
@@ -176,18 +211,7 @@ class SiteService extends BaseAdminService
      */
     public function getSiteCache(int $site_id)
     {
-        $cache_name = 'site_info_cache';
-        return cache_remember(
-            $cache_name . $site_id,
-            function() use ($site_id) {
-                $where = [
-                    [ 'site_id', '=', $site_id ],
-                ];
-                $site = $this->model->where($where)->field('site_id, app_type,site_name,front_end_name,front_end_logo,logo,icon,group_id, status, expire_time, app, addons')->append([ 'status_name' ])->findOrEmpty();
-                return $site->toArray();
-            },
-            self::$cache_tag_name . $site_id
-        );
+        return (new CoreSiteService())->getSiteCache($site_id);
     }
 
 

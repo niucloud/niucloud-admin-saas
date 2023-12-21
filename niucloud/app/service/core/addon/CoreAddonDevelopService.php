@@ -437,7 +437,7 @@ class CoreAddonDevelopService extends CoreAddonBaseService
                     'version' => $data['version'],
                     'type' => $data['type'],
                     'support_app' => $data['support_app'],
-                    'update_time' => $data['update_time'],
+                    'update_time' => time(),
                 ]
             );
         }

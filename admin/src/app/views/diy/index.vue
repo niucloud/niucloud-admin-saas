@@ -14,7 +14,10 @@
 						<text class="mb-[10px]">{{ t('wapDomain') }}</text>
 						<el-input v-model="wapDomain" :placeholder="t('wapDomainPlaceholder')" clearable/>
 					</div>
-					<el-button type="primary" @click="saveDomain()">{{ t('confirm') }}</el-button>
+                    <div class="flex">
+                        <el-button type="primary" @click="saveDomain()">{{ t('confirm') }}</el-button>
+                        <el-button type="primary" @click="settingTips()" plain>{{ t('settingTips') }}</el-button>
+                    </div>
 				</div>
 			</div>
 
@@ -231,6 +234,10 @@
                 }
             }
         }, 100 * 3);
+    }
+
+    const settingTips = () => {
+        window.open('https://www.kancloud.cn/niucloud/niucloud-admin-develop/3213393')
     }
 
     const setDomain = (key: string) => {

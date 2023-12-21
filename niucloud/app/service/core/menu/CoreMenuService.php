@@ -165,4 +165,23 @@ class CoreMenuService extends BaseCoreService
         Cache::tag(MenuService::$cache_tag_name)->clear();
         return true;
     }
+
+    /**
+     * 获取path
+     * @param $menu_key
+     * @param $paths
+     * @return string
+     * @throws DbException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function getRoutePathByMenuKey($menu_key, $paths = []) {
+        $menu = $this->model->where([ ['menu_key', '=', $menu_key], ['app_type', '=', 'site'] ])->field('parent_key,router_path')->find();
+        array_unshift($paths, $menu['router_path']);
+        if (!empty($menu['parent_key'])) {
+            return $this->getRoutePathByMenuKey($menu['parent_key'], $paths);
+        } else {
+            return implode('/', $paths);
+        }
+    }
 }

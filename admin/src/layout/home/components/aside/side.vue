@@ -2,7 +2,7 @@
     <el-container class="w-100 h-screen" :class="[{ 'sidebar-dark-mode': systemStore.sidebar == 'twoType' }, { 'sidebar-brightness-mode': systemStore.sidebar == 'oneType' }]">
         <el-header class="logo-wrap w-100">
             <div class="logo flex items-center m-auto max-w-[210px] h-[30px]" v-if="!systemStore.menuIsCollapse">
-                <img class="max-h-full max-w-full" v-if="storage.get('siteInfo').logo" :src="img(siteInfo.logo)" alt="">
+                <img class="max-h-full max-w-full" v-if="siteInfo.logo" :src="img(siteInfo.logo)" alt="">
                 <img class="max-h-full max-w-full" v-else src="@/app/assets/images/login_logo.png" alt="">
             </div>
             <div class="logo flex items-center justify-center w-[64px] h-[30px]" v-else>
@@ -34,7 +34,7 @@ const logo = ref('@/app/assets/images/login_logo.png')
 const systemStore = useSystemStore()
 const userStore = useUserStore()
 const route = useRoute()
-const siteInfo = storage.get('siteInfo') || false
+const siteInfo = userStore.siteInfo
 
 const menuActive = computed(() => String(route.name))
 console.log("userStore.routers",userStore.routers)

@@ -34,6 +34,8 @@
                                     class="input-width" />
                                 <p class="text-[12px] text-[#a9a9a9] leading-normal mt-[5px]">
                                     生成代码所属功能模块，对应路由名称，例如会员模块，充值模块，订单模块等</p>
+                                <p class="text-[12px] text-[#a9a9a9] leading-normal mt-[5px]">
+                                    命名规范，小写，多个单词使用下划线连接,例如: member，article_category</p>
                             </div>
 
                         </el-form-item>
@@ -43,8 +45,9 @@
                                     class="input-width" />
                                 <p class="text-[12px] text-[#a9a9a9] leading-normal mt-[5px]">
                                     生成代码所属文件名称，controller，model，service，等类型文件名</p>
+                                <p class="text-[12px] text-[#a9a9a9] leading-normal mt-[5px]">
+                                    命名规范，小写，多个单词使用下划线连接,例如: article_category</p>
                             </div>
-
                         </el-form-item>
                     </el-form>
                 </el-tab-pane>
@@ -216,6 +219,7 @@
                                 <p class="text-[12px] text-[#a9a9a9] leading-normal mt-[5px]">列表排序规则。</p>
                             </div>
 
+
                         </el-form-item>
                         <el-form-item :label="t('menuType')">
                             <!-- <div>
@@ -225,11 +229,11 @@
                                 </el-radio-group>
                             <p class="text-[12px] text-[#a9a9a9] leading-normal mt-[5px]">自动构建：自动执行生成菜单sql。手动添加：自行添加菜单。</p>
                             </div> -->
-                            <el-tree-select class="input-width" v-if="formData.addon_name != ''"
-                                v-model="formData.parent_menu" :props="{ label: 'menu_name', value: 'menu_key' }"
+                            <el-tree-select class="input-width" v-if="formData.addon_name != ''" clearable
+                                            v-model="formData.parent_menu" :props="{ label: 'menu_name', value: 'menu_key' }"
                                 :data="addonMenuList" check-strictly :render-after-expand="false" />
-                            <el-tree-select class="input-width" v-else v-model="formData.parent_menu"
-                                :props="{ label: 'menu_name', value: 'menu_key' }" :data="sysMenuList" check-strictly
+                            <el-tree-select class="input-width" v-else v-model="formData.parent_menu" clearable
+                                            :props="{ label: 'menu_name', value: 'menu_key' }" :data="sysMenuList" check-strictly
                                 :render-after-expand="false" />
                         </el-form-item>
                         <!-- <el-form-item :label="t('controller')">
@@ -251,7 +255,7 @@
                 </el-tab-pane>
                 <el-tab-pane :label="t('associatedConfiguration')" name="associatedConfiguration">
                     <div class="mb-[20px]">
-                        <el-button type="primary" class="w-[100px]" @click="addEvent(null, 0)">{{ t('insertAssociated')
+                        <el-button type="primary" class="w-[100px]" @click="addEvent(null, -1)">{{ t('insertAssociated')
                         }}</el-button>
                     </div>
                     <el-table :data="formData.relations" size="large">
@@ -295,7 +299,7 @@ import editAssociated from '@/app/views/tools/code/components/edit-associated.vu
 import editViewType from '@/app/views/tools/code/components/edit-view-type.vue'
 import editVerify from '@/app/views/tools/code/components/edit-verify.vue'
 import { getGenerateTableInfo, editGenerateTable, getAddonDevelop, generatorCheckFile, generateCreate } from '@/app/api/tools'
-import { getSystemMenu, getAddonMenu } from '@/app/api/sys'
+import { getMenuByTypeDir } from '@/app/api/sys'
 import { useRoute, useRouter } from 'vue-router'
 import Sortable from 'sortablejs'
 import { useTemplateRefsList } from '@vueuse/core'
@@ -309,7 +313,7 @@ const id: number = parseInt(route.query.id || 0)
 
 const loading = ref(true)
 const tableRef = useTemplateRefsList<HTMLElement>()
-const toggleIndex = ref(0)
+let toggleIndex = ref(0)
 const activeName = ref('basicSettings')
 /**
  * 表单数据
@@ -395,12 +399,12 @@ const verifyType = [
     {
         label: '',
         value: 'between'
-    }
+    },
 
 ]
 
 const addonList = ref<Array<any>>([])
-// 获取插件远程搜索
+//获取插件远程搜索
 const getAddonDevelopFn = (search: string) => {
     getAddonDevelop({ search }).then(res => {
         addonList.value = res.data
@@ -409,7 +413,7 @@ const getAddonDevelopFn = (search: string) => {
         })
     })
 }
-// 拖拽排序
+//拖拽排序
 const rowDrop = () => {
     const tbody = tableRef.value.$el.querySelector(
         '.el-table__body-wrapper tbody'
@@ -425,17 +429,17 @@ const rowDrop = () => {
             nextTick(() => {
                 rowDrop()
             })
-        }
+        },
     })
 }
 onMounted(() => {
     getAddonDevelopFn('')
 })
-// 删除类型change
+//删除类型change
 const deleteTypeChange = (val: any) => {
     formData.delete_column_name = val ? formData.table_column[formData.table_column.length - 1].column_name : ''
 }
-// 排序字段change
+//排序字段change
 const orderColumnNameChange = (val: any) => {
     formData.order_type = val ? 1 : 0
 }
@@ -450,7 +454,7 @@ const validator = computed(() => {
     return formData.addon_name ? `addon${formData.addon_name ? '\\' + formData.addon_name : ''}\\app\\validate${formData.module_name ? '\\' + formData.module_name : ''}${formData.class_name ? '\\' + formData.class_name : ''}` : `app\\validate${formData.module_name ? '\\' + formData.module_name : ''}${formData.class_name ? '\\' + formData.class_name : ''}`
 })
 const webView = computed(() => {
-    return formData.addon_name ? `addon${formData.addon_name ? '\\' + formData.addon_name : ''}\\admin\\src` : 'admin\\src'
+    return formData.addon_name ? `addon${formData.addon_name ? '\\' + formData.addon_name : ''}\\admin\\src` : `admin\\src`
 })
 const routerView = computed(() => {
     return formData.addon_name ? `addon${formData.addon_name ? '\\' + formData.addon_name : ''}\\app\\adminapi\\route${formData.module_name ? '\\' + formData.module_name : ''}` : `app\\adminapi\\route${formData.module_name ? '\\' + formData.module_name : ''}`
@@ -462,8 +466,8 @@ const setFormData = async (id: number = 0) => {
         if (data[key] != undefined) formData[key] = data[key]
     })
     formData.table_column.forEach(el => {
-        el.betweenMin = cloneDeep(el.min_number)
-        el.betweenMax = cloneDeep(el.max_number)
+        el.betweenMin = cloneDeep(el.min_number);
+        el.betweenMax = cloneDeep(el.max_number);
     })
     if (formData.addon_name != '') getAddonMenuFn(formData.addon_name)
     loading.value = false
@@ -474,46 +478,48 @@ const formRef = ref<FormInstance>()
 
 const sysMenuList = ref<Array<any>>([])
 const addonMenuList = ref<Array<any>>([])
-// 获取系统菜单列表
+//获取系统菜单列表
 const getSystemMenuFn = async () => {
-    const { data } = await getSystemMenu()
-    sysMenuList.value = [{ menu_name: '顶级', menu_key: '' }]
+    let { data } = await getMenuByTypeDir()
+    sysMenuList.value = [{ menu_name: "顶级", menu_key: "" }]
     sysMenuList.value.push(...data)
 }
 getSystemMenuFn()
-// 获取系统应用菜单列表
+//获取系统应用菜单列表
 const getAddonMenuFn = async (key: any) => {
-    const { data } = await getAddonMenu(key)
+    let { data } = await getMenuByTypeDir(key)
     addonMenuList.value = data
 }
-// 选择插件
+//选择插件
 const addonChange = async (val: any) => {
     formData.parent_menu = ''
     if (val != '') {
         await getAddonMenuFn(val)
-        formData.parent_menu = addonMenuList.value[0].menu_key
+        if (addonMenuList.value[0]) formData.parent_menu = addonMenuList.value[0].menu_key
     }
 }
 const associatedIndex = ref(0)
 const editDialog = ref()
-// 添加编辑关联设置
+//添加编辑关联设置
 
 const addEvent = (val: any, index: number) => {
     associatedIndex.value = index
     editDialog.value.setFormData(val)
+
 }
 const complete = (row: any) => {
-    if (associatedIndex.value) {
+    if (associatedIndex.value != -1) {
         formData.relations.splice(associatedIndex.value, 1, row)
     } else {
         formData.relations.unshift(row)
     }
 }
-// 删除关联配置
+//删除关联配置
 const deleteEvent = (index: number) => {
     formData.relations.splice(index, 1)
 }
 const onSave = async (code: number) => {
+
     const data = cloneDeep(formData)
     // if (data.table_column.some(el => { return ['select', 'radio', 'checkbox'].includes(el.view_type) && el.dict_type == '' })) {
     //     // ElMessage({
@@ -544,13 +550,14 @@ const onSave = async (code: number) => {
             loading.value = false
             ElMessage({
                 type: 'success',
-                message: '操作成功'
+                message: '操作成功',
             })
             setTimeout(() => {
                 window.codeActiveName = 'codeList'
                 back()
             }, 650)
         }
+
     }).catch(() => {
         loading.value = false
     })
@@ -558,7 +565,7 @@ const onSave = async (code: number) => {
 /**
  * 同步校验
  */
-const generatorCheckFileFn = () => {
+const generatorCheckFileFn = (() => {
     generatorCheckFile({ id: formData.id }).then(res => {
         loading.value = false
         ElMessageBox.confirm(
@@ -566,7 +573,7 @@ const generatorCheckFileFn = () => {
             t('warning'),
             {
                 confirmButtonText: t('confirm'),
-                cancelButtonText: t('cancel')
+                cancelButtonText: t('cancel'),
             }
         )
             .then(() => {
@@ -577,7 +584,7 @@ const generatorCheckFileFn = () => {
     }).catch(() => {
         loading.value = false
     })
-}
+})
 /**
  * 同步or下载
  */
@@ -586,7 +593,7 @@ const generateCreateFn = (generate_type: any) => {
         loading.value = false
         ElMessage({
             type: 'success',
-            message: '操作成功'
+            message: '操作成功',
         })
         window.open(img(res.data.file), '_blank')
         setTimeout(() => {
@@ -609,6 +616,7 @@ const validatorBtn = (row: any, index: number) => {
         rowIndex.value = index
         editVerifyRef.value?.setFormData(row)
     }
+
 }
 const completeVerify = (row: any) => {
     formData.table_column.splice(rowIndex.value, 1, row)
@@ -616,11 +624,13 @@ const completeVerify = (row: any) => {
 const viewTypeBtn = (row: any, index: number) => {
     if (!['input', 'textarea'].includes(row.view_type)) row.validate_type = ''
     if (['select', 'radio', 'checkbox'].includes(row.view_type)) {
+
         rowIndex.value = index
         editViewTypeRef.value?.setFormData(row)
     } else if (row.view_type === 'number') {
         validatorBtn(row, index)
     }
+
 }
 const completeViewType = (row: any) => {
     formData.table_column.splice(rowIndex.value, 1, row)

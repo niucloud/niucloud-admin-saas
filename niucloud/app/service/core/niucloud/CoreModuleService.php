@@ -95,4 +95,13 @@ class CoreModuleService extends BaseNiucloudClient
     {
         return $this->httpGet('store/app_check/'.$key, ['product_key' => self::PRODUCT])['data'] ?? false;
     }
+
+    /**
+     * 获取框架最新版本
+     * @return array|\core\util\niucloud\Response|object|ResponseInterface
+     * @throws GuzzleException
+     */
+    public function getFrameworkLastVersion() {
+        return $this->httpGet('store/framework/lastversion', ['product_key' => self::PRODUCT])['data'] ?? false;
+    }
 }

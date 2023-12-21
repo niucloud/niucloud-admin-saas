@@ -45,8 +45,12 @@ return [
     'LAYOUT_NOT_EXIST' => '该布局不存在',
     'ZIP_FILE_NOT_FOUND' => '找不到可用的压缩文件',
     'DOWNLOAD_SUCCESS' => '下载成功',
-    'APP_NOT_ALLOW_UNINSTALL' => '该应用下存在站点不允许卸载',
+    'APP_NOT_ALLOW_UNINSTALL' => '该应用下存在站点卸载前请先删除相关站点',
     'ADDON_INSTALL_FAIL' => '插件安装失败',
+    'ADMIN_DIR_NOT_EXIST' => '未找到admin源码所在目录, <a style="text-decoration: underline;" href="https://www.kancloud.cn/niucloud/niucloud-admin-develop/3213544" target="blank">点击查看相关手册</a>',
+    'WEB_DIR_NOT_EXIST' => '未找到web源码所在目录, <a style="text-decoration: underline;" href="https://www.kancloud.cn/niucloud/niucloud-admin-develop/3213544" target="blank">点击查看相关手册</a>',
+    'UNIAPP_DIR_NOT_EXIST' => '未找到uni-app源码所在目录, <a style="text-decoration: underline;" href="https://www.kancloud.cn/niucloud/niucloud-admin-develop/3213544" target="blank">点击查看相关手册</a>',
+    'OPEN_BASEDIR_ERROR' => '请关闭防跨站攻击, 具体操作方法<a style="text-decoration: underline;" href="https://www.kancloud.cn/niucloud/niucloud-admin-develop/3213393" target="blank">点击查看相关手册</a>',
     //登录注册重置账号....
 
     'LOGIN_SUCCESS' => '登录成功',

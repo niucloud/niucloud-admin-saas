@@ -88,7 +88,9 @@
         mobile_code: '',
         mobile_key: ''
     })
+
     uni.getStorageSync('openid') && (Object.assign(formData, { openid: uni.getStorageSync('openid') }))
+    uni.getStorageSync('pid') && (Object.assign(formData, { pid: uni.getStorageSync('pid') }))
 
     const memberStore = useMemberStore()
     const configStore = useConfigStore()

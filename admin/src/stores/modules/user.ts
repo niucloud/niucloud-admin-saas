@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { getToken, setToken, removeToken, getAppType } from '@/utils/common'
-import { login, getAuthMenus } from '@/app/api/auth'
+import { login, getAuthMenus, getSiteInfo } from '@/app/api/auth'
 import storage from '@/utils/storage'
 import router from '@/router'
 import { formatRouters } from '@/router/routers'
@@ -19,7 +19,7 @@ const useSystemStore = defineStore('user', {
         return {
             token: getToken() || '',
             userInfo: storage.get('userinfo') || {},
-            siteInfo: storage.get('siteInfo') || {},
+            siteInfo: null,
             routers: [],
             rules: [],
             routeGather: {
@@ -31,6 +31,16 @@ const useSystemStore = defineStore('user', {
     actions: {
         setRoute(type, data) {
             this.routeGather[type] = data;
+        },
+        async getSiteInfo() {
+            await getSiteInfo().then(({ data }) => {
+                this.siteInfo = data
+                storage.set({ key: 'siteId', data: data.site_id || 0 })
+                storage.set({ key: 'siteInfo', data: data })
+                storage.set({ key: 'comparisonSiteIdStorage', data: data.site_id || 0 })
+            }).catch(() => {
+                
+            })
         },
         login(form: object, app_type: any) {
             return new Promise((resolve, reject) => {
@@ -45,7 +55,6 @@ const useSystemStore = defineStore('user', {
                         storage.set({ key: 'siteInfo', data: res.data.site_info || {} })
                         storage.set({ key: 'comparisonSiteIdStorage', data: res.data.site_id || 0 })
                         storage.set({ key: 'comparisonTokenStorage', data: res.data.token })
-                        storage.set({ key: 'layout', data: (res.data.layout || 'default') })
                         resolve(res)
                     })
                     .catch((error) => {

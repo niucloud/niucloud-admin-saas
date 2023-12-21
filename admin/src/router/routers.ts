@@ -80,6 +80,10 @@ export const HOME_ROUTE: RouteRecordRaw = {
         {
             path: 'index',
             name: Symbol('homeIndex'),
+            meta: {
+                type: 1,
+                title: '站点管理'
+            },
             component: () => import('@/app/views/home/index.vue')
         }
     ]

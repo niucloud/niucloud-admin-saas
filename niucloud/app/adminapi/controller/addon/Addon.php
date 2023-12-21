@@ -152,16 +152,6 @@ class Addon extends BaseAdminController
     }
 
     /**
-     * 更新插件
-     * @param $app_key
-     * @return Response
-     */
-    public function upgrade($addon){
-        (new AddonService())->upgrade($addon);
-        return success('DOWNLOAD_SUCCESS');
-    }
-
-    /**
      * 查询已安装插件
      * @return Response
      */
@@ -183,5 +173,14 @@ class Addon extends BaseAdminController
      */
     public function getType(){
         return success(AddonDict::getType());
+    }
+
+    /**
+     * 更新插件
+     * @param $app_key
+     * @return Response
+     */
+    public function upgrade($addon = ''){
+        return success('DOWNLOAD_SUCCESS', (new AddonService())->upgrade($addon));
     }
 }

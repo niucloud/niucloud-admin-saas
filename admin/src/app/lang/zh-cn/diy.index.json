@@ -19,5 +19,6 @@
   "placeholderOtherPage": "请选择一个页面",
   "developTitle": "开发环境配置",
   "wapDomain": "wap域名（WAP_DOMAIN）",
-  "wapDomainPlaceholder": "请输入wap域名"
+  "wapDomainPlaceholder": "请输入wap域名",
+  "settingTips": "点击查看如何配置"
 }

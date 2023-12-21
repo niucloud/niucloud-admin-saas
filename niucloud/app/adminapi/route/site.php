@@ -29,6 +29,8 @@ Route::group('site', function () {
     Route::post('site', 'site.Site/add');
     //更新站点
     Route::put('site/:id', 'site.Site/edit');
+    //删除站点
+    Route::delete('site/:id', 'site.Site/del');
     //关闭站点
     Route::put('closesite/:id', 'site.Site/closeSite');
     //开启站点

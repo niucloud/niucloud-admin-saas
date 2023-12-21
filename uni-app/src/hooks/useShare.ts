@@ -2,6 +2,7 @@ import { img, isWeixinBrowser, currRoute, currShareRoute, getToken } from '@/uti
 import { onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app'
 import { getShareInfo } from '@/app/api/diy';
 import useMemberStore from '@/stores/member'
+import { watch } from 'vue'
 
 // #ifdef H5
 import wechat from '@/utils/wechat'
@@ -30,6 +31,10 @@ export const useShare = () => {
 
 	const setShare = async (options : any = {}) => {
 		let memberStore = useMemberStore();
+
+		watch(() => memberStore.info, () => {
+			setShare(options)
+		})
 
 		// #ifdef H5
 		// 初始化sdk

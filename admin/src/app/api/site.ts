@@ -39,6 +39,14 @@ export function editSite(params: Record<string, any>) {
 }
 
 /**
+ * 删除站点
+ * @param siteId
+ */
+export function deleteSite(siteId: number) {
+    return request.delete(`site/site/${siteId}`)
+}
+
+/**
  * 关闭站点
  * @param params
  */

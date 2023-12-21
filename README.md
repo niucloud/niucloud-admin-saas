@@ -38,10 +38,10 @@ niucloud-admin是一款快速开发通用管理后台框架，前端采用最新
  | [论坛地址](https://www.niucloud.com/bbs)
 
 ### 演示地址
-- 站点后台演示网址：[<a href='http://demo-saas.site.niucloud.com/site' target="_blank"> 查看 </a>]       
-<a href='http://demo-saas.site.niucloud.com/site' target="_blank">http://demo-saas.site.niucloud.com/site    账号：admin  密码：123456
-- 平台后台演示网址：[<a href='http://demo-saas.site.niucloud.com/admin/' target="_blank"> 查看 </a>]       
-<a href='http://demo-saas.site.niucloud.com/admin/' target="_blank">http://demo-saas.site.niucloud.com/admin/  账号：admin  密码：123456
+- 站点后台演示网址：[<a href='https://demo.niucloud.com/site/' target="_blank"> 查看 </a>]       
+<a href='https://demo.niucloud.com/site/' target="_blank">https://demo.niucloud.com/site/    账号：test  密码：123456
+- 平台后台演示网址：[<a href='https://demo.niucloud.com/admin/' target="_blank"> 查看 </a>]       
+<a href='https://demo.niucloud.com/admin/' target="_blank">https://demo.niucloud.com/admin/  账号：admin  密码：123456
 
 ### 开源使用须知
 

@@ -55,7 +55,7 @@ class Request {
 					const res = response.data
 					if (res.code != 1) {
 					    this.handleAuthError(res.code)
-					    if (res.code != 401 && response.config.showErrorMessage !== false) ElMessage({ message: res.msg, type: 'error' })
+					    if (res.code != 401 && response.config.showErrorMessage !== false) ElMessage({ message: res.msg, type: 'error', dangerouslyUseHTMLString: true, duration: 5000 })
 					    return Promise.reject(new Error(res.msg || 'Error'))
 					} else {
 					    if (response.config.showSuccessMessage) ElMessage({ message: res.msg, type: 'success' })
@@ -168,12 +168,15 @@ class Request {
             const baseURL = isUrl(err.config.baseURL) ? err.config.baseURL : `${location.origin}${err.config.baseURL}`
             errMessage = baseURL + t('axios.baseUrlError')
         }
-        errMessage && ElMessage({ message: errMessage, type: 'error' })
+        errMessage && ElMessage({ dangerouslyUseHTMLString: true, duration: 5000, message: errMessage, type: 'error' })
     }
 
     private handleAuthError(code: number) {
         switch (code) {
             case 401:
+                useUserStore().logout()
+                break;
+            case 400:
                 useUserStore().logout()
                 break;
         }

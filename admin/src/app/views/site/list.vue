@@ -119,6 +119,7 @@
                                 v-if="row.status == 1 || row.status == 3">{{ row.status == 1 ? t('closeTxt') : t('openTxt')
                                 }}</el-button>
                             <el-button type="primary" link @click="editEvent(row)">{{ t('edit') }}</el-button>
+                            <el-button type="primary" link @click="deleteEvent(row)">{{ t('delete') }}</el-button>
                             <el-button type="primary" link @click="urlEvent(row)">{{ t('url') }}</el-button>
                             <el-button type="primary" link @click="infoEvent(row)">{{ t('info') }}</el-button>
                         </template>
@@ -141,12 +142,13 @@
 import { reactive, ref } from 'vue'
 import { img } from '@/utils/common'
 import { t } from '@/lang'
-import { getSiteList, getSiteGroupAll, getStatusList, closeSite, openSite } from '@/app/api/site'
-import { FormInstance } from 'element-plus'
+import { getSiteList, getSiteGroupAll, getStatusList, closeSite, openSite, deleteSite } from '@/app/api/site'
+import {ElMessageBox, FormInstance} from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
 import EditSite from '@/app/views/site/components/edit-site.vue'
 import { getInstalledAddonList } from '@/app/api/addon'
 import { CollectionTag } from '@element-plus/icons-vue'
+import {deleteMenu} from "@/app/api/sys";
 
 const route = useRoute()
 const pageName = route.meta.title
@@ -285,7 +287,7 @@ const editEvent = (data: any) => {
  * @param data
  */
 const toSiteLink = (data: any) => {
-    // window.localStorage.setItem('site.siteId', data.site_id)
+    window.localStorage.setItem('site.siteId', data.site_id)
     window.open(`${location.origin}/site/`)
 }
 
@@ -300,6 +302,21 @@ const openClose = (i, site_id) => {
             loadSiteList()
         })
     }
+}
+
+const deleteEvent = (data: any) => {
+    ElMessageBox.confirm(t('siteDeleteTips'), t('warning'),
+        {
+            confirmButtonText: t('confirm'),
+            cancelButtonText: t('cancel'),
+            type: 'warning'
+        }
+    ).then(() => {
+        deleteSite(data.site_id).then(res => {
+            loadSiteList()
+        }).catch(() => {
+        })
+    })
 }
 </script>
 

@@ -16,7 +16,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item :label="t('associatedModel')" prop="model">
-                <el-select :placeholder="t('associatedModelPlaceholder')" v-model="formData.model" class="input-width">
+                <el-select :placeholder="t('associatedModelPlaceholder')" v-model="formData.model" class="input-width" filterable>
                     <el-option v-for="item in modelList" :label="item" :value="item" :key="item" />
                 </el-select>
             </el-form-item>
@@ -121,13 +121,13 @@ const getAddonDevelopFn = async () => {
     let { data } = await getAddonDevelop({})
     addonLst.value = [{ title: "系统", key: "system" }]
     addonLst.value.push(...data)
-    getGeneratorAllModelFn({addon:'system'}) 
+    getGeneratorAllModelFn({addon:'system'})
 }
 getAddonDevelopFn()
 //选择应用
 const addonChange =(val:any)=>{
     formData.value.model = ''
-   getGeneratorAllModelFn({addon:val}) 
+   getGeneratorAllModelFn({addon:val})
 }
 const beforeClose=(next:any)=>{
     formRef.value?.clearValidate()

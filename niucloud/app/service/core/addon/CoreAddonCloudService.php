@@ -259,4 +259,28 @@ class CoreAddonCloudService extends CoreCloudBaseService
 
         return $zip_file;
     }
+
+    /**
+     * 插件升级
+     * @param $data
+     * @return void
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function upgradeAddon(array $data = []) {
+        $action_token = (new CoreModuleService())->getActionToken('upgrade', ['data' => $data ]);
+        if (isset($action_token['code']) && $action_token['code'] != 1) {
+            if ($action_token['code'] == 401) $action_token = (new CoreModuleService())->getActionToken('upgrade', ['data' => $data ]);
+            if ($action_token['code'] != 1) throw new CommonException($action_token['msg']);
+        }
+
+        $query = [
+            'authorize_code' => $this->auth_code,
+            'token' => $action_token['data']['token'] ?? ''
+        ];
+        // 获取文件大小
+        $response = (new CloudService())->request('HEAD','cloud/upgrade?' . http_build_query($query), [
+            'headers' => ['Range' => 'bytes=0-']
+        ]);
+        return $response;
+    }
 }

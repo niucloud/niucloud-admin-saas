@@ -25,7 +25,7 @@ const systemStore = useSystemStore()
 const userStore = useUserStore()
 const route = useRoute()
 const router = useRouter()
-const siteInfo = storage.get('siteInfo') || false
+const siteInfo = userStore.siteInfo
 
 const menuActive = computed(() => String(route.name))
 

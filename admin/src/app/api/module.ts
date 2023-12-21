@@ -48,3 +48,12 @@ export function getModuleVersion() {
 export function downloadVersion(params: Record<string, any>) {
     return request.post(`addon/download/${params.addon}`, params, { showSuccessMessage: true })
 }
+
+/**
+ * 获取框架最新版本
+ * @param params
+ * @returns
+ */
+export function getFrameworkNewVersion() {
+    return request.get(`niucloud/framework/newversion`)
+}

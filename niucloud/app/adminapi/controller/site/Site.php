@@ -113,6 +113,16 @@ class Site extends BaseAdminController
     }
 
     /**
+     * 删除站点
+     * @param $id
+     * @return Response
+     */
+    public function del($id) {
+        (new SiteService())->del($id);
+        return success('DELETE_SUCCESS');
+    }
+
+    /**
      * 开启站点
      */
     public function openSite($id)

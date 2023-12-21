@@ -110,7 +110,9 @@
         captcha_key: '',
         captcha_code: ''
     })
-    uni.getStorageSync('openid') && (Object.assign(formData, {openid: uni.getStorageSync('openid')}))
+
+    uni.getStorageSync('openid') && (Object.assign(formData, { openid: uni.getStorageSync('openid') }))
+    uni.getStorageSync('pid') && (Object.assign(formData, { pid: uni.getStorageSync('pid') }))
 
     const captcha = useCaptcha(formData)
     captcha.refresh()

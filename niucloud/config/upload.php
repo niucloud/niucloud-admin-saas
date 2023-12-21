@@ -42,7 +42,8 @@ return [
             'ext' => ['pem', 'key'],
             'mime' => [
                 'application/x-x509-ca-cert',
-                'application/octet-stream'
+                'application/octet-stream',
+                'application/x-iwork-keynote-sffkey'
             ],
             'size' => 2097152
         ],

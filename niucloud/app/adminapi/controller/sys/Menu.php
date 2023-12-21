@@ -147,4 +147,13 @@ class Menu extends BaseAdminController
     {
         return success( (new MenuService())->getAddonMenu($app_key,'all', 1));
     }
+
+    /**
+     * 查询菜单类型为目录的菜单
+     * @param $addon
+     * @return Response
+     */
+    public function getMenuByTypeDir($addon = 'system') {
+        return success( (new MenuService())->getMenuByTypeDir($addon));
+    }
 }

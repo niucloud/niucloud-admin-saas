@@ -59,6 +59,8 @@ class AddonDict
         ];
     }
 
+    const FRAMEWORK_KEY = 'niucloud-admin';
+
     const APP = 'app';
     const ADDON = 'addon';
 

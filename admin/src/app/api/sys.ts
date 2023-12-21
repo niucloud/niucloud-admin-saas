@@ -128,6 +128,15 @@ export function getAddonMenu(key: any) {
     return request.get(`sys/menu/addon_menu/${key}`)
 }
 
+/**
+ * 获取类型为目录的菜单
+ * @param key
+ */
+export function getMenuByTypeDir(key: any = 'system') {
+    return request.get(`sys/menu/dir/${key}`)
+}
+
+
 /***************************************************** 站点菜单 ****************************************************/
 
 /**
