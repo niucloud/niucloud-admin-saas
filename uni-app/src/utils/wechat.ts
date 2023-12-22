@@ -1,4 +1,6 @@
+// #ifdef H5
 import wx from 'weixin-js-sdk'
+// #endif
 import { getWechatSkdConfig } from '@/app/api/system'
 import { isWeixinBrowser } from '@/utils/common'
 
