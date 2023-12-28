@@ -89,7 +89,7 @@ class CoreAddonDevelopService extends CoreAddonBaseService
                 'menu' => [
                     [
                         'name' => 'admin.php',
-                        'vm' => 'system' . DIRECTORY_SEPARATOR . 'menu.vm'
+                        'vm' => 'system' . DIRECTORY_SEPARATOR . 'admin_menu.vm'
                     ],
                     [
                         'name' => 'site.php',

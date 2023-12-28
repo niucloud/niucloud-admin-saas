@@ -52,7 +52,6 @@ class Pay extends BaseAdminController
     /**
      * 审核拒绝
      * @param string $out_trade_no
-     * @return void
      */
     public function refuse(string $out_trade_no){
         $reason = input('reason', '');

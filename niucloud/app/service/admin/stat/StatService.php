@@ -11,6 +11,7 @@
 
 namespace app\service\admin\stat;
 
+use app\model\site\Site;
 use app\service\admin\site\SiteGroupService;
 use app\service\admin\site\SiteService;
 use app\service\admin\sys\SystemService;
@@ -101,7 +102,7 @@ class StatService extends BaseAdminService
         for ($i = 1; $i <= 7; $i++){
             $item_day = date('Y-m-d', strtotime('+' . $i - 7 . ' days', $time));
             $data['site_stat']['date'][] = $item_day;
-            $data['site_stat']['value'][] = (new SiteService())->getCount(['create_time' => get_start_and_end_time_by_day($item_day)]);
+            $data['site_stat']['value'][] = (new Site())->where([['create_time','between',get_start_and_end_time_by_day($item_day)]])->count();
         }
         $man_count = (new CoreMemberService())->getCount(['sex' => '1']);
         $woman_count = (new CoreMemberService())->getCount(['sex' => '2']);

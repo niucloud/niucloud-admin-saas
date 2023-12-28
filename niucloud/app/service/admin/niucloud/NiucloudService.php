@@ -69,11 +69,15 @@ class NiucloudService extends BaseAdminService
 
     /**
      * 获取框架最新版本
-     * @return void
-     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getFrameworkLastVersion() {
         return (new CoreModuleService())->getFrameworkLastVersion();
     }
 
+    /**
+     * 获取框架版本更新记录
+     */
+    public function getFrameworkVersionList() {
+        return (new CoreModuleService())->getFrameworkVersionList();
+    }
 }

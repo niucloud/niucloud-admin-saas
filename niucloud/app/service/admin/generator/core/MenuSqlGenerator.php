@@ -138,6 +138,8 @@ class MenuSqlGenerator extends BaseGenerator
             $dir = $this->rootDir . '/niucloud/addon/'.$this->addonName.'/sql/';
             $this->checkDir($dir);
             return $dir;
+        }else{
+            return '';
         }
     }
 

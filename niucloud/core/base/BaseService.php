@@ -58,8 +58,6 @@ abstract class BaseService
      * @param string $field
      * @param string $order
      * @param array $append
-     * @param null $with //数组可以是数组  function($query) use ($with){$query->with($with);}
-     * @param null $each //闭包匿名函数  function($item, $key){$item['nickname'] = 'think';return $item;}
      * @return array
      * @throws DbException
      */
@@ -86,7 +84,6 @@ abstract class BaseService
     /**
      * 分页数据查询，传入model（查询后结果）
      * @param $model BaseModel
-     * @param null $each
      * @return array
      * @throws DbException
      */
@@ -112,8 +109,6 @@ abstract class BaseService
      * @param string $field
      * @param string $order
      * @param array $append
-     * @param null $with
-     * @param null $each
      * @return array
      * @throws DbException
      */

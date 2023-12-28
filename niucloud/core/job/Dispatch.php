@@ -28,7 +28,7 @@ class Dispatch
      * @param bool $is_async
      * @return mixed
      */
-    public static function invoke($action, array $data = [], int $secs = 0, string $queue_name = null, bool $is_async = true)
+    public static function dispatch($action, array $data = [], int $secs = 0, string $queue_name = null, bool $is_async = true)
     {
         $class = static::class;//调用主调类
         if ($is_async) {

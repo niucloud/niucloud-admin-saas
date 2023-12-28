@@ -100,6 +100,7 @@ class Request extends \think\Request
     {
         if ($site_id > 0) {
             static::$site_id = (int)$site_id;
+            return $site_id;
         } else {
             return static::$site_id ?? $this->defaultSiteId();
         }
@@ -114,6 +115,7 @@ class Request extends \think\Request
     {
         if (!empty($username)) {
             static::$auth_info['username'] = $username;
+            return $username;
         } else {
             return static::$auth_info['username'] ?? '';
         }
@@ -128,6 +130,7 @@ class Request extends \think\Request
     public function appType(string $app_type = ''){
         if (!empty($app_type)) {
             static::$auth_info['app_type'] = $app_type;
+            return $app_type;
         } else {
             return static::$auth_info['app_type'] ?? '';
         }

@@ -417,6 +417,8 @@ class GenerateService extends BaseAdminService
             } catch ( Exception $e) {
                 throw new AdminException($e->getMessage());
             }
+        }else{
+            return [];
         }
 
     }

@@ -11,14 +11,13 @@
                 </el-form-item>
 
                 <el-form-item :label="t('cashWithdrawalAmount')" v-if="formData.is_open" prop="min">
-                    <el-input v-model="formData.min" class="w-60" type="number" :placeholder="t('cashWithdrawalAmountPlaceholder')" />
+                    <el-input v-model="formData.min" type="number"  class="input-width" :placeholder="t('cashWithdrawalAmountPlaceholder')" />
                 </el-form-item>
 
                 <el-form-item :label="t('commissionRatio')" v-if="formData.is_open" prop="rate">
-                    <el-input v-model="formData.rate" type="number" class="w-60" :placeholder="t('commissionRatioPlaceholder')" />
+                    <el-input v-model="formData.rate" type="number" class="input-width" :placeholder="t('commissionRatioPlaceholder')" />
                     <span class="ml-2">%</span>
                 </el-form-item>
-
                 <el-form-item :label="t('audit')" v-if="formData.is_open"  class="items-center">
                     <el-radio-group v-model="formData.is_auto_verify">
                         <el-radio label="0" size="large">{{t('manualAudit')}}</el-radio>

@@ -39,7 +39,19 @@ Route::group('niucloud', function () {
     Route::put('addon/status/:version_id', 'addon.Addon/setStatus');
     // 获取框架最新版本
     Route::get('framework/newversion', 'niucloud.Module/getFrameworkLastVersion');
+    // 获取框架版本更新记录
+    Route::get('framework/version/list', 'niucloud.Module/getFrameworkVersionList');
 
+    // 云编译
+    Route::post('build', 'niucloud.Cloud/build');
+    // 获取编译任务
+    Route::get('build', 'niucloud.Cloud/getBuildTask');
+    // 获取云编译
+    Route::get('build/log', 'niucloud.Cloud/getBuildLog');
+    // 清除编译任务
+    Route::post('build/clear', 'niucloud.Cloud/clearBuildTask');
+    // 编译前环境检测
+    Route::get('build/check', 'niucloud.Cloud/buildPreCheck');
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,

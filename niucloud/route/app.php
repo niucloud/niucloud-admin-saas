@@ -17,11 +17,11 @@ Route::rule('/', function () {
     if (Request::isMobile()) {
         return redirect('/wap');
     } else {
-        return redirect('/web');
+        return redirect('/admin');
     }
 });
 // 管理后台
-Route::rule('admin/:any', function () {
+Route::rule('admin', function () {
     return view(app()->getRootPath() . 'public/admin/index.html');
 })->pattern(['any' => '\w+']);
 // 站点端
@@ -37,11 +37,11 @@ Route::rule('decorate/:any', function () {
     return view(app()->getRootPath() . 'public/admin/index.html');
 })->pattern(['any' => '\w+']);
 // 手机端
-Route::rule('wap/:any', function () {
+Route::rule('wap', function () {
     return view(app()->getRootPath() . 'public/wap/index.html');
 })->pattern(['any' => '\w+']);
 // 电脑端
-Route::rule('web/:any', function () {
+Route::rule('web', function () {
     return view(app()->getRootPath() . 'public/web/index.html');
 })->pattern(['any' => '\w+']);
 //用于公众号授权证书

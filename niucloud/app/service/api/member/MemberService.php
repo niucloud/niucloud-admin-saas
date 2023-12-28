@@ -36,7 +36,6 @@ class MemberService extends BaseApiService
 
     /**
      * 新增会员
-     * @return void
      */
     public function add(array $data){
         $data['site_id'] = $this->site_id;

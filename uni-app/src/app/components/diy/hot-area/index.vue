@@ -6,7 +6,7 @@
 
 			<template v-if="diyStore.mode != 'decorate'">
 				<!-- 热区功能 -->
-				<app-link :data="mapItem.link" class="absolute" v-for="(mapItem, mapIndex) in diyComponent.heatMapData"
+				<app-link :data="mapItem.link" custom-class="absolute" v-for="(mapItem, mapIndex) in diyComponent.heatMapData"
 					:key="mapIndex" :style="{
 					width: mapItem.width + '%',
 					height: mapItem.height + '%',

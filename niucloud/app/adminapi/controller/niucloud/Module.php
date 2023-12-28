@@ -52,4 +52,13 @@ class Module extends BaseAdminController
     public function getFrameworkLastVersion() {
         return success(data:(new NiucloudService())->getFrameworkLastVersion());
     }
+
+    /**
+     * 获取框架最新版本
+     * @return Response
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function getFrameworkVersionList() {
+        return success(data:(new NiucloudService())->getFrameworkVersionList());
+    }
 }

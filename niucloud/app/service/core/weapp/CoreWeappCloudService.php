@@ -47,7 +47,6 @@ class CoreWeappCloudService extends CoreCloudBaseService
     /**
      * 上传小程序
      * @param $addon
-     * @return void
      */
     public function uploadWeapp(array $data) {
         if (!request()->isSsl()) throw new CommonException('CURR_SITE_IS_NOT_OPEN_SSL');

@@ -86,6 +86,16 @@ class CoreModuleService extends BaseNiucloudClient
     }
 
     /**
+     * 获取升级内容
+     * @param $data
+     * @return array|\core\util\niucloud\Response|object|ResponseInterface
+     * @throws GuzzleException
+     */
+    public function getUpgradeContent($data) {
+        return $this->httpGet('member_app_upgrade/content', $data);
+    }
+
+    /**
      * 校验key是否被占用
      * @param $key
      * @return array|Response|object|ResponseInterface
@@ -103,5 +113,14 @@ class CoreModuleService extends BaseNiucloudClient
      */
     public function getFrameworkLastVersion() {
         return $this->httpGet('store/framework/lastversion', ['product_key' => self::PRODUCT])['data'] ?? false;
+    }
+
+    /**
+     * 获取框架版本更新记录
+     * @return false|mixed
+     * @throws GuzzleException
+     */
+    public function getFrameworkVersionList() {
+        return $this->httpGet('store/framework/version', ['product_key' => self::PRODUCT])['data'] ?? false;
     }
 }

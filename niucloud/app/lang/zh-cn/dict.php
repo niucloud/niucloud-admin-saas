@@ -45,7 +45,9 @@ return [
         'status_experience' => '体验期',
         'status_expire' => '已到期',
         'status_close' => '已停止',
-
+        'pay' => '支付',
+        'refund' => '退款',
+        'transfer' => '转账',
     ],
     // 站点
     'dict_site_index' => [

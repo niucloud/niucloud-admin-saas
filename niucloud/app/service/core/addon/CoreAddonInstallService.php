@@ -108,9 +108,16 @@ class CoreAddonInstallService extends CoreAddonBaseService
 
         $to_resource_dir = public_path() . 'addon' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
 
-        if (!is_dir($this->root_path . 'admin' . DIRECTORY_SEPARATOR)) throw new CommonException('ADMIN_DIR_NOT_EXIST');
-        if (!is_dir($this->root_path . 'web' . DIRECTORY_SEPARATOR)) throw new CommonException('WEB_DIR_NOT_EXIST');
-        if (!is_dir($this->root_path . 'uni-app' . DIRECTORY_SEPARATOR)) throw new CommonException('UNIAPP_DIR_NOT_EXIST');
+        try {
+            if (!is_dir($this->root_path . 'admin' . DIRECTORY_SEPARATOR)) throw new CommonException('ADMIN_DIR_NOT_EXIST');
+            if (!is_dir($this->root_path . 'web' . DIRECTORY_SEPARATOR)) throw new CommonException('WEB_DIR_NOT_EXIST');
+            if (!is_dir($this->root_path . 'uni-app' . DIRECTORY_SEPARATOR)) throw new CommonException('UNIAPP_DIR_NOT_EXIST');
+        } catch (\Exception $e) {
+            if (strpos($e->getMessage(), 'open basedir') !== false) {
+                throw new CommonException('OPEN_BASEDIR_ERROR');
+            }
+            throw new CommonException($e->getMessage());
+        }
 
         // 配置文件
         $package_path = $this->install_addon_path . 'package' . DIRECTORY_SEPARATOR;

@@ -68,7 +68,6 @@ class NoticeService extends BaseAdminService
      * @param string $key
      * @param string $type
      * @param int $status
-     * @return Response
      */
     public function editMessageStatus(string $key, string $type, int $status)
     {
@@ -82,7 +81,6 @@ class NoticeService extends BaseAdminService
      * @param string $key
      * @param string $type
      * @param array $data
-     * @return Response
      */
     public function edit(string $key, string $type, array $data)
     {

@@ -163,7 +163,6 @@ class SiteService extends BaseAdminService
     /**
      * 删除站点
      * @param int $site_id
-     * @return void
      */
     public function del(int $site_id) {
         Db::startTrans();
@@ -302,7 +301,7 @@ class SiteService extends BaseAdminService
 
     /**
      * 获取站点的插件
-     * @return void
+     * @return array
      */
     public function getSiteAddons(array $where) {
         $site_addon = (new CoreSiteService())->getAddonKeysBySiteId($this->site_id);

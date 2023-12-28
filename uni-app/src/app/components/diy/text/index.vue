@@ -27,7 +27,7 @@
 			<view class="ml-auto text-right " v-if="diyComponent.more.isShow"
 				:style="{ color: diyComponent.more.color }">
 
-				<app-link :data="diyComponent.more.link" class="flex items-center">
+				<app-link :data="diyComponent.more.link" custom-class="flex items-center">
 					<text class="max-w-[200rpx] truncate text-[24rpx] mr-[8rpx]">{{ diyComponent.more.text }}</text>
 					<u-icon name="arrow-right" size="12" :style="{ color: diyComponent.more.color }"></u-icon>
 				</app-link>

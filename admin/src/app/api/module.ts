@@ -57,3 +57,11 @@ export function downloadVersion(params: Record<string, any>) {
 export function getFrameworkNewVersion() {
     return request.get(`niucloud/framework/newversion`)
 }
+
+/**
+ * 获取框架更新记录
+ * @returns
+ */
+export function getFrameworkVersionList() {
+    return request.get(`niucloud/framework/version/list`)
+}

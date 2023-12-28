@@ -41,7 +41,6 @@ class AttachmentService extends BaseAdminService
     /**
      * 新增素材
      * @param array $data
-     * @return mixed
      */
     public function add(array $data)
     {

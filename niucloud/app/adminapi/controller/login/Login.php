@@ -11,15 +11,9 @@
 
 namespace app\adminapi\controller\login;
 
-use addon\cms\app\model\article\CmsArticle;
-use app\model\sys\SysUser;
 use app\service\admin\auth\ConfigService;
 use app\service\admin\auth\LoginService;
-use app\service\admin\site\SiteService;
-use app\service\core\upgrade\CoreBackupService;
-use app\service\core\upgrade\CoreRestoreService;
-use app\service\core\upgrade\CoreUpgradeService;
-use app\service\core\weapp\CoreWeappCloudService;
+use app\service\admin\upgrade\UpgradeService;
 use core\base\BaseAdminController;
 use think\Response;
 
@@ -68,6 +62,13 @@ class Login extends BaseAdminController
     }
 
     public function test(){
-        (new CoreUpgradeService())->execute();
+        $code_dir = project_path() . 'upgrade/658a7ee7aec7d/download/code/0.0.6';
+        $file_path = project_path() . 'upgrade/658a7ee7aec7d/download/code/0.0.6.txt';
+        $change = array_filter(explode("\n", file_get_contents($file_path)));
+
+        foreach ($change as &$item) {
+            list($operation, $md5, $file) = $item = explode(' ', $item);
+        }
+        (new UpgradeService())->installDepend($code_dir, array_column($change, 2));
     }
 }

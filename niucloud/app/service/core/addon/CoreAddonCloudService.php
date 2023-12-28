@@ -278,9 +278,60 @@ class CoreAddonCloudService extends CoreCloudBaseService
             'token' => $action_token['data']['token'] ?? ''
         ];
         // 获取文件大小
-        $response = (new CloudService())->request('HEAD','cloud/upgrade?' . http_build_query($query), [
-            'headers' => ['Range' => 'bytes=0-']
-        ]);
+        $response = (new CloudService())->httpGet('cloud/upgrade?' . http_build_query($query));
+        $response['token'] = $query['token'];
         return $response;
+    }
+
+    /**
+     * 下载升级文件
+     * @param string $dir
+     * @param string $token
+     * @return void
+     */
+    public function downloadUpgradeFile(string $token, string $dir = '', int $index = -1, $step = 0, $length = 0) {
+        $query = [
+            'authorize_code' => $this->auth_code,
+            'token' => $token
+        ];
+        $chunk_size = 1 * 1024 * 1024;
+
+        if ($index == -1) {
+            $response = (new CloudService())->request('HEAD','cloud/upgrade/download?' . http_build_query($query), [
+                'headers' => ['Range' => 'bytes=0-']
+            ]);
+            $length = $response->getHeader('Content-range');
+            $length = (int)explode("/", $length[0])[1];
+            $step = (int)ceil($length / $chunk_size);
+
+            $index++;
+            return compact('token', 'dir', 'index', 'step', 'length');
+        } else {
+            $zip_file = $dir . 'upgrade.zip';
+            $zip_resource = fopen($zip_file, 'a');
+
+            if ($index < $step) {
+                $start = $index * $chunk_size;
+                $end = ($index + 1) * $chunk_size;
+                $end = min($end, $length);
+
+                $response = (new CloudService())->request('GET','cloud/upgrade/download?' . http_build_query($query), [
+                    'headers' => ['Range' => "bytes={$start}-{$end}"]
+                ]);
+                fwrite($zip_resource, $response->getBody());
+                fclose($zip_resource);
+
+                $index++;
+                return compact('token', 'dir', 'index', 'step', 'length');
+            } else {
+                $zip = new \ZipArchive();
+                if ($zip->open($zip_file) === true) {
+                    dir_mkdir($dir . 'code');
+                    $zip->extractTo($dir . 'code');
+                    $zip->close();
+                }
+                return true;
+            }
+        }
     }
 }

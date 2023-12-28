@@ -271,7 +271,6 @@ class LoginService extends BaseApiService
      * 重置密码
      * @param string $mobile
      * @param string $password
-     * @return null
      */
     public function resetPassword(string $mobile, string $password){
         $member_service = new MemberService();

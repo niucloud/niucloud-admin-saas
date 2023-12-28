@@ -136,7 +136,6 @@ class MemberService extends BaseAdminService
      * @param int $member_id
      * @param string $field
      * @param $data
-     * @return null
      */
     public function modify(int $member_id, string $field, $data)
     {
@@ -146,7 +145,6 @@ class MemberService extends BaseAdminService
     /**
      * 组合整理数据
      * @param $data
-     * @return void
      */
     public function makeUp($data){
         //会员标签

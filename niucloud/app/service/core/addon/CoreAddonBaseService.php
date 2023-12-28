@@ -78,7 +78,7 @@ class CoreAddonBaseService extends BaseCoreService
      * 读取json文件转化成数组返回
      * @param $json_file_path //json文件目录
      */
-    protected function jsonFileToArray(string $json_file_path)
+    public function jsonFileToArray(string $json_file_path)
     {
         if (file_exists($json_file_path)) {
             $content_json = @file_get_contents($json_file_path);
@@ -93,7 +93,7 @@ class CoreAddonBaseService extends BaseCoreService
      * @param string $file_path
      * @return true
      */
-    protected function writeArrayToJsonFile(array $content, string $file_path)
+    public function writeArrayToJsonFile(array $content, string $file_path)
     {
         $content_json = json_encode($content, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
         $content_json = preg_replace('/\[\]/', '{}', $content_json);

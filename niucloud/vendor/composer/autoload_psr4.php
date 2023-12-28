@@ -22,7 +22,7 @@ return array(
     'Yansongda\\Pay\\' => array($vendorDir . '/yansongda/pay/src'),
     'WpOrg\\Requests\\' => array($vendorDir . '/rmccue/requests/src'),
     'Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
-    'TencentCloud\\' => array($vendorDir . '/tencentcloud/tencentcloud-sdk-php/src/TencentCloud'),
+    'TencentCloud\\' => array($vendorDir . '/tencentcloud/common/src/TencentCloud', $vendorDir . '/tencentcloud/sms/src/TencentCloud'),
     'Symfony\\Polyfill\\Php80\\' => array($vendorDir . '/symfony/polyfill-php80'),
     'Symfony\\Polyfill\\Php73\\' => array($vendorDir . '/symfony/polyfill-php73'),
     'Symfony\\Polyfill\\Php72\\' => array($vendorDir . '/symfony/polyfill-php72'),

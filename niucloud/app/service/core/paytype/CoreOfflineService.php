@@ -117,7 +117,6 @@ class CoreOfflineService extends BaseCoreService
      * @param int $site_id
      * @param string $out_trade_no
      * @param string $reason
-     * @return void
      */
     public function refuse(int $site_id, string $out_trade_no, string $reason = '') {
         $pay = (new CorePayService())->findPayInfoByOutTradeNo($site_id, $out_trade_no);

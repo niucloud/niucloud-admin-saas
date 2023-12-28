@@ -22,7 +22,7 @@ class CheckJob extends BaseJob
     {
         file_put_contents($file, time());
         //todo 部署一个十五秒后再校验一次删除这个文件
-        CheckDeleteJob::invoke(['file' => $file], secs: 8);
+        CheckDeleteJob::dispatch(['file' => $file], secs: 8);
         return true;
     }
 }

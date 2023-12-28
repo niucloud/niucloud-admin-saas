@@ -53,8 +53,6 @@ Route::group(function () {
     // 取消安装任务
     Route::put('addon/install/cancel/:addon', 'addon.Addon/cancleInstall');
 
-    Route::post('addon/upgrade/[:addon]', 'addon.Addon/upgrade');
-
     /******************************************************************开发插件 *******************************************************/
     //开发插件列表
     Route::get('addon_develop', 'addon.AddonDevelop/lists');

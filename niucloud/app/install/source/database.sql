@@ -776,7 +776,7 @@ CREATE TABLE `sys_user`  (
   `head_img` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '',
   `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '用户密码',
   `real_name` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '实际姓名',
-  `last_ip` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '最后一次登录ip',
+  `last_ip` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '最后一次登录ip',
   `last_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '最后一次登录时间',
   `create_time` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '添加时间',
   `login_count` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '登录次数',
@@ -791,7 +791,7 @@ CREATE TABLE `sys_user`  (
 DROP TABLE IF EXISTS `sys_user_log`;
 CREATE TABLE `sys_user_log`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '管理员操作记录ID',
-  `ip` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '登录IP',
+  `ip` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '登录IP',
   `site_id` int(11) NOT NULL DEFAULT 0 COMMENT '站点id',
   `uid` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '管理员id',
   `username` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '管理员姓名',

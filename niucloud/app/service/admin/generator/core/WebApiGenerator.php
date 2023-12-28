@@ -179,7 +179,6 @@ class WebApiGenerator extends BaseGenerator
 
     /**
      * 获取文件生成到插件中
-     * @return void
      */
     public function getAddonObjectOutDir() {
         $dir = $this->rootDir . '/niucloud/addon/'.$this->addonName.'/admin/api/';

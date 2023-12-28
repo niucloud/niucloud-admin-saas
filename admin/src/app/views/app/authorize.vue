@@ -2,30 +2,35 @@
 	<div class="main main-container min-w-[1000px] min-h-[650px]" v-loading="loading">
 		<el-card class="box-card !border-none" shadow="never" v-if="!loading">
 			<div class="flex">
-				<div class="bg-[#F3F6FF] mr-[14px] w-[402px] pt-[30px] pl-[32px] pr-[46px] pb-[60px]">
+				<div class="bg-[#F3F6FF] mr-[14px] w-[402px] pt-[30px] pl-[32px] pr-[20px] pb-[60px] timeline-log-wrap">
 					<div class="flex items-center justify-between">
-						<span class="text-[20px] text-[#333333]">版本信息</span>
-						<el-button class="text-[#4C4C4C] w-[78px] h-[32px] !bg-transparent">检测更新</el-button>
+						<span class="text-[20px]">版本信息</span>
+                        <div class="flex-1 w-0 flex justify-end">
+                            <el-button class="text-[#4C4C4C] w-[78px] h-[32px] !bg-transparent" @click="getFrameworkVersionListFn" v-if="!newVersion || (newVersion && newVersion.version_no == versions)">检测更新</el-button>
+                            <el-button class="text-[#4C4C4C] w-[78px] h-[32px]" type="primary" @click="handleUpgrade" v-else>一键升级</el-button>
+                            <el-button class="text-[#4C4C4C] w-[78px] h-[32px]" type="primary" @click="handleCloudBuild">云编译</el-button>
+                        </div>
 					</div>
 					<div class="mt-[30px] flex items-center text-[14px] text-[#797979]">
 						<span>当前版本</span>
 						<span class="text-[26px] ml-[15px] mr-[10px] text-[#656668]">{{versions}}</span>
-						<em class="text-[12px]">(当前已是最新版本)</em>
+						<em class="text-[12px]" v-if="!newVersion || (newVersion && newVersion.version_no == versions)">(当前已是最新版本)</em>
+                        <em class="text-[12px] text-[red]" v-else>(最新版本{{ newVersion.version_no }})</em>
 					</div>
 				</div>
-				<div class="flex-1 flex justify-between items-center bg-[#F3F6FF] pt-[34px] pl-[30px] pr-[60px] pb-[62px]">
+				<div class="flex-1 flex justify-between items-center bg-[#F3F6FF] pt-[34px] pl-[30px] pr-[60px] pb-[62px] timeline-log-wrap">
 					<div class="flex flex-col">
 						<div class="flex flex-wrap items-center">
-							<p class="text-[20px]  text-[#333] mr-[20px]">授权信息</p>
+							<p class="text-[20px] mr-[20px]">授权信息</p>
 							<span class="text-[14px] text-[#666]">{{ authinfo.company_name || '--' }}</span>
 						</div>
 						<div class="mt-[46px] ml-[40px] flex flex-wrap">
-							<span class="text-[14px] text-[#797979] mr-[84px]">授权域名<em
-									class="ml-[12px] text-[12px] text-[#222222]">{{ authinfo.site_address || '--'
+							<span class="text-[14px] mr-[84px]">授权域名<em
+									class="ml-[12px] text-[12px]">{{ authinfo.site_address || '--'
 									}}</em></span>
-							<span class="text-[14px] flex items-center text-[#797979]">
+							<span class="text-[14px] flex items-center">
 								<span>授权码</span>
-								<em class="ml-[12px] mr-[10px] text-[12px] text-[#222222]">{{ authinfo.auth_code ? (isCheck
+								<em class="ml-[12px] mr-[10px] text-[12px]">{{ authinfo.auth_code ? (isCheck
 									?
 									authinfo.auth_code : hideAuthCode(authinfo.auth_code)) : '--' }}</em>
 								<el-icon v-if="!isCheck" @click="isCheck = !isCheck" class="text-[12px] cursor-pointer">
@@ -35,7 +40,7 @@
 									<Hide />
 								</el-icon>
 							</span>
-						</div> 
+						</div>
 					</div>
 					<div class="flex flex-1  flex-wrap justify-end relative">
 						<el-button class="w-[154px] !h-[48px] mt-[8px]" type="primary"
@@ -89,23 +94,53 @@
 				</div>
 			</div>
 		</el-card>
+
+        <el-card class="box-card !border-none " shadow="never" v-if="!loading">
+            <div class="text-[20px] mb-[20px]">历史版本</div>
+            <el-timeline>
+                <el-timeline-item :timestamp="item.release_time + ' 版本：' + item.version_no" v-for="item in frameworkVersionList" type="primary" :hollow="true" placement="top">
+                    <div class="mt-[10px] p-[20px] bg-overlay rounded-md timeline-log-wrap" v-if="item.upgrade_log">
+                        <div v-html="item.upgrade_log"></div>
+                    </div>
+                </el-timeline-item>
+            </el-timeline>
+        </el-card>
+
+        <upgrade ref="upgradeRef" />
+        <cloud-build ref="cloudBuildRef" />
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { t } from '@/lang'
 import { getVersions } from '@/app/api/auth'
-import { getAuthinfo, setAuthinfo, getAdminAuthinfo } from '@/app/api/module'
-import { FormInstance, FormRules } from 'element-plus'
+import { getAuthinfo, setAuthinfo, getFrameworkVersionList } from '@/app/api/module'
+import { ElMessageBox, FormInstance, FormRules } from 'element-plus'
 import { useRoute } from 'vue-router'
+import Upgrade from '@/app/components/upgrade/index.vue'
+import CloudBuild from '@/app/components/cloud-build/index.vue'
 
 const route = useRoute()
 const pageName = route.meta.title
+const upgradeRef = ref(null)
+const cloudBuildRef = ref(null)
 
 const getAuthCodeDialog = ref(null)
 const authCodeApproveDialog = ref(false)
 const isCheck = ref(false)
+const frameworkVersionList = ref([])
+
+const getFrameworkVersionListFn = () => {
+    getFrameworkVersionList().then(({ data }) => {
+        frameworkVersionList.value = data
+    })
+}
+getFrameworkVersionListFn()
+
+const newVersion = computed(() => {
+    return frameworkVersionList.value.length ? frameworkVersionList.value[0] : null
+})
 
 const hideAuthCode = (res) => {
 	const authCode = JSON.parse(JSON.stringify(res))
@@ -177,12 +212,43 @@ const market = () => {
 }
 
 const versions = ref('')
-    const getVersionsInfo = () =>{
-        getVersions().then(res =>{
-            versions.value = res.data.version.version
-        })
+const getVersionsInfo = () => {
+    getVersions().then(res => {
+        versions.value = res.data.version.version
+    })
+}
+getVersionsInfo()
+
+/**
+ * 升级
+ */
+const handleUpgrade = () => {
+    if (!authinfo.value) {
+        authCodeApproveFn()
+        return
     }
-    getVersionsInfo()
+    upgradeRef.value?.open()
+}
+
+const handleCloudBuild = () => {
+    if (!authinfo.value) {
+        authCodeApproveFn()
+        return
+    }
+    if (cloudBuildRef.value.cloudBuildTask) {
+        cloudBuildRef.value?.open()
+        return
+    }
+    ElMessageBox.confirm(t('cloudBuildTips'), t('warning'),
+        {
+            confirmButtonText: t('confirm'),
+            cancelButtonText: t('cancel'),
+            type: 'warning'
+        }
+    ).then(() => {
+        cloudBuildRef.value?.open()
+    })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -199,6 +265,15 @@ const versions = ref('')
 
 em {
 	font-style: normal
+}
+.timeline-log-wrap {
+    background: #F5F7F9;
+}
+html.dark {
+    .timeline-log-wrap {
+        background: var(--el-bg-color);
+        color: var(--el-text-color-regular);
+    }
 }
 </style>
 <style>

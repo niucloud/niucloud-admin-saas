@@ -69,5 +69,7 @@
 	"tipText":"标识指开发应用或插件的文件夹名称",
 	"uninstallTips": "卸载插件将会移除admin web uni-app目录下该插件的内容，是否要继续进行卸载？",
 	"upgrade": "升级",
-	"newVersion": "最新版本"
+	"newVersion": "最新版本",
+	"cloudBuild": "云编译",
+	"cloudBuildTips": "是否要进行云编译该操作可能会影响到正在访问的客户是否要继续操作？"
 }

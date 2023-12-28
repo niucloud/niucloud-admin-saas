@@ -232,7 +232,7 @@ class CorePayService extends BaseCoreService
                     'channel' => $channel
                 ]
             );
-            PayReturnTo::invoke(['site_id' => $site_id, 'out_trade_no' => $out_trade_no], secs: 15);
+            PayReturnTo::dispatch(['site_id' => $site_id, 'out_trade_no' => $out_trade_no], secs: 15);
         }
         return $pay_result;
     }

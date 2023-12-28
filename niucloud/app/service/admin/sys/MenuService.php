@@ -600,7 +600,6 @@ class MenuService extends BaseAdminService
     /**
      * 查询菜单类型为目录的菜单
      * @param string $addon
-     * @return void
      */
     public function getMenuByTypeDir(string $addon = 'system') {
         $cache_name = 'menu_api_by_type_dir' . $addon;

@@ -11,13 +11,13 @@ use app\service\core\upload\CoreImageService;
 
 /**
  * 接口操作成功，返回信息
- * @param string $msg
+ * @param array|string $msg
  * @param array|string|bool|null $data
  * @param int $code
  * @param int $http_code
  * @return Response
  */
-function success($msg = 'SUCCESS', array|string|bool|null $data = [], int $code = 1, int $http_code = 200): Response
+function success(array|string $msg = 'SUCCESS', array|string|bool|null $data = [], int $code = 1, int $http_code = 200): Response
 {
     if (is_array($msg)) {
         $data = $msg;
@@ -237,7 +237,7 @@ function path_to_url($path)
 /**
  * 链接转化路径
  * @param $url
- * @return void
+ * @return string
  */
 function url_to_path($url)
 {

@@ -12,6 +12,9 @@
                 <div class="flex items-center mt-[12px]">
                     <img class="w-[12px] h-[12px]" src="@/app/assets/images/versions.png" />
                     <span class="ml-[7px] text-[16px] font-600 text-[#424242] leading-[16px] font-[600]">{{ statInfo.version.version }}</span>
+                    <div class="ml-[10px] cursor-pointer" v-if="newVersion" @click="toUpgrade">
+                        <el-tag type="danger" size="small">{{ t('newVersion') }}{{ newVersion.last_version }}</el-tag>
+                    </div>
                     <el-link class="text-color ml-[30px] text-[14px] leading-[20px]" href="https://www.niucloud.com/"
                         target="_blank" :underline="false">{{ t("officialWbsite") }}</el-link>
                     <el-link class="ml-[12px] text-color text-[14px] leading-[20px]"
@@ -170,6 +173,8 @@ import { img } from "@/utils/common";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
 import useStyleStore from '@/stores/modules/style'
+import { getFrameworkNewVersion } from '@/app/api/module'
+
 const loading = ref(true);
 const visitStat = ref<any>(null);
 const memberStat = ref<any>(null);
@@ -179,6 +184,11 @@ const siteStat = ref<any>(null);
 
 const systemStore = useSystemStore();
 const styleStore = useStyleStore()
+const newVersion = ref(null)
+
+getFrameworkNewVersion().then(({ data }) => {
+    newVersion.value = data
+}).catch()
 
 let statInfo = ref({
     today_data: {},
@@ -300,6 +310,10 @@ const nowTime = () => {
     time.value = year + '-' + month + '-' + day + ' ' + hh + ':' + mm + ':' + ss
 }
 nowTime()
+
+const toUpgrade = () => {
+    router.push({ path: '/tools/authorize' })
+}
 </script>
 
 <style lang="scss" scoped>

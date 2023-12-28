@@ -68,7 +68,7 @@ class MemberCashOutAccountService extends BaseApiService
     /**
      * 添加提现账号
      * @param array $data
-     * @return void
+     * @return  int
      */
     public function add(array $data)
     {

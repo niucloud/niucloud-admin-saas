@@ -36,22 +36,22 @@
 				<view class="flex-1 text-center">
 					<view class="font-bold">
 						<app-link :url="(info ? '/app/pages/member/balance' : '')"
-							:style="{ color : diyComponent.textColor }">{{ money }}</app-link>
+							:custom-style="{ color : diyComponent.textColor }">{{ money }}</app-link>
 					</view>
 					<view class="text-sm mt-[10rpx]">
 						<app-link :url="(info ? '/app/pages/member/balance' : '')"
-							:style="{ color : diyComponent.textColor }">{{ t('balance') }}</app-link>
+							:custom-style="{ color : diyComponent.textColor }">{{ t('balance') }}</app-link>
 					</view>
 				</view>
 				<view class="border-solid border-white border-l border-b-0 border-t-0 border-r-0 h-[60rpx]"></view>
 				<view class="flex-1 text-center">
 					<view class="font-bold">
 						<app-link :url="(info ? '/app/pages/member/point' : '')"
-							:style="{ color : diyComponent.textColor }">{{ parseInt(info?.point) || 0 }}</app-link>
+							:custom-style="{ color : diyComponent.textColor }">{{ parseInt(info?.point) || 0 }}</app-link>
 					</view>
 					<view class="text-sm mt-[10rpx]">
 						<app-link :url="(info ? '/app/pages/member/point' : '')"
-							:style="{ color : diyComponent.textColor }">{{ t('point') }}</app-link>
+							:custom-style="{ color : diyComponent.textColor }">{{ t('point') }}</app-link>
 					</view>
 				</view>
 			</view>

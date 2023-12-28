@@ -172,7 +172,6 @@ class SystemService extends BaseAdminService
     /**
      * 设置布局
      * @param string $key
-     * @return void
      */
     public function setLayout(string $key) {
         $layouts = array_column(event('SiteLayout'), 'key');

@@ -19,6 +19,7 @@ use app\service\admin\sys\MenuService;
 use app\service\core\addon\CoreAddonService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
+use core\exception\CommonException;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
 use think\db\exception\ModelNotFoundException;
@@ -123,7 +124,7 @@ class SiteGroupService extends BaseAdminService
         $count = (new Site())->where([['group_id', '=', $group_id]])->count();
         if($count > 0)
         {
-            throw new AdminException('SITE_GROUP_IS_EXIST');
+            throw new CommonException('SITE_GROUP_IS_EXIST');
         }
         $res = $this->model->where([['group_id', '=', $group_id]])->delete();
 

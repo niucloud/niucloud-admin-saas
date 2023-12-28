@@ -23,7 +23,6 @@ use app\service\core\addon\CoreAddonInstallService;
 use app\service\core\addon\CoreAddonService;
 use app\service\core\niucloud\CoreModuleService;
 use app\service\core\site\CoreSiteService;
-use app\service\core\upgrade\CoreUpgradeService;
 use core\base\BaseAdminService;
 use Exception;
 use think\db\exception\DbException;
@@ -58,7 +57,6 @@ class AddonService extends BaseAdminService
     /**
      * 安装插件
      * @param string $addon
-     * @return Response
      */
     public function install(string $addon)
     {
@@ -68,7 +66,6 @@ class AddonService extends BaseAdminService
     /**
      * 云安装插件
      * @param string $addon
-     * @return Response
      */
     public function cloudInstall(string $addon)
     {
@@ -97,7 +94,6 @@ class AddonService extends BaseAdminService
     /**
      * 安装插件检测安装环境
      * @param string $addon
-     * @return Response
      */
     public function installCheck(string $addon)
     {
@@ -107,7 +103,6 @@ class AddonService extends BaseAdminService
     /**
      * 取消安装任务
      * @param string $addon
-     * @return Response
      */
     public function cancleInstall(string $addon)
     {
@@ -156,7 +151,6 @@ class AddonService extends BaseAdminService
      * 设置插件状态
      * @param int $id
      * @param int $status
-     * @return null
      */
     public function setStatus(int $id, int $status){
         return (new CoreAddonService())->setStatus($id, $status);
@@ -171,14 +165,6 @@ class AddonService extends BaseAdminService
         return (new CoreAddonDownloadService())->download($app_key, $version);
     }
 
-    /**
-     * 更新应用
-     * @param string $app_key
-     * @return null
-     */
-    public function upgrade(string $app_key = ''){
-        return (new CoreUpgradeService())->upgrade($app_key);
-    }
 
     /**
      * 查询已安装应用

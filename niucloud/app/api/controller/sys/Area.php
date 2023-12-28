@@ -41,6 +41,9 @@ class Area extends BaseApiController
      *
      * @return void
      */
+    /**
+     * 通过编码查询地址信息
+     */
     public function areaByAreaCode(string $code) {
         return success((new AreaService())->getAreaByAreaCode($code));
     }

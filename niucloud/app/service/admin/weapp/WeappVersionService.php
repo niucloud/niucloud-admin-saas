@@ -33,7 +33,6 @@ class WeappVersionService extends BaseAdminService
     /**
      * 添加小程序版本
      * @param array $data
-     * @return mixed
      */
     public function add(array $data)
     {

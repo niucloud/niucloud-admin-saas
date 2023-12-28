@@ -243,4 +243,13 @@ return [
 
     /********************************************************* home端专用 **************************************/
     'USER_ROLE_NOT_HAS_SITE' => '当前登录用户下没有此项站点',
+
+    // 云服务
+    'CLOUD_WEAPP_COMPILE_NOT_EXIST' => '未找到微信小程序编译包',
+    'WEAPP_APPID_EMPTY' => '还没有配置微信小程序',
+    'UPLOAD_KEY_EMPTY' => '还没有配置微信小程序代码上传秘钥',
+    'UPLOAD_KEY_NOT_EXIST' => '未找到微信小程序代码上传秘钥',
+    'NEED_TO_AUTHORIZE_FIRST' => '使用云服务需先进行授权',
+    'WEAPP_UPLOADING' => '小程序有正在上传的版本，请等待上一版本上传完毕后再进行操作',
+    'CLOUD_BUILD_TASK_EXIST' => '已有正在执行中的编译任务'
 ];

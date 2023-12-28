@@ -44,7 +44,7 @@ class RefundService extends BaseAdminService
     /**
      * 获取退款详情
      * @param string $refund_no
-     * @return void
+     * @return array
      */
     public function getDetail(string $refund_no){
         $field = 'id,refund_no,out_trade_no,type,channel,money,reason,status,create_time,refund_time,close_time,fail_reason,voucher,trade_type,trade_id,refund_type,main_type,main_id';
@@ -58,7 +58,7 @@ class RefundService extends BaseAdminService
     /**
      * 支付审核通过
      * @param array $data
-     * @return null
+     * @return bool
      */
     public function refund(array $data) {
         return (new CoreRefundService())->refund($this->site_id, $data['refund_no'], $data['voucher'], $data['refund_type'], PayDict::USER, $this->uid);

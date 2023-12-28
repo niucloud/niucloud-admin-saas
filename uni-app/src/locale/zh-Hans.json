@@ -76,5 +76,7 @@
     "shop.pages.refund.detail": "退款详情",
     "shop.pages.refund.apply": "申请退款",
     "shop.pages.refund.edit_apply": "编辑退款信息",
-    "shop.pages.refund.log": "协商记录"
+    "shop.pages.refund.log": "协商记录",
+    "cms.pages.list": "资讯中心",
+    "cms.pages.detail": "文章详情"
 }

@@ -4,7 +4,7 @@
 		<!-- 1左2右 -->
 		<template v-if="diyComponent.mode == 'row1-lt-of2-rt'">
 			<view class="template-left">
-				<app-link :data="diyComponent.list[0].link" :class="['item', diyComponent.mode]"
+				<app-link :data="diyComponent.list[0].link" :custom-class="['item', diyComponent.mode]"
 					:style="{ marginRight: diyComponent.imageGap * 2 + 'rpx', width: diyComponent.list[0].imgWidth, height: diyComponent.list[0].imgHeight + 'px' }">
 					<image :src="img(diyComponent.list[0].imageUrl)" mode="scaleToFill"
 						:style="diyComponent.list[0].pageItemStyle" :show-menu-by-longpress="true"></image>
@@ -14,7 +14,7 @@
 			<view class="template-right">
 				<template v-for="(item, index) in diyComponent.list" :key="index">
 					<template v-if="index > 0">
-						<app-link :data="item.link" :class="['item', diyComponent.mode]"
+						<app-link :data="item.link" :custom-class="['item', diyComponent.mode]"
 							:style="{ marginBottom: diyComponent.imageGap * 2 + 'rpx', width: item.imgWidth, height: item.imgHeight + 'px' }">
 							<image :src="img(item.imageUrl)" mode="scaleToFill" :style="item.pageItemStyle"
 								:show-menu-by-longpress="true"></image>
@@ -27,7 +27,7 @@
 		<!-- 1左3右 -->
 		<template v-else-if="diyComponent.mode == 'row1-lt-of1-tp-of2-bm'">
 			<view class="template-left">
-				<app-link :data="diyComponent.list[0].link" :class="['item', diyComponent.mode]"
+				<app-link :data="diyComponent.list[0].link" :custom-class="['item', diyComponent.mode]"
 					:style="{ marginRight: diyComponent.imageGap * 2 + 'rpx', width: diyComponent.list[0].imgWidth, height: diyComponent.list[0].imgHeight + 'px' }">
 					<image :src="img(diyComponent.list[0].imageUrl)" mode="scaleToFill"
 						:style="diyComponent.list[0].pageItemStyle" :show-menu-by-longpress="true"></image>
@@ -35,7 +35,7 @@
 			</view>
 
 			<view class="template-right">
-				<app-link :data="diyComponent.list[1].link" :class="['item', diyComponent.mode]"
+				<app-link :data="diyComponent.list[1].link" :custom-class="['item', diyComponent.mode]"
 					:style="{ marginBottom: diyComponent.imageGap * 2 + 'rpx', width: diyComponent.list[1].imgWidth, height: diyComponent.list[1].imgHeight + 'px' }">
 					<image :src="img(diyComponent.list[1].imageUrl)" mode="scaleToFill"
 						:style="diyComponent.list[1].pageItemStyle" :show-menu-by-longpress="true"></image>
@@ -43,7 +43,7 @@
 				<view class="template-bottom">
 					<template v-for="(item, index) in diyComponent.list" :key="index">
 						<template v-if="index > 1">
-							<app-link :data="item.link" :class="['item', diyComponent.mode]" :style="{
+							<app-link :data="item.link" :custom-class="['item', diyComponent.mode]" :style="{
 										marginRight: diyComponent.imageGap * 2 + 'rpx',
 										width: item.imgWidth,
 										height: item.imgHeight + 'px'
@@ -58,7 +58,7 @@
 		</template>
 
 		<template v-else>
-			<app-link :class="['item', diyComponent.mode]" v-for="(item, index) in diyComponent.list" :key="index"
+			<app-link :custom-class="['item', diyComponent.mode]" v-for="(item, index) in diyComponent.list" :key="index"
 				:data="item.link"
 				:style="{ marginRight: diyComponent.imageGap * 2 + 'rpx', marginBottom: diyComponent.imageGap * 2 + 'rpx', width: item.widthStyle, height: item.imgHeight + 'px' }">
 				<image :src="img(item.imageUrl)" :mode="'scaleToFill'" :style="item.pageItemStyle"

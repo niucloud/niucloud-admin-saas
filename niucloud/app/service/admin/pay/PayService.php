@@ -66,7 +66,6 @@ class PayService extends BaseAdminService
      * 支付审核未通过
      * @param string $out_trade_no
      * @param string $reason
-     * @return void
      */
     public function refuse(string $out_trade_no, string $reason) {
         return (new CoreOfflineService())->refuse($this->site_id, $out_trade_no, $reason);

@@ -126,5 +126,33 @@
   "passwordPlaceholder": "请输入新密码",
   "originalPasswordHint": "原始密码不能为空",
   "newPasswordHint": "请输入确认密码",
-  "doubleCipherHint": "两次新密码不同"
+  "doubleCipherHint": "两次新密码不同",
+  "upgrade": {
+    "upgradeButton": "立即升级",
+    "title": "升级",
+    "upgradingTips": "有正在执行的升级任务，",
+    "clickView": "点击查看",
+    "dirPermission": "目录读写权限",
+    "path": "路径",
+    "demand": "要求",
+    "readable": "可读",
+    "write": "可写",
+    "upgradeSuccess": "升级成功",
+    "localBuild": "手动编译",
+    "cloudBuild": "云编译",
+    "showDialogCloseTips": "升级任务尚未完成，关闭将取消升级，是否要继续关闭？",
+    "upgradeCompleteTips": "升级完成后还需要编译admin wap web端可选择云编译或者是手动编译"
+  },
+  "cloudbuild": {
+    "title": "云编译",
+    "executingTips": "有正在执行的编译任务，",
+    "clickView": "点击查看",
+    "dirPermission": "目录读写权限",
+    "path": "路径",
+    "demand": "要求",
+    "readable": "可读",
+    "write": "可写",
+    "cloudbuildSuccess": "编译完成",
+    "showDialogCloseTips": "编译任务尚未完成，关闭将取消编译，是否要继续关闭？"
+  }
 }

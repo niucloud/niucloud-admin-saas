@@ -1,6 +1,6 @@
 <template>
     <div class="pt-[59px] px-[20px] app-store" v-loading="authLoading">
-        <div v-if="info[activeName] && !loading && !authLoading">
+        <div>
             <div class="flex justify-between items-center h-[32px] mb-4">
                 <span class="text-[20px] text-[#222]">{{ t('localAppText') }}</span>
                 <el-input class="!w-[250px]" :placeholder="t('search')" v-model="search_name" @keyup.enter="query">
@@ -40,9 +40,13 @@
                                     </template>
                                 </el-image>
                                 <div
-                                    class="flex flex-col justify-center h-[54px] pl-[20px] text-[#222] font-500 text-[13px]">
+                                    class="flex flex-col justify-center pl-[20px] text-[#222] font-500 text-[13px]">
                                     <div class="w-[236px] truncate leading-[18px]">{{ row.title }}</div>
-                                    <div class="w-[236px] truncate leading-[18px] mt-[6px]">{{ row.version }}</div>
+                                    <div class="w-[236px] truncate leading-[18px] mt-[6px]" v-if="row.install_info && Object.keys(row.install_info)?.length">{{ row.install_info.version }}</div>
+                                    <div class="w-[236px] truncate leading-[18px] mt-[6px]" v-else>{{ row.version }}</div>
+                                    <div class="mt-[3px]" v-if="row.install_info && Object.keys(row.install_info)?.length && row.install_info.version != row.version">
+                                        <el-tag type="danger" size="small">{{ t('newVersion') }}{{ row.version }}</el-tag>
+                                    </div>
                                 </div>
                             </div>
                         </template>
@@ -82,6 +86,8 @@
                         <template #default="{ row }">
                             <el-button class="!text-[13px]" type="primary" link @click="getAddonDetialFn(row)">{{
                                 t('detail') }}</el-button>
+                            <el-button class="!text-[13px]" v-if="row.install_info && Object.keys(row.install_info)?.length && row.install_info.version != row.version"
+                                       type="primary" link @click="upgradeAddonFn(row.key)">{{ t('upgrade') }}</el-button>
                             <el-button class="!text-[13px]"
                                 v-if="row.install_info && Object.keys(row.install_info)?.length && activeName != 'all'"
                                 type="primary" link @click="uninstallAddonFn(row.key)">{{ t('unload') }}</el-button>
@@ -95,6 +101,8 @@
                                 <span v-else-if="row.is_download && row.install_info <= 0">{{ t('installDown') }}</span>
                                 <span v-else>{{ t('down') }}</span>
                             </el-button>
+                            <el-button class="!text-[13px]" type="primary" v-if="row.install_info && Object.keys(row.install_info)?.length" link @click="handleCloudBuild">{{
+                                    t('cloudBuild') }}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
@@ -295,7 +303,7 @@
                 </div>
                 <div v-show="installStep == 2" class="h-[50vh] mt-[20px]">
                     <terminal ref="terminalRef" :context="currAddon" :init-log="null" :show-header="false"
-                        :show-log-time="true" />
+                        :show-log-time="true" @exec-cmd="onExecCmd"/>
                 </div>
                 <div v-show="installStep == 3" class="h-[50vh] mt-[20px] flex flex-col">
                     <el-result icon="success" :title="t('addonInstallSuccess')"></el-result>
@@ -375,6 +383,9 @@
             </el-dialog>
         </div>
     </div>
+
+    <upgrade ref="upgradeRef" @complete="localListFn"/>
+    <cloud-build ref="cloudBuildRef" />
 </template>
 
 <script lang="ts" setup>
@@ -384,16 +395,20 @@ import { getAddonLocal, uninstallAddon, installAddon, preInstallCheck, cloudInst
 import { downloadVersion, getAuthinfo, setAuthinfo } from '@/app/api/module'
 import { ElMessage, ElMessageBox, ElNotification, FormInstance, FormRules } from 'element-plus'
 import { img } from '@/utils/common'
-import { Terminal, api as terminalApi } from 'vue-web-terminal'
+import 'vue-web-terminal/lib/theme/dark.css'
+import { Terminal, TerminalFlash } from 'vue-web-terminal'
 import { findFirstValidRoute } from '@/router/routers'
 import storage from '@/utils/storage'
 import { useRouter, useRoute } from 'vue-router'
 import useUserStore from '@/stores/modules/user'
+import Upgrade from '@/app/components/upgrade/index.vue'
+import CloudBuild from '@/app/components/cloud-build/index.vue'
 
 const router = useRouter()
 const route = useRoute()
 const activeName = ref(storage.get('storeActiveName') || 'installed')
-
+const upgradeRef = ref(null)
+const cloudBuildRef = ref(null)
 const loading = ref<Boolean>(true)
 const downloading = ref('')
 const installAfterTips = ref<string[]>([])
@@ -535,6 +550,30 @@ const installStep = ref(1)
 // 安装检测结果
 const installCheckResult = ref({})
 
+let flashInterval = null
+const terminalFlash = new TerminalFlash()
+const onExecCmd = (key, command, success, failed, name)=> {
+    if (command == '开始安装插件') {
+        success(terminalFlash)
+        const frames = makeIterator(['/', '——', '\\', '|'])
+        flashInterval = setInterval(() => {
+            terminalFlash.flush('> ' + frames.next().value)
+        }, 150)
+    }
+}
+
+function makeIterator(array: string[]) {
+    var nextIndex = 0
+    return {
+        next() {
+            if ((nextIndex + 1) == array.length) {
+                nextIndex = 0
+            }
+            return { value: array[nextIndex++] }
+        }
+    }
+}
+
 /**
  * 安装
  * @param key
@@ -612,7 +651,6 @@ const handleInstall = () => {
     installAddon({ addon: currAddon.value }).then(res => {
         installStep.value = 3
         localListFn()
-        userStore.getAppList()
         localInstalling.value = false
         if (res.data.length) installAfterTips.value = res.data
     }).catch((res) => {
@@ -637,7 +675,7 @@ const handleCloudInstall = () => {
     cloudInstallAddon({ addon: currAddon.value }).then(res => {
         installStep.value = 2
         terminalRef.value.execute('clear')
-        terminalRef.value.pushMessage({ content: '开始安装插件', class: 'info' })
+        terminalRef.value.execute('开始安装插件')
         getInstallTask()
         cloudInstalling.value = false
     }).catch((res) => {
@@ -718,6 +756,37 @@ const uninstallAddonFn = (key: string) => {
     }
 }
 
+/**
+ * 插件升级
+ * @param key
+ */
+const upgradeAddonFn = (key: string) => {
+    upgradeRef.value?.open(key)
+}
+
+/**
+ * 云编译
+ */
+const handleCloudBuild = () => {
+    if (!authCode.value) {
+        authElMessageBox()
+        return
+    }
+    if (cloudBuildRef.value.cloudBuildTask) {
+        cloudBuildRef.value?.open()
+        return
+    }
+    ElMessageBox.confirm(t('cloudBuildTips'), t('warning'),
+        {
+            confirmButtonText: t('confirm'),
+            cancelButtonText: t('cancel'),
+            type: 'warning'
+        }
+    ).then(() => {
+        cloudBuildRef.value?.open()
+    })
+}
+
 const handleUninstallAddon = (key: string) => {
     preUninstallCheck(key).then(({ data }) => {
         if (data.is_pass) {
@@ -761,6 +830,8 @@ const installShowDialogClose = (done: () => {}) => {
         activeNameTabFn('installed')
         location.reload()
     } else done()
+
+    flashInterval && clearInterval(flashInterval)
 }
 
 // 插件详情

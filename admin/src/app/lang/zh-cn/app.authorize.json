@@ -13,5 +13,6 @@
 	"authSecretPlaceholder": "请输入授权秘钥",
 	"updateCode": "重新绑定",
 	"notHaveAuth": "还没有授权？去购买",
-	"authInfoTips": "授权码和授权秘钥可在Niucloud官网我的授权 授权详情中查看"
+	"authInfoTips": "授权码和授权秘钥可在Niucloud官网我的授权 授权详情中查看",
+	"cloudBuildTips": "是否要进行云编译该操作可能会影响到正在访问的客户是否要继续操作？"
 }
