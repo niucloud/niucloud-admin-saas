@@ -256,12 +256,16 @@ class UpgradeService extends BaseAdminService
         $version_item = $version_list[$index];
         $version_no = $version_item['version_no'];
 
+        $to_dir = $addon == AddonDict::FRAMEWORK_KEY ? $this->root_path : $this->root_path . 'niucloud' . DIRECTORY_SEPARATOR . 'addon' . DIRECTORY_SEPARATOR . $addon;
+
         // 获取文件变更记录
         if (file_exists($code_dir . $version_no . '.txt')) {
             $change = array_filter(explode("\n", file_get_contents($code_dir . $version_no . '.txt')));
             foreach ($change as &$item) {
                 list($operation, $md5, $file) = $item = explode(' ', $item);
-                if ($operation == '-') @unlink($this->root_path . $file);
+                if ($operation == '-') {
+                    @unlink($to_dir . $file);
+                }
             }
             // 合并依赖
             $this->installDepend($code_dir . $version_no, array_column($change, 2));
@@ -269,11 +273,9 @@ class UpgradeService extends BaseAdminService
 
         // 覆盖文件
         if (is_dir($code_dir . $version_no)) {
+            dir_copy($code_dir . $version_no, $to_dir);
             if ($addon != AddonDict::FRAMEWORK_KEY) {
-                dir_copy($code_dir . $version_no, $this->root_path . 'niucloud' . DIRECTORY_SEPARATOR . 'addon' . DIRECTORY_SEPARATOR . $addon);
                 (new CoreAddonInstallService($addon))->installDir();
-            } else {
-                dir_copy($code_dir . $version_no, $this->root_path);
             }
         }
 
