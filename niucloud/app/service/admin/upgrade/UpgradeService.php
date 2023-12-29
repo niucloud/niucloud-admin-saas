@@ -15,6 +15,7 @@ use app\dict\addon\AddonDict;
 use app\model\addon\Addon;
 use app\service\admin\install\InstallSystemService;
 use app\service\core\addon\CoreAddonCloudService;
+use app\service\core\addon\CoreAddonInstallService;
 use app\service\core\addon\CoreAddonService;
 use app\service\core\addon\CoreDependService;
 use app\service\core\addon\WapTrait;
@@ -247,6 +248,7 @@ class UpgradeService extends BaseAdminService
      */
     public function coverCode($index = 0) {
         $this->upgrade_task['is_cover'] = 1;
+        $addon = $this->upgrade_task['upgrade']['app_key'];
 
         $version_list = array_reverse($this->upgrade_task['upgrade_content']['version_list']);
         $code_dir = $this->upgrade_dir .$this->upgrade_task['key'] . DIRECTORY_SEPARATOR . 'download' . DIRECTORY_SEPARATOR . 'code' . DIRECTORY_SEPARATOR;
@@ -270,8 +272,11 @@ class UpgradeService extends BaseAdminService
             dir_copy($code_dir . $version_no, $this->root_path);
         }
 
+        if ($addon != AddonDict::FRAMEWORK_KEY) {
+            (new CoreAddonInstallService($addon))->installDir();
+        }
+
         $upgrade_file_dir = 'v' . str_replace('.', '', $version_no);
-        $addon = $this->upgrade_task['upgrade']['app_key'];
         if ($addon == AddonDict::FRAMEWORK_KEY) {
             $class_path = "\\app\\upgrade\\{$upgrade_file_dir}\\Upgrade";
             $sql_file = root_path() . 'app' .  DIRECTORY_SEPARATOR . 'upgrade' . DIRECTORY_SEPARATOR . $upgrade_file_dir . DIRECTORY_SEPARATOR . 'upgrade.sql';
