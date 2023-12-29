@@ -269,11 +269,12 @@ class UpgradeService extends BaseAdminService
 
         // 覆盖文件
         if (is_dir($code_dir . $version_no)) {
-            dir_copy($code_dir . $version_no, $this->root_path);
-        }
-
-        if ($addon != AddonDict::FRAMEWORK_KEY) {
-            (new CoreAddonInstallService($addon))->installDir();
+            if ($addon != AddonDict::FRAMEWORK_KEY) {
+                dir_copy($code_dir . $version_no, $this->root_path . 'niucloud' . DIRECTORY_SEPARATOR . 'addon' . DIRECTORY_SEPARATOR . $addon);
+                (new CoreAddonInstallService($addon))->installDir();
+            } else {
+                dir_copy($code_dir . $version_no, $this->root_path);
+            }
         }
 
         $upgrade_file_dir = 'v' . str_replace('.', '', $version_no);
