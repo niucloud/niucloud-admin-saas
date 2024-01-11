@@ -675,3 +675,20 @@ export function getAddonList() {
 export function getWapIndexList(params: Record<string, any>) {
     return request.get('sys/config/wap_index', { params })
 }
+
+/**
+ * 获取开发者key
+ * @returns
+ */
+export function getDeveloperToken() {
+    return request.get('sys/config/developer_token')
+}
+
+/**
+ * 设置开发者key
+ * @param params
+ * @returns
+ */
+export function setDeveloperToken(params: Record<string, any>) {
+    return request.put(`sys/config/developer_token`, params, { showSuccessMessage: true })
+}

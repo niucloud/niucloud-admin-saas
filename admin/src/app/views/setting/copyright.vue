@@ -54,12 +54,12 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import { t } from '@/lang'
-import { setCopyright,getCopyright } from '@/app/api/sys'
+import { setCopyright, getCopyright } from '@/app/api/sys'
 import { FormInstance, FormRules } from 'element-plus'
-import { useRoute } from 'vue-router'
+// import { useRoute } from 'vue-router'
 
-const route = useRoute()
-const pageName = route.meta.title
+// const route = useRoute()
+// const pageName = route.meta.title
 
 const loading = ref(true)
 
@@ -68,12 +68,11 @@ const formData = reactive<Record<string, string>>({
     gov_record: '',
     gov_url: '',
     market_supervision_url: '',
-    logo:'',
+    logo: '',
     company_name: '',
     copyright_link: '',
     copyright_desc: ''
 })
-
 
 const setFormData = async (id: number = 0) => {
     const data = await (await getCopyright()).data
@@ -81,7 +80,7 @@ const setFormData = async (id: number = 0) => {
         if (data[key] != undefined) formData[key] = data[key]
     })
 
-    loading.value = false;
+    loading.value = false
 }
 setFormData()
 
@@ -105,7 +104,6 @@ const save = async (formEl: FormInstance | undefined) => {
             loading.value = true
             setCopyright(formData).then(() => {
                 loading.value = false
-
             }).catch(() => {
                 loading.value = false
             })

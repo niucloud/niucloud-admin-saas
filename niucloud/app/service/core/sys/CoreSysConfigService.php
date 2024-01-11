@@ -72,7 +72,9 @@ class CoreSysConfigService extends BaseCoreService
      */
     public function getWapIndexList($data = [])
     {
-        $result = event("WapIndex");
+        $result = array_filter(event("WapIndex"));
+        if (empty($result)) return [];
+
         $index_list = [];
         foreach ($result as $v) {
             $index_list = empty($index_list) ? $v : array_merge($index_list, $v);

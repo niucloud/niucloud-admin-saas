@@ -110,7 +110,6 @@
                                 <el-input v-model="codeTableData.searchParam.table_name"
                                     :placeholder="t('tableNamePlaceholder')" />
                             </el-form-item>
-                          
                             <el-form-item>
                                 <el-button type="primary" @click="loadGenerateTableList()">{{ t('search') }}</el-button>
                                 <el-button @click="resetForm(searchFormRef)">{{ t('reset') }}</el-button>
@@ -202,7 +201,7 @@
 <script lang="ts" setup>
 import { reactive, ref, onMounted } from 'vue'
 import { t } from '@/lang'
-import { getGenerateTableList, deleteGenerateTable, generateCreate, generatePreview, generatorCheckFile,getAddonDevelop } from '@/app/api/tools'
+import { getGenerateTableList, deleteGenerateTable, generateCreate, generatePreview, generatorCheckFile, getAddonDevelop } from '@/app/api/tools'
 import { img } from '@/utils/common'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import AddTable from '@/app/views/tools/code/components/add-table.vue'
@@ -210,20 +209,20 @@ import type { FormInstance } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
 
 const route = useRoute()
-const pageName = route.meta.title;
+const pageName = route.meta.title
 
 const router = useRouter()
 const activeName = ref('codeGeneration')
-let codeTableData = reactive({
+const codeTableData = reactive({
     page: 1,
     limit: 10,
     total: 0,
     loading: true,
     data: [],
     searchParam: {
-        table_name: "",
-        table_content: "",
-        addon_name:""
+        table_name: '',
+        table_content: '',
+        addon_name: ''
     }
 })
 
@@ -232,8 +231,8 @@ const searchFormRef = ref<FormInstance>()
 const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
 
-    formEl.resetFields();
-    loadGenerateTableList();
+    formEl.resetFields()
+    loadGenerateTableList()
 }
 onMounted(() => {
     if (window.codeActiveName) {
@@ -263,7 +262,7 @@ const loadGenerateTableList = (page: number = 1) => {
 }
 
 const addonList = ref<Array<any>>([])
-//获取插件远程搜索
+// 获取插件远程搜索
 const getAddonDevelopFn = (search: string) => {
     getAddonDevelop({ search }).then(res => {
         addonList.value = res.data
@@ -271,7 +270,6 @@ const getAddonDevelopFn = (search: string) => {
 }
 
 const addCodeDialog: Record<string, any> | null = ref(null)
-
 
 /**
  * 添加代码生成
@@ -289,7 +287,7 @@ const deleteEvent = (id: number) => {
         {
             confirmButtonText: t('confirm'),
             cancelButtonText: t('cancel'),
-            type: 'warning',
+            type: 'warning'
         }
     ).then(() => {
         deleteGenerateTable(id).then(() => {
@@ -298,7 +296,6 @@ const deleteEvent = (id: number) => {
         })
     })
 }
-
 
 /**
  * 编辑
@@ -312,14 +309,14 @@ const editEvent = (data: any) => {
  * 同步校验
  */
 const generatorCheckFileFn = ((id: any) => {
-    generatorCheckFile({ id }).then(res => {
+    generatorCheckFile({ id }).then((res:any) => {
         codeTableData.loading = false
         ElMessageBox.confirm(
             res.msg != '2' ? t('saveAndSyncText') : t('saveAndSyncText1'),
             t('warning'),
             {
                 confirmButtonText: t('confirm'),
-                cancelButtonText: t('cancel'),
+                cancelButtonText: t('cancel')
             }
         )
             .then(() => {
@@ -339,12 +336,11 @@ const generateCreateFn = (id: any, generate_type: any) => {
     generateCreate({ id, generate_type }).then(res => {
         ElMessage({
             type: 'success',
-            message: '操作成功',
+            message: '操作成功'
         })
         if (generate_type != 3) {
             codeTableData.loading = false
             window.open(img(res.data.file), '_blank')
-
         } else {
             loadGenerateTableList()
         }
@@ -370,47 +366,46 @@ const generatePreviewFn = (id: number) => {
     treeKey.value = ''
     generatePreview(id).then(res => {
         previewList.value = res.data
-        treeData.value = listToTree(res.data.map(el => el.file_dir + el.name))
+        treeData.value = listToTree(res.data.map((el:any) => el.file_dir + el.name))
         code.value = previewList.value[0].content
         codeLoading.value = false
     }).catch(() => {
         codeLoading.value = false
-
     })
 }
 
-const nodeClick = (node) => {
+const nodeClick = (node: { path: any }) => {
     previewList.value.forEach(el => {
         if (node.path === el.file_dir + el.name) code.value = el.content
     })
 }
-const listToTree = (arr) => {
-    var ret = [];
+const listToTree = (arr:any) => {
+    const ret: any[] = []
     if (Array.isArray(arr)) {
-        for (var i = 0; i < arr.length; ++i) {
-            var path = arr[i].split("/");
-            var _ret = ret;
-            for (var j = 0; j < path.length; ++j) {
-                var name = path[j];
-                var obj = null;
+        for (let i = 0; i < arr.length; ++i) {
+            const path = arr[i].split('/')
+            let _ret = ret
+            for (let j = 0; j < path.length; ++j) {
+                const name = path[j]
+                let obj = null
                 for (var k = 0; k < _ret.length; ++k) {
-                    var _obj = _ret[k];
+                    const _obj = _ret[k]
                     if (_obj.name === name) {
-                        obj = _obj;
-                        break;
+                        obj = _obj
+                        break
                     }
                 }
                 if (!obj) {
-                    obj = { name: name, path: name.indexOf(".") < 0 ? '' : arr[i], key: 'k' + i + j + k };
-                    if (name.indexOf(".") < 0) obj.children = [];
+                    obj = { name: name, path: name.indexOf('.') < 0 ? '' : arr[i], key: 'k' + i + j + k }
+                    if (name.indexOf('.') < 0) obj.children = []
                     if (obj.path === arr[0]) treeKey.value = obj.key
-                    _ret.push(obj);
+                    _ret.push(obj)
                 }
-                if (obj.children) _ret = obj.children;
+                if (obj.children) _ret = obj.children
             }
         }
     }
-    return ret;
+    return ret
 }
 </script>
 

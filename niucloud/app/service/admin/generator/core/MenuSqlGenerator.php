@@ -30,6 +30,7 @@ class MenuSqlGenerator extends BaseGenerator
      */
     public function replaceText()
     {
+
         $old = [
             '{SQL}',
         ];
@@ -56,27 +57,27 @@ class MenuSqlGenerator extends BaseGenerator
         if(!empty($this->addonName))
         {
             $dir = dirname(root_path());
-            $file = $dir.'\niucloud\addon\\'.$this->addonName.'\\sql\\install.sql';
+            $file = $dir.DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'sql'.DIRECTORY_SEPARATOR.'install.sql';
             $res = $this->getMenuSql();
             $addSql = $res['sql'];
 
-            $sql = PHP_EOL . $this->getBegin() . PHP_EOL;
-            $sql .= $addSql . PHP_EOL;
-            $sql .= $this->getEnd() . PHP_EOL;
-
-            if (file_exists($file)) {
-                $content = file_get_contents($file);
-                $code_begin = '-- USER_CODE_BEGIN -- '.$this->getTableName() . PHP_EOL;
-                $code_end = '-- USER_CODE_END -- '.$this->getTableName() . PHP_EOL;
-                if(strpos($content,$code_begin) !== false && strpos($content,$code_end) !== false)
-                {
-                    $pattern = "/\s+{$code_begin}[\S\s]+{$code_end}?/";
-                    $replace_sql = preg_replace($pattern, $sql, $content);
-                    file_put_contents($file, $replace_sql);
-                    return;
-                }
-            }
-            file_put_contents($file, $sql, FILE_APPEND);
+//            $sql = PHP_EOL . $this->getBegin() . PHP_EOL;
+//            $sql .= $addSql . PHP_EOL;
+//            $sql .= $this->getEnd() . PHP_EOL;
+//
+//            if (file_exists($file)) {
+//                $content = file_get_contents($file);
+//                $code_begin = '-- USER_CODE_BEGIN -- '.$this->getTableName() . PHP_EOL;
+//                $code_end = '-- USER_CODE_END -- '.$this->getTableName() . PHP_EOL;
+//                if(strpos($content,$code_begin) !== false && strpos($content,$code_end) !== false)
+//                {
+//                    $pattern = "/\s+{$code_begin}[\S\s]+{$code_end}?/";
+//                    $replace_sql = preg_replace($pattern, $sql, $content);
+//                    file_put_contents($file, $replace_sql);
+//                    return;
+//                }
+//            }
+//            file_put_contents($file, $sql, FILE_APPEND);
         }
     }
 
@@ -98,9 +99,9 @@ class MenuSqlGenerator extends BaseGenerator
      */
     public function getModuleOutDir()
     {
-        $dir = $this->basePath .'/adminapi/controller/';
+        $dir = $this->basePath .DIRECTORY_SEPARATOR.'adminapi'.DIRECTORY_SEPARATOR.'controller'.DIRECTORY_SEPARATOR;
         if (!empty($this->moduleName)) {
-            $dir .= $this->moduleName . '/';
+            $dir .= $this->moduleName . DIRECTORY_SEPARATOR;
             $this->checkDir($dir);
         }
         return $dir;
@@ -114,9 +115,9 @@ class MenuSqlGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = $this->outDir . '/addon/'.$this->addonName.'/sql/';
+            $dir = $this->outDir . DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'sql'.DIRECTORY_SEPARATOR;
         }else{
-            $dir = $this->outDir . '/niucloud/app/sql/';
+            $dir = $this->outDir . DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'sql'.DIRECTORY_SEPARATOR;
         }
         $this->checkDir($dir);
         if (!empty($this->moduleName)) {
@@ -132,10 +133,9 @@ class MenuSqlGenerator extends BaseGenerator
      */
     public function getObjectOutDir()
     {
-
         if(!empty($this->addonName))
         {
-            $dir = $this->rootDir . '/niucloud/addon/'.$this->addonName.'/sql/';
+            $dir = $this->rootDir . DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'sql'.DIRECTORY_SEPARATOR;
             $this->checkDir($dir);
             return $dir;
         }else{
@@ -161,6 +161,7 @@ class MenuSqlGenerator extends BaseGenerator
      */
     public function getFileName()
     {
+        return '';
         return 'menu.sql';
     }
 

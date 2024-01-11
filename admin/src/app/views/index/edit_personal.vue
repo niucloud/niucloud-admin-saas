@@ -4,7 +4,7 @@
             <span class="text-[20px]">{{ t('editPersonal') }}</span>
         </div>
         <el-card class="box-card !border-none" shadow="never">
-            <el-form :model="saveInfo" label-width="90px" ref="formRef" :rules="formRules" class="page-form">
+            <el-form :model="saveInfo" label-width="90px" ref="formRef" class="page-form">
                 <el-form-item :label="t('headImg')">
                     <upload-image v-model="saveInfo.head_img" :limit="1" />
                 </el-form-item>
@@ -17,7 +17,7 @@
             </el-form>
             <div class="flex justify-center mt-[50px]">
                 <el-button type="primary" @click="submitForm(formRef)">{{ t('save') }}</el-button>
-                <el-button type="primary" @click="returnFn(formRef)">{{ t('cancel') }}</el-button>
+                <el-button type="primary" @click="returnFn()">{{ t('cancel') }}</el-button>
             </div>
         </el-card>
     </div>
@@ -26,57 +26,56 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import { t } from '@/lang'
-import type { FormInstance, FormRules, ElNotification } from 'element-plus'
-import { img } from '@/utils/common'
-import { getUserInfo,setUserInfo } from '@/app/api/personal'
-import { useRoute, useRouter } from 'vue-router'
+import type { FormInstance } from 'element-plus'
+
+import { getUserInfo, setUserInfo } from '@/app/api/personal'
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
 // 提交信息
-let saveInfo = reactive({
-        head_img: '',
-        real_name: '',
-		username: ''
-    });
+const saveInfo = reactive({
+    head_img: '',
+    real_name: '',
+    username: ''
+})
 
-const formRef = ref<FormInstance>();
-const loading = ref(true);
+const formRef = ref<FormInstance>()
+const loading = ref(true)
 
 /**
  * 获取用户信息
  */
 const getUserInfoFn = () => {
-    loading.value = true;
+    loading.value = true
     getUserInfo().then(res => {
-        loading.value = false;
-        
-        let data = res.data;
-        saveInfo.head_img = data.head_img;
-        saveInfo.real_name = data.real_name;
-		saveInfo.username = data.username;
+        loading.value = false
+        const data = res.data
+        saveInfo.head_img = data.head_img
+        saveInfo.real_name = data.real_name
+        saveInfo.username = data.username
     }).catch(() => {
-        loading.value = false;  
+        loading.value = false
     })
 }
-getUserInfoFn();
+getUserInfoFn()
 
 const submitForm = (formEl: FormInstance | undefined) => {
     if (loading.value || !formEl) return
     formEl.validate((valid) => {
         if (valid) {
-            loading.value = true;
+            loading.value = true
 
             setUserInfo(saveInfo).then((res: any) => {
-                loading.value = false;
-            }).catch((err: any) => {
+                loading.value = false
+            }).catch(() => {
                 loading.value = false
             })
         } else {
             return false
         }
-    });
+    })
 }
-const returnFn = ()=>{
+const returnFn = () => {
     router.push('/user/center')
 }
 </script>

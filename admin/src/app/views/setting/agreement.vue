@@ -38,14 +38,14 @@
 import { reactive } from 'vue'
 import { t } from '@/lang'
 import { getAgreementList } from '@/app/api/sys'
-import { useRouter,useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 
 const route = useRoute()
-const pageName = route.meta.title;
+const pageName = route.meta.title
 
-let agreementTableData = reactive({
+const agreementTableData = reactive({
     loading: true,
-    data: [],
+    data: []
 })
 
 /**
@@ -53,10 +53,10 @@ let agreementTableData = reactive({
  */
 const loadAgreementList = () => {
     agreementTableData.loading = true
-    agreementTableData.data = [];
+    agreementTableData.data = []
     getAgreementList().then(res => {
         Object.keys(res.data).forEach((key) => {
-            return agreementTableData.data.push(res.data[key]);
+            return agreementTableData.data.push(res.data[key])
         })
         agreementTableData.loading = false
     }).catch(() => {

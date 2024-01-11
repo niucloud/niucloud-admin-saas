@@ -42,7 +42,6 @@ class Pay extends BaseApiController
 
         $data = $this->request->params([
             ['type', ''],
-//            ['out_trade_no', ''],
             ['trade_type', ''],//业务类型
             ['trade_id', ''],//业务id
             ['quit_url', ''],

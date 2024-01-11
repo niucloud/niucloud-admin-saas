@@ -49,9 +49,9 @@
 import { reactive, ref, watch } from 'vue'
 import { t } from '@/lang'
 import { useDictionary } from '@/app/api/dict'
-import { get{UCASE_NAME}List, delete{UCASE_NAME} } from '@{API_PATH}'
+import { get{UCASE_NAME}List, delete{UCASE_NAME},{WITH_API_PATH} } from '@/{API_PATH}'
 import { img } from '@/utils/common'
-import { ElMessageBox } from 'element-plus'
+import { ElMessageBox,FormInstance } from 'element-plus'
 {EDIT_PATH}
 import { useRoute } from 'vue-router'
 const route = useRoute()
@@ -132,6 +132,7 @@ const deleteEvent = (id: number) => {
     })
 }
 
+{MODEL_DATA}
 
 const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return

@@ -68,14 +68,15 @@ import { getTemplateList, getBatchAcquisition } from '@/app/api/weapp'
 import { editNoticeStatus } from '@/app/api/notice'
 import { ElLoading } from 'element-plus'
 import { useRoute, useRouter } from 'vue-router'
+import { AnyObject } from '@/types/global'
 
 const route = useRoute()
 const router = useRouter()
 const pageName = route.meta.title
-let activeName = ref("/channel/weapp/message");
+const activeName = ref('/channel/weapp/message')
 const handleClick = (val: any) => {
-    router.push({ path: activeName.value });
-};
+    router.push({ path: activeName.value })
+}
 const cronTableData = reactive({
     loading: true,
     data: []
@@ -117,7 +118,7 @@ interface Switch {
     type: string;
     status: number
 }
-const infoSwitch = (res) => {
+const infoSwitch = (res:any) => {
     const data = ref<Switch>({
         key: '',
         type: '',

@@ -57,27 +57,27 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getDictList, deleteDict } from '@/app/api/dict'
-import { img } from '@/utils/common'
 import { ElMessageBox } from 'element-plus'
+import type { FormInstance } from 'element-plus'
 import Edit from '@/app/views/dict/components/edit.vue'
 import dict from '@/app/views/dict/components/dict.vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const pageName = route.meta.title;
+const pageName = route.meta.title
 
-let dictTable = reactive({
+const dictTable = reactive({
     page: 1,
     limit: 10,
     total: 0,
     loading: true,
     data: [],
-    searchParam:{
-      "name":"",
-      "key":""
+    searchParam: {
+        name: '',
+        key: ''
     }
 })
 
@@ -93,7 +93,7 @@ const loadDictList = (page: number = 1) => {
     getDictList({
         page: dictTable.page,
         limit: dictTable.limit,
-         ...dictTable.searchParam
+        ...dictTable.searchParam
     }).then(res => {
         dictTable.loading = false
         dictTable.data = res.data.data
@@ -137,7 +137,7 @@ const deleteEvent = (id: number) => {
         {
             confirmButtonText: t('confirm'),
             cancelButtonText: t('cancel'),
-            type: 'warning',
+            type: 'warning'
         }
     ).then(() => {
         deleteDict(id).then(() => {
@@ -147,13 +147,11 @@ const deleteEvent = (id: number) => {
     })
 }
 
-
 const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.resetFields()
     loadDictList()
 }
-
 
 </script>
 

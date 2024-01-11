@@ -237,16 +237,16 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getMemberInfo } from '@/app/api/member'
-import { ElMessageBox, FormInstance, ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
 import { img } from '@/utils/common'
 import PointEdit from '@/app/views/member/components/member-point-edit.vue'
 import BalanceEdit from '@/app/views/member/components/member-balance-edit.vue'
 import EditMember from '@/app/views/member/components/edit-member.vue'
-import colorGradient from '../../../../uniapp/src/uni_modules/vk-uview-ui/libs/function/colorGradient'
+// import colorGradient from '../../../../uniapp/src/uni_modules/vk-uview-ui/libs/function/colorGradient'
 import useAppStore from '@/stores/modules/app'
 
 const route = useRoute()
@@ -260,34 +260,34 @@ const id: number = parseInt(route.query.id || 0)
 const formData: any = reactive({ member_label_name: '' })
 
 const getMemberInfoFn = async () => {
-	loading.value = true
-	if (id) {
-		const data = await (await getMemberInfo(id)).data
-		if (!data || Object.keys(data).length == 0) {
-			ElMessage.error(t('memberNull'))
-			setTimeout(() => {
-				router.go(-1)
-			}, 2000)
-			return false
-		}
+    loading.value = true
+    if (id) {
+        const data = await (await getMemberInfo(id)).data
+        if (!data || Object.keys(data).length == 0) {
+            ElMessage.error(t('memberNull'))
+            setTimeout(() => {
+                router.go(-1)
+            }, 2000)
+            return false
+        }
 
-		Object.keys(data).forEach((item) => {
-			formData[item] = data[item]
-		})
+        Object.keys(data).forEach((item) => {
+            formData[item] = data[item]
+        })
 
-		if (formData?.member_label_array && Object.keys(formData.member_label_array)?.length) {
-			formData.member_label = Object.values(formData.member_label_array).map((item: any, index) => {
-				return item.label_id
-			})
+        if (formData?.member_label_array && Object.keys(formData.member_label_array)?.length) {
+            formData.member_label = Object.values(formData.member_label_array).map((item: any, index) => {
+                return item.label_id
+            })
 
-			formData.member_label_name = Object.values(formData.member_label_array).map((item: any, index) => {
-				return item.label_name
-			})
-		}
-		loading.value = false
-	} else {
-		loading.value = false
-	}
+            formData.member_label_name = Object.values(formData.member_label_array).map((item: any, index) => {
+                return item.label_name
+            })
+        }
+        loading.value = false
+    } else {
+        loading.value = false
+    }
 }
 getMemberInfoFn()
 
@@ -299,29 +299,29 @@ const editMemberDialog: Record<string, any> | null = ref(null)
  *  修改会员信息
  */
 const editMemberInfo = (type: any) => {
-	const data = ref({
-		type,
-		id,
-		data: formData
-	})
-	editMemberDialog.value.setDialogType(data.value)
-	editMemberDialog.value.showDialog = true
+    const data = ref({
+        type,
+        id,
+        data: formData
+    })
+    editMemberDialog.value.setDialogType(data.value)
+    editMemberDialog.value.showDialog = true
 }
 
 /**
  * 调整积分
  */
 const adjustPoint = (data: any) => {
-	pointDialog.value.setFormData(data)
-	pointDialog.value.showDialog = true
+    pointDialog.value.setFormData(data)
+    pointDialog.value.showDialog = true
 }
 
 /**
  * 调整余额
  */
 const adjustBalance = (data: any) => {
-	balanceDialog.value.setFormData(data)
-	balanceDialog.value.showDialog = true
+    balanceDialog.value.setFormData(data)
+    balanceDialog.value.showDialog = true
 }
 
 const router = useRouter()
@@ -330,21 +330,21 @@ const router = useRouter()
  * 积分详情
  */
 const infoPoint = () => {
-	router.push(`/member/point?id=${id}`)
+    router.push(`/member/point?id=${id}`)
 }
 
 /**
  * 余额详情
  */
 const infoBalance = () => {
-	router.push(`/member/balance?id=${id}`)
+    router.push(`/member/balance?id=${id}`)
 }
 
 /**
  * 佣金详情
  */
 const infoCommission = () => {
-	router.push(`/member/commission?id=${id}`)
+    router.push(`/member/commission?id=${id}`)
 }
 
 </script>

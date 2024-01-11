@@ -100,58 +100,6 @@ class PagesDict
                         ]
                     ]
                 ],
-//                'recharge' => [
-//                    "title" => "固定模板示例", // 页面名称
-//                    'cover' => 'static/resource/images/diy/template/tourism_cover.png', // 页面封面图
-//                    'preview' => '', // 页面预览图
-//                    'desc' => '描述固定模板', // 页面描述
-//                    'mode' => 'fixed', // 页面模式：diy：自定义，fixed：固定
-//                    'data' => [
-//                        "global" => [
-//                            'component' => 'demo-index', // 模板组件名称 DemoIndex
-//                            "title" => "固定模板示例",
-//                            "pageBgColor" => "#F8F8F8",
-//                            'bgUrl' => '',
-//                            'imgWidth' => '',
-//                            'imgHeight' => '',
-//                            "bottomTabBarSwitch" => true,
-//                            "template" => [
-//                                'textColor' => "#303133",
-//                                "pageBgColor" => "",
-//                                "componentBgColor" => "",
-//                                "topRounded" => 0,
-//                                "bottomRounded" => 0,
-//                                "elementBgColor" => "",
-//                                "topElementRounded" => 0,
-//                                "bottomElementRounded" => 0,
-//                                "margin" => [
-//                                    "top" => 0,
-//                                    "bottom" => 0,
-//                                    "both" => 0
-//                                ]
-//                            ],
-//                            'topStatusBar' => [
-//                                'bgColor' => "#ffffff",
-//                                'isTransparent' => false,
-//                                'isShow' => true,
-//                                'style' => 'style-1',
-//                                'textColor' => "#333333",
-//                                'textAlign' => 'center',
-//                            ],
-//                            'popWindow' => [
-//                                'imgUrl' => "",
-//                                'imgWidth' => '',
-//                                'imgHeight' => '',
-//                                'count' => -1,
-//                                'show' => 0,
-//                                'link' => [
-//                                    'name' => ""
-//                                ],
-//                            ]
-//                        ],
-//                        "value" => []
-//                    ]
-//                ]
             ],
             'DIY_MEMBER_INDEX' => [
                 'default_member_index_one' => [

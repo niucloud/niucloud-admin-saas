@@ -114,7 +114,9 @@ class CoreAddonCloudService extends CoreCloudBaseService
                 $last = end($build_log['data'][0]);
                 if ($last['percent'] == 100 && $last['code'] == 0) {
                     (new CoreAddonInstallService($addon))->installExceptionHandle();
-                    throw new CommonException('ADDON_INSTALL_FAIL');
+                    $install_task['error'] = 'ADDON_INSTALL_FAIL';
+                    Cache::set('install_task', $install_task, 10);
+                    return $build_log;
                 }
                 if ($last['percent'] == 100) {
                     $build_log['data'][0] = $this->buildSuccess($addon, $build_log['data'][0], $install_task['timestamp']);
@@ -200,9 +202,6 @@ class CoreAddonCloudService extends CoreCloudBaseService
 
                     // 安装插件
                     (new CoreAddonInstallService($addon))->handleAddonInstall();
-
-                    // 处理编译之后的文件
-                    (new CoreAddonInstallService($addon))->handleBuildFile();
 
                     // 删除临时文件
                     @del_target_dir($temp_dir, true);

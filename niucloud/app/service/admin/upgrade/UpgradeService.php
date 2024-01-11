@@ -330,37 +330,36 @@ class UpgradeService extends BaseAdminService
         if (in_array($composer, $change_files)) {
             $original = $depend_service->getComposerContent();
             $new = $depend_service->jsonFileToArray($dir . $composer);
-
-            if (isset($new['require'])) $original['require'] = array_merge($original['require'], $new['require']);
-            if (isset($new['require_dev'])) $original['require_dev'] = array_merge($original['require_dev'], $new['require_dev']);
-
+            foreach ($new as $name => $value) {
+                $original[$name] = isset($original[$name]) && is_array($original[$name]) ? array_merge($original[$name], $new[$name]) : $new[$name];
+            }
             $depend_service->writeArrayToJsonFile($original, $dir . $composer);
         }
         if (in_array($admin_package, $change_files)) {
             $original = $depend_service->getNpmContent('admin');
             $new = $depend_service->jsonFileToArray($dir . $admin_package);
 
-            if (isset($new['dependencies'])) $original['dependencies'] = array_merge($original['dependencies'], $new['dependencies']);
-            if (isset($new['devDependencies'])) $original['devDependencies'] = array_merge($original['devDependencies'], $new['devDependencies']);
-
+            foreach ($new as $name => $value) {
+                $original[$name] = isset($original[$name]) && is_array($original[$name]) ? array_merge($original[$name], $new[$name]) : $new[$name];
+            }
             $depend_service->writeArrayToJsonFile($original, $dir . $admin_package);
         }
         if (in_array($web_package, $change_files)) {
             $original = $depend_service->getNpmContent('web');
             $new = $depend_service->jsonFileToArray($dir . $web_package);
 
-            if (isset($new['dependencies'])) $original['dependencies'] = array_merge($original['dependencies'], $new['dependencies']);
-            if (isset($new['devDependencies'])) $original['devDependencies'] = array_merge($original['devDependencies'], $new['devDependencies']);
-
+            foreach ($new as $name => $value) {
+                $original[$name] = isset($original[$name]) && is_array($original[$name]) ? array_merge($original[$name], $new[$name]) : $new[$name];
+            }
             $depend_service->writeArrayToJsonFile($original, $dir . $web_package);
         }
         if (in_array($uniapp_package, $change_files)) {
             $original = $depend_service->getNpmContent('uni-app');
             $new = $depend_service->jsonFileToArray($dir . $uniapp_package);
 
-            if (isset($new['dependencies'])) $original['dependencies'] = array_merge($original['dependencies'], $new['dependencies']);
-            if (isset($new['devDependencies'])) $original['devDependencies'] = array_merge($original['devDependencies'], $new['devDependencies']);
-
+            foreach ($new as $name => $value) {
+                $original[$name] = isset($original[$name]) && is_array($original[$name]) ? array_merge($original[$name], $new[$name]) : $new[$name];
+            }
             $depend_service->writeArrayToJsonFile($original, $dir . $uniapp_package);
         }
     }

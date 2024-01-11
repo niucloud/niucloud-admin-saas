@@ -123,7 +123,7 @@ const checkPayConfigList = () => {
 checkPayConfigList()
 
 // 配置支付宝、微信信息
-const setConfigInfo = (data) => {
+const setConfigInfo = (data:any) => {
     console.log(data)
     payConfigData.value[data.channel].pay_type.forEach(element => {
         if (element.key == data.type) {
@@ -134,7 +134,7 @@ const setConfigInfo = (data) => {
 }
 
 // 初始化配置信息
-const configPayFn = (data) => {
+const configPayFn = (data:any) => {
     eval(data.key + 'Dialog.value.setFormData(data)')
     eval(data.key + 'Dialog.value.showDialog = true;')
 }
@@ -157,7 +157,7 @@ const fieldBoxRefs = ref<any>([])
 watch(isEdit, (newValue, oldValue) => {
     if (newValue) {
         nextTick(() => {
-            fieldBoxRefs.value.forEach((item, index) => {
+            fieldBoxRefs.value.forEach((item:any, index:any) => {
                 sortableFn(item, index)
             })
         })
@@ -186,7 +186,7 @@ const saveFn = () => {
     payLoading.value = true
     const data = JSON.parse(JSON.stringify(payConfigData.value))
     Object.values(data).forEach((item, index) => {
-        item.pay_type.forEach((subItem, subIndex) => {
+        item.pay_type.forEach((subItem:any, subIndex:any) => {
             subItem.sort = subIndex
             subItem.status = Number(subItem.status)
         })

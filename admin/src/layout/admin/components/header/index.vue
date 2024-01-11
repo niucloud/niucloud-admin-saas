@@ -106,7 +106,7 @@ const dark = computed(()=>{
 let app_debug = ref(true)
 const getEnvFn = () => {
     getEnv().then(res => {
-        app_debug.value = res.data.app_debug;
+        // app_debug.value = res.data.app_debug;
     }).catch(() => {})
 }
 getEnvFn();

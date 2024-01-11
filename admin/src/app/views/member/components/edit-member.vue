@@ -13,12 +13,12 @@
             </el-form-item>
             <el-form-item :label="t('sex')" v-if="type == 'sex'">
                 <el-select v-model="saveData.sex" clearable :placeholder="t('sexPlaceholder')" class="input-width">
-                    <el-option :label="item['name']" :value="item['id']" v-for="item in sexSelectData" />
+                    <el-option :label="item['name']" :value="item['id']" v-for="(item,index) in sexSelectData" :key="index" />
                 </el-select>
             </el-form-item>
             <el-form-item :label="t('memberLabel')" v-if="type == 'member_label'">
                 <el-select v-model="saveData.member_label" multiple collapse-tags :placeholder="t('memberLabelPlaceholder')" class="input-width">
-                    <el-option :label="item['label_name']" :value="item['label_id']" v-for="item in labelSelectData" />
+                    <el-option :label="item['label_name']" :value="item['label_id']" v-for="(item,index) in labelSelectData"  :key="index"/>
                 </el-select>
             </el-form-item>
         </el-form>
@@ -39,11 +39,11 @@ import type { FormInstance } from 'element-plus'
 import { editMemberDetail, getMemberLabelAll } from '@/app/api/member'
 
 // 修改类型
-let type = ref('')
-let title = ref('')
+const type = ref('')
+const title = ref('')
 // 会员id
-let memberId = ref('')
-let showDialog = ref(false)
+const memberId = ref('')
+const showDialog = ref(false)
 const loading = ref(false)
 const sexSelectData = ref([
     {
@@ -58,14 +58,13 @@ const sexSelectData = ref([
         id: 2,
         name: t('girlSex')
     }
-]);
-let labelSelectData = ref(null)
+])
+const labelSelectData = ref(null)
 // 获取全部标签
 const getMemberLabelAllFn = async () => {
     labelSelectData.value = await (await getMemberLabelAll()).data
 }
-getMemberLabelAllFn();
-
+getMemberLabelAllFn()
 
 /**
  * 表单数据
@@ -79,7 +78,6 @@ const initialFormData = {
 }
 const saveData: Record<string, any> = reactive({ ...initialFormData })
 
-
 const emit = defineEmits(['complete'])
 
 /**
@@ -88,7 +86,7 @@ const emit = defineEmits(['complete'])
  */
 const confirm = async (formEl: FormInstance | undefined) => {
     loading.value = true
-    let data = ref({
+    const data = ref({
         member_id: memberId.value,
         field: type.value,
         value: saveData[type.value]
@@ -98,25 +96,24 @@ const confirm = async (formEl: FormInstance | undefined) => {
         loading.value = false
         showDialog.value = false
         emit('complete')
-    }).catch(err => {
+    }).catch(() => {
         loading.value = false
         // showDialog.value = false
     })
 }
 
 const setDialogType = async (row: any = null) => {
-    loading.value = true;
-    type.value = row.type;
-    title.value = row.title;
-    memberId.value = row.id;
+    loading.value = true
+    type.value = row.type
+    title.value = row.title
+    memberId.value = row.id
     saveData[type.value] = row.data[type.value]
-    if (type.value == "member_label" && saveData[type.value]) {
-        saveData[type.value].forEach((item, index) => {
-            saveData[type.value][index] = Number.parseFloat(item);
-        });
+    if (type.value == 'member_label' && saveData[type.value]) {
+        saveData[type.value].forEach((item:any, index:any) => {
+            saveData[type.value][index] = Number.parseFloat(item)
+        })
     }
-    loading.value = false;
-
+    loading.value = false
 }
 
 defineExpose({

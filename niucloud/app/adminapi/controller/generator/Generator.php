@@ -184,4 +184,15 @@ class Generator extends BaseController
         return success((new GenerateService())->getModels($data));
     }
 
+    /**
+     * 根据模型获取表字段
+     */
+    public function getModelTableColumn()
+    {
+        $data = $this->request->params([
+            ["model",""]
+        ]);
+        return success((new GenerateService())->getModelColumn($data));
+    }
+
 }

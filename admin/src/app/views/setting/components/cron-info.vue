@@ -1,7 +1,7 @@
 <template>
     <el-dialog v-model="showDialog" :title="t('cronInfo')" width="550px" :destroy-on-close="true">
         <el-form :model="formData" label-width="110px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
- 
+
             <el-form-item :label="t('title')" >
                 <div class="input-width"> {{ formData.title }} </div>
             </el-form-item>
@@ -18,7 +18,7 @@
             <el-form-item :label="t('count')" >
                 <div class="input-width"> {{ formData.count }} </div>
             </el-form-item>
- 
+
             <el-form-item :label="t('task')" >
                 <div class="input-width"> {{ formData.task }} </div>
             </el-form-item>
@@ -66,19 +66,19 @@ const loading = ref(true)
  */
 const initialFormData = {
     count: 0,
-    create_time:'',
-    crond_length:'',
-    crond_type:'',
-    crond_type_name:'',
-    data:'',
-    delete_time:'',
-    last_time:'',
-    next_time:'',
-    status_desc:'',
-    title:'',
-    type:'',
-    type_name:'',
-    update_time:''
+    create_time: '',
+    crond_length: '',
+    crond_type: '',
+    crond_type_name: '',
+    data: '',
+    delete_time: '',
+    last_time: '',
+    next_time: '',
+    status_desc: '',
+    title: '',
+    type: '',
+    type_name: '',
+    update_time: ''
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 
@@ -91,7 +91,7 @@ const formRules = computed(() => {
     }
 })
 
-const emit = defineEmits(['complete'])
+// const emit = defineEmits(['complete'])
 
 const setFormData = async (row: any = null) => {
     loading.value = true
@@ -101,7 +101,6 @@ const setFormData = async (row: any = null) => {
             if (row[key] != undefined) formData[key] = row[key]
         })
     }
-    
     loading.value = false
 }
 

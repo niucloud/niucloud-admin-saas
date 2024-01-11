@@ -94,7 +94,10 @@ router.beforeEach(async (to, from, next) => {
                     await userStore.getAuthMenus()
 
                     // 设置首页路由
-                    const firstRoute = findFirstValidRoute(userStore.routers)
+                    let firstRoute: symbol | string | undefined = findFirstValidRoute(userStore.routers)
+                    if (getAppType() != 'admin' && userStore.siteInfo?.apps.length > 1) {
+                        firstRoute = userStore.addonIndexRoute[ userStore.siteInfo?.apps[0].key ]
+                    }
                     ROOT_ROUTER.redirect = { name: firstRoute }
                     router.addRoute(ROOT_ROUTER)
 

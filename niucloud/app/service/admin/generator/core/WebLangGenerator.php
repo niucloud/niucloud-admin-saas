@@ -46,8 +46,15 @@ class WebLangGenerator extends BaseGenerator
                 $lang .= '"' . Str::camel($column['column_name']) . '":"' . $column['column_comment'] . '",' . PHP_EOL;
             }
             if($column['is_search']){
-                $placeholder_text = '请输入';
-                $lang .= '"'.Str::camel($column['column_name']) .'Placeholder":"'.$placeholder_text.$column['column_comment'].'",'.PHP_EOL;
+                if(!empty($column['model']))
+                {
+                    $placeholder_text = '全部';
+                    $lang .= '"'.Str::camel($column['column_name']) .'Placeholder":"'.$placeholder_text.'",'.PHP_EOL;
+                }else{
+                    $placeholder_text = '请输入';
+                    $lang .= '"'.Str::camel($column['column_name']) .'Placeholder":"'.$placeholder_text.$column['column_comment'].'",'.PHP_EOL;
+                }
+
             }
 
             if($this->table['edit_type'] == 1 && ($column['is_insert'] || $column['is_update'])){
@@ -90,9 +97,9 @@ class WebLangGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = dirname(app()->getRootPath()) . '/admin/src/'. $this->addonName .'/lang/zh-cn/';
+            $dir = dirname(app()->getRootPath()) . DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR. $this->addonName .DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR;
         } else {
-            $dir = dirname(app()->getRootPath()) . '/admin/src/app/lang/zh-cn/';
+            $dir = dirname(app()->getRootPath()) . DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR;
         }
         $this->checkDir($dir);
         return $dir;
@@ -107,10 +114,10 @@ class WebLangGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = $this->outDir . 'addon/'.$this->addonName.'/admin/lang/zh-cn/';
+            $dir = $this->outDir . 'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR;
 
         }else{
-            $dir = $this->outDir . 'admin/src/app/lang/zh-cn/';
+            $dir = $this->outDir . 'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR;
         }
 
         $this->checkDir($dir);
@@ -125,9 +132,9 @@ class WebLangGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = $this->rootDir . '/admin/src/'.$this->addonName.'/lang/zh-cn/';
+            $dir = $this->rootDir . DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR;
         }else{
-            $dir = $this->rootDir . '/admin/src/app/lang/zh-cn/';
+            $dir = $this->rootDir . DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR;
         }
 
         $this->checkDir($dir);
@@ -138,7 +145,7 @@ class WebLangGenerator extends BaseGenerator
      * 获取文件生成到插件中
      */
     public function getAddonObjectOutDir() {
-        $dir = $this->rootDir . '/niucloud/addon/'.$this->addonName.'/admin/lang/zh-cn/';
+        $dir = $this->rootDir . DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR;
         $this->checkDir($dir);
         return $dir;
     }

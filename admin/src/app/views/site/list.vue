@@ -19,7 +19,8 @@
                         <el-select v-model="siteTableData.searchParam.app" clearable @change="appChangeFn"
                             :placeholder="t('appIdPlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')" value="all" />
-                            <el-option :label="item['title']" :value="item['key']" v-for="item in Object.values(addonList)" />
+                            <el-option :label="item['title']" :value="item['key']"
+                                v-for="(item, index) in Object.values(addonList)"  :key="index"/>
                         </el-select>
                     </el-form-item>
 
@@ -27,7 +28,8 @@
                         <el-select v-model="siteTableData.searchParam.group_id" clearable
                             :placeholder="t('groupIdPlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')" value="" />
-                            <el-option :label="item['group_name']" :value="item['group_id']" v-for="item in groupList[siteTableData.searchParam.app]" />
+                            <el-option :label="item['group_name']" :value="item['group_id']"
+                                v-for="(item, index) in groupList[siteTableData.searchParam.app]" :key="index"/>
                         </el-select>
                     </el-form-item>
 
@@ -35,7 +37,7 @@
                         <el-select v-model="siteTableData.searchParam.status" clearable
                             :placeholder="t('groupIdPlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')" value="" />
-                            <el-option :label="item" :value="index" v-for="(item, index) in statusList" />
+                            <el-option :label="item" :value="index" v-for="(item, index) in statusList" :key="index"/>
                         </el-select>
                     </el-form-item>
 
@@ -70,7 +72,8 @@
                         <template #default="{ row }">
                             <div class="flex items-center">
                                 <img class="w-[50px] h-[50px] mr-[10px]" v-if="row.logo" :src="img(row.logo)" alt="">
-                                <img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/app/assets/images/site_logo.png" alt="">
+                                <img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/app/assets/images/site_logo.png"
+                                    alt="">
                                 <div class="flex flex flex-col">
                                     <span>{{ row.site_name || '' }}</span>
                                 </div>
@@ -88,9 +91,9 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column prop="app_name" :label="t('app')" width="150" :show-overflow-tooltip="true" />
                     <el-table-column prop="group_name" :label="t('groupId')" width="150" :show-overflow-tooltip="true" />
-                    <el-table-column prop="create_time" :label="t('createTime')" width="250" :show-overflow-tooltip="true" />
+                    <el-table-column prop="create_time" :label="t('createTime')" width="250"
+                        :show-overflow-tooltip="true" />
                     <el-table-column prop="expire_time" :label="t('expireTime')" width="250" :show-overflow-tooltip="true">
                         <template #default="{ row }">
                             <div v-if="row.expire_time == 0">永久</div>
@@ -112,7 +115,7 @@
                     <el-table-column :label="t('operation')" min-width="250" align="right" fixed="right">
                         <template #default="{ row }">
                             <el-button type="primary" link @click="toSiteLink(row)">
-<!--                                <a href="javascript:;" title="启动站点" class="iconfont iconicon_huojian"></a>-->
+                                <!--                                <a href="javascript:;" title="启动站点" class="iconfont iconicon_huojian"></a>-->
                                 访问站点
                             </el-button>
                             <el-button type="primary" link @click="openClose(row.status, row.site_id)"
@@ -143,12 +146,12 @@ import { reactive, ref } from 'vue'
 import { img } from '@/utils/common'
 import { t } from '@/lang'
 import { getSiteList, getSiteGroupAll, getStatusList, closeSite, openSite, deleteSite } from '@/app/api/site'
-import {ElMessageBox, FormInstance} from 'element-plus'
+import { ElMessageBox, FormInstance, ElMessage } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
 import EditSite from '@/app/views/site/components/edit-site.vue'
 import { getInstalledAddonList } from '@/app/api/addon'
-import { CollectionTag } from '@element-plus/icons-vue'
-import {deleteMenu} from "@/app/api/sys";
+// import { CollectionTag } from '@element-plus/icons-vue'
+// import { deleteMenu } from "@/app/api/sys"
 
 const route = useRoute()
 const pageName = route.meta.title
@@ -168,24 +171,24 @@ const siteTableData = reactive({
     searchParam: {
         keywords: '',
         group_id: '',
-        app:'all',
+        app: 'all',
         status: '',
         create_time: [],
         expire_time: []
 
     }
 })
-siteTableData.searchParam.status = route.query.id || '';
+siteTableData.searchParam.status = route.query.id || ''
 const setGroupList = async () => {
-    let obj = await (await getSiteGroupAll({})).data
+    const obj = await (await getSiteGroupAll({})).data
 
-    groupList.value.all = obj;
-    obj.forEach((item,index)=>{
-        if(!groupList.value[item.app]){
-            groupList.value[item.app] = [];
-            groupList.value[item.app].push(item);
-        }else{
-            groupList.value[item.app].push(item);
+    groupList.value.all = obj
+    obj.forEach((item:any, index:any) => {
+        if (!groupList.value[item.app]) {
+            groupList.value[item.app] = []
+            groupList.value[item.app].push(item)
+        } else {
+            groupList.value[item.app].push(item)
         }
     })
 }
@@ -209,8 +212,8 @@ const resetForm = (formEl: FormInstance | undefined) => {
 /**
  * 应用选择
  */
-const appChangeFn = (val)=>{
-    siteTableData.searchParam.group_id = "";
+const appChangeFn = () => {
+    siteTableData.searchParam.group_id = ''
 }
 
 /**
@@ -227,7 +230,7 @@ getInstalledAddonList().then(({ data }) => {
 const loadSiteList = (page: number = 1) => {
     siteTableData.loading = true
     siteTableData.page = page
-    siteTableData.searchParam.app = siteTableData.searchParam.app == "all" ? '' : siteTableData.searchParam.app;
+    siteTableData.searchParam.app = siteTableData.searchParam.app == 'all' ? '' : siteTableData.searchParam.app
     getSiteList({
         page: siteTableData.page,
         limit: siteTableData.limit,
@@ -325,5 +328,4 @@ const deleteEvent = (data: any) => {
     .el-alert__description {
         margin: 0;
     }
-}
-</style>
+}</style>

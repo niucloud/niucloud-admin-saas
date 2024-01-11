@@ -370,4 +370,21 @@ class ConfigService extends BaseAdminService
     {
         return ( new CoreSysConfigService() )->getWapIndexList($data);
     }
+
+    /**
+     * 获取开发者key
+     * @return array
+     */
+    public function getDeveloperToken() {
+        return (new CoreConfigService())->getConfigValue(0, "DEVELOPER_TOKEN");
+    }
+
+    /**
+     * 设置开发者key
+     * @param array $data
+     * @return array
+     */
+    public function setDeveloperToken(array $data) {
+        return (new CoreConfigService())->setConfig(0, "DEVELOPER_TOKEN", $data);
+    }
 }

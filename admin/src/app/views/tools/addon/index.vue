@@ -81,7 +81,7 @@
                             <template #description>
                                 <span class="text-[#999]">{{ t("describe3") }}</span>
                                 <div class="mt-[20px] mb-[40px] h-[32px]">
-                                    <el-button type="primary" plain @click="linkEvent('https://www.kancloud.cn/niushop/niucloud-admin-app/3199825')">{{t("btn3") }}</el-button>
+                                    <el-button type="primary" plain @click="linkEvent('https://www.kancloud.cn/niucloud/niucloud-admin-develop/3153336')">{{t("btn3") }}</el-button>
                                 </div>
                             </template>
                         </el-step>
@@ -200,7 +200,7 @@
 <script lang="ts" setup>
 import { reactive, toRefs, ref, onMounted } from 'vue'
 import { t } from '@/lang'
-import { getAddonDevelop, deleteAddonDevelop, addonDevelopBuild,addonDevelopDownload } from '@/app/api/tools'
+import { getAddonDevelop, deleteAddonDevelop, addonDevelopBuild, addonDevelopDownload } from '@/app/api/tools'
 import { img } from '@/utils/common'
 import { ElMessageBox } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
@@ -208,7 +208,7 @@ import type { FormInstance } from 'element-plus'
 
 const route = useRoute()
 const router = useRouter()
-const pageName = route.meta.title;
+const pageName = route.meta.title
 const searchFormRef = ref(null)
 const state = reactive({
     params: {
@@ -216,12 +216,12 @@ const state = reactive({
         // limit: 10,
         // total: 0,
         // title: '',
-        search: ""
+        search: ''
     },
     loading: false,
     data: [],
-    activeName: "developmentProcess",
-    active: 0,
+    activeName: 'developmentProcess',
+    active: 0
 })
 const { params, loading, data, activeName, active } = toRefs(state)
 onMounted(() => {
@@ -241,19 +241,18 @@ const getAddonDevelopFn = () => {
     })
 }
 
-
 const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
-    formEl.resetFields();
-    getAddonDevelopFn();
+    formEl.resetFields()
+    getAddonDevelopFn()
 }
 const editEvent = (key: any) => {
     router.push({ path: '/tools/addon_edit', query: { key } })
 }
 const linkEvent = (url: string) => {
-    window.open(url, "_blank")
+    window.open(url, '_blank')
 }
-//打包插件
+// 打包插件
 const addonDevelopBuildFn = (data: any) => {
     loading.value = true
     addonDevelopBuild(data.key).then(res => {
@@ -267,21 +266,20 @@ const addonDevelopBuildFn = (data: any) => {
         ).then(() => {
             addonDevelopDownloadFn(data)
         })
-
     }).catch(() => {
         loading.value = false
     })
 }
-//下载插件
-const addonDevelopDownloadFn=(data:any)=>{
-    addonDevelopDownload(data.key).then(res=>{
-        let blob = new Blob([res]);
-		let url = window.URL.createObjectURL(blob); // 创建 url 并指向 blob
-		let a = document.createElement('a');
-		a.href = url;
-		a.download = data.title + '.zip';
-		a.click();
-		window.URL.revokeObjectURL(url); // 释放该 url
+// 下载插件
+const addonDevelopDownloadFn = (data:any) => {
+    addonDevelopDownload(data.key).then(res => {
+        const blob = new Blob([res])
+        const url = window.URL.createObjectURL(blob) // 创建 url 并指向 blob
+        const a = document.createElement('a')
+        a.href = url
+        a.download = data.title + '.zip'
+        a.click()
+        window.URL.revokeObjectURL(url) // 释放该 url
     })
 }
 /**
@@ -292,7 +290,7 @@ const deleteEvent = (key: any) => {
         {
             confirmButtonText: t('confirm'),
             cancelButtonText: t('cancel'),
-            type: 'warning',
+            type: 'warning'
         }
     ).then(() => {
         loading.value = true

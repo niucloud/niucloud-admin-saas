@@ -40,7 +40,6 @@
                 </el-form-item>
             </el-card>
 
-
             <el-card class="box-card mt-4 !border-none" shadow="never">
                 <h3 class="panel-title !text-sm">{{t('alipay')}}</h3>
 
@@ -85,8 +84,8 @@
 import { reactive, ref, computed } from 'vue'
 import { t } from '@/lang'
 import { getTransferInfo, setTransferInfo } from '@/app/api/sys'
-import { useClipboard } from '@vueuse/core'
-import { FormInstance, FormRules } from 'element-plus'
+// import { useClipboard } from '@vueuse/core'
+import { FormInstance } from 'element-plus'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -98,13 +97,13 @@ const loading = ref(false)
  * 表单数据
  */
 const initialFormData = {
-    wechatpay_config:{
+    wechatpay_config: {
         mch_id: '',
         mch_secret_key: '',
         mch_secret_cert: '',
-        mch_public_cert_path: '',
+        mch_public_cert_path: ''
     },
-    alipay_config:{
+    alipay_config: {
         app_secret_cert: '',
         app_public_cert_path: '',
         alipay_public_cert_path: '',
@@ -114,18 +113,17 @@ const initialFormData = {
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 
-
 // 获取提款信息
-const transferInfoF = async () =>{
-    loading.value = true;
-    let val = await (await getTransferInfo('transfer')).data
-    if(val && val.length){
+const transferInfoF = async () => {
+    loading.value = true
+    const val = await (await getTransferInfo('transfer')).data
+    if (val && val.length) {
         formData.wechatpay_config = val[0].config
         formData.alipay_config = val[1].config
     }
-    loading.value = false;
+    loading.value = false
 }
-transferInfoF();
+transferInfoF()
 
 const formRef = ref<FormInstance>()
 // 表单验证规则
@@ -172,11 +170,11 @@ const save = async (formEl: FormInstance | undefined) => {
         if (valid) {
             loading.value = true
 
-            const data = formData;
+            const data = formData
             setTransferInfo(data).then(res => {
-                loading.value = false;
+                loading.value = false
             }).catch(() => {
-                loading.value = false;
+                loading.value = false
             })
         }
     })

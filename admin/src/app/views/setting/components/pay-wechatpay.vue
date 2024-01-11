@@ -44,7 +44,7 @@
 import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import { setPatConfig } from '@/app/api/sys'
+// import { setPatConfig } from '@/app/api/sys'
 
 const showDialog = ref(false)
 const loading = ref(true)

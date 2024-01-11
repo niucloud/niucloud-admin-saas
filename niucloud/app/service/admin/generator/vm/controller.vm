@@ -56,7 +56,7 @@ class {UCASE_CLASS_NAME} extends BaseAdminController
      * @param $id  {NOTES}id
      * @return \think\Response
      */
-    public function edit($id){
+    public function edit(int $id){
         $data = $this->request->params({EDIT_FILED_NOTE});
         $this->validate($data, '{VALIDATE}.edit');
         (new {UCASE_NAME}Service())->edit($id, $data);
@@ -73,5 +73,5 @@ class {UCASE_CLASS_NAME} extends BaseAdminController
         return success('DELETE_SUCCESS');
     }
 
-
+    {WITH_CONTROLLER}
 }

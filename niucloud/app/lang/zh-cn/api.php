@@ -51,6 +51,7 @@ return [
     'WEB_DIR_NOT_EXIST' => '未找到web源码所在目录, <a style="text-decoration: underline;" href="https://www.kancloud.cn/niucloud/niucloud-admin-develop/3213544" target="blank">点击查看相关手册</a>',
     'UNIAPP_DIR_NOT_EXIST' => '未找到uni-app源码所在目录, <a style="text-decoration: underline;" href="https://www.kancloud.cn/niucloud/niucloud-admin-develop/3213544" target="blank">点击查看相关手册</a>',
     'OPEN_BASEDIR_ERROR' => '请关闭防跨站攻击, 具体操作方法<a style="text-decoration: underline;" href="https://www.kancloud.cn/niucloud/niucloud-admin-develop/3213393" target="blank">点击查看相关手册</a>',
+    'ADDON_DOWNLOAD_VERSION_EMPTY' => '该插件还没有发布过版本',
     //登录注册重置账号....
 
     'LOGIN_SUCCESS' => '登录成功',

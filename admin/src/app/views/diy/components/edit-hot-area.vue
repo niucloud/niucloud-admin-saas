@@ -33,39 +33,39 @@
 </template>
 
 <script lang="ts" setup>
-    import {t} from '@/lang'
-    import useDiyStore from '@/stores/modules/diy'
-    import {img} from '@/utils/common'
+import { t } from '@/lang'
+import useDiyStore from '@/stores/modules/diy'
+import { img } from '@/utils/common'
 
-    const diyStore = useDiyStore()
-    diyStore.editComponent.ignore = []; // 忽略公共属性
+const diyStore = useDiyStore()
+diyStore.editComponent.ignore = [] // 忽略公共属性
 
-    // 组件验证
-    diyStore.editComponent.verify = (index: number) => {
-        var res = {code: true, message: ''};
-        if (diyStore.value[index].imageUrl === '') {
-            res.code = false;
-            res.message = t('imageUrlTip');
-            return res;
-        }
-        return res;
-    };
-
-    const selectImg = (url: string) => {
-        handleHeight();
-    };
-
-    // 处理高度
-    const handleHeight = () => {
-        let image = new Image();
-        image.src = img(diyStore.editComponent.imageUrl);
-        image.onload = async () => {
-            diyStore.editComponent.imgWidth = image.width;
-            diyStore.editComponent.imgHeight = image.height;
-        };
+// 组件验证
+diyStore.editComponent.verify = (index: number) => {
+    const res = { code: true, message: '' }
+    if (diyStore.value[index].imageUrl === '') {
+        res.code = false
+        res.message = t('imageUrlTip')
+        return res
     }
+    return res
+}
 
-    defineExpose({})
+const selectImg = (url: string) => {
+    handleHeight()
+}
+
+// 处理高度
+const handleHeight = () => {
+    const image = new Image()
+    image.src = img(diyStore.editComponent.imageUrl)
+    image.onload = async () => {
+        diyStore.editComponent.imgWidth = image.width
+        diyStore.editComponent.imgHeight = image.height
+    }
+}
+
+defineExpose({})
 
 </script>
 

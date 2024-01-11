@@ -70,7 +70,7 @@ import type { FormInstance } from 'element-plus'
 import { getRechargeOrderInfo } from '@/app/api/order'
 import { useRoute, useRouter } from 'vue-router'
 import useTabbarStore from '@/stores/modules/tabbar'
-import useAppStore from '@/stores/modules/app'
+// import useAppStore from '@/stores/modules/app'
 
 const tabbarStore = useTabbarStore()
 const route = useRoute()

@@ -135,96 +135,96 @@
 </template>
 
 <script lang="ts" setup>
-    import {ref, watch, onMounted, nextTick} from 'vue'
-    import {t} from '@/lang'
-    import Sortable from 'sortablejs'
-    import {img} from '@/utils/common'
-    import {range} from 'lodash-es'
+import { ref, watch, onMounted, nextTick } from 'vue'
+import { t } from '@/lang'
+import Sortable from 'sortablejs'
+import { img } from '@/utils/common'
+import { range } from 'lodash-es'
 
-    import useDiyStore from '@/stores/modules/diy'
+import useDiyStore from '@/stores/modules/diy'
 
-    const diyStore = useDiyStore()
-    diyStore.editComponent.ignore = []; // 忽略公共属性
+const diyStore = useDiyStore()
+diyStore.editComponent.ignore = [] // 忽略公共属性
 
-    // 组件验证
-    diyStore.editComponent.verify = (index: number) => {
-        var res = {code: true, message: ''};
+// 组件验证
+diyStore.editComponent.verify = (index: number) => {
+    const res = { code: true, message: '' }
 
-        diyStore.value[index].list.forEach((item: any) => {
-            if ((diyStore.value[index].mode === 'graphic' || diyStore.value[index].mode === 'img') && item.imageUrl === '') {
-                res.code = false;
-                res.message = t('imageUrlTip');
-                return res;
-            }
-            if ((diyStore.value[index].mode === 'graphic' || diyStore.value[index].mode === 'text') && item.title === '') {
-                res.code = false;
-                res.message = t('graphicNavTitlePlaceholder');
-                return res;
-            }
-        });
-        return res;
-    };
-
-    diyStore.editComponent.list.forEach((item: any) => {
-        if (!item.id) item.id = diyStore.generateRandom();
+    diyStore.value[index].list.forEach((item: any) => {
+        if ((diyStore.value[index].mode === 'graphic' || diyStore.value[index].mode === 'img') && item.imageUrl === '') {
+            res.code = false
+            res.message = t('imageUrlTip')
+            return res
+        }
+        if ((diyStore.value[index].mode === 'graphic' || diyStore.value[index].mode === 'text') && item.title === '') {
+            res.code = false
+            res.message = t('graphicNavTitlePlaceholder')
+            return res
+        }
     })
+    return res
+}
 
-    watch(
-        () => diyStore.editComponent.list,
-        (newValue, oldValue) => {
-            // 设置图片宽高
-            diyStore.editComponent.list.forEach((item: any) => {
-                let image = new Image();
-                image.src = img(item.imageUrl);
-                image.onload = async () => {
-                    item.imgWidth = image.width;
-                    item.imgHeight = image.height;
-                };
-            });
-        },
-        {deep: true}
-    )
+diyStore.editComponent.list.forEach((item: any) => {
+    if (!item.id) item.id = diyStore.generateRandom()
+})
 
-    const addGraphicNav = () => {
-        diyStore.editComponent.list.push({
-            id: diyStore.generateRandom(),
-            title: '',
-            imageUrl: '',
-            imgWidth: 0,
-            imgHeight: 0,
-            link: {name: ''},
-            label: {
-                control: false,
-                text: '热门',
-                textColor: '#FFFFFF',
-                bgColorStart: '#F83287',
-                bgColorEnd: '#FE3423'
+watch(
+    () => diyStore.editComponent.list,
+    (newValue, oldValue) => {
+        // 设置图片宽高
+        diyStore.editComponent.list.forEach((item: any) => {
+            const image = new Image()
+            image.src = img(item.imageUrl)
+            image.onload = async () => {
+                item.imgWidth = image.width
+                item.imgHeight = image.height
             }
         })
-    }
+    },
+    { deep: true }
+)
 
-    const imageBoxRef = ref()
-
-    onMounted(() => {
-        nextTick(() => {
-            const sortable = Sortable.create(imageBoxRef.value, {
-                group: 'item-wrap',
-                animation: 200,
-                onEnd: event => {
-                    const temp = diyStore.editComponent.list[event.oldIndex!];
-                    diyStore.editComponent.list.splice(event.oldIndex!, 1);
-                    diyStore.editComponent.list.splice(event.newIndex!, 0, temp);
-                    sortable.sort(
-                        range(diyStore.editComponent.list.length).map(value => {
-                            return value.toString();
-                        })
-                    );
-                }
-            })
-        });
+const addGraphicNav = () => {
+    diyStore.editComponent.list.push({
+        id: diyStore.generateRandom(),
+        title: '',
+        imageUrl: '',
+        imgWidth: 0,
+        imgHeight: 0,
+        link: { name: '' },
+        label: {
+            control: false,
+            text: '热门',
+            textColor: '#FFFFFF',
+            bgColorStart: '#F83287',
+            bgColorEnd: '#FE3423'
+        }
     })
+}
 
-    defineExpose({})
+const imageBoxRef = ref()
+
+onMounted(() => {
+    nextTick(() => {
+        const sortable = Sortable.create(imageBoxRef.value, {
+            group: 'item-wrap',
+            animation: 200,
+            onEnd: event => {
+                const temp = diyStore.editComponent.list[event.oldIndex!]
+                diyStore.editComponent.list.splice(event.oldIndex!, 1)
+                diyStore.editComponent.list.splice(event.newIndex!, 0, temp)
+                sortable.sort(
+                    range(diyStore.editComponent.list.length).map(value => {
+                        return value.toString()
+                    })
+                )
+            }
+        })
+    })
+})
+
+defineExpose({})
 
 </script>
 

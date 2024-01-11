@@ -99,16 +99,16 @@ const button = ref<Record<string, any>[]>([])
 const buttonIndex = ref<number>(0)
 const subButtonIndex = ref<number>(-1)
 const formRef = ref<Record<string, any>[] | null>(null)
-let activeName = ref("/channel/wechat/menu");
+const activeName = ref('/channel/wechat/menu')
 const handleClick = (val: any) => {
-    router.push({ path: activeName.value });
-};
+    router.push({ path: activeName.value })
+}
 /**
  * 获取公众号菜单配置
  */
 getWechatMenu().then((res) => {
     button.value = res.data
-    loading.value = false;
+    loading.value = false
 })
 
 /**

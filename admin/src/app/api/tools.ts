@@ -175,3 +175,10 @@ export function getGeneratorTableColumn(params: any) {
 export function generatorCheckFile(params: Record<string, any>) {
     return request.get(`generator/check_file`, {params})
 }
+
+/**
+ * 根据模型获取表字段
+ */
+export function getGeneratorModelTableColumn(params: any) {
+    return request.get(`generator/model_table_column`, {params})
+}

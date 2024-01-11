@@ -42,6 +42,7 @@ class WebApiGenerator extends BaseGenerator
             '{ROUTE_GROUP_NAME}',
             '{IMPORT}',
             '{BEGIN}',
+            '{WITH_ROUTE_API}',
             '{END}',
         ];
 
@@ -56,10 +57,10 @@ class WebApiGenerator extends BaseGenerator
             $this->getRouteGroupName(),
             $this->getImport(),
             $this->getBegin(),
+            $this->getWithRouteApi(),
             $this->getEnd(),
         ];
         $vmPath = $this->getvmPath('web_api');
-
         $text = $this->replaceFileText($old, $new, $vmPath);
 
         $this->setText($text);
@@ -85,9 +86,9 @@ class WebApiGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = dirname(app()->getRootPath()) . '/admin/src/'. $this->addonName  .'/api/';
+            $dir = dirname(app()->getRootPath()) . DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'src'. $this->addonName  .'/api/';
         }else{
-            $dir = dirname(app()->getRootPath()) . '/admin/src/app/api/';
+            $dir = dirname(app()->getRootPath()) . DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'api'.DIRECTORY_SEPARATOR;
         }
         $this->checkDir($dir);
         return $dir;
@@ -103,9 +104,9 @@ class WebApiGenerator extends BaseGenerator
         $dir = dirname(root_path());
         if(!empty($this->addonName))
         {
-            $file = $dir.'\admin\src\\'.$this->addonName.'\\api\\'.$this->moduleName.'.ts';
+            $file = $dir.DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'api'.DIRECTORY_SEPARATOR.$this->moduleName.'.ts';
         }else{
-            $file = $dir.'\admin\src\app\api\\'.$this->moduleName.'.ts';
+            $file = $dir.DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'api'.DIRECTORY_SEPARATOR.$this->moduleName.'.ts';
         }
 
         if(file_exists($file))
@@ -151,10 +152,10 @@ class WebApiGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = $this->outDir . 'addon/'.$this->addonName.'/admin/api/';
+            $dir = $this->outDir . 'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'api'.DIRECTORY_SEPARATOR;
 
         }else{
-            $dir = $this->outDir . 'admin/src/app/api/';
+            $dir = $this->outDir . 'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'api'.DIRECTORY_SEPARATOR;
         }
         $this->checkDir($dir);
         return $dir;
@@ -168,9 +169,9 @@ class WebApiGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = $this->rootDir . '/admin/src/'.$this->addonName.'/api/';
+            $dir = $this->rootDir . DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'api'.DIRECTORY_SEPARATOR;
         }else{
-            $dir = $this->rootDir . '/admin/src/app/api/';
+            $dir = $this->rootDir . DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'api'.DIRECTORY_SEPARATOR;
         }
 
         $this->checkDir($dir);
@@ -181,7 +182,7 @@ class WebApiGenerator extends BaseGenerator
      * 获取文件生成到插件中
      */
     public function getAddonObjectOutDir() {
-        $dir = $this->rootDir . '/niucloud/addon/'.$this->addonName.'/admin/api/';
+        $dir = $this->rootDir . DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'api'.DIRECTORY_SEPARATOR;
         $this->checkDir($dir);
         return $dir;
     }
@@ -241,4 +242,35 @@ class WebApiGenerator extends BaseGenerator
         }
     }
 
+    public function getWithRouteApi()
+    {
+        if(!empty($this->addonName))
+        {
+            $moduleName = $this->addonName;
+        }else{
+            $moduleName = $this->moduleName;
+        }
+        $with = [];
+        $content = '';
+        foreach ($this->tableColumn as $column) {
+            if (!empty($column['model'])) {
+                $str = strripos($column['model'],'\\');
+                $with[] = Str::camel(substr($column['model'],$str+1));
+            }
+        }
+        if(!empty($with))
+        {
+//            $str = strripos($column['model'],'\\');
+//            $with = Str::camel(substr($column['model'],$str+1));
+//            $content.= ' get'.Str::studly($with).'List,';
+//            export function getCompanyList(params: Record<string, any>) {
+//            return request.get(`shop/delivery/company`, {params})
+//            } $with = Str::camel(substr($column['model'],$str+1));
+            foreach ($with as $value)
+            {
+                $content.= 'export function getWith'.Str::studly($value).'List(params: Record<string,any>){'.PHP_EOL."    return request.get('".$moduleName.'/'.$value."', {params})".PHP_EOL.'}';
+            }
+        }
+        return $content;
+    }
 }

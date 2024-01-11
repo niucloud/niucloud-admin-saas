@@ -4,7 +4,7 @@ import request from '@/utils/request'
  * 获取支付设置
  * @returns
  */
-export function getUserInfo(type: string) {
+export function getUserInfo() {
     return request.get(`auth/get`)
 }
 

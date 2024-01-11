@@ -96,7 +96,7 @@ class RegisterService extends BaseApiService
         $chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $username = '';
         for ($i = 0; $i < 6; $i++) {
-            $username .= $chars[ random_int(0, strlen($chars)) ];
+            $username .= $chars[ random_int(0, (strlen($chars) - 1)) ];
         }
 
         return $microtime . strtoupper(base_convert(time() - 1420070400, 10, 36)) . $username;

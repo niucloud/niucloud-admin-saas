@@ -40,27 +40,27 @@
 </template>
 
 <script lang="ts" setup>
-    import {t} from '@/lang'
-    import {ref,watch} from 'vue'
-    import useDiyStore from '@/stores/modules/diy'
-    import {img} from '@/utils/common'
+import { t } from '@/lang'
+import { watch } from 'vue'
+import useDiyStore from '@/stores/modules/diy'
+import { img } from '@/utils/common'
 
-    const diyStore = useDiyStore()
+const diyStore = useDiyStore()
 
-    watch(
-        () => diyStore.global.bgUrl,
-        (newValue, oldValue) => {
-            // 设置图片宽高
-            let image = new Image();
-            image.src = img(diyStore.global.bgUrl);
-            image.onload = async () => {
-                diyStore.global.imgWidth = image.width;
-                diyStore.global.imgHeight = image.height;
-            };
+watch(
+    () => diyStore.global.bgUrl,
+    (newValue, oldValue) => {
+        // 设置图片宽高
+        const image = new Image()
+        image.src = img(diyStore.global.bgUrl)
+        image.onload = async () => {
+            diyStore.global.imgWidth = image.width
+            diyStore.global.imgHeight = image.height
         }
-    )
+    }
+)
 
-    defineExpose({})
+defineExpose({})
 </script>
 
 <style lang="scss" scoped></style>

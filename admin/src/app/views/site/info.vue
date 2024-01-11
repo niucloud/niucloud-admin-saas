@@ -29,7 +29,7 @@
                 </el-form-item>
 
                 <el-form-item :label="t('status')">
-                    <template #default="{ row }">
+                    <template #default="{ }">
                         <el-tag class="ml-2" type="success" v-if="formData.status == 1">{{ t('statusNormal') }}</el-tag>
                         <el-tag class="ml-2" type="error" v-if="formData.status == 0">{{t('statusDeactivate') }}</el-tag>
                         <el-tag class="ml-2" type="error" v-if="formData.status == 2">{{t('statusExpire') }}</el-tag>
@@ -65,9 +65,9 @@ import { getSiteInfo } from '@/app/api/site'
 import { useRoute, useRouter } from 'vue-router'
 import EditSite from '@/app/views/site/components/edit-site.vue'
 import useTabbarStore from '@/stores/modules/tabbar'
-import useAppStore from '@/stores/modules/app'
+// import useAppStore from '@/stores/modules/app'
 
-const appStore = useAppStore()
+// const appStore = useAppStore()
 const tabbarStore = useTabbarStore()
 const route = useRoute()
 const router = useRouter()

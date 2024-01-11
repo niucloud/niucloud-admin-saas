@@ -76,6 +76,11 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="expire_time" :label="t('expireTime')" />
+                <el-table-column :label="t('operation')" min-width="250" align="right" fixed="right">
+                        <template #default="{ row }">
+                            <el-button type="primary" link @click="siteInfo(row)">{{ t('info') }}</el-button>
+                        </template>
+                    </el-table-column>
             </el-table>
         </el-card>
     </div>
@@ -98,6 +103,14 @@ getUserInfo(uid).then(({ data }) => {
     detail.value = data
     loading.value = false
 }).catch()
+
+/**
+ * 站点详情
+ * @param data
+ */
+ const siteInfo = (data: any) => {
+    router.push({ path: '/admin/site/info', query: { id: data.site_id } })
+}
 
 </script>
 

@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts" setup async>
-import { ref, reactive, computed, toRaw, } from 'vue'
+import { ref, computed, toRaw } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
 import { cloneDeep } from 'lodash-es'
@@ -61,11 +61,11 @@ const title = ref('')
  * 表单数据
  */
 const initialFormData = {
-    validate_type: "",
+    validate_type: '',
     min_number: 1,
     max_number: 120,
     betweenMin: 1,
-    betweenMax: 120,
+    betweenMax: 120
 }
 const formData: Record<string, any> = ref({ ...initialFormData })
 
@@ -124,7 +124,7 @@ const formRules = computed(() => {
         ],
         view_max: [
             { required: true, validator: validateMax1, trigger: 'change' }
-        ],
+        ]
     }
 })
 

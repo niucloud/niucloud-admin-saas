@@ -44,6 +44,8 @@ Route::group('generator', function () {
     Route::get('table_column', 'generator.generator/getTableColumn');
     //全部模型
     Route::get('all_model', 'generator.generator/getModels');
+    //根据模型获取字段信息
+    Route::get('model_table_column', 'generator.generator/getModelTableColumn');
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,

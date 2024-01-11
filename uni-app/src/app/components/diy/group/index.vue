@@ -3,6 +3,9 @@
         <view v-for="(component, index) in data.value" :key="component.id"
         @click="diyStore.changeCurrentIndex(index, component)" class="draggable-element relative cursor-move"
         :class="{ selected: diyStore.currentIndex == index,decorate : diyStore.mode == 'decorate' }" :style="component.pageStyle">
+            <template v-if="component.componentName == 'AddonList'">
+                <diy-addon-list :component="component" :index="index" :pullDownRefreshCount="props.pullDownRefreshCount"></diy-addon-list>
+            </template>
             <template v-if="component.componentName == 'GraphicNav'">
                 <diy-graphic-nav :component="component" :index="index" :pullDownRefreshCount="props.pullDownRefreshCount"></diy-graphic-nav>
             </template>

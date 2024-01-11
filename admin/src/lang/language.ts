@@ -33,7 +33,7 @@ class Language {
             const file = path == '/' ? 'index' : path.replace(/^(\/admin\/|\/site\/|\/)/, '').replaceAll('/', '.')
 
             // 引入语言包文件
-            const messages = await import(app ? `@/${app}/lang/${locale}/${file}.json` : `@/app/lang/${locale}/${file}.json`)
+            const messages = await import(app ? `@/addon/${app}/lang/${locale}/${file}.json` : `@/app/lang/${locale}/${file}.json`)
 
             let data: Record<string, string> = {}
             Object.keys(messages.default).forEach(key => {

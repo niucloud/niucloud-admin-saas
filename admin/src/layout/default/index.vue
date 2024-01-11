@@ -36,7 +36,7 @@ import useSystemStore from '@/stores/modules/system'
 const appStore = useAppStore()
 const tabbarStore = useTabbarStore()
 const systemStore = useSystemStore()
-const dark = computed(()=>{
+const dark = computed(() => {
     return systemStore.dark
 })
 </script>

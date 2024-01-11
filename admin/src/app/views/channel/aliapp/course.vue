@@ -100,10 +100,10 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getWechatConfig } from '@/app/api/wechat'
-import { img } from '@/utils/common'
+// import { img } from '@/utils/common'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -111,26 +111,26 @@ const router = useRouter()
 const pageName = route.meta.title
 const loading = ref(true)
 const formData = reactive<Record<string, string>>({
-	wechat_name: '',
-	wechat_original: '',
-	app_id: '',
-	app_secret: '',
-	qr_code: '',
-	token: '',
-	encoding_aes_key: '',
-	encryption_type: 'not_encrypt'
+    wechat_name: '',
+    wechat_original: '',
+    app_id: '',
+    app_secret: '',
+    qr_code: '',
+    token: '',
+    encoding_aes_key: '',
+    encryption_type: 'not_encrypt'
 })
 
 /**
  * 获取微信配置
  */
 getWechatConfig().then(res => {
-	Object.assign(formData, res.data)
-	loading.value = false
+    Object.assign(formData, res.data)
+    loading.value = false
 })
 
 const linkEvent = () => {
-	window.open("https://open.alipay.com/develop/manage", "_blank")
+    window.open('https://open.alipay.com/develop/manage', '_blank')
 }
 
 </script>

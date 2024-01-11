@@ -402,6 +402,19 @@ return
                     'sort' => 20,
                     'status' => 1,
                     'is_show' => 1,
+                ],
+                [
+                    'menu_name' => '素材管理',
+                    'menu_key' => 'attachment',
+                    'menu_type' => 1,
+                    'icon' => 'element-Files',
+                    'api_url' => 'sys/attachment',
+                    'router_path' => 'attachment',
+                    'view_path' => 'tools/attachment',
+                    'methods' => 'get',
+                    'sort' => 10,
+                    'status' => 1,
+                    'is_show' => 1,
                 ]
             ]
         ],
@@ -559,7 +572,7 @@ return
                     'router_path' => 'setting',
                     'view_path' => '',
                     'methods' => '',
-                    'sort' => 20,
+                    'sort' => 49,
                     'status' => 1,
                     'is_show' => 1,
                     'children' => [
@@ -775,7 +788,20 @@ return
                     'router_path' => 'authorize',
                     'view_path' => 'app/authorize',
                     'methods' => 'get',
-                    'sort' => 0,
+                    'sort' => 30,
+                    'status' => 1,
+                    'is_show' => 1
+                ],
+                [
+                    'menu_name' => '开发者key',
+                    'menu_key' => 'developer_token',
+                    'menu_type' => 1,
+                    'icon' => 'iconfont-iconshouquanxinxi2',
+                    'api_url' => 'sys/config/developer_token',
+                    'router_path' => 'developer_token',
+                    'view_path' => 'setting/developer_token',
+                    'methods' => 'get',
+                    'sort' => 20,
                     'status' => 1,
                     'is_show' => 1
                 ]

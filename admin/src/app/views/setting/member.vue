@@ -35,13 +35,13 @@ import { FormInstance, FormRules } from 'element-plus'
 
 const loading = ref(true)
 const ruleFormRef = ref<FormInstance>({})
-let memberNo = ref('');
+const memberNo = ref('')
 
-//验证会员编号
+// 验证会员编号
 const prefixVerify = (rule: any, value: any, callback: any) => {
     if (value && !/^[a-zA-Z]*$/g.test(value)) {
         callback(new Error(t('prefixHint')))
-    }else {
+    } else {
         callback()
     }
 }
@@ -49,17 +49,20 @@ const prefixVerify = (rule: any, value: any, callback: any) => {
 // 表单验证规则
 const formRules = reactive<FormRules>({
     prefix: [
-         { validator: prefixVerify, trigger: 'blur' }
+        { validator: prefixVerify, trigger: 'blur' }
     ],
     length: [
         { required: true, message: t('lengthPlaceholder'), trigger: 'blur' },
-        { validator: (rule: any, value: any, callback: any) => {
-            if (parseInt(value) > 30 || parseInt(value) - formData.prefix.length < 4) {
-                callback(new Error(t('lengthHint')))
-            }else {
-                callback()
-            }
-        }, trigger: 'blur' }
+        {
+            validator: (rule: any, value: any, callback: any) => {
+                if (parseInt(value) > 30 || parseInt(value) - formData.prefix.length < 4) {
+                    callback(new Error(t('lengthHint')))
+                } else {
+                    callback()
+                }
+            },
+            trigger: 'blur'
+        }
     ]
 })
 
@@ -73,7 +76,7 @@ const setFormData = async () => {
     Object.keys(formData).forEach((key: string) => {
         if (data[key] != undefined) formData[key] = data[key]
     })
-    getMemberNo(ruleFormRef.value);
+    getMemberNo(ruleFormRef.value)
     loading.value = false
 }
 setFormData()
@@ -81,10 +84,10 @@ setFormData()
 const getMemberNo = async (formEl: FormInstance | undefined) => {
     await formEl.validate((valid) => {
         if (valid) {
-            let no = '';
-            let length = formData.length - formData.prefix.length - 1;
-            for(let i = 1; i <= length;i++) no += '0';
-            memberNo.value = formData.prefix + no + '1';
+            let no = ''
+            const length = formData.length - formData.prefix.length - 1
+            for (let i = 1; i <= length; i++) no += '0'
+            memberNo.value = formData.prefix + no + '1'
         }
     })
 }
@@ -95,7 +98,7 @@ const onSave = async (formEl: FormInstance | undefined) => {
         if (valid) {
             setMemberConfig(formData).then(() => {
                 loading.value = false
-                getMemberNo();
+                getMemberNo()
             }).catch(() => {
                 loading.value = false
             })

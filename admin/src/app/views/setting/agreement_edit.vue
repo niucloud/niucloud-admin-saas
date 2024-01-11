@@ -37,9 +37,9 @@ import type { FormInstance } from 'element-plus'
 import { getAgreementInfo, editAgreement } from '@/app/api/sys'
 import { useRoute, useRouter } from 'vue-router'
 import useTabbarStore from '@/stores/modules/tabbar'
-import useAppStore from '@/stores/modules/app'
+// import useAppStore from '@/stores/modules/app'
 
-const appStore = useAppStore()
+// const appStore = useAppStore()
 const route = useRoute()
 const router = useRouter()
 const agreement_key: string = route.query.key || ''
@@ -65,10 +65,9 @@ const setFormData = async (agreement_key: string = '') => {
     Object.keys(formData).forEach((key: string) => {
         if (data[key] != undefined) formData[key] = data[key]
     })
-    loading.value = false;
+    loading.value = false
 }
 if (agreement_key) setFormData(agreement_key)
-
 
 const formRef = ref<FormInstance>()
 
@@ -87,10 +86,10 @@ const onSave = async (formEl: FormInstance | undefined) => {
         if (valid) {
             loading.value = true
             const data = formData
-            data.key = formData.agreement_key;
+            data.key = formData.agreement_key
             editAgreement(data).then(res => {
                 loading.value = false
-                back();
+                back()
             }).catch(() => {
                 loading.value = false
             })

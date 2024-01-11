@@ -56,30 +56,27 @@ import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getLogList } from '@/app/api/site'
 import UserLogDetail from '@/app/views/auth/components/user-log-detail.vue'
-import { useRoute } from 'vue-router'
 import { FormInstance } from 'element-plus'
 
-const route = useRoute()
-const pageName = route.meta.title;
-
-let sysUserLogTableData = reactive({
+const sysUserLogTableData = reactive({
     page: 1,
     limit: 10,
     total: 0,
     loading: true,
     data: [],
-    searchParam:{
-      ip:"",
-      username:"",
+    searchParam: {
+        ip: '',
+        username: '',
+        url: ''
     }
 })
 
 const searchFormRef = ref<FormInstance>()
-const resetForm = (formEl: FormInstance | undefined)=>{
+const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
 
-    formEl.resetFields();
-    loadSysUserLogList();
+    formEl.resetFields()
+    loadSysUserLogList()
 }
 /**
  * 获取管理员操作记录表列表
@@ -91,7 +88,7 @@ const loadSysUserLogList = (page: number = 1) => {
     getLogList({
         page: sysUserLogTableData.page,
         limit: sysUserLogTableData.limit,
-         ...sysUserLogTableData.searchParam
+        ...sysUserLogTableData.searchParam
     }).then(res => {
         sysUserLogTableData.loading = false
         sysUserLogTableData.data = res.data.data
@@ -106,7 +103,7 @@ const userLogDetailDialog: Record<string, any> | null = ref(null)
  * 查看详情
  * @param data
  */
- const detailEvent = (data: any) => {
+const detailEvent = (data: any) => {
     userLogDetailDialog.value.setFormData(data)
     userLogDetailDialog.value.showDialog = true
 }

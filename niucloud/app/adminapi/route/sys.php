@@ -100,6 +100,12 @@ Route::group('sys', function () {
     Route::get('config/login', 'login.Config/getConfig');
     //登录注册设置
     Route::put('config/login', 'login.Config/setConfig');
+
+    // 开发者key
+    Route::put('config/developer_token', 'sys.Config/setDeveloperToken');
+    // 开发者key
+    Route::get('config/developer_token', 'sys.Config/getDeveloperToken');
+
     /***************************************************** 图片上传 ****************************************************/
     //附件图片上传
     Route::post('image', 'upload.Upload/image');
@@ -147,8 +153,6 @@ Route::group('sys', function () {
     Route::get('agreement/:key', 'sys.Agreement/info');
     //短信配置修改
     Route::put('agreement/:key', 'sys.Agreement/edit');
-    // 刷新菜单
-    Route::put('menu/refresh', 'sys.Menu/refreshMenu');
     /***************************************************** 地区管理 ****************************************************/
     //通过pid获取列表
     Route::get('area/list_by_pid/:pid', 'sys.Area/listByPid');

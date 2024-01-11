@@ -31,7 +31,7 @@ import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
 import { addDict, editDict, getDictInfo } from '@/app/api/dict'
 
-let showDialog = ref(false)
+const showDialog = ref(false)
 const loading = ref(false)
 
 /**
@@ -41,7 +41,7 @@ const initialFormData = {
     id: '',
     name: '',
     key: '',
-    memo: '',
+    memo: ''
 
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
@@ -52,13 +52,13 @@ const formRef = ref<FormInstance>()
 const formRules = computed(() => {
     return {
         name: [
-            {required: true, message: t('namePlaceholder'), trigger: 'blur'}
+            { required: true, message: t('namePlaceholder'), trigger: 'blur' }
         ],
         key: [
-            {required: true, message: t('keyPlaceholder'), trigger: 'blur'}
+            { required: true, message: t('keyPlaceholder'), trigger: 'blur' }
         ],
         data: [
-            {required: true, message: t('dataPlaceholder'), trigger: 'blur'}
+            { required: true, message: t('dataPlaceholder'), trigger: 'blur' }
         ]
     }
 })
@@ -71,19 +71,19 @@ const emit = defineEmits(['complete'])
  */
 const confirm = async (formEl: FormInstance | undefined) => {
     if (loading.value || !formEl) return
-    let save = formData.id ? editDict : addDict
+    const save = formData.id ? editDict : addDict
 
     await formEl.validate(async (valid) => {
         if (valid) {
             loading.value = true
 
-            let data = formData
+            const data = formData
 
             save(data).then(res => {
                 loading.value = false
                 showDialog.value = false
                 emit('complete')
-            }).catch(err => {
+            }).catch(() => {
                 loading.value = false
             })
         }
@@ -93,11 +93,13 @@ const confirm = async (formEl: FormInstance | undefined) => {
 const setFormData = async (row: any = null) => {
     Object.assign(formData, initialFormData)
     loading.value = true
-    if(row){
+    if (row) {
         const data = await (await getDictInfo(row.id)).data
-        if (data) Object.keys(formData).forEach((key: string) => {
-            if (data[key] != undefined) formData[key] = data[key]
-        })
+        if (data) {
+            Object.keys(formData).forEach((key: string) => {
+                if (data[key] != undefined) formData[key] = data[key]
+            })
+        }
     }
     loading.value = false
 }

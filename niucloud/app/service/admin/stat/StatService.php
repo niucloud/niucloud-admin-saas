@@ -108,7 +108,7 @@ class StatService extends BaseAdminService
         $woman_count = (new CoreMemberService())->getCount(['sex' => '2']);
         $data['member_stat']['value'] = [$man_count, $woman_count, (int)($data['today_data']['total_member_count'] - $man_count - $woman_count)];
 
-        $site_group_list = (new SiteGroupService())->getAll();
+        $site_group_list = (new SiteGroupService())->getAll([]);
 
         if(!empty($site_group_list)){
             foreach($site_group_list as $v){

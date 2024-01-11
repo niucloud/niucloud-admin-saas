@@ -92,9 +92,9 @@ class WebEditLangGenerator extends BaseGenerator
         }
         if(!empty($this->addonName))
         {
-            $dir = $this->outDir . '/addon/'.$this->addonName.'/admin/lang/zh-cn/';
+            $dir = $this->outDir . DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR;
         }else{
-            $dir = $this->outDir . 'admin/src/app/lang/zh-cn/';
+            $dir = $this->outDir . 'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR;
         }
         $this->checkDir($dir);
         return $dir;
@@ -112,9 +112,9 @@ class WebEditLangGenerator extends BaseGenerator
         }
         if(!empty($this->addonName))
         {
-            $dir = $this->outDir . '/addon/'.$this->addonName.'/admin/lang/zh-cn/';
+            $dir = $this->outDir . DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR;
         }else{
-            $dir = $this->outDir . 'admin/src/app/lang/zh-cn/';
+            $dir = $this->outDir . 'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR;
         }
         $this->checkDir($dir);
         return $dir;
@@ -132,9 +132,9 @@ class WebEditLangGenerator extends BaseGenerator
 
         if(!empty($this->addonName))
         {
-            $dir = $this->rootDir . '/admin/src/'.$this->addonName.'/lang/zh-cn/';
+            $dir = $this->rootDir . DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR;
         }else{
-            $dir = $this->rootDir . '/admin/src/app/lang/zh-cn/';
+            $dir = $this->rootDir . DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR;
         }
 
         $this->checkDir($dir);
@@ -145,7 +145,7 @@ class WebEditLangGenerator extends BaseGenerator
      * 获取文件生成到插件中
      */
     public function getAddonObjectOutDir() {
-        $dir = $this->rootDir . '/niucloud/addon/'.$this->addonName.'/admin/lang/zh-cn/';
+        $dir = $this->rootDir . DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'lang'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR;
         $this->checkDir($dir);
         return $dir;
     }

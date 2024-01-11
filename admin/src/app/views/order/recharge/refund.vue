@@ -45,7 +45,7 @@
 					<el-form-item :label="t('refundStatus')" prop="status">
 						<el-select v-model="refundTableData.searchParam.status" clearable class="input-width">
 							<el-option :label="t('selectPlaceholder')" value="" />
-							<el-option :label="item.name" :value="key" v-for="(item, key) in refundList" />
+							<el-option :label="item.name" :value="key" v-for="(item, key) in refundList" :key="key" />
 						</el-select>
 					</el-form-item>
 					<el-form-item :label="t('refundTime')" prop="create_time">
@@ -152,85 +152,85 @@ const route = useRoute()
 const pageName = route.meta.title
 const searchFormRef = ref<FormInstance>()
 const refundTableData = reactive({
-	page: 1,
-	limit: 10,
-	total: 0,
-	loading: true,
-	data: [],
-	searchParam: {
-		refund_no: '',
-		// member_id,
-		create_time: [],
-		status: '',
-		keywords: '',
-		order_no: ''
-	}
+    page: 1,
+    limit: 10,
+    total: 0,
+    loading: true,
+    data: [],
+    searchParam: {
+        refund_no: '',
+        // member_id,
+        create_time: [],
+        status: '',
+        keywords: '',
+        order_no: ''
+    }
 })
 
 const resetForm = (formEl: FormInstance | undefined) => {
-	if (!formEl) return
+    if (!formEl) return
 
-	formEl.resetFields()
-	loadRefundList()
+    formEl.resetFields()
+    loadRefundList()
 }
 /**
  * 获取退款列表
  */
 const loadRefundList = (page: number = 1) => {
-	refundTableData.loading = true
-	refundTableData.page = page
+    refundTableData.loading = true
+    refundTableData.page = page
 
-	getRechargeRefund({
-		page: refundTableData.page,
-		limit: refundTableData.limit,
-		...refundTableData.searchParam
-	}).then(res => {
-		refundTableData.loading = false
-		refundTableData.data = res.data.data
-		refundTableData.total = res.data.total
-	}).catch(() => {
-		refundTableData.loading = false
-	})
+    getRechargeRefund({
+        page: refundTableData.page,
+        limit: refundTableData.limit,
+        ...refundTableData.searchParam
+    }).then(res => {
+        refundTableData.loading = false
+        refundTableData.data = res.data.data
+        refundTableData.total = res.data.total
+    }).catch(() => {
+        refundTableData.loading = false
+    })
 }
 loadRefundList()
 
 const refundList = ref([])
 const checkRefundList = () => {
-	getRechargeRefundStatus().then(res => {
-		refundList.value = res.data
-	})
+    getRechargeRefundStatus().then(res => {
+        refundList.value = res.data
+    })
 }
 checkRefundList()
 
 const refundStat = reactive({
-	refund_all_money: 0.00,
-	refund_have_money: 0.00,
-	refund_Success_money: 0.00,
-	refund_fail_moey: 0.00
+    refund_all_money: 0.00,
+    refund_have_money: 0.00,
+    refund_Success_money: 0.00,
+    refund_fail_moey: 0.00
 })
 const checkRefundStat = () => {
-	getRechargeRefundStat().then(res => {
-		refundStat.refund_all_money = res.data.all.money
-		refundStat.refund_have_money = res.data.have.money
-		refundStat.refund_Success_money = res.data['3'].money
-		refundStat.refund_fail_moey = res.data['-1'].money
-	})
+    getRechargeRefundStat().then(res => {
+        refundStat.refund_all_money = res.data.all.money
+        refundStat.refund_have_money = res.data.have.money
+        refundStat.refund_Success_money = res.data['3'].money
+        refundStat.refund_fail_moey = res.data['-1'].money
+    })
 }
 checkRefundStat()
 
 const refundInfoShowDialog = ref(false)
 const refundInfo = ref({})
 
-const infoEvent = (info) => {
-	refundInfo.value = info
-	refundInfoShowDialog.value = true
+const infoEvent = (info:any) => {
+    refundInfo.value = info
+    refundInfoShowDialog.value = true
 }
 
 /**
  * 会员详情
  */
 const toMember = (memberId: number) => {
-	router.push(`/member/detail?id=${memberId}`)
+    router.push(`/member/detail?id=${memberId}`)
 }
 
 </script>

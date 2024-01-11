@@ -1,16 +1,16 @@
 <template>
-	<text class="text-[20px]">{{hello_world_text}}</text>
+	<text class="text-[20px]">{{helloWorld}}</text>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { getHelloWorld } from '@/{key}/api/hello_world';
-import { onLoad } from '@dcloudio/uni-app';
-let hello_world_text = ref('');
+import { getHelloWorld } from '@/addon/{key}/api/hello_world'
+import { onLoad } from '@dcloudio/uni-app'
+let helloWorld = ref('');
 onLoad(() => {
     getHelloWorld().then((res) => {
-        hello_world_text.value = res.data;
-    });
+        helloWorld.value = res.data
+    })
 })
 </script>
 <style lang="scss" scoped>

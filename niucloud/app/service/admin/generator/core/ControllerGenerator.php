@@ -39,7 +39,8 @@ class ControllerGenerator extends BaseGenerator
             '{VALIDATE}',
             '{ADD_FILED_NOTE}',
             '{EDIT_FILED_NOTE}',
-            '{SEARCH_PARAMS}'
+            '{SEARCH_PARAMS}',
+            '{WITH_CONTROLLER}'
         ];
 
         $new = [
@@ -55,7 +56,8 @@ class ControllerGenerator extends BaseGenerator
             $this->getValidate(),
             $this->getAddField(),
             $this->getEditField(),
-            $this->getSearchParams()
+            $this->getSearchParams(),
+            $this->getWithController()
         ];
 
         $vmPath = $this->getvmPath('controller');
@@ -245,9 +247,9 @@ class ControllerGenerator extends BaseGenerator
      */
     public function getModuleOutDir()
     {
-        $dir = $this->basePath .'/adminapi/controller/';
+        $dir = $this->basePath .DIRECTORY_SEPARATOR.'adminapi'.DIRECTORY_SEPARATOR.'controller'.DIRECTORY_SEPARATOR;
         if (!empty($this->moduleName)) {
-            $dir .= $this->moduleName . '/';
+            $dir .= $this->moduleName . DIRECTORY_SEPARATOR;
             $this->checkDir($dir);
         }
         return $dir;
@@ -262,14 +264,14 @@ class ControllerGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = $this->outDir . '/addon/'.$this->addonName.'/app/adminapi/controller/';
+            $dir = $this->outDir .DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'adminapi'.DIRECTORY_SEPARATOR.'controller'.DIRECTORY_SEPARATOR;
         }else{
-            $dir = $this->outDir . '/niucloud/app/adminapi/controller/';
+            $dir = $this->outDir . DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'adminapi'.DIRECTORY_SEPARATOR.'controller'.DIRECTORY_SEPARATOR;
         }
 
         $this->checkDir($dir);
         if (!empty($this->moduleName)) {
-            $dir .= $this->moduleName . '/';
+            $dir .= $this->moduleName . DIRECTORY_SEPARATOR;
             $this->checkDir($dir);
         }
         return $dir;
@@ -281,16 +283,17 @@ class ControllerGenerator extends BaseGenerator
      */
     public function getObjectOutDir()
     {
+
         if(!empty($this->addonName))
         {
-            $dir = $this->rootDir . '/niucloud/addon/'.$this->addonName.'/app/adminapi/controller/';
+            $dir = $this->rootDir . DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'adminapi'.DIRECTORY_SEPARATOR.'controller'.DIRECTORY_SEPARATOR;
         }else{
-            $dir = $this->rootDir . '/niucloud/app/adminapi/controller/';
+            $dir = $this->rootDir . DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'adminapi'.DIRECTORY_SEPARATOR.'controller'.DIRECTORY_SEPARATOR;
         }
 
         $this->checkDir($dir);
         if (!empty($this->moduleName)) {
-            $dir .= $this->moduleName . '/';
+            $dir .= $this->moduleName . DIRECTORY_SEPARATOR;
             $this->checkDir($dir);
         }
 
@@ -335,5 +338,31 @@ class ControllerGenerator extends BaseGenerator
         }
     }
 
+    /**
+     * 增加关联控制器方法
+     * @return string
+     */
+    public function getWithController()
+    {
+        $with = [];
+        foreach ($this->tableColumn as $column) {
+            if (!empty($column['model'])) {
+                $str = strripos($column['model'],'\\');
+                $with[] = Str::camel(substr($column['model'],$str+1));
+            }
+
+        }
+        $uCaseClassName =  $this->getUCaseClassName();
+        $content = '';
+        if(!empty($with))
+        {
+            $with = array_unique($with);
+            foreach ($with as $value)
+            {
+               $content .= PHP_EOL.'    public function get'.Str::studly($value).'All(){'.PHP_EOL.'         return success(( new '.$uCaseClassName.'Service())->get'.Str::studly($value).'All());'.PHP_EOL.'    }'.PHP_EOL;
+            }
+        }
+        return $content;
+    }
 
 }

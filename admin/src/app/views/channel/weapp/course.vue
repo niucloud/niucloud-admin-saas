@@ -68,7 +68,7 @@
 
 <script lang="ts" setup>
 import { t } from '@/lang'
-import { img } from '@/utils/common'
+// import { img } from '@/utils/common'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -76,7 +76,7 @@ const router = useRouter()
 const pageName = route.meta.title
 
 const linkEvent = () => {
-	window.open("https://mp.weixin.qq.com/", "_blank")
+    window.open('https://mp.weixin.qq.com/', '_blank')
 }
 
 </script>

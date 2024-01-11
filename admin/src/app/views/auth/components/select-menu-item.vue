@@ -4,7 +4,7 @@
             <span v-html="`${menuLevel}${prop.menu.menu_name}`"></span>
         </el-option>
         <template v-if="prop.menu.children">
-            <select-menu-item :menu="item" v-for="item in prop.menu.children" :level="prop.level + 1" />
+            <select-menu-item :menu="item" v-for="(item,index) in prop.menu.children" :level="prop.level + 1"  :key="index" />
         </template>
     </template>
 </template>
@@ -12,7 +12,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 
-const prop = defineProps({
+const prop:any = defineProps({
     menu: Object,
     level: {
         type: Number,

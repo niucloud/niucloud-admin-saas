@@ -32,25 +32,24 @@ import { addGenerateTable, generateTable } from '@/app/api/tools'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-let showDialog = ref(false)
+const showDialog = ref(false)
 const search = ref('')
-let tableTableData = reactive({
+const tableTableData = reactive({
     loading: true,
     data: [],
     searchParam: {
-        table_name: "",
-        table_content: ""
+        table_name: '',
+        table_content: ''
     }
 })
 
 const filterTableData = computed(() =>
     tableTableData.data.filter(
-        (data) =>
+        (data:any) =>
             !search.value ||
             data.Name.toLowerCase().includes(search.value.toLowerCase()) || data.Comment.toLowerCase().includes(search.value.toLowerCase())
     )
 )
-
 
 /**
  * 获取代码生成列表
@@ -67,25 +66,25 @@ const loadTableList = () => {
 }
 loadTableList()
 
-const emit = defineEmits(['complete'])
+// const emit = defineEmits(['complete'])
 /**
  * 确认
  * @param formEl
  */
 const confirm = (row: any) => {
-    let name: string = row.Name;
+    const name: string = row.Name
     tableTableData.loading = true
     addGenerateTable({ 'table_name': name }).then(res => {
         tableTableData.loading = false
         showDialog.value = false
-        router.push({path:'/tools/code/edit',query:{id:res.data.id}})
-    }).catch(err => {
+        router.push({ path: '/tools/code/edit', query: { id: res.data.id } })
+    }).catch(() => {
         tableTableData.loading = false
     })
 }
 
 const setFormData = async (row: any = null) => {
-    loadTableList();
+    loadTableList()
 }
 
 defineExpose({

@@ -52,11 +52,11 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getPayRefundPages } from '@/app/api/pay'
 import { useRouter, useRoute } from 'vue-router'
-
+import type { FormInstance } from 'element-plus'
 const route = useRoute()
 const router = useRouter()
 const pageName = route.meta.title
@@ -76,7 +76,7 @@ const payRefundTable = reactive({
 const searchFormRef = ref<FormInstance>()
 
 // 选中数据
-const selectData = ref<any[]>([])
+// const selectData = ref<any[]>([])
 
 /**
  * 获取商品标签列表
@@ -99,7 +99,7 @@ const loadPayRefundList = (page: number = 1) => {
 }
 loadPayRefundList()
 
-const infoEvent = (data) => {
+const infoEvent = (data:any) => {
     router.push('/finance/refund/detail?refund_no=' + data.refund_no)
 }
 

@@ -28,13 +28,13 @@
 </template>
 
 <script lang="ts" setup>
-    import {t} from '@/lang'
-    import useDiyStore from '@/stores/modules/diy'
+import { t } from '@/lang'
+import useDiyStore from '@/stores/modules/diy'
 
-    const diyStore = useDiyStore()
-    diyStore.editComponent.ignore = []; // 忽略公共属性
+const diyStore = useDiyStore()
+diyStore.editComponent.ignore = [] // 忽略公共属性
 
-    defineExpose({})
+defineExpose({})
 
 </script>
 

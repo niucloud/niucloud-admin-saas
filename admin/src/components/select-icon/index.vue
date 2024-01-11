@@ -43,90 +43,90 @@
 </template>
 
 <script lang="ts" setup>
-    import {computed, reactive, watch, toRaw} from 'vue'
-    import {t} from '@/lang'
+import { computed, reactive, watch, toRaw } from 'vue'
+import { t } from '@/lang'
 
-    const prop = defineProps({
-        modelValue: {
-            type: String,
-            default: ''
-        },
-        width: {
-            type: String,
-            default: '100px'
-        },
-        height: {
-            type: String,
-            default: '100px'
-        },
-        iconText: {
-            type: String
-        },
-        limit: {
-            type: Number,
-            default: 1
-        }
-    })
-
-    const emit = defineEmits(['update:modelValue', 'change'])
-
-    const value = computed({
-        get() {
-            return prop.modelValue
-        },
-        set(value) {
-            emit('update:modelValue', value)
-        }
-    })
-
-    const icons: Record<string, any> = reactive({
-        data: []
-    })
-
-    const setValue = () => {
-        value.value = toRaw(icons.data).toString()
+const prop = defineProps({
+    modelValue: {
+        type: String,
+        default: ''
+    },
+    width: {
+        type: String,
+        default: '100px'
+    },
+    height: {
+        type: String,
+        default: '100px'
+    },
+    iconText: {
+        type: String
+    },
+    limit: {
+        type: Number,
+        default: 1
     }
+})
 
-    watch(() => value.value, () => {
-        icons.data = [
-            ...value.value.split(',').filter((item: string) => {
-                return item
-            })
-        ]
-        setValue()
-    }, {immediate: true})
+const emit = defineEmits(['update:modelValue', 'change'])
 
-    const style = computed(() => {
-        return {
-            width: prop.width,
-            height: prop.height
-        }
-    })
+const value = computed({
+    get () {
+        return prop.modelValue
+    },
+    set (value) {
+        emit('update:modelValue', value)
+    }
+})
 
-    /**
+const icons: Record<string, any> = reactive({
+    data: []
+})
+
+const setValue = () => {
+    value.value = toRaw(icons.data).toString()
+}
+
+watch(() => value.value, () => {
+    icons.data = [
+        ...value.value.split(',').filter((item: string) => {
+            return item
+        })
+    ]
+    setValue()
+}, { immediate: true })
+
+const style = computed(() => {
+    return {
+        width: prop.width,
+        height: prop.height
+    }
+})
+
+/**
      * 选择图标
      */
-    const confirmSelect = (data: Record<string, any>) => {
-        if (prop.limit == 1) {
-            icons.data.splice(0, 1)
-            data && icons.data.push(data.url)
-        } else {
-            data.forEach((item: any) => {
-                if (icons.data.length < prop.limit) icons.data.push(item.url)
-            })
-        }
-        setValue()
-        emit('change', value.value)
+const confirmSelect = (data: Record<string, any>) => {
+    if (prop.limit == 1) {
+        icons.data.splice(0, 1)
+        data && icons.data.push(data.url)
+    } else {
+        data.forEach((item: any) => {
+            if (icons.data.length < prop.limit) icons.data.push(item.url)
+        })
     }
+    setValue()
+    emit('change', value.value)
+}
 
-    /**
+/**
      * 删除图标
      * @param index
      */
-    const removeIcon = (index: number = 0) => {
-        icons.data.splice(index, 1)
-        setValue()
-    }
+const removeIcon = (index: number = 0) => {
+    icons.data.splice(index, 1)
+    setValue()
+}
 
 </script>
 

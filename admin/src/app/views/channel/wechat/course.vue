@@ -60,10 +60,9 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getWechatConfig } from '@/app/api/wechat'
-import { img } from '@/utils/common'
 import { useRouter, useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -71,26 +70,26 @@ const pageName = route.meta.title
 const router = useRouter()
 const loading = ref(true)
 const formData = reactive<Record<string, string>>({
-	wechat_name: '',
-	wechat_original: '',
-	app_id: '',
-	app_secret: '',
-	qr_code: '',
-	token: '',
-	encoding_aes_key: '',
-	encryption_type: 'not_encrypt'
+    wechat_name: '',
+    wechat_original: '',
+    app_id: '',
+    app_secret: '',
+    qr_code: '',
+    token: '',
+    encoding_aes_key: '',
+    encryption_type: 'not_encrypt'
 })
 
 /**
  * 获取微信配置
  */
 getWechatConfig().then(res => {
-	Object.assign(formData, res.data)
-	loading.value = false
+    Object.assign(formData, res.data)
+    loading.value = false
 })
 
 const linkEvent = () => {
-	window.open('https://mp.weixin.qq.com/', '_blank')
+    window.open('https://mp.weixin.qq.com/', '_blank')
 }
 
 </script>

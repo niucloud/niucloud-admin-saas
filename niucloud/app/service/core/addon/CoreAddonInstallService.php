@@ -102,9 +102,9 @@ class CoreAddonInstallService extends CoreAddonBaseService
         $from_resource_dir = $this->install_addon_path . 'resource' . DIRECTORY_SEPARATOR;
 
         // 放入的文件
-        $to_admin_dir = $this->root_path . 'admin' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
+        $to_admin_dir = $this->root_path . 'admin' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'addon'. DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
         $to_web_dir = $this->root_path . 'web' . DIRECTORY_SEPARATOR;
-        $to_wap_dir = $this->root_path . 'uni-app' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
+        $to_wap_dir = $this->root_path . 'uni-app' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'addon'. DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
 
         $to_resource_dir = public_path() . 'addon' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
 
@@ -281,9 +281,9 @@ class CoreAddonInstallService extends CoreAddonBaseService
         $from_resource_dir = $this->install_addon_path . 'resource' . DIRECTORY_SEPARATOR;
 
         // 放入的文件
-        $to_admin_dir = $this->root_path . 'admin' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
+        $to_admin_dir = $this->root_path . 'admin' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'addon' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
         $to_web_dir = $this->root_path . 'web' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
-        $to_wap_dir = $this->root_path . 'uni-app' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
+        $to_wap_dir = $this->root_path . 'uni-app' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'addon' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
         $to_resource_dir = public_path() . 'addon' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
 
         // 安装admin管理端
@@ -574,9 +574,9 @@ class CoreAddonInstallService extends CoreAddonBaseService
     public function uninstallDir()
     {
         // 将要删除的根目录
-        $to_admin_dir = $this->root_path . 'admin' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
+        $to_admin_dir = $this->root_path . 'admin' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'addon' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
         $to_web_dir = $this->root_path . 'web' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
-        $to_wap_dir = $this->root_path . 'uni-app' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
+        $to_wap_dir = $this->root_path . 'uni-app' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'addon' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
         $to_resource_dir = public_path() . 'addon' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
 
         // 卸载admin管理端
@@ -758,33 +758,6 @@ class CoreAddonInstallService extends CoreAddonBaseService
      * @return void
      */
     public function handleBuildFile() {
-        // 处理admin端
-        $admin_file = public_path() . DIRECTORY_SEPARATOR . 'admin' . DIRECTORY_SEPARATOR . 'index.html';
-        if (file_exists($admin_file)) {
-            $content = file_get_contents($admin_file);
-            $content = preg_replace('/\.\/assets/', '/admin/assets', $content);
-            file_put_contents($admin_file, $content);
-        }
-
-//        $web_file = public_path() . 'test' . DIRECTORY_SEPARATOR . 'web' . DIRECTORY_SEPARATOR . 'index.html';
-//        if (file_exists($web_file)) {
-//        }
-
-        // 处理wap端
-        $wap_file_dir = public_path() . 'wap' . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR;
-        $wap_files = getFileMap($wap_file_dir);
-        if (!empty($wap_files)) {
-            foreach ($wap_files as $key => $file) {
-                if (preg_match("/^(index-)(\w{8})(.js)$/", $file)) {
-                    $content = 'const match = location.href.match(/\/wap\/(\d*)\//);';
-                    $content .= file_get_contents($wap_file_dir . $file);
-
-                    $replace = 'router:{mode:"history",base: match ? `/wap/${match[1]}/` : "/wap/",assets:"assets",routerBase: match ? `/wap/${match[1]}/` : "/wap/"},darkmode';
-                    $content = preg_replace('/router:{(.*?)},darkmode/s', $replace, $content);
-                    file_put_contents($wap_file_dir . $file, $content);
-                    break;
-                }
-            }
-        }
+        return true;
     }
 }

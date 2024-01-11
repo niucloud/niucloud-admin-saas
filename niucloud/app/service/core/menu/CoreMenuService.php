@@ -12,6 +12,7 @@
 namespace app\service\core\menu;
 
 use app\dict\sys\AppTypeDict;
+use app\dict\sys\MenuDict;
 use app\model\addon\Addon;
 use app\model\sys\SysMenu;
 use app\service\admin\sys\MenuService;
@@ -54,9 +55,13 @@ class CoreMenuService extends BaseCoreService
      * @return true
      * @throws DbException
      */
-    public function deleteByAddon(string $addon)
+    public function deleteByAddon(string $addon, bool $is_all = true)
     {
-        Db::name("sys_menu")->where([['addon', '=', $addon]])->delete();
+        $where = [['addon', '=', $addon]];
+        if(!$is_all){
+            $where[] = ['source', '=', MenuDict::SYSTEM];
+        }
+        Db::name("sys_menu")->where($where)->delete();
         return true;
     }
 
@@ -85,10 +90,13 @@ class CoreMenuService extends BaseCoreService
         $addon_admin_tree = $addon_loader->load(["addon" => $addon, "app_type" => "admin"]);
         $addon_site_tree = $addon_loader->load(["addon" => $addon, "app_type" => "site"]);
 
+        if (isset($addon_admin_tree['delete'])) unset($addon_admin_tree['delete']);
+        if (isset($addon_site_tree['delete'])) unset($addon_site_tree['delete']);
+
         if (!empty($addon_site_tree)) {
             $admin_menu = $this->loadMenu($addon_admin_tree, "admin", $addon);
             $site_menu = $this->loadMenu($addon_site_tree, "site", $addon);
-            $this->deleteByAddon($addon);
+            $this->deleteByAddon($addon, false);
             if(!empty($site_menu))
             {
                 $this->install(array_merge($admin_menu, $site_menu));

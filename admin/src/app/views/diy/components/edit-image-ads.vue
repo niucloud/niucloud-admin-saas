@@ -44,112 +44,112 @@
 </template>
 
 <script lang="ts" setup>
-    import {ref, watch, onMounted, nextTick} from 'vue'
-    import {t} from '@/lang'
-    import Sortable from 'sortablejs'
-    import {img} from '@/utils/common'
-    import {range} from 'lodash-es'
-    import useDiyStore from '@/stores/modules/diy'
+import { ref, watch, onMounted, nextTick } from 'vue'
+import { t } from '@/lang'
+import Sortable from 'sortablejs'
+import { img } from '@/utils/common'
+import { range } from 'lodash-es'
+import useDiyStore from '@/stores/modules/diy'
 
-    const diyStore = useDiyStore()
-    diyStore.editComponent.ignore = []; // 忽略公共属性
+const diyStore = useDiyStore()
+diyStore.editComponent.ignore = [] // 忽略公共属性
 
-    // 组件验证
-    diyStore.editComponent.verify = (index: number) => {
-        var res = {code: true, message: ''};
-        if(diyStore.value[index].imageHeight == 0){
-            res.code = false;
-            res.message = t('imageHeightPlaceholder');
-            return res;
+// 组件验证
+diyStore.editComponent.verify = (index: number) => {
+    const res = { code: true, message: '' }
+    if (diyStore.value[index].imageHeight == 0) {
+        res.code = false
+        res.message = t('imageHeightPlaceholder')
+        return res
+    }
+    if (!/^\d+.?\d{0,2}$/.test(diyStore.value[index].imageHeight)) {
+        res.code = false
+        res.message = t('imageHeightRegNum')
+        return res
+    }
+    diyStore.value[index].list.forEach((item: any) => {
+        if (item.imageUrl === '') {
+            res.code = false
+            res.message = t('imageUrlTip')
+            return res
         }
-        if(!/^\d+.?\d{0,2}$/.test(diyStore.value[index].imageHeight)){
-            res.code = false;
-            res.message = t('imageHeightRegNum');
-            return res;
-        }
-        diyStore.value[index].list.forEach((item: any) => {
-            if (item.imageUrl === '') {
-                res.code = false;
-                res.message = t('imageUrlTip');
-                return res;
+    })
+    return res
+}
+
+diyStore.editComponent.list.forEach((item: any) => {
+    if (!item.id) item.id = diyStore.generateRandom()
+})
+
+watch(
+    () => diyStore.editComponent.list,
+    (newValue, oldValue) => {
+        // 设置图片宽高
+        handleHeight()
+    },
+    { deep: true }
+)
+
+const addImageAd = () => {
+    diyStore.editComponent.list.push({
+        id: diyStore.generateRandom(),
+        imageUrl: '',
+        imgWidth: 0,
+        imgHeight: 0,
+        link: { name: '' }
+    })
+}
+
+const selectImg = (url:string) => {
+    handleHeight(true)
+}
+
+// 处理高度
+const handleHeight = (isCalcHeight:boolean = false)=> {
+    diyStore.editComponent.list.forEach((item: any, index: number) => {
+        const image = new Image()
+        image.src = img(item.imageUrl)
+        image.onload = async () => {
+            item.imgWidth = image.width
+            item.imgHeight = image.height
+            // 计算第一张图片高度
+            if (isCalcHeight && index == 0) {
+                const ratio = item.imgHeight / item.imgWidth
+                item.width = 375
+                item.height = item.width * ratio
+                diyStore.editComponent.imageHeight = parseInt(item.height)
             }
-        });
-        return res;
-    };
-
-    diyStore.editComponent.list.forEach((item: any) => {
-        if (!item.id) item.id = diyStore.generateRandom();
+        }
     })
+}
 
-    watch(
-        () => diyStore.editComponent.list,
-        (newValue, oldValue) => {
-            // 设置图片宽高
-            handleHeight();
-        },
-        {deep: true}
-    )
+const blurImageHeight = () => {
+    diyStore.editComponent.imageHeight = parseInt(diyStore.editComponent.imageHeight)
+}
 
-    const addImageAd = () => {
-        diyStore.editComponent.list.push({
-            id: diyStore.generateRandom(),
-            imageUrl: '',
-            imgWidth: 0,
-            imgHeight: 0,
-            link: {name: ''}
+const imageBoxRef = ref()
+
+onMounted(() => {
+    nextTick(() => {
+        const sortable = Sortable.create(imageBoxRef.value, {
+            group: 'item-wrap',
+            animation: 200,
+            onEnd: event => {
+                const temp = diyStore.editComponent.list[event.oldIndex!]
+                diyStore.editComponent.list.splice(event.oldIndex!, 1)
+                diyStore.editComponent.list.splice(event.newIndex!, 0, temp)
+                sortable.sort(
+                    range(diyStore.editComponent.list.length).map(value => {
+                        return value.toString()
+                    })
+                )
+                handleHeight(true)
+            }
         })
-    }
-
-    const selectImg = (url:string)=> {
-        handleHeight(true);
-    };
-
-    // 处理高度
-    const handleHeight = (isCalcHeight:boolean = false)=> {
-        diyStore.editComponent.list.forEach((item: any, index: number) => {
-            let image = new Image();
-            image.src = img(item.imageUrl);
-            image.onload = async () => {
-                item.imgWidth = image.width;
-                item.imgHeight = image.height;
-                // 计算第一张图片高度
-                if (isCalcHeight && index == 0) {
-                    var ratio = item.imgHeight / item.imgWidth;
-                    item.width = 375;
-                    item.height = item.width * ratio;
-                    diyStore.editComponent.imageHeight = parseInt(item.height);
-                }
-            };
-        });
-    }
-
-    const blurImageHeight = ()=> {
-        diyStore.editComponent.imageHeight = parseInt(diyStore.editComponent.imageHeight);
-    }
-
-    const imageBoxRef = ref()
-
-    onMounted(() => {
-        nextTick(() => {
-            const sortable = Sortable.create(imageBoxRef.value, {
-                group: 'item-wrap',
-                animation: 200,
-                onEnd: event => {
-                    const temp = diyStore.editComponent.list[event.oldIndex!];
-                    diyStore.editComponent.list.splice(event.oldIndex!, 1);
-                    diyStore.editComponent.list.splice(event.newIndex!, 0, temp);
-                    sortable.sort(
-                        range(diyStore.editComponent.list.length).map(value => {
-                            return value.toString();
-                        })
-                    );
-                    handleHeight(true);
-                }
-            })
-        });
     })
+})
 
-    defineExpose({})
+defineExpose({})
 </script>
 
 <style lang="scss" scoped>

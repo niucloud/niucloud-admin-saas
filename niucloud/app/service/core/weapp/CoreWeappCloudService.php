@@ -130,7 +130,7 @@ class CoreWeappCloudService extends CoreCloudBaseService
             foreach ($diff_addon as $addon) {
                 $this->addon = $addon;
 
-                $addon_dir = $dir . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . $addon;
+                $addon_dir = $dir . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'addon' . DIRECTORY_SEPARATOR . $addon;
                 if (is_dir($addon_dir)) del_target_dir($addon_dir, true);
 
                 // 编译 diy-group 自定义组件代码文件

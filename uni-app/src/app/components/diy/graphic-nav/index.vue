@@ -7,8 +7,7 @@
 		<view v-if="diyComponent.layout == 'vertical'" class="graphic-nav">
 			<view class="graphic-nav-item" v-for="(item, index) in diyComponent.list" :key="item.id">
 
-				<app-link :data="item.link" custom-class="flex items-center justify-between  py-[30rpx] px-[32rpx]"
-					:class="[index == 0 ? 'border-t-0':'border-t']">
+				<app-link :data="item.link" :custom-class="['flex items-center justify-between py-3 px-4', index == 0 ? 'border-t-0':'border-t']">
 
 					<view class="graphic-img relative flex items-center w-10 h-10 mr-[20rpx]"
 						v-if="diyComponent.mode != 'text'"

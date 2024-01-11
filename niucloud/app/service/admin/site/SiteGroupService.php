@@ -17,6 +17,7 @@ use app\model\site\SiteGroup;
 use app\model\sys\SysMenu;
 use app\service\admin\sys\MenuService;
 use app\service\core\addon\CoreAddonService;
+use app\service\core\site\CoreSiteService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
 use core\exception\CommonException;
@@ -86,7 +87,7 @@ class SiteGroupService extends BaseAdminService
     public function add(array $data)
     {
         //判断应用是否全部是有效的已安装应用
-        $this->checkAddon(array_merge($data['addon'], [ $data['app'] ] ));
+        $this->checkAddon(array_merge($data['app'], $data['addon']));
         $res = $this->model->create($data);
         return $res->group_id;
     }
@@ -99,11 +100,18 @@ class SiteGroupService extends BaseAdminService
      */
     public function edit(int $group_id, array $data){
         //判断应用是否全部是有效的已安装应用
-        $this->checkAddon($data['addon']);
+        $this->checkAddon(array_merge($data['app'], $data['addon']));
         $this->model->update($data, [['group_id', '=', $group_id]]);
         //删除缓存
         $cache_name = self::$cache_name . $group_id;
         Cache::delete($cache_name);
+
+        $site_list = (new Site())->field('site_id')->where([ ['group_id', '=', $group_id] ])->select()->toArray();
+        if (!empty($site_list)) {
+            foreach ($site_list as $site) {
+                Cache::tag(CoreSiteService::$cache_tag_name . $site['site_id'])->clear();
+            }
+        }
         return true;
     }
 

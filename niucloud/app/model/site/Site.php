@@ -40,7 +40,7 @@ class Site extends BaseModel
      */
     protected $name = 'site';
 
-    protected $json = ['addons'];
+    protected $json = ['addons', 'app'];
 
     /**
      * 状态字段转化
@@ -77,7 +77,7 @@ class Site extends BaseModel
     public function searchAppAttr($query, $value, $data)
     {
         if ($value) {
-            $query->where('app', '=', $value);
+            $query->where('app', 'like', '%"' . $value . '"%');
         }
     }
 
@@ -114,10 +114,6 @@ class Site extends BaseModel
     public function groupName()
     {
         return $this->hasOne(SiteGroup::class, 'group_id', 'group_id')->joinType('left')->withField('group_id, group_name')->bind(['group_name' => 'group_name']);
-    }
-
-    public function addonName() {
-        return $this->hasOne(Addon::class, 'key', 'app')->bind(['app_name' => 'title']);
     }
 
     /**

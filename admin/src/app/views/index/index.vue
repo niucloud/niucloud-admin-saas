@@ -1,3 +1,4 @@
+<!-- eslint-disable no-undef -->
 <template>
     <div class="bg-[#FAFAFA] box-border pb-[77px]">
         <div class="main-container" v-loading="loading">
@@ -164,33 +165,43 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from "vue";
-import useSystemStore from "@/stores/modules/system";
-import { t } from "@/lang";
-import { getStatInfo } from "@/app/api/stat";
-import * as echarts from "echarts";
-import { img } from "@/utils/common";
-import { useRouter } from "vue-router";
-import { useRoute } from "vue-router";
+import { ref, watch } from 'vue'
+import { t } from '@/lang'
+import { getStatInfo } from '@/app/api/stat'
+import * as echarts from 'echarts'
 import useStyleStore from '@/stores/modules/style'
 import { getFrameworkNewVersion } from '@/app/api/module'
+import { useRoute, useRouter } from 'vue-router'
+import { AnyObject } from '@/types/global'
+const loading = ref(true)
 
-const loading = ref(true);
-const visitStat = ref<any>(null);
-const memberStat = ref<any>(null);
+const newSiteStat = ref<any>(null)
+const siteStat = ref<any>(null)
 
-const newSiteStat = ref<any>(null);
-const siteStat = ref<any>(null);
-
-const systemStore = useSystemStore();
 const styleStore = useStyleStore()
-const newVersion = ref(null)
+
+interface NewVersion{
+    last_version: string
+}
+interface StatInfo {
+    today_data: AnyObject,
+    system: AnyObject,
+    version: AnyObject,
+    about: any,
+    site_stat: AnyObject,
+    site_group_stat: AnyObject,
+    app: AnyObject
+}
+
+const newVersion = ref<NewVersion>({
+    last_version: ''
+})
 
 getFrameworkNewVersion().then(({ data }) => {
     newVersion.value = data
 }).catch()
 
-let statInfo = ref({
+const statInfo = ref<StatInfo>({
     today_data: {},
     system: {},
     version: {},
@@ -198,44 +209,44 @@ let statInfo = ref({
     site_stat: {},
     site_group_stat: {},
     app: {}
-});
+})
 const getStatInfoFn = async (id: number = 0) => {
-    statInfo.value = await (await getStatInfo()).data;
-    loading.value = false;
+    statInfo.value = await (await getStatInfo()).data
+    loading.value = false
     setTimeout(() => {
-        drawChart();
-    }, 20);
-};
-getStatInfoFn();
+        drawChart()
+    }, 20)
+}
+getStatInfoFn()
 
 // 绘制折线图
 const drawChart = () => {
-    //新增站点
-    const newSiteStatChart = echarts.init(newSiteStat.value);
+    // 新增站点
+    const newSiteStatChart = echarts.init(newSiteStat.value)
     const newSiteStatOption = ref({
         legend: {},
         xAxis: {
-            data: [],
+            data: []
         },
         yAxis: {},
         tooltip: {
-            trigger: "axis",
+            trigger: 'axis'
         },
         series: [
             {
-                name: t("newSite"),
-                type: "line",
-                data: [],
-            },
-        ],
-    });
-    newSiteStatOption.value.xAxis.data = statInfo.value.site_stat.date;
-    newSiteStatOption.value.series[0].data = statInfo.value.site_stat.value;
-    newSiteStatChart.setOption(newSiteStatOption.value);
+                name: t('newSite'),
+                type: 'line',
+                data: []
+            }
+        ]
+    })
+    newSiteStatOption.value.xAxis.data = statInfo.value.site_stat.date
+    newSiteStatOption.value.series[0].data = statInfo.value.site_stat.value
+    newSiteStatChart.setOption(newSiteStatOption.value)
 
     // 站点分布
-    const siteStatChart = echarts.init(siteStat.value);
-    const siteStatOption = ref({
+    const siteStatChart = echarts.init(siteStat.value)
+    const siteStatOption:AnyObject = ref({
         legend: {
             orient: 'vertical',
             right: 20,
@@ -244,34 +255,40 @@ const drawChart = () => {
         tooltip: {},
         series: [
             {
-                type: "pie",
-                data: [],
-            },
-        ],
-    });
+                type: 'pie',
+                data: []
+            }
+        ]
+    })
 
-    const len = statInfo.value.site_group_stat.type.length;
+    const len = statInfo.value.site_group_stat.type.length
     for (let i = 0; i < len; i++) {
-        let obj = {};
-        obj.name = statInfo.value.site_group_stat.type[i];
-        obj.value = statInfo.value.site_group_stat.value[i];
-        siteStatOption.value.series[0].data.push(obj);
+        const obj:{
+            name: string,
+            value: number
+        } = {
+            name: '',
+            value: 0
+        }
+        obj.name = statInfo.value.site_group_stat.type[i]
+        obj.value = statInfo.value.site_group_stat.value[i]
+        siteStatOption.value.series[0].data.push(obj)
     }
-    siteStatChart.setOption(siteStatOption.value);
-    window.addEventListener("resize", () => {
-        //页面大小变化后Echarts也更改大小
-        newSiteStatChart.resize();
-        siteStatChart.resize();
-    });
-};
+    siteStatChart.setOption(siteStatOption.value)
+    window.addEventListener('resize', () => {
+        // 页面大小变化后Echarts也更改大小
+        newSiteStatChart.resize()
+        siteStatChart.resize()
+    })
+}
 
 const router = useRouter()
 const route = useRoute()
-if(route.path == '/admin/index'){
+if (route.path == '/admin/index') {
     styleStore.changeStyle()
 }
 watch(() => route.path, (newval, oldval) => {
-    if(newval !== '/admin/index'){
+    if (newval !== '/admin/index') {
         styleStore.changeBlack()
     }
 })
@@ -279,19 +296,19 @@ watch(() => route.path, (newval, oldval) => {
 /**
  * 链接跳转
  */
-const toLink = (link) => {
-    router.push(link);
-};
-const toHref = (url:any,id:any) =>{
-    router.push({
-        path:url,
-        query:{id}
-        })
+const toLink = (link:any) => {
+    router.push(link)
 }
-const toApplication = ()=>{
+const toHref = (url:any, id:any) => {
+    router.push({
+        path: url,
+        query: { id }
+    })
+}
+const toApplication = () => {
     window.open('https://www.niucloud.com/app')
 }
-//更新时间
+// 更新时间
 const time = ref('')
 const nowTime = () => {
     const date = new Date()
@@ -301,7 +318,7 @@ const nowTime = () => {
     const hh = checkTime(date.getHours())
     const mm = checkTime(date.getMinutes())
     const ss = checkTime(date.getSeconds())
-    function checkTime (i) {
+    function checkTime (i:any) {
         if (i < 10) {
             return '0' + i
         }

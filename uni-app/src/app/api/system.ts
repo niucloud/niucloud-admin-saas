@@ -107,3 +107,10 @@ export function getAreatree(level: number = 1) {
 export function getAreaByCode(code: number | string) {
     return request.get(`area/code/${code}`)
 }
+
+/**
+ * 获取手机端首页列表
+ */
+export function getWapIndexList(data : AnyObject) {
+    return request.get('wap_index', data)
+}

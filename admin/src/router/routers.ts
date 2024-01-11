@@ -1,3 +1,4 @@
+import { toRaw } from 'vue'
 import { RouteRecordRaw, RouterView } from 'vue-router'
 import Default from '@/layout/index.vue'
 import Decorate from '@/layout/decorate/index.vue'
@@ -143,7 +144,7 @@ export const DECORATE_ROUTER: RouteRecordRaw = {
 }
 
 const modules = import.meta.glob('@/app/views/**/*.vue')
-const addonModules = import.meta.glob('@/**/views/**/*.vue')
+const addonModules = import.meta.glob('@/addon/**/views/**/*.vue')
 
 interface Route {
     menu_name: string,
@@ -179,14 +180,15 @@ const createRoute = function (route: Route, parentRoute: RouteRecordRaw | null =
             show: route.is_show,
             app: route.app_type,
             view: route.view_path,
-            addon: route.addon
+            addon: route.addon,
+            parent_route: parentRoute ? parentRoute.meta : parentRoute
         }
     }
     if (route.menu_type == 0) {
         record.component = parentRoute ? RouterView : () => Promise.resolve(Default)
         if (!route.children) record.component = RouterView
     } else {
-        record.component = route.addon ? addonModules[`/src/${route.addon}/views/${route.view_path}.vue`] : modules[`/src/app/views/${route.view_path}.vue`]
+        record.component = route.addon ? addonModules[`/src/addon/${route.addon}/views/${route.view_path}.vue`] : modules[`/src/app/views/${route.view_path}.vue`]
     }
     return record
 }

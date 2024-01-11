@@ -18,7 +18,9 @@
     "reset": "重置",
     "search": "搜索",
     "foldText":"展开/折叠",
-    "mainApp": "套餐主应用",
-    "mainAppPlaceholder": "请选择套餐主应用",
-    "containAddon": "套餐内含插件"
+    "mainApp": "套餐内含应用",
+    "mainAppPlaceholder": "请选择套餐内包含的应用",
+    "containAddon": "套餐内含插件",
+    "appListEmpty": "没有可选择的应用",
+    "addonListEmpty": "没有可选择的插件"
 }

@@ -1,23 +1,24 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-			<div class="flex justify-between items-center mb-[5px]">
-                <span class="text-[20px]">{{pageName}}</span>
+            <div class="flex justify-between items-center mb-[5px]">
+                <span class="text-[20px]">{{ pageName }}</span>
             </div>
-			<el-card class="box-card !border-none base-bg !px-[35px]" shadow="never">
-			    <el-row class="flex">
-			        <el-col :span="8" class="min-w-[100px]">
-						<div class="statistic-card">
-                            <el-statistic :value="balanceStatistics.money && balanceStatistics.balance  ? (Number.parseFloat(balanceStatistics.money)+Number.parseFloat(balanceStatistics.balance)).toFixed(2) : '0.00'"></el-statistic>
+            <el-card class="box-card !border-none base-bg !px-[35px]" shadow="never">
+                <el-row class="flex">
+                    <el-col :span="8" class="min-w-[100px]">
+                        <div class="statistic-card">
+                            <el-statistic
+                                :value="balanceStatistics.money && balanceStatistics.balance ? (Number.parseFloat(balanceStatistics.money) + Number.parseFloat(balanceStatistics.balance)).toFixed(2) : '0.00'"></el-statistic>
                             <div class="statistic-footer">
                                 <div class="footer-item text-[14px] text-[#666]">
                                     <span>{{ t('totalAllBalance') }}</span>
                                 </div>
                             </div>
                         </div>
-			        </el-col>
-					<el-col :span="8" class="min-w-[100px]">
-						<div class="statistic-card">
+                    </el-col>
+                    <el-col :span="8" class="min-w-[100px]">
+                        <div class="statistic-card">
                             <el-statistic :value="balanceStatistics.money"></el-statistic>
                             <div class="statistic-footer">
                                 <div class="footer-item text-[14px] text-[#666]">
@@ -25,9 +26,9 @@
                                 </div>
                             </div>
                         </div>
-			        </el-col>
-			        <el-col :span="8" class="min-w-[100px]">
-						<div class="statistic-card">
+                    </el-col>
+                    <el-col :span="8" class="min-w-[100px]">
+                        <div class="statistic-card">
                             <el-statistic :value="balanceStatistics.balance"></el-statistic>
                             <div class="statistic-footer">
                                 <div class="footer-item text-[14px] text-[#666]">
@@ -35,37 +36,36 @@
                                 </div>
                             </div>
                         </div>
-			        </el-col>
-			    </el-row>
-			</el-card>
+                    </el-col>
+                </el-row>
+            </el-card>
             <el-card class="box-card !border-none mb-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="memberAccountLogTableData.searchParam" ref="searchFormRef">
 
-					<el-form-item :label="t('memberInfo')" prop="keywords">
-                        <el-input v-model="memberAccountLogTableData.searchParam.keywords" class="w-[240px]" :placeholder="t('memberInfoPlaceholder')" />
+                    <el-form-item :label="t('memberInfo')" prop="keywords">
+                        <el-input v-model="memberAccountLogTableData.searchParam.keywords" class="w-[240px]"
+                            :placeholder="t('memberInfoPlaceholder')" />
                     </el-form-item>
 
-					<el-form-item :label="t('balanceType')" prop="from_type">
-					    <el-select v-model="memberAccountLogTableData.balance_type" clearable :placeholder="t('fromTypePlaceholder')" class="input-width" @change="checkAccountType">
-					        <el-option :label="t('selectPlaceholder')" value="" />
-					        <el-option :label="item.name" :value="item.type" v-for="(item,key) in balanceStatus" />
-					    </el-select>
-					</el-form-item>
+                    <el-form-item :label="t('balanceType')" prop="from_type">
+                        <el-select v-model="memberAccountLogTableData.balance_type" clearable
+                            :placeholder="t('fromTypePlaceholder')" class="input-width" @change="checkAccountType">
+                            <el-option :label="t('selectPlaceholder')" value="" />
+                            <el-option :label="item.name" :value="item.type" v-for="(item, key) in balanceStatus" :key="key"/>
+                        </el-select>
+                    </el-form-item>
 
                     <el-form-item :label="t('fromType')" prop="from_type">
-                        <el-select v-model="memberAccountLogTableData.searchParam.from_type" clearable :placeholder="t('fromTypePlaceholder')" class="input-width">
+                        <el-select v-model="memberAccountLogTableData.searchParam.from_type" clearable
+                            :placeholder="t('fromTypePlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')" value="" />
-                            <el-option :label="item.name" :value="key" v-for="(item,key) in fromTypeList" />
+                            <el-option :label="item.name" :value="key" v-for="(item, key) in fromTypeList"  :key="key"/>
                         </el-select>
                     </el-form-item>
                     <el-form-item :label="t('createTime')" prop="create_time">
-                        <el-date-picker
-                            v-model="memberAccountLogTableData.searchParam.create_time"
-                            type="datetimerange"
-                            value-format="YYYY-MM-DD HH:mm:ss"
-                            :start-placeholder="t('startDate')"
-                            :end-placeholder="t('endDate')"
-                        />
+                        <el-date-picker v-model="memberAccountLogTableData.searchParam.create_time" type="datetimerange"
+                            value-format="YYYY-MM-DD HH:mm:ss" :start-placeholder="t('startDate')"
+                            :end-placeholder="t('endDate')" />
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="loadMemberAccountLogList()">{{ t('search') }}</el-button>
@@ -81,48 +81,52 @@
                     <template #empty>
                         <span>{{ !memberAccountLogTableData.loading ? t('emptyData') : '' }}</span>
                     </template>
-					<el-table-column prop="member_id" :label="t('memberId')" min-width="80" :show-overflow-tooltip="true">
+                    <el-table-column prop="member_id" :label="t('memberId')" min-width="80" :show-overflow-tooltip="true">
                         <template #default="{ row }">
                             {{ row.member.member_no }}
                         </template>
                     </el-table-column>
-                    <el-table-column  :label="t('memberInfo')" min-width="140" :show-overflow-tooltip="true">
+                    <el-table-column :label="t('memberInfo')" min-width="140" :show-overflow-tooltip="true">
                         <template #default="{ row }">
                             <div class="flex items-center cursor-pointer" @click="toMember(row.member_id)">
-                                <img class="w-[50px] h-[50px] mr-[10px]" v-if="row.member.headimg" :src="img(row.member.headimg)" alt="" >
-                                <img class="w-[50px] h-[50px] mr-[10px]" v-else src="@/app/assets/images/default_headimg.png" alt="" >
+                                <img class="w-[50px] h-[50px] mr-[10px]" v-if="row.member.headimg"
+                                    :src="img(row.member.headimg)" alt="">
+                                <img class="w-[50px] h-[50px] mr-[10px]" v-else
+                                    src="@/app/assets/images/default_headimg.png" alt="">
                                 <div class="flex flex flex-col">
                                     <span class="">{{ row.member.nickname || '' }}</span>
                                 </div>
                             </div>
                         </template>
                     </el-table-column>
-					<el-table-column prop="mobile" :label="t('mobile')" min-width="90">
-						<template #default="{ row }">
-							{{ row.member.mobile || '' }}
+                    <el-table-column prop="mobile" :label="t('mobile')" min-width="90">
+                        <template #default="{ row }">
+                            {{ row.member.mobile || '' }}
                         </template>
-					</el-table-column>
+                    </el-table-column>
                     <el-table-column prop="account_data" :label="t('accountData')" min-width="70" align="right">
-						<template #default="{ row }">
-							<span v-if="row.account_data >= 0">+{{ row.account_data }}</span>
-							<span v-else>{{ row.account_data }}</span>
+                        <template #default="{ row }">
+                            <span v-if="row.account_data >= 0">+{{ row.account_data }}</span>
+                            <span v-else>{{ row.account_data }}</span>
                         </template>
-					</el-table-column>
-					<el-table-column prop="account_sum" :label="t('accountSum')" min-width="110" align="right"/>
-					<el-table-column prop="account_type_name" :label="t('balanceType')" min-width="150" align="center" />
-                    <el-table-column prop="from_type_name" :label="t('fromType')" min-width="120" align=""/>
-                    <el-table-column prop="create_time" :show-overflow-tooltip="true" :label="t('createTime')" min-width="150" />
+                    </el-table-column>
+                    <el-table-column prop="account_sum" :label="t('accountSum')" min-width="110" align="right" />
+                    <el-table-column prop="account_type_name" :label="t('balanceType')" min-width="150" align="center" />
+                    <el-table-column prop="from_type_name" :label="t('fromType')" min-width="120" align="" />
+                    <el-table-column prop="create_time" :show-overflow-tooltip="true" :label="t('createTime')"
+                        min-width="150" />
                     <el-table-column :label="t('operation')" align="right" fixed="right" width="100">
-                       <template #default="{ row }">
-                           <el-button type="primary" link @click="infoEvent(row)">{{ t('info') }}</el-button>
-                       </template>
+                        <template #default="{ row }">
+                            <el-button type="primary" link @click="infoEvent(row)">{{ t('info') }}</el-button>
+                        </template>
                     </el-table-column>
 
                 </el-table>
                 <div class="mt-[16px] flex justify-end">
-                    <el-pagination v-model:current-page="memberAccountLogTableData.page" v-model:page-size="memberAccountLogTableData.limit"
-                        layout="total, sizes, prev, pager, next, jumper" :total="memberAccountLogTableData.total"
-                        @size-change="loadMemberAccountLogList()" @current-change="loadMemberAccountLogList" />
+                    <el-pagination v-model:current-page="memberAccountLogTableData.page"
+                        v-model:page-size="memberAccountLogTableData.limit" layout="total, sizes, prev, pager, next, jumper"
+                        :total="memberAccountLogTableData.total" @size-change="loadMemberAccountLogList()"
+                        @current-change="loadMemberAccountLogList" />
                 </div>
             </div>
         </el-card>
@@ -134,54 +138,53 @@
 import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import {
-	getBalanceList,
-	getChangeTypeList,
-	getBalanceSum,
-	getBalanceStatus,
-	getMoneyList,
-	getAccountType,
+    getBalanceList,
+    getChangeTypeList,
+    getBalanceSum,
+    getBalanceStatus,
+    getMoneyList,
+    getAccountType
 } from '@/app/api/member'
 import { FormInstance } from 'element-plus'
 import { img } from '@/utils/common'
 import balanceInfo from '@/app/views/member/components/member-balance-info.vue'
-import { useRoute,useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const member_id: number = parseInt(route.query.id || 0)
-const pageName = route.meta.title;
+const pageName = route.meta.title
 
-let memberAccountLogTableData = reactive({
+const memberAccountLogTableData = reactive({
     page: 1,
     limit: 10,
     total: 0,
     loading: true,
     data: [],
-    searchParam:{
-	  keywords:"",
-      from_type:"",
-      create_time:"",
-      mobile:"",
-      member_id,
+    searchParam: {
+        keywords: '',
+        from_type: '',
+        create_time: '',
+        mobile: '',
+        member_id: member_id
 
     },
-	balance_type: ""
+    balance_type: ''
 })
 
-let fromTypeList = ref([])
+const fromTypeList = ref([])
 
 const setFromTypeList = async () => {
     fromTypeList.value = await (await getChangeTypeList('balance')).data
 }
 
-setFromTypeList();
+setFromTypeList()
 
 const searchFormRef = ref<FormInstance>()
 
-
-const resetForm = (formEl: FormInstance | undefined)=>{
+const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
-    formEl.resetFields();
-    loadMemberAccountLogList();
+    formEl.resetFields()
+    loadMemberAccountLogList()
 }
 
 /**
@@ -190,32 +193,31 @@ const resetForm = (formEl: FormInstance | undefined)=>{
 const loadMemberAccountLogList = (page: number = 1) => {
     memberAccountLogTableData.loading = true
     memberAccountLogTableData.page = page
-	if(memberAccountLogTableData.balance_type == "" || memberAccountLogTableData.balance_type == "balance"){
-		getBalanceList({
-		    page: memberAccountLogTableData.page,
-		    limit: memberAccountLogTableData.limit,
-		     ...memberAccountLogTableData.searchParam
-		}).then(res => {
-		    memberAccountLogTableData.loading = false
-		    memberAccountLogTableData.data = res.data.data
-		    memberAccountLogTableData.total = res.data.total
-		}).catch(() => {
-		    memberAccountLogTableData.loading = false
-		})
-	}else{
-		getMoneyList({
-		    page: memberAccountLogTableData.page,
-		    limit: memberAccountLogTableData.limit,
-		     ...memberAccountLogTableData.searchParam
-		}).then(res => {
-		    memberAccountLogTableData.loading = false
-		    memberAccountLogTableData.data = res.data.data
-		    memberAccountLogTableData.total = res.data.total
-		}).catch(() => {
-		    memberAccountLogTableData.loading = false
-		})
-	}
-
+    if (memberAccountLogTableData.balance_type == '' || memberAccountLogTableData.balance_type == 'balance') {
+        getBalanceList({
+            page: memberAccountLogTableData.page,
+            limit: memberAccountLogTableData.limit,
+            ...memberAccountLogTableData.searchParam
+        }).then(res => {
+            memberAccountLogTableData.loading = false
+            memberAccountLogTableData.data = res.data.data
+            memberAccountLogTableData.total = res.data.total
+        }).catch(() => {
+            memberAccountLogTableData.loading = false
+        })
+    } else {
+        getMoneyList({
+            page: memberAccountLogTableData.page,
+            limit: memberAccountLogTableData.limit,
+            ...memberAccountLogTableData.searchParam
+        }).then(res => {
+            memberAccountLogTableData.loading = false
+            memberAccountLogTableData.data = res.data.data
+            memberAccountLogTableData.total = res.data.total
+        }).catch(() => {
+            memberAccountLogTableData.loading = false
+        })
+    }
 }
 loadMemberAccountLogList()
 
@@ -224,7 +226,7 @@ const balanceDialog: Record<string, any> | null = ref(null)
  * 查看详情
  * @param data
  */
- const infoEvent = (data: any) => {
+const infoEvent = (data: any) => {
     balanceDialog.value.setFormData(data)
     balanceDialog.value.showDialog = true
 }
@@ -234,7 +236,7 @@ const router = useRouter()
 /**
  * 会员详情
  */
-const toMember = (member_id:number) => {
+const toMember = (member_id: number) => {
     router.push(`/member/detail?id=${member_id}`)
 }
 
@@ -243,37 +245,37 @@ const toMember = (member_id:number) => {
  */
 const balanceStatistics = ref([])
 const checkBalanceInfo = () => {
-	getBalanceSum({
-		member_id
-	 }).then(res => {
-		balanceStatistics.value = res.data;
-	 })
+    getBalanceSum({
+        member_id
+    }).then(res => {
+        balanceStatistics.value = res.data
+    })
 }
 checkBalanceInfo()
 
-//获取余额类型
+// 获取余额类型
 const balanceStatus = ref([])
 const checkBalanceStatus = () => {
-	 getBalanceStatus().then(res => {
-		for (var i in res.data) {
-			if(i == 'balance' || i == 'money'){
-				 balanceStatus.value.push({"name" : res.data[i], "type" : i})
-			}
-		}
-	 })
+    getBalanceStatus().then(res => {
+        for (var i in res.data) {
+            if (i == 'balance' || i == 'money') {
+                balanceStatus.value.push({ 'name': res.data[i], 'type': i })
+            }
+        }
+    })
 }
 checkBalanceStatus()
 
 const checkAccountType = () => {
-	let account_type = memberAccountLogTableData.balance_type;
-	if(memberAccountLogTableData.balance_type == ""){
-		account_type = "balance"
-	}
-	getAccountType({
-		account_type
-	}).then(res => {
-		fromTypeList.value = res.data;
-	})
+    let account_type = memberAccountLogTableData.balance_type
+    if (memberAccountLogTableData.balance_type == '') {
+        account_type = 'balance'
+    }
+    getAccountType({
+        account_type
+    }).then(res => {
+        fromTypeList.value = res.data
+    })
 }
 checkAccountType()
 

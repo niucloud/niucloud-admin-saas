@@ -26,7 +26,7 @@
 
             <el-form-item :label="t('content')">
                 <div class="input-width">
-                    <div v-for="(item, index) in formData.content">{{ item[0] }}：{{ item[1] }} </div>
+                    <div v-for="(item, index) in formData.content" :key="index">{{ item[0] }}：{{ item[1] }} </div>
                 </div>
             </el-form-item>
 
@@ -67,7 +67,7 @@ const initialFormData = {
     // first: '',
     // remark: '',
     temp_key: '',
-    keyword_name_list: '',
+    keyword_name_list: ''
     // wechat_first: '',
     // wechat_remark: ''
 }
@@ -97,7 +97,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
             loading.value = true
 
             const data = formData
-			data.status = data.is_wechat;
+            data.status = data.is_wechat
             editNotice(data).then(res => {
                 loading.value = false
                 showDialog.value = false

@@ -77,9 +77,9 @@
 import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getCronList } from '@/app/api/sys'
-import { img } from '@/utils/common'
+// import { img } from '@/utils/common'
 import { FormInstance } from 'element-plus'
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 import CronInfo from '@/app/views/setting/components/cron-info.vue'
 
 const cronTableData = reactive({
@@ -90,8 +90,8 @@ const cronTableData = reactive({
     data: [],
     searchParam: {
         title: '',
-        type:'',
-        last_time:''
+        type: '',
+        last_time: ''
     }
 })
 
@@ -118,7 +118,7 @@ const loadCronList = (page: number = 1) => {
 }
 loadCronList()
 
-const router = useRouter()
+// const router = useRouter()
 
 const cronDialog: Record<string, any> | null = ref(null)
 /**

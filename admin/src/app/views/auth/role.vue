@@ -52,27 +52,23 @@ import { getRoleList, deleteRole } from '@/app/api/sys'
 import { ElMessageBox, FormInstance } from 'element-plus'
 import EditRole from '@/app/views/auth/components/edit-role.vue'
 
-import { useRoute } from 'vue-router'
-const route = useRoute()
-const pageName = route.meta.title;
-
 const roleTableData = reactive({
     page: 1,
     limit: 10,
     total: 0,
     loading: true,
     data: [],
-    searchParam:{
-        seach:''
+    searchParam: {
+        seach: ''
     }
 })
 
 const searchFormRef = ref<FormInstance>()
-const resetForm = (formEl: FormInstance | undefined)=>{
+const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
 
-    formEl.resetFields();
-    loadRoleList();
+    formEl.resetFields()
+    loadRoleList()
 }
 /**
  * 获取角色列表

@@ -245,9 +245,9 @@ class ValidateGenerator extends BaseGenerator
      */
     public function getModuleOutDir()
     {
-        $dir = $this->basePath  . '/validate/';
+        $dir = $this->basePath  . DIRECTORY_SEPARATOR.'validate'.DIRECTORY_SEPARATOR;
         if (!empty($this->moduleName)) {
-            $dir .= $this->moduleName . '/';
+            $dir .= $this->moduleName . DIRECTORY_SEPARATOR;
             $this->checkDir($dir);
         }
         return $dir;
@@ -262,15 +262,15 @@ class ValidateGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = $this->outDir . '/addon/'.$this->addonName.'/app/validate/';
+            $dir = $this->outDir . DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'validate'.DIRECTORY_SEPARATOR;
         }else{
-            $dir = $this->outDir . 'niucloud/app/validate/';
+            $dir = $this->outDir . 'niucloud'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'validate'.DIRECTORY_SEPARATOR;
         }
 
 
         $this->checkDir($dir);
         if (!empty($this->moduleName)) {
-            $dir .= $this->moduleName . '/';
+            $dir .= $this->moduleName . DIRECTORY_SEPARATOR;
             $this->checkDir($dir);
         }
         return $dir;
@@ -284,16 +284,15 @@ class ValidateGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = $this->rootDir . '/niucloud/addon/'.$this->addonName.'/app/validate/';
+            $dir = $this->rootDir . DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'validate'.DIRECTORY_SEPARATOR;
         }else{
-//            $dir = '';
-            $dir = $this->rootDir . '/niucloud/app/validate/';
+            $dir = $this->rootDir . DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'validate'.DIRECTORY_SEPARATOR;
         }
 
 
         $this->checkDir($dir);
         if (!empty($this->moduleName)) {
-            $dir .= $this->moduleName . '/';
+            $dir .= $this->moduleName . DIRECTORY_SEPARATOR;
             $this->checkDir($dir);
         }
         return $dir;

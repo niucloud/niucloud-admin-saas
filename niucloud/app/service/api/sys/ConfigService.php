@@ -47,5 +47,13 @@ class ConfigService extends BaseApiService
         return (new CoreSysConfigService())->getSceneDomain($this->site_id);
     }
 
-
+    /**
+     * 获取手机端首页列表
+     * @param $data
+     * @return array
+     */
+    public function getWapIndexList($data)
+    {
+        return ( new CoreSysConfigService() )->getWapIndexList($data);
+    }
 }

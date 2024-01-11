@@ -3,15 +3,16 @@ import { getToken, setToken, removeToken, getAppType } from '@/utils/common'
 import { login, getAuthMenus, getSiteInfo } from '@/app/api/auth'
 import storage from '@/utils/storage'
 import router from '@/router'
-import { formatRouters } from '@/router/routers'
+import { formatRouters, findFirstValidRoute } from '@/router/routers'
 import useTabbarStore from './tabbar'
 
 interface User {
     token: string,
     userInfo: object,
-    siteInfo: object,
+    siteInfo: null | Record<string, any>,
     routers: any[],
-    rules: any[]
+    rules: any[],
+    addonIndexRoute: Record<string, symbol>
 }
 
 const useSystemStore = defineStore('user', {
@@ -22,16 +23,10 @@ const useSystemStore = defineStore('user', {
             siteInfo: null,
             routers: [],
             rules: [],
-            routeGather: {
-                stairRoute: '',
-                secondRoute: ''
-            }
+            addonIndexRoute: {}
         }
     },
     actions: {
-        setRoute(type, data) {
-            this.routeGather[type] = data;
-        },
         async getSiteInfo() {
             await getSiteInfo().then(({ data }) => {
                 this.siteInfo = data
@@ -39,7 +34,7 @@ const useSystemStore = defineStore('user', {
                 storage.set({ key: 'siteInfo', data: data })
                 storage.set({ key: 'comparisonSiteIdStorage', data: data.site_id || 0 })
             }).catch(() => {
-                
+
             })
         },
         login(form: object, app_type: any) {
@@ -79,6 +74,16 @@ const useSystemStore = defineStore('user', {
                 getAuthMenus({})
                     .then((res) => {
                         this.routers = formatRouters(res.data)
+                        // 获取插件的首个菜单
+                        this.routers.forEach((item, index) => {
+                            if (item.meta.addon !== '') {
+                                if (item.children && item.children.length) {
+                                    this.addonIndexRoute[item.meta.addon] = findFirstValidRoute(item.children)
+                                } else {
+                                    this.addonIndexRoute[item.meta.addon] = item.name
+                                }
+                            }
+                        })
                         resolve(res)
                     })
                     .catch((error) => {

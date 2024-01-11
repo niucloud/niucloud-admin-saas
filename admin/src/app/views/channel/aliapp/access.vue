@@ -77,7 +77,6 @@
                     <p class="text-[#999] text-[12px]">{{ t('aliappSet') }}</p>
                 </div>
             </div>
-            
         </div>
     </div> -->
     <div class="w-full p-5 bg-white">
@@ -219,10 +218,10 @@
                 </el-col>
                 <el-col :span="4">
                     <div class="flex justify-center">
-                        <el-image class="w-[180px] h-[180px]" :src="qr_code ? img(qr_code) : ''">
+                        <el-image class="w-[180px] h-[180px]" :src="qrCode ? img(qrCode) : ''">
                             <template #error>
                                 <div class="w-[100%] h-[100%] flex items-center  justify-center bg-[#f5f7fa]">
-                                    <span>{{ qr_code ? t('fileErr') : t('emptyQrCode') }}</span>
+                                    <span>{{ qrCode ? t('fileErr') : t('emptyQrCode') }}</span>
                                 </div>
                             </template>
                         </el-image>
@@ -236,26 +235,26 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { t } from '@/lang'
 import { img } from '@/utils/common'
 import { getAliappConfig } from '@/app/api/aliapp'
 
 const router = useRouter()
-let activeName = ref("/channel/aliapp");
-let active = ref(2);
-let qr_code = ref('')
+const activeName = ref('/channel/aliapp')
+const active = ref(2)
+const qrCode = ref<string>('')
 onMounted(async () => {
-    let res = await getAliappConfig()
-    qr_code.value = res.data.qr_code
+    const res = await getAliappConfig()
+    qrCode.value = res.data.qr_code
 })
 const linkEvent = (url: string) => {
-    window.open(url, "_blank")
+    window.open(url, '_blank')
 }
 const handleClick = (val: any) => {
-    router.push({ path: activeName.value });
-};
+    router.push({ path: activeName.value })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -310,4 +309,5 @@ const handleClick = (val: any) => {
 :deep(.el-step__title) {
     height: 40px;
     line-height: 40px !important;
-}</style>
+}
+</style>

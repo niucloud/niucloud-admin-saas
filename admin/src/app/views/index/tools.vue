@@ -123,28 +123,22 @@
 </template>
 
 <script lang="ts" setup>
-    import {reactive, ref, onMounted, computed} from 'vue'
-    import {t} from '@/lang'
-    import {getAuthaddon} from '@/app/api/auth'
-    import {img} from '@/utils/common'
-    import {useRouter} from 'vue-router'
-    import storage from '@/utils/storage'
-    import {findFirstValidRoute} from '@/router/routers'
-	import {UserFilled} from '@element-plus/icons-vue'
-	import useSystemStore from '@/stores/modules/system'
-	
-	const systemStore = useSystemStore()
-	systemStore.setHeadMenu('');
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import useSystemStore from '@/stores/modules/system'
 
-    const router = useRouter()
-	let developerDialogVisible = ref(false)
+const systemStore = useSystemStore()
+systemStore.setHeadMenu('')
 
-	const toLink = (link)=>{
-		router.push(link)
-	}
-    const goRouter = () => {
-        window.open('https://www.niucloud.com/app')
-    }
+const router = useRouter()
+const developerDialogVisible = ref(false)
+
+const toLink = (link:any) => {
+    router.push(link)
+}
+const goRouter = () => {
+    window.open('https://www.niucloud.com/app')
+}
 </script>
 
 <style lang="scss" scoped></style>

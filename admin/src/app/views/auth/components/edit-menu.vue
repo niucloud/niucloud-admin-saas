@@ -1,6 +1,7 @@
 <template>
     <el-dialog v-model="showDialog" :title="popTitle" width="500px" :destroy-on-close="true">
-        <el-form :model="formData" label-width="90px" class="page-form" ref="formRef" :rules="formRules" v-loading="loading">
+        <el-form :model="formData" label-width="90px" class="page-form" ref="formRef" :rules="formRules"
+            v-loading="loading">
             <el-form-item :label="t('menuName')" prop="menu_name">
                 <el-input v-model="formData.menu_name" :placeholder="t('menuNamePlaceholder')" class="input-width" />
             </el-form-item>
@@ -16,11 +17,19 @@
                 </el-radio-group>
             </el-form-item>
 
-            <el-form-item :label="t('parentMenu')" prop="parent_key">
-                <el-select v-model="formData.parent_key" placeholder="Select" class="input-width">
-                    <el-option :label="t('topLevel')" value="" />
-                    <select-menu-item :menu="item" v-for="(item, index) in prop.menuTree" :key="index" />
+            <el-form-item :label="t('addon')" prop="addon" v-show="formData.app_type == 'site'">
+                <el-select v-model="formData.addon" placeholder="Select" class="input-width" @change="addonChange">
+                    <el-option v-for="(item, index) in addonLst" :label="item.title" :value="item.key" :key="index" />
                 </el-select>
+            </el-form-item>
+
+            <el-form-item :label="t('parentMenu')" prop="parent_key">
+                <el-tree-select class="input-width" v-if="formData.addon != ''" v-model="formData.parent_key"
+                    :props="{ label: 'menu_name', value: 'menu_key' }" :data="addonMenuList" check-strictly
+                    :render-after-expand="false" />
+                <el-tree-select class="input-width" v-else v-model="formData.parent_key"
+                    :props="{ label: 'menu_name', value: 'menu_key' }" :data="sysMenuList" check-strictly
+                    :render-after-expand="false" />
             </el-form-item>
 
             <el-form-item :label="t('routePath')" prop="router_path" v-show="formData.menu_type != 2">
@@ -34,7 +43,7 @@
             <el-form-item :label="t('authId')" prop="api_url" v-show="formData.menu_type != 0">
                 <el-input v-model="formData.api_url" :placeholder="t('authIdPlaceholder')" class="input-width">
                     <template #append>
-                        <el-select class="w-[90px] border-none" v-model="method">
+                        <el-select class="w-[90px] border-none" v-model="formData.methods">
                             <el-option label="POST" value="post" />
                             <el-option label="GET" value="get" />
                             <el-option label="PUT" value="put" />
@@ -64,6 +73,11 @@
                 </el-radio-group>
             </el-form-item>
 
+            <el-form-item :label="t('menuShortName')">
+                <el-input v-model="formData.menu_short_name" :placeholder="t('menuShortNamePlaceholder')"
+                    class="input-width" />
+            </el-form-item>
+
             <el-form-item :label="t('sort')">
                 <el-input-number v-model="formData.sort" :min="0" />
             </el-form-item>
@@ -72,7 +86,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
-                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{t('confirm')}}</el-button>
+                <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{ t('confirm') }}</el-button>
             </span>
         </template>
     </el-dialog>
@@ -82,13 +96,12 @@
 import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import selectMenuItem from './select-menu-item.vue'
-import { addMenu, editMenu, getMenuInfo } from '@/app/api/sys'
+import { addMenu, editMenu, getMenuInfo, getSystemMenu, getAddonMenu } from '@/app/api/sys'
+import { getAddonDevelop } from '@/app/api/tools'
 
 const showDialog = ref(false)
-const method = ref('post')
 const loading = ref(false)
-let popTitle: string = '';
+let popTitle: string = ''
 
 /**
  * 表单数据
@@ -102,22 +115,20 @@ const initialFormData = {
     api_url: '',
     router_path: '',
     view_path: '',
-    methods: '',
+    methods: 'post',
     sort: '',
     status: 1,
     is_show: 1,
     menu_key: '',
-    app_type: ''
+    app_type: '',
+    addon: '',
+    menu_short_name: ''
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 
-const prop = defineProps({
-    menuTree: {
-        type: Array,
-        default: () => []
-    }
-})
-
+const addonLst = ref<Array<any>>([])
+const sysMenuList = ref<Array<any>>([])
+const addonMenuList = ref<Array<any>>([])
 const formRef = ref<FormInstance>()
 
 const validataMenuKey = (val: string) => {
@@ -143,7 +154,7 @@ const formRules = computed(() => {
                 trigger: 'blur'
             }
         ],
-        //return /^([a-zA-Z_$])([a-zA-Z0-9_$])*$/.test(val)
+        // return /^([a-zA-Z_$])([a-zA-Z0-9_$])*$/.test(val)
         router_path: [
             { required: formData.menu_type != 2, message: t('routePathPlaceholder'), trigger: 'blur' }
         ],
@@ -154,10 +165,39 @@ const formRules = computed(() => {
             { required: formData.menu_type != 2, message: t('selectIconPlaceholder'), trigger: 'blur' }
         ],
         api_url: [
-            { required: formData.menu_type == 2, message: t('selectIconPlaceholder'), trigger: 'blur' }
+            { required: formData.menu_type == 2, message: t('authIdPlaceholder'), trigger: 'blur' }
         ]
     }
 })
+
+// 获取插件列表
+const getAddonDevelopFn = async () => {
+    const { data } = await getAddonDevelop({})
+    addonLst.value = [{ title: '系统', key: '' }]
+    addonLst.value.push(...data)
+}
+
+// 获取系统菜单列表
+const getSystemMenuFn = async () => {
+    const { data } = await getSystemMenu()
+    sysMenuList.value = [{ menu_name: '顶级', menu_key: '' }]
+    sysMenuList.value.push(...data)
+}
+
+// 获取系统应用列表
+const getAddonMenuFn = async (key: any) => {
+    const { data } = await getAddonMenu(key)
+    addonMenuList.value = data
+}
+
+// 选择应用
+const addonChange = async (val: any) => {
+    formData.parent_key = ''
+    if (val != '') {
+        await getAddonMenuFn(val)
+        formData.parent_key = addonMenuList.value[0].menu_key
+    }
+}
 
 const emit = defineEmits(['complete'])
 
@@ -174,7 +214,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
             loading.value = true
 
             const data = formData
-            data.api_url = data.api_url ? `${data.api_url}/${method.value}` : ''
+            data.api_url = data.api_url ? `${data.api_url}/${formData.methods}` : ''
 
             save(data).then(res => {
                 loading.value = false
@@ -182,7 +222,6 @@ const confirm = async (formEl: FormInstance | undefined) => {
                 emit('complete')
             }).catch(() => {
                 loading.value = false
-                // showDialog.value = false
             })
         }
     })
@@ -192,17 +231,21 @@ const setFormData = async (row: any = null) => {
     loading.value = true
     Object.assign(formData, initialFormData)
     popTitle = t('addMenu')
+    getAddonDevelopFn()
+    getSystemMenuFn()
     if (row.menu_key) {
         popTitle = t('updateMenu')
-        const data = await (await getMenuInfo(row.menu_key)).data
+        const data = await (await getMenuInfo(row.app_type, row.menu_key)).data
         Object.keys(formData).forEach((key: string) => {
             if (data[key] != undefined) formData[key] = data[key]
         })
+        if (formData.addon != '') getAddonMenuFn(formData.addon)
     } else {
         Object.keys(formData).forEach((key: string) => {
             if (row[key] != undefined) formData[key] = row[key]
         })
     }
+
     loading.value = false
 }
 

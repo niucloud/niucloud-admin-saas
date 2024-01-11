@@ -16,7 +16,7 @@
                     </el-form-item>
                 </el-form>
             </el-card>
-            
+
             <el-table :data="diyRouteTableData.data" size="large" v-loading="diyRouteTableData.loading">
                 <template #empty>
                     <span>{{ !diyRouteTableData.loading ? t('emptyData') : '' }}</span>
@@ -83,7 +83,7 @@
 import { reactive, ref, watch, computed } from 'vue'
 import { t } from '@/lang'
 import { getDiyTemplate, getDiyRouteList, getDiyRouteInfo, editDiyRouteShare } from '@/app/api/diy'
-import {  ElMessage, FormInstance, ElMessageBox } from 'element-plus'
+import { ElMessage, FormInstance } from 'element-plus'
 import { useRoute, useRouter } from 'vue-router'
 import { useClipboard } from '@vueuse/core'
 import { getUrl } from '@/app/api/sys'
@@ -91,28 +91,28 @@ import { getUrl } from '@/app/api/sys'
 const pageTemplate: any = reactive({})
 const router = useRouter()
 const route = useRoute()
-const pageName = route.meta.title;
+const pageName = route.meta.title
 
 const formRef = ref<FormInstance>()
 const dialogVisible = ref(false)
 
-let diyRouteTableData = reactive({
+const diyRouteTableData = reactive({
     page: 1,
     limit: 10,
     total: 0,
     loading: true,
     data: [],
     searchParam: {
-        "title": "",
+        title: ''
     }
 })
 
 const wapDomain = ref('')
 const getDomain = async () => {
-    wapDomain.value = (await getUrl()).data.wap_url;
-};
+    wapDomain.value = (await getUrl()).data.wap_url
+}
 
-getDomain();
+getDomain()
 
 /**
  * 获取自定义路由列表
@@ -126,15 +126,15 @@ const loadDiyRouteList = (page: number = 1) => {
         limit: diyRouteTableData.limit,
         ...diyRouteTableData.searchParam
     }).then(res => {
-        diyRouteTableData.loading = false;
+        diyRouteTableData.loading = false
 
-        let len = Math.ceil(res.data.length / diyRouteTableData.limit);
-        let data = JSON.parse(JSON.stringify(res.data));
-        let dataGather = [];
-        for(var i = 0; i < len; i++){
-            dataGather[i] = data.splice(0, diyRouteTableData.limit);
+        const len = Math.ceil(res.data.length / diyRouteTableData.limit)
+        const data = JSON.parse(JSON.stringify(res.data))
+        const dataGather = []
+        for (let i = 0; i < len; i++) {
+            dataGather[i] = data.splice(0, diyRouteTableData.limit)
         }
-        diyRouteTableData.data = dataGather[diyRouteTableData.page-1];
+        diyRouteTableData.data = dataGather[diyRouteTableData.page - 1]
 
         diyRouteTableData.total = res.data.length
     }).catch(() => {
@@ -145,7 +145,7 @@ loadDiyRouteList()
 
 // 获取自定义页面模板
 getDiyTemplate({}).then(res => {
-    for (let key in res.data) {
+    for (const key in res.data) {
         pageTemplate[key] = res.data[key]
     }
 })
@@ -204,12 +204,12 @@ const shareFormRules = computed(() => {
 const shareFormRef = ref<FormInstance>()
 const openShare = async (row: any) => {
     // 基础页面
-    let info = (await getDiyRouteInfo({
+    const info = (await getDiyRouteInfo({
         name: row.name
-    })).data;
+    })).data
 
     if (info.title) {
-        row.id = info.id;
+        row.id = info.id
         row.title = info.title
         row.name = info.name
         row.page = info.page
@@ -224,18 +224,18 @@ const openShare = async (row: any) => {
     diyRouteData.is_share = row.is_share
     diyRouteData.sort = row.sort
 
-    shareFormId.value = row.id;
-    sharePage.value = row.title;
-    let share = row.share ? JSON.parse(row.share) : {
-        wechat: {title: '', desc: '', url: ''},
-        weapp: {title: '', url: ''}
-    };
+    shareFormId.value = row.id
+    sharePage.value = row.title
+    const share = row.share ? JSON.parse(row.share) : {
+        wechat: { title: '', desc: '', url: '' },
+        weapp: { title: '', url: '' }
+    }
     if (share) {
-        shareFormData.wechat = share.wechat;
-        shareFormData.weapp = share.weapp;
+        shareFormData.wechat = share.wechat
+        shareFormData.weapp = share.weapp
     }
 
-    shareDialogVisible.value = true;
+    shareDialogVisible.value = true
 }
 
 const shareEvent = async (formEl: FormInstance | undefined) => {
@@ -243,24 +243,24 @@ const shareEvent = async (formEl: FormInstance | undefined) => {
 
     await formEl.validate(async (valid) => {
         if (valid) {
-            let save = editDiyRouteShare
+            const save = editDiyRouteShare
             save({
                 id: shareFormId.value,
                 share: JSON.stringify(shareFormData),
                 ...diyRouteData
             }).then(() => {
                 loadDiyRouteList()
-                shareDialogVisible.value = false;
+                shareDialogVisible.value = false
             }).catch(() => {
             })
         }
     })
 }
 
-const resetForm = (formEl: FormInstance | undefined)=>{
+const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
-    formEl.resetFields();
-    loadDiyRouteList();
+    formEl.resetFields()
+    loadDiyRouteList()
 }
 </script>
 

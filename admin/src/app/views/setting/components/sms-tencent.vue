@@ -41,7 +41,7 @@ import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
 import { getSmsInfo, editSms } from '@/app/api/notice'
 
-let showDialog = ref(false)
+const showDialog = ref(false)
 const loading = ref(true)
 
 /**
@@ -89,13 +89,13 @@ const confirm = async (formEl: FormInstance | undefined) => {
         if (valid) {
             loading.value = true
 
-            let data = formData
+            const data = formData
 
             editSms(data).then(res => {
                 loading.value = false
                 showDialog.value = false
                 emit('complete')
-            }).catch(err => {
+            }).catch(() => {
                 loading.value = false
                 // showDialog.value = false
             })
@@ -104,7 +104,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
 }
 
 const setFormData = async (row: any = null) => {
-    loading.value = true;
+    loading.value = true
     Object.assign(formData, initialFormData)
     if (row) {
         const data = await (await getSmsInfo(row.sms_type)).data
@@ -113,7 +113,7 @@ const setFormData = async (row: any = null) => {
             if (data.params[key] != undefined) formData[key] = data.params[key].value
         })
     }
-    loading.value = false;
+    loading.value = false
 }
 
 defineExpose({

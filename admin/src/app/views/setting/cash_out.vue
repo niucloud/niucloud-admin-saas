@@ -57,69 +57,66 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 const pageName = route.meta.title
 
-const loading = ref(true),
-      ruleFormRef = ref<FormInstance>(),
-      formData = reactive<Record<string, string | boolean | Array<string> >>({
-        is_auto_transfer: "0",
-        is_auto_verify: "0",
-        is_open: "0",
-        min: "0.01",
-        rate: "0",
-        transfer_type: []
-    });
+const loading = ref(true)
+const ruleFormRef = ref<FormInstance>()
+const formData = reactive<Record<string, string | boolean | Array<string> >>({
+    is_auto_transfer: '0',
+    is_auto_verify: '0',
+    is_open: '0',
+    min: '0.01',
+    rate: '0',
+    transfer_type: []
+})
 const Transfertype = ref<Array<Object>>([])
 
 // 获取会员转账方式
-const getTransfertypeFn = async()=>{
+const getTransfertypeFn = async () => {
     Transfertype.value = await (await getTransfertype()).data
 }
 getTransfertypeFn()
-
 
 // 获取会员的配置信息
 const setFormData = async (id: number = 0) => {
     const data = await (await getCashOutConfig()).data
     Object.keys(formData).forEach((key: string) => {
-        if (data[key] != undefined) formData[key] = data[key];
+        if (data[key] != undefined) formData[key] = data[key]
     })
-    formData.is_open = Boolean(Number(formData.is_open));
-    loading.value = false;
+    formData.is_open = Boolean(Number(formData.is_open))
+    loading.value = false
 }
 setFormData()
 
-
-
 const minRules = (rule: any, value: any, callback: any) => {
-  if (Number(value) < 0.01) {
-    callback(new Error(t('cashWithdrawalAmountHint')))
-  } else {
-    callback()
-  }
+    if (Number(value) < 0.01) {
+        callback(new Error(t('cashWithdrawalAmountHint')))
+    } else {
+        callback()
+    }
 }
 
 const rateRules = (rule: any, value: any, callback: any) => {
-  if (Number(value) > 100 || Number(value) < 0) {
-    callback(new Error(t('commissionRatioHint')))
-  } else {
-    callback()
-  }
+    if (Number(value) > 100 || Number(value) < 0) {
+        callback(new Error(t('commissionRatioHint')))
+    } else {
+        callback()
+    }
 }
 
 const rules = reactive<FormRules>({
-  min: [
-    { validator: minRules, trigger: 'blur' }
-  ],
-  rate: [
-    { validator: rateRules, trigger: 'blur' }
-  ]
+    min: [
+        { validator: minRules, trigger: 'blur' }
+    ],
+    rate: [
+        { validator: rateRules, trigger: 'blur' }
+    ]
 })
 
 const onSave = async (formEl: FormInstance | undefined) => {
     if (loading.value || !formEl) return
     await formEl.validate((valid) => {
         if (valid) {
-            let save = {...formData};
-            save.is_open = Number(save.is_open).toString();
+            const save = { ...formData }
+            save.is_open = Number(save.is_open).toString()
 
             setCashOutConfig(save).then(() => {
                 loading.value = false

@@ -22,7 +22,7 @@ import { useDictionary } from '@/app/api/dict'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
 
-import { add{UCASE_NAME}, edit{UCASE_NAME}, get{UCASE_NAME}Info } from '@/{API_PATH}'
+import { add{UCASE_NAME}, edit{UCASE_NAME}, get{UCASE_NAME}Info,{WITH_API_PATH} } from '@/{API_PATH}'
 
 let showDialog = ref(false)
 const loading = ref(false)
@@ -74,6 +74,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
 // 获取字典数据
 {DICT_LIST}
 
+{MODEL_DATA}
 const setFormData = async (row: any = null) => {
     Object.assign(formData, initialFormData)
     loading.value = true

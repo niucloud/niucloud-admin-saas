@@ -51,6 +51,10 @@ trait ExecuteSqlTrait
             $match_item = preg_match('/ALTER TABLE [`]?(\\w+)[`]?/is', $sql, $match_data);
         } elseif (str_contains($sql, 'INSERT INTO')) {
             $match_item = preg_match('/INSERT INTO [`]?(\\w+)[`]?/is', $sql, $match_data);
+        } elseif (str_contains($sql, 'DELETE FROM')) {
+            $match_item = preg_match('/DELETE FROM [`]?(\\w+)[`]?/is', $sql, $match_data);
+        } elseif (str_contains($sql, 'UPDATE')) {
+            $match_item = preg_match('/UPDATE [`]?(\\w+)[`]?/is', $sql, $match_data);
         } else {
             $match_item = 0;
         }

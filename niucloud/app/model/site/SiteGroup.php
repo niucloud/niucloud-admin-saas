@@ -28,7 +28,7 @@ class SiteGroup extends BaseModel
     protected $pk = 'group_id';
 
     // 设置json类型字段
-    protected $json = ['addon'];
+    protected $json = ['app', 'addon'];
 
     // 设置JSON数据返回数组
     protected $jsonAssoc = true;

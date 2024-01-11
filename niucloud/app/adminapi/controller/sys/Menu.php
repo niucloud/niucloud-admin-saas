@@ -49,21 +49,21 @@ class Menu extends BaseAdminController
     public function add()
     {
         $data = $this->request->params([
+            ['app_type', ''],
             ['menu_name', ''],
             ['menu_type', 0],
             ['menu_key', ''],
             ['parent_key', ''],
-            ['app_type', ''],
             ['icon', ''],
             ['api_url', ''],
             ['view_path', ''],
             ['router_path', ''],
-
             ['methods', ''],
             ['sort', 0],
-
             ['status', MenuDict::ON],
             ['is_show', 0],
+            ['addon', ''],
+            ['menu_short_name','']
         ]);
         $this->validate($data, 'app\validate\sys\Menu.add');
         (new MenuService())->add($data);
@@ -78,18 +78,17 @@ class Menu extends BaseAdminController
         $data = $this->request->params([
             ['menu_name', ''],
             ['parent_key', ''],
-
             ['menu_type', 0],
             ['icon', ''],
             ['api_url', ''],
             ['router_path', ''],
             ['view_path', ''],
-
             ['methods', ''],
             ['sort', 0],
-
             ['status', MenuDict::ON],
             ['is_show', 0],
+            ['addon', ''],
+            ['menu_short_name','']
         ]);
         $this->validate($data, 'app\validate\sys\Menu.edit');
         (new MenuService())->edit($app_type, $menu_key, $data);

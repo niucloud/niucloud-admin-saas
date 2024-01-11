@@ -84,15 +84,15 @@ import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
-const pageName = route.meta.title;
+const pageName = route.meta.title
 const cronTableData = reactive({
     loading: true,
     data: []
 })
-let activeName = ref("/channel/wechat/message");
+const activeName = ref('/channel/wechat/message')
 const handleClick = (val: any) => {
-    router.push({ path: activeName.value });
-};
+    router.push({ path: activeName.value })
+}
 /**
  * 获取消息模板列表
  */

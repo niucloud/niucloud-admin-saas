@@ -212,13 +212,12 @@
                         <el-form-item :label="t('orderType')" v-if="formData.order_column_name">
                             <div>
                                 <el-select class="input-width" :placeholder="t('orderTypePlaceholder')"
-                                    v-model="formData.order_type" @change="">
+                                    v-model="formData.order_type" >
                                     <el-option label="正序 asc" :value="1" />
                                     <el-option label="倒序 desc" :value="2" />
                                 </el-select>
                                 <p class="text-[12px] text-[#a9a9a9] leading-normal mt-[5px]">列表排序规则。</p>
                             </div>
-
 
                         </el-form-item>
                         <el-form-item :label="t('menuType')">
@@ -313,7 +312,7 @@ const id: number = parseInt(route.query.id || 0)
 
 const loading = ref(true)
 const tableRef = useTemplateRefsList<HTMLElement>()
-let toggleIndex = ref(0)
+const toggleIndex = ref(0)
 const activeName = ref('basicSettings')
 /**
  * 表单数据
@@ -399,12 +398,11 @@ const verifyType = [
     {
         label: '',
         value: 'between'
-    },
-
+    }
 ]
 
 const addonList = ref<Array<any>>([])
-//获取插件远程搜索
+// 获取插件远程搜索
 const getAddonDevelopFn = (search: string) => {
     getAddonDevelop({ search }).then(res => {
         addonList.value = res.data
@@ -413,7 +411,7 @@ const getAddonDevelopFn = (search: string) => {
         })
     })
 }
-//拖拽排序
+// 拖拽排序
 const rowDrop = () => {
     const tbody = tableRef.value.$el.querySelector(
         '.el-table__body-wrapper tbody'
@@ -421,7 +419,7 @@ const rowDrop = () => {
     Sortable.create(tbody, {
         handle: '.vues-rank',
         animation: 300,
-        onEnd({ newIndex, oldIndex }) {
+        onEnd ({ newIndex, oldIndex }) {
             const tableData = formData.table_column
             const currRow = tableData.splice(oldIndex, 1)[0]
             tableData.splice(newIndex, 0, currRow)
@@ -429,17 +427,17 @@ const rowDrop = () => {
             nextTick(() => {
                 rowDrop()
             })
-        },
+        }
     })
 }
 onMounted(() => {
     getAddonDevelopFn('')
 })
-//删除类型change
+// 删除类型change
 const deleteTypeChange = (val: any) => {
     formData.delete_column_name = val ? formData.table_column[formData.table_column.length - 1].column_name : ''
 }
-//排序字段change
+// 排序字段change
 const orderColumnNameChange = (val: any) => {
     formData.order_type = val ? 1 : 0
 }
@@ -454,7 +452,7 @@ const validator = computed(() => {
     return formData.addon_name ? `addon${formData.addon_name ? '\\' + formData.addon_name : ''}\\app\\validate${formData.module_name ? '\\' + formData.module_name : ''}${formData.class_name ? '\\' + formData.class_name : ''}` : `app\\validate${formData.module_name ? '\\' + formData.module_name : ''}${formData.class_name ? '\\' + formData.class_name : ''}`
 })
 const webView = computed(() => {
-    return formData.addon_name ? `addon${formData.addon_name ? '\\' + formData.addon_name : ''}\\admin\\src` : `admin\\src`
+    return formData.addon_name ? `addon${formData.addon_name ? '\\' + formData.addon_name : ''}\\admin\\src` : 'admin\\src'
 })
 const routerView = computed(() => {
     return formData.addon_name ? `addon${formData.addon_name ? '\\' + formData.addon_name : ''}\\app\\adminapi\\route${formData.module_name ? '\\' + formData.module_name : ''}` : `app\\adminapi\\route${formData.module_name ? '\\' + formData.module_name : ''}`
@@ -465,9 +463,9 @@ const setFormData = async (id: number = 0) => {
     Object.keys(data).forEach((key: string) => {
         if (data[key] != undefined) formData[key] = data[key]
     })
-    formData.table_column.forEach(el => {
-        el.betweenMin = cloneDeep(el.min_number);
-        el.betweenMax = cloneDeep(el.max_number);
+    formData.table_column.forEach((el:any) => {
+        el.betweenMin = cloneDeep(el.min_number)
+        el.betweenMax = cloneDeep(el.max_number)
     })
     if (formData.addon_name != '') getAddonMenuFn(formData.addon_name)
     loading.value = false
@@ -478,19 +476,19 @@ const formRef = ref<FormInstance>()
 
 const sysMenuList = ref<Array<any>>([])
 const addonMenuList = ref<Array<any>>([])
-//获取系统菜单列表
+// 获取系统菜单列表
 const getSystemMenuFn = async () => {
-    let { data } = await getMenuByTypeDir()
-    sysMenuList.value = [{ menu_name: "顶级", menu_key: "" }]
+    const { data } = await getMenuByTypeDir()
+    sysMenuList.value = [{ menu_name: '顶级', menu_key: '' }]
     sysMenuList.value.push(...data)
 }
 getSystemMenuFn()
-//获取系统应用菜单列表
+// 获取系统应用菜单列表
 const getAddonMenuFn = async (key: any) => {
-    let { data } = await getMenuByTypeDir(key)
+    const { data } = await getMenuByTypeDir(key)
     addonMenuList.value = data
 }
-//选择插件
+// 选择插件
 const addonChange = async (val: any) => {
     formData.parent_menu = ''
     if (val != '') {
@@ -500,12 +498,11 @@ const addonChange = async (val: any) => {
 }
 const associatedIndex = ref(0)
 const editDialog = ref()
-//添加编辑关联设置
+// 添加编辑关联设置
 
 const addEvent = (val: any, index: number) => {
     associatedIndex.value = index
     editDialog.value.setFormData(val)
-
 }
 const complete = (row: any) => {
     if (associatedIndex.value != -1) {
@@ -514,12 +511,11 @@ const complete = (row: any) => {
         formData.relations.unshift(row)
     }
 }
-//删除关联配置
+// 删除关联配置
 const deleteEvent = (index: number) => {
     formData.relations.splice(index, 1)
 }
 const onSave = async (code: number) => {
-
     const data = cloneDeep(formData)
     // if (data.table_column.some(el => { return ['select', 'radio', 'checkbox'].includes(el.view_type) && el.dict_type == '' })) {
     //     // ElMessage({
@@ -529,7 +525,7 @@ const onSave = async (code: number) => {
     //     // return false
     // }
 
-    data.table_column = JSON.stringify(data.table_column.map(el => {
+    data.table_column = JSON.stringify(data.table_column.map((el:any) => {
         if (!el.is_search) el.query_type = ''
         if (el.validate_type === 'between' || el.view_type === 'number') {
             el.max_number = el.betweenMax
@@ -550,14 +546,13 @@ const onSave = async (code: number) => {
             loading.value = false
             ElMessage({
                 type: 'success',
-                message: '操作成功',
+                message: '操作成功'
             })
             setTimeout(() => {
                 window.codeActiveName = 'codeList'
                 back()
             }, 650)
         }
-
     }).catch(() => {
         loading.value = false
     })
@@ -573,7 +568,7 @@ const generatorCheckFileFn = (() => {
             t('warning'),
             {
                 confirmButtonText: t('confirm'),
-                cancelButtonText: t('cancel'),
+                cancelButtonText: t('cancel')
             }
         )
             .then(() => {
@@ -593,7 +588,7 @@ const generateCreateFn = (generate_type: any) => {
         loading.value = false
         ElMessage({
             type: 'success',
-            message: '操作成功',
+            message: '操作成功'
         })
         window.open(img(res.data.file), '_blank')
         setTimeout(() => {
@@ -616,7 +611,6 @@ const validatorBtn = (row: any, index: number) => {
         rowIndex.value = index
         editVerifyRef.value?.setFormData(row)
     }
-
 }
 const completeVerify = (row: any) => {
     formData.table_column.splice(rowIndex.value, 1, row)
@@ -624,13 +618,11 @@ const completeVerify = (row: any) => {
 const viewTypeBtn = (row: any, index: number) => {
     if (!['input', 'textarea'].includes(row.view_type)) row.validate_type = ''
     if (['select', 'radio', 'checkbox'].includes(row.view_type)) {
-
         rowIndex.value = index
         editViewTypeRef.value?.setFormData(row)
     } else if (row.view_type === 'number') {
         validatorBtn(row, index)
     }
-
 }
 const completeViewType = (row: any) => {
     formData.table_column.splice(rowIndex.value, 1, row)

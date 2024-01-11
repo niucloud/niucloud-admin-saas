@@ -129,7 +129,7 @@ if (loginType.value == 'site') {
 
 // 验证码 - start
 const verifyRef = ref(null)
-const success = (params) => {
+const success = (params:any) => {
     loginFn({ captcha_code: params.captchaVerification })
 }
 // 验证码 - end
@@ -178,7 +178,7 @@ const loginFn = (data = {}) => {
         const { query: { redirect } } = route
         const path = typeof redirect === 'string' ? redirect : '/'
         router.push(path)
-    }).catch(err => {
+    }).catch(() => {
         loading.value = false
     })
 }

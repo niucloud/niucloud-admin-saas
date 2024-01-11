@@ -21,26 +21,40 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, computed } from 'vue'
+import { ref } from 'vue'
 import { t } from '@/lang'
-import type { FormInstance } from 'element-plus'
+// import type { FormInstance } from 'element-plus'
 import { getLogInfo } from '@/app/api/site'
 
 const showDialog = ref(false)
 const loading = ref(false)
 
-const logData = ref([])
+interface LogData {
+    username: string
+    ip: string,
+    url: string,
+    type: string,
+    params:any
+}
+
+const logData = ref<LogData>({
+    username: '',
+    ip: '',
+    url: '',
+    type: '',
+    params: ''
+})
 const getLogDetail = async () => {
     logData.value = await (await getLogInfo(id)).data
     loading.value = false
 }
 
-let id = 0;
+let id = 0
 const setFormData = async (row: any = null) => {
     loading.value = true
     if (row) {
-        id = row.id;
-        getLogDetail();
+        id = row.id
+        getLogDetail()
     }
 }
 

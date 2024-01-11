@@ -12,6 +12,7 @@
 namespace app\service\admin\install;
 
 use app\dict\sys\AppTypeDict;
+use app\dict\sys\MenuDict;
 use app\model\sys\SysMenu;
 use app\service\admin\sys\MenuService;
 use app\service\core\menu\CoreMenuService;
@@ -49,8 +50,7 @@ class InstallSystemService extends BaseAdminService
         $admin_menus = $this->loadMenu(AppTypeDict::ADMIN);
         $site_menus = $this->loadMenu(AppTypeDict::SITE);
         $menus = array_merge($admin_menus, $site_menus);
-        Db::name("sys_menu")->where([ [ 'id', '>', 0 ] ])->delete();
-        //$sys_menu->where([ [ 'id', '>', 0 ] ])->force(true)->delete();
+        Db::name("sys_menu")->where([ [ 'addon', '=', '' ], ['source', '=', MenuDict::SYSTEM] ])->delete();
         $sys_menu->replace()->insertAll($menus);
         //插件菜单
         (new CoreMenuService())->refreshAllAddonMenu();

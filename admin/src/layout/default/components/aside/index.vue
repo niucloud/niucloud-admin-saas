@@ -15,8 +15,6 @@ import { watch, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import side from './side.vue'
 import useSystemStore from '@/stores/modules/system'
-import storage from '@/utils/storage'
-
 const systemStore = useSystemStore()
 const dark = computed(() => {
     return systemStore.dark

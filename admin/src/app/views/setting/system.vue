@@ -1,57 +1,63 @@
 <template>
     <div class="main-container">
-        <el-form :model="formData" label-width="150px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
+        <el-form :model="formData" label-width="150px" ref="formRef" :rules="formRules" class="page-form"
+            v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
                 <h3 class="panel-title !text-sm">{{ t('websiteInfo') }}</h3>
 
                 <el-form-item :label="t('siteName')" prop="site_name">
-                    <el-input v-model="formData.site_name" :placeholder="t('siteNamePlaceholder')" class="input-width" clearable maxlength="20" />
+                    <el-input v-model="formData.site_name" :placeholder="t('siteNamePlaceholder')" class="input-width"
+                        clearable maxlength="20" />
                 </el-form-item>
 
                 <el-form-item :label="t('logo')">
-					<div>
-						<upload-image v-model="formData.logo" />
-						<p class="text-[12px] text-[#a9a9a9]">{{ t('logoPlaceholder') }}</p>
-					</div>
+                    <div>
+                        <upload-image v-model="formData.logo" />
+                        <p class="text-[12px] text-[#a9a9a9]">{{ t('logoPlaceholder') }}</p>
+                    </div>
                 </el-form-item>
 
                 <el-form-item :label="t('icon')">
-					<div>
-						<upload-image v-model="formData.icon" />
-						<p class="text-[12px] text-[#a9a9a9]">{{ t('iconPlaceholder') }}</p>
-					</div>
+                    <div>
+                        <upload-image v-model="formData.icon" />
+                        <p class="text-[12px] text-[#a9a9a9]">{{ t('iconPlaceholder') }}</p>
+                    </div>
                 </el-form-item>
 
                 <el-form-item :label="t('keywords')">
-                    <el-input v-model="formData.keywords" :placeholder="t('keywordsPlaceholder')" class="input-width" clearable maxlength="20" />
+                    <el-input v-model="formData.keywords" :placeholder="t('keywordsPlaceholder')" class="input-width"
+                        clearable maxlength="20" />
                 </el-form-item>
 
                 <el-form-item :label="t('desc')">
-                    <el-input v-model="formData.desc" type="textarea" rows="4" clearable :placeholder="t('descPlaceholder')" class="input-width" maxlength="100" />
+                    <el-input v-model="formData.desc" type="textarea" rows="4" clearable :placeholder="t('descPlaceholder')"
+                        class="input-width" maxlength="100" />
                 </el-form-item>
             </el-card>
             <el-card class="box-card !border-none" shadow="never">
                 <h3 class="panel-title !text-sm">{{ t('frontEndInfo') }}</h3>
-				<el-form-item :label="t('frontEndName')">
-				    <el-input v-model="formData.front_end_name" :placeholder="t('frontEndNamePlaceholder')" class="input-width" clearable maxlength="20" />
-				</el-form-item>
+                <el-form-item :label="t('frontEndName')">
+                    <el-input v-model="formData.front_end_name" :placeholder="t('frontEndNamePlaceholder')"
+                        class="input-width" clearable maxlength="20" />
+                </el-form-item>
 
                 <el-form-item :label="t('frontEndLogo')">
                     <upload-image v-model="formData.front_end_logo" />
                 </el-form-item>
             </el-card>
-			<el-card class="box-card !border-none" shadow="never" v-if="app_type == 'admin' ">
-			    <h3 class="panel-title !text-sm">{{ t('serviceInformation') }}</h3>
-				<el-form-item :label="t('contactsTel')">
-				    <el-input v-model="formData.tel" :placeholder="t('contactsTelPlaceholder')" class="input-width" clearable maxlength="20" />
-				</el-form-item>
-			    <el-form-item :label="t('wechatCode')">
-			        <upload-image v-model="formData.wechat_code" />
-			    </el-form-item>
-				<el-form-item :label="t('customerServiceCode')">
-				    <upload-image v-model="formData.enterprise_wechat" />
-				</el-form-item>
-			</el-card>
+            <el-card class="box-card !border-none" shadow="never" v-if="app_type == 'admin'">
+                <h3 class="panel-title !text-sm">{{ t('serviceInformation') }}</h3>
+                <el-form-item :label="t('contactsTel')">
+                    <el-input v-model="formData.tel" :placeholder="t('contactsTelPlaceholder')" class="input-width"
+                        clearable maxlength="20" />
+                </el-form-item>
+                <el-form-item :label="t('wechatCode')">
+                    <upload-image v-model="formData.wechat_code" />
+                </el-form-item>
+                <el-form-item :label="t('customerServiceCode')">
+                    <upload-image v-model="formData.enterprise_wechat" />
+                </el-form-item>
+            </el-card>
         </el-form>
 
         <div class="fixed-footer-wrap">
@@ -69,10 +75,10 @@ import { setWebsite, getWebsite, getService } from '@/app/api/sys'
 import { FormInstance, FormRules } from 'element-plus'
 import storage from '@/utils/storage'
 import { getAppType } from '@/utils/common'
-import { useRoute } from 'vue-router'
+// import { useRoute } from 'vue-router'
 
-const route = useRoute()
-const pageName = route.meta.title
+// const route = useRoute()
+// const pageName = route.meta.title
 const loading = ref(true)
 const app_type = ref()
 const formData = reactive<Record<string, string>>({
@@ -92,9 +98,9 @@ const formData = reactive<Record<string, string>>({
     front_end_name: '',
     front_end_logo: '',
     icon: '',
-	wechat_code: '',
-	enterprise_wechat: '',
-	tel: ''
+    wechat_code: '',
+    enterprise_wechat: '',
+    tel: ''
 })
 
 const setFormData = async (id: number = 0) => {
@@ -103,12 +109,12 @@ const setFormData = async (id: number = 0) => {
         if (data[key] != undefined) formData[key] = data[key]
     })
 
-	const service_data = await (await getService()).data
-	formData['wechat_code'] = service_data.wechat_code;
-	formData['enterprise_wechat'] = service_data.enterprise_wechat;
-	formData['tel'] = service_data.tel;
+    const service_data = await (await getService()).data
+    formData['wechat_code'] = service_data.wechat_code
+    formData['enterprise_wechat'] = service_data.enterprise_wechat
+    formData['tel'] = service_data.tel
 
-	app_type.value = getAppType();
+    app_type.value = getAppType()
     loading.value = false
 }
 setFormData()

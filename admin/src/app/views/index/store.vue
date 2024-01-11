@@ -249,7 +249,7 @@
                                         </el-col>
                                     </el-row>
                                     <el-row class="pb-[10px] items pl-[15px]"
-                                        v-for="item in installCheckResult.dir.is_readable">
+                                        v-for="(item,index) in installCheckResult.dir.is_readable" :key="index">
                                         <el-col :span="12">
                                             <span>{{ item.dir }}</span>
                                         </el-col>
@@ -266,7 +266,7 @@
                                         </el-col>
                                     </el-row>
                                     <el-row class="pb-[10px] items pl-[15px]"
-                                        v-for="item in installCheckResult.dir.is_write">
+                                        v-for="(item,index) in installCheckResult.dir.is_write" :key="index">
                                         <el-col :span="12">
                                             <span>{{ item.dir }}</span>
                                         </el-col>
@@ -308,7 +308,7 @@
                 <div v-show="installStep == 3" class="h-[50vh] mt-[20px] flex flex-col">
                     <el-result icon="success" :title="t('addonInstallSuccess')"></el-result>
                     <!-- 提示信息 -->
-                    <div v-for="item in installAfterTips" class="mb-[10px]">
+                    <div v-for="(item,index) in installAfterTips" class="mb-[10px]" :key="index">
                         <el-alert :title="item" type="error" :closable="false" />
                     </div>
                 </div>
@@ -333,7 +333,7 @@
                                     </el-col>
                                 </el-row>
                                 <el-row class="pb-[10px] items pl-[15px]"
-                                    v-for="item in uninstallCheckResult.dir.is_readable">
+                                    v-for="(item,index) in uninstallCheckResult.dir.is_readable" :key="index">
                                     <el-col :span="12">
                                         <span>{{ item.dir }}</span>
                                     </el-col>
@@ -349,7 +349,7 @@
                                         </span>
                                     </el-col>
                                 </el-row>
-                                <el-row class="pb-[10px] items pl-[15px]" v-for="item in uninstallCheckResult.dir.is_write">
+                                <el-row class="pb-[10px] items pl-[15px]" v-for="(item,index) in uninstallCheckResult.dir.is_write" :key="index">
                                     <el-col :span="12">
                                         <span>{{ item.dir }}</span>
                                     </el-col>
@@ -394,7 +394,6 @@ import { t } from '@/lang'
 import { getAddonLocal, uninstallAddon, installAddon, preInstallCheck, cloudInstallAddon, getAddonInstalltask, getAddonCloudInstallLog, preUninstallCheck, cancelInstall } from '@/app/api/addon'
 import { downloadVersion, getAuthinfo, setAuthinfo } from '@/app/api/module'
 import { ElMessage, ElMessageBox, ElNotification, FormInstance, FormRules } from 'element-plus'
-import { img } from '@/utils/common'
 import 'vue-web-terminal/lib/theme/dark.css'
 import { Terminal, TerminalFlash } from 'vue-web-terminal'
 import { findFirstValidRoute } from '@/router/routers'
@@ -421,7 +420,7 @@ const downEventHintFn = () => {
     downEvent(currDownData.value, true)
 }
 
-const activeNameTabFn = (data) => {
+const activeNameTabFn = (data:any) => {
     activeName.value = data
     storage.set({ key: 'storeActiveName', data })
 }
@@ -563,7 +562,7 @@ const onExecCmd = (key, command, success, failed, name)=> {
 }
 
 function makeIterator(array: string[]) {
-    var nextIndex = 0
+    let nextIndex = 0
     return {
         next() {
             if ((nextIndex + 1) == array.length) {
@@ -614,6 +613,7 @@ const getInstallTask = (first: boolean = true) => {
                 }
             }
             if (res.data.error) {
+                ElMessage({ message: '插件安装失败', type: 'error', duration: 5000 })
                 return
             }
             if (res.data.mode == 'cloud') {
@@ -981,6 +981,9 @@ html.dark .table-head-bg {
 .app-store {
     height: calc(100vh - 120px);
     box-sizing: border-box;
+}
+:deep(.terminal .t-log-box span) {
+    white-space: pre-wrap;
 }
 </style>
 

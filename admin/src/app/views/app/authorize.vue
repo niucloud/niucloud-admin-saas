@@ -98,9 +98,9 @@
         <el-card class="box-card !border-none " shadow="never" v-if="!loading">
             <div class="text-[20px] mb-[20px]">历史版本</div>
             <el-timeline>
-                <el-timeline-item :timestamp="item.release_time + ' 版本：' + item.version_no" v-for="item in frameworkVersionList" type="primary" :hollow="true" placement="top">
-                    <div class="mt-[10px] p-[20px] bg-overlay rounded-md timeline-log-wrap" v-if="item.upgrade_log">
-                        <div v-html="item.upgrade_log"></div>
+                <el-timeline-item :timestamp="item['release_time'] + ' 版本：' + item['version_no']" v-for="(item,index) in frameworkVersionList" type="primary" :hollow="true" placement="top" :key="index">
+                    <div class="mt-[10px] p-[20px] bg-overlay rounded-md timeline-log-wrap whitespace-pre" v-if="item['upgrade_log']">
+                        <div v-html="item['upgrade_log']"></div>
                     </div>
                 </el-timeline-item>
             </el-timeline>
@@ -117,16 +117,13 @@ import { t } from '@/lang'
 import { getVersions } from '@/app/api/auth'
 import { getAuthinfo, setAuthinfo, getFrameworkVersionList } from '@/app/api/module'
 import { ElMessageBox, FormInstance, FormRules } from 'element-plus'
-import { useRoute } from 'vue-router'
 import Upgrade from '@/app/components/upgrade/index.vue'
 import CloudBuild from '@/app/components/cloud-build/index.vue'
 
-const route = useRoute()
-const pageName = route.meta.title
-const upgradeRef = ref(null)
-const cloudBuildRef = ref(null)
+const upgradeRef = ref<any>(null)
+const cloudBuildRef = ref<any>(null)
+const getAuthCodeDialog: Record<string, any> | null = ref(null)
 
-const getAuthCodeDialog = ref(null)
 const authCodeApproveDialog = ref(false)
 const isCheck = ref(false)
 const frameworkVersionList = ref([])
@@ -138,77 +135,87 @@ const getFrameworkVersionListFn = () => {
 }
 getFrameworkVersionListFn()
 
-const newVersion = computed(() => {
+const newVersion:any = computed(() => {
     return frameworkVersionList.value.length ? frameworkVersionList.value[0] : null
 })
 
-const hideAuthCode = (res) => {
-	const authCode = JSON.parse(JSON.stringify(res))
-	const data = authCode.slice(0, authCode.length / 2) + authCode.slice(authCode.length / 2, authCode.length - 1).replace(/./g, '*')
-	return data
+const hideAuthCode = (res:any) => {
+    const authCode = JSON.parse(JSON.stringify(res))
+    const data = authCode.slice(0, authCode.length / 2) + authCode.slice(authCode.length / 2, authCode.length - 1).replace(/./g, '*')
+    return data
 }
 
 const authCodeApproveFn = () => {
-	authCodeApproveDialog.value = true
+    authCodeApproveDialog.value = true
 }
 
-const authinfo = ref('')
+interface AuthInfo {
+	company_name: string,
+	site_address: string,
+	auth_code: string
+}
+
+const authinfo = ref<AuthInfo>({
+    company_name: '',
+    site_address: '',
+    auth_code: ''
+})
 const loading = ref(true)
 const saveLoading = ref(false)
 const checkAppMange = () => {
-	getAuthinfo()
-		.then((res) => {
-			loading.value = false
-			if (res.data.data && res.data.data.length != 0) {
-				authinfo.value = res.data.data
-				authCodeApproveDialog.value = false
-			}
-		})
-		.catch(() => {
-			loading.value = false
-			authCodeApproveDialog.value = false
-		})
+    getAuthinfo()
+        .then((res) => {
+            loading.value = false
+            if (res.data.data && res.data.data.length != 0) {
+                authinfo.value = res.data.data
+                authCodeApproveDialog.value = false
+            }
+        })
+        .catch(() => {
+            loading.value = false
+            authCodeApproveDialog.value = false
+        })
 }
 checkAppMange()
 
 const formData = reactive<Record<string, string>>({
-	auth_code: '',
-	auth_secret: ''
+    auth_code: '',
+    auth_secret: ''
 })
 const formRef = ref<FormInstance>()
 
 // 表单验证规则
 const formRules = reactive<FormRules>({
-	auth_code: [
-		{ required: true, message: t('authCodePlaceholder'), trigger: 'blur' }
-	],
-	auth_secret: [
-		{ required: true, message: t('authSecretPlaceholder'), trigger: 'blur' }
-	]
+    auth_code: [
+        { required: true, message: t('authCodePlaceholder'), trigger: 'blur' }
+    ],
+    auth_secret: [
+        { required: true, message: t('authSecretPlaceholder'), trigger: 'blur' }
+    ]
 })
 
 const save = async (formEl: FormInstance | undefined) => {
-	if (saveLoading.value || !formEl) return
+    if (saveLoading.value || !formEl) return
 
-	await formEl.validate(async (valid) => {
-		if (valid) {
-			saveLoading.value = true
+    await formEl.validate(async (valid) => {
+        if (valid) {
+            saveLoading.value = true
 
-			setAuthinfo(formData)
-				.then(() => {
-					saveLoading.value = false
-					checkAppMange()
-				})
-				.catch(() => {
-					saveLoading.value = false
-					authCodeApproveDialog.value = false
-				})
-		}
-	})
+            setAuthinfo(formData)
+                .then(() => {
+                    saveLoading.value = false
+                    checkAppMange()
+                })
+                .catch(() => {
+                    saveLoading.value = false
+                    authCodeApproveDialog.value = false
+                })
+        }
+    })
 }
 
 const market = () => {
-	window.open('https://www.niucloud.com/app')
+    window.open('https://www.niucloud.com/app')
 }
 
 const versions = ref('')

@@ -37,10 +37,10 @@ const imageRef: Record<string, any> | null = ref(null)
 const videoRef: Record<string, any> | null = ref(null)
 
 const content = computed({
-    get() {
+    get () {
         return prop.modelValue
     },
-    set(value) {
+    set (value) {
         emit('update:modelValue', value)
     }
 })
@@ -61,13 +61,13 @@ let insertFn: InsertFnType = (url: string) => { }
 const editorConfig: Partial<IEditorConfig> = {
     MENU_CONF: {
         uploadImage: {
-            customBrowseAndUpload(insert: InsertFnType) {
+            customBrowseAndUpload (insert: InsertFnType) {
                 imageRef.value.showDialog = true
                 insertFn = insert
             }
         },
         uploadVideo: {
-            customBrowseAndUpload(insert: InsertFnType) {
+            customBrowseAndUpload (insert: InsertFnType) {
                 videoRef.value.showDialog = true
                 insertFn = insert
             }

@@ -137,10 +137,10 @@
                 </el-col>
                 <el-col :span="4">
                     <div class="flex justify-center">
-                        <el-image class="w-[180px] h-[180px]" :src="qr_code ? img(qr_code) : ''">
+                        <el-image class="w-[180px] h-[180px]" :src="qrCode ? img(qrCode) : ''">
                             <template #error>
                                 <div class="w-[100%] h-[100%] flex items-center  justify-center bg-[#f5f7fa]">
-                                    <span>{{ qr_code ? t('fileErr') : t('emptyQrCode') }}</span>
+                                    <span>{{ qrCode ? t('fileErr') : t('emptyQrCode') }}</span>
                                 </div>
                             </template>
                         </el-image>
@@ -155,26 +155,26 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
-import { t } from "@/lang";
+import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { t } from '@/lang'
 import { img } from '@/utils/common'
 import { getWeappConfig } from '@/app/api/weapp'
 
-const router = useRouter();
-let activeName = ref("/channel/weapp");
-let active = ref(2);
-let qr_code = ref('')
+const router = useRouter()
+const activeName = ref('/channel/weapp')
+const active = ref(2)
+const qrCode = ref('')
 onMounted(async () => {
-    let res = await getWeappConfig()
-    qr_code.value = res.data.qr_code
+    const res = await getWeappConfig()
+    qrCode.value = res.data.qr_code
 })
 const linkEvent = (url: string) => {
-    window.open(url, "_blank");
-};
+    window.open(url, '_blank')
+}
 const handleClick = (val: any) => {
-    router.push({ path: activeName.value });
-};
+    router.push({ path: activeName.value })
+}
 </script>
 
 <style lang="scss" scoped>

@@ -96,90 +96,88 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import { t } from '@/lang'
-import { getAddontype, addAddonDevelop, editAddonDevelop, getAddonDevelopInfo, getAddonDevelopCheck, getAddonDevelop } from '@/app/api/tools'
+import { getAddontype, addAddonDevelop, editAddonDevelop, getAddonDevelopInfo, getAddonDevelopCheck } from '@/app/api/tools'
 import { getAddonList } from '@/app/api/sys'
-import { ElMessageBox, ElMessage } from 'element-plus'
+import { ElMessageBox, ElMessage, FormInstance } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
-const pageName = route.meta.title;
+const pageName = route.meta.title
 const form = ref({
-    title: "",
-    icon: "",
-    key: "",
-    desc: "",
-    author: "",
-    version: "",
-    cover: "",
-    type: "",
-    support_app: "",
+    title: '',
+    icon: '',
+    key: '',
+    desc: '',
+    author: '',
+    version: '',
+    cover: '',
+    type: '',
+    support_app: '',
     support_type: 1
 })
 const options = ref([])
 const loading = ref(false)
 const formRef = ref()
-const validKey = (rule, value, callback) => {
+const validKey = (rule:any, value:any, callback:any) => {
     if (value !== '') {
-        const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/;
+        const reg = /^[a-zA-Z][a-zA-Z0-9_]*$/
         if (!reg.test(value)) {
-            return callback(new Error(t('keyPlaceholderErr')));
+            return callback(new Error(t('keyPlaceholderErr')))
         } else {
-            return callback(); // *验证成功的地方必须callback()
+            return callback() // *验证成功的地方必须callback()
         }
     } else {
-        return callback(new Error(t('keyPlaceholder')));
+        return callback(new Error(t('keyPlaceholder')))
     }
-
 }
-const validVersion = (rule, value, callback) => {
+const validVersion = (rule:any, value:any, callback:any) => {
     if (value !== '') {
-        const reg = /^([0-9]\d|[0-9])(\.([0-9]){1}){2}$/;
+        const reg = /^([0-9]\d|[0-9])(\.([0-9]){1}){2}$/
         if (!reg.test(value)) {
-            return callback(new Error(t('versionPlaceholderErr')));
+            return callback(new Error(t('versionPlaceholderErr')))
         } else {
-            return callback(); // *验证成功的地方必须callback()
+            return callback() // *验证成功的地方必须callback()
         }
     } else {
-        return callback(new Error(t('versionPlaceholder')));
+        return callback(new Error(t('versionPlaceholder')))
     }
-
 }
 const rules = ref({
     title: [
-        { required: true, message: t('titlePlaceholder'), trigger: 'blur' },
+        { required: true, message: t('titlePlaceholder'), trigger: 'blur' }
     ],
     icon: [
-        { required: true, message: t('iconPlaceholder'), trigger: 'change' },
+        { required: true, message: t('iconPlaceholder'), trigger: 'change' }
     ],
     key: [
-        { required: true, validator: validKey, trigger: 'blur' },
+        { required: true, validator: validKey, trigger: 'blur' }
     ],
     author: [
-        { required: true, message: t('authorPlaceholder'), trigger: 'blur' },
+        { required: true, message: t('authorPlaceholder'), trigger: 'blur' }
     ],
     version: [
-        { required: true, validator: validVersion, trigger: 'blur' },
+        { required: true, validator: validVersion, trigger: 'blur' }
     ],
     cover: [
-        { required: true, message: t('coverPlaceholder'), trigger: 'change' },
+        { required: true, message: t('coverPlaceholder'), trigger: 'change' }
     ],
     type: [
-        { required: true, message: t('typePlaceholder'), trigger: 'change' },
+        { required: true, message: t('typePlaceholder'), trigger: 'change' }
     ],
     support_app: [
-        { required: true, message: t('typePlaceholder'), trigger: 'change' },
-    ],
+        { required: true, message: t('typePlaceholder'), trigger: 'change' }
+    ]
 })
 onMounted(async () => {
-    let res = await getAddontype()
+    const res = await getAddontype()
     options.value = res.data
     if (route.query.key) getAddonDevelopInfoFn(route.query.key)
 })
 const typeChange = () => {
     form.value.support_app = ''
 }
-//详情查询
+// 详情查询
 const getAddonDevelopInfoFn = (key: any) => {
     loading.value = true
     getAddonDevelopInfo(key).then(res => {
@@ -189,10 +187,10 @@ const getAddonDevelopInfoFn = (key: any) => {
         loading.value = false
     })
 }
-//获取app列表
+// 获取app列表
 const AppLst = ref<Array<any>>([])
 const getAddonListFn = async () => {
-    let { data } = await getAddonList({})
+    const { data } = await getAddonList({})
     AppLst.value = data
 }
 getAddonListFn()
@@ -204,7 +202,7 @@ const getAddonDevelopCheckFn = (key: any) => {
             confirmButtonText: t('confirm'),
             callback: (action: any) => {
                 console.log(action)
-            },
+            }
         })
     })
 }
@@ -215,20 +213,19 @@ const getAddonDevelopCheckFn = (key: any) => {
 const onSave = async (formEl: FormInstance | undefined) => {
     await formEl.validate(async (valid) => {
         if (valid) {
-            let save = route.query.key ? editAddonDevelop : addAddonDevelop
+            const save = route.query.key ? editAddonDevelop : addAddonDevelop
             loading.value = true
             save(form.value.key, form.value).then(res => {
                 loading.value = false
                 ElMessage({
                     message: t('onSaveSuccessText'),
-                    type: 'success',
+                    type: 'success'
                 })
 
                 setTimeout(() => {
                     window.addonActiveName = 'pluginList'
-                    router.push({ path: "/tools/addon" })
+                    router.push({ path: '/tools/addon' })
                 }, 650)
-
             }).catch(() => {
                 loading.value = false
             })

@@ -69,15 +69,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, computed, toRaw, watch } from 'vue'
+import { ref, reactive, computed, toRaw } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
 import { getUserInfo, getAllUserList } from '@/app/api/user'
 import { addUser, editUser } from '@/app/api/site'
 import { allRole } from '@/app/api/sys'
 import { img, deepClone } from '@/utils/common'
+import { AnyObject } from '@/types/global'
 
-const userList = ref([])
+const userList = ref<AnyObject>([])
 const uid = ref<number | string>('')
 
 const selectUser = (value: any) => {
@@ -165,7 +166,7 @@ const emit = defineEmits(['complete'])
 const roles = ref<Record<string, any>>([])
 allRole().then(res => {
     roles.value = res.data
-    roles.value.forEach(element => {
+    roles.value.forEach((element:any) => {
         element.role_id = element.role_id.toString()
     })
 })

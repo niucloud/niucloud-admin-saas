@@ -13,7 +13,7 @@
                     <el-select v-model="formData.group_id" clearable :placeholder="t('groupIdPlaceholder')"
                         class="input-width">
                         <el-option :label="item['group_name']" :value="item['group_id']"
-                            v-for="item in groupList" />
+                            v-for="(item,index) in groupList" :key="index"/>
                     </el-select>
                 </el-form-item>
                 <!-- <el-form-item :label="t('realName')" prop="real_name" v-if="!formData.site_id && !loading">
@@ -68,15 +68,14 @@
                     <el-select v-model="formData.group_id" clearable :placeholder="t('groupIdPlaceholder')"
                         class="input-width">
                         <el-option :label="item['group_name']" :value="item['group_id']"
-                            v-for="item in groupList" />
+                            v-for="(item,index) in groupList" :key="index"/>
                     </el-select>
                 </el-form-item>
             </div>
 
             <el-form-item :label="t('expireTime')" prop="expire_time" class="input-width">
                 <el-date-picker class="flex-1 !flex" v-model="formData.expire_time" clearable type="datetime"
-                    value-format="YYYY-MM-DD HH:mm:ss" :placeholder="t('expireTimePlaceholder')">
-                </el-date-picker>
+                    :placeholder="t('expireTimePlaceholder')" />
             </el-form-item>
         </el-form>
 
@@ -102,11 +101,14 @@ const showDialog = ref(false)
 const loading = ref(true)
 const groupList = ref([])
 const siteUser = ref([])
-
+const siteType = ref([])
 getAllUserList({}).then(({ data }) => {
     siteUser.value = data
 }).catch()
 
+const end = new Date()
+
+end.setTime(end.getTime() + 3600 * 1000 * 2 * 360)
 /**
  * 表单数据
  */
@@ -118,7 +120,7 @@ const initialFormData = {
     username: '',
     password: '',
     confirm_password: '',
-    expire_time: '',
+    expire_time: end,
     group_id: ''
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
@@ -126,14 +128,14 @@ const formData: Record<string, any> = reactive({ ...initialFormData })
 const formRef = ref<FormInstance>()
 
 const setGroupList = async () => {
-    groupList.value = await (await getSiteGroupAll({})).data
-    if (groupList.value.length > 0) formData.group_id = groupList.value[0].group_id
+    groupList.value = await (await getSiteGroupAll()).data
 }
 setGroupList()
+
 /**
  * 应用选择
  */
-const appChangeFn = (val) => { formData.group_id = '' }
+// const appChangeFn = (val) => { formData.group_id = '' }
 /**
  * 获取应用列表
  */
@@ -147,6 +149,7 @@ const setFormData = async (row: any = null) => {
     Object.assign(formData, initialFormData)
     if (row) {
         const data = await (await getSiteInfo(row.site_id)).data
+        siteType.value = data
         Object.keys(formData).forEach((key: string) => {
             if (data[key] != undefined) formData[key] = data[key]
         })
@@ -201,7 +204,7 @@ const emit = defineEmits(['complete'])
 
 // 弹窗头部
 const elDialogTitle = computed(() => {
-    const title = ref<string>('')
+    // const title = ref<string>('')
     if (loading.value) return ''
     return formData.site_id ? t('editSite') : t('addSite')
 })
@@ -223,7 +226,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
                 loading.value = false
                 showDialog.value = false
                 emit('complete')
-            }).catch(err => {
+            }).catch(() => {
                 loading.value = false
                 // showDialog.value = false
             })

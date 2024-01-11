@@ -105,7 +105,8 @@ class Site extends BaseAdminController
     {
         $data = $this->request->params([
             ['site_name', ''],
-            ['expire_time', 0]
+            ['expire_time', 0],
+            ['group_id',0]
         ]);
         $this->validate($data, 'app\validate\site\Site.edit');
         (new SiteService())->edit($id, $data);

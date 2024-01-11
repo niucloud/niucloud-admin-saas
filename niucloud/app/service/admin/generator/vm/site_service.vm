@@ -38,7 +38,7 @@ class {UCASE_NAME}Service extends BaseAdminService
         $field = '{FIELDS}';
         $order = '{ORDER}';
 
-        $search_model = $this->model->where([['site_id', '=', $this->site_id]])->withSearch([{SEARCH_FIELDS}], $where)->field($field)->order($order);
+         $search_model = {SEARCH_MODEL};
         $list = $this->pageQuery($search_model);
         return $list;
     }
@@ -52,7 +52,7 @@ class {UCASE_NAME}Service extends BaseAdminService
     {
         $field = '{FIELDS}';
 
-        $info = $this->model->field($field)->where([['{PK}', '=', $id],['site_id', '=', $this->site_id]])->findOrEmpty()->toArray();
+        $info = {INFO_SEARCH_MODEL};
         return $info;
     }
 
@@ -93,5 +93,5 @@ class {UCASE_NAME}Service extends BaseAdminService
         $res = $model->delete();
         return $res;
     }
-
+    {WITH_ALL_FUNCTION}
 }

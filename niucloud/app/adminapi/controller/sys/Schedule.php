@@ -70,7 +70,7 @@ class Schedule extends BaseAdminController
     public function add()
     {
         $data = $this->request->params([
-            ['key', ''],
+            ['key', '', false],
             ['time', []],
             ['status', ScheduleDict::OFF],
         ]);

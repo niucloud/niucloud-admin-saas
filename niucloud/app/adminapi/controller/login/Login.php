@@ -14,6 +14,8 @@ namespace app\adminapi\controller\login;
 use app\service\admin\auth\ConfigService;
 use app\service\admin\auth\LoginService;
 use app\service\admin\upgrade\UpgradeService;
+use app\service\core\addon\CoreAddonDevelopBuildService;
+use app\service\core\menu\CoreMenuService;
 use core\base\BaseAdminController;
 use think\Response;
 
@@ -62,13 +64,7 @@ class Login extends BaseAdminController
     }
 
     public function test(){
-        $code_dir = project_path() . 'upgrade/658a7ee7aec7d/download/code/0.0.6';
-        $file_path = project_path() . 'upgrade/658a7ee7aec7d/download/code/0.0.6.txt';
-        $change = array_filter(explode("\n", file_get_contents($file_path)));
-
-        foreach ($change as &$item) {
-            list($operation, $md5, $file) = $item = explode(' ', $item);
-        }
-        (new UpgradeService())->installDepend($code_dir, array_column($change, 2));
+        (new CoreMenuService())->refreshAddonMenu('shop');
+//        (new CoreAddonDevelopBuildService())->build('shop');
     }
 }

@@ -62,7 +62,7 @@ class SiteService extends BaseAdminService
         $condition = [
             [ 'app_type', '<>', 'admin' ]
         ];
-        $search_model = $this->model->where($condition)->withSearch([ 'create_time', 'expire_time', 'keywords', 'status', 'group_id', 'app' ], $where)->with(['groupName', 'addonName'])->field($field)->append([ 'status_name' ])->order('create_time desc');
+        $search_model = $this->model->where($condition)->withSearch([ 'create_time', 'expire_time', 'keywords', 'status', 'group_id', 'app' ], $where)->with(['groupName'])->field($field)->append([ 'status_name' ])->order('create_time desc');
         return $this->pageQuery($search_model, function ($item){
             $item['admin'] = (new SysUserRole())->where([ ['site_id', '=', $item['site_id'] ], ['is_admin', '=', 1] ])
                 ->field('uid')
@@ -80,7 +80,7 @@ class SiteService extends BaseAdminService
     {
         $field = 'site_id, site_name, front_end_name, front_end_logo, app_type, keywords, logo, icon, `desc`, status, latitude, longitude, province_id, city_id, 
         district_id, address, full_address, phone, business_hours, create_time, expire_time, group_id, app, addons';
-        $info = $this->model->where([ [ 'site_id', '=', $site_id ] ])->with([ 'groupName', 'addonName' ])->field($field)->append([ 'status_name' ])->findOrEmpty()->toArray();
+        $info = $this->model->where([ [ 'site_id', '=', $site_id ] ])->with([ 'groupName' ])->field($field)->append([ 'status_name' ])->findOrEmpty()->toArray();
         if (!empty($info)) {
             $site_addons = (new CoreSiteService())->getAddonKeysBySiteId($site_id);
             $info['site_addons'] = (new Addon())->where([ ['key', 'in', $site_addons]])->field('key,title,desc,icon')->select()->toArray();
@@ -155,6 +155,9 @@ class SiteService extends BaseAdminService
      */
     public function edit(int $site_id, array $data)
     {
+        //获取套餐类型
+        $site_group = (new SiteGroup())->where([ ['group_id', '=', $data[ 'group_id' ] ] ])->field('app,addon')->findOrEmpty();
+        $data['app'] = $site_group['app'];
         $this->model->update($data, [ [ 'site_id', '=', $site_id ] ]);
         Cache::tag(self::$cache_tag_name . $site_id)->clear();
         return true;

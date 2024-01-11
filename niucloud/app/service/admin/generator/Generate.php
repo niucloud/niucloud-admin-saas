@@ -203,7 +203,6 @@ class Generate
             }
 
         }
-
         return $data;
     }
 

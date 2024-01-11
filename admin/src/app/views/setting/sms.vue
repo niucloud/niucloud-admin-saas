@@ -35,20 +35,20 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import { t } from '@/lang'
-import { getSmsList,getSmsInfo } from '@/app/api/notice'
+import { getSmsList } from '@/app/api/notice'
 import Ali from '@/app/views/setting/components/sms-ali.vue'
 import Tencent from '@/app/views/setting/components/sms-tencent.vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const pageName = route.meta.title;
+const pageName = route.meta.title
 
 const aliyunDialog: Record<string, any> | null = ref(null)
 const tencentDialog: Record<string, any> | null = ref(null)
 
-let smsTableData = reactive({
+const smsTableData = reactive({
     loading: true,
-    data: [],
+    data: []
 })
 
 /**
@@ -66,8 +66,8 @@ const loadSmsList = () => {
 
 loadSmsList()
 const editEvent = (data: any) => {
-    eval(data.sms_type+'Dialog.value.setFormData(data)');
-    eval(data.sms_type+'Dialog.value.showDialog = true;');
+    eval(data.sms_type + 'Dialog.value.setFormData(data)')
+    eval(data.sms_type + 'Dialog.value.showDialog = true;')
 }
 
 </script>

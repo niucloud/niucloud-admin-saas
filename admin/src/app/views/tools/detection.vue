@@ -76,24 +76,24 @@ const route = useRoute()
 const pageName = route.meta.title
 
 const systemService = ref([])
-let loadingArr = reactive({
-	"server_load": true,
-	"server_version_load": true,
-	"system_variables_load": true,
-	"process_load": true
+const loadingArr = reactive({
+    server_load: true,
+    server_version_load: true,
+    system_variables_load: true,
+    process_load: true
 })
 const getSystemService = () => {
-	loadingArr.server_load = true;
-	loadingArr.server_version_load = true;
-	loadingArr.system_variables_load = true;
-	loadingArr.process_load = true;
-	getSystem().then(res => {
-		systemService.value = res.data
-		loadingArr.server_load = false;
-		loadingArr.server_version_load = false;
-		loadingArr.system_variables_load = false;
-		loadingArr.process_load = false;
-	})
+    loadingArr.server_load = true
+    loadingArr.server_version_load = true
+    loadingArr.system_variables_load = true
+    loadingArr.process_load = true
+    getSystem().then(res => {
+        systemService.value = res.data
+        loadingArr.server_load = false
+        loadingArr.server_version_load = false
+        loadingArr.system_variables_load = false
+        loadingArr.process_load = false
+    })
 }
 getSystemService()
 </script>

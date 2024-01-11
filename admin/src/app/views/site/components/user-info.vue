@@ -1,55 +1,57 @@
 <template>
     <el-dialog v-model="showDialog" :title="t('userInfo')" width="550px" :destroy-on-close="true">
-        <el-form :model="formData" label-width="110px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
+        <el-form :model="formData" label-width="110px" ref="formRef" :rules="formRules" class="page-form"
+            v-loading="loading">
 
-            <el-form-item :label="t('headimg')" >
+            <el-form-item :label="t('headimg')">
                 <div class="flex items-center">
                     <el-avatar v-if="formData.head_img" :src="img(formData.head_img)" />
                     <el-avatar v-else>
-                    	<img src="@/app/assets/images/member_head.png"/>
+                        <img src="@/app/assets/images/member_head.png" />
                     </el-avatar>
                 </div>
             </el-form-item>
 
-            <el-form-item :label="t('userRealName')" >
+            <el-form-item :label="t('userRealName')">
                 <div class="input-width"> {{ formData.real_name }} </div>
             </el-form-item>
-            <el-form-item :label="t('accountNumber')" >
+            <el-form-item :label="t('accountNumber')">
                 <div class="input-width"> {{ formData.username }} </div>
             </el-form-item>
 
-			<el-form-item :label="t('siteId')" >
-			    <div class="input-width"> {{ formData.roles[0].site_id }} </div>
-			</el-form-item>
+            <el-form-item :label="t('siteId')">
+                <div class="input-width"> {{ formData.roles[0].site_id }} </div>
+            </el-form-item>
 
-            <el-form-item :label="t('siteName')" >
-				<div class="flex">
-					<div class="max-w-[260px]"> {{ formData.roles[0].site_name }} </div>
-					<el-link class="ml-10 text-blue-700" href="/site/login" target="_blank" :underline="false">{{ t('enterSite') }}</el-link>
-				</div>
+            <el-form-item :label="t('siteName')">
+                <div class="flex">
+                    <div class="max-w-[260px]"> {{ formData.roles[0].site_name }} </div>
+                    <el-link class="ml-10 text-blue-700" href="/site/login" target="_blank" :underline="false">{{
+                        t('enterSite') }}</el-link>
+                </div>
 
             </el-form-item>
 
-            <el-form-item :label="t('isAdmin')" >
-                <div class="input-width">{{  formData.roles[0].is_admin ? t('yes') : t('no')  }} </div>
+            <el-form-item :label="t('isAdmin')">
+                <div class="input-width">{{ formData.roles[0].is_admin ? t('yes') : t('no') }} </div>
             </el-form-item>
 
-            <el-form-item :label="t('status')" >
+            <el-form-item :label="t('status')">
                 <div class="input-width">
                     <el-tag class="ml-2" type="success" v-if="formData.status == 1">{{ t('statusNormal') }}</el-tag>
-                    <el-tag class="ml-2" type="error" v-if="formData.status == 0">{{t('statusDeactivate') }}</el-tag>
+                    <el-tag class="ml-2" type="error" v-if="formData.status == 0">{{ t('statusDeactivate') }}</el-tag>
                 </div>
             </el-form-item>
 
-            <el-form-item :label="t('lastIp')" >
+            <el-form-item :label="t('lastIp')">
                 <div class="input-width"> {{ formData.last_ip }} </div>
             </el-form-item>
 
-            <el-form-item :label="t('lastTime')" v-if="parseFloat(formData.last_time)" >
+            <el-form-item :label="t('lastTime')" v-if="parseFloat(formData.last_time)">
                 <div class="input-width"> {{ formData.last_time }} </div>
             </el-form-item>
 
-            <el-form-item :label="t('createTime')"  v-if="parseFloat(formData.create_time)">
+            <el-form-item :label="t('createTime')" v-if="parseFloat(formData.create_time)">
                 <div class="input-width"> {{ formData.create_time }} </div>
             </el-form-item>
 
@@ -76,17 +78,17 @@ const loading = ref(true)
  * 表单数据
  */
 const initialFormData = {
-    username:'',
-    create_time:'',
-    head_img:'',
-    last_ip:'',
-    last_time:'',
-    login_count:'',
-    real_name:'',
-    status:'',
-    uid:'',
-    update_time:'',
-    roles:[]
+    username: '',
+    create_time: '',
+    head_img: '',
+    last_ip: '',
+    last_time: '',
+    login_count: '',
+    real_name: '',
+    status: '',
+    uid: '',
+    update_time: '',
+    roles: []
 
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
@@ -100,7 +102,7 @@ const formRules = computed(() => {
     }
 })
 
-const emit = defineEmits(['complete'])
+// const emit = defineEmits(['complete'])
 
 const setFormData = async (row: any = null) => {
     loading.value = true

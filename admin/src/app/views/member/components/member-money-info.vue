@@ -57,17 +57,17 @@ const loading = ref(true)
  */
 const initialFormData = {
     account_data: 0,
-    account_type:'',
-    create_time:'',
-    from_type:'',
-    from_type_name:"",
-    headimg:'',
-    member_id:'',
-    memo:'',
-    mobile:'',
-    nickname:'',
-    related_id:'',
-    username:''
+    account_type: '',
+    create_time: '',
+    from_type: '',
+    from_type_name: '',
+    headimg: '',
+    member_id: '',
+    memo: '',
+    mobile: '',
+    nickname: '',
+    related_id: '',
+    username: ''
 
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
@@ -81,10 +81,10 @@ const formRules = computed(() => {
     }
 })
 
-const emit = defineEmits(['complete'])
+// const emit = defineEmits(['complete'])
 
 const setFormData = async (row: any = null) => {
-    loading.value = true;
+    loading.value = true
     Object.assign(formData, initialFormData)
 
     if (row) {

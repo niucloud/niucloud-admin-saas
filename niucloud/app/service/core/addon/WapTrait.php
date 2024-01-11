@@ -78,7 +78,7 @@ trait WapTrait
         $addon_arr[] = $addon; // 追加新装插件
         $addon_arr = array_unique($addon_arr);
         foreach ($addon_arr as $k => $v) {
-            $addon_path = $compile_path . str_replace('/', DIRECTORY_SEPARATOR, $v . '/components/diy'); // 插件自定义组件根目录
+            $addon_path = $compile_path . str_replace('/', DIRECTORY_SEPARATOR, 'addon/' . $v . '/components/diy'); // 插件自定义组件根目录
             $addon_file_arr = getFileMap($addon_path);
             if (!empty($addon_file_arr)) {
                 foreach ($addon_file_arr as $ck => $cv) {
@@ -100,7 +100,7 @@ trait WapTrait
                         $content .= "                <$file_name :component=\"component\" :index=\"index\" :pullDownRefreshCount=\"props.pullDownRefreshCount\"></$file_name>\n";
                         $content .= "            </template>\n";
 
-                        $addon_import_content .= "   import diy{$name} from '@/" . $v . "/components/diy/{$path}/index.vue';\n";
+                        $addon_import_content .= "   import diy{$name} from '@/addon/" . $v . "/components/diy/{$path}/index.vue';\n";
                     }
                 }
             }
@@ -219,7 +219,7 @@ trait WapTrait
         $addon_arr[] = $addon; // 追加新装插件
         $addon_arr = array_unique($addon_arr);
         foreach ($addon_arr as $k => $v) {
-            $addon_path = $compile_path . str_replace('/', DIRECTORY_SEPARATOR, $v . '/components/fixed'); // 插件固定模板组件根目录
+            $addon_path = $compile_path . str_replace('/', DIRECTORY_SEPARATOR, 'addon/' . $v . '/components/fixed'); // 插件固定模板组件根目录
             $addon_file_arr = getFileMap($addon_path);
 
             if (!empty($addon_file_arr)) {
@@ -242,7 +242,7 @@ trait WapTrait
                         $content .= "            <$file_name :data=\"props.data\" :pullDownRefreshCount=\"props.pullDownRefreshCount\"></$file_name>\n";
                         $content .= "        </template>\n";
 
-                        $addon_import_content .= "   import fixed{$name} from '@/" . $v . "/components/fixed/{$path}/index.vue';\n";
+                        $addon_import_content .= "   import fixed{$name} from '@/addon/" . $v . "/components/fixed/{$path}/index.vue';\n";
                     }
                 }
             }

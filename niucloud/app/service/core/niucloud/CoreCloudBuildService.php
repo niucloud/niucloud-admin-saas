@@ -28,6 +28,8 @@ class CoreCloudBuildService extends BaseCoreService
 
     private $build_task;
 
+    protected $root_path;
+
     public function __construct()
     {
         parent::__construct();
@@ -241,9 +243,6 @@ class CoreCloudBuildService extends BaseCoreService
                         }
 
                         dir_copy($temp_dir . 'download', root_path());
-
-                        // 处理编译之后的文件
-                        (new CoreAddonInstallService(''))->handleBuildFile();
 
                         $this->clearTask();
                     } else {

@@ -24,6 +24,7 @@ use app\service\core\addon\CoreAddonService;
 use app\service\core\niucloud\CoreModuleService;
 use app\service\core\site\CoreSiteService;
 use core\base\BaseAdminService;
+use core\exception\CommonException;
 use Exception;
 use think\db\exception\DbException;
 use think\Response;
@@ -162,6 +163,7 @@ class AddonService extends BaseAdminService
      * @return true
      */
     public function download(string $app_key, string $version){
+        if (empty($version)) throw new CommonException('ADDON_DOWNLOAD_VERSION_EMPTY');
         return (new CoreAddonDownloadService())->download($app_key, $version);
     }
 

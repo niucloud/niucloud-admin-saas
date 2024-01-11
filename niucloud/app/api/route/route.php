@@ -83,6 +83,8 @@ Route::group(function() {
     Route::get('site', 'sys.Config/site');
     //场景域名
     Route::get('scene_domain', 'sys.Config/getSceneDomain');
+    // 获取手机端首页列表
+    Route::get('wap_index', 'sys.Config/getWapIndexList');
 
     /***************************************************** 地区管理 ****************************************************/
     //通过pid获取列表

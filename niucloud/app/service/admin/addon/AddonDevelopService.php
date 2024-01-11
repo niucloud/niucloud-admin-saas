@@ -88,7 +88,7 @@ class AddonDevelopService extends BaseAdminService
      * @return array
      */
     public function build(string $key){
-        return (new CoreAddonDevelopBuildService($key))->build();
+        return (new CoreAddonDevelopBuildService())->build($key);
     }
 
 
@@ -98,7 +98,7 @@ class AddonDevelopService extends BaseAdminService
      * @return true
      */
     public function download(string $key){
-        return (new CoreAddonDevelopDownloadService($key))->download();
+        return (new CoreAddonDevelopBuildService())->download($key);
     }
 
     /**

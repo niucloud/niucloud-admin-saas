@@ -62,9 +62,9 @@
 </template>
 
 <script lang="ts" setup>
-import { CollectionTag, UserFilled } from '@element-plus/icons-vue'
-import { computed, reactive, ref, onMounted, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { UserFilled } from '@element-plus/icons-vue'
+import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import type { FormInstance, FormRules, ElNotification } from 'element-plus'
 import useUserStore from '@/stores/modules/user'
 import { setUserInfo } from '@/app/api/personal'
@@ -81,55 +81,54 @@ const clickEvent = (command: string) => {
     }
 }
 
-const toLink = (link)=>{
-    router.push(link);
+const toLink = (link) => {
+    router.push(link)
 }
 
-
 // 修改密码 --- start
-let changePasswordDialog = ref(false)
-const formRef = ref<FormInstance>();
+const changePasswordDialog = ref(false)
+const formRef = ref<FormInstance>()
 // 提交信息
-let saveInfo = reactive({
+const saveInfo = reactive({
     original_password: '',
     password: '',
     password_copy: ''
-});
+})
 // 表单验证规则
 const formRules = reactive<FormRules>({
-  original_password: [
-    { required: true, message: t("originalPasswordPlaceholder"), trigger: "blur" },
-  ],
-  password: [
-    { required: true, message: t("passwordPlaceholder"), trigger: "blur" },
-  ],
-  password_copy: [
-    { required: true, message: t("passwordPlaceholder"), trigger: "blur" },
-  ]
-});
+    original_password: [
+        { required: true, message: t('originalPasswordPlaceholder'), trigger: 'blur' }
+    ],
+    password: [
+        { required: true, message: t('passwordPlaceholder'), trigger: 'blur' }
+    ],
+    password_copy: [
+        { required: true, message: t('passwordPlaceholder'), trigger: 'blur' }
+    ]
+})
 const submitForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.validate((valid) => {
         if (valid) {
-            let msg = "";
-            if (saveInfo.password && !saveInfo.original_password) msg = t('originalPasswordHint');
-            if (saveInfo.password && saveInfo.original_password && !saveInfo.password_copy) msg = t('newPasswordHint');
-            if (saveInfo.password && saveInfo.original_password && saveInfo.password_copy && saveInfo.password != saveInfo.password_copy) msg = t('doubleCipherHint');
+            let msg = ''
+            if (saveInfo.password && !saveInfo.original_password) msg = t('originalPasswordHint')
+            if (saveInfo.password && saveInfo.original_password && !saveInfo.password_copy) msg = t('newPasswordHint')
+            if (saveInfo.password && saveInfo.original_password && saveInfo.password_copy && saveInfo.password != saveInfo.password_copy) msg = t('doubleCipherHint')
             if (msg) {
                 ElNotification({
                     type: 'error',
-                    message: msg,
+                    message: msg
                 })
-                return;
+                return
             }
 
             setUserInfo(saveInfo).then((res: any) => {
-                changePasswordDialog.value = false;
+                changePasswordDialog.value = false
             })
         } else {
             return false
         }
-    });
+    })
 }
 // 修改密码 --- end
 </script>

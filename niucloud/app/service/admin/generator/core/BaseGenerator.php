@@ -128,8 +128,8 @@ abstract class BaseGenerator
 
         $this->basePath = base_path();
         $this->rootPath = root_path();
-        $this->vmDir = $this->basePath . 'service/admin/generator/vm/';
-        $this->outDir = $this->rootPath . 'public/upload/generator/';
+        $this->vmDir = $this->basePath . 'service'.DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'generator'.DIRECTORY_SEPARATOR.'vm'.DIRECTORY_SEPARATOR;
+        $this->outDir = $this->rootPath . 'public'.DIRECTORY_SEPARATOR.'upload'.DIRECTORY_SEPARATOR.'generator'.DIRECTORY_SEPARATOR;
         $this->checkDir($this->outDir);
         $this->rootDir = dirname(root_path());
     }

@@ -43,8 +43,8 @@
 import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import { setPatConfig } from '@/app/api/sys'
-import { number } from 'echarts'
+// import { setPatConfig } from '@/app/api/sys'
+// import { number } from 'echarts'
 
 const showDialog = ref(false)
 const loading = ref(true)
@@ -55,7 +55,7 @@ const loading = ref(true)
 const initialFormData = {
     type: 'alipay',
     app_id: '',
-    config:{
+    config: {
         app_secret_cert: '',
         app_public_cert_path: '',
         alipay_public_cert_path: '',
@@ -96,12 +96,12 @@ const emit = defineEmits(['complete'])
  * 确认
  * @param formEl
  */
-const confirm = async(formEl: FormInstance | undefined) => {
+const confirm = async (formEl: FormInstance | undefined) => {
     if (loading.value || !formEl) return
     await formEl.validate(async (valid) => {
-        if(valid){
-            emit('complete',formData);
-            showDialog.value = false;
+        if (valid) {
+            emit('complete', formData)
+            showDialog.value = false
         }
     })
 }
@@ -113,8 +113,8 @@ const setFormData = async (data: any = null) => {
         Object.keys(formData).forEach((key: string) => {
             if (data[key] != undefined) formData[key] = data[key]
         })
-        formData['channel'] = data['redio_key'].split('_')[0];
-        formData['status'] = Number(formData['status']);
+        formData['channel'] = data['redio_key'].split('_')[0]
+        formData['status'] = Number(formData['status'])
     }
     loading.value = false
 }

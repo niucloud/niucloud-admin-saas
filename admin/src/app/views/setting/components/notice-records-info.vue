@@ -42,7 +42,7 @@
 import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import { editNoticeStatus } from '@/app/api/notice'
+// import { editNoticeStatus } from '@/app/api/notice'
 
 const showDialog = ref(false)
 const loading = ref(true)
@@ -57,7 +57,7 @@ const initialFormData = {
     message_type: '',
     name: '',
     nickname: '',
-    receiver: '',
+    receiver: ''
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 
@@ -70,10 +70,10 @@ const formRules = computed(() => {
     }
 })
 
-const emit = defineEmits(['complete'])
+// const emit = defineEmits(['complete'])
 
 const setFormData = async (row: any = null) => {
-    loading.value = true;
+    loading.value = true
     Object.assign(formData, initialFormData)
 
     if (row) {

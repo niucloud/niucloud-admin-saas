@@ -27,7 +27,7 @@
 import { ref, computed } from 'vue'
 import useSystemStore from '@/stores/modules/system'
 import { useDark, useToggle } from '@vueuse/core'
-import { setThemeColor, img } from '@/utils/common'
+import { setThemeColor } from '@/utils/common'
 import { t } from '@/lang'
 
 const drawer = ref(false)
@@ -37,10 +37,10 @@ const isDark = useDark()
 const toggleDark = useToggle(isDark)
 
 const dark = computed({
-    get() {
+    get () {
         return systemStore.dark
     },
-    set(val) {
+    set (val) {
         systemStore.setTheme('dark', val)
         toggleDark(val)
         setThemeColor(systemStore.theme, systemStore.dark ? 'dark' : 'light')
@@ -48,10 +48,10 @@ const dark = computed({
 })
 
 const theme = computed({
-    get() {
+    get () {
         return systemStore.theme
     },
-    set(val) {
+    set (val) {
         systemStore.setTheme('theme', val)
         setThemeColor(systemStore.theme, systemStore.dark ? 'dark' : 'light')
     }

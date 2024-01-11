@@ -40,22 +40,22 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import { t } from '@/lang'
-import { getStorageList,getStorageInfo } from '@/app/api/sys'
+import { getStorageList } from '@/app/api/sys'
 import storageLocal from '@/app/views/setting/components/storage-local.vue'
 import storageQiniu from '@/app/views/setting/components/storage-qiniu.vue'
 import storageAli from '@/app/views/setting/components/storage-ali.vue'
 import storageTencent from '@/app/views/setting/components/storage-tencent.vue'
-import { useRouter,useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const pageName = route.meta.title;
+const pageName = route.meta.title
 
 const localDialog: Record<string, any> | null = ref(null)
 const qiniuDialog: Record<string, any> | null = ref(null)
 const aliyunDialog: Record<string, any> | null = ref(null)
 const tencentDialog: Record<string, any> | null = ref(null)
 
-let storageTableData = reactive({
+const storageTableData = reactive({
     data: []
 })
 const loading = ref(true)
@@ -71,14 +71,13 @@ const loadStorageList = () => {
     }).catch(() => {
         loading.value = false
     })
-
 }
 
 loadStorageList()
 
 const editEvent = (data: any) => {
-    eval(data.storage_type+'Dialog.value.setFormData(data)');
-    eval(data.storage_type+'Dialog.value.showDialog = true;');
+    eval(data.storage_type + 'Dialog.value.setFormData(data)');
+    eval(data.storage_type + 'Dialog.value.showDialog = true;');
 }
 
 </script>

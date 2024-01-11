@@ -36,7 +36,6 @@
 import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import { img } from '@/utils/common'
 import { adjustPoint } from '@/app/api/member'
 
 const showDialog = ref(false)
@@ -47,11 +46,11 @@ const loading = ref(true)
  */
 const initialFormData = {
     member_id: 0,
-    point:'',
-    memo:'',
-    adjust:'',
-    account_data:'',
-    adjust_type:1,
+    point: '',
+    memo: '',
+    adjust: '',
+    account_data: '',
+    adjust_type: 1
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 
@@ -64,11 +63,11 @@ const formRules = computed(() => {
             { required: true, message: t('adjustPointPlaceholder'), trigger: 'blur' },
             {
                 validator: (rule: any, value: string, callback: any) => {
-                    formData.adjust = Math.floor(formData.adjust);
+                    formData.adjust = Math.floor(formData.adjust)
 
-                    let adjust = Math.abs(parseFloat(formData.adjust));
+                    const adjust = Math.abs(parseFloat(formData.adjust))
 
-                    if(!adjust){
+                    if (!adjust) {
                         callback(new Error(t('adjustPointPlaceholder')))
                     }
 
@@ -80,7 +79,7 @@ const formRules = computed(() => {
                 },
                 trigger: 'blur'
             }
-        ],
+        ]
     }
 })
 
@@ -88,20 +87,20 @@ const formRules = computed(() => {
  * 确认
  * @param formEl
  */
- const confirm = async (formEl: FormInstance | undefined) => {
+const confirm = async (formEl: FormInstance | undefined) => {
     if (loading.value || !formEl) return
 
     await formEl.validate(async (valid) => {
         if (valid) {
             loading.value = true
             formData.account_data = Math.abs(parseFloat(formData.adjust)) * formData.adjust_type;
-            let data = formData
+            const data = formData
 
             adjustPoint(data).then(res => {
                 loading.value = false
                 showDialog.value = false
                 emit('complete')
-            }).catch(err => {
+            }).catch(() => {
                 loading.value = false
                 // showDialog.value = false
             })
@@ -112,7 +111,7 @@ const formRules = computed(() => {
 const emit = defineEmits(['complete'])
 
 const setFormData = async (row: any = null) => {
-    loading.value = true;
+    loading.value = true
     Object.assign(formData, initialFormData)
     if (row) {
         Object.keys(formData).forEach((key: string) => {

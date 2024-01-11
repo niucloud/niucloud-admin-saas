@@ -18,7 +18,7 @@
 
             <el-form-item :label="t('content')">
                 <div class="input-width">
-                    <div v-for="(item, index) in formData.content">{{ item[0] }}：{{ item[1] }} </div>
+                    <div v-for="(item, index) in formData.content" :key="index">{{ item[0] }}：{{ item[1] }} </div>
                 </div>
             </el-form-item>
 
@@ -81,7 +81,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
             loading.value = true
 
             const data = formData
-			data.status = data.is_weapp;
+            data.status = data.is_weapp
 
             editNoticeStatus(data).then(res => {
                 loading.value = false

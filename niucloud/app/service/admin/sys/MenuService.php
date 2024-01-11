@@ -11,10 +11,12 @@
 
 namespace app\service\admin\sys;
 
+use app\dict\sys\MenuDict;
 use app\dict\sys\MenuTypeDict;
 use app\model\sys\SysMenu;
 use app\service\admin\addon\AddonService;
 use core\base\BaseAdminService;
+use core\dict\DictLoader;
 use core\exception\AdminException;
 use think\db\exception\DataNotFoundException;
 use think\db\exception\DbException;
@@ -47,6 +49,7 @@ class MenuService extends BaseAdminService
         $menu = $this->find($data['menu_key'], $data['app_type']);
         if(!$menu->isEmpty()) throw new AdminException('validate_menu.exit_menu_key');//创建失败
 
+        $data['source'] = MenuDict::CREATE;
         $res = $this->model->create($data);
         if(!$res) throw new AdminException('ADD_FAIL');//创建失败
 
@@ -94,8 +97,6 @@ class MenuService extends BaseAdminService
             $where[] = ['app_type', '=', $app_type];
         }
         $menu = $this->model->where($where)->findOrEmpty();
-        if ($menu->isEmpty())
-            throw new AdminException('MENU_NOT_EXIST');
         return $menu;
     }
 
@@ -140,10 +141,30 @@ class MenuService extends BaseAdminService
                 ];
                 $addons = ( new AddonService() )->getAddonKeysBySiteId($site_id);
                 $addons[] = '';
+
+                $delete_menu_addon = [];
+                $addon_loader = new DictLoader("Menu");
+
                 if($addon != 'all'){
                     $where[] = ['addon', '=', $addon];
+
+                    $delete_menu = $addon_loader->load(["addon" => $addon, "app_type" => $app_type])['delete'] ?? [];
+                    if (!empty($delete_menu) && is_array($delete_menu)) $delete_menu_addon[] = $delete_menu;
                 } else {
                     $where[] = ['addon', 'in', $addons];
+
+                    foreach ($addons as $addon) {
+                        $delete_menu = $addon_loader->load(["addon" => $addon, "app_type" => $app_type])['delete'] ?? [];
+                        if (!empty($delete_menu) && is_array($delete_menu)) $delete_menu_addon[] = $delete_menu;
+                    }
+                }
+
+                // 排除插件中delete的菜单
+                if (!empty($delete_menu_addon)) {
+                    $delete_intersect = array_intersect(...$delete_menu_addon);
+                    if (!empty($delete_intersect)) {
+                        $where[] = ['menu_key', 'not in', $delete_intersect];
+                    }
                 }
                 if(!empty($app_type)){
                     $where[] = ['app_type', '=', $app_type];
@@ -494,8 +515,20 @@ class MenuService extends BaseAdminService
                 if(!empty($app_type)){
                     $where[] = ['app_type', '=', $app_type];
                 }
+                // 排除插件中delete的菜单
+                $delete_menu_addon = [];
+                $addon_loader = new DictLoader("Menu");
+                foreach ($addons as $addon) {
+                    $delete_menu = $addon_loader->load(["addon" => $addon, "app_type" => $app_type])['delete'] ?? [];
+                    if (!empty($delete_menu) && is_array($delete_menu)) $delete_menu_addon[] = $delete_menu;
+                }
+                if (!empty($delete_menu_addon)) {
+                    $delete_intersect = array_intersect(...$delete_menu_addon);
+                    if (!empty($delete_intersect)) {
+                        $where[] = ['menu_key', 'not in', $delete_intersect];
+                    }
+                }
                 return $this->model->where($where)->order('sort', 'desc')->select()->toArray();
-
             },
             self::$cache_tag_name
         );

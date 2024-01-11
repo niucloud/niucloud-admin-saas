@@ -203,4 +203,24 @@ class Config extends BaseAdminController
     {
         return success(data: (new ConfigService())->getShortcutMenu());
     }
+
+    /**
+     * 获取开发者key
+     * @return Response
+     */
+    public function getDeveloperToken() {
+        return success(data: (new ConfigService())->getDeveloperToken());
+    }
+
+    /**
+     * 设置开发者key
+     * @return Response
+     */
+    public function setDeveloperToken() {
+        $data = $this->request->params([
+            ['token', ''],
+        ]);
+        (new ConfigService())->setDeveloperToken($data);
+        return success();
+    }
 }

@@ -131,6 +131,13 @@
       "setUp":"设置",
       "dictType":"数据字典",
       "dictTypePlaceholder":"请选择数据字典",
-      "dictTypePlaceholder1":"部分字段未选择数据字典"
+      "dictTypePlaceholder1":"部分字段未选择数据字典",
+      "remotePullDown": "远程下拉",
+      "remotePullDownValue":"远程下拉value字段",
+      "remotePullDownValuePlaceholder":"请选择远程下拉value字段",
+      "remotePullDownLabel":"远程下拉标题字段",
+      "remotePullDownLabelPlaceholder":"请选择远程下拉label字段",
+      "selectType":"下拉类型"
+
 
 }

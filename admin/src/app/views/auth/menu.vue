@@ -1,6 +1,13 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
+            <div class="flex justify-between items-center mb-[20px]">
+                <span class="text-[20px]">{{ pageName }}</span>
+                <el-button type="primary" class="w-[100px]" @click="addEvent">
+                    {{ t('addMenu') }}
+                </el-button>
+            </div>
+
             <el-table :data="menusTableData.data" row-key="menu_key" size="large" v-loading="menusTableData.loading">
                 <template #empty>
                     <span>{{ !menusTableData.loading ? t('emptyData') : '' }}</span>
@@ -22,19 +29,19 @@
                 <el-table-column :label="t('status')" min-width="120" align="center">
                     <template #default="{ row }">
                         <el-tag class="ml-2" type="success" v-if="row.status == 1">{{ t('statusNormal') }}</el-tag>
-                        <el-tag class="ml-2" type="error" v-if="row.status == 0">{{t('statusDeactivate') }}</el-tag>
+                        <el-tag class="ml-2" type="error" v-if="row.status == 0">{{ t('statusDeactivate') }}</el-tag>
                     </template>
                 </el-table-column>
                 <el-table-column prop="sort" :label="t('sort')" min-width="100" />
                 <el-table-column :label="t('operation')" align="right" fixed="right" width="130">
                     <template #default="{ row }">
-                        <!-- <el-button type="primary" link @click="editEvent(row)">{{ t('edit') }}</el-button>
-                        <el-button type="primary" link @click="deleteEvent(row.menu_key)">{{ t('delete') }}</el-button> -->
+                        <el-button type="primary" link @click="editEvent(row)">{{ t('edit') }}</el-button>
+                        <el-button type="primary" link @click="deleteEvent(row.menu_key)">{{ t('delete') }}</el-button>
                     </template>
                 </el-table-column>
             </el-table>
 
-            <edit-menu ref="editMenuDialog" :menu-tree="menusTableData.data" @complete="getMenuList" />
+            <edit-menu ref="editMenuDialog" :menu-tree="menusTableData.data" @complete="getMenuList" app-type="admin" />
         </el-card>
     </div>
 </template>
@@ -45,11 +52,10 @@ import { getMenus, deleteMenu } from '@/app/api/sys'
 import { t } from '@/lang'
 import { ElMessageBox } from 'element-plus'
 import EditMenu from '@/app/views/auth/components/edit-menu.vue'
-
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const pageName = route.meta.title
-
 const menusTableData = reactive({
     loading: true,
     data: []
@@ -91,7 +97,7 @@ const editEvent = (data: any) => {
 /**
  * 删除菜单
  */
-const deleteEvent = (menu_key: string) => {
+const deleteEvent = (key: string) => {
     ElMessageBox.confirm(t('menuDeleteTips'), t('warning'),
         {
             confirmButtonText: t('confirm'),
@@ -99,7 +105,7 @@ const deleteEvent = (menu_key: string) => {
             type: 'warning'
         }
     ).then(() => {
-        deleteMenu(menu_key).then(res => {
+        deleteMenu('admin', key).then(() => {
             getMenuList()
         }).catch(() => {
         })

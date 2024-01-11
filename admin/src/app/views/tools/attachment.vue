@@ -11,12 +11,12 @@
 </template>
 
 <script lang="ts" setup>
-    import {ref} from 'vue'
-    import {t} from '@/lang'
-    import attachment from '@/components/upload-attachment/attachment.vue'
+import { ref } from 'vue'
+import { t } from '@/lang'
+import attachment from '@/components/upload-attachment/attachment.vue'
 
-    const attachmentType: string[] = ['image', 'video', 'icon']
-    const type = ref(attachmentType[0])
+const attachmentType: string[] = ['image', 'video', 'icon']
+const type = ref(attachmentType[0])
 
 </script>
 

@@ -55,7 +55,6 @@
 				</el-form-item>
 			</el-form>
 		</div>
-		
 		<!-- 组件样式 -->
 		<slot name="style"></slot>
 	</div>
@@ -63,39 +62,39 @@
 </template>
 
 <script lang="ts" setup>
-    import {t} from '@/lang'
-    import useDiyStore from '@/stores/modules/diy'
-    import {ref, reactive} from 'vue'
+import { t } from '@/lang'
+import useDiyStore from '@/stores/modules/diy'
+import { ref } from 'vue'
 
-    const diyStore = useDiyStore()
-    diyStore.editComponent.ignore = []; // 忽略公共属性
+const diyStore = useDiyStore()
+diyStore.editComponent.ignore = [] // 忽略公共属性
 
-	const showDialog = ref(false)
-	
-    const showStyle = () => {
-        showDialog.value = true
+const showDialog = ref(false)
+
+const showStyle = () => {
+    showDialog.value = true
+}
+
+const selectStyle = ref(diyStore.editComponent.style)
+
+const changeStyle = () => {
+    switch (selectStyle.value) {
+        case 'style-1':
+            diyStore.editComponent.subTitle.control = false
+            diyStore.editComponent.more.control = false
+            diyStore.editComponent.styleName = '风格1'
+            break
+        case 'style-2':
+            diyStore.editComponent.subTitle.control = true
+            diyStore.editComponent.more.control = true
+            diyStore.editComponent.styleName = '风格2'
+            break
     }
+    diyStore.editComponent.style = selectStyle.value
+    showDialog.value = false
+}
 
-    const selectStyle = ref(diyStore.editComponent.style)
-
-    const changeStyle = () => {
-        switch (selectStyle.value) {
-            case 'style-1':
-                diyStore.editComponent.subTitle.control = false
-				diyStore.editComponent.more.control = false
-				diyStore.editComponent.styleName = "风格1"
-                break;
-            case 'style-2':
-                diyStore.editComponent.subTitle.control = true
-                diyStore.editComponent.more.control = true
-				diyStore.editComponent.styleName = "风格2"
-                break;
-        }
-        diyStore.editComponent.style = selectStyle.value
-        showDialog.value = false
-    }
-
-	defineExpose({})
+defineExpose({})
 </script>
 
 <style lang="scss">

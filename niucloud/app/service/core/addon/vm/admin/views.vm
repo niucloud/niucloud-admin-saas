@@ -4,7 +4,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { getHelloWorld } from '@/{key}/api/hello_world'
+import { getHelloWorld } from '@/addon/{key}/api/hello_world'
 
 const hello_world_text = ref('');
 const getHelloWorldInfo = async () => {

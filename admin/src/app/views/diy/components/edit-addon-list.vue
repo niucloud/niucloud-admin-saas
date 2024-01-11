@@ -60,105 +60,103 @@
 </template>
 
 <script lang="ts" setup>
-    import {t} from '@/lang'
-    import useDiyStore from '@/stores/modules/diy'
-    import {ref, reactive,onMounted, nextTick} from 'vue'
-    import {img} from '@/utils/common'
-    import { getWapIndexList } from '@/app/api/sys'
-    import Sortable from 'sortablejs'
-    import {range} from 'lodash-es'
+import { t } from '@/lang'
+import useDiyStore from '@/stores/modules/diy'
+import { ref, reactive, onMounted, nextTick } from 'vue'
+import { img } from '@/utils/common'
+import { getWapIndexList } from '@/app/api/sys'
+import Sortable from 'sortablejs'
+import { range } from 'lodash-es'
 
-    const diyStore = useDiyStore()
-    diyStore.editComponent.ignore = []; // 忽略公共属性
+const diyStore = useDiyStore()
+diyStore.editComponent.ignore = [] // 忽略公共属性
 
-    // 组件验证
-    diyStore.editComponent.verify = (index: number) => {
-        var res = {code: true, message: ''};
-        // if (diyStore.value[index].list.length === 0) {
-        //     res.code = false;
-        //     res.message = t('selectAddonTips');
-        // }
-        return res;
-    };
+// 组件验证
+diyStore.editComponent.verify = (index: number) => {
+    const res = { code: true, message: '' }
+    // if (diyStore.value[index].list.length === 0) {
+    //     res.code = false;
+    //     res.message = t('selectAddonTips');
+    // }
+    return res
+}
 
-    const showDialog = ref(false)
+const showDialog = ref(false)
 
-    const addonBoxRef = ref()
+const addonBoxRef = ref()
 
-    onMounted(() => {
-        nextTick(() => {
-            const sortable = Sortable.create(addonBoxRef.value, {
-                group: 'item-wrap',
-                animation: 200,
-                onEnd: event => {
-                    const temp = diyStore.editComponent.list[event.oldIndex!];
-                    diyStore.editComponent.list.splice(event.oldIndex!, 1);
-                    diyStore.editComponent.list.splice(event.newIndex!, 0, temp);
-                    sortable.sort(
-                        range(diyStore.editComponent.list.length).map(value => {
-                            return value.toString();
-                        })
-                    );
-                }
-            })
-        });
-    })
-
-    const addonTableData = reactive({
-        page: 1,
-        limit: 10,
-        total: 0,
-        loading: true,
-        data: [],
-        searchParam: {
-            title: '',
-            key: '',
-        }
-    })
-
-    // 获取插件列表
-    const loadAddonList = (page: number = 1) => {
-        addonTableData.loading = true
-        addonTableData.page = page
-
-        getWapIndexList({
-            ...addonTableData.searchParam
-        }).then(res => {
-            addonTableData.loading = false
-            addonTableData.data = res.data
-            addonTableData.total = res.data.length
-        }).catch(() => {
-            addonTableData.loading = false
+onMounted(() => {
+    nextTick(() => {
+        const sortable = Sortable.create(addonBoxRef.value, {
+            group: 'item-wrap',
+            animation: 200,
+            onEnd: event => {
+                const temp = diyStore.editComponent.list[event.oldIndex!]
+                diyStore.editComponent.list.splice(event.oldIndex!, 1)
+                diyStore.editComponent.list.splice(event.newIndex!, 0, temp)
+                sortable.sort(
+                    range(diyStore.editComponent.list.length).map(value => {
+                        return value.toString()
+                    })
+                )
+            }
         })
+    })
+})
+
+const addonTableData = reactive({
+    page: 1,
+    limit: 10,
+    total: 0,
+    loading: true,
+    data: [],
+    searchParam: {
+        title: '',
+        key: '',
+    }
+})
+
+// 获取插件列表
+const loadAddonList = (page: number = 1) => {
+    addonTableData.loading = true
+    addonTableData.page = page
+
+    getWapIndexList({
+        ...addonTableData.searchParam
+    }).then(res => {
+        addonTableData.loading = false
+        addonTableData.data = res.data
+        addonTableData.total = res.data.length
+    }).catch(() => {
+        addonTableData.loading = false
+    })
+}
+
+loadAddonList()
+
+const handleCurrentChange = (val:any) => {
+    const item:any = {
+        id: diyStore.generateRandom(),
+        key: '',
+        title: '',
+        url: '',
+        icon: '',
+        desc: ''
+    }
+    for (let k in val) {
+        item[k] = val[k]
     }
 
-    loadAddonList()
+    diyStore.editComponent.list.push(item)
+    showDialog.value = false
+}
 
-    const handleCurrentChange = (val) => {
-        let item:any = {
-            id: diyStore.generateRandom(),
-            key: '',
-            title: '',
-            url: '',
-            icon: '',
-            desc: ''
-        };
-        for (let k in val) {
-            item[k] = val[k];
-        }
+const addAddon = () => {
+    showDialog.value = true
+}
 
-        diyStore.editComponent.list.push(item)
-        showDialog.value = false
-    }
-
-    const addAddon = () => {
-        showDialog.value = true;
-    }
-
-    defineExpose({})
+defineExpose({})
 </script>
 
-<style lang="scss">
-</style>
 <style lang="scss" scoped>
 </style>

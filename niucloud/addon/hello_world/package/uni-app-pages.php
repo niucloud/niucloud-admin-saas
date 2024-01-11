@@ -3,7 +3,7 @@ return [
     'pages' => <<<EOT
         // PAGE_BEGIN
         {
-            "path": "{{addon_name}}/pages/index",
+            "path": "addon/{{addon_name}}/pages/index",
             "style": {
                 // #ifdef H5
                 "navigationStyle": "custom",

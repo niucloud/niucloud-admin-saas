@@ -1,0 +1,1 @@
+const e="开发者KEY设置",o="请输入开发者令牌",t="开发者KEY可以在已安装的框架中设置。框架安装并配置好开发者KEY后，开发者自己开发的应用和插件，会像普通授权插件一样可以安装使用，特别是当开发者发布自己开发的插件或应用时，尚在未发布状态时，开发者也可以对其进行安装测试",n={developerTokenEdit:e,tokenPlaceholder:o,tokenTips:t};export{n as default,e as developerTokenEdit,o as tokenPlaceholder,t as tokenTips};

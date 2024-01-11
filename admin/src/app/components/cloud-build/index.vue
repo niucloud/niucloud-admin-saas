@@ -265,4 +265,7 @@ defineExpose({
 .table-head-bg {
     background-color: var(--el-table-header-bg-color);
 }
+:deep(.terminal .t-log-box span) {
+    white-space: pre-wrap;
+}
 </style>

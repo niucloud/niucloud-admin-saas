@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-deprecated-v-on-native-modifier -->
 <template>
     <div>
         <div class="flex justify-between items-center py-[24px] pl-[62px] pr-[64px] home-head">
@@ -63,18 +64,38 @@
 
 <script lang="ts" setup>
 import { reactive, ref, toRefs } from 'vue'
-import { CollectionTag, Search } from '@element-plus/icons-vue'
+import { Search } from '@element-plus/icons-vue'
 import { getHomeSite } from '@/app/api/home'
 import { getWebConfig } from '@/app/api/sys'
 import { img } from '@/utils/common'
 import useUserStore from '@/stores/modules/user'
 import storage from '@/utils/storage'
 import { getInstalledAddonList } from '@/app/api/addon'
-import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import { AnyObject } from '@/types/global'
+const userStore:AnyObject = useUserStore()
 
-const userStore = useUserStore()
-const router = useRouter()
-const state = reactive({
+interface State{
+    params: {
+        keywords: string,
+        page: number,
+        limit: number,
+        app: string,
+        sort: boolean
+    },
+    loading: boolean,
+    tableData: {
+        logo: string,
+        app_name: string,
+        site_name: string,
+        create_time: string,
+        expire_time: string,
+        site_id: number,
+        group_name: string
+    }[]
+}
+
+const state:State = reactive({
     params: {
         keywords: '',
         page: 1,
@@ -99,17 +120,19 @@ const getHomeSiteFn = () => {
 getHomeSiteFn()
 
 // 切换应用
-const cutAppFn = (app)=>{
-    state.params.app = app;
-    getHomeSiteFn();
+const cutAppFn = (app:any) => {
+    state.params.app = app
+    getHomeSiteFn()
 }
 
-
 // 网络设置
-let webConfig = ref({})
-const getWebConfigFn = () =>{
-    getWebConfig().then(res =>{
-        webConfig.value = res.data;
+const webConfig = ref({
+    icon: '',
+    site_name: ''
+})
+const getWebConfigFn = () => {
+    getWebConfig().then(res => {
+        webConfig.value = res.data
     })
 }
 getWebConfigFn()
@@ -128,19 +151,19 @@ const selectSite = (site: any) => {
     })
     location.href = `${location.origin}/site/`
 }
-const logoutFn = ()=>{
-    userStore.logout();
-}
-const toLinkFn = (link)=>{
-    router.push(link)
+const logoutFn = () => {
+    userStore.logout()
 }
 
 /**
  * 获取应用列表
  */
-const addonList = ref([])
+const addonList = ref<{
+    key: string,
+    title: string
+}[]>([])
 getInstalledAddonList().then(({ data }) => {
-    const apps = []
+    const apps:any = []
     Object.keys(data).forEach(key => {
         const addon = data[key]
         addon.type == 'app' && apps.push(addon)
@@ -149,7 +172,7 @@ getInstalledAddonList().then(({ data }) => {
 }).catch()
 
 const handleChick = () => {
-	ElMessage('加班加点研发中...')
+    ElMessage('加班加点研发中...')
 }
 </script>
 

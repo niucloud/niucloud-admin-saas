@@ -8,54 +8,56 @@
             <span class="adorn">|</span>
             <span class="right">{{ pageName }}</span>
         </div>
-	    <el-card class="box-card !border-none relative" shadow="never" v-if="formData">
-			<div class="flex px-[20px] py-[20px] justify-between">
-				<span>{{ t('refundMoney') }}：<span>￥{{ formData.money }}</span></span>
-				<span>{{ t('refundNo') }}：<span>{{ formData.refund_no }}</span></span>
-			</div>
-			<el-table :data="refundList" size="large">
-			    <el-table-column prop="out_trade_no" :label="t('outTradeNo')" min-width="200" />
-				<el-table-column prop="create_time" :label="t('createTime')" min-width="160" />
-				<el-table-column prop="refund_type_name" :label="t('refundTypeName')" min-width="120" />
-				<el-table-column :label="t('refundMoney')" min-width="120">
-					<template #default="{ row }">
-				        <span>￥{{ row.money }}</span>
-				    </template>
-				</el-table-column>
-			    <el-table-column prop="status_name" :label="t('statusName')" min-width="120" />
-			    <el-table-column :label="t('operation')" fixed="right" align="right" min-width="120">
-			       <template #default="{ row }">
-			           <el-button type="primary" link @click="transferEvent(row)" v-if="row.status == 'wait'">{{ t('transfer') }}</el-button>
-			       </template>
-			    </el-table-column>
-			</el-table>
-		</el-card>
+        <el-card class="box-card !border-none relative" shadow="never" v-if="formData">
+            <div class="flex px-[20px] py-[20px] justify-between">
+                <span>{{ t('refundMoney') }}：<span>￥{{ formData.money }}</span></span>
+                <span>{{ t('refundNo') }}：<span>{{ formData.refund_no }}</span></span>
+            </div>
+            <el-table :data="refundList" size="large">
+                <el-table-column prop="out_trade_no" :label="t('outTradeNo')" min-width="200" />
+                <el-table-column prop="create_time" :label="t('createTime')" min-width="160" />
+                <el-table-column prop="refund_type_name" :label="t('refundTypeName')" min-width="120" />
+                <el-table-column :label="t('refundMoney')" min-width="120">
+                    <template #default="{ row }">
+                        <span>￥{{ row.money }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="status_name" :label="t('statusName')" min-width="120" />
+                <el-table-column :label="t('operation')" fixed="right" align="right" min-width="120">
+                    <template #default="{ row }">
+                        <el-button type="primary" link @click="transferEvent(row)" v-if="row.status == 'wait'">{{
+                            t('transfer') }}</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-card>
 
-		<el-dialog v-model="transferDialog" :title="title" width="500px" class="diy-dialog-wrap"
-		    :destroy-on-close="true">
-		    <el-form :model="transfeFormData" label-width="120px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
-				<el-form-item :label="t('transferType')">
-					<el-radio-group v-model="transfeFormData.refund_type">
-					    <el-radio :label="item.value" v-for="(item, index) in refundTypeData" :key="index">{{ item.name }}</el-radio>
-					</el-radio-group>
-				</el-form-item>
-				<el-form-item :label="t('refundMoney')" >
-					<span>{{ transfeFormData.refund_money }}</span>
-				</el-form-item>
-				<el-form-item :label="t('voucher')" v-if="transfeFormData.refund_type == 'offline'">
-					<upload-image v-model="transfeFormData.voucher" />
-				</el-form-item>
-		    </el-form>
+        <el-dialog v-model="transferDialog" :title="title" width="500px" class="diy-dialog-wrap" :destroy-on-close="true">
+            <el-form :model="transfeFormData" label-width="120px" ref="formRef" :rules="formRules" class="page-form"
+                v-loading="loading">
+                <el-form-item :label="t('transferType')">
+                    <el-radio-group v-model="transfeFormData.refund_type">
+                        <el-radio :label="item.value" v-for="(item, index) in refundTypeData" :key="index">{{ item.name
+                        }}</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item :label="t('refundMoney')">
+                    <span>{{ transfeFormData.refund_money }}</span>
+                </el-form-item>
+                <el-form-item :label="t('voucher')" v-if="transfeFormData.refund_type == 'offline'">
+                    <upload-image v-model="transfeFormData.voucher" />
+                </el-form-item>
+            </el-form>
 
-		    <template #footer>
-		        <span class="dialog-footer">
-		            <el-button @click="transferDialog = false">{{ t('cancel') }}</el-button>
-		            <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{
-		                t('confirm')
-		            }}</el-button>
-		        </span>
-		    </template>
-		</el-dialog>
+            <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="transferDialog = false">{{ t('cancel') }}</el-button>
+                    <el-button type="primary" :loading="loading" @click="confirm(formRef)">{{
+                        t('confirm')
+                    }}</el-button>
+                </span>
+            </template>
+        </el-dialog>
     </div>
 </template>
 
@@ -64,15 +66,13 @@ import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import { getPayRefundInfo, getRefundType, getRefundTransfer } from '@/app/api/pay'
 import { useRoute, useRouter } from 'vue-router'
-import { img, getAppType } from '@/utils/common'
-import { ElMessageBox, FormInstance } from 'element-plus'
+import { FormInstance } from 'element-plus'
 
 const route = useRoute()
 const router = useRouter()
 const pageName = route.meta.title
 const refundNo: string = route.query.refund_no
 const loading = ref(true)
-const appType = getAppType()
 
 const refundList = ref([])
 const formData: Record<string, any> | null = ref(null)
@@ -102,7 +102,7 @@ getRefundType().then((data) => {
 })
 
 const transferDialog = ref(false)
-const transferEvent = (data) => {
+const transferEvent = (data:any) => {
     transferDialog.value = true
     transfeFormData.refund_no = data.refund_no
     transfeFormData.refund_money = data.money
@@ -140,7 +140,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
                 transferDialog.value = false
                 refundList.value = []
                 setFormData(refundNo)
-            }).catch(err => {
+            }).catch(() => {
                 transferDialog.value = false
                 loading.value = false
             })

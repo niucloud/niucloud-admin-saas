@@ -56,13 +56,13 @@ const prop = defineProps({
     }
 })
 
-const formRef = ref(null)
+const formRef = ref()
 
 const buttonData = computed({
-    get() {
+    get () {
         return prop.data
     },
-    set(value) {
+    set (value) {
 
     }
 })

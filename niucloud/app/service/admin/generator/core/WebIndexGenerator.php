@@ -50,7 +50,11 @@ class WebIndexGenerator extends BaseGenerator
             '{ADD_EVENT}',
             '{EDIT_EVENT}',
             '{API_PATH}',
-            '{DICT_LIST}'
+            '{DICT_LIST}',
+            '{WITH_API_PATH}',
+            '{MODEL_DATA}',
+            '{EDIT_WITH_API_PATH}'
+
         ];
 
         $new = [
@@ -72,6 +76,10 @@ class WebIndexGenerator extends BaseGenerator
             $this->getApiPath(),
 //            $this->getDictDataContent(),
             $this->getDictList(),
+            $this->getWithApiPath(),
+            $this->getModelData(),
+            $this->getEditWithApiPath(),
+
         ];
 
         $vmPath = $this->getvmPath('web_index');
@@ -112,7 +120,7 @@ class WebIndexGenerator extends BaseGenerator
         }
         if(!empty($this->addonName))
         {
-            return "import "."Edit from '@/".$this->addonName."/views/".$this->moduleName."/".$path.$file_name."'";
+            return "import "."Edit from '@/addon/".$this->addonName."/views/".$this->moduleName."/".$path.$file_name."'";
         }else{
             return "import "."Edit from '@/app/views/".$this->moduleName."/".$path.$file_name."'";
         }
@@ -198,16 +206,37 @@ class WebIndexGenerator extends BaseGenerator
                 '{DICT_TYPE}',
                 '{LCASE_CLASS_NAME}',
                 '{LCASE_COLUMN_NAME}',
+                '{ITEM_LABEL}',
+                '{ITEM_VALUE}'
             ];
             if(empty($column['dict_type']))
             {
-                $new = [
-                    $column['column_comment'],
-                    $column['column_name'],
-                    $column['dict_type'],
-                    $this->getLCaseClassName(),
-                    Str::camel($column['column_name']),
-                ];
+                if(empty($column['model']))
+                {
+                    $new = [
+                        $column['column_comment'],
+                        $column['column_name'],
+                        $column['dict_type'],
+                        $this->getLCaseClassName(),
+                        Str::camel($column['column_name']),
+                        '',
+                        ''
+                    ];
+
+                }else{
+                    $new = [
+                        $column['column_comment'],
+                        $column['column_name'],
+                        Str::camel($column['column_name']).'List',
+                        $this->getLCaseClassName(),
+                        Str::camel($column['column_name']),
+                        $column['label_key'],
+                        $column['value_key']
+                    ];
+
+                }
+
+
             }else{
                 $new = [
                     $column['column_comment'],
@@ -215,6 +244,8 @@ class WebIndexGenerator extends BaseGenerator
                     $column['column_name'].'List',
                     $this->getLCaseClassName(),
                     Str::camel($column['column_name']),
+                    '',
+                    ''
                 ];
             }
 
@@ -226,7 +257,13 @@ class WebIndexGenerator extends BaseGenerator
             if(empty($column['dict_type']))
             {
                 if ($column['view_type'] == 'radio' || $column['view_type'] == 'select' || $column['view_type'] == 'checkbox' ) {
-                    $searchVmType = 'select2';
+                    if(empty($column['model']))
+                    {
+                        $searchVmType = 'select2';
+                    }else{
+                        $searchVmType = 'select3';
+                    }
+
                 }
             }else{
                 if ($column['view_type'] == 'radio') {
@@ -289,7 +326,7 @@ class WebIndexGenerator extends BaseGenerator
     {
         $content = '';
         foreach ($this->tableColumn as $column) {
-            if (!$column['is_lists']) {
+            if (!$column['is_lists'] || $column['column_name'] == 'site_id') {
                 continue;
             }
 
@@ -299,12 +336,23 @@ class WebIndexGenerator extends BaseGenerator
                 '{LANG}',
                 '{DICT_TYPE}'
             ];
-            $new = [
-                $column['column_comment'],
-                $column['column_name'],
-                Str::camel($column['column_name']),
-                $column['column_name'].'List'
-            ];
+            if(!empty($column['model']))
+            {
+                $new = [
+                    $column['column_comment'],
+                    $column['column_name'].'_name',
+                    Str::camel($column['column_name']),
+                    $column['column_name'].'List'
+                ];
+            }else{
+                $new = [
+                    $column['column_comment'],
+                    $column['column_name'],
+                    Str::camel($column['column_name']),
+                    $column['column_name'].'List'
+                ];
+            }
+
 
             $vmPath = $this->getvmPath('table/default');
             if ($column['view_type'] == 'imageSelect') {
@@ -367,9 +415,9 @@ class WebIndexGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = dirname(app()->getRootPath()) . '/admin/src/'. $this->addonName  .'/views/';
+            $dir = dirname(app()->getRootPath()) . DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR. $this->addonName  .DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR;
         }else{
-            $dir = dirname(app()->getRootPath()) . '/admin/src/app/views/';
+            $dir = dirname(app()->getRootPath()) . DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR;
         }
         $this->checkDir($dir);
 
@@ -385,10 +433,10 @@ class WebIndexGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = $this->outDir . 'addon/'.$this->addonName.'/admin/views/' . $this->moduleName . '/';
+            $dir = $this->outDir . 'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR . $this->moduleName . DIRECTORY_SEPARATOR;
 
         }else{
-            $dir = $this->outDir . 'admin/src/app/views/' . $this->moduleName . '/';
+            $dir = $this->outDir . 'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR . $this->moduleName . DIRECTORY_SEPARATOR;
         }
 
 
@@ -405,9 +453,9 @@ class WebIndexGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = $this->rootDir . '/admin/src/'.$this->addonName.'/views/'. $this->moduleName . '/';
+            $dir = $this->rootDir . DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR. $this->moduleName . DIRECTORY_SEPARATOR;
         }else{
-            $dir = $this->rootDir . '/admin/src/app/views/' . $this->moduleName . '/';
+            $dir = $this->rootDir . DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR . $this->moduleName . DIRECTORY_SEPARATOR;
         }
 
         $this->checkDir($dir);
@@ -418,7 +466,7 @@ class WebIndexGenerator extends BaseGenerator
      * 获取文件生成到插件中
      */
     public function getAddonObjectOutDir() {
-        $dir = $this->rootDir . '/niucloud/addon/'.$this->addonName.'/admin/views/'. $this->moduleName . '/';
+        $dir = $this->rootDir . DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'admin'.DIRECTORY_SEPARATOR.'views'.DIRECTORY_SEPARATOR. $this->moduleName . DIRECTORY_SEPARATOR;
         $this->checkDir($dir);
         return $dir;
     }
@@ -427,7 +475,7 @@ class WebIndexGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = 'addon/'.$this->addonName.'/admin/'.$this->addonName.'/views/' . $this->moduleName . '/';
+            $dir = 'addon/'.$this->addonName.'/admin/views/' . $this->moduleName . '/';
 
         }else{
             $dir = 'admin/app/views/' . $this->moduleName . '/';
@@ -452,9 +500,9 @@ class WebIndexGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            return '/'.$this->addonName.'/api/'.$this->moduleName;
+            return 'addon/'.$this->addonName.'/api/'.$this->moduleName;
         }else{
-            return '/app/api/'.$this->moduleName;
+            return 'app/api/'.$this->moduleName;
         }
     }
 
@@ -491,7 +539,7 @@ class WebIndexGenerator extends BaseGenerator
             {
                 continue;
             }
-            $content.= 'const '.$column['column_name'].'List = ref([])'.PHP_EOL.'const '.$column['column_name'].'DictList = async () => {'.PHP_EOL.$column['column_name'].'List.value = await (await useDictionary(' ."'".$column['dict_type']."'".')).data.dictionary'.PHP_EOL.'}'.PHP_EOL. $column['column_name'].'DictList();'.PHP_EOL;
+            $content.= 'const '.$column['column_name'].'List = ref([] as any[])'.PHP_EOL.'const '.$column['column_name'].'DictList = async () => {'.PHP_EOL.$column['column_name'].'List.value = await (await useDictionary(' ."'".$column['dict_type']."'".')).data.dictionary'.PHP_EOL.'}'.PHP_EOL. $column['column_name'].'DictList();'.PHP_EOL;
         }
 
         if(!empty($content))
@@ -499,5 +547,67 @@ class WebIndexGenerator extends BaseGenerator
             $content = substr($content, 0, -1);
         }
         return $this->setBlankSpace($content, '    ');
+    }
+
+    /**
+     * 增加关联方法
+     * @return void
+     */
+    public function getWithApiPath()
+    {
+        $content = '';
+        foreach ($this->tableColumn as $column) {
+            if (!empty($column['model'])) {
+                $str = strripos($column['model'],'\\');
+                $with = Str::camel(substr($column['model'],$str+1));
+                $content.= ' getWith'.Str::studly($with).'List,';
+            }
+        }
+        return $content;
+    }
+
+    /**
+     * 调用远程下拉方法
+     * @return void
+     */
+    public function getModelData()
+    {
+        $content = '';
+        foreach ($this->tableColumn as $column)
+        {
+            if(empty($column['model']))
+            {
+                continue;
+            }
+            $str = strripos($column['model'],'\\');
+            $with = Str::camel(substr($column['model'],$str+1));
+            $content.= PHP_EOL.'const '. Str::camel($column['column_name']).'List = ref([])'.PHP_EOL;
+            $content.= 'const set'.Str::studly($column['column_name']).'List = async () => {'.PHP_EOL.Str::camel($column['column_name']).'List.value = await (await getWith'.Str::studly($with).'List({})).data' .PHP_EOL.'}'
+                .PHP_EOL.'set'.Str::studly($column['column_name']).'List())';
+        }
+
+        if(!empty($content))
+        {
+            $content = substr($content, 0, -1);
+        }
+        return $this->setBlankSpace($content, '    ');
+
+    }
+
+    /**
+     * 编辑远程下拉方法
+     * @return void
+     */
+    public function getEditWithApiPath()
+    {
+        $content = '';
+        foreach ($this->tableColumn as $column) {
+            if (!empty($column['model'])) {
+                $str = strripos($column['model'],'\\');
+                $with = Str::camel(substr($column['model'],$str+1));
+                $content.= ' getWith'.Str::studly($with).'List,';
+            }
+        }
+        return $content;
     }
 }

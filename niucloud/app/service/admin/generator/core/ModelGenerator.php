@@ -41,7 +41,9 @@ class ModelGenerator extends BaseGenerator
             '{SOFT_DELETE}',
             '{DELETE_COLUMN}',
             '{DELETE_COLUMN_VALUE}',
-            '{RELATION_MODEL}'
+            '{RELATION_MODEL}',
+            '{SELECT_MODEL}',
+            '{WITH_MODEL}'
         ];
         $delete_data = $this->getSoftDeleteFunction();
         $new = [
@@ -56,6 +58,8 @@ class ModelGenerator extends BaseGenerator
             $delete_data['deleteColumn'],
             $delete_data['deleteColumnValue'],
             $this->getRelationModel(),
+            $this->getSelectModel(),
+            $this->getWithModel()
         ];
 
         $vmPath = $this->getvmPath('model');
@@ -227,9 +231,9 @@ class ModelGenerator extends BaseGenerator
      */
     public function getModuleOutDir()
     {
-        $dir = $this->basePath . 'model/';
+        $dir = $this->basePath . 'model'.DIRECTORY_SEPARATOR;
         if (!empty($this->moduleName)) {
-            $dir .= $this->moduleName . '/';
+            $dir .= $this->moduleName . DIRECTORY_SEPARATOR;
             $this->checkDir($dir);
         }
         return $dir;
@@ -244,14 +248,14 @@ class ModelGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = $this->outDir . '/addon/'.$this->addonName.'/app/model/';
+            $dir = $this->outDir . DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'model'.DIRECTORY_SEPARATOR;
         }else{
-            $dir = $this->outDir . 'niucloud/app/model/';
+            $dir = $this->outDir . 'niucloud'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'model'.DIRECTORY_SEPARATOR;
         }
 
         $this->checkDir($dir);
         if (!empty($this->moduleName)) {
-            $dir .= $this->moduleName . '/';
+            $dir .= $this->moduleName . DIRECTORY_SEPARATOR;
             $this->checkDir($dir);
         }
         return $dir;
@@ -265,15 +269,14 @@ class ModelGenerator extends BaseGenerator
     {
         if(!empty($this->addonName))
         {
-            $dir = $this->rootDir . '/niucloud/addon/'.$this->addonName.'/app/model/';
+            $dir = $this->rootDir . DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'model'.DIRECTORY_SEPARATOR;
         }else{
-//            $dir = '';
-            $dir = $this->rootDir . '/niucloud/app/model/';
+            $dir = $this->rootDir . DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'model'.DIRECTORY_SEPARATOR;
         }
 
         $this->checkDir($dir);
         if (!empty($this->moduleName)) {
-            $dir .= $this->moduleName . '/';
+            $dir .= $this->moduleName . DIRECTORY_SEPARATOR;
             $this->checkDir($dir);
         }
         return $dir;
@@ -363,6 +366,37 @@ class ModelGenerator extends BaseGenerator
             return '';
         }
 
+    }
+
+    /**
+     * 远程关联方法
+     */
+    public function getSelectModel()
+    {
+        $content = '';
+        foreach ($this->tableColumn as $column) {
+            if (!empty($column['model'])) {
+                $str = strripos($column['model'],'\\');
+                $model = substr($column['model'],$str+1);
+               $content .= PHP_EOL.'    public function '.Str::camel($model).'(){'.PHP_EOL.'       return $this->hasOne('.$model.'::class, '."'".$column['column_name']."', '".$column['value_key']."')->joinType('left')->withField('".$column['label_key'].','.$column['value_key']."'".")->bind(['".$column['column_name'].'_name'."'".'=>'."'".$column['label_key']."'"."]);".PHP_EOL.'    }'.PHP_EOL;
+            }
+        }
+        return $content;
+
+    }
+
+    /**
+     * 远程关联方法引用
+     */
+    public function getWithModel()
+    {
+        $content = '';
+        foreach ($this->tableColumn as $column) {
+            if (!empty($column['model'])) {
+                $content .= PHP_EOL.'use '.$column['model'].';'.PHP_EOL;
+            }
+        }
+        return $content;
     }
 
 }

@@ -59,25 +59,25 @@ import EditMemberLabel from '@/app/views/member/components/edit-label.vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const pageName = route.meta.title;
+const pageName = route.meta.title
 
-let memberLabelTableData = reactive({
+const memberLabelTableData = reactive({
     page: 1,
     limit: 10,
     total: 0,
     loading: true,
     data: [],
-    searchParam:{
-    "label_name":""
+    searchParam: {
+        label_name: ''
     }
 })
 
 const searchFormRef = ref<FormInstance>()
 
-const resetForm = (formEl: FormInstance | undefined)=>{
+const resetForm = (formEl: FormInstance | undefined) => {
     if (!formEl) return
-    formEl.resetFields();
-    loadMemberLabelList();
+    formEl.resetFields()
+    loadMemberLabelList()
 }
 
 /**

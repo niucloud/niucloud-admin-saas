@@ -97,7 +97,8 @@ const userTableData = reactive({
     loading: true,
     data: [],
     searchParam: {
-        seach: ''
+        seach: '',
+        user_type: ''
     }
 })
 

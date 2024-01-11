@@ -76,9 +76,9 @@ class CoreAddonService extends CoreAddonBaseService
                     $data['install_info'] = $install_addon_list[$key] ?? [];
                     $data['is_download'] = true;
                     $data['is_local'] = in_array($data['key'], $online_app_list) ? false : true;
+                    $data['version'] = isset($list[ $data['key'] ]) ? $list[ $data['key'] ]['version'] : $data['version'];
                     $list[$key] = $data;
                 }
-
             }
         }
         return ['list' => $list, 'error' => $error ?? ''];

@@ -9,14 +9,14 @@ return [
             [
                 'name' => 'HELLO_WORLD_INDEX',
                 'title' => get_lang('dict_diy.hello_world_index'),
-                'url' => '/hello_world/pages/index',
+                'url' => '/addon/hello_world/pages/index',
                 'is_share' => 1,
                 'action' => ''
             ],
             [
                 'name' => 'HELLO_WORLD_INFO',
                 'title' => get_lang('dict_diy.hello_world_info'),
-                'url' => '/hello_world/pages/info',
+                'url' => '/addon/hello_world/pages/info',
                 'is_share' => 1,
                 'action' => ''
             ],

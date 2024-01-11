@@ -1,7 +1,6 @@
 {ROUTE}
-
-
 {BEGIN}
+
 Route::group('{ROUTE_GROUP_NAME}', function () {
 
     //{NOTES}列表
@@ -14,7 +13,7 @@ Route::group('{ROUTE_GROUP_NAME}', function () {
     Route::put('{ROUTE_NAME}/:id', '{ROUTE_PATH}edit');
     //删除{NOTES}
     Route::delete('{ROUTE_NAME}/:id', '{ROUTE_PATH}del');
-
+    {WITH_ROUTE}
 })->middleware([
     AdminCheckToken::class,
     AdminCheckRole::class,

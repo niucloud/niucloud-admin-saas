@@ -45,7 +45,7 @@
             </div>
         </el-card>
         <el-dialog v-model="dialogVisible" :title="t('codeDownTwoDesc')" width="30%" :before-close="handleClose">
-            <el-form ref="ruleFormRef" :model="form" :rules="rules" label-width="120px">
+            <el-form ref="ruleFormRef" :model="form" label-width="120px">
                 <el-form-item prop="code" :label="t('code')">
                     <el-input v-model="form.code" :placeholder="t('codePlaceholder')"
                         onkeyup="this.value = this.value.replace(/[^\d\.]/g,'');" />
@@ -76,13 +76,20 @@ import { t } from '@/lang'
 import { useRoute, useRouter } from 'vue-router'
 import { getAuthinfo } from '@/app/api/module'
 import { ElMessageBox } from 'element-plus'
+import { AnyObject } from '@/types/global'
 
 const route = useRoute()
 const router = useRouter()
 const pageName = route.meta.title
-const activeNames = ref('1')
+// const activeNames = ref('1')
 const dialogVisible = ref(false)
-const weappTableData = reactive({
+const weappTableData:{
+    page: number,
+    limit: number,
+    total: number,
+    loading: boolean,
+    data: AnyObject
+} = reactive({
     page: 1,
     limit: 10,
     total: 0,
@@ -90,7 +97,10 @@ const weappTableData = reactive({
     data: []
 })
 const form = ref({
-    desc: ''
+    desc: '',
+    code: '',
+    path: '',
+    content: ''
 })
 
 const authCode = ref('')
@@ -102,7 +112,13 @@ getAuthinfo().then(res => {
 }).catch(() => {
 })
 
-const weappConfig = ref({})
+const weappConfig = ref<{
+    app_id:string,
+    app_secret:string
+}>({
+    app_id: '',
+    app_secret: ''
+})
 getWeappConfig().then(res => {
     weappConfig.value = res.data
 })
@@ -111,7 +127,7 @@ const activeName = ref('/channel/weapp/code')
 const handleClick = (val: any) => {
     router.push({ path: activeName.value })
 }
-const ruleFormRef = ref(null)
+const ruleFormRef = ref<any>(null)
 
 /**
  * 获取版本列表

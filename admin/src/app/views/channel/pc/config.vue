@@ -4,7 +4,6 @@
 			<span class="text-[20px]">{{pageName}}</span>
 		</div>
         <el-form :model="formData" label-width="150px" ref="formRef" class="page-form">
-            
             <el-card class="box-card !border-none" shadow="never">
                 <el-form-item :label="t('preview')" prop="weapp_name">
                     <img class="w-[500px]" src="@/app/assets/images/channel/preview.png" alt="">
@@ -30,26 +29,25 @@ import { t } from '@/lang'
 import { getUrl } from '@/app/api/sys'
 import { useClipboard } from '@vueuse/core'
 import { ElMessage, FormInstance } from 'element-plus'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const pageName = route.meta.title
 const loading = ref(true)
 
-const formData = reactive<Record<string, string | boolean>>({
+const formData = reactive<Record<string, string | boolean | any>>({
     is_open: false,
     request_url: ''
 })
 
 const formRef = ref<FormInstance>()
-const router = useRouter()
 
 /**
  * 获取pc域名
  */
- getUrl().then(res => {
-    formData.request_url = res.data.web_url + '/';
-    loading.value = false;
+getUrl().then(res => {
+    formData.request_url = res.data.web_url + '/'
+    loading.value = false
 })
 
 /**
@@ -77,8 +75,8 @@ watch(copied, () => {
 })
 
 // 点击访问
-const visitFn = ()=>{
-     window.open(formData.request_url);
+const visitFn = () => {
+    window.open(formData.request_url)
 }
 </script>
 

@@ -28,11 +28,11 @@ import { FormInstance } from 'element-plus'
 const loading = ref(false)
 const formRef = ref<FormInstance>()
 const formData = reactive<Record<string, string>>({
-	key : ''
+    key: ''
 })
 const setFormData = async () => {
-	const service_data = await (await getMap()).data
-	formData.key = service_data.key
+    const service_data = await (await getMap()).data
+    formData.key = service_data.key
 }
 setFormData()
 
@@ -51,17 +51,16 @@ const save = async (formEl: FormInstance | undefined) => {
 /**
  * 点击访问教程
  */
-const tutorialFn = ()=>{
-    window.open('https://www.kancloud.cn/niucloud/niucloud-admin-develop/3214217');
+const tutorialFn = () => {
+    window.open('https://www.kancloud.cn/niucloud/niucloud-admin-develop/3214217')
 }
 
 /**
  * 点击访问腾讯地图
  */
- const secretlFn = ()=>{
-    window.open('https://lbs.qq.com/dev/console/key/manage');
+const secretlFn = () => {
+    window.open('https://lbs.qq.com/dev/console/key/manage')
 }
-
 
 </script>
 <style lang="scss" scoped>

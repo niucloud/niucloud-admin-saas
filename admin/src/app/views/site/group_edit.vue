@@ -19,20 +19,44 @@
                         :placeholder="t('groupDescPlaceholder')" class="input-width" maxlength="100" />
                 </el-form-item>
                 <el-form-item :label="t('mainApp')" prop="app">
-                    <el-select class="input-width" v-model="formData.app" :placeholder="t('mainAppPlaceholder')"
-                        :disabled="formData.group_id">
-                        <block v-for="item in addonList">
-                            <el-option v-if="item.type == 'app'" :key="item.key" :label="item.title" :value="item.key" />
-                        </block>
-                    </el-select>
+                    <div class="text-gray-400" v-if="!appList.length">{{ t('appListEmpty') }}</div>
+                    <el-checkbox-group v-model="formData.app" class="flex flex-wrap w-full" v-else>
+                        <template #default>
+                            <div class="flex w-[300px]" v-for="(item, index) in appList" :key="index">
+                                <el-checkbox :label="item.key" name=""
+                                             class="w-full !h-auto border border-solid p-[10px] !mr-[10px] !mb-[10px] rounded-md">
+                                    <template #default>
+                                        <div class="w-full">
+                                            <div class="flex">
+                                                <div class="w-[60px] h-[60px] mr-[10px] rounded-md overflow-hidden">
+                                                    <el-image :src="img(item.cover)" v-if="item.cover"
+                                                              class="w-full h-full" />
+                                                    <el-image v-else class="w-full h-full">
+                                                        <template #error>
+                                                            <div class="image-error">
+                                                                <el-icon><icon-picture /></el-icon>
+                                                            </div>
+                                                        </template>
+                                                    </el-image>
+                                                </div>
+                                                <div class="flex-1 w-0 flex flex-col justify-center">
+                                                    <div class="font-bold truncate">{{ item.title }}</div>
+                                                    <div class="text-gray-400 mt-[10px] truncate" :title="item.desc">{{ item.desc }}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </el-checkbox>
+                            </div>
+                        </template>
+                    </el-checkbox-group>
                 </el-form-item>
 
                 <el-form-item :label="t('containAddon')">
-                    <div class="text-gray-400" v-if="!formData.app">请先选择主应用</div>
-                    <div class="text-gray-400" v-else-if="!supportAddon.length">没有所选应用可用的插件</div>
-                    <el-checkbox-group v-model="formData.addon" class="flex w-full" v-else>
+                    <div class="text-gray-400" v-if="!addonList.length">{{ t('appListEmpty') }}</div>
+                    <el-checkbox-group v-model="formData.addon" class="flex flex-wrap w-full" v-else>
                         <template #default>
-                            <div class="flex w-[300px]" v-for="item in supportAddon">
+                            <div class="flex w-[300px]" v-for="(item, index) in addonList" :key="index">
                                 <el-checkbox :label="item.key" name=""
                                     class="w-full !h-auto border border-solid p-[10px] !mr-[10px] !mb-[10px] rounded-md">
                                     <template #default>
@@ -50,8 +74,8 @@
                                                     </el-image>
                                                 </div>
                                                 <div class="flex-1 w-0 flex flex-col justify-center">
-                                                    <div class="font-bold">{{ item.title }}</div>
-                                                    <div class="text-gray-400 mt-[10px]">{{ item.desc }}</div>
+                                                    <div class="font-bold truncate">{{ item.title }}</div>
+                                                    <div class="text-gray-400 mt-[10px] truncate" :title="item.desc">{{ item.desc }}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -74,7 +98,7 @@
 </template>
 
 <script lang="ts" setup async>
-import { ref, reactive, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
 import { addSiteGroup, editSiteGroup, getSiteGroupInfo } from '@/app/api/site'
@@ -83,6 +107,7 @@ import { img } from '@/utils/common'
 import { useRouter, useRoute } from 'vue-router'
 
 const loading = ref(true)
+const appList = ref([])
 const addonList = ref([])
 const route = useRoute()
 const router = useRouter()
@@ -96,7 +121,7 @@ const formData: Record<string, any> = ref({
     group_id: 0,
     group_name: '',
     group_desc: '',
-    app: '',
+    app: [],
     addon: []
 })
 
@@ -114,19 +139,17 @@ const back = () => {
 }
 
 getInstalledAddonList().then(({ data }) => {
-    addonList.value = data
-}).catch()
+    const apps: any[] = []
+    const addons: any[] = []
 
-const supportAddon = computed(() => {
-    const addon = []
-    if (formData.value.app && Object.keys(addonList.value).length) {
-        Object.keys(addonList.value).forEach(key => {
-            const item = addonList.value[key]
-            if (item.type == 'addon' && item.support_app == '' || item.support_app == formData.value.app) addon.push(item)
-        })
-    }
-    return addon
-})
+    Object.keys(data).forEach(key => {
+        const item = data[key]
+        item.type == 'addon' ? addons.push(item) : apps.push(item)
+    })
+
+    appList.value = apps
+    addonList.value = addons
+}).catch()
 
 const formRef = ref<FormInstance>()
 
@@ -140,10 +163,6 @@ const formRules = computed(() => {
             { required: true, message: t('mainAppPlaceholder'), trigger: 'blur' }
         ]
     }
-})
-
-watch(() => formData.value.app, (nval, oval) => {
-    if (nval && oval) formData.value.addon = []
 })
 
 /**

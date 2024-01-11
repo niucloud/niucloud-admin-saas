@@ -64,13 +64,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
 import { setDictData, getDictInfo } from '@/app/api/dict'
 import { cloneDeep } from 'lodash-es'
 
-let showDialog = ref(false)
+const showDialog = ref(false)
 const loading = ref(false)
 const dialogVisible = ref(false)
 
@@ -86,7 +86,7 @@ const initialFormData = {
     name: '',
     value: '',
     sort: 0,
-    memo:'',
+    memo: ''
 }
 const formData = ref({ ...initialFormData })
 // 表单验证规则
@@ -99,7 +99,7 @@ const formRules = computed(() => {
         value: [
             { required: true, message: t('dataValuePlaceholder'), trigger: 'blur' }
 
-        ],
+        ]
     }
 })
 const addEvent = () => {
@@ -112,7 +112,7 @@ const editEvent = (row: any, index: number) => {
     type.value = 'edit'
     tabelIndex.value = index
     formData.value = cloneDeep(initialFormData)
-    formData.value = Object.assign(formData.value,cloneDeep( row))
+    formData.value = Object.assign(formData.value, cloneDeep(row))
     dialogVisible.value = true
 }
 /**
@@ -126,9 +126,8 @@ const submit = async (formEl: FormInstance | undefined) => {
                 tableDate.value.push(cloneDeep(formData.value))
             } else {
                 tableDate.value.splice(tabelIndex.value, 1, cloneDeep(formData.value))
-                
             }
-            tableDate.value.sort(function(a,b){return b.sort-a.sort})
+            tableDate.value.sort(function (a, b) { return b.sort - a.sort })
             dialogVisible.value = false
         }
     })
@@ -162,11 +161,9 @@ const setFormData = async (row: any = null) => {
     id.value = row.id
     name.value = row.name
     const data = await (await getDictInfo(row.id)).data
-    tableDate.value =  data.dictionary
+    tableDate.value = data.dictionary
     loading.value = false
 }
-
-
 
 defineExpose({
     showDialog,

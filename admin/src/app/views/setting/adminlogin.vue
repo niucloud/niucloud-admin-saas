@@ -4,7 +4,7 @@
 			<span class="text-[20px]">{{pageName}}</span>
 		</div>
 
-        <el-form :model="formData" label-width="150px" ref="ruleFormRef" :rules="formRules" class="page-form" v-loading="loading">
+        <el-form :model="formData" label-width="150px" ref="ruleFormRef" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
 
                 <h3 class="panel-title !text-sm">{{ t('admin') }}</h3>
@@ -45,29 +45,29 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import { t } from '@/lang'
-import {  getConfigLogin, setConfigLogin } from '@/app/api/sys'
-import { FormRules, FormInstance } from 'element-plus'
+import { getConfigLogin, setConfigLogin } from '@/app/api/sys'
+import { FormInstance } from 'element-plus'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
 const pageName = route.meta.title
 
-const loading = ref(true),
-  ruleFormRef = ref<FormInstance>(),
-  formData = reactive<Record<string, number | string>>({
+const loading = ref(true)
+const ruleFormRef = ref<FormInstance>()
+const formData = reactive<Record<string, number | string>>({
     is_captcha: 0,
     is_site_captcha: 0,
     bg: '',
     site_bg: ''
-  });
+})
 
 const getFormData = async (id: number = 0) => {
     const data = await (await getConfigLogin()).data
     Object.keys(formData).forEach((key: string) => {
-        if (['is_captcha','is_site_captcha'].includes(key)) formData[key] = Boolean(Number(data[key]));
-        else formData[key] = data[key];
+        if (['is_captcha', 'is_site_captcha'].includes(key)) formData[key] = Boolean(Number(data[key]))
+        else formData[key] = data[key]
     })
-    loading.value = false;
+    loading.value = false
 }
 getFormData()
 
@@ -75,9 +75,9 @@ const onSave = async (formEl: FormInstance | undefined) => {
     if (loading.value || !formEl) return
     await formEl.validate((valid) => {
         if (valid) {
-            let save = JSON.parse(JSON.stringify(formData));
-            Object.keys(save).forEach((key)=>{
-                if (['is_captcha','is_site_captcha'].includes(key)) save[key] = Number(save[key]);
+            const save = JSON.parse(JSON.stringify(formData))
+            Object.keys(save).forEach((key) => {
+                if (['is_captcha', 'is_site_captcha'].includes(key)) save[key] = Number(save[key])
             })
 
             setConfigLogin(save).then(() => {

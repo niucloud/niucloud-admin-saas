@@ -78,7 +78,7 @@ import { FormInstance } from 'element-plus'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const pageName = route.meta.title;
+const pageName = route.meta.title
 
 const recordsTableData = reactive({
     page: 1,

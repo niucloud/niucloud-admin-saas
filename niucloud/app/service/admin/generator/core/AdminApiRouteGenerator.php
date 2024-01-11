@@ -38,9 +38,11 @@ class AdminApiRouteGenerator extends BaseGenerator
             '{MODULE_NAME}',
             '{ROUTE_NAME}',
             '{ROUTE_PATH}',
+            '{WITH_ROUTE}',
             '{ROUTE}',
             '{BEGIN}',
-            '{END}'
+            '{END}',
+
         ];
 
         $new = [
@@ -52,9 +54,10 @@ class AdminApiRouteGenerator extends BaseGenerator
             $this->moduleName,
             $this->getRouteName(),
             $this->getRoutePath(),
+            $this->getWithRoute(),
             $this->getRoute(),
             $this->getBegin(),
-            $this->getEnd()
+            $this->getEnd(),
         ];
 
         $vmPath = $this->getvmPath('admin_api_route');
@@ -85,9 +88,9 @@ class AdminApiRouteGenerator extends BaseGenerator
         $dir = dirname(root_path());
         if(!empty($this->addonName))
         {
-            $file = $dir.'\niucloud\addon\\'.$this->addonName.'\app\adminapi\route\route.php';
+            $file = $dir.DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'adminapi'.DIRECTORY_SEPARATOR.'route'.DIRECTORY_SEPARATOR.'route.php';
         }else{
-            $file = $dir.'\niucloud\app\adminapi\route\\'.$this->moduleName.'php';
+            $file = $dir.DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'adminapi'.DIRECTORY_SEPARATOR.'route'.DIRECTORY_SEPARATOR."$this->moduleName".'php';
         }
 
         if(file_exists($file))
@@ -161,6 +164,7 @@ use app\adminapi\middleware\AdminLog;";
      * 获取类注释
      * @return string
      */
+
     public function getClassComment()
     {
         if(!empty($this->addonName))
@@ -197,7 +201,7 @@ use app\adminapi\middleware\AdminLog;";
      */
     public function getModuleOutDir()
     {
-        $dir = $this->basePath . '/route/';
+        $dir = $this->basePath . DIRECTORY_SEPARATOR.'route'.DIRECTORY_SEPARATOR;
         $this->checkDir($dir);
         return $dir;
     }
@@ -211,9 +215,9 @@ use app\adminapi\middleware\AdminLog;";
     {
         if(!empty($this->addonName))
         {
-            $dir = $this->outDir . '/addon/'.$this->addonName.'/app/adminapi/route/';
+            $dir = $this->outDir . DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.'.$this->addonName.'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'adminapi'.DIRECTORY_SEPARATOR.'route'.DIRECTORY_SEPARATOR;
         }else{
-            $dir = $this->outDir . 'niucloud/app/adminapi/route/';
+            $dir = $this->outDir . 'niucloud'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'adminapi'.DIRECTORY_SEPARATOR.'route'.DIRECTORY_SEPARATOR;
         }
 
         $this->checkDir($dir);
@@ -228,11 +232,10 @@ use app\adminapi\middleware\AdminLog;";
     {
         if(!empty($this->addonName))
         {
-            $dir = $this->rootDir . '/niucloud/addon/'.$this->addonName.'/app/adminapi/route/';
+            $dir = $this->rootDir . DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'addon'.DIRECTORY_SEPARATOR.$this->addonName.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'adminapi'.DIRECTORY_SEPARATOR.'route'.DIRECTORY_SEPARATOR;
         }else{
-            $dir = $this->rootDir . '/niucloud/app/adminapi/route/';
+            $dir = $this->rootDir . DIRECTORY_SEPARATOR.'niucloud'.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'adminapi'.DIRECTORY_SEPARATOR.'route'.DIRECTORY_SEPARATOR;
         }
-
         $this->checkDir($dir);
         return $dir;
     }
@@ -298,5 +301,34 @@ use app\adminapi\middleware\AdminLog;";
         }
     }
 
+    /**
+     * 远程下拉Route
+     * @return string
+     */
+    public function getWithRoute()
+    {
+        if(!empty($this->addonName))
+        {
+            $route_path = 'addon\\'.$this->addonName.'\\app\adminapi\\controller\\'.$this->moduleName.'\\'.$this->getUCaseClassName().'@';
+        }else{
+            $route_path = $this->moduleName.'.'.$this->getUCaseClassName().'/';
+        }
+
+        $content = '';
+        foreach ($this->tableColumn as $column) {
+            if (!empty($column['model'])) {
+                $str = strripos($column['model'],'\\');
+                $with = Str::camel(substr($column['model'],$str+1));
+                $content.= PHP_EOL.'    Route::get('."'".$with."'".','."'".$route_path.'get'.Str::studly($with).'All'."'".');'.PHP_EOL;
+            }
+        }
+        return $content;
+    }
+
+
+    /**
+     * use
+     * @return string
+     */
 
 }

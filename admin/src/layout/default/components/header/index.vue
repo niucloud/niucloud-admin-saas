@@ -59,26 +59,24 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, onMounted, watch } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import layoutSetting from './layout-setting.vue'
-import switchLang from './switch-lang.vue'
 import userInfo from './user-info.vue'
 import { useFullscreen } from '@vueuse/core'
 import useSystemStore from '@/stores/modules/system'
 import useAppStore from '@/stores/modules/app'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { t } from '@/lang'
 import storage from '@/utils/storage'
 
-const router = useRouter()
 const appType = storage.get('app_type')
-const { toggle: toggleFullscreen, isFullscreen } = useFullscreen()
+const { toggle: toggleFullscreen } = useFullscreen()
 const systemStore = useSystemStore()
 const appStore = useAppStore()
 const route = useRoute()
 const screenWidth = ref(window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth)
 
-const dark = computed(()=>{
+const dark = computed(() => {
     return systemStore.dark
 })
 
@@ -103,7 +101,7 @@ document.addEventListener('visibilitychange', e => {
 
 const detectionLoginFn = () => {
     detectionLoginDialog.value = false
-    location.reload();
+    location.reload()
 }
 // 检测登录 end
 
@@ -124,7 +122,7 @@ onMounted(() => {
 //     }
 // })
 
-// // 菜单栏展开折叠
+// 菜单栏展开折叠
 // const toggleMenuCollapse = () => {
 //     systemStore.$patch((state) => {
 //         if (screenWidth.value < 768) {
@@ -150,10 +148,9 @@ const breadcrumb = computed(() => {
 })
 
 // 返回上一页
-const backFn = () => {
-    router.go(-1)
-}
-
+// const backFn = () => {
+//     router.go(-1)
+// }
 </script>
 
 <style lang="scss" scoped>

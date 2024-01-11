@@ -2,6 +2,7 @@
 
 namespace core\util\niucloud;
 
+use app\service\admin\sys\ConfigService;
 use app\service\core\niucloud\CoreNiucloudConfigService;
 use Closure;
 use core\exception\NiucloudException;
@@ -31,6 +32,12 @@ class BaseNiucloudClient
      */
     protected $secret;
 
+    /**
+     * 开发者令牌
+     * @var
+     */
+    protected $developer_token;
+
 
     protected $config;
 
@@ -41,6 +48,7 @@ class BaseNiucloudClient
      * @var string
      */
     protected string $baseUri = 'https://api.niucloud.com/openapi/';
+
     /**
      *
      * @var \think\facade\Request|\think\Request
@@ -69,6 +77,7 @@ class BaseNiucloudClient
         }
         $this->access_token = $this->getAccessToken();
         $this->request = request();
+        $this->developer_token = (new ConfigService())->getDeveloperToken()['token'] ?? '';
     }
 
     /**
@@ -156,12 +165,15 @@ class BaseNiucloudClient
      * @return Closure
      */
     public function headerMiddleware(){
-        return function (callable $handler) {
-            return function (RequestInterface $request, array $options) use ($handler) {
+        $developer_token = $this->developer_token;
+
+        return function (callable $handler) use ($developer_token) {
+            return function (RequestInterface $request, array $options) use ($handler, $developer_token) {
                 $domain = request()->domain(true);
                 $domain = str_replace('http://', '', $domain);
                 $domain = str_replace('https://', '', $domain);
                 $request = $request->withHeader('Referer', $domain);
+                $request = $request->withHeader('developer-token', $developer_token);
                 $options['verify'] =  config('niucloud.http.verify', true);
                 return $handler($request, $options);
             };

@@ -46,98 +46,98 @@
 </template>
 
 <script lang="ts" setup>
-    import {computed, reactive, watch, toRaw} from 'vue'
-    import {img} from '@/utils/common'
+import { computed, reactive, watch, toRaw } from 'vue'
+import { img } from '@/utils/common'
 
-    const prop = defineProps({
-        modelValue: {
-            type: String,
-            default: ''
-        },
-        width: {
-            type: String,
-            default: '200px'
-        },
-        height: {
-            type: String,
-            default: '100px'
-        },
-        limit: {
-            type: Number,
-            default: 1
-        }
-    })
+const prop = defineProps({
+    modelValue: {
+        type: String,
+        default: ''
+    },
+    width: {
+        type: String,
+        default: '200px'
+    },
+    height: {
+        type: String,
+        default: '100px'
+    },
+    limit: {
+        type: Number,
+        default: 1
+    }
+})
 
-    const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue'])
 
-    const value = computed({
-        get() {
-            return prop.modelValue
-        },
-        set(value) {
-            emit('update:modelValue', value)
-        }
-    })
+const value = computed({
+    get () {
+        return prop.modelValue
+    },
+    set (value) {
+        emit('update:modelValue', value)
+    }
+})
 
-    const videos: Record<string, any> = reactive({
-        data: []
-    })
+const videos: Record<string, any> = reactive({
+    data: []
+})
 
-    watch(() => value.value, () => {
-        videos.data = [
-            ...value.value.split(',').filter((item: string) => {
-                return item
-            })
-        ]
-        setValue()
-    })
+watch(() => value.value, () => {
+    videos.data = [
+        ...value.value.split(',').filter((item: string) => {
+            return item
+        })
+    ]
+    setValue()
+})
 
-    const style = computed(() => {
-        return {
-            width: prop.width,
-            height: prop.height
-        }
-    })
+const style = computed(() => {
+    return {
+        width: prop.width,
+        height: prop.height
+    }
+})
 
-    /**
+/**
      * 选择视频
      */
-    const confirmSelect = (data: Record<string, any>) => {
-        if (prop.limit == 1) {
-            videos.data.splice(0, 1)
-            data && videos.data.push(data.url)
-        } else {
-            data.forEach((item: any) => {
-                if (videos.data.length < prop.limit) videos.data.push(item.url)
-            })
-        }
-        setValue()
+const confirmSelect = (data: Record<string, any>) => {
+    if (prop.limit == 1) {
+        videos.data.splice(0, 1)
+        data && videos.data.push(data.url)
+    } else {
+        data.forEach((item: any) => {
+            if (videos.data.length < prop.limit) videos.data.push(item.url)
+        })
     }
+    setValue()
+}
 
-    /**
+/**
      * 删除视频
      * @param index
      */
-    const removeVideo = (index: number = 0) => {
-        videos.data.splice(index, 1)
-        setValue()
-    }
+const removeVideo = (index: number = 0) => {
+    videos.data.splice(index, 1)
+    setValue()
+}
 
-    const setValue = () => {
-        value.value = toRaw(videos.data).toString()
-    }
+const setValue = () => {
+    value.value = toRaw(videos.data).toString()
+}
 
-    /**
+/**
      * 查看视频
      */
-    const videoViewer = reactive({
-        visible: false,
-        src: ''
-    })
-    const previewVideo = (index: number = 0) => {
-        videoViewer.visible = true
-        videoViewer.src = img(videos.data[index])
-    }
+const videoViewer = reactive({
+    visible: false,
+    src: ''
+})
+const previewVideo = (index: number = 0) => {
+    videoViewer.visible = true
+    videoViewer.src = img(videos.data[index])
+}
 </script>
 
 <style lang="scss">

@@ -41,31 +41,31 @@
 </template>
 
 <script lang="ts" setup async>
-import { ref, reactive, computed, toRaw, } from 'vue'
+import { ref, computed, toRaw } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
-import { getGeneratorAllModel, getGeneratorTableColumn,getAddonDevelop } from '@/app/api/tools'
+import { getGeneratorAllModel, getGeneratorTableColumn, getAddonDevelop } from '@/app/api/tools'
 import { cloneDeep } from 'lodash-es'
 
 const showDialog = ref(false)
-const loading = ref(false)
+// const loading = ref(false)
 const title = ref('')
 const prop = defineProps({
     table_name: {
         type: String,
-        required: true,
+        required: true
     }
 })
 /**
  * 表单数据
  */
 const initialFormData = {
-    type: "has_one",
-    name: "",
-    addon:"system",
-    model: "",
-    local_key: "",
-    foreign_key: ""
+    type: 'has_one',
+    name: '',
+    addon: 'system',
+    model: '',
+    local_key: '',
+    foreign_key: ''
 }
 const formData: Record<string, any> = ref({ ...initialFormData })
 
@@ -91,10 +91,9 @@ const formRules = computed(() => {
         ],
         foreign_key: [
             { required: true, message: t('foreignKeyPlaceholder'), trigger: 'blur' }
-        ],
+        ]
     }
 })
-
 
 /**
  * 获取关联模型
@@ -115,21 +114,21 @@ const getGeneratorTableColumnFn = (key: any) => {
         localKeyList.value = res.data
     })
 }
-//获取插件列表
+// 获取插件列表
 const addonLst = ref<Array<any>>([])
 const getAddonDevelopFn = async () => {
-    let { data } = await getAddonDevelop({})
-    addonLst.value = [{ title: "系统", key: "system" }]
+    const { data } = await getAddonDevelop({})
+    addonLst.value = [{ title: '系统', key: 'system' }]
     addonLst.value.push(...data)
-    getGeneratorAllModelFn({addon:'system'})
+    getGeneratorAllModelFn({ addon: 'system' })
 }
 getAddonDevelopFn()
-//选择应用
-const addonChange =(val:any)=>{
+// 选择应用
+const addonChange = (val:any) => {
     formData.value.model = ''
-   getGeneratorAllModelFn({addon:val})
+    getGeneratorAllModelFn({ addon: val })
 }
-const beforeClose=(next:any)=>{
+const beforeClose = (next:any) => {
     formRef.value?.clearValidate()
     next()
 }
@@ -143,7 +142,7 @@ const confirm = async (formEl: FormInstance | undefined) => {
 
     await formEl.validate(async (valid) => {
         if (valid) {
-            emit('complete',toRaw(formData.value))
+            emit('complete', toRaw(formData.value))
             showDialog.value = false
         }
     })

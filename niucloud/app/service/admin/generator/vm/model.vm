@@ -15,7 +15,7 @@ use core\base\BaseModel;
 use think\model\concern\SoftDelete;
 use think\model\relation\HasMany;
 use think\model\relation\HasOne;
-
+{WITH_MODEL}
 /**
  * {CLASS_COMMENT}
  * Class {UCASE_NAME}
@@ -45,4 +45,6 @@ class {UCASE_NAME} extends BaseModel
     {SEARCH_FUNCTION}
 
     {RELATION_MODEL}
+
+    {SELECT_MODEL}
 }

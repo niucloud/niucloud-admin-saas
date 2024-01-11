@@ -16,10 +16,10 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, onBeforeMount, computed, watch,ref, toRaw,onMounted } from 'vue'
+import { reactive, onBeforeMount, watch } from 'vue'
 import { getAreaListByPid } from '@/app/api/sys'
 import { t } from '@/lang'
-import { da } from 'element-plus/es/locale'
+// import { da } from 'element-plus/es/locale'
 
 // 定义数据类型
 export interface areaType {
@@ -33,101 +33,98 @@ const prop = defineProps({
     initData: {
         type: Object,
         default: {
-            province : '',
-            city : '',
-            area : ''
+            province: '',
+            city: '',
+            area: ''
         }
     }
 })
 
-const emits = defineEmits<{
-  (e: 'areaChange', value: any):void
-}>()
+const emits = defineEmits<{(e: 'areaChange', value: any):void}>()
 
 const state = reactive({
-  // 用于展示的省市区数据
+    // 用于展示的省市区数据
     provinceList: [] as areaType[],
     citiesList: [] as areaType[],
     areasList: [] as areaType[],
-  // 最终选择的省市区
-    province: "",
-    city: "",
-    area: ""
+    // 最终选择的省市区
+    province: '',
+    city: '',
+    area: ''
 })
 
-onBeforeMount(async ()=>{
-  state.provinceList = (await getAreaListByPid(0)).data
+onBeforeMount(async () => {
+    state.provinceList = (await getAreaListByPid(0)).data
 })
 
-watch( () => prop.initData.province, async (val) => {
+watch(() => prop.initData.province, async (val) => {
     state['province'] = prop.initData['province']
     state['city'] = prop.initData['city']
     state['area'] = prop.initData['area']
     state.citiesList = (await getAreaListByPid(parseInt(state.province))).data
     state.areasList = (await getAreaListByPid(parseInt(state.city))).data
-    emitsArea();
+    emitsArea()
 })
 
-watch(()=>state.area, (val)=>{
-  if(val){
-    emitsArea();
-  }
+watch(() => state.area, (val) => {
+    if (val) {
+        emitsArea()
+    }
 })
 
-watch(()=>state.province, (val)=>{
-  if(val){
-    emitsArea();
-  }
+watch(() => state.province, (val) => {
+    if (val) {
+        emitsArea()
+    }
 })
 
-watch(()=>state.city, (val)=>{
-  if(val){
-    emitsArea();
-  }
+watch(() => state.city, (val) => {
+    if (val) {
+        emitsArea()
+    }
 })
 
 const emitsArea = () => {
     const paramsData = {
-      province: {} as areaType,
-      city: {} as areaType,
-      area: {} as areaType
+        province: {} as areaType,
+        city: {} as areaType,
+        area: {} as areaType
     }
     let tmp = state.provinceList.find((item) => item.id === state.province)
-    paramsData.province.name = tmp? tmp.name : ""
-    paramsData.province.id = tmp? tmp.id : ""
+    paramsData.province.name = tmp ? tmp.name : ''
+    paramsData.province.id = tmp ? tmp.id : ''
     tmp = state.citiesList.find((item) => item.id === state.city) as any
-    paramsData.city.name = tmp? tmp.name : ""
-    paramsData.city.id = tmp ?tmp.id : ""
+    paramsData.city.name = tmp ? tmp.name : ''
+    paramsData.city.id = tmp ? tmp.id : ''
     tmp = state.areasList.find((item) => item.id === state.area) as any
-    paramsData.area.name = tmp ? tmp.name : ""
-    paramsData.area.id = tmp ? tmp.id : ""
+    paramsData.area.name = tmp ? tmp.name : ''
+    paramsData.area.id = tmp ? tmp.id : ''
 
     emits('areaChange', paramsData)
 }
 
 const changeArea = async (data : any) => {
-
-    if(data == 'province'){
-        state.city = ""
-        state.area = ""
-        if(!state.province) {
-            emitsArea();
-            return false;
+    if (data == 'province') {
+        state.city = ''
+        state.area = ''
+        if (!state.province) {
+            emitsArea()
+            return false
         }
         state.citiesList = (await getAreaListByPid(parseInt(state.province))).data
     }
-    if(data == 'city'){
-        state.area = ""
-        if(!state.city) {
-            emitsArea();
-            return false;
+    if (data == 'city') {
+        state.area = ''
+        if (!state.city) {
+            emitsArea()
+            return false
         }
         state.areasList = (await getAreaListByPid(parseInt(state.city))).data
     }
-    if(data == 'area'){
-        if(!state.area) {
-            emitsArea();
-            return false;
+    if (data == 'area') {
+        if (!state.area) {
+            emitsArea()
+            return false
         }
     }
 }

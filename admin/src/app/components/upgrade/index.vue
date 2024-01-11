@@ -19,7 +19,7 @@
                     <div class="mt-[20px]" v-for="(item, index) in upgradeContent.version_list" :key="index">
                         <div class="font-bold text-lg">{{ item.version_no }}</div>
                         <div class="mt-[5px]">{{ item.release_time }}</div>
-                        <div class="mt-[10px] p-[10px] rounded bg-[#f4f4f5]" v-if="item.upgrade_log" v-html="item.upgrade_log"></div>
+                        <div class="mt-[10px] p-[10px] rounded bg-[#f4f4f5] whitespace-pre" v-if="item.upgrade_log" v-html="item.upgrade_log"></div>
                     </div>
                 </el-scrollbar>
             </div>
@@ -233,7 +233,7 @@ const open = (addonKey: string = '') => {
     }
     getUpgradeContent(addonKey).then(({ data }) => {
         upgradeContent.value = data
-        if (data.version == data.last_version) {
+        if (!data.version_list.length) {
             ElMessage({ message: '已经是最新版本了', type: 'error' })
             return
         }
@@ -315,5 +315,8 @@ defineExpose({
 <style lang="scss" scoped>
 .table-head-bg {
     background-color: var(--el-table-header-bg-color);
+}
+:deep(.terminal .t-log-box span) {
+    white-space: pre-wrap;
 }
 </style>

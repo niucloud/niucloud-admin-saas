@@ -27,114 +27,113 @@
 </div>
 </template>
 <script type="text/babel">
-    /**
+/**
      * Verify 验证码组件
      * @description 分发验证码使用
      * */
-    import VerifySlide from './Verify/VerifySlide.vue'
-    import VerifyPoints from './Verify/VerifyPoints.vue'
-import { computed, ref,watch,toRefs,watchEffect } from 'vue';
+import VerifySlide from './Verify/VerifySlide.vue'
+import VerifyPoints from './Verify/VerifyPoints.vue'
+import { computed, ref, toRefs, watchEffect } from 'vue'
 
-    export default {
-        name: 'Vue2Verify',
-        components: {
-            VerifySlide,
-            VerifyPoints
+export default {
+    name: 'Vue2Verify',
+    components: {
+        VerifySlide,
+        VerifyPoints
+    },
+    props: {
+        captchaType: {
+            type: String,
+            required: true
         },
-        props: {
-            captchaType:{
-                type:String,
-                required:true
-            },
-            figure: {
-                type: Number
-            },
-            arith: {
-                type: Number
-            },
-            mode: {
-                type: String,
-                default:'pop'
-            },
-            vSpace: {
-                type: Number
-            },
-            explain: {
-                type: String
-            },
-            imgSize: {
-                type: Object,
-                default() {
-                    return {
-                        width: '310px',
-                        height: '155px'
-                    }
+        figure: {
+            type: Number
+        },
+        arith: {
+            type: Number
+        },
+        mode: {
+            type: String,
+            default: 'pop'
+        },
+        vSpace: {
+            type: Number
+        },
+        explain: {
+            type: String
+        },
+        imgSize: {
+            type: Object,
+            default () {
+                return {
+                    width: '310px',
+                    height: '155px'
                 }
-            },
-            blockSize: {
-                type: Object
-            },
-            barSize: {
-                type: Object
-            },
+            }
         },
-        setup(props){
-            const {captchaType,figure,arith,mode,vSpace,explain,imgSize,blockSize,barSize} = toRefs(props)
-            const clickShow = ref(false)
-            const verifyType = ref(undefined)
-            const componentType = ref(undefined)
-            
-            const instance = ref({})
+        blockSize: {
+            type: Object
+        },
+        barSize: {
+            type: Object
+        }
+    },
+    setup (props) {
+        const { captchaType,figure, arith, mode, vSpace, explain, imgSize, blockSize, barSize } = toRefs(props)
+        const clickShow = ref(false)
+        const verifyType = ref(undefined)
+        const componentType = ref(undefined)
+        const instance = ref({})
 
-            const showBox = computed(()=>{
-                if (mode.value=='pop') {
-                    return clickShow.value
-                }else{
-                    return true;
-                }
-            })
-            /**
+        const showBox = computed(() => {
+            if (mode.value == 'pop') {
+                return clickShow.value
+            } else {
+                return true
+            }
+        })
+        /**
              * refresh
              * @description 刷新
              * */
-            const refresh = ()=>{
-                if (instance.value.refresh) {
-                    instance.value.refresh()
-                }
+        const refresh = () => {
+            if (instance.value.refresh) {
+                instance.value.refresh()
             }
-            const closeBox = ()=>{
-                clickShow.value = false
-                refresh();
+        }
+        const closeBox = () => {
+            clickShow.value = false
+            refresh()
+        }
+        const show = () => {
+            if (mode.value == 'pop') {
+                clickShow.value = true
             }
-            const show = ()=>{
-                if (mode.value=="pop") {
-                    clickShow.value = true;
-                }
+        }
+        watchEffect(() => {
+            switch (captchaType.value) {
+                case 'blockPuzzle':
+                    verifyType.value = '2'
+                    componentType.value = 'VerifySlide'
+                    break
+                case 'clickWord':
+                    verifyType.value = ''
+                    componentType.value = 'VerifyPoints'
+                    break
             }
-            watchEffect(()=>{   
-                switch (captchaType.value) {
-                    case 'blockPuzzle':
-                        verifyType.value = '2'
-                        componentType.value = 'VerifySlide'
-                        break
-                    case 'clickWord':
-                        verifyType.value = ''
-                        componentType.value = 'VerifyPoints'
-                        break
-                }
-            })
+        })
 
-            return {
-                clickShow,
-                verifyType,
-                componentType,
-                instance,
-                showBox,
-                closeBox,
-                show
-            }
-        },  
+        return {
+            clickShow,
+            verifyType,
+            componentType,
+            instance,
+            showBox,
+            closeBox,
+            show
+        }
     }
+}
 </script>
 <style>
     .verifybox{
@@ -192,11 +191,11 @@ import { computed, ref,watch,toRefs,watchEffect } from 'vue';
         color: #fff;
     }
     .suc-bg{
-       background-color:rgba(92, 184, 92,.5);  
+       background-color:rgba(92, 184, 92,.5);
        filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#7f5CB85C, endcolorstr=#7f5CB85C);
     }
     .err-bg{
-       background-color:rgba(217, 83, 79,.5);  
+       background-color:rgba(217, 83, 79,.5);
        filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#7fD9534F, endcolorstr=#7fD9534F);
     }
     .tips-enter,.tips-leave-to{
@@ -255,8 +254,6 @@ import { computed, ref,watch,toRefs,watchEffect } from 'vue';
         border: none;
         margin-top: 10px;
     }
-    
-    
     /*滑动验证码*/
     .verify-bar-area {
         position: relative;
