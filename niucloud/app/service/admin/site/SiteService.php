@@ -176,9 +176,12 @@ class SiteService extends BaseAdminService
 
             // 删除站点相关数据
             $sys_models = (new GenerateService())->getModels(['addon' => 'system']);
-            $addon_models = (new GenerateService())->getModels(['addon' => $site['app'] ]);
-
-            $models = array_merge($sys_models, $addon_models);
+            $addon_models = [];
+            $addons = (new CoreSiteService())->getAddonKeysBySiteId($site_id);
+            foreach($addons as $addon) {
+                $addon_models[] = (new GenerateService())->getModels(['addon' => $addon ]);
+            }
+            $models = array_merge($sys_models, ...$addon_models);
 
             foreach ($models as $model) {
                 $name = "\\$model";
