@@ -156,8 +156,10 @@ class SiteService extends BaseAdminService
     public function edit(int $site_id, array $data)
     {
         //获取套餐类型
-        $site_group = (new SiteGroup())->where([ ['group_id', '=', $data[ 'group_id' ] ] ])->field('app,addon')->findOrEmpty();
-        $data['app'] = $site_group['app'];
+        if (isset($data[ 'group_id' ])) {
+            $site_group = (new SiteGroup())->where([ ['group_id', '=', $data[ 'group_id' ] ] ])->field('app,addon')->findOrEmpty();
+            $data['app'] = $site_group['app'];
+        }
         $this->model->update($data, [ [ 'site_id', '=', $site_id ] ]);
         Cache::tag(self::$cache_tag_name . $site_id)->clear();
         return true;
