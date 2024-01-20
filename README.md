@@ -1,11 +1,11 @@
 
-### NIUCLOUD-ADMIN 是什么？
-niucloud-admin是一款快速开发通用管理后台框架，整体功能架构全部精心设计！代码干净整洁！低耦合，高质量！！！前端采用最新技术 **Vite+TypeScript+Vue3+ElementPlus** ，后台采用PHP8、MYSQL8、THINKPHP8 全部最新技术栈。 采用多租户多站点多应用多插件任意组合使用的SAAS架构设计，内置代码生成器，插件生成器，一键云编译、一键云部署，集成用户权限、表单设计、云存储、短信发送、素材中心、微信及公众号、Api模块一系列开箱即用功能，是一款快速搭建开发企业级应用的软件系统。源码100%开源无加密！框架采用MIT协议，终身免费，商用免费！
+### NIUCLOUD-ADMIN-SAAS 是什么？
+niucloud-admin-saas是一款快速开发通用管理后台框架，整体功能架构全部精心设计！代码干净整洁！低耦合，高质量！！！前端采用最新技术 **Vite+TypeScript+Vue3+ElementPlus** ，后台采用PHP8、MYSQL8、THINKPHP8 全部最新技术栈。 采用多租户多站点多应用多插件任意组合使用的SAAS架构设计，内置代码生成器，插件生成器，一键云编译、一键云部署，集成用户权限、表单设计、云存储、短信发送、素材中心、微信及公众号、Api模块一系列开箱即用功能，是一款快速搭建开发企业级应用的软件系统。源码100%开源无加密！框架采用MIT协议，终身免费，商用免费！
 
 目前已经有 NIUCLOUD SHOP商城+分销+VIPCard+上门服务插件。 更多应用插件正在陆续上线中... :clap:  :clap:  :clap: 
 
 
-### NIUCLOUD-ADMIN 采用的技术亮点
+### NIUCLOUD-ADMIN-SAAS 采用的技术亮点
 ```
 - 后台php采用thinkphp8+php8+mysql,支持composer快速安装扩展，支持redis缓存以及消息队列，支持多语言设计开发，同时开发采用严格的restful的api设计开发。
 - 后台前后端分离采用element-plus、vue3.0、typescript、vite、pina等前端技术,同时使用i18n支持国际化多语言开发。
