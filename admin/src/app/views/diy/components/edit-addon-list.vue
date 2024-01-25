@@ -5,7 +5,7 @@
 			<h3 class="mb-[10px]">{{ t('addonListSet') }}</h3>
 			<el-form label-width="100px" class="px-[10px]">
 				<div ref="addonBoxRef">
-					<div v-for="(item,index) in diyStore.editComponent.list" :key="item.id" class="item-wrap !cursor-move p-[10px] pb-0 relative border border-dashed border-gray-300 mb-[16px]">
+					<div v-for="(item,index) in diyStore.editComponent.list" :key="item.id" class="item-wrap p-[10px] pb-0 relative border border-dashed border-gray-300 mb-[16px]">
                         <div v-show="item.title" class="flex items-center pb-[10px]">
 							<img class="w-[60px] h-[60px] rounded-md" :src="img(item.icon)" />
                             <div class="flex flex-col justify-center ml-[10px] leading-[1]">

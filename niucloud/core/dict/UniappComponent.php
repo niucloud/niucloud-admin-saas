@@ -11,18 +11,16 @@
 namespace core\dict;
 
 
-use app\service\admin\addon\AddonService;
-
 class UniappComponent extends BaseDict
 {
     /**
      * 系统uniapp组件配置
-     * @param array $data //系统
+     * @param array $data
      * @return array|mixed
      */
     public function load(array $data)
     {
-        $addons = (new AddonService())->getAddonKeysBySiteId(request()->siteId());
+        $addons = $this->getLocalAddons();
         $components_files = [];
         foreach ($addons as $v) {
             $components_path = $this->getAddonDictPath($v) . "diy" . DIRECTORY_SEPARATOR . "components.php";

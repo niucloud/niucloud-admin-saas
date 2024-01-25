@@ -76,7 +76,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="expire_time" :label="t('expireTime')" />
-                <el-table-column :label="t('operation')" min-width="250" align="right" fixed="right">
+                <el-table-column :label="t('operation')" align="right" fixed="right">
                         <template #default="{ row }">
                             <el-button type="primary" link @click="siteInfo(row)">{{ t('info') }}</el-button>
                         </template>

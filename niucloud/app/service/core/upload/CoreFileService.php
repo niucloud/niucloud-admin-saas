@@ -55,6 +55,16 @@ class CoreFileService extends BaseCoreService
     }
 
     /**
+     * 设置重命名
+     * @param $rename
+     * @return $this
+     */
+    public function setRename($rename = ''){
+        $this->rename = $rename;
+        return $this;
+    }
+
+    /**
      * @var FileDriver
      */
     protected $upload_driver;
@@ -71,10 +81,10 @@ class CoreFileService extends BaseCoreService
         if(!empty($storage_type)){
             self::$storage_type = $storage_type;
             $core_storage_service = new CoreStorageService();
-            $storage_config = $core_storage_service->getStorageByType($this->request->defaultSiteId(), $storage_type);
+            $storage_config = $core_storage_service->getStorageByType($site_id, $storage_type);
         }else{
             $core_storage_service = new CoreStorageService();
-            $storage_config = $core_storage_service->getDefaultStorage($this->request->defaultSiteId());
+            $storage_config = $core_storage_service->getDefaultStorage($site_id);
             if(empty($storage_config)) throw new UploadFileException('UPLOAD_STORAGE_TYPE_ALL_CLOSE');
             self::$storage_type = $storage_config['storage_type'];
         }

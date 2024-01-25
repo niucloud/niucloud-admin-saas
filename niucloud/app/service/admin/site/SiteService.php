@@ -83,7 +83,7 @@ class SiteService extends BaseAdminService
         $info = $this->model->where([ [ 'site_id', '=', $site_id ] ])->with([ 'groupName' ])->field($field)->append([ 'status_name' ])->findOrEmpty()->toArray();
         if (!empty($info)) {
             $site_addons = (new CoreSiteService())->getAddonKeysBySiteId($site_id);
-            $info['site_addons'] = (new Addon())->where([ ['key', 'in', $site_addons]])->field('key,title,desc,icon')->select()->toArray();
+            $info['site_addons'] = (new Addon())->where([ ['key', 'in', $site_addons]])->field('key,title,desc,icon,type')->select()->toArray();
         }
         return $info;
     }

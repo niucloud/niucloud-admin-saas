@@ -4,6 +4,8 @@ class Language {
     private i18n: any
     private loadLocale: Array<string> = [] //已加载的语言
 
+    public path = ''
+
     constructor(i18n: any) {
         this.i18n = i18n
     }
@@ -12,12 +14,13 @@ class Language {
      *
      * @param locale 设置语言
      */
-    public setI18nLanguage(locale: string, path: string) {
+    public setI18nLanguage(locale: string, path: string = '') {
         if (this.i18n.mode === 'legacy') {
             this.i18n.global.locale = locale
         } else {
             this.i18n.global.locale = locale
         }
+        path && (this.path = path)
         uni.setLocale(locale)
     }
 
@@ -39,24 +42,28 @@ class Language {
             if (route == 'app') {
                 file = file.replace('app.', '')
             } else {
-                file = file.split('.').splice(1).join('.')
+                file = file.replace(`addon.${route}.`, '')
             }
 
             // 是否已加载
-            if (this.loadLocale.includes(`${route}/${locale}/${file}`)) {
+            if (this.loadLocale.includes(`${file}.${locale}`)) {
                 this.setI18nLanguage(locale, file)
                 return nextTick()
             }
-            this.loadLocale.push(`${route}/${locale}/${file}`)
+            this.loadLocale.push(`${file}.${locale}`)
 
             // 引入语言包文件
             const messages = await import(route == 'app' ? `../${route}/locale/${locale}/${file}.json` : `../addon/${route}/locale/${locale}/${file}.json`)
-            this.i18n.global.mergeLocaleMessage(locale, messages.default)
-            this.setI18nLanguage(locale, path)
+            let data: Record<string, string> = {}
+            Object.keys(messages.default).forEach(key => {
+                data[`${file}.${key}`] = messages.default[key]
+            })
+            this.i18n.global.mergeLocaleMessage(locale, data)
+            this.setI18nLanguage(locale, file)
 
             return nextTick()
         } catch (e) {
-            this.setI18nLanguage(locale, path)
+            this.setI18nLanguage(locale)
             return nextTick()
         }
     }

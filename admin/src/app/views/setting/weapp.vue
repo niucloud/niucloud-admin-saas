@@ -82,7 +82,6 @@ const weappTableData = reactive({
         last_time: ''
     }
 })
-// const searchFormRef = ref<FormInstance>()
 
 /**
  * 获取任务列表
@@ -105,8 +104,6 @@ const loadWeappTemplateList = (page: number = 1) => {
 }
 loadWeappTemplateList()
 
-// const router = useRouter()
-
 const showDialog = ref(false)
 const initialFormData = {
     id: 0,
@@ -119,10 +116,10 @@ const formData: Record<string, any> = reactive({ ...initialFormData })
 const formRef = ref<FormInstance>()
 
 const showEvent = () => {
-    formData.id = 0,
-    formData.desc = '',
-    formData.path = '',
-    formData.version = '',
+    formData.id = 0
+    formData.desc = ''
+    formData.path = ''
+    formData.version = ''
     showDialog.value = true
 }
 
@@ -134,7 +131,7 @@ const formRules = computed(() => {
         ],
         path: [
             { required: true, validator: validatePass, trigger: 'blur' }
-        ],
+        ]
     }
 })
 
@@ -144,34 +141,34 @@ const validatePass = (rule: any, value: any, callback: any) => {
     }
     return callback()
 }
-const save_type = ref(false)
+const saveType = ref(false)
 const addEvent = async (formEl: FormInstance | undefined) => {
-    if (save_type.value || !formEl) return
+    if (saveType.value || !formEl) return
     await formEl.validate(async (valid) => {
         if (valid) {
-            save_type.value = true
+            saveType.value = true
             const data = formData
             const save = formData.id > 0 ? editVersion : addVersion
             save(data).then(res => {
-                save_type.value = false
+                saveType.value = false
                 showDialog.value = false
                 loadWeappTemplateList()
             }).catch(() => {
-                save_type.value = false
+                saveType.value = false
             })
         }
     })
 }
 
 const editEvent = (item:any) => {
-    formData.id = item.id,
-    formData.desc = item.desc,
+    formData.id = item.id
+    formData.desc = item.desc
     formData.path = item.path
     formData.version = item.version
     showDialog.value = true
 }
 
-const deleteEvent = (id: number) => {
+const deleteEvent = (id: string) => {
     ElMessageBox.confirm(t('weappVersionDeleteTips'), t('warning'),
         {
             confirmButtonText: t('confirm'),

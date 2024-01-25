@@ -11,6 +11,8 @@
 
 namespace app\dict\sys;
 
+use think\facade\Log;
+
 /**
  * 协议相关枚举类
  * Class AgreementDict
@@ -18,10 +20,6 @@ namespace app\dict\sys;
  */
 class AgreementDict
 {
-    //服务协议
-    const SERVICE = 'service';
-    //隐私协议
-    const PRIVACY = 'privacy';
 
     /**
      * 获取协议类型
@@ -29,10 +27,18 @@ class AgreementDict
      */
     public static function getType()
     {
-        return [
-            self::SERVICE => get_lang('dict_agreement.service'),//服务协议,
-            self::PRIVACY => get_lang('dict_agreement.privacy'),//隐私协议
+        $data = [
+            'service' => get_lang('dict_agreement.service'),//服务协议,
+            'privacy' => get_lang('dict_agreement.privacy'),//隐私协议
         ];
+        $addon_data = event("AgreementType");
+        Log::write("检测数据");
+        Log::write($addon_data);
+        foreach ($addon_data as $k => $v)
+        {
+            $data = array_merge($data, $v);
+        }
+        return $data;
     }
 
 }

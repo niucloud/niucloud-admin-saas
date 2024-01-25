@@ -33,7 +33,7 @@ trait WapTrait
         $content = "<template>\n";
         $content .= "    <view class=\"diy-group\" id=\"componentList\">\n";
         $content .= "        <view v-for=\"(component, index) in data.value\" :key=\"component.id\"\n";
-        $content .= "        @click=\"diyStore.changeCurrentIndex(index, component)\" class=\"draggable-element relative cursor-move\"\n";
+        $content .= "        @click=\"diyStore.changeCurrentIndex(index, component)\" class=\"draggable-element relative\"\n";
         $content .= "        :class=\"{ selected: diyStore.currentIndex == index,decorate : diyStore.mode == 'decorate' }\" :style=\"component.pageStyle\">\n";
 
         $root_path = $compile_path . str_replace('/', DIRECTORY_SEPARATOR, 'app/components/diy'); // 系统自定义组件根目录

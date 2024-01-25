@@ -154,15 +154,11 @@ const formRules = computed(() => {
                 trigger: 'blur'
             }
         ],
-        // return /^([a-zA-Z_$])([a-zA-Z0-9_$])*$/.test(val)
         router_path: [
             { required: formData.menu_type != 2, message: t('routePathPlaceholder'), trigger: 'blur' }
         ],
         view_path: [
             { required: formData.menu_type == 1, message: t('viewPathPlaceholder'), trigger: 'blur' }
-        ],
-        icon: [
-            { required: formData.menu_type != 2, message: t('selectIconPlaceholder'), trigger: 'blur' }
         ],
         api_url: [
             { required: formData.menu_type == 2, message: t('authIdPlaceholder'), trigger: 'blur' }
@@ -214,7 +210,6 @@ const confirm = async (formEl: FormInstance | undefined) => {
             loading.value = true
 
             const data = formData
-            data.api_url = data.api_url ? `${data.api_url}/${formData.methods}` : ''
 
             save(data).then(res => {
                 loading.value = false

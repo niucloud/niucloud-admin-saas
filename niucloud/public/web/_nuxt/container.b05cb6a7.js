@@ -1,1 +1,0 @@
-import{E as r}from"./el-main.00fa021b.js";import{c as t,w as n,o as c,x as s}from"./entry.539d3b49.js";import{_ as a}from"./_plugin-vue_export-helper.c27b6911.js";const _={};function f(e,l){const o=r;return c(),t(o,{class:"w-screen h-screen"},{default:n(()=>[s(e.$slots,"default")]),_:3})}const d=a(_,[["render",f]]);export{d as default};

@@ -1,1 +1,1 @@
-const e="个人信息",n="会员头像",c="修改",o="会员昵称",m="取消",t="确定",a={personageInfo:e,memberHeadimg:n,edit:c,nickname:o,cancel:m,confirm:t};export{m as cancel,t as confirm,a as default,c as edit,n as memberHeadimg,o as nickname,e as personageInfo};
+const e="\u4E2A\u4EBA\u4FE1\u606F",a="\u4F1A\u5458\u5934\u50CF",n="\u4FEE\u6539",m="\u4F1A\u5458\u6635\u79F0",c="\u53D6\u6D88",s="\u786E\u5B9A",o={personageInfo:e,memberHeadimg:a,edit:n,nickname:m,cancel:c,confirm:s};export{c as cancel,s as confirm,o as default,n as edit,a as memberHeadimg,m as nickname,e as personageInfo};

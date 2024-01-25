@@ -25,7 +25,7 @@
                         <el-tabs v-model="activeName" class="demo-tabs mt-[15px]">
                             <el-tab-pane :label="t('navImage')" name="navPicture">
                                 <div ref="navItemRef">
-                                    <div v-for="(item,index) in diyBottomData.list" :key="'a'+index" :data-id="index"  class="item-wrap !cursor-move border-2 border-dashed pt-[18px] m-[10px] mb-[15px] relative list-item">
+                                    <div v-for="(item,index) in diyBottomData.list" :key="'a'+index" :data-id="index"  class="item-wrap border-2 border-dashed pt-[18px] m-[10px] mb-[15px] relative list-item">
                                         <el-form-item :label="t('navIconOne')">
                                             <div class="flex align-center">
                                                 <div class="flex flex-col justify-center items-center">

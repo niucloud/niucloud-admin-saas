@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
+import {computed, ref, watch} from 'vue'
 import { t } from '@/lang'
 import { ElMessage } from 'element-plus'
 
@@ -21,7 +21,7 @@ const prop = defineProps({
         type: String,
         default: '350px'
     },
-    value: {
+    modelValue: {
         type: String,
         default: ''
     },
@@ -39,14 +39,21 @@ const prop = defineProps({
     }
 })
 
-const value = ref(prop.value)
-const visible = ref(false)
-
-watch(visible, () => {
-    if (!visible.value) {
-        value.value = ''
+const value = computed({
+    get () {
+        return prop.modelValue
+    },
+    set (value) {
+        emit('update:modelValue', value)
     }
 })
+const visible = ref(false)
+
+// watch(visible, () => {
+//     if (!visible.value) {
+//         value.value = ''
+//     }
+// })
 
 const emit = defineEmits(['confirm'])
 

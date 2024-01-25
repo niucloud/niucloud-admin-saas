@@ -11,6 +11,7 @@
 
 namespace app\adminapi\controller\diy;
 
+use app\dict\diy\PagesDict;
 use app\service\admin\diy\DiyService;
 use core\base\BaseAdminController;
 use Exception;
@@ -34,9 +35,10 @@ class Diy extends BaseAdminController
     public function lists()
     {
         $data = $this->request->params([
-            ["title", ""],
-            ["type", ""],
-            ['mode', '']
+            [ "title", "" ],
+            [ "type", "" ],
+            [ 'mode', '' ],
+            [ 'addon_name', '' ]
         ]);
         return success((new DiyService())->getPage($data));
     }
@@ -51,9 +53,9 @@ class Diy extends BaseAdminController
     public function getList()
     {
         $data = $this->request->params([
-            ["title", ""],
-            ["type", ""],
-            ['mode', '']
+            [ "title", "" ],
+            [ "type", "" ],
+            [ 'mode', '' ]
         ]);
         return success((new DiyService())->getList($data));
     }
@@ -75,19 +77,19 @@ class Diy extends BaseAdminController
     public function add()
     {
         $data = $this->request->params([
-            ["title", ""],
-            ["name", ""],
-            ["type", ""],
-            ['template', ''],
-            ['mode', 'diy'], // 页面展示模式，diy：自定义，fixed：固定
-            ["value", ""],
-            ['is_default', 0],
-            ['is_change', '']
+            [ "title", "" ],
+            [ "name", "" ],
+            [ "type", "" ],
+            [ 'template', '' ],
+            [ 'mode', 'diy' ], // 页面展示模式，diy：自定义，fixed：固定
+            [ "value", "" ],
+            [ 'is_default', 0 ],
+            [ 'is_change', '' ]
         ]);
 
         $this->validate($data, 'app\validate\diy\Diy.add');
         $id = (new DiyService())->add($data);
-        return success('ADD_SUCCESS', ['id' => $id]);
+        return success('ADD_SUCCESS', [ 'id' => $id ]);
     }
 
     /**
@@ -98,10 +100,10 @@ class Diy extends BaseAdminController
     public function edit($id)
     {
         $data = $this->request->params([
-            ["title", ""],
-            ["name", ""],
-            ["value", ""],
-            ['is_change', '']
+            [ "title", "" ],
+            [ "name", "" ],
+            [ "value", "" ],
+            [ 'is_change', '' ]
         ]);
         $this->validate($data, 'app\validate\diy\Diy.edit');
         (new DiyService())->edit($id, $data);
@@ -138,11 +140,10 @@ class Diy extends BaseAdminController
     public function getPageInit()
     {
         $params = $this->request->params([
-            ['id', ""],
-            ["name", ""],
-            ["type", ""],
-            ['template', ''],
-            ["title", ""],
+            [ 'id', "" ],
+            [ "name", "" ],
+            [ "type", "" ],
+            [ "title", "" ],
         ]);
 
         $diy_service = new DiyService();
@@ -165,9 +166,9 @@ class Diy extends BaseAdminController
     public function getTemplate()
     {
         $params = $this->request->params([
-            ['type', ""], // 页面类型模板
-            ['action', ''], // 页面是否装修标识，为空标识不装修，decorate：装修
-            ['mode', ''] // 页面展示模式，diy：自定义，fixed：固定
+            [ 'type', '' ], // 页面类型模板
+            [ 'action', '' ], // 页面是否装修标识，为空标识不装修，decorate：装修
+            [ 'mode', '' ] // 页面展示模式，diy：自定义，fixed：固定
         ]);
         $diy_service = new DiyService();
         return success($diy_service->getTemplate($params));
@@ -181,7 +182,7 @@ class Diy extends BaseAdminController
     public function modifyShare(int $id)
     {
         $data = $this->request->params([
-            ["share", ""],
+            [ "share", "" ],
         ]);
         (new DiyService())->modifyShare($id, $data);
         return success('MODIFY_SUCCESS');
@@ -192,7 +193,10 @@ class Diy extends BaseAdminController
      */
     public function getDecoratePage()
     {
-        return success((new DiyService())->getDecoratePage());
+        $params = $this->request->params([
+            [ 'type', '' ],
+        ]);
+        return success((new DiyService())->getDecoratePage($params));
     }
 
     /**
@@ -201,28 +205,37 @@ class Diy extends BaseAdminController
     public function changeTemplate()
     {
         $data = $this->request->params([
-            [ "id", "" ],
             [ 'type', '' ], // 页面类型
-            [ 'name', '' ], // 页面名称标识
-            [ 'mode', '' ], //  页面展示模式，diy：自定义，fixed：固定，other：其他页面
-            [ 'template', '' ], // 模板名称
-            [ 'page', '' ], // 页面路由
-            [ 'title', '' ], // 页面标题
+            [ 'name', '' ], // 链接名称标识
+            [ 'parent', '' ], // 链接父级名称标识
+            [ 'page', '' ], // 链接路由
+            [ 'title', '' ], // 链接标题
             [ 'action', '' ] // 是否存在操作，decorate 表示支持装修
         ]);
-        return success(( new DiyService() )->changeTemplate($data));
+        (new DiyService())->changeTemplate($data);
+        return success('MODIFY_SUCCESS');
     }
 
     /**
-     * 获取页面预览数据
+     * 获取模板页面列表
+     * @return Response
      */
-    public function getPreviewData()
+    public function getTemplatePages()
     {
-        $data = $this->request->params([
-            ["id", ""],
-            ['name', '']
+        $params = $this->request->params([
+            [ 'type', '' ],
+            [ 'mode', '' ]
         ]);
-        $res = (new DiyService())->getPreviewData($data);
-        return success($res);
+        $pages = PagesDict::getPages($params);
+        return success($pages);
+    }
+
+    /**
+     * 获取模板页面的应用插件列表
+     * @return Response
+     */
+    public function getApps()
+    {
+        return success((new DiyService())->getApps());
     }
 }

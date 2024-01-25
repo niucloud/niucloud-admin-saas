@@ -5,7 +5,7 @@ import request from '@/utils/request'
  * @returns
  */
 export function getAddonLocal(params: Record<string, any>) {
-    return request.get('addon/local', params, {showSuccessMessage: true})
+    return request.get('addon/local', params, { showSuccessMessage: true })
 }
 
 /**

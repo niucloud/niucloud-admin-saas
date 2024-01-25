@@ -15,7 +15,7 @@
                 <div class="content-box relative bg-cover bg-gray-100 border border-dashed border-gray-500"
                     :style="{ backgroundImage: 'url(' + img(value.imageUrl) + ')', width: contentBoxWidth + 'px', height: contentBoxHeight + 'px' }">
                     <div v-for="(item, index) in dragBoxArr" :id="'box_' + index" :key="index"
-                        class="area-box cursor-move border border-solid border-[#ccc] w-[100px] h-[100px] absolute top-0 left-0 select-none p-[5px]"
+                        class="area-box border border-solid border-[#ccc] w-[100px] h-[100px] absolute top-0 left-0 select-none p-[5px]"
                         :style="{ left: item.left + item.unit, top: item.top + item.unit, width: item.width + item.unit, height: item.height + item.unit }"
                         @mousedown="mouseDown($event, index)">
                         <span>{{ index + 1 }}</span>

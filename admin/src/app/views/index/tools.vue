@@ -65,7 +65,7 @@
 				</div>
 				<img src="@/app/assets/images/tools/app_auth.png" class="w-[256px] h-[128px]" />
 			</div>
-			<div class="w-[256px] tools-item-shadow mb-[24px] mx-[14px] rounded-[8px] flex flex-col cursor-pointer leading-[1]" @click="toLink('/admin/tools/setting/admin')">
+			<div class="w-[256px] tools-item-shadow mb-[24px] mx-[14px] rounded-[8px] flex flex-col cursor-pointer leading-[1]" @click="toLink('/admin/tools/admin_menu')">
 				<div class="flex-1 pt-[18px] pb-[14px] px-[24px] flex flex-col">
 					<span class="text-[16px] text-[#222] font-bold">平台菜单</span>
 					<div class="text-[13px] text-[#6D7278] leading-[18px] mt-[8px] truncate">
@@ -74,7 +74,7 @@
 				</div>
 				<img src="@/app/assets/images/tools/official_market.png" class="w-[256px] h-[128px]" />
 			</div>
-			<div class="w-[256px] tools-item-shadow mb-[24px] mx-[14px] rounded-[8px] flex flex-col cursor-pointer leading-[1]" @click="toLink('/admin/tools/setting/site')">
+			<div class="w-[256px] tools-item-shadow mb-[24px] mx-[14px] rounded-[8px] flex flex-col cursor-pointer leading-[1]" @click="toLink('/admin/tools/site_menu')">
 				<div class="flex-1 pt-[18px] pb-[14px] px-[24px] flex flex-col">
 					<span class="text-[16px] text-[#222] font-bold">站点菜单</span>
 					<div class="text-[13px] text-[#6D7278] leading-[18px] mt-[8px] truncate">

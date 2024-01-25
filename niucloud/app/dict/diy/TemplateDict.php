@@ -41,29 +41,45 @@ class TemplateDict
             ]
         ];
 
-        $pages = ( new DictLoader("UniappTemplate") )->load($system_pages);
-        if (!empty($params[ 'type' ])) {
-            $temp = [];
-            foreach ($params[ 'type' ] as $k => $v) {
-                if (!empty($pages[ $v ])) {
-                    $temp[ $v ] = $pages[ $v ];
+        // 查询存在模板页面的应用插件列表
+        if (!empty($params[ 'query' ]) && $params[ 'query' ] == 'addon') {
+            $system = [
+                'app' => [
+                    'title' => '系统',
+                    'key' => 'app',
+                    'list' => $system_pages
+                ]
+            ];
+            $addon = (new DictLoader("UniappTemplate"))->load($params);
+            $app = array_merge($system, $addon);
+            return $app;
+        } else {
+            // 查询应用插件下的模板页面数据
+            $pages = (new DictLoader("UniappTemplate"))->load($system_pages);
+            if (!empty($params[ 'type' ])) {
+                $temp = [];
+                foreach ($params[ 'type' ] as $k => $v) {
+                    if (!empty($pages[ $v ])) {
+                        $temp[ $v ] = $pages[ $v ];
+                    }
                 }
+                return $temp;
             }
-            return $temp;
-        }
 
-        if (!empty($params[ 'action' ])) {
-            $temp = [];
-            foreach ($pages as $k => $v) {
-                if (isset($v[ 'action' ]) && $params[ 'action' ] == $v[ 'action' ]) {
-                    $temp[ $k ] = $v;
+            if (!empty($params[ 'action' ])) {
+                $temp = [];
+                foreach ($pages as $k => $v) {
+                    if (isset($v[ 'action' ]) && $params[ 'action' ] == $v[ 'action' ]) {
+                        $temp[ $k ] = $v;
+                    }
+
                 }
-
+                return $temp;
             }
-            return $temp;
-        }
 
-        return $pages;
+            return $pages;
+
+        }
     }
 
 }

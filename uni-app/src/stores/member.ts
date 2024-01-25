@@ -33,12 +33,12 @@ const useMemberStore = defineStore('member', {
         },
         async logout(isRedirect : boolean = false) {
             if (!this.token) return
+            this.token = ''
+            this.info = null
             await logout().then(() => {
-                this.$reset()
                 removeToken()
                 isRedirect && redirect({ url: '/app/pages/index/index' })
             }).catch(() => {
-                this.$reset()
                 removeToken()
                 isRedirect && redirect({ url: '/app/pages/index/index' })
             })

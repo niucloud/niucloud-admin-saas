@@ -11,18 +11,16 @@
 namespace core\dict;
 
 
-use app\service\admin\addon\AddonService;
-
 class UniappLink extends BaseDict
 {
     /**
      * 系统uniapp页面链接
-     * @param array $data //系统
+     * @param array $data
      * @return array|mixed
      */
     public function load(array $data)
     {
-        $addons = (new AddonService())->getAddonKeysBySiteId(request()->siteId());
+        $addons = $this->getLocalAddons();
         $link_files = [];
         foreach ($addons as $v) {
             $link_path = $this->getAddonDictPath($v) . "diy" . DIRECTORY_SEPARATOR . "links.php";

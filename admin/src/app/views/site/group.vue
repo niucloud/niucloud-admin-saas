@@ -30,7 +30,18 @@
 
                     <el-table-column prop="group_name" :label="t('groupName')" />
 
-                    <el-table-column prop="group_desc" :label="t('remark')"></el-table-column>
+                    <el-table-column prop="group_name" :label="t('appName')" :show-overflow-tooltip="true">
+                        <template #default="{ row }">
+                            <el-tag class="mr-1" size="small" v-for="name in row.app_name">{{ name }}</el-tag>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column prop="group_name" :label="t('addonName')" :show-overflow-tooltip="true">
+                        <template #default="{ row }">
+                            <el-tag class="mr-1" size="small" v-for="name in row.addon_name">{{ name }}</el-tag>
+                        </template>
+                    </el-table-column>
+
                     <el-table-column prop="create_time" :label="t('createTime')"></el-table-column>
                     <el-table-column prop="group_roles" :label="t('operation')" align="right" fixed="right" width="130">
                         <template #default="{ row }">

@@ -31,9 +31,8 @@ class  CoreDiyConfigService extends BaseCoreService
      */
     public function getBottomConfig(int $site_id)
     {
-        $info = ( new CoreConfigService() )->getConfig($site_id, ConfigKeyDict::DIY_BOTTOM)[ 'value' ] ?? [];
+        $info = (new CoreConfigService())->getConfig($site_id, ConfigKeyDict::DIY_BOTTOM)[ 'value' ] ?? [];
         if (empty($info)) {
-
             $info = [
                 'backgroundColor' => '#ffffff',
                 'textColor' => '#606266',
@@ -76,7 +75,7 @@ class  CoreDiyConfigService extends BaseCoreService
      */
     public function setBottomConfig(int $site_id, array $data)
     {
-        return ( new CoreConfigService() )->setConfig($site_id, ConfigKeyDict::DIY_BOTTOM, $data);
+        return (new CoreConfigService())->setConfig($site_id, ConfigKeyDict::DIY_BOTTOM, $data);
     }
 
     /**
@@ -86,7 +85,7 @@ class  CoreDiyConfigService extends BaseCoreService
      */
     public function setStartUpPageConfig(int $site_id, array $data)
     {
-        return ( new CoreConfigService() )->setConfig($site_id,'START_UP_PAGE_' . strtoupper($data[ 'type' ]), $data);
+        return (new CoreConfigService())->setConfig($site_id, 'START_UP_PAGE_' . strtoupper($data[ 'type' ]), $data);
     }
 
     /**
@@ -96,7 +95,7 @@ class  CoreDiyConfigService extends BaseCoreService
      */
     public function getStartUpPageConfig(int $site_id, string $type)
     {
-        $info = ( new CoreConfigService() )->getConfig($site_id, 'START_UP_PAGE_' . strtoupper($type))[ 'value' ] ?? [];
+        $info = (new CoreConfigService())->getConfig($site_id, 'START_UP_PAGE_' . strtoupper($type))[ 'value' ] ?? [];
         if (!empty($info)) {
             $info[ 'name' ] = isset($info[ 'name' ]) ? $info[ 'name' ] : '';
         }

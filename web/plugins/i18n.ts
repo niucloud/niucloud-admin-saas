@@ -1,9 +1,9 @@
 import { createI18n } from 'vue-i18n'
 
-import zhCn from "~/lang/zh-cn/common.json";
+import zhCn from "~/lang/zh-cn/common.json"
 import en from "~/lang/en/common.json"
-import zhCnPages from "~/lang/zh-cn/pages.json";
-import enPages from "~/lang/en/pages.json"
+import zhCnPages from "~/app/lang/zh-cn/pages.json"
+import enPages from "~/app/lang/en/pages.json"
 
 export default defineNuxtPlugin((NuxtApp) => {
     const i18n = createI18n({

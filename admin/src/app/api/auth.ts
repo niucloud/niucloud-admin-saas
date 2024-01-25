@@ -10,6 +10,13 @@ export function login(params: Record<string, any>, app_type: string) {
 }
 
 /**
+ * 退出登录
+ */
+export function logout() {
+    return request.put('auth/logout', {}, { showErrorMessage: false })
+}
+
+/**
  * 获取登录用户权限
  * @returns
  */

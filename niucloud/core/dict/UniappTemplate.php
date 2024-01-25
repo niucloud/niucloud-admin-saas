@@ -17,28 +17,54 @@ class UniappTemplate extends BaseDict
 {
     /**
      * 系统uniapp页面模板
-     * @param array $data //系统
+     * @param array $data
      * @return array|mixed
      */
     public function load(array $data)
     {
-        $addons = (new AddonService())->getAddonKeysBySiteId(request()->siteId());
-        $page_files = [];
+        $addons = $this->getLocalAddons();
+
+        $app_keys = []; // 应用插件key集合
+        $apps = []; // 应用插件集合
+        $page_files = []; // 模板页面文件集合
+
         foreach ($addons as $v) {
             $page_path = $this->getAddonDictPath($v) . "diy" . DIRECTORY_SEPARATOR . "template.php";
             if (is_file($page_path)) {
-                $page_files[] = $page_path;
+                if (!empty($data[ 'query' ]) && $data[ 'query' ] == 'addon') {
+                    $file = include $page_path;
+                    if (!empty($file)) {
+                        $app_keys[] = $v;
+                        $apps[ $v ] = $file;
+                    }
+                } else {
+                    $page_files[] = $page_path;
+                }
             }
         }
-        $page_files_data = $this->loadFiles($page_files);
-        $pages = $data;
-        foreach ($page_files_data as $file_data) {
-            if (empty($pages)) {
-                $pages = $file_data;
-            } else {
-                $pages = array_merge($pages, $file_data);
+
+        // 查询存在模板页面的应用插件列表
+        if (!empty($data[ 'query' ]) && $data[ 'query' ] == 'addon') {
+            $addon_service = new AddonService();
+            $list = $addon_service->getAddonListByKeys($app_keys);
+            $list_key = array_column($list, 'key');
+            $list = array_combine($list_key, $list);
+            foreach ($list as $k => $v) {
+                $list[ $k ][ 'list' ] = $apps[ $k ];
             }
+            return $list;
+        } else {
+            // 查询应用插件下的模板页面数据
+            $page_files_data = $this->loadFiles($page_files);
+            $pages = $data;
+            foreach ($page_files_data as $file_data) {
+                if (empty($pages)) {
+                    $pages = $file_data;
+                } else {
+                    $pages = array_merge($pages, $file_data);
+                }
+            }
+            return $pages;
         }
-        return $pages;
     }
 }

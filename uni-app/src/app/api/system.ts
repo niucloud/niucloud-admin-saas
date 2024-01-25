@@ -11,7 +11,7 @@ export function getCaptcha() {
  * 获取微信公众号授权码
  */
 export function getWechatAuthCode(data : AnyObject) {
-    return request.get('wechat/codeurl', data)
+    return request.get('wechat/codeurl', data, { showErrorMessage: false })
 }
 
 /**

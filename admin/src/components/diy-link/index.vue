@@ -32,14 +32,12 @@
                     <template v-if="parentLinkName == 'DIY_LINK'">
                         <div class="mb-[16px]">
                             <el-form-item :label="t('diyLinkName')">
-                                <el-input v-model="selectLink.title" :placeholder="t('diyLinkNamePlaceholder')"
-                                    class="w-6/12" />
+                                <el-input v-model="selectLink.title" :placeholder="t('diyLinkNamePlaceholder')" class="w-6/12" />
                             </el-form-item>
                         </div>
                         <div class="mb-[16px]">
                             <el-form-item :label="t('diyLinkUrl')">
-                                <el-input v-model="selectLink.url" :placeholder="t('diyLinkUrlPlaceholder')"
-                                    class="w-6/12" />
+                                <el-input v-model="selectLink.url" :placeholder="t('diyLinkUrlPlaceholder')" class="w-6/12" />
                             </el-form-item>
                         </div>
                         <el-form-item label=" ">
@@ -80,6 +78,10 @@ const prop = defineProps({
     modelValue: {
         type: String,
         default: ''
+    },
+    ignore:{
+        type:Array,
+        default:[]
     }
 })
 
@@ -109,12 +111,28 @@ const show = () => {
     if (value.value.name != '') {
         selectLink.value = cloneDeep(value.value)
         parentLinkName.value = selectLink.value.parent
+        for (let key in link.value){
+            if(link.value[key].name == parentLinkName.value){
+                changeParentLink(link.value[key]);
+            }
+        }
     }
     showDialog.value = true
 }
 
 getLink({}).then((res: any) => {
     link.value = res.data
+
+    if(prop.ignore && prop.ignore.length){
+        for (let key in link.value){
+            for(let i=0;i<prop.ignore.length;i++){
+                if(key == prop.ignore[i]){
+                    delete link.value[key];
+                    break;
+                }
+            }
+        }
+    }
 
     childList.value = Object.values(link.value)[0].child_list
     if (value.value.name != '') {
@@ -149,16 +167,14 @@ const clear = () => {
 }
 
 const save = () => {
-    // 自定义链接
     if (parentLinkName.value === 'DIY_LINK') {
-        selectLink.value.parent = parentLinkName.value
-        selectLink.value.name = parentLinkName.value
+        // 自定义链接
 
         if (!selectLink.value.title) {
             ElMessage({
                 message: t('diyLinkNameNotEmpty'),
                 type: 'warning'
-            })
+            });
             return
         }
 
@@ -166,13 +182,24 @@ const save = () => {
             ElMessage({
                 message: t('diyLinkUrlNotEmpty'),
                 type: 'warning'
-            })
+            });
             return
         }
+
+        selectLink.value.parent = parentLinkName.value
+        selectLink.value.name = parentLinkName.value
+        selectLink.value.page = selectLink.value.url;
+        selectLink.value.action = '';
+
+    }else if(parentLinkName.value  == 'DIY_PAGE'){
+        // 自定义页面
+        selectLink.value.parent = parentLinkName.value
+        selectLink.value.action = 'decorate';
     }
 
     value.value = cloneDeep(selectLink.value)
     showDialog.value = false
+    emit('success')
 }
 
 defineExpose({

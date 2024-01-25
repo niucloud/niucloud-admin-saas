@@ -43,7 +43,7 @@ const pageName = route.meta.title
 const loading = ref(true)
 
 const formData = reactive<Record<string, string | boolean | any>>({
-    is_open: false,
+    is_open: true,
     request_url: ''
 })
 

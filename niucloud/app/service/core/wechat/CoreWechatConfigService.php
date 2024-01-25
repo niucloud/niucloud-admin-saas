@@ -72,7 +72,7 @@ class CoreWechatConfigService extends BaseCoreService
      */
     public function getWechatStaticInfo($site_id){
 //        $domain = request()->domain();
-        $wap_domain = (new CoreSysConfigService())->getSceneDomain($site_id)['wap_domain'] ?? '';
+        $wap_domain = (new CoreSysConfigService())->getSceneDomain($site_id)['wap_url'] ?? '';
         $wap_domain_array = explode('/', $wap_domain);
         if(count($wap_domain_array) > 2){
             $wap_domain = $wap_domain_array[0].'/'.$wap_domain_array[1].'/'.$wap_domain_array[2];

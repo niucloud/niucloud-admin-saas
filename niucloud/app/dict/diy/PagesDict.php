@@ -15,7 +15,7 @@ use core\dict\DictLoader;
 
 /**
  * 页面数据
- * Class TemplateDict
+ * Class PagesDict
  * @package app\dict\diy
  */
 class PagesDict

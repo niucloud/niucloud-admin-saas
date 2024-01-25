@@ -29,7 +29,7 @@ export function upgradeAddon(addon: string = '') {
  * 执行升级
  */
 export function executeUpgrade() {
-    return request.post('upgrade/execute')
+    return request.post('upgrade/execute', {}, { timeout: 0 })
 }
 
 /**

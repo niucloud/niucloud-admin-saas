@@ -42,6 +42,29 @@ class Diy extends BaseModel
     protected $name = 'diy_page';
 
     /**
+     * 状态字段转化：所属插件名称
+     * @param $value
+     * @param $data
+     * @return string
+     */
+    public function getAddonNameAttr($value, $data)
+    {
+        $addon_name = '';
+        $template = TemplateDict::getTemplate([
+            'query' => 'addon'
+        ]);
+        foreach ($template as $k => $v) {
+            foreach ($v[ 'list' ] as $ck => $cv) {
+                if ($ck == $data[ 'type' ]) {
+                    $addon_name = $v[ 'title' ];
+                    break;
+                }
+            }
+        }
+        return $addon_name;
+    }
+
+    /**
      * 状态字段转化
      * @param $value
      * @param $data
@@ -109,6 +132,28 @@ class Diy extends BaseModel
     }
 
     /**
+     * 搜索器:自定义页面标识
+     * @param $query
+     * @param $value
+     * @param $data
+     */
+    public function searchAddonNameAttr($query, $value, $data)
+    {
+        if ($value) {
+            $list = [];
+            $template = TemplateDict::getTemplate([
+                'query' => 'addon'
+            ]);
+            foreach ($template as $k => $v) {
+                if ($k == $value) {
+                    $list = array_keys($v[ 'list' ]);
+                }
+            }
+            $query->where("type", 'in', $list);
+        }
+    }
+
+    /**
      * 搜索器:自定义页面
      * @param $query
      * @param $value
@@ -120,7 +165,6 @@ class Diy extends BaseModel
             $query->where("id", $value);
         }
     }
-
 
     /**
      * 搜索器:自定义页面名称

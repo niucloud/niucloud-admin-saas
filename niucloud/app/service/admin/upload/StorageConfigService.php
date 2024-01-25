@@ -52,7 +52,7 @@ class StorageConfigService extends BaseAdminService
         $info = (new CoreConfigService())->getConfig($this->site_id, 'STORAGE');
         if(empty($info))
         {
-            $config_type = ['default' => ''];//初始化
+            $config_type = ['default' => StorageDict::LOCAL];//初始化
         }else
             $config_type = $info['value'];
 

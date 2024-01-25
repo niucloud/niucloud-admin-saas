@@ -3,8 +3,7 @@
 		<view v-for="(item,index) in list" :key="item.id"
 			:class="['item flex align-center p-[20rpx]  mb-[20rpx]',{'border-solid border-t-0 border-l-0 border-r-0 border-b border-gray-200': list.length-1 !== index}] "
 			@click="toLink(item.url)">
-			<u--image width="120rpx" height="120rpx" :src="img(item.icon)" v-if="item.icon"
-				class="rounded-md overflow-hidden" model="aspectFill">
+			<u--image width="120rpx" height="120rpx" :src="img(item.icon)" v-if="item.icon" class="rounded-md overflow-hidden" model="aspectFill">
 				<template #error>
 					<u-icon name="photo" color="#999" size="60"></u-icon>
 				</template>

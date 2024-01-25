@@ -49,7 +49,7 @@ class SiteGroupService extends BaseAdminService
     public function getPage(array $where = [])
     {
         $field = 'group_id, group_name, group_desc, app, addon, create_time, update_time';
-        $search_model = $this->model->withSearch(['keywords'],$where)->field($field)->order('create_time desc');
+        $search_model = $this->model->withSearch(['keywords'],$where)->field($field)->append(['app_name', 'addon_name'])->order('create_time desc');
         $list = $this->pageQuery($search_model);
         return $list;
     }

@@ -102,7 +102,7 @@ class ExceptionHandle extends Handle
             return fail($e->getMessage());
         } else if($e instanceof UnexpectedValueException){
             return fail($e->getMessage(), [], 401);
-        }else if($e instanceof AuthException || $e instanceof AdminException){
+        }else if($e instanceof AuthException){
             return fail($e->getMessage(), [], $e->getCode() ?: 400);
         }else if($e instanceof ServerException){
             return fail($e->getMessage(), http_code:$e->getCode());

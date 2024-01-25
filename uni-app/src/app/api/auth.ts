@@ -50,14 +50,14 @@ export function mobileRegister(data : AnyObject) {
  * 微信公众号授权登录
  */
 export function wechatLogin(data : AnyObject) {
-    return request.post('wechat/login', data)
+    return request.post('wechat/login', data, { showErrorMessage: false })
 }
 
 /**
  * 微信公众号授权登录
  */
 export function weappLogin(data : AnyObject) {
-    return request.post('weapp/login', data)
+    return request.post('weapp/login', data, { showErrorMessage: false })
 }
 
 /**

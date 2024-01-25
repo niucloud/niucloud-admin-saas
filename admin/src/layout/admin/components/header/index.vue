@@ -2,9 +2,10 @@
     <el-container class="h-[60px] bg-[#2B303B] layout-admin flex items-center justify-between px-[15px] text-white" >
         <!-- :class="['h-full px-[10px]',{'layout-header border-b border-color': !dark}]"  -->
         <div class="flex items-center text-[14px]  leading-[1]">
-            <span class="iconfont icontuodong !text-[25px] cursor-pointer mr-[6px]" @click="toLink('/admin/index')"></span>
+            <span class="iconfont icontuodong !text-[25px] mr-[6px]"></span>
+            <span class="cursor-pointer" @click="toLink('/admin/index')">首页</span>
             <span class="mx-2 text-[#4F5563] mx-[15px]">|</span>
-            <span class="cursor-pointer" @click="toLink('/admin/setting/website/system','setting_manage')">控制台</span>
+            <span class="cursor-pointer" @click="toLink('/admin/setting/website/system','setting_manage')">配置</span>
             <span class="mx-2 text-[#4F5563] mx-[15px]">|</span>
             <span class="cursor-pointer" @click="toLink('/admin/site/list','site_manage')">站点</span>
             <template v-if="app_debug">

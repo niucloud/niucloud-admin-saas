@@ -46,6 +46,8 @@ $system_event = [
         'AppManage' => [
             'app\listener\system\AppManageListener'
         ],
+        //协议类型加载
+        'AgreementType' => [],
         //站点首页加载
         'SiteIndex' => [
             'app\listener\system\SiteIndexListener'

@@ -17,6 +17,7 @@ use app\dict\diy\PagesDict;
 use app\dict\diy\TemplateDict;
 use app\model\diy\Diy;
 use app\service\admin\sys\SystemService;
+use app\service\core\addon\CoreAddonService;
 use core\base\BaseAdminService;
 use core\exception\AdminException;
 use Exception;
@@ -49,7 +50,7 @@ class DiyService extends BaseAdminService
         $where[] = [ 'site_id', '=', $this->site_id ];
         $field = 'id,site_id,title,name,template,type,mode,is_default,share,visit_count,create_time,update_time';
         $order = "update_time desc";
-        $search_model = $this->model->where([ [ 'site_id', '=', $this->site_id ] ])->withSearch([ "title", "type", 'mode' ], $where)->field($field)->order($order)->append([ 'type_name' ]);
+        $search_model = $this->model->where([ [ 'site_id', '=', $this->site_id ] ])->withSearch([ "title", "type", 'mode', 'addon_name' ], $where)->field($field)->order($order)->append([ 'type_name', 'type_page', 'addon_name' ]);
         return $this->pageQuery($search_model);
     }
 
@@ -161,7 +162,7 @@ class DiyService extends BaseAdminService
             $this->model->where([ [ 'id', '=', $id ], [ 'site_id', '=', $this->site_id ] ])->update([ 'is_default' => 1, 'update_time' => time() ]);
             Db::commit();
             return true;
-        } catch ( Exception $e) {
+        } catch (Exception $e) {
             Db::rollback();
             throw new AdminException($e->getMessage());
         }
@@ -185,8 +186,35 @@ class DiyService extends BaseAdminService
             $data = $this->getInfoByName($params[ 'name' ]);
         }
 
+        if (!empty($params[ 'name' ])) {
+
+            // 查询启动页配置
+            $diy_config_service = new DiyConfigService();
+            $start_up_page = $diy_config_service->getStartUpPageConfig($params[ 'name' ]);
+            if (!empty($start_up_page)) {
+                if ($start_up_page[ 'parent' ] == 'DIY_PAGE') {
+                    $id = str_replace('/app/pages/index/diy?id=', '', $start_up_page[ 'page' ]);
+                    $data = $this->getInfo($id);
+                    if (!empty($data)) {
+                        $params[ 'name' ] = $data[ 'name' ];
+                        $params[ 'type' ] = $data[ 'type' ];
+                    }
+                } else {
+                    foreach ($template as $k => $v) {
+                        if ($start_up_page[ 'page' ] == $v[ 'page' ]) {
+                            $data = $this->getInfoByName($k);
+                            $params[ 'name' ] = $k;
+                            $params[ 'type' ] = $k;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
         if (!empty($data)) {
             // 编辑赋值
+
             if (isset($template[ $data[ 'type' ] ])) {
                 $page = $template[ $data[ 'type' ] ];
                 $data[ 'type_name' ] = $page[ 'title' ];
@@ -195,11 +223,11 @@ class DiyService extends BaseAdminService
         } else {
 
             // 新页面赋值
-            $title = $params[ 'title' ] ?: '页面' . $time;
-            $type = $params[ 'type' ] ?: 'DIY_PAGE';
+            $title = $params[ 'title' ] ? : '页面' . $time;
+            $type = $params[ 'type' ] ? : 'DIY_PAGE';
             $name = $type == 'DIY_PAGE' ? 'DIY_PAGE_RANDOM_' . $time : $type;
             $type_name = '';
-            $template_name = $params[ 'template' ] ?? ''; // 页面模板名称
+            $template_name = ''; // 页面模板名称
             $page_route = ''; // 页面路径
             $mode = 'diy'; // 页面模式，diy：自定义，fixed：固定
             $value = '';
@@ -233,14 +261,6 @@ class DiyService extends BaseAdminService
                     $is_default = 1;
                 }
 
-                if (!empty($params[ 'template' ])) {
-                    $page_template = $page[ 'template' ][ $params[ 'template' ] ];
-                    $mode = $page_template[ 'mode' ];
-                    $page_data = $page_template[ 'data' ];
-                    $page_data[ 'global' ][ 'title' ] = $title;
-                    $value = json_encode($page_data, JSON_UNESCAPED_UNICODE);
-                }
-
             }
 
             $data = [
@@ -256,8 +276,12 @@ class DiyService extends BaseAdminService
             ];
 
         }
+
         $data[ 'component' ] = $this->getComponentList($data[ 'type' ]);
-        $data[ 'domain_url' ] = ( new SystemService() )->getUrl();
+        $data[ 'domain_url' ] = (new SystemService())->getUrl();
+
+        // 查询已安装的有效的应用
+        $data[ 'addon_list' ] = (new CoreAddonService())->getInstallAddonList();
         return $data;
     }
 
@@ -274,13 +298,13 @@ class DiyService extends BaseAdminService
             $sort_arr = [];
             foreach ($v[ 'list' ] as $ck => $cv) {
                 $support_page = $cv[ 'support_page' ];
-                if (!( count($support_page) == 0 || in_array($name, $support_page) )) {
+                if (!(count($support_page) == 0 || in_array($name, $support_page))) {
                     unset($data[ $k ][ 'list' ][ $ck ]);
                     continue;
                 }
 
                 $sort_arr [] = $cv[ 'sort' ];
-                unset($data[$k]['list'][$ck]['sort'], $data[$k]['list'][$ck]['support_page']);
+                unset($data[ $k ][ 'list' ][ $ck ][ 'sort' ], $data[ $k ][ 'list' ][ $ck ][ 'support_page' ]);
             }
             array_multisort($sort_arr, SORT_ASC, $data[ $k ][ 'list' ]); //排序，根据 sort 排序
         }
@@ -314,7 +338,7 @@ class DiyService extends BaseAdminService
                     $link[ $k ][ 'child_list' ][] = [
                         'name' => $cv[ 'name' ],
                         'title' => $cv[ 'title' ],
-                        'url' => '/pages/index/diy?id=' . $cv[ 'id' ]
+                        'url' => '/app/pages/index/diy?id=' . $cv[ 'id' ]
                     ];
                 }
 
@@ -368,7 +392,7 @@ class DiyService extends BaseAdminService
     public function getPageData($type, $name)
     {
         $pages = PagesDict::getPages([ 'type' => $type ]);
-        return $pages[$name] ?? [];
+        return $pages[ $name ] ?? [];
     }
 
     /**
@@ -391,269 +415,117 @@ class DiyService extends BaseAdminService
 
     /**
      * 获取页面装修列表
+     * @param $params
      * @return array
      * @throws DataNotFoundException
      * @throws DbException
      * @throws ModelNotFoundException
      */
-    public function getDecoratePage()
+    public function getDecoratePage($params)
     {
 
-        // 查询可装修的页面
-        $template = $this->getTemplate([ 'action' => 'decorate', 'type' => [ 'DIY_INDEX', 'DIY_MEMBER_INDEX' ] ]);
-        $specific_page = array_column($template, 'page');
+        // 查询当前装修的页面信息
+        $template = $this->getTemplate([ 'action' => 'decorate', 'type' => [ $params[ 'type' ] ] ])[ $params[ 'type' ] ];
 
-        // 查询其他页面，排除特定页面
-        $other_page = ( new DiyRouteService() )->getList();
-        foreach ($other_page as $ck => $cv) {
-            if (in_array(substr($cv[ 'page' ], 1), $specific_page) || $cv[ 'is_share' ] == 0) {
-                unset($other_page[ $ck ]);
-            }
-        }
-        $other_page = array_values($other_page);
+        $template[ 'domain_url' ] = (new SystemService())->getUrl();
 
+        // 查询默认页面数据
+        $default_page_data = $this->getFirstPageData($params[ 'type' ]);
+
+        // 查询其他页面，排除特定页面（不能分享的页面）
+        $other_page = (new DiyRouteService())->getList();
+
+        $use_template = [
+            'type' => $params[ 'type' ], // 页面类型标识
+            'name' => '', // 链接标识
+            'parent' => '', // 链接标识
+            'title' => $default_page_data[ 'title' ], // 模板名称
+            'cover' => $default_page_data[ 'cover' ], // 封面图
+            'url' => '', // 自定义页面链接，实时预览效果
+            'page' => $template[ 'page' ], // 页面地址
+            'action' => $template[ 'action' ] // 是否存在操作，decorate 表示支持装修
+        ];
+
+        // 查询启动页配置
         $diy_config_service = new DiyConfigService();
+        $start_up_page = $diy_config_service->getStartUpPageConfig($params[ 'type' ]);
 
-        // 遍历查询页面数据，使用了那套模板
-        foreach ($template as $k => $v) {
+        // 查询页面数据
+        $info = $this->getInfoByName($params[ 'type' ]);
 
-            $template[ $k ][ 'domain_url' ] = ( new SystemService() )->getUrl();
+        if (!empty($start_up_page)) {
+            $use_template[ 'title' ] = $start_up_page[ 'title' ] ?? '';
+            $use_template[ 'name' ] = $start_up_page[ 'name' ] ?? '';
+            $use_template[ 'page' ] = $start_up_page[ 'page' ] ?? '';
+            $use_template[ 'action' ] = $start_up_page[ 'action' ] ?? '';
+            $use_template[ 'url' ] = $use_template[ 'page' ];
+            $use_template[ 'parent' ] = $start_up_page[ 'parent' ] ?? '';
+        } elseif (!empty($info)) {
+            $use_template[ 'id' ] = $info[ 'id' ];
+            $use_template[ 'title' ] = $info[ 'title' ];
 
-            // 查询我的微页面
-            $template[ $k ][ 'my_page' ] = $this->getList([ 'type' => $k ], 'id,title,name,template,type,is_default,mode');
-
-            // 查询其他页面，排除特定页面
-            $template[ $k ][ 'other_page' ] = $other_page;
-
-            // 查询默认页面数据
-            $default_page_data = $this->getFirstPageData($k);
-            $use_template = [
-                'id' => 0,
-                'name' => $k,
-                'title' => $default_page_data[ 'title' ], // 模板名称
-                'template' => $default_page_data[ 'template' ], // 模板标识
-                'cover' => $default_page_data[ 'cover' ], // 封面图
-                'preview' => $default_page_data[ 'preview' ], // 预览图
-                'desc' => $default_page_data[ 'desc' ], // 模板描述
-                'mode' => $default_page_data[ 'mode' ], // 页面模式：diy：自定义，fixed：固定
-                'hope' => 'template', // 默认选中 模板
-                'url' => '', // 自定义页面链接，实时预览效果
-                'page' => $v[ 'page' ], // 页面地址
-                'action' => '' // 是否存在操作，decorate 表示支持装修
-            ];
-
-            // 查询启动页配置
-            $start_up_page = $diy_config_service->getStartUpPageConfig($k);
-            if (!empty($start_up_page)) {
-                $use_template[ 'name' ] = $k;
-                if ($start_up_page[ 'mode' ] == 'other') {
-                    if (empty($start_up_page[ 'name' ])) {
-                        // 查询页面的名称标识
-                        foreach ($other_page as $ck => $cv) {
-                            if ($cv[ 'page' ] == $start_up_page[ 'page' ]) {
-                                $use_template[ 'name' ] = $cv['name'];
-                                break;
-                            }
-                        }
-                    }
+            // 查询链接的名称标识
+            foreach ($other_page as $ck => $cv) {
+                if ($cv[ 'page' ] == $use_template[ 'page' ]) {
+                    $use_template[ 'name' ] = $cv[ 'name' ];
+                    $use_template[ 'parent' ] = $cv[ 'parent' ];
+                    break;
                 }
-                $use_template[ 'hope' ] = $start_up_page[ 'mode' ];
-                $use_template[ 'mode' ] = $start_up_page[ 'mode' ];
-                $use_template[ 'page' ] = $start_up_page[ 'page' ];
-                $use_template[ 'action' ] = $start_up_page[ 'action' ] ?? '';
-                if ($use_template[ 'hope' ] == 'other') {
-                    // 其他页面没有预览图
-                    $use_template[ 'url' ] = $use_template[ 'page' ];
-                    $use_template[ 'cover' ] = ''; // 默认图
-                    $use_template[ 'template' ] = '';
-                    $use_template[ 'desc' ] = '将 ' . $start_up_page[ 'title' ] . ' 设为首页';
-                }
+            }
+
+            // 查询模板页面数据
+            $page_data = $this->getPageData($params[ 'type' ], $info[ 'template' ]);
+            if (!empty($page_data)) {
+                $use_template[ 'url' ] = $template[ 'page' ] . '?id=' . $info[ 'id' ];
+                // $use_template[ 'cover' ] = $page_data[ 'cover' ]; // 默认图
             } else {
-
-                // 查询页面数据
-                $info = $this->getInfoByName($k);
-
-                if (!empty($info)) {
-                    $use_template[ 'id' ] = $info[ 'id' ];
-                    $use_template[ 'name' ] = $info[ 'name' ];
-                    $use_template[ 'title' ] = $info[ 'title' ];
-                    $use_template[ 'template' ] = $info[ 'template' ];
-                    $use_template[ 'mode' ] = $info[ 'mode' ];
-                    $use_template[ 'hope' ] = $info[ 'mode' ] == 'fixed' ? 'template' : $info[ 'mode' ];
-                    $use_template[ 'preview' ] = ''; // 默认图
-                    $use_template[ 'desc' ] = '通过自定义装修的页面';
-
-                    // 查询模板页面数
-                    $page_data = $this->getPageData($k, $use_template[ 'template' ]);
-                    if (!empty($page_data)) {
-                        if ($info[ 'is_change' ] == 1) {
-                            // 修改过模板，预览实际内容
-                            $use_template[ 'url' ] = $v[ 'page' ] . '?id=' . $info[ 'id' ];
-                        } else {
-                            $use_template[ 'cover' ] = $page_data[ 'cover' ]; // 默认图
-                            $use_template[ 'desc' ] = $page_data[ 'desc' ];
-                            if (empty($page_data[ 'cover' ])) {
-                                $use_template[ 'url' ] = $v[ 'page' ] . '?id=' . $info[ 'id' ];
-                            }
-                        }
-                    } else {
-                        // 自定义页面，实时预览效果
-                        $use_template[ 'url' ] = '/app/pages/index/diy?id=' . $info[ 'id' ];
-                        // 清空模板信息
-                        $use_template[ 'cover' ] = ''; // 默认图
-                        $use_template[ 'template' ] = '';
-                        $use_template[ 'mode' ] = 'diy';
-                        $use_template[ 'hope' ] = $use_template[ 'mode' ];
-                    }
-                }
+                // 自定义页面，实时预览效果
+                $use_template[ 'url' ] = '/app/pages/index/diy?id=' . $info[ 'id' ];
+                // 清空模板信息
+                $use_template[ 'cover' ] = ''; // 默认图
             }
-
-            // 如果没有预览图，并且没有地址，则赋值
-            if (empty($use_template[ 'cover' ]) && empty($use_template[ 'url' ])) {
-                $use_template[ 'url' ] = $v[ 'page' ];
-            }
-
-            $template[ $k ][ 'use_template' ] = $use_template;
         }
+
+        // 如果没有预览图，并且没有地址，则赋值默认页面地址
+        if (empty($use_template[ 'cover' ]) && empty($use_template[ 'url' ])) {
+            $use_template[ 'url' ] = $template[ 'page' ];
+        }
+
+        $template[ 'use_template' ] = $use_template;
 
         return $template;
     }
 
+    /**
+     * 设置启动页
+     * @param array $params
+     * @return \app\model\sys\SysConfig|bool|\think\Model
+     */
     public function changeTemplate(array $params = [])
     {
-
-        $info = [];
-        if ($params[ 'mode' ] == 'diy') {
-            // 自定义页面
-
-            // 查询
-            if (!empty($params[ 'id' ])) {
-                // 使用了微页面
-                $info = $this->getInfo($params[ 'id' ]);
-                if (!empty($info)) {
-                    // 状态 变为 使用中
-                    $this->setUse($info[ 'id' ]);
-                }
-            } elseif ($params[ 'template' ]) {
-
-                // 查询表中未修改的模板数据
-                $field = 'id,title,type';
-                $condition = [
-                    [ 'site_id', '=', $this->site_id ],
-                    [ 'type', '=', $params[ 'type' ] ],
-                    [ 'template', '=', $params[ 'template' ] ],
-                    [ 'mode', '=', $params[ 'mode' ] ],
-                    [ 'is_change', '=', 0 ]
-                ];
-                $info = $this->model->field($field)->where($condition)->findOrEmpty()->toArray();
-                if (!empty($info)) {
-                    // 状态 变为 使用中
-                    $this->setUse($info[ 'id' ]);
-                } else {
-                    // 新增 数据
-
-                    // 查询模板信息
-                    $page_data = $this->getPageData($params[ 'type' ], $params[ 'template' ]);
-
-                    $data = [
-                        'title' => $page_data[ 'title' ],
-                        'name' => $params[ 'type' ],
-                        'type' => $params[ 'type' ],
-                        'value' => json_encode($page_data[ 'data' ], JSON_UNESCAPED_UNICODE),
-                        'template' => $params[ 'template' ],
-                        'mode' => $params[ 'mode' ]
-                    ];
-                    $res = $this->add($data);
-                    $this->setUse($res);
-                    $info = $data;
-                }
-
-            }
-
-            $page_template = TemplateDict::getTemplate([ 'type' => [ $info[ 'type' ] ] ])[ $info[ 'type' ] ];
-            $info[ 'page' ] = $page_template[ 'page' ];
-
-        } elseif ($params[ 'mode' ] == 'fixed') {
-            // 固定模板
-
-            // 查询模板信息
-            $page_data = $this->getPageData($params[ 'type' ], $params[ 'template' ]);
-
-            // 检查表里是否存在数据
-            $field = 'id,title,type';
-            $condition = [
-                [ 'type', '=', $params[ 'type' ] ],
-                [ 'template', '=', $params[ 'template' ] ],
-                [ 'mode', '=', $params[ 'mode' ] ]
-            ];
-            $info = $this->model->field($field)->where($condition)->findOrEmpty()->toArray();
-            if (!empty($info)) {
-                // 状态 变为 使用中
-                $this->setUse($info[ 'id' ]);
-            } else {
-                // 新增 数据
-                $data = [
-                    'title' => $page_data[ 'title' ],
-                    'name' => $params[ 'type' ],
-                    'type' => $params[ 'type' ],
-                    'value' => json_encode($page_data[ 'data' ], JSON_UNESCAPED_UNICODE),
-                    'template' => $params[ 'template' ],
-                    'mode' => $params[ 'mode' ]
-                ];
-                $res = $this->add($data);
-                $this->setUse($res);
-                $info = $data;
-            }
-
-            $page_template = TemplateDict::getTemplate([ 'type' => [ $info[ 'type' ] ] ])[ $info[ 'type' ] ];
-            $info[ 'page' ] = $page_template[ 'page' ];
-
-        } else if ($params[ 'mode' ] == 'other') {
-            // 其他页面
-            $info[ 'title' ] = $params[ 'title' ];
-            $info[ 'page' ] = $params[ 'page' ];
-        }
-
-        // 设置启动页
         $start_up_page_data = [
             'type' => $params[ 'type' ], // 页面类型
-            'name' => $params[ 'name' ], // 页面名称标识
-            'mode' => $params[ 'mode' ], // 模式：diy：自定义页面，fixed：模板，other：其他页面
-            'title' => $info[ 'title' ],
-            'page' => $info[ 'page' ],
-            'action' => $params[ 'action' ]
+            'name' => $params[ 'name' ], // 链接名称标识
+            'parent' => $params[ 'parent' ], // 链接父级名称标识
+            'page' => $params[ 'page' ], // 链接路由
+            'title' => $params[ 'title' ], // 链接标题
+            'action' => $params[ 'action' ] // 是否存在操作，decorate 表示支持装修
         ];
         $diy_config_service = new DiyConfigService();
-        $diy_config_service->setStartUpPageConfig($start_up_page_data);
-        return $info;
+        $res = $diy_config_service->setStartUpPageConfig($start_up_page_data);
+        return $res;
     }
 
     /**
-     * 获取页面预览数据
-     * @param array $params
+     * 获取模板页面的应用插件列表
      * @return array
      */
-    public function getPreviewData(array $params = [])
+    public function getApps()
     {
-        $info = [];
-        if (!empty($params[ 'id' ])) {
-            $info = $this->getInfo($params[ 'id' ]);
-        } elseif (!empty($params[ 'name' ])) {
-            $info = $this->getInfoByName($params[ 'name' ]);
-        }
-
-        $res = [
-            'page' => $this->getTemplate([ 'type' => 'DIY_PAGE' ])[ 'DIY_PAGE' ][ 'page' ]
-        ];
-
-        if (!empty($info)) {
-            if ($info[ 'is_default' ] == 1) {
-                $template = $this->getTemplate([ 'type' => $info[ 'type' ] ])[ $info[ 'type' ] ];
-                $res[ 'page' ] = $template[ 'page' ] . '?id=' . $info[ 'id' ];
-            }
-        }
-
-        return $res;
+        $page_template = TemplateDict::getTemplate([
+            'query' => 'addon'
+        ]);
+        return $page_template;
     }
 
 }

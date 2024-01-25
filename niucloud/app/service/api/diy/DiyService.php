@@ -12,6 +12,7 @@
 namespace app\service\api\diy;
 
 use app\dict\diy\PagesDict;
+use app\dict\diy\TemplateDict;
 use app\model\diy\Diy;
 use core\base\BaseApiService;
 
@@ -36,40 +37,57 @@ class DiyService extends BaseApiService
      */
     public function getInfo(array $params = [])
     {
-        $condition = [
-            [ 'site_id', '=', $this->site_id ]
-        ];
-        if (!empty($params[ 'id' ])) {
-            $condition[] = [ 'id', '=', $params[ 'id' ] ];
-        } elseif (!empty($params[ 'name' ])) {
-            $condition[] = [ 'name', '=', $params[ 'name' ] ];
-            $condition[] = [ 'is_default', '=', 1 ];
+        $start_up_page = [];
+        $page_template = [];
+
+        if (!empty($params[ 'name' ])) {
+
+            // 查询启动页
+            $diy_config_service = new DiyConfigService();
+            $start_up_page = $diy_config_service->getStartUpPageConfig($params[ 'name' ]);
+
+            $page_template = TemplateDict::getTemplate([ 'type' => [ $params[ 'name' ] ] ])[ $params[ 'name' ] ];
         }
 
-        $field = 'id,site_id,title,name,type,template, mode,value,is_default,share,visit_count';
+        if (!empty($start_up_page) && !empty($page_template) && !empty($start_up_page[ 'page' ]) && $start_up_page[ 'page' ] != $page_template[ 'page' ]) {
+            $info = $start_up_page;
+            return $info;
+        } else {
+            $condition = [
+                [ 'site_id', '=', $this->site_id ]
+            ];
+            if (!empty($params[ 'id' ])) {
+                $condition[] = [ 'id', '=', $params[ 'id' ] ];
+            } elseif (!empty($params[ 'name' ])) {
+                $condition[] = [ 'name', '=', $params[ 'name' ] ];
+                $condition[] = [ 'is_default', '=', 1 ];
+            }
 
-        $info = $this->model->field($field)->where($condition)->findOrEmpty()->toArray();
-        if (empty($info)) {
-            // 查询默认页面数据
-            if (!empty($params[ 'name' ])) {
-                $page_data = $this->getFirstPageData($params[ 'name' ]);
-                if (!empty($page_data)) {
-                    $info = [
-                        'site_id' => $this->site_id,
-                        'title' => $page_data[ 'title' ],
-                        'name' => $page_data[ 'type' ],
-                        'type' => $page_data[ 'type' ],
-                        'template' => $page_data[ 'template' ],
-                        'mode' => $page_data[ 'mode' ],
-                        'value' => json_encode($page_data[ 'data' ], JSON_UNESCAPED_UNICODE),
-                        'is_default' => 1,
-                        'share' => '',
-                        'visit_count' => 0
-                    ];
+            $field = 'id,site_id,title,name,type,template, mode,value,is_default,share,visit_count';
+
+            $info = $this->model->field($field)->where($condition)->findOrEmpty()->toArray();
+            if (empty($info)) {
+                // 查询默认页面数据
+                if (!empty($params[ 'name' ])) {
+                    $page_data = $this->getFirstPageData($params[ 'name' ]);
+                    if (!empty($page_data)) {
+                        $info = [
+                            'site_id' => $this->site_id,
+                            'title' => $page_data[ 'title' ],
+                            'name' => $page_data[ 'type' ],
+                            'type' => $page_data[ 'type' ],
+                            'template' => $page_data[ 'template' ],
+                            'mode' => $page_data[ 'mode' ],
+                            'value' => json_encode($page_data[ 'data' ], JSON_UNESCAPED_UNICODE),
+                            'is_default' => 1,
+                            'share' => '',
+                            'visit_count' => 0
+                        ];
+                    }
                 }
             }
+            return $info;
         }
-        return $info;
     }
 
     /**

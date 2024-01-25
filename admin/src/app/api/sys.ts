@@ -167,6 +167,14 @@ export function getWebConfig() {
 }
 
 /**
+ * 获取网站设置
+ * @returns
+ */
+export function getWebCopyright() {
+    return request.get('sys/web/copyright')
+}
+
+/**
  * 更新网站设置
  * @param params
  * @returns

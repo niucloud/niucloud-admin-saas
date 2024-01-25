@@ -1,6 +1,6 @@
 <template>
     <el-container
-        :class="['w-full h-screen bg-page', { 'login-wrap': loginType == 'admin' }, { 'site-login-wrap': loginType == 'site' }]">
+        :class="['w-full h-screen bg-page flex flex-col', { 'login-wrap': loginType == 'admin' }, { 'site-login-wrap': loginType == 'site' }]">
         <!-- 平台端登录 -->
         <el-main class="login-main items-center justify-center" v-if="!imgLoading && loginType == 'admin'">
             <div class="flex rounded-2xl overflow-hidden">
@@ -86,6 +86,20 @@
             </div>
         </el-main>
 
+        <div class="flex items-center justify-center mt-[20px] text-[#999] text-sm pb-10 " v-if="copyright">
+            <a :href="copyright.gov_url" v-if="copyright.gov_record" class="flex" target="_blank">
+                <img src="@/app/assets/images/gov_icon.png" alt="" class="h-[20px] mr-1">
+                <span class="mr-3">公安备案号:{{ copyright.gov_record }}</span>
+            </a>
+            <a href="https://beian.miit.gov.cn/" target="_blank" v-if="copyright.icp">
+                <span class="mr-3">备案号:{{ copyright.icp }}</span>
+            </a>
+            <a :href="copyright.copyright_link" target="_blank">
+                <span class="mr-3" v-if="copyright.company_name">{{ copyright.company_name }}</span>
+                <span class="mr-3" v-if="copyright.copyright_desc">©{{ copyright.copyright_desc }}</span>
+            </a>
+        </div>
+
         <!-- 验证组件 -->
         <verify @success="success" :mode="pop" captchaType="blockPuzzle" :imgSize="{ width: '330px', height: '155px' }"
             ref="verifyRef"></verify>
@@ -102,13 +116,18 @@ import storage from '@/utils/storage'
 import { getLoginConfig } from '@/app/api/auth'
 import useUserStore from '@/stores/modules/user'
 import { setWindowTitle, img, getAppType } from '@/utils/common'
-import { getWebConfig } from '@/app/api/sys'
+import { getWebConfig, getWebCopyright } from '@/app/api/sys'
 
 const loading = ref(false)
 const imgLoading = ref(false)
 const userStore = useUserStore()
 const route = useRoute()
 const router = useRouter()
+const copyright = ref(null)
+
+getWebCopyright().then(({ data }) => {
+    copyright.value = data
+})
 
 route.redirectedFrom && (route.query.redirect = route.redirectedFrom.path)
 

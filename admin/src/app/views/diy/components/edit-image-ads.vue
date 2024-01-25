@@ -13,7 +13,7 @@
 				</el-form-item>
 
 				<div ref="imageBoxRef">
-					<div v-for="(item,index) in diyStore.editComponent.list" :key="item.id" class="item-wrap !cursor-move p-[10px] pb-0 relative border border-dashed border-gray-300 mb-[16px]">
+					<div v-for="(item,index) in diyStore.editComponent.list" :key="item.id" class="item-wrap p-[10px] pb-0 relative border border-dashed border-gray-300 mb-[16px]">
 						<el-form-item :label="t('image')">
 							<upload-image v-model="item.imageUrl" :limit="1" @change="selectImg" />
 						</el-form-item>

@@ -11,7 +11,6 @@
 import useConfigStore from '@/stores/config'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import en from 'element-plus/dist/locale/en.mjs'
-import Language from '~~/utils/language'
 import useSystemStore from '@/stores/system'
 import useAppStore from '@/stores/app'
 import useMemberStore from '@/stores/member'
@@ -57,10 +56,6 @@ watch(route, (nval, oval) => {
 		})
 	}, !oval ? 500 : 0)
 }, { immediate: true })
-
-// 语言包初始化加载
-const language = new Language(useNuxtApp().$getI18n())
-language.loadLocaleMessages(route.path, useSystemStore().lang)
 
 // 设置title模板
 useHead({

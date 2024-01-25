@@ -29,7 +29,7 @@
                                         <div class="w-full">
                                             <div class="flex">
                                                 <div class="w-[60px] h-[60px] mr-[10px] rounded-md overflow-hidden">
-                                                    <el-image :src="img(item.cover)" v-if="item.cover"
+                                                    <el-image :src="img(item.icon)" v-if="item.icon"
                                                               class="w-full h-full" />
                                                     <el-image v-else class="w-full h-full">
                                                         <template #error>
@@ -63,7 +63,7 @@
                                         <div class="w-full">
                                             <div class="flex">
                                                 <div class="w-[60px] h-[60px] mr-[10px] rounded-md overflow-hidden">
-                                                    <el-image :src="img(item.cover)" v-if="item.cover"
+                                                    <el-image :src="img(item.icon)" v-if="item.icon"
                                                         class="w-full h-full" />
                                                     <el-image v-else class="w-full h-full">
                                                         <template #error>
@@ -125,8 +125,28 @@ const formData: Record<string, any> = ref({
     addon: []
 })
 
+let installAddon = []
+const getInstalledAddonListFn = async () => {
+    await getInstalledAddonList().then(({ data }) => {
+        const apps: any[] = []
+        const addons: any[] = []
+
+        Object.keys(data).forEach(key => {
+            installAddon.push(key)
+            const item = data[key]
+            item.type == 'addon' ? addons.push(item) : apps.push(item)
+        })
+
+        appList.value = apps
+        addonList.value = addons
+    }).catch()
+}
+getInstalledAddonListFn()
+
 if (route.query.id) {
     getSiteGroupInfo(route.query.id).then(({ data }) => {
+        data.app = data.app.filter((key: string) => installAddon.includes(key))
+        data.addon = data.addon.filter((key: string) => installAddon.includes(key))
         formData.value = data
         loading.value = false
     }).catch()
@@ -137,19 +157,6 @@ if (route.query.id) {
 const back = () => {
     router.push('/admin/site/group')
 }
-
-getInstalledAddonList().then(({ data }) => {
-    const apps: any[] = []
-    const addons: any[] = []
-
-    Object.keys(data).forEach(key => {
-        const item = data[key]
-        item.type == 'addon' ? addons.push(item) : apps.push(item)
-    })
-
-    appList.value = apps
-    addonList.value = addons
-}).catch()
 
 const formRef = ref<FormInstance>()
 

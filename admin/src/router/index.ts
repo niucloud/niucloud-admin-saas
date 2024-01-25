@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteLocationRaw, RouteLocationNormalizedLoaded } from 'vue-router'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
-import { STATIC_ROUTES, NO_LOGIN_ROUTES, ROOT_ROUTER, ADMIN_ROUTE, HOME_ROUTE, SITE_ROUTE, DECORATE_ROUTER, findFirstValidRoute } from './routers'
+import { STATIC_ROUTES, NO_LOGIN_ROUTES, ROOT_ROUTER, ADMIN_ROUTE, HOME_ROUTE, SITE_ROUTE, findFirstValidRoute } from './routers'
 import { language } from '@/lang'
 import useSystemStore from '@/stores/modules/system'
 import useUserStore from '@/stores/modules/user'
@@ -48,12 +48,17 @@ router.beforeEach(async (to, from, next) => {
 
     const userStore = useUserStore()
     const siteInfo = userStore.siteInfo
+    const appType = getAppType()
 
-    if (!siteInfo && getAppType() != 'home') {
+    let title: string = to.meta.title ?? ''
+
+    if (!siteInfo && appType != 'home') {
         await userStore.getSiteInfo()
     }
 
-    let title = (to.meta.title ? (to.meta.title + ' - ') : '') + (siteInfo ? siteInfo.site_name : '')
+    if (siteInfo) {
+        title += '-' + siteInfo.site_name
+    }
 
     // 设置网站标题
     setWindowTitle(title)
@@ -66,7 +71,7 @@ router.beforeEach(async (to, from, next) => {
     if (matched && matched.length && matched[0].path != '/:pathMatch(.*)*') {
         matched = matched[0].path;
     } else {
-        matched = getAppType();
+        matched = appType
     }
 
     const loginPath = to.path == '/' ? '/admin/login' : `${matched}/login`
@@ -112,13 +117,6 @@ router.beforeEach(async (to, from, next) => {
 
                     // 添加动态路由
                     userStore.routers.forEach(route => {
-                        // 页面装修
-                        if (route.path == DECORATE_ROUTER.path) {
-                            DECORATE_ROUTER.children = route.children
-                            router.addRoute(DECORATE_ROUTER)
-                            return
-                        }
-
                         if (!route.children) {
                             if (route.meta.app == 'admin') {
                                 router.addRoute(ADMIN_ROUTE.children[0].name, route)

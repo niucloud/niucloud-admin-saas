@@ -5,15 +5,12 @@
 				<!-- 唤起获取微信 -->
 				<u-avatar :src="img(info.headimg)" size="55" leftIcon="none" @click="clickAvatar"></u-avatar>
 				<view class="ml-[22rpx]">
-					<view class="text-[#222222] truncate w-[430rpx] font-bold text-lg"
-						:style="{ color : diyComponent.textColor }">{{ info.nickname }}</view>
-					<view class="text-[#696B70] text-[24rpx] mt-[10rpx]" :style="{ color : diyComponent.textColor }">
-						UID：{{ info.member_no }}</view>
+					<view class="text-[#222222] truncate w-[430rpx] font-bold text-lg" :style="{ color : diyComponent.textColor }">{{ info.nickname }}</view>
+					<view class="text-[#696B70] text-[24rpx] mt-[10rpx]" :style="{ color : diyComponent.textColor }">UID：{{ info.member_no }}</view>
 				</view>
 				<view class="set-icon flex items-center absolute right-0 top-2">
 					<app-link url="/app/pages/setting/index">
-						<text class="iconfont iconshezhi text-[1.6rem] ml-[10rpx]"
-							:style="{ color : diyComponent.textColor }"></text>
+						<text class="iconfont iconshezhi text-[1.6rem] ml-[10rpx]" :style="{ color : diyComponent.textColor }"></text>
 					</app-link>
 				</view>
 			</view>
@@ -26,8 +23,7 @@
 				</view>
 				<view class="set-icon flex items-center absolute right-0 top-2">
 					<app-link url="/app/pages/setting/index">
-						<text class="iconfont iconshezhi text-[1.6rem] ml-[10rpx]"
-							:style="{ color : diyComponent.textColor }"></text>
+						<text class="iconfont iconshezhi text-[1.6rem] ml-[10rpx]" :style="{ color : diyComponent.textColor }"></text>
 					</app-link>
 				</view>
 			</view>
@@ -35,23 +31,19 @@
 			<view class="flex m-[30rpx] mb-0 py-[30rpx] items-center">
 				<view class="flex-1 text-center">
 					<view class="font-bold">
-						<app-link :url="(info ? '/app/pages/member/balance' : '')"
-							:custom-style="{ color : diyComponent.textColor }">{{ money }}</app-link>
+						<app-link :url="(info ? '/app/pages/member/balance' : '')" :custom-style="{ color : diyComponent.textColor }">{{ money }}</app-link>
 					</view>
 					<view class="text-sm mt-[10rpx]">
-						<app-link :url="(info ? '/app/pages/member/balance' : '')"
-							:custom-style="{ color : diyComponent.textColor }">{{ t('balance') }}</app-link>
+						<app-link :url="(info ? '/app/pages/member/balance' : '')" :custom-style="{ color : diyComponent.textColor }">{{ t('balance') }}</app-link>
 					</view>
 				</view>
 				<view class="border-solid border-white border-l border-b-0 border-t-0 border-r-0 h-[60rpx]"></view>
 				<view class="flex-1 text-center">
 					<view class="font-bold">
-						<app-link :url="(info ? '/app/pages/member/point' : '')"
-							:custom-style="{ color : diyComponent.textColor }">{{ parseInt(info?.point) || 0 }}</app-link>
+						<app-link :url="(info ? '/app/pages/member/point' : '')" :custom-style="{ color : diyComponent.textColor }">{{ parseInt(info?.point) || 0 }}</app-link>
 					</view>
 					<view class="text-sm mt-[10rpx]">
-						<app-link :url="(info ? '/app/pages/member/point' : '')"
-							:custom-style="{ color : diyComponent.textColor }">{{ t('point') }}</app-link>
+						<app-link :url="(info ? '/app/pages/member/point' : '')" :custom-style="{ color : diyComponent.textColor }">{{ t('point') }}</app-link>
 					</view>
 				</view>
 			</view>

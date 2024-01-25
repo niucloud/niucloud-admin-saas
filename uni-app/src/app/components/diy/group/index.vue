@@ -1,7 +1,7 @@
 <template>
     <view class="diy-group" id="componentList">
         <view v-for="(component, index) in data.value" :key="component.id"
-        @click="diyStore.changeCurrentIndex(index, component)" class="draggable-element relative cursor-move"
+        @click="diyStore.changeCurrentIndex(index, component)" class="draggable-element relative"
         :class="{ selected: diyStore.currentIndex == index,decorate : diyStore.mode == 'decorate' }" :style="component.pageStyle">
             <template v-if="component.componentName == 'AddonList'">
                 <diy-addon-list :component="component" :index="index" :pullDownRefreshCount="props.pullDownRefreshCount"></diy-addon-list>
@@ -20,6 +20,9 @@
             </template>
             <template v-if="component.componentName == 'MemberInfo'">
                 <diy-member-info :component="component" :index="index" :pullDownRefreshCount="props.pullDownRefreshCount"></diy-member-info>
+            </template>
+            <template v-if="component.componentName == 'Notice'">
+                <diy-notice :component="component" :index="index" :pullDownRefreshCount="props.pullDownRefreshCount"></diy-notice>
             </template>
             <template v-if="component.componentName == 'RubikCube'">
                 <diy-rubik-cube :component="component" :index="index" :pullDownRefreshCount="props.pullDownRefreshCount"></diy-rubik-cube>

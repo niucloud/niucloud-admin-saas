@@ -20,8 +20,8 @@
                                     <icon :name="item.meta.icon" class="absolute top-[50%] -translate-y-[50%]" v-else />
                                 </div>
                                 <template #title>
-                                    <div class="relative">
-                                        <span :class="['ml-[10px]']">{{ item.meta.title }}</span>
+                                    <div class="relative flex-1 w-0">
+                                        <span class="ml-[10px] w-full truncate">{{ item.meta.short_title || item.meta.title }}</span>
                                     </div>
                                 </template>
                             </el-menu-item>
@@ -32,7 +32,7 @@
             </div>
             <el-scrollbar v-if="twoMenuData.length" class="two-menu w-[140px]">
                 <div class="w-[140px] h-[64px] flex items-center justify-center text-[16px] border-0 border-b-[1px] border-solid border-[#eee]">{{ route.matched[1].meta.title }}</div>
-                <el-menu :default-active="route.name" :router="true" class="aside-menu" unique-opened="true" :collapse="systemStore.menuIsCollapse">
+                <el-menu :default-active="route.name" :router="true" class="aside-menu" :collapse="systemStore.menuIsCollapse">
                     <menu-item v-for="(route, index) in twoMenuData" :routes="route" :key="index" />
                 </el-menu>
                 <div class="h-[48px]"></div>
@@ -68,7 +68,7 @@ routers.forEach(item => {
             item.name = findFirstValidRoute(item.children)
         }
         oneMenuData.value.push(item)
-    } else if (item.meta.addon != '' && siteInfo?.apps.length <= 1 && siteInfo?.app[0] == item.meta.addon) {
+    } else if (item.meta.addon != '' && siteInfo?.apps.length <= 1 && siteInfo?.apps[0].key == item.meta.addon) {
         if (item.children) {
             item.children.forEach((citem: Record<string, any>) => {
                 citem.path = `${item.path}/${citem.path}`
@@ -92,7 +92,7 @@ if (siteInfo?.apps.length > 1) {
         routers.push({
             path: addonRouters[item.key] ? addonRouters[item.key].path : '',
             meta: {
-                icon: img(item.icon),
+                icon: addonRouters[item.key]?.meta.icon || 'element-Setting',
                 addon: item.key,
                 title: item.title,
                 app: item.app,
@@ -116,7 +116,7 @@ watch(route, () => {
         if (route.meta.addon == '') {
             oneMenuActive.value = route.matched[1].path
             twoMenuData.value = route.matched[1].children ?? []
-        } else if (route.meta.addon && route.meta.addon != siteInfo?.app[0]) {
+        } else if (route.meta.addon && route.meta.addon != siteInfo?.apps[0].key) {
             oneMenuActive.value = '/site/app'
             twoMenuData.value = route.matched[1].children ?? []
         } else {

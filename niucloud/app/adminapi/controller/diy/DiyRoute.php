@@ -30,7 +30,8 @@ class DiyRoute extends BaseAdminController
     public function lists()
     {
         $data = $this->request->params([
-            ["title", ""],
+            [ 'title', '' ],
+            [ 'addon_name', '' ]
         ]);
         return success((new DiyRouteService())->getList($data));
     }
@@ -62,15 +63,15 @@ class DiyRoute extends BaseAdminController
     public function add()
     {
         $data = $this->request->params([
-            ["title", ""],
-            ["name", ""],
-            ["page", ""],
-            ["share", ""],
-            ["is_share", ""]
+            [ "title", "" ],
+            [ "name", "" ],
+            [ "page", "" ],
+            [ "share", "" ],
+            [ "is_share", "" ]
         ]);
         $this->validate($data, 'app\validate\diy\DiyRoute.add');
         $id = (new DiyRouteService())->add($data);
-        return success('ADD_SUCCESS', ['id' => $id]);
+        return success('ADD_SUCCESS', [ 'id' => $id ]);
     }
 
     /**
@@ -81,11 +82,11 @@ class DiyRoute extends BaseAdminController
     public function edit($id)
     {
         $data = $this->request->params([
-            ["title", ""],
-            ["name", ""],
-            ["page", ""],
-            ["share", ""],
-            ["is_share", ""]
+            [ "title", "" ],
+            [ "name", "" ],
+            [ "page", "" ],
+            [ "share", "" ],
+            [ "is_share", "" ]
         ]);
         $this->validate($data, 'app\validate\diy\DiyRoute.edit');
         (new DiyRouteService())->edit($id, $data);
@@ -109,12 +110,12 @@ class DiyRoute extends BaseAdminController
     public function modifyShare()
     {
         $data = $this->request->params([
-            ['share', ''],
-            ['title', ''],
-            ['name', ''],
-            ['page', ''],
-            ['is_share', 0],
-            ['sort', 0]
+            [ 'share', '' ],
+            [ 'title', '' ],
+            [ 'name', '' ],
+            [ 'page', '' ],
+            [ 'is_share', 0 ],
+            [ 'sort', 0 ]
         ]);
         (new DiyRouteService())->modifyShare($data);
         return success('MODIFY_SUCCESS');

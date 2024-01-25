@@ -11,13 +11,11 @@
 namespace core\dict;
 
 
-use app\service\admin\addon\AddonService;
-
 class Notice extends BaseDict
 {
     /**
      * 系统uniapp页面链接
-     * @param array $data //系统
+     * @param array $data
      * @return array|mixed
      */
     public function load(array $data)
@@ -27,7 +25,7 @@ class Notice extends BaseDict
         if (is_file($system_path)) {
             $template_files[] = $system_path;
         }
-        $addons = (new AddonService())->getAddonKeysBySiteId(request()->siteId());
+        $addons = $this->getLocalAddons();
         foreach ($addons as $v) {
             $template_path = $this->getAddonDictPath($v) . "notice" . DIRECTORY_SEPARATOR . $data[ 'type' ] . ".php";
             if (is_file($template_path)) {

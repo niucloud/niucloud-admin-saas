@@ -45,9 +45,9 @@ class CoreSysConfigService extends BaseCoreService
      * 获取版权信息(网站整体，不按照站点设置)
      * @return array|mixed
      */
-    public function getCopyright()
+    public function getCopyright($site_id)
     {
-        $info = (new CoreConfigService())->getConfig(0, 'COPYRIGHT');
+        $info = (new CoreConfigService())->getConfig($site_id, 'COPYRIGHT');
         if(empty($info))
         {
             $info = [];

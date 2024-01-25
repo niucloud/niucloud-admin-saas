@@ -1,8 +1,8 @@
 <template>
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
-            <div class="flex justify-between items-center mb-[20px]">
-                <span class="text-[20px]"></span>
+            <div class="flex justify-between items-center">
+                <span class="text-[20px]">{{ pageName }}</span>
                 <el-button type="primary" class="w-[100px]" @click="addEvent">
                     {{ t('addMenu') }}
                 </el-button>
@@ -98,10 +98,11 @@ import { getMenus, deleteMenu } from '@/app/api/sys'
 import { t } from '@/lang'
 import { ElMessageBox } from 'element-plus'
 import EditMenu from '@/app/views/auth/components/edit-menu.vue'
-
 import { useRoute } from 'vue-router'
+
 const route = useRoute()
 const active = ref('system')
+const pageName = route.meta.title
 
 const menusTableData = reactive<Record<string, any>>({
     loading: true,

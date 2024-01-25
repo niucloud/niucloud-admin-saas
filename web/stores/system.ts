@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import storage from '@/utils/storage'
-import { getSiteInfo } from '@/api/system'
+import { getSiteInfo } from '@/app/api/system'
 
 interface System {
     lang: string,

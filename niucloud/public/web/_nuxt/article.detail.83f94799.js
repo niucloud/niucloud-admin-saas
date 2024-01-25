@@ -1,1 +1,1 @@
-const t="文章",e={title:t};export{e as default,t as title};
+const t="\u6587\u7AE0",e={title:t};export{e as default,t as title};

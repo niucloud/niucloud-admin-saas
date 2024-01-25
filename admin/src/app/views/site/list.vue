@@ -29,7 +29,7 @@
                             :placeholder="t('groupIdPlaceholder')" class="input-width">
                             <el-option :label="t('selectPlaceholder')" value="" />
                             <el-option :label="item['group_name']" :value="item['group_id']"
-                                v-for="(item, index) in groupList[siteTableData.searchParam.app]" :key="index"/>
+                                v-for="(item, index) in groupList.all" :key="index"/>
                         </el-select>
                     </el-form-item>
 

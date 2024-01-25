@@ -17,5 +17,7 @@
     "remark": "套餐说明",
     "reset": "重置",
     "search": "搜索",
-    "foldText":"展开/折叠"
+    "foldText":"展开/折叠",
+    "appName": "套餐内含应用",
+    "addonName": "套餐内含插件"
 }

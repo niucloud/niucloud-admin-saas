@@ -1,5 +1,5 @@
 <template>
-    <view @click="toRedirect" :class="prop.customClass" :style-class="prop.customStyle">
+    <view @click="toRedirect" :class="prop.customClass" :style="prop.customStyle">
         <slot></slot>
     </view>
 </template>

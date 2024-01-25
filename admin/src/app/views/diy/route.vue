@@ -264,10 +264,4 @@ const resetForm = (formEl: FormInstance | undefined) => {
 }
 </script>
 
-<style lang="scss">
-.copy {
-    background: var(--el-color-primary) !important;
-    color: var(--el-color-white) !important;
-}
-</style>
 <style lang="scss" scoped></style>

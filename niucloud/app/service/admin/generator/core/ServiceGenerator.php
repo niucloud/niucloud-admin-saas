@@ -326,11 +326,11 @@ class ServiceGenerator extends BaseGenerator
         $search_field = implode(',', $search_field);
         if(empty($with))
         {
-            $content.= '$this->model->where([ [' ." 'site_id' ". ',"=", $this->site_id ] ])->withSearch(['."'$search_field'".'], $where)->field('.'$field'.')->order('.'$order'.')';
+            $content.= '$this->model->where([ [' ." 'site_id' ". ',"=", $this->site_id ] ])->withSearch(['."'$search_field'".'], $where)->field('.'$field'.')->order('.'$order'.');';
 
         }else{
             $with = implode(',', $with);
-            $content.= '$this->model->where([ [' ." 'site_id' ". ',"=", $this->site_id ] ])->withSearch(['."'$search_field'".'], $where)->with('."'$with'".')->field('.'$field'.')->order('.'$order'.')';
+            $content.= '$this->model->where([ [' ." 'site_id' ". ',"=", $this->site_id ] ])->withSearch(['."'$search_field'".'], $where)->with('."'$with'".')->field('.'$field'.')->order('.'$order'.');';
         }
 
         return $content;

@@ -2,18 +2,15 @@
 	<view class="image-ads" :style="warpCss">
 		<view v-if="diyComponent.list.length == 1" class="leading-0 overflow-hidden" :style="swiperWarpCss">
 			<app-link :data="diyComponent.list[0].link">
-				<image :src="img(diyComponent.list[0].imageUrl)" :style="{height: imgHeight}" mode="heightFix"
-					class="w-full" :show-menu-by-longpress="true"></image>
+				<image :src="img(diyComponent.list[0].imageUrl)" :style="{height: imgHeight}" mode="heightFix" class="w-full" :show-menu-by-longpress="true"/>
 			</app-link>
 		</view>
 
-		<swiper v-else class="swiper" :style="{ height: imgHeight }" autoplay="true" circular="true"
-			@change="swiperChange">
+		<swiper v-else class="swiper" :style="{ height: imgHeight }" autoplay="true" circular="true" @change="swiperChange">
 			<swiper-item class="swiper-item" v-for="(item) in diyComponent.list" :key="item.id" :style="swiperWarpCss">
 				<app-link :data="item.link">
 					<view class="item" :style="{height: imgHeight}">
-						<image :src="img(item.imageUrl)" mode="scaleToFill" class="w-full h-full"
-							:show-menu-by-longpress="true"></image>
+						<image :src="img(item.imageUrl)" mode="scaleToFill" class="w-full h-full" :show-menu-by-longpress="true"/>
 					</view>
 				</app-link>
 			</swiper-item>

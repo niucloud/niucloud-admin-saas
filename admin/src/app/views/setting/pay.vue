@@ -124,13 +124,11 @@ checkPayConfigList()
 
 // 配置支付宝、微信信息
 const setConfigInfo = (data:any) => {
-    console.log(data)
     payConfigData.value[data.channel].pay_type.forEach(element => {
         if (element.key == data.type) {
             element.config = data.config
         }
     })
-    console.log(payConfigData.value)
 }
 
 // 初始化配置信息

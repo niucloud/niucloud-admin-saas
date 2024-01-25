@@ -150,9 +150,8 @@ abstract class BasePay extends Storage
                 $type => [
                     'default' => $config
                 ]
-            ]
-
-
+            ],
+            ['_force' => true]
         );
     }
 

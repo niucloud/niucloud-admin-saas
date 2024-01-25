@@ -11,18 +11,16 @@
 namespace core\dict;
 
 
-use app\service\admin\addon\AddonService;
-
 class UniappPages extends BaseDict
 {
     /**
      * 系统uniapp页面
-     * @param array $data //系统
+     * @param array $data
      * @return array|mixed
      */
     public function load(array $data)
     {
-        $addons = (new AddonService())->getAddonKeysBySiteId(request()->siteId());
+        $addons = $this->getLocalAddons();
         $page_files = [];
         foreach ($addons as $v) {
             $page_path = $this->getAddonDictPath($v) . "diy" . DIRECTORY_SEPARATOR . "pages.php";

@@ -34,6 +34,22 @@ class ComponentDict
                         'support_page' => [], // 支持页面
                         'uses' => 0, // 最大添加数量
                         'sort' => 10001,
+                        // 组件属性
+                        'template' => [
+                            "textColor" => "#303133", // 文字颜色
+                            "pageBgColor" => "", // 底部背景颜色
+                            "componentBgColor" => '', // 组件背景颜色
+                            "topRounded" => 0, // 组件上圆角
+                            "bottomRounded" => 0, // 组件下圆角
+                            "elementBgColor" => '', // 元素背景颜色
+                            "topElementRounded" => 0,// 元素上圆角
+                            "bottomElementRounded" => 0, // 元素下圆角
+                            "margin" => [
+                                "top" => 0, // 上边距
+                                "bottom" => 0, // 下边距
+                                "both" => 0 // 左右边距
+                            ],
+                        ],
                         'value' => [
                             "style" => "style-1",
                             "styleName" => "风格1",
@@ -60,15 +76,15 @@ class ComponentDict
                                     "name" => ""
                                 ],
                                 "color" => "#999999"
-                            ]
+                            ],
                         ]
                     ],
                     'ImageAds' => [
                         'title' => '图片广告',
                         'icon' => 'iconfont-icontupianguanggao1',
-                        'path' => 'edit-image-ads', // 编辑组件属性
-                        'support_page' => [], // 支持页面
-                        'uses' => 0, // 最大添加数量
+                        'path' => 'edit-image-ads',
+                        'support_page' => [],
+                        'uses' => 0,
                         'sort' => 10002,
                         'value' => [
                             "imageHeight" => 180,
@@ -279,7 +295,7 @@ class ComponentDict
                 ],
             ],
         ];
-        return ( new DictLoader("UniappComponent") )->load($system_components);
+        return (new DictLoader("UniappComponent"))->load($system_components);
     }
 
 }

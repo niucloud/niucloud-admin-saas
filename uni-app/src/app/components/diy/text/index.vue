@@ -22,11 +22,8 @@
 					{{ diyComponent.text }}
 				</view>
 			</app-link>
-			<text class="ml-[16rpx] max-w-[300rpx] truncate" :style="{ color: diyComponent.subTitle.color,
-						fontSize: diyComponent.subTitle.fontSize * 2 + 'rpx', }">{{ diyComponent.subTitle.text }}</text>
-			<view class="ml-auto text-right " v-if="diyComponent.more.isShow"
-				:style="{ color: diyComponent.more.color }">
-
+			<text class="ml-[16rpx] max-w-[300rpx] truncate" :style="{ color: diyComponent.subTitle.color, fontSize: diyComponent.subTitle.fontSize * 2 + 'rpx', }">{{ diyComponent.subTitle.text }}</text>
+			<view class="ml-auto text-right " v-if="diyComponent.more.isShow" :style="{ color: diyComponent.more.color }">
 				<app-link :data="diyComponent.more.link" custom-class="flex items-center">
 					<text class="max-w-[200rpx] truncate text-[24rpx] mr-[8rpx]">{{ diyComponent.more.text }}</text>
 					<u-icon name="arrow-right" size="12" :style="{ color: diyComponent.more.color }"></u-icon>

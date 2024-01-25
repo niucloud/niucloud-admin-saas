@@ -43,12 +43,16 @@ class DiyRouteService extends BaseAdminService
             if (!empty($v[ 'child_list' ])) {
                 foreach ($v[ 'child_list' ] as $ck => $cv) {
                     if (!empty($cv[ 'url' ])) {
-                        if (empty($where[ 'title' ]) || ( !empty($where[ 'title' ]) && str_contains($cv['title'], $where['title']))) {
+                        if (empty($where[ 'title' ]) || (!empty($where[ 'title' ]) && str_contains($cv[ 'title' ], $where[ 'title' ]))) {
                             $diy_route_list[] = [
+                                'key' => $v[ 'key' ] ?? '',
+                                'addon_title' => $v[ 'addon_title' ] ?? '',
                                 'title' => $cv[ 'title' ],
                                 'name' => $cv[ 'name' ],
+                                'parent' => $k,
                                 'page' => $cv[ 'url' ],
                                 'is_share' => $cv[ 'is_share' ],
+                                'action' => $cv[ 'action' ] ?? '',
                                 'sort' => ++$sort
                             ];
                         }

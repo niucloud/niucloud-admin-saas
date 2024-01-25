@@ -64,7 +64,7 @@ class LoginService extends BaseAdminService
 
         $user_service = new UserService();
         $userinfo = $user_service->getUserInfoByUsername($username);
-        if (empty($userinfo)) return false;
+        if ($userinfo->isEmpty()) return false;
 
         if (!check_password($password, $userinfo->password)) return false;
 

@@ -49,12 +49,26 @@ class SiteGroup extends BaseModel
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function getGroupRolesDataAttr($value, $data)
+    public function getAppNameAttr($value, $data)
     {
-        if (empty($data['addon']))
+        if (empty($data['app']))
             return [];
-        return (new Addon())->where([['key', 'in', $data['addon']]])->select();
+        return (new Addon())->where([['key', 'in', $data['app']]])->column('title');
     }
+
+    /**
+     * 关联插件
+     * @param $value
+     * @param $data
+     * @return array
+     */
+    public function getAddonNameAttr($value, $data)
+    {
+        if (empty($data['app']))
+            return [];
+        return (new Addon())->where([['key', 'in', $data['addon']]])->column('title');
+    }
+
     /**
      * 关键字搜索
      * @param $query

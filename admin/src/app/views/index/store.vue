@@ -29,8 +29,7 @@
                 <el-table v-if="localList[activeName].length" :data="info[activeName]" size="large" class="pt-[5px]">
                     <el-table-column :label="t('appName')" align="left" width="320">
                         <template #default="{ row }">
-                            <div class="flex items-center" @click = "handleTips"
-                                :class="{ 'cursor-pointer': row.type == 'app' && Object.keys(row.install_info).length }">
+                            <div class="flex items-center cursor-pointer" @click = "handleTips">
                                 <el-image class="w-[54px] h-[54px]" :src="row.icon" fit="contain">
                                     <template #error>
                                         <div class="flex items-center w-full h-full">

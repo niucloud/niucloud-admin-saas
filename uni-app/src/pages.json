@@ -196,7 +196,7 @@
 				"navigationBarTitleText": "%pages.index.develop%"
 			}
 		} // {{PAGE}}
-	],
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",

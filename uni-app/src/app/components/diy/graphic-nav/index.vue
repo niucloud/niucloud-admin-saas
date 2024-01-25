@@ -1,7 +1,6 @@
 <template>
 	<view :style="warpCss">
-		<div v-if="diyComponent.navTitle" class="py-[30rpx] px-[32rpx] text-[30rpx]"
-			:style="{fontWeight: diyComponent.font.weight,color:diyComponent.font.color}">
+		<div v-if="diyComponent.navTitle" class="py-[30rpx] px-[32rpx] text-[30rpx]" :style="{fontWeight: diyComponent.font.weight,color:diyComponent.font.color}">
 			{{diyComponent.navTitle}}
 		</div>
 		<view v-if="diyComponent.layout == 'vertical'" class="graphic-nav">
@@ -74,11 +73,10 @@
 			</swiper-item>
 		</swiper>
 
-		<scroll-view v-else :scroll-x="diyComponent.showStyle == 'singleSlide'"
-			:class="['graphic-nav','graphic-nav-' + diyComponent.showStyle]">
+		<scroll-view v-else :scroll-x="diyComponent.showStyle == 'singleSlide'" :class="['graphic-nav','graphic-nav-' + diyComponent.showStyle]">
 			<!-- #ifdef MP -->
 			<view class="uni-scroll-view-content">
-				<!-- #endif -->
+			<!-- #endif -->
 
 				<view class="graphic-nav-item" :class="{'flex-shrink-0' : diyComponent.showStyle == 'singleSlide'}"
 					v-for="(item, index) in diyComponent.list" :key="item.id"
@@ -107,7 +105,7 @@
 					</app-link>
 				</view>
 
-				<!-- #ifdef MP -->
+			<!-- #ifdef MP -->
 			</view>
 			<!-- #endif -->
 

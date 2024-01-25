@@ -36,7 +36,7 @@ class ConfigService extends BaseApiService
      */
     public function getCopyright()
     {
-       return (new CoreSysConfigService())->getCopyright();
+       return (new CoreSysConfigService())->getCopyright($this->site_id);
     }
 
     /**

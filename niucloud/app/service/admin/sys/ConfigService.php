@@ -39,7 +39,7 @@ class ConfigService extends BaseAdminService
      */
     public function getCopyright()
     {
-        return (new CoreSysConfigService())->getCopyright();
+        return (new CoreSysConfigService())->getCopyright($this->site_id);
     }
 
     /**
@@ -59,7 +59,7 @@ class ConfigService extends BaseAdminService
             'copyright_link' => $value['copyright_link'],
             'copyright_desc' => $value['copyright_desc']
         ];
-        return $this->core_config_service->setConfig(0,'COPYRIGHT', $data);
+        return $this->core_config_service->setConfig($this->site_id,'COPYRIGHT', $data);
     }
 
     /**

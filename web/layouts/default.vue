@@ -11,8 +11,8 @@
 </template>
 
 <script lang="ts" setup>
-import layoutHeader from './components/header/index.vue'
-import layoutFooter from './components/footer/index.vue'
+import layoutHeader from './default/components/header/index.vue'
+import layoutFooter from './default/components/footer/index.vue'
 </script>
 
 <style lang="scss" scoped>

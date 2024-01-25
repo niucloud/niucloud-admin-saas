@@ -1,8 +1,7 @@
 <template>
 	<view :style="warpCss">
 		<view class="simple-graph-wrap overflow-hidden relative leading-0">
-			<image :style="{ height: diyComponent.imgHeight }" :src="img(diyComponent.imageUrl)" mode="widthFix"
-				:show-menu-by-longpress="true" class="w-full"></image>
+			<image :style="{ height: diyComponent.imgHeight }" :src="img(diyComponent.imageUrl)" mode="widthFix" :show-menu-by-longpress="true" class="w-full"/>
 
 			<template v-if="diyStore.mode != 'decorate'">
 				<!-- 热区功能 -->

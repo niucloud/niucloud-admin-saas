@@ -282,7 +282,7 @@ class CoreAddonInstallService extends CoreAddonBaseService
 
         // 放入的文件
         $to_admin_dir = $this->root_path . 'admin' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'addon' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
-        $to_web_dir = $this->root_path . 'web' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
+        $to_web_dir = $this->root_path . 'web' . DIRECTORY_SEPARATOR . 'addon' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
         $to_wap_dir = $this->root_path . 'uni-app' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'addon' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
         $to_resource_dir = public_path() . 'addon' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
 
@@ -295,6 +295,12 @@ class CoreAddonInstallService extends CoreAddonBaseService
 
         // 安装电脑端
         if (file_exists($from_web_dir)) {
+            // 安装布局文件
+            $layout = $from_web_dir . 'layouts';
+            if (is_dir($layout)) {
+                dir_copy($layout, $this->root_path . 'web' . DIRECTORY_SEPARATOR . 'layouts');
+                del_target_dir($layout, true);
+            }
             dir_copy($from_web_dir, $to_web_dir, $this->files['web']);
         }
 
@@ -575,7 +581,8 @@ class CoreAddonInstallService extends CoreAddonBaseService
     {
         // 将要删除的根目录
         $to_admin_dir = $this->root_path . 'admin' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'addon' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
-        $to_web_dir = $this->root_path . 'web' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
+        $to_web_dir = $this->root_path . 'web' . DIRECTORY_SEPARATOR . 'addon' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
+        $to_web_layouts = $this->root_path . 'web' . DIRECTORY_SEPARATOR . 'layouts' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
         $to_wap_dir = $this->root_path . 'uni-app' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'addon' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
         $to_resource_dir = public_path() . 'addon' . DIRECTORY_SEPARATOR . $this->addon . DIRECTORY_SEPARATOR;
 
@@ -586,6 +593,7 @@ class CoreAddonInstallService extends CoreAddonBaseService
 
         // 卸载pc端
         if (is_dir($to_web_dir)) del_target_dir($to_web_dir, true);
+        if (is_dir($to_web_layouts)) del_target_dir($to_web_layouts, true);
 
         // 卸载手机端
         if (is_dir($to_wap_dir)) del_target_dir($to_wap_dir, true);

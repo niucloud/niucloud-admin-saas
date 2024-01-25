@@ -293,6 +293,8 @@ watch(() => showDialog.value, () => {
 })
 
 const clearUpgradeTaskFn = () => {
+    active.value = 'content'
+    uploading.value = false
     upgradeTask.value = null
     upgradeLog = []
     flashInterval && clearInterval(flashInterval)

@@ -109,6 +109,13 @@ export function getDiyTemplate(params: Record<string, any>) {
 }
 
 /**
+ * 获取模板页面列表
+ */
+export function getDiyTemplatePages(params: Record<string, any>) {
+    return request.get(`diy/template/pages`, {params})
+}
+
+/**
  * 获取自定义路由列表
  * @param params
  * @returns
@@ -152,10 +159,10 @@ export function changeTemplate(params: Record<string, any>) {
 }
 
 /**
- * 获取预览数据
+ * 获取模板页面的应用插件列表
  * @param params
  * @returns
  */
-export function getPreviewData(params: Record<string, any>) {
-    return request.put(`diy/preview`, params, {showSuccessMessage: false})
+export function getApps(params: Record<string, any>) {
+    return request.get(`diy/apps`)
 }

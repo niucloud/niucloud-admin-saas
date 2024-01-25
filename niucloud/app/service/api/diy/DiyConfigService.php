@@ -31,4 +31,13 @@ class DiyConfigService extends BaseApiService
         return (new CoreDiyConfigService())->getBottomConfig($this->site_id);
     }
 
+    /**
+     * 获取启动页配置
+     * @return array
+     */
+    public function getStartUpPageConfig($type)
+    {
+        return (new CoreDiyConfigService())->getStartUpPageConfig($this->site_id, $type);
+    }
+
 }

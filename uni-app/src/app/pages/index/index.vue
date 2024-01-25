@@ -29,7 +29,7 @@
 	import { getDiyInfo } from '@/app/api/diy';
 	import useDiyStore from '@/app/stores/diy';
 	import { useShare } from '@/hooks/useShare'
-	import { img } from '@/utils/common';
+	import { img,redirect } from '@/utils/common';
 
 	const { setShare, onShareAppMessage, onShareTimeline } = useShare()
 	setShare();
@@ -80,8 +80,8 @@
 			getDiyInfo({
 				name: 'DIY_INDEX'
 			}).then((res : any) => {
-				if (res.data.value) {
-					let data = res.data;
+                let data = res.data;
+                if (data.value) {
 					diyData.pageMode = data.mode;
 					diyData.title = data.title;
 
@@ -101,7 +101,10 @@
 					uni.setNavigationBarTitle({
 						title: diyData.title
 					})
-				}
+				} else if (data.page) {
+                    // 跳转到设置的启动页
+                    redirect({ url: data.page })
+                }
 
 				loading.value = false;
 			});

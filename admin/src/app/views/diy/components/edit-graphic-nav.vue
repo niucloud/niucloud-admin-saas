@@ -67,7 +67,7 @@
 				<p class="text-sm text-gray-400 mb-[10px]">{{ t('graphicNavTips') }}</p>
 
 				<div ref="imageBoxRef">
-					<div v-for="(item,index) in diyStore.editComponent.list" :key="item.id" class="item-wrap !cursor-move p-[10px] pb-0 relative border border-dashed border-gray-300 mb-[16px]">
+					<div v-for="(item,index) in diyStore.editComponent.list" :key="item.id" class="item-wrap p-[10px] pb-0 relative border border-dashed border-gray-300 mb-[16px]">
 						<el-form-item :label="t('image')" v-show="diyStore.editComponent.mode === 'graphic' || diyStore.editComponent.mode === 'img'">
 							<upload-image v-model="item.imageUrl" :limit="1"/>
 						</el-form-item>

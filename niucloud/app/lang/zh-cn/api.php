@@ -52,6 +52,10 @@ return [
     'UNIAPP_DIR_NOT_EXIST' => '未找到uni-app源码所在目录, <a style="text-decoration: underline;" href="https://www.kancloud.cn/niucloud/niucloud-admin-develop/3213544" target="blank">点击查看相关手册</a>',
     'OPEN_BASEDIR_ERROR' => '请关闭防跨站攻击, 具体操作方法<a style="text-decoration: underline;" href="https://www.kancloud.cn/niucloud/niucloud-admin-develop/3213393" target="blank">点击查看相关手册</a>',
     'ADDON_DOWNLOAD_VERSION_EMPTY' => '该插件还没有发布过版本',
+    'ADDON_IS_NOT_EXIST' => '插件不存在',
+    'ADDON_KEY_IS_EXIST' => '已存在相同插件标识的应用',
+    'ADDON_IS_INSTALLED_NOT_ALLOW_DEL' => '已安装的插件不允许删除',
+    'ADDON_ZIP_ERROR' => '插件压缩失败',
     //登录注册重置账号....
 
     'LOGIN_SUCCESS' => '登录成功',
@@ -240,7 +244,6 @@ return [
 
     // 授权相关
     'AUTH_NOT_EXISTS' => '未获取到授权信息',
-
 
     /********************************************************* home端专用 **************************************/
     'USER_ROLE_NOT_HAS_SITE' => '当前登录用户下没有此项站点',

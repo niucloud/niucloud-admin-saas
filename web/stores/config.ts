@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getConfig } from '@/api/auth'
+import { getConfig } from '@/app/api/auth'
 
 interface loginConfig {
     is_username: number | boolean,

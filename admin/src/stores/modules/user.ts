@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { getToken, setToken, removeToken, getAppType } from '@/utils/common'
-import { login, getAuthMenus, getSiteInfo } from '@/app/api/auth'
+import { login, logout, getAuthMenus, getSiteInfo } from '@/app/api/auth'
 import storage from '@/utils/storage'
 import router from '@/router'
 import { formatRouters, findFirstValidRoute } from '@/router/routers'
@@ -58,12 +58,14 @@ const useSystemStore = defineStore('user', {
             })
         },
         logout() {
+            if (!this.token) return
             this.token = ''
             this.userInfo = {}
             this.siteInfo = {}
             removeToken()
             storage.remove(['userinfo', 'siteId', 'siteInfo'])
             this.routers = []
+            logout()
             // 清除tabbar
             useTabbarStore().clearTab()
             const login = getAppType() == 'admin' ? '/admin/login' : '/site/login'

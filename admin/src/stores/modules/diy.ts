@@ -182,9 +182,15 @@ const useDiyStore = defineStore('diy', {
             delete component.type;
             delete component.icon;
 
-            // 继承全局属性
-            let template = cloneDeep(this.global.template);
-            Object.assign(component, template);
+            if(component.template){
+                // 按照组件初始的属性加载
+                Object.assign(component, component.template);
+                delete component.template;
+            }else{
+                // 默认继承全局属性
+                let template = cloneDeep(this.global.template);
+                Object.assign(component, template);
+            }
 
             if (!this.checkComponentIsAdd(component)) return;
 

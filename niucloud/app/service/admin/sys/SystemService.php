@@ -141,10 +141,19 @@ class SystemService extends BaseAdminService
         $secret = uniqid('', true);
         $file = root_path('runtime') . $secret . '.job';
         try {
-            CheckJob::invoke([ 'file' => $file ]);
+            CheckJob::dispatch([ 'file' => $file ]);
         } catch ( Throwable $e) {
             return false;
         }
+//        $timeout = 0;
+//        while($timeout < 5){
+//            if (file_exists($file)) {
+//                @unlink($file);
+//                return true;
+//            }
+//            $timeout++;
+//            sleep(1);
+//        }
         sleep(3);
         if (file_exists($file)) {
             @unlink($file);

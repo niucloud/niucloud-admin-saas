@@ -7,9 +7,17 @@
                 </el-icon>
                 <span class="pl-[5px]">{{ t('back') }}</span>
             </div>
-            <div class="text-white ml-[10px] flex items-center">
+            <div class="text-white ml-[10px] mr-[20px] flex items-center">
                 <span class="mr-[5px]"> ｜ {{ t('decorating') }}：{{ diyStore.typeName }}</span>
                 <!--<el-icon class="font-bold"><EditPen /></el-icon>-->
+            </div>
+
+            <div v-if="diyStore.type && diyStore.type != 'DIY_PAGE'">
+                <span class="text-white mr-[10px] text-base">{{ t('templatePagePlaceholder') }}</span>
+                <el-select v-model="template" class="w-[180px]" :placeholder="t('templatePagePlaceholder')" @change="changeTemplatePage">
+                    <el-option :label="t('templatePageEmpty')" value="" />
+                    <el-option v-for="(item, key) in templatePages" :label="item.title" :value="key" :key="key"/>
+                </el-select>
             </div>
             <div class="flex-1"></div>
             <el-button @click="preview()">{{ t('preview') }}</el-button>
@@ -25,9 +33,7 @@
                     <el-collapse v-model="activeNames" @change="handleChange">
                         <el-collapse-item v-for="(item, key) in component" :key="key" :title="item.title" :name="key">
                             <ul class="flex flex-row flex-wrap">
-                                <li v-for="(compItem, compKey) in item.list" :key="compKey"
-                                    class="w-2/6 text-center cursor-pointer h-[75px]" :title="compItem.title"
-                                    @click="diyStore.addComponent(compKey, compItem)">
+                                <li v-for="(compItem, compKey) in item.list" :key="compKey" class="w-2/6 text-center cursor-pointer h-[75px]" :title="compItem.title" @click="diyStore.addComponent(compKey, compItem)">
                                     <icon :name="compItem.icon" size="23px" />
                                     <span class="block text-base truncate">{{ compItem.title }}</span>
                                 </li>
@@ -41,43 +47,33 @@
             <div class="preview-wrap flex-1 relative mt-[20px]">
 
                 <el-scrollbar>
-                    <el-button class="page-btn absolute right-[20px]" @click="diyStore.changeCurrentIndex(-99)">{{
-                        t('pageSet') }}
-                    </el-button>
+                    <el-button class="page-btn absolute right-[20px]" @click="diyStore.changeCurrentIndex(-99)">{{ t('pageSet') }}</el-button>
                     <div class="diy-view-wrap w-[375px] shadow-lg mx-auto">
                         <div class="preview-head bg-no-repeat bg-center bg-cover" @click="diyStore.changeCurrentIndex(-99)">
-                            <span class="text-base block text-center truncate cursor-pointer h-[64px] leading-[84px]">{{
-                                diyStore.global.title }}</span>
+                            <span class="text-base block text-center truncate cursor-pointer h-[64px] leading-[84px]">{{ diyStore.global.title }}</span>
                         </div>
                         <div class="preview-block relative">
 
-                            <ul
-                                class="quick-action absolute text-center -right-[70px] top-[20px] w-[42px] rounded shadow-md">
+                            <ul class="quick-action absolute text-center -right-[70px] top-[20px] w-[42px] rounded shadow-md">
                                 <el-tooltip effect="light" :content="t('moveUpComponent')" placement="right">
-                                    <icon name="iconfont-iconjiantoushang" size="20px"
-                                        class="block cursor-pointer leading-[40px]" @click="diyStore.moveUpComponent" />
+                                    <icon name="iconfont-iconjiantoushang" size="20px" class="block cursor-pointer leading-[40px]" @click="diyStore.moveUpComponent" />
                                 </el-tooltip>
                                 <el-tooltip effect="light" :content="t('moveDownComponent')" placement="right">
-                                    <icon name="iconfont-iconjiantouxia" size="20px"
-                                        class="block cursor-pointer leading-[40px]" @click="diyStore.moveDownComponent" />
+                                    <icon name="iconfont-iconjiantouxia" size="20px" class="block cursor-pointer leading-[40px]" @click="diyStore.moveDownComponent" />
                                 </el-tooltip>
                                 <el-tooltip effect="light" :content="t('copyComponent')" placement="right">
-                                    <icon name="iconfont-iconcopy-line" size="20px"
-                                        class="block cursor-pointer leading-[40px]" @click="diyStore.copyComponent" />
+                                    <icon name="iconfont-iconcopy-line" size="20px" class="block cursor-pointer leading-[40px]" @click="diyStore.copyComponent" />
                                 </el-tooltip>
                                 <el-tooltip effect="light" :content="t('delComponent')" placement="right">
-                                    <icon name="iconfont-icondelete-line" size="20px"
-                                        class="block cursor-pointer leading-[40px]" @click="diyStore.delComponent" />
+                                    <icon name="iconfont-icondelete-line" size="20px" class="block cursor-pointer leading-[40px]" @click="diyStore.delComponent" />
                                 </el-tooltip>
                                 <el-tooltip effect="light" :content="t('resetComponent')" placement="right">
-                                    <icon name="iconfont-iconloader-line" size="20px"
-                                        class="block cursor-pointer leading-[40px]" @click="diyStore.resetComponent" />
+                                    <icon name="iconfont-iconloader-line" size="20px" class="block cursor-pointer leading-[40px]" @click="diyStore.resetComponent" />
                                 </el-tooltip>
                             </ul>
 
                             <!-- 组件预览渲染区域 -->
-                            <iframe id="previewIframe" v-show="loadingIframe" :src="wapPreview" frameborder="0"
-                                class="preview-iframe w-[375px]"></iframe>
+                            <iframe id="previewIframe" v-show="loadingIframe" :src="wapPreview" frameborder="0" class="preview-iframe w-[375px]"></iframe>
 
                             <div v-show="loadingDev" class="preview-iframe w-[375px] pt-[20px] px-[20px]">
                                 <div class="font-bold text-xl mb-[40px]">{{ t('developTitle') }}</div>
@@ -101,63 +97,42 @@
                     <el-card class="box-card" shadow="never">
                         <template #header>
                             <div class="card-header flex justify-between items-center">
-                                <span class="title flex-1">{{ diyStore.currentIndex == -99 ? t('pageSet') :
-                                    diyStore.editComponent.componentTitle }}</span>
-                                <div class="tab-wrap flex rounded-[50px] bg-gray-100 text-[14px]"
-                                    v-if="diyStore.currentComponent">
-                                    <span class="cursor-pointer rounded-[50px] py-[5px] px-[15px]"
-                                        :class="{ 'bg-primary text-white': diyStore.editTab == 'content' }"
-                                        @click="diyStore.editTab = 'content'">{{ t('tabEditContent') }}</span>
-                                    <span class="cursor-pointer rounded-[50px] py-[5px] px-[15px]"
-                                        :class="{ 'bg-primary text-white': diyStore.editTab == 'style' }"
-                                        @click="diyStore.editTab = 'style'">{{ t('tabEditStyle') }}</span>
+                                <span class="title flex-1">{{ diyStore.currentIndex == -99 ? t('pageSet') : diyStore.editComponent.componentTitle }}</span>
+                                <div class="tab-wrap flex rounded-[50px] bg-gray-100 text-[14px]" v-if="diyStore.currentComponent">
+                                    <span class="cursor-pointer rounded-[50px] py-[5px] px-[15px]" :class="{ 'bg-primary text-white': diyStore.editTab == 'content' }" @click="diyStore.editTab = 'content'">{{ t('tabEditContent') }}</span>
+                                    <span class="cursor-pointer rounded-[50px] py-[5px] px-[15px]" :class="{ 'bg-primary text-white': diyStore.editTab == 'style' }" @click="diyStore.editTab = 'style'">{{ t('tabEditStyle') }}</span>
                                 </div>
                             </div>
                         </template>
 
                         <div class="edit-component-wrap">
 
-                            <component v-if="diyStore.currentComponent" :is="modules[diyStore.currentComponent]"
-                                :value="diyStore.value[diyStore.currentIndex]">
+                            <component v-if="diyStore.currentComponent" :is="modules[diyStore.currentComponent]" :value="diyStore.value[diyStore.currentIndex]">
                                 <template #style>
                                     <div class="edit-attr-item-wrap">
                                         <h3 class="mb-[10px]">{{ t('componentStyleTitle') }}</h3>
                                         <el-form label-width="80px" class="px-[10px]">
-                                            <el-form-item :label="t('bottomBgColor')" class="display-block"
-                                                v-if="diyStore.editComponent.ignore.indexOf('pageBgColor') == -1">
-                                                <el-color-picker v-model="diyStore.editComponent.pageBgColor" show-alpha
-                                                    :predefine="diyStore.predefineColors" />
+                                            <el-form-item :label="t('bottomBgColor')" class="display-block" v-if="diyStore.editComponent.ignore.indexOf('pageBgColor') == -1">
+                                                <el-color-picker v-model="diyStore.editComponent.pageBgColor" show-alpha :predefine="diyStore.predefineColors" />
                                                 <div class="text-sm text-gray-400">{{ t('bottomBgTips') }}</div>
                                             </el-form-item>
-                                            <el-form-item :label="t('componentBgColor')"
-                                                v-if="diyStore.editComponent.ignore.indexOf('componentBgColor') == -1">
-                                                <el-color-picker v-model="diyStore.editComponent.componentBgColor"
-                                                    show-alpha :predefine="diyStore.predefineColors" />
+                                            <el-form-item :label="t('componentBgColor')" v-if="diyStore.editComponent.ignore.indexOf('componentBgColor') == -1">
+                                                <el-color-picker v-model="diyStore.editComponent.componentBgColor" show-alpha :predefine="diyStore.predefineColors" />
                                             </el-form-item>
-                                            <el-form-item :label="t('marginTop')"
-                                                v-if="diyStore.editComponent.ignore.indexOf('marginTop') == -1">
-                                                <el-slider v-model="diyStore.editComponent.margin.top" show-input
-                                                    size="small" :min="0" class="ml-[10px] horz-blank-slider" />
+                                            <el-form-item :label="t('marginTop')" v-if="diyStore.editComponent.ignore.indexOf('marginTop') == -1">
+                                                <el-slider v-model="diyStore.editComponent.margin.top" show-input size="small" :min="0" class="ml-[10px] horz-blank-slider" />
                                             </el-form-item>
-                                            <el-form-item :label="t('marginBottom')"
-                                                v-if="diyStore.editComponent.ignore.indexOf('marginBottom') == -1">
-                                                <el-slider v-model="diyStore.editComponent.margin.bottom" show-input
-                                                    size="small" class="ml-[10px] horz-blank-slider" />
+                                            <el-form-item :label="t('marginBottom')" v-if="diyStore.editComponent.ignore.indexOf('marginBottom') == -1">
+                                                <el-slider v-model="diyStore.editComponent.margin.bottom" show-input size="small" class="ml-[10px] horz-blank-slider" />
                                             </el-form-item>
-                                            <el-form-item :label="t('marginBoth')"
-                                                v-if="diyStore.editComponent.ignore.indexOf('marginBoth') == -1">
-                                                <el-slider v-model="diyStore.editComponent.margin.both" show-input
-                                                    size="small" class="ml-[10px] horz-blank-slider" />
+                                            <el-form-item :label="t('marginBoth')" v-if="diyStore.editComponent.ignore.indexOf('marginBoth') == -1">
+                                                <el-slider v-model="diyStore.editComponent.margin.both" show-input size="small" class="ml-[10px] horz-blank-slider" />
                                             </el-form-item>
-                                            <el-form-item :label="t('topRounded')"
-                                                v-if="diyStore.editComponent.ignore.indexOf('topRounded') == -1">
-                                                <el-slider v-model="diyStore.editComponent.topRounded" show-input
-                                                    size="small" class="ml-[10px] horz-blank-slider" :max="50" />
+                                            <el-form-item :label="t('topRounded')" v-if="diyStore.editComponent.ignore.indexOf('topRounded') == -1">
+                                                <el-slider v-model="diyStore.editComponent.topRounded" show-input size="small" class="ml-[10px] horz-blank-slider" :max="50" />
                                             </el-form-item>
-                                            <el-form-item :label="t('bottomRounded')"
-                                                v-if="diyStore.editComponent.ignore.indexOf('bottomRounded') == -1">
-                                                <el-slider v-model="diyStore.editComponent.bottomRounded" show-input
-                                                    size="small" class="ml-[10px] horz-blank-slider" :max="50" />
+                                            <el-form-item :label="t('bottomRounded')" v-if="diyStore.editComponent.ignore.indexOf('bottomRounded') == -1">
+                                                <el-slider v-model="diyStore.editComponent.bottomRounded" show-input size="small" class="ml-[10px] horz-blank-slider" :max="50" />
                                             </el-form-item>
                                         </el-form>
                                     </div>
@@ -166,41 +141,27 @@
                             <div class="edit-attr-item-wrap" v-else>
                                 <h3 class="mb-[10px]">{{ t('componentStyleTitle') }}</h3>
                                 <el-form label-width="80px" class="px-[10px]">
-                                    <el-form-item :label="t('bottomBgColor')" class="display-block"
-                                        v-if="diyStore.editComponent.ignore.indexOf('pageBgColor') == -1">
-                                        <el-color-picker v-model="diyStore.editComponent.pageBgColor" show-alpha
-                                            :predefine="diyStore.predefineColors" />
+                                    <el-form-item :label="t('bottomBgColor')" class="display-block" v-if="diyStore.editComponent.ignore.indexOf('pageBgColor') == -1">
+                                        <el-color-picker v-model="diyStore.editComponent.pageBgColor" show-alpha :predefine="diyStore.predefineColors" />
                                         <div class="text-sm text-gray-400">{{ t('bottomBgTips') }}</div>
                                     </el-form-item>
-                                    <el-form-item :label="t('componentBgColor')"
-                                        v-if="diyStore.editComponent.ignore.indexOf('componentBgColor') == -1">
-                                        <el-color-picker v-model="diyStore.editComponent.componentBgColor" show-alpha
-                                            :predefine="diyStore.predefineColors" />
+                                    <el-form-item :label="t('componentBgColor')" v-if="diyStore.editComponent.ignore.indexOf('componentBgColor') == -1">
+                                        <el-color-picker v-model="diyStore.editComponent.componentBgColor" show-alpha :predefine="diyStore.predefineColors" />
                                     </el-form-item>
-                                    <el-form-item :label="t('marginTop')"
-                                        v-if="diyStore.editComponent.ignore.indexOf('marginTop') == -1">
-                                        <el-slider v-model="diyStore.editComponent.margin.top" show-input size="small"
-                                            :min="0" class="ml-[10px] horz-blank-slider" />
+                                    <el-form-item :label="t('marginTop')" v-if="diyStore.editComponent.ignore.indexOf('marginTop') == -1">
+                                        <el-slider v-model="diyStore.editComponent.margin.top" show-input size="small" :min="0" class="ml-[10px] horz-blank-slider" />
                                     </el-form-item>
-                                    <el-form-item :label="t('marginBottom')"
-                                        v-if="diyStore.editComponent.ignore.indexOf('marginBottom') == -1">
-                                        <el-slider v-model="diyStore.editComponent.margin.bottom" show-input size="small"
-                                            class="ml-[10px] horz-blank-slider" />
+                                    <el-form-item :label="t('marginBottom')" v-if="diyStore.editComponent.ignore.indexOf('marginBottom') == -1">
+                                        <el-slider v-model="diyStore.editComponent.margin.bottom" show-input size="small" class="ml-[10px] horz-blank-slider" />
                                     </el-form-item>
-                                    <el-form-item :label="t('marginBoth')"
-                                        v-if="diyStore.editComponent.ignore.indexOf('marginBoth') == -1">
-                                        <el-slider v-model="diyStore.editComponent.margin.both" show-input size="small"
-                                            class="ml-[10px] horz-blank-slider" />
+                                    <el-form-item :label="t('marginBoth')" v-if="diyStore.editComponent.ignore.indexOf('marginBoth') == -1">
+                                        <el-slider v-model="diyStore.editComponent.margin.both" show-input size="small" class="ml-[10px] horz-blank-slider" />
                                     </el-form-item>
-                                    <el-form-item :label="t('topRounded')"
-                                        v-if="diyStore.editComponent.ignore.indexOf('topRounded') == -1">
-                                        <el-slider v-model="diyStore.editComponent.topRounded" show-input size="small"
-                                            class="ml-[10px] horz-blank-slider" :max="50" />
+                                    <el-form-item :label="t('topRounded')" v-if="diyStore.editComponent.ignore.indexOf('topRounded') == -1">
+                                        <el-slider v-model="diyStore.editComponent.topRounded" show-input size="small" class="ml-[10px] horz-blank-slider" :max="50" />
                                     </el-form-item>
-                                    <el-form-item :label="t('bottomRounded')"
-                                        v-if="diyStore.editComponent.ignore.indexOf('bottomRounded') == -1">
-                                        <el-slider v-model="diyStore.editComponent.bottomRounded" show-input size="small"
-                                            class="ml-[10px] horz-blank-slider" :max="50" />
+                                    <el-form-item :label="t('bottomRounded')" v-if="diyStore.editComponent.ignore.indexOf('bottomRounded') == -1">
+                                        <el-slider v-model="diyStore.editComponent.bottomRounded" show-input size="small" class="ml-[10px] horz-blank-slider" :max="50" />
                                     </el-form-item>
                                 </el-form>
                             </div>
@@ -217,14 +178,17 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, toRaw, watch } from 'vue'
+import { ref, reactive, toRaw, watch, inject } from 'vue'
 import { t } from '@/lang'
-import { addDiyPage, editDiyPage, initPage } from '@/app/api/diy'
+import { getDiyTemplatePages, addDiyPage, editDiyPage, initPage } from '@/app/api/diy'
 import { useRoute, useRouter } from 'vue-router'
 import { cloneDeep } from 'lodash-es'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import useDiyStore from '@/stores/modules/diy'
 import storage from '@/utils/storage'
+
+const setLayout = inject('setLayout')
+setLayout('decorate')
 
 const diyStore = useDiyStore()
 const route = useRoute()
@@ -234,10 +198,12 @@ route.query.id = route.query.id || 0
 route.query.name = route.query.name || ''
 route.query.url = route.query.url || '' // 页面路径
 route.query.type = route.query.type || '' // 页面模板，新页面传入
-route.query.template = route.query.template || '' // 页面模板名称，新页面传入
 route.query.title = route.query.title || ''
-route.query.back = route.query.back || '/website/diy/list'
+route.query.back = route.query.back || '/site/diy/list'
 
+const backPath = route.query.back
+const template = ref('');
+const oldTemplate = ref('');
 const wapUrl = ref('')
 const wapDomain = ref('')
 const wapPreview = ref('')
@@ -247,7 +213,6 @@ const loadingDev = ref(false) // 加载开发环境配置
 const timeIframe = ref(0) // iframe打开时间
 const difference = ref(0) // 检测页面加载差异，小于1000毫秒，则配置wap端域名
 
-const backPath = route.query.back
 const component = ref([])
 const componentType: string[] = reactive([])
 const page = ref('')
@@ -271,6 +236,7 @@ const originData = reactive({
 const isChange = ref(true) // 数据是否发生变化，true：没变化，false：变化了
 const goBack = () => {
     if (isChange.value) {
+        location.href = `${location.origin}${backPath}`;
         router.push(backPath)
     } else {
         // 数据发生变化，弹框提示：确定离开此页面
@@ -284,7 +250,7 @@ const goBack = () => {
                 autofocus: false
             }
         ).then(() => {
-            router.push(backPath)
+            location.href = `${location.origin}${backPath}`;
         }).catch(() => {
         })
     }
@@ -299,6 +265,67 @@ for (const [key, value] of Object.entries(modulesFiles)) {
     const name = moduleName.split('/')[1]
     modules[name] = value.default
 }
+
+// 获取模板页面列表
+const templatePages: any = reactive({})
+
+const loadDiyTemplatePages = (type:any)=>{
+    getDiyTemplatePages({
+        type,
+        mode: 'diy'
+    }).then(res => {
+        for (const key in res.data) {
+            templatePages[key] = res.data[key];
+        }
+    });
+}
+
+// 全局监听自定义数据变化
+watch(
+    () => template.value,
+    (newValue, oldValue) => {
+        oldTemplate.value = oldValue;
+    }
+)
+
+// 切换模板页面
+const changeTemplatePage = (value:any)=> {
+    // 存在数据则弹框提示确认
+    if(diyStore.value.length) {
+        ElMessageBox.confirm(t('changeTemplatePageTips'), t('warning'), {
+            confirmButtonText: t('confirm'),
+            cancelButtonText: t('cancel'),
+            type: 'warning'
+        }).then(() => {
+            if (value) {
+                let data = templatePages[value].data;
+                diyStore.global = data.global;
+                if (data.value.length) {
+                    diyStore.value = data.value
+                }
+            } else {
+                // 清空
+                diyStore.init();
+            }
+            if(route.query.title) diyStore.global.title = route.query.title
+        }).catch(() => {
+            // 还原
+            template.value = oldTemplate.value;
+        });
+    }else{
+        if (value) {
+            let data = templatePages[value].data;
+            diyStore.global = data.global;
+            if (data.value.length) {
+                diyStore.value = data.value
+            }
+        } else {
+            // 清空
+            diyStore.init();
+        }
+        if(route.query.title) diyStore.global.title = route.query.title
+    }
+};
 
 // 全局监听自定义数据变化
 watch(
@@ -326,7 +353,6 @@ initPage({
     name: route.query.name,
     url: route.query.url,
     type: route.query.type,
-    template: route.query.template,
     title: route.query.title
 }).then(async (res) => {
     const data = res.data
@@ -392,6 +418,8 @@ initPage({
             }
         }
     }
+
+    loadDiyTemplatePages(data.type);
 
     // 加载预览
     wapDomain.value = data.domain_url.wap_domain
@@ -501,6 +529,8 @@ const save = (callback: any) => {
     if (isRepeat.value) return
     isRepeat.value = true
 
+    diyStore.templateName = template.value;
+
     let data = {
         id: diyStore.id,
         name: diyStore.name,
@@ -522,7 +552,7 @@ const save = (callback: any) => {
             if (diyStore.id) {
                 isRepeat.value = false // 不刷新
             } else {
-                router.push(backPath)
+                location.href = `${location.origin}${backPath}`;
             }
             if (callback) callback(res.data.id)
         }
@@ -566,7 +596,6 @@ const preview = () => {
 }
 
 .edit-component-wrap {
-
     .content-wrap,
     .style-wrap {
         .edit-attr-item-wrap {

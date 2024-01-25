@@ -25,7 +25,7 @@
                                     <el-dropdown-menu>
                                         <el-dropdown-item class="text-center">
                                             <popover-input :placeholder="t('upload.attachmentCategoryPlaceholder')"
-                                                @confirm="updateAttachmentCategory($event, index)" :value="item.name">
+                                                @confirm="updateAttachmentCategory($event, index)" v-model="item.name">
                                                 <span>{{ t('edit') }}</span>
                                             </popover-input>
                                         </el-dropdown-item>
@@ -40,7 +40,7 @@
                 </el-scrollbar>
             </div>
             <!-- 添加分组 -->
-            <popover-input :placeholder="t('upload.attachmentCategoryPlaceholder')" @confirm="addAttachmentCategory"
+            <popover-input :placeholder="t('upload.attachmentCategoryPlaceholder')" @confirm="addAttachmentCategory" v-model="attachmentCategoryName"
                 v-if="prop.type != 'icon'">
                 <el-button>{{ t('upload.addAttachmentCategory') }}</el-button>
             </popover-input>
@@ -219,6 +219,7 @@ import { debounce, img, getToken } from '@/utils/common'
 import { ElMessage, UploadFile, UploadFiles, ElMessageBox } from 'element-plus'
 import storage from '@/utils/storage'
 
+const attachmentCategoryName = ref('')
 const operate = ref(false)
 const prop = defineProps({
     // 选择数量限制
@@ -333,6 +334,7 @@ const addAttachmentCategory = (name: string) => {
         type: prop.type,
         name
     }).then(res => {
+        attachmentCategoryName.value = ''
         getAttachmentCategoryList(1)
     }).catch(() => {
 
@@ -536,6 +538,7 @@ defineExpose({
 <style lang="scss" scoped>
 .group-list {
     .group-item {
+        height: 32px;
         margin-top: 3px;
 
         .operate {

@@ -30,6 +30,8 @@ class CoreCloudBuildService extends BaseCoreService
 
     protected $root_path;
 
+    protected $auth_code;
+
     public function __construct()
     {
         parent::__construct();

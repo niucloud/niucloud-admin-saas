@@ -31,7 +31,7 @@ export const redirectInterceptor = () => {
 				checkNeedLogin(route)
 
 				// 添加会员访问日志
-				if (getToken()) memberLog({ route: route.path, params: JSON.stringify(route.query), pre_route: getCurrentPages()[0].route })
+				if (getToken()) memberLog({ route: route.path, params: JSON.stringify(route.query), pre_route: getCurrentPages()[0]?.route })
 			}
 		})
 	})
@@ -48,7 +48,7 @@ export const launchInterceptor = () => {
 	// #ifdef H5
 	if (process.env.NODE_ENV == 'development') {
 		// 后台DIY装修页面时，获取站点ID
-		
+
 		if (location.search.indexOf('site_id=') != -1) {
 			let site_id = location.search.substr(location.search.indexOf('site_id=')+8);
 			uni.setStorageSync('wap_site_id', site_id);

@@ -207,7 +207,7 @@ return [
         'component_type_basic' => '基础组件',
 
         'system_title' => '系统',
-        'system_link' => '系统页面',
+        'system_link' => '启动页',
         'system_link_index' => '首页',
 
         'member_link' => '会员页面',

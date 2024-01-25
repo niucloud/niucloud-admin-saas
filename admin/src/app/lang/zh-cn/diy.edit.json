@@ -1,4 +1,7 @@
 {
+  "templatePagePlaceholder": "选择模板",
+  "templatePageEmpty": "无",
+  "changeTemplatePageTips":"切换模板后，当前页面内容将被替换且不被保存，请谨慎操作",
   "developTitle": "开发环境配置",
   "wapDomain": "wap域名（WAP_DOMAIN）",
   "wapDomainPlaceholder": "请输入wap域名",

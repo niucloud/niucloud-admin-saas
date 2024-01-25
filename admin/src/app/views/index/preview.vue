@@ -54,7 +54,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive, watch, inject } from 'vue'
 import { t } from '@/lang'
 import { useRoute } from 'vue-router'
 import { getWeappConfig } from '@/app/api/weapp'
@@ -77,6 +77,9 @@ const difference = ref(0) // 检测页面加载差异，小于1000毫秒，则�
 
 const route = useRoute()
 route.query.page = route.query.page || '' // 页面路径
+
+const setLayout = inject('setLayout')
+setLayout('decorate')
 
 getUrl().then((res: any) => {
     wapUrl.value = res.data.wap_url
@@ -118,7 +121,6 @@ const save = () => {
 const setDomain = () => {
     if (route.query.page) {
         wapPreview.value = `${wapUrl.value}${route.query.page}`
-        console.log(wapPreview.value)
         // errorCorrectionLevel：密度容错率L（低）H(高)
         QRCode.toDataURL(wapPreview.value, { errorCorrectionLevel: 'L', margin: 0, width: 100 }).then(url => {
             wapImage.value = url

@@ -2,18 +2,12 @@
     <template v-if="meta.show">
         <el-sub-menu v-if="routes.children" :index="String(routes.name)">
             <template #title>
-                <div v-if="meta.icon" class="w-[16px] h-[16px] relative flex items-center">
-                    <icon v-if="meta.icon" :name="meta.icon" class="absolute !w-auto" />
-                </div>
                 <span :class="['ml-[10px]']">{{ meta.title }}</span>
             </template>
             <menu-item v-for="(route, index) in routes.children" :routes="route" :key="index" />
         </el-sub-menu>
         <template v-else>
             <el-menu-item :index="String(routes.name)" @click="router.push({ name: routes.name })" v-if="meta.addon && meta.parent_route && meta.parent_route.addon == ''">
-                <div class="w-[16px] h-[16px] relative flex justify-center">
-                    <el-image class="w-[16px] h-[16px] rounded-[50%] overflow-hidden" :src="img(addons[meta.addon].icon)" fit="fill"/>
-                </div>
                 <template #title>
                     <el-tooltip placement="right" effect="light">
                         <template #content>
@@ -24,9 +18,6 @@
                 </template>
             </el-menu-item>
             <el-menu-item :index="String(routes.name)" @click="router.push({ name: routes.name })" v-else>
-                <div class="w-[16px] h-[16px] relative flex justify-center">
-                    <icon :name="meta.icon" class="absolute top-[50%] -translate-y-[50%]" v-if="meta.icon"/>
-                </div>
                 <template #title>
                     <span :class="[{'text-[15px]': routes.meta.class == 1}, {'text-[14px]': routes.meta.class != 1}, {'ml-[10px]': routes.meta.class == 2, 'ml-[15px]': routes.meta.class == 3}]">{{ meta.title }}</span>
                 </template>

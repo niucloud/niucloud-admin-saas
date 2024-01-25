@@ -1,4 +1,4 @@
-import { getCaptcha } from '@/api/system'
+import { getCaptcha } from '@/app/api/system'
 
 interface formData {
     captcha_code: string,

@@ -8,7 +8,7 @@
 					</el-radio-group>
 			</el-form-item>
 
-            <el-form-item :label="t('dictType')"  v-if="formData.select_type == 1">
+            <el-form-item :label="t('dictType')"  v-if="formData.select_type == 1" prop="dict_type">
                 <el-select class="input-width" :placeholder="t('dictTypePlaceholder')" v-model="formData.dict_type" filterable remote clearable>
                     <el-option :label="item.name" :value="item.key" v-for="item in dicList" :key="item.key" />
                 </el-select>
@@ -121,7 +121,66 @@ const modelChange = (val:any) => {
 const formRules = computed(() => {
     return {
         dict_type: [
-            { required: true, message: t('dictTypePlaceholder'), trigger: 'change' }
+            {
+            validator: (rule: any, value: any, callback: any) => {
+                console.log(formData.value.select_type)
+                if (formData.value.select_type == 1 && formData.value.dict_type == '') {
+                    callback(new Error(t('dictTypePlaceholder')))
+                }else{
+                        callback()
+                    } 
+            },
+            trigger: 'blur'
+        }
+        ],
+        addon: [
+            {
+                validator: (rule: any, value: any, callback: any) => {
+                    if (formData.value.select_type == 2 && formData.value.addon == '') {
+                        callback(new Error(t('addonsPlaceholder')))
+                    }else{
+                        callback()
+                    } 
+                },
+                trigger: 'blur'
+            }
+        ],
+        model: [
+            {
+                validator: (rule: any, value: any, callback: any) => {
+                    console.log(formData.value.model);
+                    if (formData.value.select_type == 2 && formData.value.model == '') {
+                        callback(new Error(t('associatedModelPlaceholder')))
+                    }else{
+                        callback()
+                    }
+                },
+                trigger: 'blur'
+            }
+        ],
+        value_key: [
+            {
+                validator: (rule: any, value: any, callback: any) => {
+                    if (formData.value.select_type == 2 && formData.value.value_key == '') {
+                        callback(new Error(t('remotePullDownValuePlaceholder')))
+                    }else{
+                        callback()
+                    } 
+                },
+                trigger: 'blur'
+            }
+        ],
+        label_key: [
+            {
+                validator: (rule: any, value: any, callback: any) => {
+                    if (formData.value.select_type == 2 && formData.value.label_key == '') {
+                        callback(new Error(t('remotePullDownLabelPlaceholder')))
+                    }else{
+                        callback()
+                    } 
+                },
+                trigger: 'blur'
+            }
         ]
 
     }

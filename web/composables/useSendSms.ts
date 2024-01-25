@@ -1,4 +1,4 @@
-import { sendSms } from '@/api/system'
+import { sendSms } from '@/app/api/system'
 
 export function useSendSms() {
     const canGetCode = ref(true),

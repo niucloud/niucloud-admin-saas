@@ -16,8 +16,8 @@ return
             'is_show' => 1,
             'children' => [
                 [
-                    'menu_name' => '页面装修',
-                    'menu_key' => 'diy_page_decorate',
+                    'menu_name' => '启动页',
+                    'menu_key' => 'diy_page_decorate_index',
                     'menu_type' => 1,
                     'icon' => 'element-House',
                     'api_url' => '',
@@ -25,6 +25,19 @@ return
                     'view_path' => 'diy/index',
                     'methods' => '',
                     'sort' => 100,
+                    'status' => 1,
+                    'is_show' => 1,
+                ],
+                [
+                    'menu_name' => '个人中心',
+                    'menu_key' => 'diy_page_decorate_member_index',
+                    'menu_type' => 1,
+                    'icon' => 'iconfont-iconhuiyuanliebiao', // element-House
+                    'api_url' => '',
+                    'router_path' => 'member',
+                    'view_path' => 'diy/member',
+                    'methods' => '',
+                    'sort' => 99,
                     'status' => 1,
                     'is_show' => 1,
                 ],
@@ -852,7 +865,19 @@ return
                     'sort' => 100,
                     'status' => 1,
                     'is_show' => 1,
-
+                ],
+                [
+                    'menu_name' => '版权设置',
+                    'menu_key' => 'setting_copyright',
+                    'menu_type' => 1,
+                    'icon' => 'iconfont-iconbanquan1',
+                    'api_url' => 'sys/config/copyright',
+                    'router_path' => 'copyright',
+                    'view_path' => 'setting/copyright',
+                    'methods' => 'get',
+                    'sort' => 90,
+                    'status' => 1,
+                    'is_show' => 1,
                 ],
                 [
                     'menu_name' => '协议管理',
@@ -1146,7 +1171,20 @@ return
                     'sort' => 99,
                     'status' => 1,
                     'is_show' => 1,
-                ]
+                ],
+                [
+                    'menu_name' => '存储设置',
+                    'menu_key' => 'setting_storage',
+                    'menu_type' => 1,
+                    'icon' => 'element-FolderChecked',
+                    'api_url' => 'sys/storage',
+                    'router_path' => 'storage',
+                    'view_path' => 'setting/storage',
+                    'methods' => 'get',
+                    'sort' => 30,
+                    'status' => 1,
+                    'is_show' => 1
+                ],
             ]
         ]
     ];

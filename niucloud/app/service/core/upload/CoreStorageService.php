@@ -47,7 +47,7 @@ class CoreStorageService extends BaseCoreService
     public function getStorageByType(int $site_id, string $type){
         $storage_list = $this->getStorageConfigList($site_id);
         foreach($storage_list as $k => $v){
-            if($k == $type){
+            if($v['storage_type'] == $type){
                 $item_storage = $v['params'] ?? [];
                 $item_storage['storage_type'] = $v['storage_type'];
                 return $item_storage;

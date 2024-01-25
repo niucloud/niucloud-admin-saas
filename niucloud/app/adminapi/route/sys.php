@@ -218,4 +218,6 @@ Route::group('sys', function () {
 //系统环境（不效验登录状态）
 Route::group('sys', function () {
     Route::get('web/website', 'sys.Config/getWebsite');
+    // 获取版权信息
+    Route::get('web/copyright', 'sys.Config/getCopyright');
 });

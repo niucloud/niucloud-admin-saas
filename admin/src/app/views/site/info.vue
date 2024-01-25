@@ -1,5 +1,5 @@
 <template>
-    <div class="main-container">
+    <div class="main-container" v-loading="loading">
         <div class="detail-head !mb-[10px]">
             <div class="left" @click="router.push({ path: '/admin/site/list' })">
                 <span class="iconfont iconxiangzuojiantou !text-xs"></span>
@@ -42,6 +42,54 @@
 
                 <el-form-item :label="t('expireTime')">
                     <div class="input-width">{{ formData.expire_time || '' }}</div>
+                </el-form-item>
+
+                <el-form-item :label="t('app')">
+                    <div class="flex flex-wrap">
+                        <template v-for="item in formData.site_addons">
+                            <div class="flex w-[300px] border border-solid p-[10px] !mr-[10px] !mb-[10px] rounded-md" v-if="item.type == 'app'">
+                                <div class="w-[60px] h-[60px] mr-[10px] rounded-md overflow-hidden">
+                                    <el-image :src="img(item.icon)" v-if="item.icon"
+                                              class="w-full h-full" />
+                                    <el-image v-else class="w-full h-full">
+                                        <template #error>
+                                            <div class="image-error">
+                                                <el-icon><icon-picture /></el-icon>
+                                            </div>
+                                        </template>
+                                    </el-image>
+                                </div>
+                                <div class="flex-1 w-0 flex flex-col justify-center leading-tight">
+                                    <div class="font-bold truncate">{{ item.title }}</div>
+                                    <div class="text-gray-400 mt-[10px] truncate" :title="item.desc">{{ item.desc }}</div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </el-form-item>
+
+                <el-form-item :label="t('addon')">
+                    <div class="flex flex-wrap">
+                        <template v-for="item in formData.site_addons">
+                            <div class="flex w-[300px] border border-solid p-[10px] !mr-[10px] !mb-[10px] rounded-md" v-if="item.type == 'addon'">
+                                <div class="w-[60px] h-[60px] mr-[10px] rounded-md overflow-hidden">
+                                    <el-image :src="img(item.icon)" v-if="item.icon"
+                                              class="w-full h-full" />
+                                    <el-image v-else class="w-full h-full">
+                                        <template #error>
+                                            <div class="image-error">
+                                                <el-icon><icon-picture /></el-icon>
+                                            </div>
+                                        </template>
+                                    </el-image>
+                                </div>
+                                <div class="flex-1 w-0 flex flex-col justify-center leading-tight">
+                                    <div class="font-bold truncate">{{ item.title }}</div>
+                                    <div class="text-gray-400 mt-[10px] truncate" :title="item.desc">{{ item.desc }}</div>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
                 </el-form-item>
             </el-card>
 
@@ -97,7 +145,8 @@ const initialFormData = {
     phone: '',
     group_name: '',
     status: 0,
-    create_time: 0
+    create_time: 0,
+    site_addons: []
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })
 

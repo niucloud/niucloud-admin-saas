@@ -369,7 +369,7 @@ class CoreAddonDevelopService extends CoreAddonBaseService
             if (empty($image)) return true;
             if (check_file_is_remote($image)) {
                 try {
-                    (new CoreFetchService())->setRootPath($dir)->setRename($name)->image($image, '', FileDict::LOCAL);
+                    (new CoreFetchService())->setRootPath($dir)->setRename($name)->image($image, 0, FileDict::LOCAL);
                 } catch ( UploadFileException $e ) {
                     return true;
                 }

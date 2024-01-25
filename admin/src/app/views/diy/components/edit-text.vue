@@ -5,8 +5,7 @@
 			<h3 class="mb-[10px]">{{ t('styleSet') }}</h3>
 			<el-form label-width="80px" class="px-[10px]">
 				<el-form-item :label="t('selectStyle')" class="flex">
-					<span class="text-primary flex-1 cursor-pointer" @click="showStyle">{{ diyStore.editComponent.styleName
-					}}</span>
+					<span class="text-primary flex-1 cursor-pointer" @click="showStyle">{{ diyStore.editComponent.styleName }}</span>
 					<el-icon>
 						<ArrowRight />
 					</el-icon>
@@ -17,8 +16,7 @@
 			<h3 class="mb-[10px]">{{ t('titleContent') }}</h3>
 			<el-form label-width="80px" class="px-[10px]">
 				<el-form-item :label="t('title')">
-					<el-input v-model="diyStore.editComponent.text" :placeholder="t('titlePlaceholder')" clearable
-						maxlength="15" show-word-limit />
+					<el-input v-model="diyStore.editComponent.text" :placeholder="t('titlePlaceholder')" clearable maxlength="15" show-word-limit />
 				</el-form-item>
 				<el-form-item :label="t('link')">
 					<diy-link v-model="diyStore.editComponent.link" />
@@ -36,12 +34,10 @@
 			<h3 class="mb-[10px]">{{ t('subTitleContent') }}</h3>
 			<el-form label-width="80px" class="px-[10px]">
 				<el-form-item :label="t('subTitle')">
-					<el-input v-model="diyStore.editComponent.subTitle.text" :placeholder="t('subTitlePlaceholder')"
-						clearable maxlength="30" show-word-limit />
+					<el-input v-model="diyStore.editComponent.subTitle.text" :placeholder="t('subTitlePlaceholder')" clearable maxlength="30" show-word-limit />
 				</el-form-item>
 				<el-form-item :label="t('textFontSize')">
-					<el-slider v-model="diyStore.editComponent.subTitle.fontSize" show-input size="small"
-						class="ml-[10px] article-slider" :min="12" :max="16" />
+					<el-slider v-model="diyStore.editComponent.subTitle.fontSize" show-input size="small" class="ml-[10px] article-slider" :min="12" :max="16" />
 				</el-form-item>
 				<el-form-item :label="t('textColor')">
 					<el-color-picker v-model="diyStore.editComponent.subTitle.color" />
@@ -53,8 +49,7 @@
 			<h3 class="mb-[10px]">{{ t('moreContent') }}</h3>
 			<el-form label-width="80px" class="px-[10px]">
 				<el-form-item :label="t('more')">
-					<el-input v-model="diyStore.editComponent.more.text" :placeholder="t('morePlaceholder')" clearable
-						maxlength="8" show-word-limit />
+					<el-input v-model="diyStore.editComponent.more.text" :placeholder="t('morePlaceholder')" clearable maxlength="8" show-word-limit />
 				</el-form-item>
 				<el-form-item :label="t('link')">
 					<diy-link v-model="diyStore.editComponent.more.link" />
@@ -71,12 +66,10 @@
 		<el-dialog v-model="showDialog" :title="t('selectStyle')" width="40%">
 
 			<div class="flex flex-wrap">
-				<div class="flex items-center justify-center overflow-hidden w-[280px] h-[100px] mr-[12px] cursor-pointer border bg-gray-50"
-					:class="{ 'border-primary': selectStyle == 'style-1' }" @click="selectStyle = 'style-1'">
+				<div class="flex items-center justify-center overflow-hidden w-[280px] h-[100px] mr-[12px] cursor-pointer border bg-gray-50" :class="{ 'border-primary': selectStyle == 'style-1' }" @click="selectStyle = 'style-1'">
 					<img class="max-w-[280px] max-h-[220px]" src="@/app/assets/images/diy/text/style1.png" />
 				</div>
-				<div class="flex items-center justify-center overflow-hidden w-[280px] h-[100px] mr-[12px] cursor-pointer border bg-gray-50"
-					:class="{ 'border-primary': selectStyle == 'style-2' }" @click="selectStyle = 'style-2'">
+				<div class="flex items-center justify-center overflow-hidden w-[280px] h-[100px] mr-[12px] cursor-pointer border bg-gray-50" :class="{ 'border-primary': selectStyle == 'style-2' }" @click="selectStyle = 'style-2'">
 					<img class="max-w-[280px] max-h-[220px]" src="@/app/assets/images/diy/text/style2.png" />
 				</div>
 			</div>
@@ -98,8 +91,7 @@
 			<h3 class="mb-[10px]">{{ t('titleStyle') }}</h3>
 			<el-form label-width="80px" class="px-[10px]">
 				<el-form-item :label="t('textFontSize')">
-					<el-slider v-model="diyStore.editComponent.fontSize" show-input size="small"
-						class="ml-[10px] article-slider" :min="12" :max="20" />
+					<el-slider v-model="diyStore.editComponent.fontSize" show-input size="small" class="ml-[10px] article-slider" :min="12" :max="20" />
 				</el-form-item>
 				<el-form-item :label="t('textFontWeight')">
 					<el-radio-group v-model="diyStore.editComponent.fontWeight">

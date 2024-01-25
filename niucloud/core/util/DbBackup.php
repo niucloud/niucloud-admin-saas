@@ -380,7 +380,9 @@ class DbBackup
             $result = Db::query("SELECT * FROM `{$table}` LIMIT {$start}, 1000");
             $sql = "INSERT INTO `{$table}` VALUES\n";
             foreach ($result as $index => $row) {
-                $row = array_map('addslashes', $row);
+                $row = array_map(function ($item){
+                    return is_string($item) ? addslashes($item) : $item;
+                }, $row);
                 $sql .= "('".str_replace(array("\r", "\n"), array('\\r', '\\n'),
                         implode("', '", $row))."')";
                 $sql .= $index < (count($result) - 1) ? ",\n" : ";\n";

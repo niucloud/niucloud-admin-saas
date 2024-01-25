@@ -1,6 +1,5 @@
 <template>
-	<view :style="warpCss">
-	</view>
+	<view :style="warpCss"></view>
 </template>
 
 <script setup lang="ts">

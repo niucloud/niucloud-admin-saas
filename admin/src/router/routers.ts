@@ -135,7 +135,6 @@ export const SITE_ROUTE: RouteRecordRaw = {
     ]
 }
 
-// 装修路由
 export const DECORATE_ROUTER: RouteRecordRaw = {
     path: '/decorate',
     component: Decorate,

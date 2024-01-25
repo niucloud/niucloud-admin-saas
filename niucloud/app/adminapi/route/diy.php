@@ -56,6 +56,9 @@ Route::group('diy', function() {
     // 获取页面模板
     Route::get('template', 'diy.Diy/getTemplate');
 
+    // 获取模板页面列表
+    Route::get('template/pages', 'diy.Diy/getTemplatePages');
+
     // 自定义路由列表
     Route::get('route', 'diy.DiyRoute/lists');
 
@@ -67,6 +70,9 @@ Route::group('diy', function() {
 
     // 编辑自定义页面分享内容
     Route::put('diy/share', 'diy.Diy/modifyShare');
+
+    // 获取模板页面的应用插件列表
+    Route::get('apps', 'diy.Diy/getApps');
 
     /***************************************************** 配置相关 *****************************************************/
 
