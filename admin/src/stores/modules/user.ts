@@ -15,7 +15,7 @@ interface User {
     addonIndexRoute: Record<string, symbol>
 }
 
-const useSystemStore = defineStore('user', {
+const userStore = defineStore('user', {
     state: (): User => {
         return {
             token: getToken() || '',
@@ -96,4 +96,4 @@ const useSystemStore = defineStore('user', {
     }
 })
 
-export default useSystemStore
+export default userStore

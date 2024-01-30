@@ -46,5 +46,6 @@ Route::rule('web', function () {
 })->pattern(['any' => '\w+']);
 //用于公众号授权证书
 Route::any('MP_verify_<name>.txt',  function ($name) {
-    echo $name;
+    header('Content-Type:text/plain; charset=utf-8');
+    echo $name;exit();
 });

@@ -11,18 +11,24 @@
                     </template>
                 </el-input>
             </div>
-            <div class="flex mt-[24px]">
-                <div :class="['flex items-center text-[14px] h-[32px] border-[1px] border-solid my-[3px] border-[#E0E0E0] rounded-full px-[15px] mr-[24px] cursor-pointer bg-[#f8f8f8] hover:bg-[#fff]', { 'text-[#fff] !bg-[#000] border-[#000]': activeName === 'installed' }]"
-                    @click="activeNameTabFn('installed')">
-                    {{ t('installLabel') }}
+            <div class="flex mt-[24px] justify-between">
+                <div class="flex">
+                    <div :class="['flex items-center text-[14px] h-[32px] border-[1px] border-solid my-[3px] border-[#E0E0E0] rounded-full px-[15px] mr-[24px] cursor-pointer bg-[#f8f8f8] hover:bg-[#fff]', { 'text-[#fff] !bg-[#000] border-[#000]': activeName === 'installed' }]"
+                        @click="activeNameTabFn('installed')">
+                        {{ t('installLabel') }}
+                    </div>
+                    <div :class="['flex items-center text-[14px] h-[32px] border-[1px] border-solid my-[3px] border-[#E0E0E0] rounded-full px-[15px] mr-[24px] cursor-pointer bg-[#f8f8f8] hover:bg-[#fff]', { 'text-[#fff] !bg-[#000] border-[#000]': activeName === 'uninstalled' }]"
+                        @click="activeNameTabFn('uninstalled')">
+                        {{ t('uninstalledLabel') }}
+                    </div>
+                    <div :class="['flex items-center text-[14px] h-[32px] border-[1px] border-solid my-[3px] border-[#E0E0E0] rounded-full px-[15px] mr-[24px] cursor-pointer bg-[#f8f8f8] hover:bg-[#fff]', { 'text-[#fff] !bg-[#000] border-[#000]': activeName === 'all' }]"
+                        @click="activeNameTabFn('all')">
+                        {{ t('buyLabel') }}
+                    </div>
                 </div>
-                <div :class="['flex items-center text-[14px] h-[32px] border-[1px] border-solid my-[3px] border-[#E0E0E0] rounded-full px-[15px] mr-[24px] cursor-pointer bg-[#f8f8f8] hover:bg-[#fff]', { 'text-[#fff] !bg-[#000] border-[#000]': activeName === 'uninstalled' }]"
-                    @click="activeNameTabFn('uninstalled')">
-                    {{ t('uninstalledLabel') }}
-                </div>
-                <div :class="['flex items-center text-[14px] h-[32px] border-[1px] border-solid my-[3px] border-[#E0E0E0] rounded-full px-[15px] mr-[24px] cursor-pointer bg-[#f8f8f8] hover:bg-[#fff]', { 'text-[#fff] !bg-[#000] border-[#000]': activeName === 'all' }]"
-                    @click="activeNameTabFn('all')">
-                    {{ t('buyLabel') }}
+                <div :class="['flex items-center text-white text-[14px] h-[32px] border-[1px] border-solid my-[3px] border-primary rounded-full px-[15px] cursor-pointer bg-primary hover:bg-primary']"
+                     @click="handleCloudBuild">
+                    {{ t('cloudBuild') }}
                 </div>
             </div>
             <div class="mt-[25px]">
@@ -100,8 +106,6 @@
                                 <span v-else-if="row.is_download && row.install_info <= 0">{{ t('installDown') }}</span>
                                 <span v-else>{{ t('down') }}</span>
                             </el-button>
-                            <el-button class="!text-[13px]" type="primary" v-if="row.install_info && Object.keys(row.install_info)?.length" link @click="handleCloudBuild">{{
-                                    t('cloudBuild') }}</el-button>
                         </template>
                     </el-table-column>
                 </el-table>

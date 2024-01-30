@@ -288,7 +288,12 @@ class CoreAddonInstallService extends CoreAddonBaseService
 
         // 安装admin管理端
         if (file_exists($from_admin_dir)) {
-            dir_copy($from_admin_dir, $to_admin_dir, $this->files['admin']);
+            dir_copy($from_admin_dir, $to_admin_dir, $this->files['admin'], exclude_dirs:['icon']);
+            // 判断图标目录是否存在
+            if (is_dir($from_admin_dir . 'icon')) {
+                $addon_icon_dir = $this->root_path . 'admin' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'icon' . DIRECTORY_SEPARATOR . 'addon' . DIRECTORY_SEPARATOR . $this->addon;
+                dir_copy($from_admin_dir . 'icon', $addon_icon_dir);
+            }
             // 编译后台图标库文件
             $this->compileAdminIcon();
         }
@@ -588,6 +593,10 @@ class CoreAddonInstallService extends CoreAddonBaseService
 
         // 卸载admin管理端
         if (is_dir($to_admin_dir)) del_target_dir($to_admin_dir, true);
+        // 移除admin图标
+        $addon_icon_dir = $this->root_path . 'admin' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'icon' . DIRECTORY_SEPARATOR . 'addon' . DIRECTORY_SEPARATOR . $this->addon;
+        if (is_dir($addon_icon_dir)) del_target_dir($addon_icon_dir, true);
+
         // 编译后台图标库文件
         $this->compileAdminIcon();
 

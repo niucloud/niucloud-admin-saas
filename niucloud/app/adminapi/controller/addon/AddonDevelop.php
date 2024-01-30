@@ -120,7 +120,7 @@ class AddonDevelop extends BaseAdminController
      */
     public function download($key){
 
-        return (new AddonDevelopService())->download($key);
+        return success(data:(new AddonDevelopService())->download($key));
     }
 
 }

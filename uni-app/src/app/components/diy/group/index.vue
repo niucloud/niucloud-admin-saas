@@ -33,15 +33,16 @@
         </view>
         <template v-if="diyStore.mode == '' && data.global.bottomTabBarSwitch">
             <view class="pt-[20rpx]"></view>
-            <tabbar />
+            <tabbar :addon="tabbarAddonName" />
         </template>
     </view>
 </template>
 <script lang="ts" setup>
    import useDiyStore from '@/app/stores/diy';
-   import { onMounted, nextTick, computed, ref,watch } from 'vue';
+   import { onMounted, nextTick, computed } from 'vue';
    import Sortable from 'sortablejs';
    import { range } from 'lodash-es';
+   import useConfigStore from '@/stores/config'
    const props = defineProps(['data','pullDownRefreshCount']);
    const diyStore = useDiyStore();
 
@@ -51,6 +52,10 @@
        } else {
            return props.data;
        }
+   })
+
+   const tabbarAddonName = computed(() => {
+       return useConfigStore().addon;
    })
 
    onMounted(() => {

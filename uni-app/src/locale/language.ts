@@ -32,40 +32,49 @@ class Language {
      */
     public async loadLocaleMessages(path: string, locale: string) {
         try {
-            // 检测当前访问的是系统（app）还是插件
-            const pathArr = path.split('/')
-            let route = pathArr[1] == 'app' ? pathArr[1] : pathArr[2];
-
-            let file = path == '/' ? 'pages.index.index' : path.replace('/', '').replaceAll('/', '.')
-
-            // 如果是系统页面，则移除“app.”
-            if (route == 'app') {
-                file = file.replace('app.', '')
-            } else {
-                file = file.replace(`addon.${route}.`, '')
-            }
+            const { route, file, fileKey } = this.getFileKey(path)
 
             // 是否已加载
-            if (this.loadLocale.includes(`${file}.${locale}`)) {
+            if (this.loadLocale.includes(`${fileKey}.${locale}`)) {
                 this.setI18nLanguage(locale, file)
                 return nextTick()
             }
-            this.loadLocale.push(`${file}.${locale}`)
+            this.loadLocale.push(`${fileKey}.${locale}`)
 
             // 引入语言包文件
             const messages = await import(route == 'app' ? `../${route}/locale/${locale}/${file}.json` : `../addon/${route}/locale/${locale}/${file}.json`)
             let data: Record<string, string> = {}
             Object.keys(messages.default).forEach(key => {
-                data[`${file}.${key}`] = messages.default[key]
+                data[`${fileKey}.${key}`] = messages.default[key]
             })
+
             this.i18n.global.mergeLocaleMessage(locale, data)
             this.setI18nLanguage(locale, file)
 
             return nextTick()
         } catch (e) {
+            console.log(e)
             this.setI18nLanguage(locale)
             return nextTick()
         }
+    }
+
+    public getFileKey = (path: string) => {
+        const pathArr = path.split('/')
+        let route = pathArr[1] == 'app' ? pathArr[1] : pathArr[2];
+
+        let file = path == '/' ? 'pages.index.index' : path.replace('/', '').replaceAll('/', '.')
+
+        // 如果是系统页面，则移除“app.”
+        let fileKey = ''
+        if (route == 'app') {
+            fileKey = file.replace('app.', '')
+            file = file.replace('app.', '')
+        } else {
+            fileKey = file.replace(`addon.`, '')
+            file = file.replace(`addon.${route}.`, '')
+        }
+        return { file, fileKey, route }
     }
 }
 

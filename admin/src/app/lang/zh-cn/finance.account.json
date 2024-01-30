@@ -11,7 +11,7 @@
     "totalPay":"累计收款（元）",
     "totalRefund":"累计退款（元）",
     "totalTransfer":"累计转账（元）",
-	"accountType": "请选择退款类型",
+	"accountType": "请选择账单类型",
 	"startDate": "开始时间",
 	"endDate": "结束时间",
 	"transferNo" : "转账单号",
@@ -22,5 +22,6 @@
 	"outTradeNo": "单号",
 	"refundMoney": "退款金额",
 	"failReason": "退款说明",
-	"body": "说明"
+	"body": "说明",
+	"all": "全部"
 }

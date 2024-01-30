@@ -39,7 +39,7 @@ class SiteAccountLogService extends BaseAdminService
     {
 
         $field = 'id, site_id, type, money, trade_no, create_time';
-        $search_model = $this->model->where([ [ 'site_id', '=', $this->site_id ] ])->withSearch([ 'create_time', 'type' ], $where)->field($field)->append([ 'type_name', 'pay_info', 'money' ])->order('create_time desc');
+        $search_model = $this->model->where([ [ 'site_id', '=', $this->site_id ] ])->withSearch([ 'create_time', 'type', 'trade_no' ], $where)->field($field)->append([ 'type_name', 'pay_info', 'money' ])->order('create_time desc');
         return $this->pageQuery($search_model);
     }
 

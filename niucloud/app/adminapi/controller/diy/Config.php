@@ -24,24 +24,37 @@ use think\Response;
 class Config extends BaseAdminController
 {
     /**
+     * 获取底部导航列表
+     * @return Response
+     */
+    public function getBottomList()
+    {
+        return success((new DiyConfigService())->getBottomList());
+    }
+
+    /**
      * 获取底部导航
      * @return Response
      */
-    public function getBottom()
+    public function getBottomConfig()
     {
-        return success((new DiyConfigService())->getBottomConfig());
+        $params = $this->request->params([
+            [ 'key', 'app' ],
+        ]);
+        return success((new DiyConfigService())->getBottomConfig($params[ 'key' ]));
     }
 
     /**
      * 设置底部导航
      * @return Response
      */
-    public function setBottom()
+    public function setBottomConfig()
     {
         $data = $this->request->params([
-            ['menu', []]
+            [ 'value', [] ],
+            [ 'key', 'app' ]
         ]);
-        (new DiyConfigService())->setBottomConfig($data['menu']);
+        (new DiyConfigService())->setBottomConfig($data[ 'value' ], $data[ 'key' ]);
         return success();
     }
 

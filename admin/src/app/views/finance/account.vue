@@ -44,9 +44,10 @@
 			</el-card>
 			<el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
 				<el-form :inline="true" :model="siteAccountLogTable.searchParam" ref="searchFormRef">
-					<el-form-item :label="t('type')" class="items-center">
+					<el-form-item :label="t('type')" class="items-center" prop="type">
 						<el-select v-model="siteAccountLogTable.searchParam.type" class="m-2"
 							:placeholder="t('accountType')">
+                            <el-option :label="t('all')" value="" />
 							<el-option v-for="(item, index) in accountType" :key="index" :label="item" :value="index" />
 						</el-select>
 					</el-form-item>

@@ -203,7 +203,7 @@ return [
     'dict_diy' => [
         'page_index' => '首页',
         'page_member_index' => '个人中心',
-        'page_diy' => '自定义页面',
+        'page_diy' => '微页面',
         'component_type_basic' => '基础组件',
 
         'system_title' => '系统',

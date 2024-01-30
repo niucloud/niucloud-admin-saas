@@ -67,9 +67,6 @@ class Login extends BaseAdminController
     }
 
     public function test(){
-//        (new CoreMenuService())->refreshAddonMenu('shop');
-//        (new CoreAddonDevelopBuildService())->build('shop');
-//        (new CoreFileService())->driver(0);
-        dd((new CoreOrderRefundService())->refundSuccess('20240118393625662873600'));
+        dd(rtrim(dirname(root_path()) . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR));
     }
 }

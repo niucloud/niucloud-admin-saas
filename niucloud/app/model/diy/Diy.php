@@ -73,7 +73,7 @@ class Diy extends BaseModel
     public function getTypePageAttr($value, $data)
     {
         if (!empty($data[ 'type' ])) {
-            return TemplateDict::getTemplate([ 'type' => [ $data[ 'type' ] ] ])[ $data[ 'type' ] ][ 'page' ] ?? '';
+            return TemplateDict::getTemplate([ 'key' => [ $data[ 'type' ] ] ])[ $data[ 'type' ] ][ 'page' ] ?? '';
         }
         return '';
     }
@@ -87,7 +87,7 @@ class Diy extends BaseModel
     public function getTypeNameAttr($value, $data)
     {
         if (!empty($data[ 'type' ])) {
-            return TemplateDict::getTemplate([ 'type' => [ $data[ 'type' ] ] ])[ $data[ 'type' ] ][ 'title' ] ?? '';
+            return TemplateDict::getTemplate([ 'key' => [ $data[ 'type' ] ] ])[ $data[ 'type' ] ][ 'title' ] ?? '';
         }
         return '';
     }

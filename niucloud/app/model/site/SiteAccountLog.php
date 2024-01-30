@@ -95,6 +95,13 @@ class SiteAccountLog extends BaseModel
         }
     }
 
+    public function searchTradeNoAttr($query, $value, $data)
+    {
+        if ($value) {
+            $query->where('trade_no', 'like', "%$value%");
+        }
+    }
+
     /**
      * 创建时间搜索器
      * @param Query $query

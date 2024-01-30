@@ -134,7 +134,7 @@ class CorePayEventService extends BaseCoreService
                         $pay_fun = 'wap';
                         break;
                     case ChannelDict::PC://pc
-                        $pay_fun = 'web';
+                        $pay_fun = 'scan';
                         break;
                     case ChannelDict::APP://app
                         $pay_fun = 'app';

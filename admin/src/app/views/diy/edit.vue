@@ -258,11 +258,13 @@ const goBack = () => {
 
 // 动态加载后台自定义组件编辑
 const modulesFiles = import.meta.glob('./components/*.vue', { eager: true })
+const addonModulesFiles = import.meta.glob('@/addon/**/views/diy/components/*.vue', { eager: true })
+addonModulesFiles && Object.assign(modulesFiles, addonModulesFiles)
 
 const modules = {}
 for (const [key, value] of Object.entries(modulesFiles)) {
-    const moduleName = key.replace(/^\.\/(.*)\.\w+$/, '$1')
-    const name = moduleName.split('/')[1]
+    const moduleName = key.split('/').pop()
+    const name = moduleName.split('.')[0]
     modules[name] = value.default
 }
 

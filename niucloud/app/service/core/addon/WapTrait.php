@@ -109,7 +109,7 @@ trait WapTrait
         $content .= "        </view>\n";
         $content .= "        <template v-if=\"diyStore.mode == '' && data.global.bottomTabBarSwitch\">\n";
         $content .= "            <view class=\"pt-[20rpx]\"></view>\n";
-        $content .= "            <tabbar />\n";
+        $content .= "            <tabbar :addon=\"tabbarAddonName\" />\n";
         $content .= "        </template>\n";
         $content .= "    </view>\n";
         $content .= "</template>\n";
@@ -121,9 +121,10 @@ trait WapTrait
         }
 
         $content .= "   import useDiyStore from '@/app/stores/diy';\n";
-        $content .= "   import { onMounted, nextTick, computed, ref,watch } from 'vue';\n";
+        $content .= "   import { onMounted, nextTick, computed } from 'vue';\n";
         $content .= "   import Sortable from 'sortablejs';\n";
         $content .= "   import { range } from 'lodash-es';\n";
+        $content .= "   import useConfigStore from '@/stores/config'\n";
 
         $content .= "   const props = defineProps(['data','pullDownRefreshCount']);\n";
         $content .= "   const diyStore = useDiyStore();\n\n";
@@ -134,6 +135,10 @@ trait WapTrait
         $content .= "       } else {\n";
         $content .= "           return props.data;\n";
         $content .= "       }\n";
+        $content .= "   })\n\n";
+
+        $content .= "   const tabbarAddonName = computed(() => {\n";
+        $content .= "       return useConfigStore().addon;\n";
         $content .= "   })\n\n";
 
         $content .= "   onMounted(() => {\n";

@@ -47,8 +47,8 @@
                             :placeholder="t('memberInfoPlaceholder')" />
                     </el-form-item>
 
-                    <el-form-item :label="t('balanceType')" prop="from_type">
-                        <el-select v-model="memberAccountLogTableData.balance_type" clearable
+                    <el-form-item :label="t('balanceType')" prop="balance_type">
+                        <el-select v-model="memberAccountLogTableData.searchParam.balance_type" clearable
                             :placeholder="t('fromTypePlaceholder')" class="input-width" @change="checkAccountType">
                             <el-option :label="t('selectPlaceholder')" value="" />
                             <el-option :label="item.name" :value="item.type" v-for="(item, key) in balanceStatus" :key="key"/>
@@ -81,7 +81,7 @@
                     <template #empty>
                         <span>{{ !memberAccountLogTableData.loading ? t('emptyData') : '' }}</span>
                     </template>
-                    <el-table-column prop="member_id" :label="t('memberId')" min-width="80" :show-overflow-tooltip="true">
+                    <el-table-column prop="member_id" :label="t('memberId')" min-width="100" :show-overflow-tooltip="true">
                         <template #default="{ row }">
                             {{ row.member.member_no }}
                         </template>
@@ -104,10 +104,12 @@
                             {{ row.member.mobile || '' }}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="account_data" :label="t('accountData')" min-width="70" align="right">
+                    <el-table-column prop="account_data" :label="t('accountData')" min-width="100" align="right">
                         <template #default="{ row }">
-                            <span v-if="row.account_data >= 0">+{{ row.account_data }}</span>
-                            <span v-else>{{ row.account_data }}</span>
+                            <div class="whitespace-nowrap">
+                                <span v-if="row.account_data >= 0">+{{ row.account_data }}</span>
+                                <span v-else>{{ row.account_data }}</span>
+                            </div>
                         </template>
                     </el-table-column>
                     <el-table-column prop="account_sum" :label="t('accountSum')" min-width="110" align="right" />
@@ -165,10 +167,9 @@ const memberAccountLogTableData = reactive({
         from_type: '',
         create_time: '',
         mobile: '',
-        member_id: member_id
-
-    },
-    balance_type: ''
+        member_id: member_id,
+        balance_type: ''
+    }
 })
 
 const fromTypeList = ref([])
@@ -193,7 +194,7 @@ const resetForm = (formEl: FormInstance | undefined) => {
 const loadMemberAccountLogList = (page: number = 1) => {
     memberAccountLogTableData.loading = true
     memberAccountLogTableData.page = page
-    if (memberAccountLogTableData.balance_type == '' || memberAccountLogTableData.balance_type == 'balance') {
+    if (memberAccountLogTableData.searchParam.balance_type == '' || memberAccountLogTableData.searchParam.balance_type == 'balance') {
         getBalanceList({
             page: memberAccountLogTableData.page,
             limit: memberAccountLogTableData.limit,
@@ -267,12 +268,13 @@ const checkBalanceStatus = () => {
 checkBalanceStatus()
 
 const checkAccountType = () => {
-    let account_type = memberAccountLogTableData.balance_type
-    if (memberAccountLogTableData.balance_type == '') {
-        account_type = 'balance'
+    let accountType = memberAccountLogTableData.searchParam.balance_type
+
+    if (accountType == '') {
+        accountType = 'balance'
     }
     getAccountType({
-        account_type
+        account_type: accountType
     }).then(res => {
         fromTypeList.value = res.data
     })

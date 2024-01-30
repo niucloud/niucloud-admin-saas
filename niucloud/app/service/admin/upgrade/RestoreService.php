@@ -32,7 +32,7 @@ class RestoreService extends UpgradeService
             if (is_dir(public_path() . 'wap')) del_target_dir(public_path() . 'wap', true);
             if (is_dir(public_path() . 'web')) del_target_dir(public_path() . 'web', true);
 
-            dir_copy($backup_dir, $this->root_path);
+            dir_copy($backup_dir, rtrim($this->root_path, DIRECTORY_SEPARATOR));
         }
         return true;
     }

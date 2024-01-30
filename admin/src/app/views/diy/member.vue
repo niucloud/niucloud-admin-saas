@@ -28,7 +28,9 @@
 
         <div class="w-[500px]">
             <div class="flex flex-wrap">
-                <el-button type="primary" @click="toDecorate()" v-show="page.use_template.action == 'decorate'" class="mr-[12px]">{{ t('decorate') }}</el-button>
+                <!-- 多应用切换启动页 -->
+                <el-button type="primary" @click="showDialog = true" v-if="siteApps.length > 1">{{ t('changePage') }}</el-button>
+                <el-button type="primary" @click="toDecorate()" v-show="page.use_template.action == 'decorate'" class="ml-[12px]">{{ t('decorate') }}</el-button>
             </div>
 
             <div class="info-wrap">
@@ -37,10 +39,10 @@
                     <div>
                         <div class="font-bold">{{ t('H5') }}</div>
 						<el-form label-width="40px" class="mt-[5px]">
-							<el-form-item :label="t('link')" v-show="page.use_template.wapPreview" class="mb-[5px]">
-								<el-input readonly :value="page.use_template.wapPreview">
+							<el-form-item :label="t('link')" class="mb-[5px]">
+								<el-input readonly :value="page.shareUrl">
 									<template #append>
-										<el-button @click="copyEvent(page.use_template.wapPreview)" class="bg-primary copy">{{ t('copy') }}</el-button>
+										<el-button @click="copyEvent(page.shareUrl)" class="bg-primary copy">{{ t('copy') }}</el-button>
 									</template>
 								</el-input>
 							</el-form-item>
@@ -59,18 +61,45 @@
 
     </div>
 
+    <el-dialog v-model="showDialog" :title="t('pageSelectTips')" width="400px" :close-on-press-escape="false" :destroy-on-close="true" :close-on-click-modal="false">
+        <div class="flex items-start">
+            <el-scrollbar class="pl-4 h-[300px] flex-1">
+                <div class="flex flex-wrap">
+                    <div v-for="(item, key) in pageType" :key="key"
+                         class="border border-br rounded-[3px] mr-[10px] mb-[10px] px-4 h-[32px] leading-[32px] cursor-pointer hover:bg-primary-light-9 px-[10px] hover:text-primary"
+                         :class="[key == link.name ? 'border-primary text-primary' : '']"
+                         @click="changeLink(key,item)">{{ item.title }}
+                    </div>
+                </div>
+            </el-scrollbar>
+        </div>
+
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="showDialog = false">{{ t('cancel') }}</el-button>
+                <el-button type="primary" @click="changePage()">{{ t('confirm') }}</el-button>
+            </span>
+        </template>
+    </el-dialog>
+
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref, watch } from 'vue'
+import { reactive, ref, watch, computed } from 'vue'
 import { t } from '@/lang'
 import { img } from '@/utils/common'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { getDecoratePage, changeTemplate } from '@/app/api/diy'
+import { getDecoratePage, changeTemplate,getDiyTemplate } from '@/app/api/diy'
 import storage from '@/utils/storage'
 import QRCode from 'qrcode'
 import { useClipboard } from '@vueuse/core'
+import useUserStore from '@/stores/modules/user'
+
+const userStore = useUserStore()
+const siteApps = computed(()=>{
+    return userStore.siteInfo.apps;
+})
 
 const type: any = ref('DIY_MEMBER_INDEX');
 const page: any = reactive({})
@@ -81,14 +110,23 @@ const link = ref({
     name: ''
 })
 
-// 添加自定义页面
+// 切换页面
 const formData = reactive({
     type: '',
     name: '',
-    parent:'',
     page: '',
     title: '',
     action: ''
+})
+
+const showDialog = ref(false)
+const pageType: any = reactive({}) // 页面类型
+
+// 获取自定义页面类型
+getDiyTemplate({ type: 'member_index' }).then(res => {
+    for (const key in res.data) {
+        pageType[key] = res.data[key]
+    }
 })
 
 // 初始化数据
@@ -104,7 +142,6 @@ const refreshData = () => {
         link.value.title = page.use_template.title;
         link.value.page = page.use_template.page;
         link.value.action = page.use_template.action;
-        link.value.parent = page.use_template.parent;
 
         if (page.use_template.url) {
             page.loadingIframe = false // 加载iframe
@@ -197,7 +234,8 @@ const settingTips = () => {
 
 const setDomain = () => {
     page.use_template.wapPreview = page.wapUrl + page.use_template.url
-    QRCode.toDataURL(page.use_template.wapPreview, { errorCorrectionLevel: 'L', margin: 0, width: 100 }).then(url => {
+    page.shareUrl = page.wapUrl + page.page;
+    QRCode.toDataURL(page.shareUrl, { errorCorrectionLevel: 'L', margin: 0, width: 100 }).then(url => {
         wapImage.value = url
     })
     page.timeIframe = new Date().getTime()
@@ -243,14 +281,22 @@ const toPreview = () => {
     window.open(url.href)
 }
 
+// 切换页面链接
+const changeLink = (key:any,item: any) => {
+    link.value.name = key;
+    link.value.page = item.page;
+    link.value.title = item.title;
+    link.value.action = item.action;
+}
+
 const isRepeat = ref(false)
+
 const changePage = ()=>{
     formData.type = type.value;
     formData.name = link.value.name;
-    formData.page = link.value.url;
+    formData.page = link.value.page;
     formData.title = link.value.title;
     formData.action = link.value.action;
-    formData.parent = link.value.parent;
 
     if (isRepeat.value) return
     isRepeat.value = true
@@ -259,6 +305,7 @@ const changePage = ()=>{
         ...formData
     }).then((res) => {
         isRepeat.value = false
+        showDialog.value = false;
         refreshData()
     })
 }

@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center mb-[5px]">
-                <span class="text-[20x]">{{ pageName }}</span>
+                <span class="text-[20px]">{{ pageName }}</span>
             </div>
             <el-card class="box-card !border-none base-bg !px-[35px]" shadow="never">
                 <el-row class="flex">

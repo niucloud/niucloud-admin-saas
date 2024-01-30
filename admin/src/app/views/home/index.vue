@@ -25,38 +25,46 @@
                 </div>
                 <el-input v-model="params.keywords" class="!w-[300px] !h-[34px]" placeholder="输入要搜索的站点名称" @keyup.enter.native="query">
                     <template #suffix>
-                        <el-icon @click.stop="query" class="cursor-pointer">
+                        <el-icon @click.stop="getHomeSiteFn()" class="cursor-pointer">
                             <Search />
                         </el-icon>
                     </template>
                 </el-input>
             </div>
 
-            <div class="flex flex-wrap mt-[30px]" v-loading="loading">
-                <div v-for="(item, index) in tableData" :key="index" @click="selectSite(item)"
-                    :class="['home-item w-[285px] box-border mb-[20px] cursor-pointer',{'mr-[20px]': index ==0 || (index+1)%4 != 0}]">
-                    <div class="flex items-center px-[24px] pt-[22px] pb-[16px] bg-[#F0F2F4] home-item-head">
-                        <img v-if="item.logo" class="w-[48px] h-[48px] mr-[15px] rounded-[50%] overflow-hidden" :src="img(item.logo)" />
-                        <img v-else class="w-[48px] h-[48px] mr-[15px] rounded-[50%] overflow-hidden" src="@/app/assets/images/member_head.png" />
-                        <div class="flex flex-col flex-1 justify-center">
-                            <div class="flex items-center flex-wrap">
-                                <span class="text-[16px] text-[#000] max-w-[145px] font-bold truncate mr-[10px]">{{item.site_name}}</span>
-                                <div class="flex items-center justify-center min-w-[42px] h-[18px] bg-[#FF5500] rounded-tl-md rounded-br-md items-tab" v-if="item.app_name">
-                                    <span class="text-[12px] text-[#fff]">{{item.app_name}}</span>
+            <div class="min-h-[580px]">
+                <div class="flex flex-wrap mt-[30px]" v-loading="loading">
+                    <div v-for="(item, index) in tableData" :key="index" @click="selectSite(item)"
+                        :class="['home-item w-[285px] box-border mb-[20px] cursor-pointer',{'mr-[20px]': index ==0 || (index+1)%4 != 0}]">
+                        <div class="flex items-center px-[24px] pt-[22px] pb-[16px] bg-[#F0F2F4] home-item-head">
+                            <img v-if="item.logo" class="w-[48px] h-[48px] mr-[15px] rounded-[50%] overflow-hidden" :src="img(item.logo)" />
+                            <img v-else class="w-[48px] h-[48px] mr-[15px] rounded-[50%] overflow-hidden" src="@/app/assets/images/member_head.png" />
+                            <div class="flex flex-col flex-1 justify-center">
+                                <div class="flex items-center flex-wrap">
+                                    <span class="text-[16px] text-[#000] max-w-[145px] font-bold truncate mr-[10px]">{{item.site_name}}</span>
+                                    <div class="flex items-center justify-center min-w-[42px] h-[18px] bg-[#FF5500] rounded-tl-md rounded-br-md items-tab" v-if="item.app_name">
+                                        <span class="text-[12px] text-[#fff]">{{item.app_name}}</span>
+                                    </div>
                                 </div>
+                                <span class="text-[12px] mt-[3px] text-[#555]">{{item.create_time ? item.create_time.split(" ")[0] : '--'}} 到 {{item.expire_time ? item.expire_time.split(" ")[0] : '--'}}</span>
                             </div>
-                            <span class="text-[12px] mt-[3px] text-[#555]">{{item.create_time ? item.create_time.split(" ")[0] : '--'}} 到 {{item.expire_time ? item.expire_time.split(" ")[0] : '--'}}</span>
+                        </div>
+                        <div class="px-[24px] py-[20px] text-[#6D7278]">
+                            <p class="text-[14px]">站点编号：{{item.site_id}}</p>
+                            <p class="text-[14px] mt-[2px]">站点套餐：{{item.group_name || '--'}}</p>
                         </div>
                     </div>
-                    <div class="px-[24px] py-[20px] text-[#6D7278]">
-                        <p class="text-[14px]">站点编号：{{item.site_id}}</p>
-                        <p class="text-[14px] mt-[2px]">站点套餐：{{item.group_name || '--'}}</p>
+                    <div v-if="!tableData.length && !loading" class="m-auto">
+                        <img src="@/app/assets/images/empty.png"/>
+                        <p class="text-center text-gray-400">暂无站点</p>
                     </div>
                 </div>
-                <div v-if="!tableData.length && !loading" class="m-auto">
-                    <img src="@/app/assets/images/empty.png"/>
-                    <p class="text-center text-gray-400">暂无站点</p>
-                </div>
+            </div>
+
+            <div class="mt-[16px] flex justify-end">
+                <el-pagination v-model:current-page="site.params.page" v-model:page-size="site.params.limit"
+                    layout="total, sizes, prev, pager, next, jumper" :total="site.total"
+                    @size-change="getHomeSiteFn()" @current-change="getHomeSiteFn" :hide-on-single-page="true"/>
             </div>
         </div>
     </div>
@@ -75,7 +83,7 @@ import { ElMessage } from 'element-plus'
 import { AnyObject } from '@/types/global'
 const userStore:AnyObject = useUserStore()
 
-interface State{
+interface Site{
     params: {
         keywords: string,
         page: number,
@@ -92,10 +100,11 @@ interface State{
         expire_time: string,
         site_id: number,
         group_name: string
-    }[]
+    }[],
+    total: 0
 }
 
-const state:State = reactive({
+const site:Site = reactive({
     params: {
         keywords: '',
         page: 1,
@@ -104,24 +113,27 @@ const state:State = reactive({
         sort: false
     },
     loading: false,
-    tableData: []
+    tableData: [],
+    total: 0
 })
 
-const { params, loading, tableData } = toRefs(state)
-const getHomeSiteFn = () => {
-    state.loading = true
-    getHomeSite(state.params).then(res => {
-        state.tableData = res.data.data
-        state.loading = false
+const { params, loading, tableData } = toRefs(site)
+const getHomeSiteFn = (page: number = 1) => {
+    site.params.page = page
+    site.loading = true
+    getHomeSite(site.params).then(res => {
+        site.tableData = res.data.data
+        site.total = res.data.total
+        site.loading = false
     }).catch(() => {
-        state.loading = false
+        site.loading = false
     })
 }
 getHomeSiteFn()
 
 // 切换应用
 const cutAppFn = (app:any) => {
-    state.params.app = app
+    site.params.app = app
     getHomeSiteFn()
 }
 
@@ -137,17 +149,12 @@ const getWebConfigFn = () => {
 }
 getWebConfigFn()
 
-const query = () => {
-    state.params.page = 1
-    getHomeSiteFn()
-}
-
 const selectSite = (site: any) => {
     storage.set({ key: 'siteId', data: site.site_id })
     storage.set({ key: 'siteInfo', data: site })
     storage.set({ key: 'comparisonSiteIdStorage', data: site.site_id })
-    useUserStore().$patch((state) => {
-        state.siteInfo = site
+    useUserStore().$patch((site) => {
+        site.siteInfo = site
     })
     location.href = `${location.origin}/site/`
 }

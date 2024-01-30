@@ -60,6 +60,9 @@ $system_event = [
         'AdminIndex' => [
             'app\listener\system\AdminIndexListener'
         ],
+        'BottomNavigation' => [
+            'app\listener\system\BottomNavigationListener'
+        ],
         //消息模板数据内容
         'NoticeData' => [
             'app\listener\notice_template\VerifyCode',//手机验证码

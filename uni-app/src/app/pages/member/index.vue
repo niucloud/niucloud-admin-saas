@@ -5,8 +5,7 @@
 		<view v-show="!loading">
 
 			<!-- 自定义模板渲染 -->
-			<view class="diy-template-wrap bg-index" v-if="data.pageMode != 'fixed'"
-				:style="{ backgroundColor: data.global.pageBgColor,minHeight: 'calc(100vh - 50px)',backgroundImage : data.global.bgUrl ? 'url(' +  img(data.global.bgUrl) + ')' : '' }">
+			<view class="diy-template-wrap bg-index" v-if="data.pageMode != 'fixed'" :style="{ backgroundColor: data.global.pageBgColor,minHeight: 'calc(100vh - 50px)',backgroundImage : data.global.bgUrl ? 'url(' +  img(data.global.bgUrl) + ')' : '' }">
 
 				<diy-group :data="data" :pullDownRefresh="pullDownRefresh"></diy-group>
 
@@ -29,7 +28,7 @@
 	import { getDiyInfo } from '@/app/api/diy'
 	import useDiyStore from '@/app/stores/diy'
 	import useMemberStore from '@/stores/member'
-	import { img } from '@/utils/common';
+	import { img,redirect } from '@/utils/common';
 
 	const loading = ref(true);
 	const diyStore = useDiyStore();
@@ -74,8 +73,8 @@
 			getDiyInfo({
 				name: 'DIY_MEMBER_INDEX'
 			}).then((res : any) => {
-				if (res.data.value) {
-					let data = res.data;
+                let data = res.data;
+                if (data.value) {
 					diyData.pageMode = data.mode;
 					diyData.title = data.title;
 
@@ -95,7 +94,10 @@
 					uni.setNavigationBarTitle({
 						title: diyData.title
 					})
-				}
+				}else if (data.page) {
+                    // 跳转到设置的个人中心
+                    redirect({ url: data.page })
+                }
 				loading.value = false;
 			});
 		}

@@ -12,7 +12,7 @@
                         <el-input v-model="diyPageTableData.searchParam.title" :placeholder="t('titlePlaceholder')" />
                     </el-form-item>
                     <el-form-item :label="t('forAddon')" prop="addon_name">
-                        <el-select v-model="diyPageTableData.searchParam.addon_name" :placeholder="t('pageTypePlaceholder')">
+                        <el-select v-model="diyPageTableData.searchParam.addon_name" :placeholder="t('pageTypePlaceholder')" @change="handleSelectAddonChange">
                             <el-option :label="t('all')" value="" />
                             <el-option v-for="(item, key) in apps" :label="item.title" :value="key" :key="key"/>
                         </el-select>
@@ -179,11 +179,19 @@ const getDomain = async () => {
 getDomain()
 
 // 获取自定义页面类型
-getDiyTemplate({ mode: '' }).then(res => {
-    for (const key in res.data) {
-        pageType[key] = res.data[key]
-    }
-})
+const loadDiyTemplate = (addon = '')=> {
+    getDiyTemplate({mode: '', addon}).then(res => {
+        for (let key in pageType) {
+            delete pageType[key];
+        }
+
+        for (const key in res.data) {
+            pageType[key] = res.data[key]
+        }
+    })
+}
+
+loadDiyTemplate();
 
 const apps: any = reactive({}) // 应用插件列表
 
@@ -194,6 +202,12 @@ getApps({}).then(res=>{
         }
     }
 });
+
+// 根据所属插件，查询页面类型
+const handleSelectAddonChange = (value: any) => {
+    diyPageTableData.searchParam.type = '';
+    loadDiyTemplate(value)
+}
 
 const diyPageTableData: any = reactive({
     page: 1,

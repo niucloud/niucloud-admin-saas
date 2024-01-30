@@ -30,8 +30,9 @@ class DiyRoute extends BaseAdminController
     public function lists()
     {
         $data = $this->request->params([
-            [ 'title', '' ],
-            [ 'addon_name', '' ]
+            [ 'title', '' ], // 页面名称
+            [ 'url', '' ], // 路由地址，格式：/app/pages/index/index
+            [ 'addon_name', '' ] // 插件标识
         ]);
         return success((new DiyRouteService())->getList($data));
     }
@@ -119,6 +120,16 @@ class DiyRoute extends BaseAdminController
         ]);
         (new DiyRouteService())->modifyShare($data);
         return success('MODIFY_SUCCESS');
+    }
+
+
+    /**
+     * 获取模板页面（存在的应用插件列表）
+     * @return Response
+     */
+    public function getApps()
+    {
+        return success((new DiyRouteService())->getApps());
     }
 
 }

@@ -6,6 +6,7 @@ use app\dict\pay\OnlinePayDict;
 use app\dict\pay\RefundDict;
 use app\dict\pay\TransferDict;
 use core\exception\PayException;
+use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 use Yansongda\Pay\Exception\ContainerException;
@@ -54,6 +55,7 @@ class Alipay extends BasePay
             'out_trade_no' => $params['out_trade_no'],
             'total_amount' => $params['money'],
             'subject' => $params['boby'],
+            '_method' => 'get',
         ]));
     }
 
@@ -184,6 +186,9 @@ class Alipay extends BasePay
             'out_trade_no' => $out_trade_no,
         ]));
         //todo  支付宝关闭异步回调
+        if (isset($result['sub_code']) && in_array($result['sub_code'], ['ACQ.REASON_ILLEGAL_STATUS', 'ACQ.REASON_TRADE_STATUS_INVALID', 'ACQ.TRADE_NOT_EXIST', 'ACQ.TRADE_STATUS_ERROR'])) {
+            return true;
+        }
         if (!empty($result['msg']) && $result['msg'] == 'Success') {
             return true;
         } else {

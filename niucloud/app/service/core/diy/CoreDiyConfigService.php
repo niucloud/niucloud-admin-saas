@@ -22,64 +22,69 @@ use think\Model;
  * Class CoreDiyConfigService
  * @package app\service\core\diy
  */
-class  CoreDiyConfigService extends BaseCoreService
+class CoreDiyConfigService extends BaseCoreService
 {
+    public function getBottomList($params = [])
+    {
+        $list = array_values(array_filter(event('BottomNavigation', $params)));
+        $app_bottom_nav_config = [];
+        foreach ($list as $k => &$v) {
+
+            // 将系统底部导航放到第一个位置
+            if ($v[ 'key' ] == 'app') {
+                $app_bottom_nav_config = $v;
+                unset($list[ $k ]);
+            }
+        }
+        $list = array_values($list);
+        if (!empty($app_bottom_nav_config)) {
+            array_unshift($list, $app_bottom_nav_config);
+        }
+        return $list;
+    }
+
     /**
-     * 获取底部导航
+     * 获取底部导航配置
      * @param int $site_id
+     * @param string $key
      * @return array
      */
-    public function getBottomConfig(int $site_id)
+    public function getBottomConfig(int $site_id, string $key = 'app')
     {
-        $info = (new CoreConfigService())->getConfig($site_id, ConfigKeyDict::DIY_BOTTOM)[ 'value' ] ?? [];
-        if (empty($info)) {
-            $info = [
-                'backgroundColor' => '#ffffff',
-                'textColor' => '#606266',
-                'textHoverColor' => '#007aff',
-                'type' => 1,
-                'list' => [
-                    [
-                        "text" => "首页",
-                        "link" => [
-                            "parent" => "SYSTEM_LINK",
-                            "name" => "INDEX",
-                            "title" => "首页",
-                            "url" => "/app/pages/index/index"
-                        ],
-                        "iconPath" => "static/resource/images/tabbar/index.png",
-                        "iconSelectPath" => "static/resource/images/tabbar/index-selected.png"
-                    ],
-                    [
-                        "text" => "会员",
-                        "link" => [
-                            "parent" => "MEMBER_LINK",
-                            "name" => "MEMBER_CENTER",
-                            "title" => "个人中心",
-                            "url" => "/app/pages/member/index"
-                        ],
-                        "iconPath" => "static/resource/images/tabbar/my.png",
-                        "iconSelectPath" => "static/resource/images/tabbar/my-selected.png"
-                    ]
-                ]
-            ];
+        $default_config = $this->getBottomList([ 'key' => $key ])[ 0 ] ?? [];
+
+        $config_key = ConfigKeyDict::DIY_BOTTOM . '_' . $key;
+        $info = (new CoreConfigService())->getConfig($site_id, $config_key)[ 'value' ] ?? [];
+
+        if (!empty($default_config)) {
+            if (!empty($info)) {
+                $value = $info;
+                $res[ 'key' ] = $default_config[ 'key' ];
+                $res[ 'info' ] = $default_config[ 'info' ];
+                $res[ 'value' ] = $value;
+                $info = $res;
+            } else {
+                $info = $default_config;
+            }
         }
         return $info;
     }
 
     /**
-     * 配置底部导航
+     * 设置底部导航
      * @param int $site_id
      * @param array $data
+     * @param string $key
      * @return SysConfig|bool|Model
      */
-    public function setBottomConfig(int $site_id, array $data)
+    public function setBottomConfig(int $site_id, array $data, string $key = 'app')
     {
-        return (new CoreConfigService())->setConfig($site_id, ConfigKeyDict::DIY_BOTTOM, $data);
+        return (new CoreConfigService())->setConfig($site_id, ConfigKeyDict::DIY_BOTTOM . '_' . $key, $data);
     }
 
     /**
      * 设置启动页
+     * @param int $site_id
      * @param array $data
      * @return SysConfig|bool|Model
      */
@@ -90,7 +95,8 @@ class  CoreDiyConfigService extends BaseCoreService
 
     /**
      * 获取启动页配置
-     * @param $name
+     * @param int $site_id
+     * @param string $type
      * @return array
      */
     public function getStartUpPageConfig(int $site_id, string $type)

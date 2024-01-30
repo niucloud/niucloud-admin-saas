@@ -192,7 +192,7 @@ class DiyService extends BaseAdminService
             $diy_config_service = new DiyConfigService();
             $start_up_page = $diy_config_service->getStartUpPageConfig($params[ 'name' ]);
             if (!empty($start_up_page)) {
-                if ($start_up_page[ 'parent' ] == 'DIY_PAGE') {
+                if (!empty($start_up_page[ 'parent' ]) && $start_up_page[ 'parent' ] == 'DIY_PAGE') {
                     $id = str_replace('/app/pages/index/diy?id=', '', $start_up_page[ 'page' ]);
                     $data = $this->getInfo($id);
                     if (!empty($data)) {
@@ -375,8 +375,8 @@ class DiyService extends BaseAdminService
         foreach ($page_template as $k => $v) {
             // 查询页面数据
             $page_params = [
-                'type' => $k,
-                'mode' => $params[ 'mode' ] ?? ''
+                'type' => $k, // 页面类型
+                'mode' => $params[ 'mode' ] ?? '' // 页面模式：diy：自定义，fixed：固定
             ];
             $page_template[ $k ][ 'template' ] = PagesDict::getPages($page_params);
         }
@@ -398,11 +398,12 @@ class DiyService extends BaseAdminService
     /**
      * 获取默认页面数据
      * @param $type
+     * @param string $addon
      * @return array|mixed
      */
-    public function getFirstPageData($type)
+    public function getFirstPageData($type, $addon = '')
     {
-        $pages = PagesDict::getPages([ 'type' => $type ]);
+        $pages = PagesDict::getPages([ 'type' => $type, 'addon' => $addon ]);
         if (!empty($pages)) {
             $template = array_key_first($pages);
             $page = array_shift($pages);
@@ -425,15 +426,12 @@ class DiyService extends BaseAdminService
     {
 
         // 查询当前装修的页面信息
-        $template = $this->getTemplate([ 'action' => 'decorate', 'type' => [ $params[ 'type' ] ] ])[ $params[ 'type' ] ];
+        $template = $this->getTemplate([ 'action' => 'decorate', 'key' => [ $params[ 'type' ] ] ])[ $params[ 'type' ] ];
 
         $template[ 'domain_url' ] = (new SystemService())->getUrl();
 
         // 查询默认页面数据
         $default_page_data = $this->getFirstPageData($params[ 'type' ]);
-
-        // 查询其他页面，排除特定页面（不能分享的页面）
-        $other_page = (new DiyRouteService())->getList();
 
         $use_template = [
             'type' => $params[ 'type' ], // 页面类型标识
@@ -460,18 +458,10 @@ class DiyService extends BaseAdminService
             $use_template[ 'action' ] = $start_up_page[ 'action' ] ?? '';
             $use_template[ 'url' ] = $use_template[ 'page' ];
             $use_template[ 'parent' ] = $start_up_page[ 'parent' ] ?? '';
+
         } elseif (!empty($info)) {
             $use_template[ 'id' ] = $info[ 'id' ];
             $use_template[ 'title' ] = $info[ 'title' ];
-
-            // 查询链接的名称标识
-            foreach ($other_page as $ck => $cv) {
-                if ($cv[ 'page' ] == $use_template[ 'page' ]) {
-                    $use_template[ 'name' ] = $cv[ 'name' ];
-                    $use_template[ 'parent' ] = $cv[ 'parent' ];
-                    break;
-                }
-            }
 
             // 查询模板页面数据
             $page_data = $this->getPageData($params[ 'type' ], $info[ 'template' ]);
@@ -484,6 +474,15 @@ class DiyService extends BaseAdminService
                 // 清空模板信息
                 $use_template[ 'cover' ] = ''; // 默认图
             }
+        }
+
+        // 查询链接的名称标识，保证数据准确性
+        $other_page = (new DiyRouteService())->getList([ 'url' => $use_template[ 'page' ] ]);
+        if (!empty($other_page)) {
+            $use_template[ 'title' ] = $other_page[ 0 ][ 'title' ] ?? '';
+            $use_template[ 'name' ] = $other_page[ 0 ][ 'name' ];
+            $use_template[ 'parent' ] = $other_page[ 0 ][ 'parent' ];
+            $use_template[ 'action' ] = $other_page[ 0 ][ 'action' ];
         }
 
         // 如果没有预览图，并且没有地址，则赋值默认页面地址
@@ -517,7 +516,7 @@ class DiyService extends BaseAdminService
     }
 
     /**
-     * 获取模板页面的应用插件列表
+     * 获取模板页面（存在的应用插件列表）
      * @return array
      */
     public function getApps()

@@ -1,6 +1,8 @@
 {
   "decorate": "装修",
+  "changePage": "设置",
   "preview": "预览",
+  "pageSelectTips": "页面选择",
   "developTitle": "开发环境配置",
   "wapDomain": "wap域名（WAP_DOMAIN）",
   "wapDomainPlaceholder": "请输入wap域名",

@@ -473,6 +473,7 @@ class UpgradeService extends BaseAdminService
             $this->clearUpgradeTask(5);
             return true;
         } catch (\Exception $e) {
+            $this->clearUpgradeTask(5);
             return true;
         }
     }

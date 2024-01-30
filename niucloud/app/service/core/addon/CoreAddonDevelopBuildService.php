@@ -72,11 +72,8 @@ class CoreAddonDevelopBuildService extends BaseCoreService
      */
     public function download(string $addon) {
         $zip_file = runtime_path() . $addon . '.zip';
-
         if (!file_exists($zip_file)) throw new AddonException('ADDON_ZIP_ERROR');//下载失败
-        $content = file_get_contents($zip_file);
-        @unlink($zip_file);
-        return download($content, $addon . '.zip', true);
+        return str_replace(project_path(), '', $zip_file);
     }
 
     /**
@@ -89,7 +86,7 @@ class CoreAddonDevelopBuildService extends BaseCoreService
      */
     public function menu(string $app_type) {
         $where = [ ['app_type', '=', $app_type], ['addon', '=', $this->addon] ];
-        $field = 'menu_name,menu_key,parent_key,menu_type,icon,api_url,router_path,view_path,methods,sort,status,is_show';
+        $field = 'menu_name,menu_key,menu_short_name,parent_key,menu_type,icon,api_url,router_path,view_path,methods,sort,status,is_show';
         $menu = (new SysMenu())->where($where)->field($field)->order('sort', 'desc')->select()->toArray();
         if (!empty($menu)) {
             $menu = (new MenuService())->menuToTree($menu, 'menu_key', 'parent_key', 'children');
@@ -114,7 +111,7 @@ class CoreAddonDevelopBuildService extends BaseCoreService
         }
         $content = '';
         foreach ($array as $k => $v) {
-            if (in_array($k, ['status_name', 'menu_type_name'])) continue;
+            if (in_array($k, ['status_name', 'menu_type_name']) || ($level > 2 && $k == 'parent_key')) continue;
             if (is_array($v)) {
                 $content .= $tab;
                 if (is_string($k)) {
@@ -141,6 +138,10 @@ class CoreAddonDevelopBuildService extends BaseCoreService
         $addon_admin_path = $this->addon_path . 'admin' . DIRECTORY_SEPARATOR;
         if (is_dir($addon_admin_path)) del_target_dir($addon_admin_path, true);
         dir_copy($admin_path, $addon_admin_path);
+
+        // 打包admin icon文件
+        $icon_dir = $this->root_path . 'admin' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'styles' . DIRECTORY_SEPARATOR . 'icon' . DIRECTORY_SEPARATOR . 'addon' . DIRECTORY_SEPARATOR . $this->addon;
+        if (is_dir($icon_dir)) dir_copy($icon_dir, $addon_admin_path . 'icon');
 
         return true;
     }

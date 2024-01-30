@@ -249,6 +249,7 @@ const dialogClose = (done: () => {}) => {
 
 watch(() => showDialog.value, () => {
     if (!showDialog.value) {
+        active.value = 'build'
         cloudBuildLog = []
         flashInterval && clearInterval(flashInterval)
         clearCloudBuildTask()

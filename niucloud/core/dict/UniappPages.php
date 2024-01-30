@@ -18,9 +18,15 @@ class UniappPages extends BaseDict
      * @param array $data
      * @return array|mixed
      */
-    public function load(array $data)
+    public function load(array $data = [])
     {
-        $addons = $this->getLocalAddons();
+        // 筛选插件
+        if (!empty($data[ 'addon' ])) {
+            $addons = [ $data[ 'addon' ] ];
+        } else {
+            $addons = $this->getLocalAddons();
+        }
+
         $page_files = [];
         foreach ($addons as $v) {
             $page_path = $this->getAddonDictPath($v) . "diy" . DIRECTORY_SEPARATOR . "pages.php";
@@ -29,7 +35,11 @@ class UniappPages extends BaseDict
             }
         }
         $page_files_data = $this->loadFiles($page_files);
-        $pages = $data;
+        if (!empty($data[ 'addon' ])) {
+            $pages = [];
+        } else {
+            $pages = $data;
+        }
         foreach ($page_files_data as $file_data) {
             if (empty($pages)) {
                 $pages = $file_data;

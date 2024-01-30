@@ -20,13 +20,15 @@ use core\dict\DictLoader;
  */
 class LinkDict
 {
-    public static function getLink()
+    public static function getLink($params = [])
     {
         $system_links = [
             'SYSTEM_LINK' => [
-                'key' => '',
-                'addon_title' => get_lang('dict_diy.system_title'),
                 'title' => get_lang('dict_diy.system_link'),
+                'addon_info' => [
+                    'title' => '系统',
+                    'key' => 'app'
+                ],
                 'child_list' => [
                     [
                         'name' => 'INDEX',
@@ -38,9 +40,11 @@ class LinkDict
                 ]
             ],
             'MEMBER_LINK' => [
-                'key' => '',
-                'addon_title' => get_lang('dict_diy.system_title'),
                 'title' => get_lang('dict_diy.member_link'),
+                'addon_info' => [
+                    'title' => '系统',
+                    'key' => 'app'
+                ],
                 'child_list' => [
                     [
                         'name' => 'MEMBER_CENTER',
@@ -87,19 +91,37 @@ class LinkDict
                 ]
             ],
             'DIY_PAGE' => [
-                'key' => '',
-                'addon_title' => '',
                 'title' => get_lang('dict_diy.diy_page'),
+                'addon_info' => [
+                    'title' => '系统',
+                    'key' => 'app'
+                ],
                 'child_list' => []
             ],
             'DIY_LINK' => [
-                'key' => '',
-                'addon_title' => '',
                 'title' => get_lang('dict_diy.diy_link'),
+                'addon_info' => [
+                    'title' => '系统',
+                    'key' => 'app'
+                ],
                 'child_list' => []
             ]
         ];
-        return ( new DictLoader("UniappLink") )->load($system_links);
+
+        // 查询存在页面路由的应用插件列表
+        if (!empty($params[ 'query' ]) && $params[ 'query' ] == 'addon') {
+            $system = [
+                'app' => [
+                    'title' => '系统',
+                    'key' => 'app'
+                ]
+            ];
+            $addons = (new DictLoader("UniappLink"))->load([], $params);
+            $app = array_merge($system, $addons);
+            return $app;
+        } else {
+            return (new DictLoader("UniappLink"))->load($system_links, $params);
+        }
     }
 
 }

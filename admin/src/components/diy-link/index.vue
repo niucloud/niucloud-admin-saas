@@ -41,7 +41,7 @@
                             </el-form-item>
                         </div>
                         <el-form-item label=" ">
-                            <div class="text-sm text-gray-400 select-text">路径必须以“/”开头，例：/pages/index/index</div>
+                            <div class="text-sm text-gray-400 select-text">路径必须以“/”开头，例：/app/pages/index/index</div>
                         </el-form-item>
                         <el-form-item label=" ">
                             <div class="text-sm text-gray-400 select-text">跳转外部链接“/”开头，例：https://baidu.com</div>
@@ -188,7 +188,6 @@ const save = () => {
 
         selectLink.value.parent = parentLinkName.value
         selectLink.value.name = parentLinkName.value
-        selectLink.value.page = selectLink.value.url;
         selectLink.value.action = '';
 
     }else if(parentLinkName.value  == 'DIY_PAGE'){
@@ -199,6 +198,7 @@ const save = () => {
 
     value.value = cloneDeep(selectLink.value)
     showDialog.value = false
+
     emit('success')
 }
 

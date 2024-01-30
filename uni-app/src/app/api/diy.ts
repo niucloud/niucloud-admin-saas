@@ -10,8 +10,8 @@ export function getDiyInfo(params : Record<string, any>) {
 /**
  * 获取底部导航信息
  */
-export function getTabbarInfo() {
-	return request.get('diy/tabbar')
+export function getTabbarInfo(params : Record<string, any>) {
+	return request.get('diy/tabbar', params)
 }
 
 /**

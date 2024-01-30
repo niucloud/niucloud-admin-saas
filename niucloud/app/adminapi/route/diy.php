@@ -62,6 +62,9 @@ Route::group('diy', function() {
     // 自定义路由列表
     Route::get('route', 'diy.DiyRoute/lists');
 
+    // 获取路由列表（存在的应用插件列表）
+    Route::get('route/apps', 'diy.DiyRoute/getApps');
+
     // 获取自定义路由分享内容
     Route::get('route/info', 'diy.DiyRoute/getInfoByName');
 
@@ -71,16 +74,19 @@ Route::group('diy', function() {
     // 编辑自定义页面分享内容
     Route::put('diy/share', 'diy.Diy/modifyShare');
 
-    // 获取模板页面的应用插件列表
+    // 获取模板页面（存在的应用插件列表）
     Route::get('apps', 'diy.Diy/getApps');
 
     /***************************************************** 配置相关 *****************************************************/
 
-    // 底部导航查询
-    Route::get('bottom', 'diy.Config/getBottom');
+    // 底部导航列表
+    Route::get('bottom', 'diy.Config/getBottomList');
 
     // 底部导航配置
-    Route::post('bottom', 'diy.Config/setBottom');
+    Route::get('bottom/config', 'diy.Config/getBottomConfig');
+
+    // 设置底部导航
+    Route::post('bottom', 'diy.Config/setBottomConfig');
 
 })->middleware([
     AdminCheckToken::class,

@@ -46,7 +46,10 @@ class DiyService extends BaseApiService
             $diy_config_service = new DiyConfigService();
             $start_up_page = $diy_config_service->getStartUpPageConfig($params[ 'name' ]);
 
-            $page_template = TemplateDict::getTemplate([ 'type' => [ $params[ 'name' ] ] ])[ $params[ 'name' ] ];
+            $page_template = TemplateDict::getTemplate([ 'key' => [ $params[ 'name' ] ] ]);
+            if (!empty($page_template)) {
+                $page_template = $page_template [ $params[ 'name' ] ];
+            }
         }
 
         if (!empty($start_up_page) && !empty($page_template) && !empty($start_up_page[ 'page' ]) && $start_up_page[ 'page' ] != $page_template[ 'page' ]) {

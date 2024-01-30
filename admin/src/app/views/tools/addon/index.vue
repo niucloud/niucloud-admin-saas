@@ -257,31 +257,14 @@ const addonDevelopBuildFn = (data: any) => {
     loading.value = true
     addonDevelopBuild(data.key).then(res => {
         loading.value = false
-        ElMessageBox.confirm(t('addonDownloadText'), t('warning'),
-            {
-                confirmButtonText: t('confirm'),
-                cancelButtonText: t('cancel'),
-                type: 'success',
-            }
-        ).then(() => {
-            addonDevelopDownloadFn(data)
-        })
+        addonDevelopDownload(data.key).then(res => {
+            ElMessageBox.alert(`插件打包成功，插件包所在位置：网站根目录${res.data}下请手动进行下载`, t('warning'))
+        }).catch()
     }).catch(() => {
         loading.value = false
     })
 }
-// 下载插件
-const addonDevelopDownloadFn = (data:any) => {
-    addonDevelopDownload(data.key).then(res => {
-        const blob = new Blob([res])
-        const url = window.URL.createObjectURL(blob) // 创建 url 并指向 blob
-        const a = document.createElement('a')
-        a.href = url
-        a.download = data.title + '.zip'
-        a.click()
-        window.URL.revokeObjectURL(url) // 释放该 url
-    })
-}
+
 /**
  * 删除
  */

@@ -166,9 +166,11 @@ class Diy extends BaseAdminController
     public function getTemplate()
     {
         $params = $this->request->params([
-            [ 'type', '' ], // 页面类型模板
+            [ 'key', '' ], // 页面模板标识
             [ 'action', '' ], // 页面是否装修标识，为空标识不装修，decorate：装修
-            [ 'mode', '' ] // 页面展示模式，diy：自定义，fixed：固定
+            [ 'mode', '' ], // 页面展示模式，diy：自定义，fixed：固定
+            [ 'type', '' ], // 页面类型，index：首页、member_index：个人中心，空：普通页面
+            [ 'addon', '' ], // 插件标识
         ]);
         $diy_service = new DiyService();
         return success($diy_service->getTemplate($params));
@@ -223,15 +225,15 @@ class Diy extends BaseAdminController
     public function getTemplatePages()
     {
         $params = $this->request->params([
-            [ 'type', '' ],
-            [ 'mode', '' ]
+            [ 'type', '' ], // 页面类型
+            [ 'mode', '' ] // 页面模式：diy：自定义，fixed：固定
         ]);
         $pages = PagesDict::getPages($params);
         return success($pages);
     }
 
     /**
-     * 获取模板页面的应用插件列表
+     * 获取模板页面（存在的应用插件列表）
      * @return Response
      */
     public function getApps()

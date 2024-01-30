@@ -46,7 +46,7 @@ export function sendSms(data : AnyObject) {
  * 获取微信jssdk config
  */
 export function getWechatSkdConfig(data : AnyObject) {
-    return request.get('wechat/jssdkconfig', data)
+    return request.get('wechat/jssdkconfig', data, { showErrorMessage: false })
 }
 
 /**

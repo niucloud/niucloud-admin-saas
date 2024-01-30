@@ -782,7 +782,12 @@ class PagesDict
             ]
         ];
 
-        $pages = ( new DictLoader("UniappPages") )->load($system_pages);
+        if (!empty($params[ 'addon' ])) {
+            $pages = (new DictLoader("UniappPages"))->load($params);
+        } else {
+            $pages = (new DictLoader("UniappPages"))->load($system_pages);
+        }
+
         if (!empty($params[ 'type' ])) {
             if (!empty($pages[ $params[ 'type' ] ])) {
                 $temp = $pages[ $params[ 'type' ] ];
@@ -797,7 +802,6 @@ class PagesDict
             } else {
                 return [];
             }
-
         }
 
         return $pages;

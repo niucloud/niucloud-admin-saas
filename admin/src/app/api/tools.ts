@@ -75,7 +75,7 @@ export function addonDevelopBuild(key: any) {
  * @returns
  */
 export function addonDevelopDownload(key: any) {
-    return request.post(`addon_develop/download/${key}`, {}, {"responseType": "blob"})
+    return request.post(`addon_develop/download/${key}`, {})
 }
 /***************************************************** 代码生成 ****************************************************/
 

@@ -10,6 +10,12 @@
                     <el-form-item :label="t('title')" prop="title">
                         <el-input v-model="diyRouteTableData.searchParam.title" :placeholder="t('titlePlaceholder')" />
                     </el-form-item>
+                    <el-form-item :label="t('forAddon')" prop="addon_name">
+                        <el-select v-model="diyRouteTableData.searchParam.addon_name" :placeholder="t('pageTypePlaceholder')">
+                            <el-option :label="t('all')" value="" />
+                            <el-option v-for="(item, key) in apps" :label="item.title" :value="key" :key="key"/>
+                        </el-select>
+                    </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="loadDiyRouteList()">{{ t('search') }}</el-button>
                         <el-button @click="resetForm(searchFormDiyRouteRef)">{{ t('reset') }}</el-button>
@@ -22,8 +28,12 @@
                     <span>{{ !diyRouteTableData.loading ? t('emptyData') : '' }}</span>
                 </template>
                 <el-table-column prop="title" :label="t('title')" min-width="70" />
-                <el-table-column prop="addon_title" :label="t('forAddon')" min-width="70" />
-                <el-table-column prop="page" :label="t('wapUrl')" min-width="170">
+                <el-table-column prop="addon_title" :label="t('forAddon')" min-width="70">
+                    <template #default="{ row }">
+                        <span>{{ row.addon_info.title }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="page" :label="t('wapUrl')" min-width="230">
                     <template #default="{ row }">
                         <span class="mr-[10px]">{{ wapDomain + row.page }}</span>
                         <el-button type="primary" link @click="copyEvent(wapDomain + row.page)">{{ t('copy') }}</el-button>
@@ -35,7 +45,7 @@
                         <el-button type="primary" link @click="copyEvent(row.page)">{{ t('copy') }}</el-button>
                     </template>
                 </el-table-column>
-                <el-table-column :label="t('share')" fixed="right"  align="right" min-width="80">
+                <el-table-column :label="t('share')" fixed="right"  align="right" min-width="40">
                     <template #default="{ row }">
                         <el-button v-if="row.is_share == 1" type="primary" link @click="openShare(row)">{{ t('shareSet') }}</el-button>
                     </template>
@@ -82,7 +92,7 @@
 <script lang="ts" setup>
 import { reactive, ref, watch, computed } from 'vue'
 import { t } from '@/lang'
-import { getDiyTemplate, getDiyRouteList, getDiyRouteInfo, editDiyRouteShare } from '@/app/api/diy'
+import { getDiyRouteAppList,getDiyTemplate, getDiyRouteList, getDiyRouteInfo, editDiyRouteShare } from '@/app/api/diy'
 import { ElMessage, FormInstance } from 'element-plus'
 import { useRoute, useRouter } from 'vue-router'
 import { useClipboard } from '@vueuse/core'
@@ -103,7 +113,8 @@ const diyRouteTableData = reactive({
     loading: true,
     data: [],
     searchParam: {
-        title: ''
+        title: '',
+        addon_name:''
     }
 })
 
@@ -113,6 +124,16 @@ const getDomain = async () => {
 }
 
 getDomain()
+
+const apps: any = reactive({}) // 应用插件列表
+
+getDiyRouteAppList({}).then(res=>{
+    if(res.data){
+        for (const key in res.data) {
+            apps[key] = res.data[key];
+        }
+    }
+});
 
 /**
  * 获取自定义路由列表

@@ -164,9 +164,6 @@ abstract class BasePay extends Storage
         } else {
             $return_value = $param;
         }
-        if(isset($return_value['code'])){
-            throw new PayException($return_value['message']);
-        }
         return $return_value;
     }
 

@@ -143,7 +143,7 @@ class SiteService extends BaseAdminService
             return $site_id;
         } catch ( Exception $e) {
             Db::rollback();
-            throw new AdminException($e->getMessage());
+            throw new AdminException($e->getMessage().$e->getFile().$e->getLine());
         }
     }
 

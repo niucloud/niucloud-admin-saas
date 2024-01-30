@@ -158,7 +158,7 @@
             field: 'birthday',
             value: uni.$u.date(e.value, 'yyyy-mm-dd')
         }).then(() => {
-            memberStore.info.birthday = uni.$u.date(e.value, 'yyyy-mm-dd')
+            memberStore.info.birthday = uni.$u.date(e.value||e.value+1, 'yyyy-mm-dd')
             birthdayPicker.value = false
         })
     }

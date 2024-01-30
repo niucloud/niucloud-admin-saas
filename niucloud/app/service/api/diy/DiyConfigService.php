@@ -12,6 +12,7 @@
 namespace app\service\api\diy;
 
 use app\service\core\diy\CoreDiyConfigService;
+use app\service\core\site\CoreSiteService;
 use core\base\BaseApiService;
 
 /**
@@ -24,11 +25,19 @@ class DiyConfigService extends BaseApiService
 
     /**
      * 获取底部导航配置
+     * @param $key
      * @return array
      */
-    public function getBottomConfig()
+    public function getBottomConfig($key)
     {
-        return (new CoreDiyConfigService())->getBottomConfig($this->site_id);
+        // 检测当前站点是多应用还是单应用
+        if ($key == 'app') {
+            $site_addon = (new CoreSiteService())->getSiteCache($this->site_id);
+            if (count($site_addon[ 'apps' ]) == 1) {
+                $key = $site_addon[ 'apps' ][ 0 ][ 'key' ];
+            }
+        }
+        return (new CoreDiyConfigService())->getBottomConfig($this->site_id, $key);
     }
 
     /**

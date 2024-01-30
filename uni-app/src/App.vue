@@ -10,8 +10,10 @@
 	import { language } from '@/locale'
 
 	onLaunch(async (data) => {
+
 		// 添加初始化拦截器
 		launchInterceptor()
+
 		// 添加页面跳转拦截器
 		redirectInterceptor()
 
@@ -44,7 +46,6 @@
 		// #endif
 
 		const configStore = useConfigStore()
-		configStore.getTabbarConfig()
 		await configStore.getLoginConfig()
 
 		useSystemStore().getSitenfo()
@@ -70,14 +71,6 @@
 			}
 			// #endif
 		}
-
-		// 监听浏览器返回
-		// #ifdef H5
-		window.addEventListener("popstate", function (e) {
-			const path = '/' + location.pathname.replace(manifest.h5.router.base, '')
-			language.loadLocaleMessages(path, uni.getLocale())
-		}, false);
-		// #endif
 	})
 
 	onShow(() => {

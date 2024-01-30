@@ -26,6 +26,7 @@ class SiteAccount extends BaseAdminController
     {
         $data = $this->request->params([
             ['type', ''],
+            ['trade_no', ''],
             ['create_time', []],
         ]);
         return success((new SiteAccountLogService())->getPage($data));

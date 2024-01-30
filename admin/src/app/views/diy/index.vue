@@ -40,10 +40,10 @@
                     <div>
                         <div class="font-bold">{{ t('H5') }}</div>
 						<el-form label-width="40px" class="mt-[5px]">
-							<el-form-item :label="t('link')" v-show="page.use_template.wapPreview" class="mb-[5px]">
-								<el-input readonly :value="page.use_template.wapPreview">
+							<el-form-item :label="t('link')" class="mb-[5px]">
+								<el-input readonly :value="page.shareUrl">
 									<template #append>
-										<el-button @click="copyEvent(page.use_template.wapPreview)" class="bg-primary copy">{{ t('copy') }}</el-button>
+										<el-button @click="copyEvent(page.shareUrl)" class="bg-primary copy">{{ t('copy') }}</el-button>
 									</template>
 								</el-input>
 							</el-form-item>
@@ -84,7 +84,7 @@ const link = ref({
     name: ''
 })
 
-// 添加自定义页面
+// 切换页面
 const formData = reactive({
     type: '',
     name: '',
@@ -105,7 +105,7 @@ const refreshData = () => {
 
         link.value.name = page.use_template.name;
         link.value.title = page.use_template.title;
-        link.value.page = page.use_template.page;
+        link.value.url = page.use_template.page;
         link.value.action = page.use_template.action;
         link.value.parent = page.use_template.parent;
 
@@ -200,7 +200,8 @@ const settingTips = () => {
 
 const setDomain = () => {
     page.use_template.wapPreview = page.wapUrl + page.use_template.url
-    QRCode.toDataURL(page.use_template.wapPreview, { errorCorrectionLevel: 'L', margin: 0, width: 100 }).then(url => {
+    page.shareUrl = page.wapUrl + '/';
+    QRCode.toDataURL(page.shareUrl, { errorCorrectionLevel: 'L', margin: 0, width: 100 }).then(url => {
         wapImage.value = url
     })
     page.timeIframe = new Date().getTime()
