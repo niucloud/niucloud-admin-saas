@@ -2,7 +2,7 @@
 	<div class="main-container attachment-container min-h-[80vh]" v-loading="loading">
 		<el-card class="box-card !border-none" shadow="never"  v-if="Object.keys(systemService).length">
 			<div class="flex justify-between items-center">
-				<span class="text-[20px]">{{ pageName }}</span>
+				<span class="text-page-title">{{ pageName }}</span>
 			</div>
 			<div class="bg-[#fff] pb-[20px] mb-3">
 				<p class="pt-[20px] pb-[10px] text-sm">{{ t('serverInformation') }}</p>

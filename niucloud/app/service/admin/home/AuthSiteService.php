@@ -52,25 +52,6 @@ class AuthSiteService extends BaseAdminService
     }
 
     /**
-     * 获取授权用户旗下的站点列表
-     */
-//    public function getSiteList(){
-//        //通过用户id获取
-//        $cache_name = 'site_list'.'_'.$this->uid;
-//        return cache_remember(
-//            $cache_name,
-//            function (){
-//                $auth_service = new AuthService();
-//                $user_role_list = $auth_service->getAuthSiteRoleList();
-//                $site_ids = array_column($user_role_list, 'site_id');
-//                return $this->model->where([['site_id', 'in', $site_ids]])->field('app_type,site_name,logo')->column('site_id, site_name, logo, app_type');
-//            },
-//            SiteService::$cache_tag_name
-//        );
-//
-//    }
-
-    /**
      * 获取授权账号下的站点列表
      * @param array $where
      * @return array
@@ -80,10 +61,13 @@ class AuthSiteService extends BaseAdminService
     {
         $field = 'site_id, site_name, front_end_name, front_end_logo, app_type, keywords, logo, icon, `desc`, status, latitude, longitude, province_id, city_id, 
         district_id, address, full_address, phone, business_hours, create_time, expire_time, group_id, app';
-        $search_model = $this->model->where([['site_id', 'in', $this->getSiteIds()]])->withSearch([ 'create_time', 'expire_time', 'keywords', 'status', 'group_id', 'app' ], $where)->with(['groupName'])->field($field)->append([ 'status_name' ])->order('create_time desc');
+        $condition = [
+            ['site_id', '<>', request()->defaultSiteId()],
+        ];
+        if (!AuthService::isSuperAdmin()) $condition[] = ['site_id', 'in', $this->getSiteIds()];
+        $search_model = $this->model->where($condition)->withSearch([ 'create_time', 'expire_time', 'keywords', 'status', 'group_id', 'app' ], $where)->with(['groupName'])->field($field)->append([ 'status_name' ])->order('create_time desc');
         return $this->pageQuery($search_model);
     }
-
 
     /**
      * 查询用户角色类表

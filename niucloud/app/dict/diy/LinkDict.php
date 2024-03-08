@@ -20,6 +20,12 @@ use core\dict\DictLoader;
  */
 class LinkDict
 {
+    /**
+     * 查询存在页面路由的应用插件列表 query 格式：'query' => 'addon'
+     * 查询插件的链接列表，包括系统的链接 addon 格式：'addon' => 'shop'
+     * @param array $params
+     * @return array|null
+     */
     public static function getLink($params = [])
     {
         $system_links = [
@@ -116,11 +122,11 @@ class LinkDict
                     'key' => 'app'
                 ]
             ];
-            $addons = (new DictLoader("UniappLink"))->load([], $params);
+            $addons = ( new DictLoader("UniappLink") )->load([ 'data' => $system, 'params' => $params ]);
             $app = array_merge($system, $addons);
             return $app;
         } else {
-            return (new DictLoader("UniappLink"))->load($system_links, $params);
+            return ( new DictLoader("UniappLink") )->load([ 'data' => $system_links, 'params' => $params ]);
         }
     }
 

@@ -4,7 +4,7 @@
 			<div class="flex">
 				<div class="bg-[#F3F6FF] mr-[14px] w-[402px] pt-[30px] pl-[32px] pr-[20px] pb-[60px] timeline-log-wrap">
 					<div class="flex items-center justify-between">
-						<span class="text-[20px]">版本信息</span>
+						<span class="text-page-title">版本信息</span>
                         <div class="flex-1 w-0 flex justify-end">
                             <el-button class="text-[#4C4C4C] w-[78px] h-[32px] !bg-transparent" @click="getFrameworkVersionListFn" v-if="!newVersion || (newVersion && newVersion.version_no == versions)">检测更新</el-button>
                             <el-button class="text-[#4C4C4C] w-[78px] h-[32px]" type="primary" @click="handleUpgrade" v-else>一键升级</el-button>
@@ -21,7 +21,7 @@
 				<div class="flex-1 flex justify-between items-center bg-[#F3F6FF] pt-[34px] pl-[30px] pr-[60px] pb-[62px] timeline-log-wrap">
 					<div class="flex flex-col">
 						<div class="flex flex-wrap items-center">
-							<p class="text-[20px] mr-[20px]">授权信息</p>
+							<p class="text-page-title mr-[20px]">授权信息</p>
 							<span class="text-[14px] text-[#666]">{{ authinfo.company_name || '--' }}</span>
 						</div>
 						<div class="mt-[46px] ml-[40px] flex flex-wrap">
@@ -96,7 +96,7 @@
 		</el-card>
 
         <el-card class="box-card !border-none " shadow="never" v-if="!loading">
-            <div class="text-[20px] mb-[20px]">历史版本</div>
+            <div class="text-page-title mb-[20px]">历史版本</div>
             <el-timeline>
                 <el-timeline-item :timestamp="item['release_time'] + ' 版本：' + item['version_no']" v-for="(item,index) in frameworkVersionList" type="primary" :hollow="true" placement="top" :key="index">
                     <div class="mt-[10px] p-[20px] bg-overlay rounded-md timeline-log-wrap whitespace-pre" v-if="item['upgrade_log']">

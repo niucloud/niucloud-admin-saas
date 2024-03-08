@@ -50,7 +50,7 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "",
+        "appid" : "wx59e6ba6050bbe7bc",
         "setting" : {
             "urlCheck" : false
         },
@@ -71,13 +71,6 @@
     },
     "vueVersion" : "3",
     "h5" : {
-        "sdkConfigs" : {
-            "maps" : {
-                "qqmap" : {
-                    "key" : "6ZDBZ-CLSLX-66747-7MVM4-HLK47-XMBXU"
-                }
-            }
-        },
         "router" : {
             "mode" : "history",
             "base" : "/wap/"

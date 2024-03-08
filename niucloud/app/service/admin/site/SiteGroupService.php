@@ -99,6 +99,8 @@ class SiteGroupService extends BaseAdminService
      * @return true
      */
     public function edit(int $group_id, array $data){
+        $group = $this->model->where([['group_id', '=', $group_id]])->findOrEmpty()->toArray();
+
         //判断应用是否全部是有效的已安装应用
         $this->checkAddon(array_merge($data['app'], $data['addon']));
         $this->model->update($data, [['group_id', '=', $group_id]]);
@@ -106,13 +108,37 @@ class SiteGroupService extends BaseAdminService
         $cache_name = self::$cache_name . $group_id;
         Cache::delete($cache_name);
 
-        $site_list = (new Site())->field('site_id')->where([ ['group_id', '=', $group_id] ])->select()->toArray();
+        $site_list = (new Site())->field('site_id,initalled_addon')->where([ ['group_id', '=', $group_id] ])->select()->toArray();
         if (!empty($site_list)) {
             foreach ($site_list as $site) {
+                if (count(array_diff($data['app'], $group['app'])) || count(array_diff($data['addon'], $group['addon']))) {
+                    $this->siteAddonsChange($site, $group, $data);
+                }
                 Cache::tag(CoreSiteService::$cache_tag_name . $site['site_id'])->clear();
             }
         }
+
         return true;
+    }
+
+    /**
+     * 站点套餐插件变更后相关站点执行插件初始化
+     * @param $site_info
+     * @param $old_group
+     * @param $new_group
+     * @return void
+     */
+    public function siteAddonsChange($site_info, $old_group, $new_group) {
+        $initalled_addon = $site_info['initalled_addon'];
+        if (empty($initalled_addon)) {
+            $initalled_addon = array_merge($old_group['app'], $old_group['addon']);
+        }
+
+        //添加站点成功事件
+        event("AddSiteAfter", [ 'site_id' => $site_info['site_id'], 'main_app' => array_diff($new_group['app'], $initalled_addon) , 'site_addons' => array_diff($new_group['addon'], $initalled_addon) ]);
+
+        $initalled_addon = array_values(array_unique(array_merge($initalled_addon, $new_group['app'], $new_group['addon'])));
+        (new Site())->update(['initalled_addon' => $initalled_addon], [ ['site_id', '=', $site_info['site_id'] ] ]);
     }
 
     public function checkAddon($group_roles){

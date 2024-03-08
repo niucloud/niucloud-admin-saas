@@ -1,7 +1,7 @@
 <template>
     <div class="main-container" v-loading="noticeTableData.loading">
         <div class="flex ml-[18px] justify-between items-center mt-[20px]">
-            <span class="text-[20px]">{{ pageName }}</span>
+            <span class="text-page-title">{{ pageName }}</span>
         </div>
         <el-card class="box-card !border-none" shadow="never">
             <h3 class="panel-title !text-base">{{ t('buyerNotice') }}</h3>

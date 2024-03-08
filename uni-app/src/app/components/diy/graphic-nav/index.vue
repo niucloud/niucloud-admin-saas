@@ -11,9 +11,11 @@
 					<view class="graphic-img relative flex items-center w-10 h-10 mr-[20rpx]"
 						v-if="diyComponent.mode != 'text'"
 						:style="{ width: diyComponent.imageSize * 2 + 'rpx', height: diyComponent.imageSize * 2 + 'rpx' }">
-						<image :src="img(item.imageUrl)" mode="aspectFill"
-							:style="{ maxWidth: diyComponent.imageSize * 2 + 'rpx', maxHeight: diyComponent.imageSize * 2 + 'rpx', borderRadius: diyComponent.aroundRadius * 2 + 'rpx' }">
-						</image>
+						<image v-if="item.imageUrl" :src="img(item.imageUrl)" mode="aspectFill"
+							:style="{ maxWidth: diyComponent.imageSize * 2 + 'rpx', maxHeight: diyComponent.imageSize * 2 + 'rpx', borderRadius: diyComponent.aroundRadius * 2 + 'rpx' }"/>
+						<image v-else :src="img('static/resource/images/diy/figure.png')" mode="aspectFill"
+						       :style="{ maxWidth: diyComponent.imageSize * 2 + 'rpx', maxHeight: diyComponent.imageSize * 2 + 'rpx', borderRadius: diyComponent.aroundRadius * 2 + 'rpx' }"/>
+
 						<text v-if="item.label.control"
 							class="tag absolute -top-[10rpx] -right-[24rpx] text-white rounded-[24rpx] rounded-bl-none transform scale-80 py-1 px-2 text-xs"
 							:style="{ color: item.label.textColor, backgroundImage: 'linear-gradient(' + item.label.bgColorStart + ',' + item.label.bgColorEnd + ')' }">
@@ -35,22 +37,21 @@
 		<swiper v-else-if="diyComponent.layout == 'horizontal' && diyComponent.showStyle == 'pageSlide'"
 			class="graphic-nav p-2 box-border relative" circular :indicator-dots="false"
 			:style="{ height: swiperHeight }" @change="swiperChange">
-			<swiper-item class="graphic-nav-wrap flex flex-wrap"
-				v-for="(numItem, numIndex) in Math.ceil(diyComponent.list.length / (diyComponent.pageCount * diyComponent.rowCount))">
+			<swiper-item class="graphic-nav-wrap flex flex-wrap" v-for="(numItem, numIndex) in Math.ceil(diyComponent.list.length / (diyComponent.pageCount * diyComponent.rowCount))">
 
 				<template v-for="(item, index) in diyComponent.list">
 
-					<view class="graphic-nav-item" :class="[diyComponent.mode]" :key="item.id"
-						v-if="swiperCondition(index,numItem)" :style="{ width: 100 / diyComponent.rowCount + '%' }">
+					<view class="graphic-nav-item" :class="[diyComponent.mode]" :key="item.id" v-if="swiperCondition(index,numItem)" :style="{ width: 100 / diyComponent.rowCount + '%' }">
 
 						<app-link :data="item.link" custom-class="flex flex-col items-center box-border py-2">
 
 							<view class="graphic-img relative flex items-center justify-center w-10 h-10"
 								v-if="diyComponent.mode != 'text'"
 								:style="{ width: diyComponent.imageSize * 2 + 'rpx', height: diyComponent.imageSize * 2 + 'rpx' }">
-								<image :src="img(item.imageUrl)" mode="aspectFill"
-									:style="{ maxWidth: diyComponent.imageSize * 2 + 'rpx', maxHeight: diyComponent.imageSize * 2 + 'rpx', borderRadius: diyComponent.aroundRadius * 2 + 'rpx' }">
-								</image>
+								<image v-if="item.imageUrl" :src="img(item.imageUrl)" mode="aspectFill"
+									:style="{ maxWidth: diyComponent.imageSize * 2 + 'rpx', maxHeight: diyComponent.imageSize * 2 + 'rpx', borderRadius: diyComponent.aroundRadius * 2 + 'rpx' }"/>
+								<image v-else :src="img('static/resource/images/diy/figure.png')" mode="aspectFill"
+								       :style="{ maxWidth: diyComponent.imageSize * 2 + 'rpx', maxHeight: diyComponent.imageSize * 2 + 'rpx', borderRadius: diyComponent.aroundRadius * 2 + 'rpx' }"/>
 
 								<text
 									class="tag absolute -top-[10rpx] -right-[24rpx] text-white rounded-[24rpx] rounded-bl-none transform scale-80 py-1 px-2 text-xs"
@@ -86,9 +87,10 @@
 						<view class="graphic-img relative flex items-center justify-center w-10 h-10"
 							v-if="diyComponent.mode != 'text'"
 							:style="{ width: diyComponent.imageSize * 2 + 'rpx', height: diyComponent.imageSize * 2 + 'rpx' }">
-							<image :src="img(item.imageUrl)" mode="aspectFill"
-								:style="{ maxWidth: diyComponent.imageSize * 2 + 'rpx', maxHeight: diyComponent.imageSize * 2 + 'rpx', borderRadius: diyComponent.aroundRadius * 2 + 'rpx' }">
-							</image>
+							<image v-if="item.imageUrl" :src="img(item.imageUrl)" mode="aspectFill"
+								:style="{ maxWidth: diyComponent.imageSize * 2 + 'rpx', maxHeight: diyComponent.imageSize * 2 + 'rpx', borderRadius: diyComponent.aroundRadius * 2 + 'rpx' }"/>
+							<image v-else :src="img('static/resource/images/diy/figure.png')" mode="aspectFill"
+							       :style="{ maxWidth: diyComponent.imageSize * 2 + 'rpx', maxHeight: diyComponent.imageSize * 2 + 'rpx', borderRadius: diyComponent.aroundRadius * 2 + 'rpx' }"/>
 							<text
 								:class="['tag absolute -top-[10rpx] -right-[24rpx] text-white rounded-[24rpx] rounded-bl-none transform scale-80 py-1 px-2 text-xs']"
 								v-if="item.label.control"
@@ -201,14 +203,6 @@
 	});
 
 	const refresh = () => {
-		if (diyStore.mode == 'decorate') {
-			diyComponent.value.list.forEach((item : any, index) => {
-				// 装修模式下设置默认图
-				if (item.imageUrl == '') {
-					item.imageUrl = 'static/resource/images/diy/figure.png';
-				}
-			});
-		}
 		handleData()
 	}
 

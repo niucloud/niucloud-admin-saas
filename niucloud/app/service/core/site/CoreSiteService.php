@@ -55,7 +55,7 @@ class CoreSiteService extends BaseCoreService
                 $where = [
                     [ 'site_id', '=', $site_id ],
                 ];
-                $info = $this->model->where($where)->field('site_id, site_name, front_end_name, front_end_logo, app_type, keywords, logo, icon, `desc`, status, latitude, longitude, province_id, city_id, district_id, address, full_address, phone, business_hours, create_time, expire_time, group_id, app, addons')->append([ 'status_name' ])->findOrEmpty()->toArray();
+                $info = $this->model->where($where)->field('site_id, site_name, front_end_name, front_end_logo, app_type, keywords, logo, icon, `desc`, status, latitude, longitude, province_id, city_id, district_id, address, full_address, phone, business_hours, create_time, expire_time, group_id, app, addons, site_domain')->append([ 'status_name' ])->findOrEmpty()->toArray();
                 if (!empty($info)) {
                     $site_addons = (new CoreSiteService())->getAddonKeysBySiteId((int)$site_id);
                     $info['apps'] = (new Addon())->where([ ['key', 'in', $site_addons], ['type', '=', AddonDict::APP]])->field('key,title,desc,icon,type')->select()->toArray();
@@ -64,6 +64,24 @@ class CoreSiteService extends BaseCoreService
                 return $info;
             },
             self::$cache_tag_name . $site_id
+        );
+    }
+
+    /**
+     * 根据域名获取站点id
+     * @param string $domain
+     * @return mixed|string
+     */
+    public function getSiteIdByDomain(string $domain) {
+        if (empty($domain)) return;
+
+        $cache_name = 'site_domain';
+        return cache_remember(
+            $cache_name . $domain,
+            function() use ($domain) {
+                return $this->model->where([ ['site_domain', '=', $domain] ])->value('site_id');
+            },
+            self::$cache_tag_name
         );
     }
 

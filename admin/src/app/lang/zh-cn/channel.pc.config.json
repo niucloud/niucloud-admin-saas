@@ -4,5 +4,6 @@
     "copy": "复制",
     "clickVisit": "点击访问",
     "PCDomainName": "pc域名",
-    "newInfo": "最新消息"
+    "newInfo": "最新消息",
+    "isOpen": "是否开启"
 }

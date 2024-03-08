@@ -8,6 +8,7 @@
 
 <script setup lang="ts">
 	import { computed, watch } from 'vue';
+    import diyGroup from '@/addon/components/diy/group/index.vue'
 	const props = defineProps(['data', 'pullDownRefresh']);
 </script>
 

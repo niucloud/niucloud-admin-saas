@@ -40,7 +40,9 @@ class Site extends BaseModel
      */
     protected $name = 'site';
 
-    protected $json = ['addons', 'app'];
+    protected $json = ['addons', 'app', 'initalled_addon'];
+
+    protected $jsonAssoc = true;
 
     /**
      * 状态字段转化
@@ -65,6 +67,20 @@ class Site extends BaseModel
     {
         if ($value) {
             $query->where('site_name|keywords', 'like', '%' . $value . '%');
+        }
+    }
+
+    /**
+     * 站点域名搜索
+     * @param $query
+     * @param $value
+     * @param $data
+     * @return void
+     */
+    public function searchSiteDomainAttr($query, $value, $data)
+    {
+        if ($value) {
+            $query->where('site_domain', 'like', '%' . $value . '%');
         }
     }
 
@@ -114,6 +130,14 @@ class Site extends BaseModel
     public function groupName()
     {
         return $this->hasOne(SiteGroup::class, 'group_id', 'group_id')->joinType('left')->withField('group_id, group_name')->bind(['group_name' => 'group_name']);
+    }
+
+    /**
+     * 关联站点分组
+     * @return HasOne
+     */
+    public function siteGroup() {
+        return $this->hasOne(SiteGroup::class, 'group_id', 'group_id');
     }
 
     /**

@@ -20,11 +20,11 @@
 			<el-form label-width="80px" class="px-[10px]">
 
 				<ul class="layout">
-					<li v-for="(li,i) in selectTemplate.dimensionScale" :key="i" :class="[selectTemplate.className]" :style="{ width: rubikCubeList[i].widthStyle, height: rubikCubeList[i].imgHeight + 'px' }">
-						<div class="have-preview-image" v-show="diyStore.editComponent.list[i].imageUrl">
-							<img class="!w-full !h-full" :src="img(diyStore.editComponent.list[i].imageUrl)"/>
+					<li v-for="(li,i) in selectTemplate.dimensionScale" :key="i" :class="[selectTemplate.className]">
+						<div class="have-preview-image" v-show="diyStore.editComponent.list[i].imageUrl && diyStore.editComponent.list[i].imageUrl != 'static/resource/images/diy/figure.png'">
+							<img :src="img(diyStore.editComponent.list[i].imageUrl)"/>
 						</div>
-						<div class="empty" :class="[selectTemplate.className]" v-show="!diyStore.editComponent.list[i].imageUrl">
+						<div class="empty" :class="[selectTemplate.className]" v-show="!diyStore.editComponent.list[i].imageUrl || diyStore.editComponent.list[i].imageUrl == 'static/resource/images/diy/figure.png'">
 							<p>{{li.name}}</p>
 							<p>{{li.desc}}</p>
 						</div>
@@ -267,25 +267,11 @@ const templateList = ref([
     }
 ])
 
-const rubikCubeList = ref([])
 const selectTemplate = computed(() => {
     let data
     templateList.value.forEach((item) => {
         if (item.className == diyStore.editComponent.mode) {
             data = item
-
-            rubikCubeList.value = JSON.parse(JSON.stringify(diyStore.editComponent.list))
-            if (item.className == 'row2-lt-of2-rt') {
-                calcFourSquare()
-            } else if (item.className == 'row1-lt-of2-rt') {
-                calcRowOneLeftOfTwoRight()
-            } else if (item.className == 'row1-tp-of2-bm') {
-                calcRowOneTopOfTwoBottom()
-            } else if (item.className == 'row1-lt-of1-tp-of2-bm') {
-                calcRowOneLeftOfOneTopOfTwoBottom()
-            } else {
-                calcSingleRow(item.className)
-            }
         }
     })
     return data
@@ -343,152 +329,6 @@ const handleHeight = (isCalcHeight:boolean = false) => {
 }
 
 defineExpose({})
-
-/**
-	 * 魔方：单行多个，平分宽度
-	 * 公式：
-	 * 宽度：屏幕宽度/2，示例：375/2=187.5
-	 * 比例：原图高/原图宽，示例：322/690=0.46
-	 * 高度：宽度*比例，示例：187.5*0.46=86.25
-	 */
-const calcSingleRow = (type:any) => {
-    let maxHeight = 0
-    let paramsRatio = 2
-    let paramsWidth = 'calc(100% / 2)'
-    if (type == 'row1-of3') {
-        paramsRatio = 3
-        paramsWidth = 'calc(100% / 3)'
-    }
-    if (type == 'row1-of4') {
-        paramsRatio = 4
-        paramsWidth = 'calc(100% / 4)'
-    }
-
-    rubikCubeList.value.forEach((item:any, index) => {
-        const ratio = item.imgHeight / item.imgWidth
-
-        const width = 330
-        item.imgWidth = width / paramsRatio
-        item.imgHeight = item.imgWidth * ratio
-
-        if (maxHeight == 0 || maxHeight < item.imgHeight) maxHeight = item.imgHeight
-    })
-
-    rubikCubeList.value.forEach((item:any, index) => {
-        item.widthStyle = paramsWidth
-        item.imgHeight = maxHeight
-    })
-};
-
-/**
-	 * 魔方：四方型，各占50%
-	 */
-const calcFourSquare = () => {
-    let maxHeightFirst = 0
-    let maxHeightTwo = 0
-    rubikCubeList.value.forEach((item:any, index) => {
-        const ratio = item.imgHeight / item.imgWidth
-        item.imgWidth = 330
-        item.imgWidth = item.imgWidth / 2
-        item.imgHeight = item.imgWidth * ratio
-
-        // 获取每行最大高度
-        if (index <= 1) {
-            if (maxHeightFirst == 0 || maxHeightFirst < item.imgHeight) {
-                maxHeightFirst = item.imgHeight
-            }
-        } else if (index > 1) {
-            if (maxHeightTwo == 0 || maxHeightTwo < item.imgHeight) {
-                maxHeightTwo = item.imgHeight
-            }
-        }
-    })
-    rubikCubeList.value.forEach((item:any, index) => {
-        item.imgWidth = 'calc(100% / 2)'
-        item.widthStyle = item.imgWidth
-        if (index <= 1) {
-            item.imgHeight = maxHeightFirst
-        } else if (index > 1) {
-            item.imgHeight = maxHeightTwo
-        }
-    })
-}
-
-/**
-	 * 魔方：1左2右
-	 */
-const calcRowOneLeftOfTwoRight = () => {
-    let rightHeight = 0 // 右侧两图平分高度
-    let divide = 'left' // 划分规则，left：左，right：右
-    if (rubikCubeList.value[1].imgWidth === rubikCubeList.value[2].imgWidth) divide = 'right'
-    rubikCubeList.value.forEach((item:any, index) => {
-        if (index == 0) {
-            const ratio = item.imgHeight / item.imgWidth // 获取左图的尺寸比例
-            item.imgWidth = 330
-            item.imgWidth = item.imgWidth / 2
-            item.imgHeight = item.imgWidth * ratio
-            rightHeight = item.imgHeight / 2
-            item.imgWidth += 'px'
-        } else {
-            item.imgWidth = rubikCubeList.value[0].imgWidth
-            item.imgHeight = rightHeight
-        }
-    })
-}
-
-/**
-	 * 魔方：1上2下
-	 */
-const calcRowOneTopOfTwoBottom = () => {
-    let maxHeight = 0
-    rubikCubeList.value.forEach((item:any, index) => {
-        const ratio = item.imgHeight / item.imgWidth // 获取左图的尺寸比例
-        if (index == 0) {
-            item.imgWidth = 330
-        } else if (index > 0) {
-            item.imgWidth = 330
-            item.imgWidth = item.imgWidth / 2
-        }
-
-        item.imgHeight = item.imgWidth * ratio
-
-        // 获取最大高度
-        if (index > 0 && (maxHeight == 0 || maxHeight < item.imgHeight)) {
-            maxHeight = item.imgHeight
-        }
-    })
-    rubikCubeList.value.forEach((item:any, index) => {
-        item.imgWidth += 'px'
-        item.widthStyle = item.imgWidth
-        if (index > 0) item.imgHeight = maxHeight
-    })
-}
-
-/**
-	 * 魔方：1左3右
-	 */
-const calcRowOneLeftOfOneTopOfTwoBottom = () => {
-    rubikCubeList.value.forEach((item:any, index) => {
-        // 左图
-        if (index == 0) {
-            const ratio = item.imgHeight / item.imgWidth // 获取左图的尺寸比例
-            item.imgWidth = 330
-            item.imgWidth = item.imgWidth / 2
-            item.imgHeight = item.imgWidth * ratio
-        } else if (index == 1) {
-            item.imgWidth = rubikCubeList.value[0].imgWidth
-            item.imgHeight = rubikCubeList.value[0].imgHeight / 2
-        } else if (index > 1) {
-            item.imgWidth = rubikCubeList.value[0].imgWidth / 2
-            item.imgHeight = rubikCubeList.value[1].imgHeight
-        }
-    })
-
-    rubikCubeList.value.forEach((item:any, index) => {
-        item.imgWidth += 'px'
-    })
-}
-
 </script>
 
 <style lang="scss" scoped>
@@ -675,6 +515,7 @@ const calcRowOneLeftOfOneTopOfTwoBottom = () => {
 					div.have-preview-image {
 						text-align: center;
 						height: 100%;
+						line-height: 322px;
 						background: #ffffff;
 					}
 				}
@@ -684,9 +525,9 @@ const calcRowOneLeftOfOneTopOfTwoBottom = () => {
 					border-bottom: 1px transparent solid;
 
 					div.have-preview-image {
-						display: flex;
-						align-items: center;
-						justify-content: center;
+						text-align: center;
+						height: 100%;
+						line-height: 160px;
 						background: #ffffff;
 					}
 				}
@@ -697,6 +538,7 @@ const calcRowOneLeftOfOneTopOfTwoBottom = () => {
 					div.have-preview-image {
 						text-align: center;
 						height: 100%;
+						line-height: 160px;
 						background: #ffffff;
 					}
 				}
@@ -744,6 +586,7 @@ const calcRowOneLeftOfOneTopOfTwoBottom = () => {
 					div.have-preview-image {
 						text-align: center;
 						height: 100%;
+						line-height: 320px;
 						background: #ffffff;
 					}
 				}
@@ -756,6 +599,7 @@ const calcRowOneLeftOfOneTopOfTwoBottom = () => {
 					div.have-preview-image {
 						text-align: center;
 						height: 100%;
+						line-height: 160px;
 						background: #ffffff;
 					}
 				}
@@ -768,6 +612,7 @@ const calcRowOneLeftOfOneTopOfTwoBottom = () => {
 					div.have-preview-image {
 						text-align: center;
 						height: 100%;
+						line-height: 160px;
 						background: #ffffff;
 					}
 				}
@@ -779,6 +624,7 @@ const calcRowOneLeftOfOneTopOfTwoBottom = () => {
 					div.have-preview-image {
 						text-align: center;
 						height: 100%;
+						line-height: 160px;
 						background: #ffffff;
 					}
 				}

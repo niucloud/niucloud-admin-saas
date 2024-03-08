@@ -1,7 +1,7 @@
 <template>
     <div class="main-container min-h-[300px] p-5">
         <div class="flex justify-between items-center mb-[20px]">
-            <span class="text-[20px]">{{ pageName }}</span>
+            <span class="text-page-title">{{ pageName }}</span>
         </div>
         <el-tabs v-model="activeName" class="demo-tabs" @tab-change="handleClick">
             <el-tab-pane :label="t('weappAccessFlow')" name="/channel/weapp" />
@@ -23,7 +23,6 @@
                 <el-table-column prop="status_name" :label="t('status')" align="left">
                     <template #default="{ row }">
                         <div>{{ row.status_name }}</div>
-                        <div class="text-error" v-if="row.status == -1">{{ t('failReason') }}{{ row.fail_reason }}</div>
                     </template>
                 </el-table-column>
                 <el-table-column prop="create_time" :label="t('createTime')" align="center" />
@@ -34,6 +33,8 @@
                                 <el-button type="primary" link>
                                     {{ t('preview') }}</el-button>
                             </el-tooltip>
+                            <el-button type="primary" link v-if="row.status == -1" @click="handleFailReason(row)">
+                                {{ t('failReason') }}</el-button>
                         </div>
                     </template>
                 </el-table-column>
@@ -65,6 +66,11 @@
                     </el-button>
                 </span>
             </template>
+        </el-dialog>
+        <el-dialog v-model="failReasonDialogVisible" :title="t('failReason')" width="60%">
+            <el-scrollbar class="h-[60vh] w-full whitespace-pre p-[20px]">
+                {{ failReason }}
+            </el-scrollbar>
         </el-dialog>
     </div>
 </template>
@@ -247,6 +253,13 @@ const configElMessageBox = () => {
         router.push({ path: '/channel/weapp/config' })
     }).catch((action: string) => {
     })
+}
+
+const failReason = ref('')
+const failReasonDialogVisible = ref(false)
+const handleFailReason = (data: any) => {
+    failReason.value = data.fail_reason
+    failReasonDialogVisible.value = true
 }
 </script>
 

@@ -175,7 +175,7 @@ trait WapTrait
         $content .= "   @import './index.scss';\n";
         $content .= "</style>\n";
 
-        return file_put_contents($compile_path . str_replace('/', DIRECTORY_SEPARATOR, 'app/components/diy/group/index.vue'), $content);
+        return file_put_contents($compile_path . str_replace('/', DIRECTORY_SEPARATOR, 'addon/components/diy/group/index.vue'), $content);
     }
 
     /**
@@ -267,7 +267,7 @@ trait WapTrait
         $content .= "   @import './index.scss';\n";
         $content .= "</style>\n";
 
-        return file_put_contents($compile_path . str_replace('/', DIRECTORY_SEPARATOR, 'app/components/fixed/group/index.vue'), $content);
+        return file_put_contents($compile_path . str_replace('/', DIRECTORY_SEPARATOR, 'addon/components/fixed/group/index.vue'), $content);
     }
 
     /**
@@ -296,19 +296,17 @@ trait WapTrait
         $pattern = "/\s+\/\/ {$page_begin}[\S\s]+\/\/ {$page_end}(\n,)?/";
         $content = preg_replace($pattern, '', $content);
 
-        $uniapp_pages[ 'pages' ] = str_replace('PAGE_BEGIN', $page_begin, $uniapp_pages[ 'pages' ]);
+        $page_begin_matches_count = preg_match_all('/PAGE_BEGIN/', $content, $page_begin_matches);
+        if ($page_begin_matches_count > 0) {
+            $uniapp_pages[ 'pages' ] = str_replace('PAGE_BEGIN', $page_begin . PHP_EOL . ",", $uniapp_pages[ 'pages' ]);
+        } else {
+            $uniapp_pages[ 'pages' ] = str_replace('PAGE_BEGIN', $page_begin . PHP_EOL, $uniapp_pages[ 'pages' ]);
+        }
         $uniapp_pages[ 'pages' ] = str_replace('PAGE_END', $page_end, $uniapp_pages[ 'pages' ]);
         $uniapp_pages[ 'pages' ] = str_replace('{{addon_name}}', $this->addon, $uniapp_pages[ 'pages' ]); // 将变量替换为当前安装的插件名称
 
-        $replacement = ",// {{PAGE}}\n";
-        $replacement .= $uniapp_pages[ 'pages' ] . "\n,";
-
-        $page_begin_matches_count = preg_match_all('/PAGE_BEGIN/', $content . $replacement, $page_begin_matches);
-
-        // 如果存在多个插件，要在插件前面加上逗号分割
-        if ($page_begin_matches_count > 0) {
-            $content = str_replace(',// {{PAGE}}', '// {{PAGE}}', $content);
-        }
+        $replacement = $uniapp_pages[ 'pages' ] . PHP_EOL;
+        $replacement .= "           // {{PAGE}}\n";
 
         $content = str_replace('// {{PAGE}}', $replacement, $content);
 
@@ -405,7 +403,7 @@ trait WapTrait
         $addon_arr[] = $addon; // 追加新装插件
         $addon_arr = array_unique($addon_arr);
         foreach ($addon_arr as $k => $v) {
-            $addon_path = $compile_path . str_replace('/', DIRECTORY_SEPARATOR, $v . '/locale'); // 插件语言包根目录
+            $addon_path = $compile_path . str_replace('/', DIRECTORY_SEPARATOR, 'addon/' . $v . '/locale'); // 插件语言包根目录
             $addon_file_arr = getFileMap($addon_path, [], false);
             if (!empty($addon_file_arr)) {
                 foreach ($addon_file_arr as $ck => $cv) {

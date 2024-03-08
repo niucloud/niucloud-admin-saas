@@ -50,7 +50,7 @@ abstract class BaseDict extends Storage
         $api_site_id_name = system_name('admin_site_id_name');
         $site_id = $headers[$admin_site_id_name] ?? $headers[$api_site_id_name] ?? 0;
 
-        if ($site_id) {
+        if ((int)$site_id) {
             $addons = Cache::get("local_install_addons_{$site_id}");
             if (!is_null($addons)) return $addons;
 

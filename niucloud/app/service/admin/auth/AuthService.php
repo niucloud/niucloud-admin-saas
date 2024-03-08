@@ -12,6 +12,7 @@
 namespace app\service\admin\auth;
 
 use app\dict\site\SiteDict;
+use app\model\sys\SysUserRole;
 use app\Request;
 use app\service\admin\site\SiteUserService;
 use app\service\admin\sys\MenuService;
@@ -42,7 +43,9 @@ class AuthService extends BaseAdminService
         //站点不存在
         if(empty($site_info)) throw new AuthException('SITE_NOT_EXIST');
         //没有当前站点的信息
-        if(!$this->getAuthRole($site_id)) throw new AuthException('NO_SITE_PERMISSION');
+        if (!AuthService::isSuperAdmin()) {
+            if(!$this->getAuthRole($site_id)) throw new AuthException('NO_SITE_PERMISSION');
+        }
 
         $request->siteId($site_id);
         $request->appType($site_info['app_type']);
@@ -96,11 +99,16 @@ class AuthService extends BaseAdminService
      * @return array
      */
     public function getAuthApiList(){
-        $user_role_info = $this->getAuthRole($this->site_id);
-        if(empty($user_role_info))
-            return [];
+        if (AuthService::isSuperAdmin()) {
+            $is_admin = 1;
+        } else {
+            $user_role_info = $this->getAuthRole($this->site_id);
+            if (empty($user_role_info))
+                return [];
 
-        $is_admin = $user_role_info['is_admin'];//是否是超级管理员组
+            $is_admin = $user_role_info['is_admin'];//是否是超级管理员组
+        }
+
         $menu_service = new MenuService();
         if($is_admin){//查询全部启用的权限
             //获取站点信息
@@ -120,10 +128,15 @@ class AuthService extends BaseAdminService
      * @return array
      */
     public function getAuthMenuList(int $is_tree = 0, $addon = 'all'){
-        $user_role_info = $this->getAuthRole($this->site_id);
-        if(empty($user_role_info))
-            return [];
-        $is_admin = $user_role_info['is_admin'];//是否是超级管理员组
+        if (AuthService::isSuperAdmin()) {
+            $is_admin = 1;
+        } else {
+            $user_role_info = $this->getAuthRole($this->site_id);
+            if(empty($user_role_info))
+                return [];
+            $is_admin = $user_role_info['is_admin'];//是否是超级管理员组
+        }
+
         $menu_service = new MenuService();
         if($is_admin){//查询全部启用的权限
             return (new AuthSiteService())->getMenuList($is_tree, 1, $addon);
@@ -168,6 +181,16 @@ class AuthService extends BaseAdminService
         return (new UserService())->edit($this->uid, $data);
     }
 
-
+    /**
+     * 是否是超级管理员
+     * @return bool
+     */
+    public static function isSuperAdmin() {
+        return !(new SysUserRole())->where([
+            ['uid', '=', (new self())->uid ],
+            ['site_id', '=', request()->defaultSiteId()],
+            ['is_admin', '=', 1]
+        ])->field('id')->findOrEmpty()->isEmpty();
+    }
 
 }

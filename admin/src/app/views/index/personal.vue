@@ -1,7 +1,7 @@
 <template>
     <div class="main-container w-full pt-[64px] bg-white" v-loading="loading">
         <div class="flex justify-between items-center h-[32px] mb-4">
-            <span class="text-[20px]">{{ t('personal') }}</span>
+            <span class="text-page-title">{{ t('personal') }}</span>
             <span class="text-[14px] text-[#999] cursor-pointer" @click="toEditPersonal">{{ t('editPersonal') }}</span>
         </div>
         <el-card class="box-card !border-none" shadow="never">

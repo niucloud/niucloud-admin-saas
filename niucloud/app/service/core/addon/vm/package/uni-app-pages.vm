@@ -4,7 +4,7 @@ return [
         // PAGE_BEGIN
         // *********************************** hello world ***********************************
 		{
-			"path": "addon/{{addon_name}}/pages/hello_world/index",
+			"path": "{{addon_name}}/pages/hello_world/index",
 			"style": {
 				"navigationBarTitleText": "%{{addon_name}}.pages.hello_world.index%"
 			}

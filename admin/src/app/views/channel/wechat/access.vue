@@ -1,7 +1,7 @@
 <template>
     <div class="w-full p-5 bg-white">
         <div class="flex justify-between items-center mb-[20px]">
-            <span class="text-[20px]">{{ t('title') }}</span>
+            <span class="text-page-title">{{ t('title') }}</span>
         </div>
         <el-tabs v-model="activeName" class="demo-tabs" @tab-change="handleClick">
             <el-tab-pane :label="t('wechatAccessFlow')" name="/channel/wechat" />

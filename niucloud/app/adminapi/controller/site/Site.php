@@ -32,7 +32,7 @@ class Site extends BaseAdminController
             ['create_time', []],
             ['expire_time', []],
             ['app', ''],
-//            ['']
+            ['site_domain', '']
         ]);
         return success((new SiteService())->getPage($data));
     }
@@ -61,7 +61,8 @@ class Site extends BaseAdminController
             ['real_name', ''],
             ['password', ''],
             ['group_id', 0],
-            ['expire_time', 0]
+            ['expire_time', 0],
+            ['site_domain', ''],
         ]);
         $this->validate($data, 'app\validate\site\Site.add');
         if (empty($data['uid'])) $this->validate($data, 'app\validate\sys\User.add');
@@ -107,9 +108,10 @@ class Site extends BaseAdminController
         $data = $this->request->params([
             ['site_name', ''],
             ['expire_time', 0],
-            ['group_id',0]
+            ['group_id',0],
+            ['site_domain', ''],
         ]);
-        $this->validate($data, 'app\validate\site\Site.edit');
+        $this->validate(array_merge($data, ['site_id' => $id]), 'app\validate\site\Site.edit');
         (new SiteService())->edit($id, $data);
         return success('MODIFY_SUCCESS');
     }

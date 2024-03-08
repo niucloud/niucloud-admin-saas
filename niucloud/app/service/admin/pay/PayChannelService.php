@@ -90,7 +90,7 @@ class PayChannelService extends BaseAdminService
         foreach ($channel_list as $k => $v) {
             $temp_item = $pay_channel_list[$k] ?? [];
             foreach ($v['pay_type'] as $item_k => $item_v) {
-                $temp_v_item = $temp_item[$item_k] ?? ['status' => 0, 'config' => [], 'sort' => 0];
+                $temp_v_item = $temp_item[$item_k] ?? ['status' => 0, 'config' => ['name' => ''], 'sort' => 0];
                 $item_v['config'] = $temp_v_item['config'];
                 $item_v['status'] = $temp_v_item['status'];
                 $item_v['sort'] = $temp_v_item['sort'];

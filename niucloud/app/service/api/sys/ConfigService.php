@@ -52,7 +52,7 @@ class ConfigService extends BaseApiService
      * @param $data
      * @return array
      */
-    public function getWapIndexList($data)
+    public function getWapIndexList($data = [])
     {
         return ( new CoreSysConfigService() )->getWapIndexList($data);
     }

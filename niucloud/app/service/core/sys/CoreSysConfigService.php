@@ -11,6 +11,7 @@
 
 namespace app\service\core\sys;
 
+use app\service\core\site\CoreSiteService;
 use core\base\BaseCoreService;
 
 /**
@@ -34,10 +35,11 @@ class CoreSysConfigService extends BaseCoreService
     public function getSceneDomain(int $site_id){
         $wap_domain = !empty(env("system.wap_domain")) ? preg_replace('#/$#', '', env("system.wap_domain")) : request()->domain();
         $web_domain = !empty(env("system.web_domain")) ? preg_replace('#/$#', '', env("system.web_domain")) : request()->domain();
+        $site_domain = (new CoreSiteService())->getSiteCache($site_id)['site_domain'] ?? '';
 
         return  [
-            'wap_url' => $wap_domain . "/wap/" . $site_id . "/",
-            'web_url' => $web_domain . "/web/" . $site_id . "/"
+            'wap_url' => $site_domain ? "http://" . $site_domain . "/wap/" : $wap_domain . "/wap/" . $site_id . "/",
+            'web_url' => $site_domain ? "http://" . $site_domain . "/wap/" : $web_domain . "/web/" . $site_id . "/"
         ];
     }
 

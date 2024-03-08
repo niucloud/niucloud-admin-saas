@@ -224,3 +224,63 @@ export function guid(len = 10, firstU = true, radix = null) {
     }
     return uuid.join('')
 }
+
+/**
+* 金额格式化
+*/
+export function moneyFormat(money : string) : string {
+	return isNaN(parseFloat(money)) ? money : parseFloat(money).toFixed(2)
+}
+
+
+/**
+ * 时间戳转日期格式
+ * @param {Object} timeStamp
+ */
+export function timeStampTurnTime(timeStamp, type = "") {
+	if (timeStamp != undefined && timeStamp != "" && timeStamp > 0) {
+		var date = new Date();
+		date.setTime(timeStamp * 1000);
+		var y = date.getFullYear();
+		var m = date.getMonth() + 1;
+		m = m < 10 ? ('0' + m) : m;
+		var d = date.getDate();
+		d = d < 10 ? ('0' + d) : d;
+		var h = date.getHours();
+		h = h < 10 ? ('0' + h) : h;
+		var minute = date.getMinutes();
+		var second = date.getSeconds();
+		minute = minute < 10 ? ('0' + minute) : minute;
+		second = second < 10 ? ('0' + second) : second;
+		if (type) {
+			if (type == 'yearMonthDay') {
+				return y + '年' + m + '月' + d + '日';
+			}
+			return y + '-' + m + '-' + d;
+		} else {
+			return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+		}
+
+	} else {
+		return "";
+	}
+}
+
+/**
+ * 过滤小数点
+ * @param event
+ */
+export function filterDigit(event:any){
+    event.target.value = event.target.value.replace(/[^\d\.]/g,'');
+    event.target.value = event.target.value.replace(/^\./g,'');
+    event.target.value = event.target.value.replace(/\.{2,}/g,'.');
+    event.target.value = event.target.value.replace('.','$#$').replace(/\./g,'').replace('$#$','.');
+}
+
+/**
+ * 过滤整数
+  * @param event
+ */
+export function filterNumber(event:any){
+    event.target.value = event.target.value.replace(/[^\d]/g,'');
+}

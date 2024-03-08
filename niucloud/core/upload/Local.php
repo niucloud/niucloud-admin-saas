@@ -52,7 +52,7 @@ class Local extends BaseUpload
     public function fetch(string $url, ?string $key)
     {
         try {
-            mkdirs_or_notexist($key, 0777);
+            mkdirs_or_notexist(dirname($key), 0777);
             $content = @file_get_contents($url);
             if (!empty($content)) {
                 file_put_contents($key, $content);
@@ -77,7 +77,7 @@ class Local extends BaseUpload
     public function base64(string $content, ?string $key = null)
     {
 
-        mkdirs_or_notexist($key);
+        mkdirs_or_notexist(dirname($key));
         file_put_contents(url_to_path($key), base64_decode($content));
         return true;
     }

@@ -1,0 +1,38 @@
+@font-face {
+  font-family: "o2o"; /* Project id 4412516 */
+  src: url('//at.alicdn.com/t/c/font_4412516_cacqsbew46.woff2?t=1705720131974') format('woff2'),
+       url('//at.alicdn.com/t/c/font_4412516_cacqsbew46.woff?t=1705720131974') format('woff'),
+       url('//at.alicdn.com/t/c/font_4412516_cacqsbew46.ttf?t=1705720131974') format('truetype');
+}
+
+.o2o {
+  font-family: "o2o" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.o2o-icon-danhanghuadong:before {
+  content: "\e66f";
+}
+
+.o2o-icon-yuanjiao:before {
+  content: "\e6c0";
+}
+
+.o2o-icon-gl-square:before {
+  content: "\ea92";
+}
+
+.o2o-icon-sousuo12:before {
+  content: "\e699";
+}
+
+.o2o-icon-sousuo11:before {
+  content: "\e6d4";
+}
+
+.o2o-icon-jishi:before {
+  content: "\e600";
+}

@@ -1,0 +1,51 @@
+{
+  "id": "4412516",
+  "name": "上门服务",
+  "font_family": "o2o",
+  "css_prefix_text": "o2o-icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "30621139",
+      "name": "单行滑动",
+      "font_class": "danhanghuadong",
+      "unicode": "e66f",
+      "unicode_decimal": 58991
+    },
+    {
+      "icon_id": "7149037",
+      "name": "圆角",
+      "font_class": "yuanjiao",
+      "unicode": "e6c0",
+      "unicode_decimal": 59072
+    },
+    {
+      "icon_id": "7594344",
+      "name": "20gl-square",
+      "font_class": "gl-square",
+      "unicode": "ea92",
+      "unicode_decimal": 60050
+    },
+    {
+      "icon_id": "10133070",
+      "name": "搜索",
+      "font_class": "sousuo12",
+      "unicode": "e699",
+      "unicode_decimal": 59033
+    },
+    {
+      "icon_id": "14652583",
+      "name": "搜索",
+      "font_class": "sousuo11",
+      "unicode": "e6d4",
+      "unicode_decimal": 59092
+    },
+    {
+      "icon_id": "6818781",
+      "name": "技师",
+      "font_class": "jishi",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    }
+  ]
+}

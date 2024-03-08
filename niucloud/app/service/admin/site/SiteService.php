@@ -12,6 +12,7 @@
 namespace app\service\admin\site;
 
 use app\dict\addon\AddonDict;
+use app\dict\site\SiteDict;
 use app\dict\sys\AppTypeDict;
 use app\model\addon\Addon;
 use app\model\site\Site;
@@ -58,11 +59,11 @@ class SiteService extends BaseAdminService
     {
 
         $field = 'site_id, site_name, front_end_name, front_end_logo, app_type, keywords, logo, icon, `desc`, status, latitude, longitude, province_id, city_id, 
-        district_id, address, full_address, phone, business_hours, create_time, expire_time, group_id, app, addons';
+        district_id, address, full_address, phone, business_hours, create_time, expire_time, group_id, app, addons, site_domain';
         $condition = [
             [ 'app_type', '<>', 'admin' ]
         ];
-        $search_model = $this->model->where($condition)->withSearch([ 'create_time', 'expire_time', 'keywords', 'status', 'group_id', 'app' ], $where)->with(['groupName'])->field($field)->append([ 'status_name' ])->order('create_time desc');
+        $search_model = $this->model->where($condition)->withSearch([ 'create_time', 'expire_time', 'keywords', 'status', 'group_id', 'app', 'site_domain' ], $where)->with(['groupName'])->field($field)->append([ 'status_name' ])->order('create_time desc');
         return $this->pageQuery($search_model, function ($item){
             $item['admin'] = (new SysUserRole())->where([ ['site_id', '=', $item['site_id'] ], ['is_admin', '=', 1] ])
                 ->field('uid')
@@ -79,7 +80,7 @@ class SiteService extends BaseAdminService
     public function getInfo(int $site_id)
     {
         $field = 'site_id, site_name, front_end_name, front_end_logo, app_type, keywords, logo, icon, `desc`, status, latitude, longitude, province_id, city_id, 
-        district_id, address, full_address, phone, business_hours, create_time, expire_time, group_id, app, addons';
+        district_id, address, full_address, phone, business_hours, create_time, expire_time, group_id, app, addons, site_domain';
         $info = $this->model->where([ [ 'site_id', '=', $site_id ] ])->with([ 'groupName' ])->field($field)->append([ 'status_name' ])->findOrEmpty()->toArray();
         if (!empty($info)) {
             $site_addons = (new CoreSiteService())->getAddonKeysBySiteId($site_id);
@@ -155,14 +156,38 @@ class SiteService extends BaseAdminService
      */
     public function edit(int $site_id, array $data)
     {
-        //获取套餐类型
-        if (isset($data[ 'group_id' ])) {
-            $site_group = (new SiteGroup())->where([ ['group_id', '=', $data[ 'group_id' ] ] ])->field('app,addon')->findOrEmpty();
-            $data['app'] = $site_group['app'];
+        $site = $this->model->where([ [ 'site_id', '=', $site_id ] ])->with(['site_group'])->findOrEmpty();
+        if ($site->isEmpty()) throw new AdminException('SITE_NOT_EXIST');
+
+        Db::startTrans();
+        try {
+            if (isset($data[ 'group_id' ]) && $site['group_id'] != $data[ 'group_id' ]) {
+                $old_site_group = $site['site_group'];
+
+                $site_group = (new SiteGroup())->where([ ['group_id', '=', $data[ 'group_id' ] ] ])->field('app,addon')->findOrEmpty();
+                $data['app'] = $site_group['app'];
+
+                if (empty($site->initalled_addon)) {
+                    $site->initalled_addon = array_merge($old_site_group['app'], $old_site_group['addon']);
+                }
+                //添加站点成功事件
+                event("AddSiteAfter", [ 'site_id' => $site_id, 'main_app' => array_diff($site_group['app'], $site->initalled_addon) , 'site_addons' => array_diff($site_group['addon'], $site->initalled_addon) ]);
+
+                $data['initalled_addon'] = array_values(array_unique(array_merge($site->initalled_addon, $site_group['app'], $site_group['addon'])));
+            }
+
+            if (isset($data['expire_time']) && $site['status'] != SiteDict::CLOSE) {
+                $data['status'] = strtotime($data['expire_time']) > time() ? SiteDict::ON : SiteDict::EXPIRE;
+            }
+            $site->save($data);
+
+            Cache::tag(self::$cache_tag_name . $site_id)->clear();
+            Db::commit();
+            return true;
+        } catch ( Exception $e) {
+            Db::rollback();
+            throw new AdminException($e->getMessage().$e->getFile().$e->getLine());
         }
-        $this->model->update($data, [ [ 'site_id', '=', $site_id ] ]);
-        Cache::tag(self::$cache_tag_name . $site_id)->clear();
-        return true;
     }
 
     /**

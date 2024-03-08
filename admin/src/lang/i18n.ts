@@ -23,7 +23,8 @@ let i18n = createI18n({
     messages: {
         "zh-cn": zhCn,
         en
-    }
+    },
+    silentFallbackWarn: true
 });
 
 const language = new Language(i18n);

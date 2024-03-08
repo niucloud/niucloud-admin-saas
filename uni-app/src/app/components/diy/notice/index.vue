@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-// 应用列表
+// 公告
 import { ref, computed, watch, onMounted } from 'vue';
 import { img, redirect } from '@/utils/common';
 import useDiyStore from '@/app/stores/diy';
@@ -55,17 +55,6 @@ watch(
 
 onMounted(() => {
     refresh();
-    // 装修模式下刷新
-    if (diyStore.mode == 'decorate') {
-        watch(
-            () => diyComponent.value,
-            (newValue, oldValue) => {
-                if (newValue && newValue.componentName == 'AddonList') {
-                    refresh();
-                }
-            }
-        )
-    }
 });
 
 const refresh = () => {
@@ -86,24 +75,4 @@ const noticeClickFn = ()=>{
 </script>
 
 <style lang="scss" scoped>
-/* 单行超出隐藏 */
-.using-hidden {
-    word-break: break-all;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    white-space: break-spaces;
-}
-
-/* 多行超出隐藏 */
-.multi-hidden {
-    word-break: break-all;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-}
 </style>

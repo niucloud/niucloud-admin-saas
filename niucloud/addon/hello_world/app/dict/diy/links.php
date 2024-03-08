@@ -2,8 +2,6 @@
 
 return [
     'HELLO_WORLD_LINK' => [
-        'key' => 'hello_world',
-        'addon_title' => get_lang('dict_diy.hello_world_title'),
         'title' => get_lang('dict_diy.hello_world_link'),
         'child_list' => [
             [

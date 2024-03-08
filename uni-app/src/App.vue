@@ -1,21 +1,17 @@
 <script setup lang="ts">
 	import { onLaunch, onShow, onHide } from '@dcloudio/uni-app'
 	import manifest from '@/manifest.json'
-	import { redirectInterceptor, launchInterceptor } from '@/utils/interceptor'
+	import { launchInterceptor } from '@/utils/interceptor'
 	import { getToken, isWeixinBrowser, getSiteId } from '@/utils/common'
 	import useMemberStore from '@/stores/member'
 	import useConfigStore from '@/stores/config'
 	import useSystemStore from '@/stores/system'
 	import { useLogin } from '@/hooks/useLogin'
-	import { language } from '@/locale'
 
 	onLaunch(async (data) => {
 
 		// 添加初始化拦截器
 		launchInterceptor()
-
-		// 添加页面跳转拦截器
-		redirectInterceptor()
 
 		// #ifdef H5
 		uni.getSystemInfoSync().platform == 'ios' && (uni.setStorageSync('initUrl', location.href))

@@ -11,13 +11,10 @@
 
 namespace app\service\core\addon;
 
-use app\model\addon\AddonDevelop;
 use app\service\core\niucloud\CoreCloudBaseService;
 use app\service\core\niucloud\CoreModuleService;
 use core\exception\CommonException;
 use core\util\niucloud\CloudService;
-use GuzzleHttp\Client;
-use GuzzleHttp\RequestOptions;
 use think\facade\Cache;
 
 /**

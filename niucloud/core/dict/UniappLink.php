@@ -17,17 +17,16 @@ class UniappLink extends BaseDict
 {
     /**
      * 系统uniapp页面链接
-     * @param array $data
      * @param array $params
      * @return array|false|mixed|string
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function load(array $data = [], array $params = [])
+    public function load(array $params = [])
     {
-        if (!empty($params[ 'addon' ])) {
-            $addons = [ $params[ 'addon' ] ];
+        if (!empty($params[ 'params' ][ 'addon' ])) {
+            $addons = [ $params[ 'params' ][ 'addon' ] ];
         } else {
             $addons = $this->getLocalAddons();
         }
@@ -44,13 +43,13 @@ class UniappLink extends BaseDict
         $addon_service = new AddonService();
         $addon_info_list = $addon_service->getAddonListByKeys(array_keys($link_files));
 
-        if (!empty($params[ 'query' ]) && $params[ 'query' ] == 'addon') {
+        if (!empty($params[ 'params' ][ 'query' ]) && $params[ 'params' ][ 'query' ] == 'addon') {
             $list_key = array_column($addon_info_list, 'key');
             $addon_info_list = array_combine($list_key, $addon_info_list);
             return $addon_info_list;
         } else {
 
-            $links = $data;
+            $links = $params[ 'data' ];
 
             foreach ($link_files as $k => $v) {
                 $addon_link = include $v;

@@ -4,7 +4,15 @@
 			"path": "app/pages/index/index",
 			"style": {
 				"navigationBarTitleText": "%pages.index.index%",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": true,
+				"usingComponents": {
+					"diy-group": "../../../../addon/components/diy/group/index",
+					"fixed-group": "../../../../addon/components/fixed/group/index"
+				},
+				"componentPlaceholder": {
+					"diy-group": "view",
+					"fixed-group": "view"
+				}
 			}
 		},
 		{
@@ -41,7 +49,15 @@
 			"path": "app/pages/index/diy",
 			"style": {
 				"navigationBarTitleText": "%pages.index.diy%",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": true,
+				"usingComponents": {
+					"diy-group": "../../../../addon/components/diy/group/index",
+					"fixed-group": "../../../../addon/components/fixed/group/index"
+				},
+				"componentPlaceholder": {
+					"diy-group": "view",
+					"fixed-group": "view"
+				}
 			}
 		},
 		{
@@ -113,7 +129,15 @@
 			"path": "app/pages/member/index",
 			"style": {
 				"navigationBarTitleText": "%pages.member.index%",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": true,
+				"usingComponents": {
+					"diy-group": "../../../../addon/components/diy/group/index",
+					"fixed-group": "../../../../addon/components/fixed/group/index"
+				},
+				"componentPlaceholder": {
+					"diy-group": "view",
+					"fixed-group": "view"
+				}
 			}
 		},
 		{
@@ -195,8 +219,16 @@
 			"style": {
 				"navigationBarTitleText": "%pages.index.develop%"
 			}
-		} // {{PAGE}}
-    ],
+		}
+	],
+	"subPackages": [
+		{
+			"root": "addon",
+			"pages": [
+				// {{PAGE}}
+			]
+		}
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "",
@@ -217,6 +249,8 @@
 	"uniIdRouter": {},
 	"easycom": {
 		"custom": {
+			"diy-group": "@/addon/components/diy/group/index.vue",
+			"fixed-group": "@/addon/components/fixed/group/index.vue",
 			"^u-(.*)": "uview-plus/components/u-$1/u-$1.vue",
 			"diy-(\W.*)": "@/app/components/diy/$1/index.vue",
 			"fixed-(\W.*)": "@/app/components/fixed/$1/index.vue"

@@ -24,6 +24,10 @@ Route::group('channel', function () {
     //设置微信配置
     Route::put('h5/config', 'channel.H5/set');
 
+    /***************************************************** pc信息 ****************************************************/
+    Route::get('pc/config', 'channel.Pc/get');
+    //设置微信配置
+    Route::put('pc/config', 'channel.Pc/set');
 
 })->middleware([
     AdminCheckToken::class,

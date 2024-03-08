@@ -55,6 +55,8 @@ trait ExecuteSqlTrait
             $match_item = preg_match('/DELETE FROM [`]?(\\w+)[`]?/is', $sql, $match_data);
         } elseif (str_contains($sql, 'UPDATE')) {
             $match_item = preg_match('/UPDATE [`]?(\\w+)[`]?/is', $sql, $match_data);
+        } elseif (str_contains($sql, 'DROP TABLE')) {
+            $match_item = preg_match('/DROP TABLE [`]?(\\w+)[`]?/is', $sql, $match_data);
         } else {
             $match_item = 0;
         }

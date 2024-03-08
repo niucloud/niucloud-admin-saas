@@ -11,10 +11,13 @@
 
 namespace app\service\api\login;
 
+use app\dict\common\ChannelDict;
 use app\dict\site\SiteDict;
 use app\model\member\Member;
 use app\Request;
 use app\service\api\member\MemberService;
+use app\service\core\channel\CoreH5Service;
+use app\service\core\channel\CorePcService;
 use app\service\core\site\CoreSiteService;
 use app\service\core\weapp\CoreWeappAuthService;
 use core\base\BaseApiService;
@@ -41,9 +44,30 @@ class AuthService extends BaseApiService
             $member_service = new MemberService();
             $member_info = $member_service->findMemberInfo(['member_id' => $this->member_id, 'site_id' => $this->site_id]);
             if($member_info->isEmpty())
-                throw new AuthException('MEMBER_NOT_EXIST');
+                throw new AuthException('MEMBER_NOT_EXIST', 401);
         }
         return true;
+    }
+
+    /**
+     * 校验渠道
+     * @param Request $request
+     * @return void
+     */
+    public function checkChannel(Request $request) {
+        $channel = $request->getChannel();
+        $site_id = $request->apiSiteId();
+
+        switch ($channel) {
+            case ChannelDict::H5:
+                $is_open = (int)(new CoreH5Service())->getH5($site_id)['is_open'];
+                if (!$is_open) throw new AuthException('SITE_CLOSE_NOT_ALLOW', 402);
+                break;
+            case ChannelDict::PC:
+                $is_open = (int)(new CorePcService())->getPc($site_id)['is_open'];
+                if (!$is_open) throw new AuthException('SITE_CLOSE_NOT_ALLOW', 402);
+                break;
+        }
     }
 
     /**
@@ -57,7 +81,7 @@ class AuthService extends BaseApiService
         if(empty($site_info)) throw new AuthException('SITE_NOT_EXIST');
         $rule = strtolower(trim($request->rule()->getRule()));
         if($rule != 'site'){
-            if ($site_info['status'] == SiteDict::CLOSE || $site_info['expire_time'] < time()) throw new AuthException('SITE_CLOSE_NOT_ALLOW');
+            if ($site_info['status'] == SiteDict::CLOSE || $site_info['expire_time'] < time()) throw new AuthException('SITE_CLOSE_NOT_ALLOW', 402);
         }
         $request->siteId($site_id);
         return true;

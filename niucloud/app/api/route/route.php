@@ -93,6 +93,10 @@ Route::group(function() {
     Route::get('area/tree/:level', 'sys.Area/tree');
     // 获取省市县数据根据地址id
     Route::get('area/code/:code', 'sys.Area/areaByAreaCode');
+
+    /***************************************************** 海报管理 ****************************************************/
+    //获取海报
+    Route::get('poster', 'poster.Poster/poster');
 })->middleware(ApiChannel::class)
     ->middleware(ApiCheckToken::class)
     ->middleware(ApiLog::class);

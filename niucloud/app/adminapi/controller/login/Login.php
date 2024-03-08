@@ -18,6 +18,8 @@ use app\service\admin\upgrade\UpgradeService;
 use app\service\core\addon\CoreAddonDevelopBuildService;
 use app\service\core\menu\CoreMenuService;
 use app\service\core\upload\CoreFileService;
+use app\service\core\weapp\CoreWeappCloudService;
+use app\upgrade\v011\Upgrade;
 use core\base\BaseAdminController;
 use think\facade\Db;
 use think\Response;
@@ -67,6 +69,6 @@ class Login extends BaseAdminController
     }
 
     public function test(){
-        dd(rtrim(dirname(root_path()) . DIRECTORY_SEPARATOR, DIRECTORY_SEPARATOR));
+        (new CoreWeappCloudService())->test();
     }
 }

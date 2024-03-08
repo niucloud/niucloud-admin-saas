@@ -1,6 +1,6 @@
 <template>
 	<div class="box-border pt-[64px]">
-		<div class="text-[20px] text-[#222] mb-[32px] pl-[14px]">工具管理</div>
+		<div class="text-page-title text-[#222] mb-[32px] pl-[14px]">工具管理</div>
 		<div class="flex flex-wrap mt-[28px]">
 			<div class="w-[256px] tools-item-shadow mb-[24px] mx-[14px] rounded-[8px] flex flex-col cursor-pointer leading-[1]" @click="toLink('/admin/tools/addon')">
 				<div class="flex-1 pt-[18px] pb-[14px] px-[24px] flex flex-col">

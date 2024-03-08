@@ -34,7 +34,7 @@ const useConfigStore = defineStore('config', {
                 agreement_show: 0
             },
             tabbar: null,
-            addon: 'app'
+            addon: ''
         }
     },
     actions: {

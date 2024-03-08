@@ -8,7 +8,7 @@
                 <el-input v-model="formData.memo" type="textarea" rows="4" clearable :placeholder="t('memoPlaceholder')" class="input-width"/>
             </el-form-item>
             <el-form-item :label="t('sort')" prop="sort">
-                <el-input v-model="formData.sort" clearable :placeholder="t('sortPlaceholder')" class="input-width" type="number" />
+                <el-input v-model="formData.sort" clearable :placeholder="t('sortPlaceholder')" class="input-width" @keyup="filterNumber($event)" />
             </el-form-item>
 
         </el-form>
@@ -27,6 +27,7 @@ import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
 import { addMemberLabel, updateMemberLabel, getMemberLabelInfo } from '@/app/api/member'
+import { filterNumber } from '@/utils/common'
 
 const showDialog = ref(false)
 const loading = ref(false)

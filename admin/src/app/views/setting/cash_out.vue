@@ -1,7 +1,7 @@
 <template>
     <div class="main-container">
         <div class="flex ml-[18px] justify-between items-center mt-[20px]">
-			<span class="text-[20px]">{{pageName}}</span>
+			<span class="text-page-title">{{pageName}}</span>
 		</div>
         <el-form :model="formData" label-width="150px" ref="ruleFormRef" :rules="rules" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">
@@ -11,11 +11,11 @@
                 </el-form-item>
 
                 <el-form-item :label="t('cashWithdrawalAmount')" v-if="formData.is_open" prop="min">
-                    <el-input v-model="formData.min" type="number"  class="input-width" :placeholder="t('cashWithdrawalAmountPlaceholder')" />
+                    <el-input v-model="formData.min" @keyup="filterDigit($event)" class="input-width" :placeholder="t('cashWithdrawalAmountPlaceholder')" />
                 </el-form-item>
 
                 <el-form-item :label="t('commissionRatio')" v-if="formData.is_open" prop="rate">
-                    <el-input v-model="formData.rate" type="number" class="input-width" :placeholder="t('commissionRatioPlaceholder')" />
+                    <el-input v-model="formData.rate" @keyup="filterDigit($event)" class="input-width" :placeholder="t('commissionRatioPlaceholder')" />
                     <span class="ml-2">%</span>
                 </el-form-item>
                 <el-form-item :label="t('audit')" v-if="formData.is_open"  class="items-center">
@@ -53,6 +53,7 @@ import { t } from '@/lang'
 import { getCashOutConfig, setCashOutConfig, getTransfertype } from '@/app/api/member'
 import { FormRules, FormInstance } from 'element-plus'
 import { useRoute } from 'vue-router'
+import { filterDigit } from '@/utils/common'
 
 const route = useRoute()
 const pageName = route.meta.title

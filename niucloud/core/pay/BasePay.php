@@ -4,6 +4,7 @@ namespace core\pay;
 
 use core\exception\PayException;
 use core\loader\Storage;
+use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\MessageInterface;
 use Yansongda\Supports\Collection;
 
@@ -157,7 +158,7 @@ abstract class BasePay extends Storage
 
     public function returnFormat($param)
     {
-        if ($param instanceof MessageInterface) {
+        if ($param instanceof MessageInterface || $param instanceof Response) {
             $return_value =  $param->getBody()->getContents();
         } else if ($param instanceof Collection) {
             $return_value = $param->all();

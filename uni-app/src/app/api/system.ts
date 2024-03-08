@@ -114,3 +114,11 @@ export function getAreaByCode(code: number | string) {
 export function getWapIndexList(data : AnyObject) {
     return request.get('wap_index', data)
 }
+
+/**
+ * 获取海报
+ * @returns 
+ */
+export function getPoster(params : Record<string, any>) {
+    return request.get("poster", params)
+}

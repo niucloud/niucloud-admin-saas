@@ -2,7 +2,7 @@
     <div class="main-container w-full bg-white" v-loading="loading">
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center">
-                <span class="text-[20px]">应用管理</span>
+                <span class="text-page-title">应用管理</span>
             </div>
             <div class="flex flex-wrap plug-list pb-10 plug-large" v-if="appList.length">
                 <div v-for="(item, index) in appList" :key="index + 'b'">

@@ -196,8 +196,8 @@ class Account extends BaseAdminController
         if (empty($data['member_id'])) {
 
             $balance_data = [
-                MemberAccountTypeDict::BALANCE => number_format($member_account_service->getSumAccount(MemberAccountTypeDict::BALANCE), 2),
-                MemberAccountTypeDict::MONEY => number_format($member_account_service->getSumAccount(MemberAccountTypeDict::MONEY), 2),
+                MemberAccountTypeDict::BALANCE => number_format($member_account_service->getSumAccount(MemberAccountTypeDict::BALANCE), 2, '.', ''),
+                MemberAccountTypeDict::MONEY => number_format($member_account_service->getSumAccount(MemberAccountTypeDict::MONEY), 2, '.', ''),
             ];
             return success($balance_data);
         } else {

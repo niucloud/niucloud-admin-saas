@@ -101,7 +101,7 @@ document.addEventListener('visibilitychange', e => {
 
 const detectionLoginFn = () => {
     detectionLoginDialog.value = false
-    location.reload()
+    location.href = `${location.origin}/site/`
 }
 // 检测登录 end
 

@@ -1,7 +1,7 @@
 <template>
     <div class="main-container p-5">
         <div class="flex justify-between items-center mb-[20px]">
-            <span class="text-[20px]">{{ pageName }}</span>
+            <span class="text-page-title">{{ pageName }}</span>
         </div>
         <el-tabs v-model="activeName" class="demo-tabs" @tab-change="handleClick">
             <el-tab-pane :label="t('weappAccessFlow')" name="/channel/weapp" />

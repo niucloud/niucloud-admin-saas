@@ -181,6 +181,7 @@ class DiyRouteService extends BaseAdminService
         $link = LinkDict::getLink([
             'query' => 'addon'
         ]);
+
         return $link;
     }
 

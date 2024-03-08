@@ -2,7 +2,7 @@
 	<div class="main-container">
 		<el-card class="box-card !border-none" shadow="never">
 			<div class="flex justify-between items-center mb-[20px]">
-				<span class="text-[20px]">{{ pageName }}</span>
+				<span class="text-page-title">{{ pageName }}</span>
 				<el-button type="primary" @click="showEvent">{{ t('addCron') }}</el-button>
 			</div>
 			<el-alert class="warm-prompt " type="info">

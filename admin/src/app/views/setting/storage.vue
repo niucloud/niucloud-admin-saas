@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
            <div class="flex justify-between items-center">
-                <span class="text-[20px]">{{pageName}}</span>
+                <span class="text-page-title">{{pageName}}</span>
             </div>
             <div class="mt-[16px]">
                 <el-table :data="storageTableData.data" size="large" v-loading="loading">

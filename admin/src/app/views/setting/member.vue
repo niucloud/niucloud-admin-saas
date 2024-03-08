@@ -10,7 +10,7 @@
                 </el-form-item>
 
                 <el-form-item :label="t('length')" prop="length">
-                    <el-input v-model="formData.length" :placeholder="t('lengthPlaceholder')" class="input-width" clearable type="number" @change="getMemberNo(ruleFormRef)"/>
+                    <el-input v-model="formData.length" :placeholder="t('lengthPlaceholder')" class="input-width" clearable @keyup="filterNumber($event)" @change="getMemberNo(ruleFormRef)"/>
                     <div class="form-tip">{{ t('lengthTips') }}</div>
                 </el-form-item>
 
@@ -32,6 +32,7 @@ import { reactive, ref } from 'vue'
 import { t } from '@/lang'
 import { getMemberConfig, setMemberConfig } from '@/app/api/member'
 import { FormInstance, FormRules } from 'element-plus'
+import { filterNumber } from '@/utils/common'
 
 const loading = ref(true)
 const ruleFormRef = ref<FormInstance>({})

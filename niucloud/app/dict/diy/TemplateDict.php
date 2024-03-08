@@ -19,6 +19,15 @@ use core\dict\DictLoader;
 class TemplateDict
 {
 
+    /**
+     * 根据关键字查询：key 格式：[ 'DIY_INDEX', 'DIY_MEMBER_INDEX','DIY_SHOP_MEMBER_INDEX' ]
+     * 查询指定类型的页面：type 格式：'type' => 'member_index'
+     * 查询指定插件定义的所有页面：addon 格式：'addon' => 'shop'
+     * 查询可装修的页面类型：action 格式：'action' => 'decorate'
+     * 查询存在模板页面的应用插件列表：query 格式：'query' => 'addon'
+     * @param array $params
+     * @return array|null
+     */
     public static function getTemplate($params = [])
     {
         $system_pages = [
@@ -51,13 +60,13 @@ class TemplateDict
                     'list' => $system_pages
                 ]
             ];
-            $addon = (new DictLoader("UniappTemplate"))->load([], $params);
+            $addon = ( new DictLoader("UniappTemplate") )->load([ 'data' => $system, 'params' => $params ]);
             $app = array_merge($system, $addon);
             return $app;
         } else {
             // 查询应用插件下的模板页面数据
 
-            $pages = (new DictLoader("UniappTemplate"))->load($system_pages, $params);
+            $pages = ( new DictLoader("UniappTemplate") )->load([ 'data' => $system_pages, 'params' => $params ]);
 
             // 根据关键字查询
             if (!empty($params[ 'key' ])) {

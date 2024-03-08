@@ -12,13 +12,10 @@
 namespace app\service\core\addon;
 
 use app\dict\sys\MenuDict;
-use app\model\addon\Addon;
-use app\model\addon\AddonDevelop;
 use app\model\sys\SysMenu;
 use app\service\admin\sys\MenuService;
 use core\base\BaseCoreService;
 use core\exception\AddonException;
-use think\helper\Arr;
 
 /**
  * 插件开发服务层
@@ -53,6 +50,7 @@ class CoreAddonDevelopBuildService extends BaseCoreService
         $this->admin();
         $this->uniapp();
         $this->buildUniappPagesJson();
+        $this->buildUniappLangJson();
         $this->web();
         $this->resource();
         $this->menu('admin');
@@ -173,7 +171,7 @@ class CoreAddonDevelopBuildService extends BaseCoreService
             preg_match($pattern, $pages_json, $match);
 
             if (!empty($match)) {
-                $addon_pages = $match[1];
+                $addon_pages = str_replace(PHP_EOL.','.PHP_EOL, '', $match[1]);
 
                 $content = '<?php' . PHP_EOL;
                 $content .= 'return [' . PHP_EOL . "    'pages' => <<<EOT" . PHP_EOL . '        // PAGE_BEGIN' . PHP_EOL;
@@ -184,6 +182,32 @@ class CoreAddonDevelopBuildService extends BaseCoreService
                 file_put_contents($this->addon_path . 'package' . DIRECTORY_SEPARATOR . 'uni-app-pages.php', $content);
             }
         }
+        return true;
+    }
+
+    public function buildUniappLangJson() {
+        $zh_json = json_decode(file_get_contents($this->root_path . 'uni-app' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'locale' . DIRECTORY_SEPARATOR . 'zh-Hans.json'), true);
+        $en_json = json_decode(file_get_contents($this->root_path . 'uni-app' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . 'locale' . DIRECTORY_SEPARATOR . 'en.json'), true);
+
+        $zh = [];
+        $en = [];
+        foreach ($zh_json as $key => $value) {
+            if (strpos($key, $this->addon . '.') === 0) {
+                $key = str_replace($this->addon . '.', '', $key);
+                $zh[$key] = $value;
+            }
+        }
+        foreach ($en_json as $key => $value) {
+            if (strpos($key, $this->addon . '.') === 0) {
+                $key = str_replace($this->addon . '.', '', $key);
+                $en[$key] = $value;
+            }
+        }
+        $addon_lang_dir = $this->addon_path . 'uni-app' . DIRECTORY_SEPARATOR . 'locale' . DIRECTORY_SEPARATOR;
+        if (!is_dir($addon_lang_dir)) dir_mkdir($addon_lang_dir);
+        (new CoreAddonBaseService())->writeArrayToJsonFile($zh, $addon_lang_dir . 'zh-Hans.json');
+        (new CoreAddonBaseService())->writeArrayToJsonFile($en, $addon_lang_dir . 'en.json');
+
         return true;
     }
 

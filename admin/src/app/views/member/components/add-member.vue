@@ -7,7 +7,7 @@
             </el-form-item>
 
             <el-form-item :label="t('mobile')" prop="mobile">
-                <el-input v-model="formData.mobile" clearable :placeholder="t('mobilePlaceholder')" type="number" class="input-width" />
+                <el-input v-model="formData.mobile" clearable :placeholder="t('mobilePlaceholder')" @keyup="filterNumber($event)" class="input-width" />
             </el-form-item>
 
             <el-form-item :label="t('nickname')">
@@ -37,6 +37,7 @@ import { ref, reactive, computed } from 'vue'
 import { t } from '@/lang'
 import type { FormInstance } from 'element-plus'
 import { addMember, getMemberList, getMemberNo } from '@/app/api/member'
+import { filterNumber } from '@/utils/common'
 
 const showDialog = ref(false)
 const loading = ref(false)

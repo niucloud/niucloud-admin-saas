@@ -40,7 +40,7 @@ class Diy extends BaseAdminController
             [ 'mode', '' ],
             [ 'addon_name', '' ]
         ]);
-        return success((new DiyService())->getPage($data));
+        return success(( new DiyService() )->getPage($data));
     }
 
     /**
@@ -57,7 +57,7 @@ class Diy extends BaseAdminController
             [ "type", "" ],
             [ 'mode', '' ]
         ]);
-        return success((new DiyService())->getList($data));
+        return success(( new DiyService() )->getList($data));
     }
 
     /**
@@ -67,7 +67,7 @@ class Diy extends BaseAdminController
      */
     public function info(int $id)
     {
-        return success((new DiyService())->getInfo($id));
+        return success(( new DiyService() )->getInfo($id));
     }
 
     /**
@@ -88,7 +88,7 @@ class Diy extends BaseAdminController
         ]);
 
         $this->validate($data, 'app\validate\diy\Diy.add');
-        $id = (new DiyService())->add($data);
+        $id = ( new DiyService() )->add($data);
         return success('ADD_SUCCESS', [ 'id' => $id ]);
     }
 
@@ -106,7 +106,7 @@ class Diy extends BaseAdminController
             [ 'is_change', '' ]
         ]);
         $this->validate($data, 'app\validate\diy\Diy.edit');
-        (new DiyService())->edit($id, $data);
+        ( new DiyService() )->edit($id, $data);
         return success('MODIFY_SUCCESS');
     }
 
@@ -117,7 +117,7 @@ class Diy extends BaseAdminController
      */
     public function del(int $id)
     {
-        (new DiyService())->del($id);
+        ( new DiyService() )->del($id);
         return success('DELETE_SUCCESS');
     }
 
@@ -129,7 +129,7 @@ class Diy extends BaseAdminController
      */
     public function setUse($id)
     {
-        (new DiyService())->setUse($id);
+        ( new DiyService() )->setUse($id);
         return success('MODIFY_SUCCESS');
     }
 
@@ -158,7 +158,6 @@ class Diy extends BaseAdminController
         $diy_service = new DiyService();
         return success($diy_service->getLink());
     }
-
     /**
      * 获取页面模板
      * @return Response
@@ -186,7 +185,7 @@ class Diy extends BaseAdminController
         $data = $this->request->params([
             [ "share", "" ],
         ]);
-        (new DiyService())->modifyShare($id, $data);
+        ( new DiyService() )->modifyShare($id, $data);
         return success('MODIFY_SUCCESS');
     }
 
@@ -198,7 +197,7 @@ class Diy extends BaseAdminController
         $params = $this->request->params([
             [ 'type', '' ],
         ]);
-        return success((new DiyService())->getDecoratePage($params));
+        return success(( new DiyService() )->getDecoratePage($params));
     }
 
     /**
@@ -214,7 +213,7 @@ class Diy extends BaseAdminController
             [ 'title', '' ], // 链接标题
             [ 'action', '' ] // 是否存在操作，decorate 表示支持装修
         ]);
-        (new DiyService())->changeTemplate($data);
+        ( new DiyService() )->changeTemplate($data);
         return success('MODIFY_SUCCESS');
     }
 
@@ -238,6 +237,6 @@ class Diy extends BaseAdminController
      */
     public function getApps()
     {
-        return success((new DiyService())->getApps());
+        return success(( new DiyService() )->getApps());
     }
 }

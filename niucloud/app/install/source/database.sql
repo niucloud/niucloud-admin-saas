@@ -531,6 +531,8 @@ CREATE TABLE `site`  (
   `member_no` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '0' COMMENT '最大会员码值',
   `app` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '站点主应用',
   `addons` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '站点包含的插件',
+  `initalled_addon` text DEFAULT NULL COMMENT '站点已执行初始化方法的插件',
+  `site_domain` varchar(255) NOT NULL DEFAULT '' COMMENT '站点域名',
   PRIMARY KEY (`site_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 10000 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '站点表' ROW_FORMAT = Dynamic;
 
@@ -755,6 +757,27 @@ CREATE TABLE `sys_role`  (
   PRIMARY KEY (`role_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '角色表' ROW_FORMAT = Dynamic;
 
+DROP TABLE IF EXISTS `sys_poster`;
+CREATE TABLE `sys_poster` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `site_id` int NOT NULL DEFAULT 0 COMMENT '站点id',
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '海报名称',
+  `type` varchar(255) NOT NULL DEFAULT '' COMMENT '海报类型',
+  `channel` varchar(255) NOT NULL DEFAULT '' COMMENT '海报支持渠道',
+  `value` text DEFAULT NULL COMMENT '配置值json',
+  `status` tinyint NOT NULL DEFAULT 1 COMMENT '是否启用 1启用 2不启用',
+  `create_time` int NOT NULL DEFAULT 0 COMMENT '创建时间',
+  `update_time` int NOT NULL DEFAULT 0 COMMENT '修改时间',
+  `addon` varchar(255) NOT NULL DEFAULT '' COMMENT '所属插件',
+  PRIMARY KEY (`id`)
+)
+ENGINE = INNODB,
+AUTO_INCREMENT = 3,
+AVG_ROW_LENGTH = 8192,
+CHARACTER SET utf8mb4,
+COLLATE utf8mb4_general_ci,
+COMMENT = '海报表';
+
 DROP TABLE IF EXISTS `sys_schedule`;
 CREATE TABLE `sys_schedule`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -888,7 +911,7 @@ CREATE TABLE `wechat_reply`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '公众号消息回调表' ROW_FORMAT = Dynamic;
 
-INSERT INTO `site` VALUES (1, 'niucloud-admin', '0', '', 'admin', '', '', '1', '', '', '0', '0', '0', '', '', '', '', '0', '0', '', '', '', '0', '', '');
+INSERT INTO `site` VALUES (1, 'niucloud-admin', '0', '', 'admin', '', '', '1', '', '', '0', '0', '0', '', '', '', '', '0', '0', '', '', '', '0', '', '', '', '');
 
 UPDATE `site` SET site_id = 0 WHERE  site_id = 1;
 

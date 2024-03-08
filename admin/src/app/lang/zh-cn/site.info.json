@@ -27,9 +27,12 @@
       "keywordsPlaceholder": "网站关键字",
       "logoPlaceholder": "网站Logo",
       "descPlaceholder": "网站简介",
-
       "phonePlaceholder": "客服电话",
       "app" : "站点应用",
-      "addon" : "站点插件"
-
+      "addon" : "站点插件",
+      "siteDomain": "站点域名",
+      "siteDomainPlaceholder": "请输入站点域名",
+      "siteDomainTips": "站点域名的配置是针对站点的wap和web端",
+      "siteDomainTipsTwo": "配置的站点域名需要先配置域名解析",
+      "siteDomainTipsThree": "配置的站点域名需配置隐性解析到域名："
 }

@@ -11,6 +11,7 @@
 
 namespace app\dict\diy;
 
+use app\service\admin\sys\ConfigService;
 use core\dict\DictLoader;
 
 /**
@@ -23,6 +24,90 @@ class PagesDict
 
     public static function getPages($params = [])
     {
+        $default_index_value = [
+            "path" => "edit-graphic-nav",
+            "id" => unique_random(10),
+            "componentName" => "GraphicNav",
+            "componentTitle" => "图文导航",
+            "uses" => 0,
+            "layout" => "horizontal",
+            "navTitle" => "",
+            "subNavTitle" => "",
+            "subNavTitleLink" => [
+                "name" => ""
+            ],
+            "subNavColor" => "#999999",
+            "mode" => "graphic",
+            "showStyle" => "fixed",
+            "rowCount" => 4,
+            "pageCount" => 2,
+            "carousel" => [
+                "type" => "circle",
+                "color" => "#FFFFFF"
+            ],
+            "imageSize" => 30,
+            "aroundRadius" => 25,
+            "font" => [
+                "size" => 14,
+                "weight" => "normal",
+                "color" => "#303133"
+            ],
+            "pageBgColor" => "",
+            "componentBgColor" => "rgba(255, 255, 255, 1)",
+            "topRounded" => 9,
+            "bottomRounded" => 9,
+            "elementBgColor" => "",
+            "topElementRounded" => 0,
+            "bottomElementRounded" => 0,
+            "margin" => [
+                "top" => 10,
+                "bottom" => 10,
+                "both" => 16
+            ],
+            "ignore" => [],
+            "list" => []
+        ];
+
+        $wap_index_list = ( new ConfigService() )->getWapIndexList();
+
+        if (!empty($wap_index_list)) {
+            foreach ($wap_index_list as $k => $v) {
+
+                $link_list = LinkDict::getLink([ 'addon' => $v[ 'key' ] ]);
+                $link = [];
+                foreach ($link_list as $ck => $cv) {
+                    if ($cv[ 'addon_info' ][ 'key' ] == $v[ 'key' ]) {
+                        foreach ($cv[ 'child_list' ] as $tk => $tv) {
+                            if ($tv[ 'url' ] == $v[ 'url' ]) {
+                                $link = [
+                                    "parent" => $ck,
+                                    "name" => $tv[ 'name' ],
+                                    "title" => $tv[ 'title' ],
+                                    "url" => $tv[ 'url' ]
+                                ];
+                                break;
+                            }
+                        }
+                    }
+                }
+                $default_index_value[ 'list' ][] = [
+                    "title" => $v[ 'title' ],
+                    "link" => $link,
+                    "imageUrl" => $v[ 'icon' ],
+                    "label" => [
+                        "control" => false,
+                        "text" => "热门",
+                        "textColor" => "#FFFFFF",
+                        "bgColorStart" => "#F83287",
+                        "bgColorEnd" => "#FE3423"
+                    ],
+                    "id" => unique_random(10 + $k),
+                    "imgWidth" => 100,
+                    "imgHeight" => 100
+                ];
+            }
+        }
+
         $system_pages = [
             'DIY_INDEX' => [
                 'default_index' => [ // 页面标识
@@ -75,28 +160,7 @@ class PagesDict
                             ]
                         ],
                         "value" => [
-                            [
-                                "path" => "edit-addon-list",
-                                "uses" => 0,
-                                "id" => "2zcflqtzwn80",
-                                "componentName" => "AddonList",
-                                "componentTitle" => "应用",
-                                "ignore" => [],
-                                "list" => [],
-                                "textColor" => "#303133",
-                                "pageBgColor" => "",
-                                "componentBgColor" => "",
-                                "topRounded" => 0,
-                                "bottomRounded" => 0,
-                                "elementBgColor" => "",
-                                "topElementRounded" => 0,
-                                "bottomElementRounded" => 0,
-                                "margin" => [
-                                    "top" => 0,
-                                    "bottom" => 0,
-                                    "both" => 0
-                                ],
-                            ]
+                            $default_index_value
                         ]
                     ]
                 ],
@@ -783,9 +847,9 @@ class PagesDict
         ];
 
         if (!empty($params[ 'addon' ])) {
-            $pages = (new DictLoader("UniappPages"))->load($params);
+            $pages = ( new DictLoader("UniappPages") )->load($params);
         } else {
-            $pages = (new DictLoader("UniappPages"))->load($system_pages);
+            $pages = ( new DictLoader("UniappPages") )->load($system_pages);
         }
 
         if (!empty($params[ 'type' ])) {

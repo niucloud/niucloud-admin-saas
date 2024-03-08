@@ -53,6 +53,8 @@ class ApiCheckToken
         }
         //校验会员和站点
         ( new AuthService() )->checkSiteAuth($request);
+        // 校验渠道
+        ( new AuthService() )->checkChannel($request);
         return $next($request);
     }
 }

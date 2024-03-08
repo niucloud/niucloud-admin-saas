@@ -261,17 +261,6 @@ class ComponentDict
                             'bgColorEnd' => ''
                         ],
                     ],
-                    'AddonList' => [
-                        'title' => '应用',
-                        'icon' => 'iconfont-iconyingyong1',
-                        'path' => 'edit-addon-list',
-                        'support_page' => [],
-                        'uses' => 0,
-                        'sort' => 10009,
-                        'value' => [
-                            'list' => []
-                        ],
-                    ],
                     'Notice' => [
                         'title' => '公告',
                         'icon' => 'iconfont-icongonggao',

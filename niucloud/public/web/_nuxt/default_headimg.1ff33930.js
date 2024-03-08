@@ -1,1 +1,0 @@
-import{__tla as a}from"./entry.60adbc61.js";let t,e=Promise.all([(()=>{try{return a}catch{}})()]).then(async()=>{t=""+new URL("default_headimg.621b1a94.png",import.meta.url).href});export{t as _,e as __tla};

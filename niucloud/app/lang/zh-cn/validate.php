@@ -50,6 +50,7 @@ return [
         'app_require' => '套餐主应用必须选择',
         'front_end_name_require' => '前台名称必须填写',
         'front_end_name_max' => '前台名称最多不能超过20个字符',
+        'site_domain_cannot_repeated' => '站点域名不能重复'
     ],
     //附件
     'validate_attachment' => [

@@ -9,7 +9,7 @@
             </template>
         </el-alert>
         <div class="flex ml-[18px] justify-between items-center mt-[20px]">
-			<span class="text-[20px]">{{pageName}}</span>
+			<span class="text-page-title">{{pageName}}</span>
 		</div>
         <el-form :model="formData" label-width="200px" ref="formRef" :rules="formRules" class="page-form" v-loading="loading">
             <el-card class="box-card !border-none" shadow="never">

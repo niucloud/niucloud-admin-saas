@@ -3,16 +3,25 @@
         <el-card class="box-card !border-none" shadow="never">
 
             <div class="flex justify-between items-center">
-                <span class="text-[20px]">{{ pageName }}</span>
-                <el-button type="primary" class="w-[100px]" @click="addEvent">
-                    {{ t('addSite') }}
-                </el-button>
+                <span class="text-page-title">{{ pageName }}</span>
+                <div>
+                    <el-button type="primary" class="w-[100px]" @click="addEvent">
+                        {{ t('addSite') }}
+                    </el-button>
+                    <el-button type="default" class="w-[100px]" @click="toSiteLink">
+                        {{ t('toSite') }}
+                    </el-button>
+                </div>
             </div>
 
             <el-card class="box-card !border-none my-[10px] table-search-wrap" shadow="never">
                 <el-form :inline="true" :model="siteTableData.searchParam" ref="searchFormRef">
                     <el-form-item :label="t('siteName')" prop="keywords">
                         <el-input v-model="siteTableData.searchParam.keywords" :placeholder="t('siteNamePlaceholder')" />
+                    </el-form-item>
+
+                    <el-form-item :label="t('siteDomain')" prop="site_domain">
+                        <el-input v-model="siteTableData.searchParam.site_domain" :placeholder="t('siteDomainPlaceholder')" />
                     </el-form-item>
 
                     <el-form-item :label="t('app')" prop="app_id">
@@ -92,6 +101,7 @@
                     </el-table-column>
 
                     <el-table-column prop="group_name" :label="t('groupId')" width="150" :show-overflow-tooltip="true" />
+                    <el-table-column prop="site_domain" :label="t('siteDomain')" width="150" :show-overflow-tooltip="true" />
                     <el-table-column prop="create_time" :label="t('createTime')" width="250"
                         :show-overflow-tooltip="true" />
                     <el-table-column prop="expire_time" :label="t('expireTime')" width="250" :show-overflow-tooltip="true">
@@ -114,16 +124,11 @@
 
                     <el-table-column :label="t('operation')" min-width="250" align="right" fixed="right">
                         <template #default="{ row }">
-                            <el-button type="primary" link @click="toSiteLink(row)">
-                                <!--                                <a href="javascript:;" title="启动站点" class="iconfont iconicon_huojian"></a>-->
-                                访问站点
-                            </el-button>
                             <el-button type="primary" link @click="openClose(row.status, row.site_id)"
                                 v-if="row.status == 1 || row.status == 3">{{ row.status == 1 ? t('closeTxt') : t('openTxt')
                                 }}</el-button>
                             <el-button type="primary" link @click="editEvent(row)">{{ t('edit') }}</el-button>
                             <el-button type="primary" link @click="deleteEvent(row)">{{ t('delete') }}</el-button>
-                            <el-button type="primary" link @click="urlEvent(row)">{{ t('url') }}</el-button>
                             <el-button type="primary" link @click="infoEvent(row)">{{ t('info') }}</el-button>
                         </template>
                     </el-table-column>
@@ -143,15 +148,14 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
-import { img } from '@/utils/common'
+import { getToken, img } from '@/utils/common'
 import { t } from '@/lang'
 import { getSiteList, getSiteGroupAll, getStatusList, closeSite, openSite, deleteSite } from '@/app/api/site'
-import { ElMessageBox, FormInstance, ElMessage } from 'element-plus'
+import { ElMessageBox, FormInstance } from 'element-plus'
 import { useRouter, useRoute } from 'vue-router'
 import EditSite from '@/app/views/site/components/edit-site.vue'
 import { getInstalledAddonList } from '@/app/api/addon'
-// import { CollectionTag } from '@element-plus/icons-vue'
-// import { deleteMenu } from "@/app/api/sys"
+import useUserStore from '@/stores/modules/user'
 
 const route = useRoute()
 const pageName = route.meta.title
@@ -173,9 +177,9 @@ const siteTableData = reactive({
         group_id: '',
         app: 'all',
         status: '',
+        site_domain: '',
         create_time: [],
         expire_time: []
-
     }
 })
 siteTableData.searchParam.status = route.query.id || ''
@@ -265,18 +269,6 @@ const infoEvent = (data: any) => {
 }
 
 /**
- * 站点域名
- * @param data
- */
-const urlEvent = (data: any) => {
-    ElMessage({
-        message: t('siteUrlDevelopMessage'),
-        grouping: true,
-        type: 'success'
-    })
-}
-
-/**
  * 编辑站点详情
  * @param data
  */
@@ -289,9 +281,11 @@ const editEvent = (data: any) => {
  * 站点登录
  * @param data
  */
-const toSiteLink = (data: any) => {
-    window.localStorage.setItem('site.siteId', data.site_id)
-    window.open(`${location.origin}/site/`)
+const toSiteLink = () => {
+    window.localStorage.setItem('site.token', getToken())
+    window.localStorage.setItem('site.comparisonTokenStorage', getToken())
+    window.localStorage.setItem('site.userinfo',  JSON.stringify(useUserStore().userInfo))
+    window.open(`${location.origin}/home/index`)
 }
 
 const openClose = (i, site_id) => {

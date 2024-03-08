@@ -2,6 +2,7 @@
 
 namespace app;
 use app\dict\common\ChannelDict;
+use app\service\core\site\CoreSiteService;
 
 /**
  * Class Request
@@ -166,7 +167,12 @@ class Request extends \think\Request
      * @return array|string|null
      */
     public function apiSiteId(){
-        return $this->header(system_name('api_site_id_name'));
+        $site_id = (int)$this->header(system_name('api_site_id_name'));
+        if (!$site_id) {
+            $domain = str_replace(['http://', 'https://'], '', $this->header('origin'));
+            $site_id = (new CoreSiteService())->getSiteIdByDomain($domain);
+        }
+        return $site_id;
     }
 
     /**

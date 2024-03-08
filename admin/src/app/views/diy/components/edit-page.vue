@@ -32,7 +32,7 @@
 			<h3 class="mb-[10px]">{{ t('marginSet') }}</h3>
 			<el-form label-width="80px" class="px-[10px]">
 				<el-form-item :label="t('marginBoth')">
-					<el-slider v-model="diyStore.global.template.margin.both" show-input size="small" class="ml-[10px] horz-blank-slider"/>
+					<el-slider v-model="diyStore.global.template.margin.both" show-input size="small" @input="inputBoth" class="ml-[10px] horz-blank-slider"/>
 				</el-form-item>
 			</el-form>
 		</div>
@@ -59,6 +59,15 @@ watch(
         }
     }
 )
+
+// 改变页面的左右边距时，更新所有组件的数值
+const inputBoth = (value:any)=>{
+
+    diyStore.value.forEach((item,index)=>{
+        item.margin.both = value;
+    })
+
+}
 
 defineExpose({})
 </script>

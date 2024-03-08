@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center mb-[10px]">
-                <span class="text-[20px]">{{ pageName }}</span>
+                <span class="text-page-title">{{ pageName }}</span>
             </div>
             <el-tabs v-model="activeName" class="demo-tabs">
                 <el-tab-pane :label="t('codeGeneration')" name="codeGeneration">

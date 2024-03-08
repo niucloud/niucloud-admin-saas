@@ -41,7 +41,7 @@ class CoreH5Service extends BaseCoreService
         if(empty($info))
         {
             $info = [
-                'is_open' => 0
+                'is_open' => 1
             ];
         }
         return $info;

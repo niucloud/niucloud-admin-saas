@@ -1,7 +1,7 @@
 {
   "title": "页面名称",
   "typeName": "页面类型",
-  "forAddon": "所属插件",
+  "forAddon": "所属应用",
   "addPageTips": "创建新页面",
   "pageTypePlaceholder": "请选择页面类型",
   "nameMax": "名称不能超过12个字符",
@@ -19,7 +19,7 @@
   "titlePlaceholder": "请输入页面名称",
   "addDiyPage": "添加页面",
   "diyPageDeleteTips": "确定要删除该自定义页面吗？",
-  "promote": "推广",
+  "preview": "预览",
   "share": "分享",
   "shareSet": "分享设置",
   "sharePage": "分享页面",

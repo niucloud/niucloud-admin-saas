@@ -1,7 +1,8 @@
 <template>
 	<view :style="warpCss">
 		<view class="simple-graph-wrap overflow-hidden relative leading-0">
-			<image :style="{ height: diyComponent.imgHeight }" :src="img(diyComponent.imageUrl)" mode="widthFix" :show-menu-by-longpress="true" class="w-full"/>
+			<image v-if="diyComponent.imageUrl" :style="itemCss" :src="img(diyComponent.imageUrl)" mode="widthFix" :show-menu-by-longpress="true" class="w-full"/>
+			<image v-else :style="itemCss" :src="img('static/resource/images/diy/figure.png')" mode="widthFix" :show-menu-by-longpress="true" class="w-full"/>
 
 			<template v-if="diyStore.mode != 'decorate'">
 				<!-- 热区功能 -->
@@ -39,12 +40,18 @@
 	const warpCss = computed(() => {
 		var style = '';
 		if (diyComponent.value.componentBgColor) style += 'background-color:' + diyComponent.value.componentBgColor + ';';
-		if (diyComponent.value.topRounded) style += 'border-top-left-radius:' + diyComponent.value.topRounded * 2 + 'rpx;';
-		if (diyComponent.value.topRounded) style += 'border-top-right-radius:' + diyComponent.value.topRounded * 2 + 'rpx;';
-		if (diyComponent.value.bottomRounded) style += 'border-bottom-left-radius:' + diyComponent.value.bottomRounded * 2 + 'rpx;';
-		if (diyComponent.value.bottomRounded) style += 'border-bottom-right-radius:' + diyComponent.value.bottomRounded * 2 + 'rpx;';
 		return style;
 	})
+
+    const itemCss = computed(() => {
+        var style = '';
+        style += 'height:' + diyComponent.value.imgHeight + ';';
+        if (diyComponent.value.topRounded) style += 'border-top-left-radius:' + diyComponent.value.topRounded * 2 + 'rpx;';
+        if (diyComponent.value.topRounded) style += 'border-top-right-radius:' + diyComponent.value.topRounded * 2 + 'rpx;';
+        if (diyComponent.value.bottomRounded) style += 'border-bottom-left-radius:' + diyComponent.value.bottomRounded * 2 + 'rpx;';
+        if (diyComponent.value.bottomRounded) style += 'border-bottom-right-radius:' + diyComponent.value.bottomRounded * 2 + 'rpx;';
+        return style;
+    })
 
 	onMounted(() => {
 		refresh();
@@ -63,7 +70,6 @@
 		if (diyStore.mode == 'decorate') {
 			// 装修模式下设置默认图
 			if (diyComponent.value.imageUrl == '') {
-				diyComponent.value.imageUrl = 'static/resource/images/diy/figure.png';
 				diyComponent.value.imgWidth = 690;
 				diyComponent.value.imgHeight = 330;
 			}

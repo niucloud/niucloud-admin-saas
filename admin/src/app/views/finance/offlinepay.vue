@@ -2,7 +2,7 @@
     <el-card class="box-card !border-none" shadow="never" v-loading="payLoading">
         <!-- 设置支付配置 -->
         <div class="flex justify-between items-center">
-            <span class="text-[20px]">{{ pageName }}</span>
+            <span class="text-page-title">{{ pageName }}</span>
         </div>
 
         <div class="mt-[10px]">

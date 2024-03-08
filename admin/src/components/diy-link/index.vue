@@ -2,7 +2,7 @@
     <div>
         <div @click="show">
             <slot>
-                <el-input v-model="value.title" :placeholder="t('linkPlaceholder')" readonly>
+                <el-input v-model="value.title" :placeholder="t('linkPlaceholder')" readonly class="link-input">
                     <template #suffix>
                         <div @click.stop="clear">
                             <el-icon v-if="value.name">
@@ -207,4 +207,8 @@ defineExpose({
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss">
+    .link-input .el-input__inner{
+        cursor: pointer;
+    }
+</style>

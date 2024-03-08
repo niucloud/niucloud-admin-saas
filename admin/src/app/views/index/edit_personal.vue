@@ -1,7 +1,7 @@
 <template>
     <div class="main-container w-full pt-[64px] bg-white"  v-loading="loading">
         <div class="flex justify-between items-center h-[32px] mb-4">
-            <span class="text-[20px]">{{ t('editPersonal') }}</span>
+            <span class="text-page-title">{{ t('editPersonal') }}</span>
         </div>
         <el-card class="box-card !border-none" shadow="never">
             <el-form :model="saveInfo" label-width="90px" ref="formRef" class="page-form">

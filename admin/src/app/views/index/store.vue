@@ -2,7 +2,7 @@
     <div class="pt-[59px] px-[20px] app-store" v-loading="authLoading">
         <div>
             <div class="flex justify-between items-center h-[32px] mb-4">
-                <span class="text-[20px] text-[#222]">{{ t('localAppText') }}</span>
+                <span class="text-page-title text-[#222]">{{ t('localAppText') }}</span>
                 <el-input class="!w-[250px]" :placeholder="t('search')" v-model="search_name" @keyup.enter="query">
                     <template #suffix>
                         <el-icon class="el-input__icon  cursor-pointer" size="14px" @click="query">

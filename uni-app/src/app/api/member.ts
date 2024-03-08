@@ -138,7 +138,7 @@ export function deleteCashoutAccount(accountId: number) {
 }
 
 /**
- * 佣金信息
+ * 佣金列表
  */
 export function getCommissionList(data : AnyObject) {
 	return request.get(`member/account/commission`, data)

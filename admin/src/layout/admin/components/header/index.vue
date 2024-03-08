@@ -3,16 +3,14 @@
         <!-- :class="['h-full px-[10px]',{'layout-header border-b border-color': !dark}]"  -->
         <div class="flex items-center text-[14px]  leading-[1]">
             <span class="iconfont icontuodong !text-[25px] mr-[6px]"></span>
-            <span class="cursor-pointer" @click="toLink('/admin/index')">首页</span>
-            <span class="mx-2 text-[#4F5563] mx-[15px]">|</span>
-            <span class="cursor-pointer" @click="toLink('/admin/setting/website/system','setting_manage')">配置</span>
-            <span class="mx-2 text-[#4F5563] mx-[15px]">|</span>
-            <span class="cursor-pointer" @click="toLink('/admin/site/list','site_manage')">站点</span>
-            <template v-if="app_debug">
-                <span class="mx-2 text-[#4F5563] mx-[15px]">|</span>
-                <span class="cursor-pointer" @click="toLink('/admin/app_manage/app_store','')">应用</span>
-                <span class="mx-2 text-[#4F5563] mx-[15px]">|</span>
-                <span class="cursor-pointer" @click="toLink('/admin/app_manage/tools','tool')">开发</span>
+
+            <template v-for="(item, index) in oneMenuData">
+                <template v-if="item.meta.show">
+                    <span class="mx-2 text-[#4F5563] mx-[15px]" v-if="index">|</span>
+                    <span class="cursor-pointer" @click="router.push({ name: item.name })" >
+                        {{ item.meta.short_title || item.meta.title }}
+                    </span>
+                </template>
             </template>
         </div>
         <div class="right-panel h-full flex items-center justify-end">
@@ -20,25 +18,6 @@
             <div class="navbar-item flex items-center h-full cursor-pointer" @click="refreshRouter">
                 <icon name="element-Refresh" />
             </div>
-            <!-- 预览 只有站点时展示-->
-            <i class="iconfont iconlingdang-xianxing cursor-pointer px-[8px]" :title="t('newInfo')" v-if="appType == 'site'"></i>
-            <!-- 切换首页 -->
-            <div class="navbar-item flex items-center h-full cursor-pointer"  v-if="appType == 'site'" @click="checkIndexList">
-                <icon name="iconfont-iconqiehuan" :title="t('indexSwitch')"/>
-            </div>
-            <!-- 切换语言 -->
-            <!-- <div class="navbar-item flex items-center h-full cursor-pointer">
-                <switch-lang />
-            </div> -->
-            <!-- 切换全屏 -->
-            <!-- <div class="navbar-item flex items-center h-full cursor-pointer" @click="toggleFullscreen">
-                <icon name="iconfont-icontuichuquanping" v-if="isFullscreen" />
-                <icon name="iconfont-iconquanping" v-else />
-            </div> -->
-            <!-- 布局设置 -->
-            <!-- <div class="navbar-item flex items-center h-full cursor-pointer">
-                <layout-setting />
-            </div> -->
             <!-- 用户信息 -->
             <div class="navbar-item flex items-center h-full cursor-pointer">
                 <user-info />
@@ -79,39 +58,28 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, onMounted, watch } from 'vue'
-import layoutSetting from './layout-setting.vue'
-import switchLang from './switch-lang.vue'
-import userInfo from './user-info.vue'
-import { useFullscreen } from '@vueuse/core'
-import useSystemStore from '@/stores/modules/system'
+import { ref } from 'vue'
+import useUserStore from '@/stores/modules/user'
 import useAppStore from '@/stores/modules/app'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { t } from '@/lang'
 import storage from '@/utils/storage'
-import { getIndexList, setIndexList, getEnv } from '@/app/api/sys'
+import userInfo from './user-info.vue'
+import { findFirstValidRoute } from "@/router/routers"
 
 const router = useRouter()
-const appType = storage.get('app_type')
-const { toggle: toggleFullscreen, isFullscreen } = useFullscreen()
-const systemStore = useSystemStore()
 const appStore = useAppStore()
-const route = useRoute()
-const screenWidth = ref(window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth)
+const userStore = useUserStore()
+const routers = userStore.routers
 
-const dark = computed(()=>{
-    return systemStore.dark
+const oneMenuData = ref<Record<string, any>[]>([])
+routers.forEach(item => {
+    item.original_name = item.name
+    if (item.children && item.children.length) {
+        item.name = findFirstValidRoute(item.children)
+    }
+    oneMenuData.value.push(item)
 })
-
-// 是否是debug模式 start
-let app_debug = ref(true)
-const getEnvFn = () => {
-    getEnv().then(res => {
-        // app_debug.value = res.data.app_debug;
-    }).catch(() => {})
-}
-getEnvFn();
-// 是否是debug模式 end
 
 // 检测登录 start
 const detectionLoginDialog = ref(false)
@@ -119,11 +87,9 @@ const comparisonToken = ref('')
 const comparisonSiteId = ref('')
 if (storage.get('comparisonTokenStorage')) {
     comparisonToken.value = storage.get('comparisonTokenStorage')
-    // storage.remove(['comparisonTokenStorage']);
 }
 if (storage.get('comparisonSiteIdStorage')) {
     comparisonSiteId.value = storage.get('comparisonSiteIdStorage')
-    // storage.remove(['comparisonSiteIdStorage']);
 }
 // 监听标签页面切换
 document.addEventListener('visibilitychange', e => {
@@ -134,18 +100,9 @@ document.addEventListener('visibilitychange', e => {
 
 const detectionLoginFn = () => {
     detectionLoginDialog.value = false
-    location.reload();
+    location.reload()
 }
 // 检测登录 end
-
-onMounted(() => {
-    // 监听窗体宽度变化
-    window.onresize = () => {
-        return (() => {
-            screenWidth.value = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth
-        })()
-    }
-})
 
 // 刷新路由
 const refreshRouter = () => {
@@ -153,46 +110,7 @@ const refreshRouter = () => {
     appStore.refreshRouterView()
 }
 
-// 面包屑导航
-const breadcrumb = computed(() => {
-    const matched = route.matched.filter(item => { return item.meta.title })
-    if (matched[0] && matched[0].path == '/') matched.splice(0, 1)
-    return matched
-})
-
-// 返回上一页
-const backFn = () => {
-    router.go(-1)
-}
-
-const indexList = ref();
-const showDialog = ref(false)
-const checkIndexList = () => {
-	getIndexList().then(res => {
-		showDialog.value = true
-		indexList.value = res.data
-		for(let i = 0 ; i < indexList.value.length; i ++){
-			if(indexList.value[i].is_use == 1){
-				index_path.value = indexList.value[i].view_path
-			}
-		}
-	})
-}
-
-const index_path = ref('');
-const submitIndex = () => {
-	setIndexList({
-		view_path: index_path.value
-	}).then(() => {
-	    showDialog.value = false
-	    router.go(0)
-	})
-}
-storage.set({ key: 'currHeadMenuName', data: ""})
-const toLink = (link,type)=>{
-    // systemStore.setHeadMenu(type);
-    router.push(link);
-}
+storage.set({ key: 'currHeadMenuName', data: "" })
 </script>
 
 <style lang="scss" scoped>

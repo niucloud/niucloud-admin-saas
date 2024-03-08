@@ -1,1 +1,0 @@
-import{_ as o}from"./notice-wechat.vue_vue_type_script_setup_true_lang-5671de1e.js";import"./index-4ce69858.js";/* empty css                   *//* empty css                   *//* empty css                  *//* empty css                */import"./el-form-item-4ed993c7.js";/* empty css                 */import"./notice-1e9e976b.js";export{o as default};

@@ -167,7 +167,7 @@ export function urlDeconstruction(url : string) {
 * @returns
 */
 export function isUrl(str : string) : boolean {
-	return str.indexOf('http://') != -1 || str.indexOf('https://') != -1
+	return str && (str.indexOf('http://') != -1 || str.indexOf('https://') != -1) || false
 }
 
 /**

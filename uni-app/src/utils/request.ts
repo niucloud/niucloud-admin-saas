@@ -1,6 +1,6 @@
 import useMemberStore from '@/stores/member'
 import { t } from '@/locale'
-import { getToken, getAppChannel, getSiteId } from './common'
+import {getToken, getAppChannel, getSiteId, redirect} from './common'
 import qs from 'qs'
 
 interface RequestConfig {
@@ -155,6 +155,9 @@ class Request {
 		switch (code) {
 			case 401:
 				useMemberStore().logout()
+				break;
+			case 402:
+				redirect({url: '/app/pages/index/close', mode: 'reLaunch'})
 				break;
 		}
 	}

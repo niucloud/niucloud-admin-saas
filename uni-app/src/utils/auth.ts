@@ -9,6 +9,7 @@ const loginBack = useLogin()
  */
 export function checkNeedLogin(route: AnyObject){
     const pages = getNeedLoginPages()
+
     if (pages.includes(route.path) && !getToken()) {
         setTimeout(() => {
             loginBack.setLoginBack({ url: route.path, param: route.query || {} })

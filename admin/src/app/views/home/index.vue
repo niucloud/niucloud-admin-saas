@@ -23,7 +23,7 @@
                     <span :class="['mr-[12px] cursor-pointer', {'text-[var(--el-color-primary)]': params.app == ''}]" @click="cutAppFn('')">所有应用</span>
                     <span :class="['mr-[12px] cursor-pointer', {'text-[var(--el-color-primary)]': params.app == item.key}]" @click="cutAppFn(item.key)" v-for="(item,index) in addonList" :key="index">{{item.title}}</span>
                 </div>
-                <el-input v-model="params.keywords" class="!w-[300px] !h-[34px]" placeholder="输入要搜索的站点名称" @keyup.enter.native="query">
+                <el-input v-model="params.keywords" class="!w-[300px] !h-[34px]" placeholder="请输入要搜索的站点名称" @keyup.enter.native="getHomeSiteFn()">
                     <template #suffix>
                         <el-icon @click.stop="getHomeSiteFn()" class="cursor-pointer">
                             <Search />

@@ -17,14 +17,13 @@ class UniappTemplate extends BaseDict
 {
     /**
      * 系统uniapp页面模板
-     * @param array $data
      * @param array $params
      * @return array|false|mixed|string
      */
-    public function load(array $data, $params = [])
+    public function load(array $params)
     {
-        if (!empty($params[ 'addon' ])) {
-            $addons = [ $params[ 'addon' ] ];
+        if (!empty($params[ 'params' ][ 'addon' ])) {
+            $addons = [ $params[ 'params' ][ 'addon' ] ];
         } else {
             $addons = $this->getLocalAddons();
         }
@@ -34,10 +33,10 @@ class UniappTemplate extends BaseDict
         $page_files = []; // 模板页面文件集合
 
         // 筛选插件
-        if (!empty($params) && !empty($params[ 'addon' ])) {
+        if (!empty($params[ 'params' ]) && !empty($params[ 'params' ][ 'addon' ])) {
             $is_pass = true;
             foreach ($addons as $k => $v) {
-                if ($params[ 'addon' ] == $v) {
+                if ($params[ 'params' ][ 'addon' ] == $v) {
                     $addons = [ $v ];
                     $is_pass = false;
                     break;
@@ -46,14 +45,14 @@ class UniappTemplate extends BaseDict
 
             // 如果没有匹配到，则返回系统的
             if ($is_pass) {
-                return $data;
+                return $params[ 'data' ];
             }
         }
 
         foreach ($addons as $v) {
             $page_path = $this->getAddonDictPath($v) . "diy" . DIRECTORY_SEPARATOR . "template.php";
             if (is_file($page_path)) {
-                if (!empty($params[ 'query' ]) && $params[ 'query' ] == 'addon') {
+                if (!empty($params[ 'params' ][ 'query' ]) && $params[ 'params' ][ 'query' ] == 'addon') {
                     $file = include $page_path;
                     if (!empty($file)) {
                         $app_keys[] = $v;
@@ -66,7 +65,7 @@ class UniappTemplate extends BaseDict
         }
 
         // 查询存在模板页面的应用插件列表
-        if (!empty($params[ 'query' ]) && $params[ 'query' ] == 'addon') {
+        if (!empty($params[ 'params' ][ 'query' ]) && $params[ 'params' ][ 'query' ] == 'addon') {
             $addon_service = new AddonService();
             $list = $addon_service->getAddonListByKeys($app_keys);
             $list_key = array_column($list, 'key');
@@ -78,10 +77,10 @@ class UniappTemplate extends BaseDict
         } else {
             // 查询应用插件下的模板页面数据
             $page_files_data = $this->loadFiles($page_files);
-            if (!empty($params) && !empty($params[ 'addon' ])) {
+            if (!empty($params[ 'params' ]) && !empty($params[ 'params' ][ 'addon' ])) {
                 $pages = [];
             } else {
-                $pages = $data;
+                $pages = $params[ 'data' ];
             }
             foreach ($page_files_data as $file_data) {
                 if (empty($pages)) {

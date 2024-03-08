@@ -407,7 +407,6 @@ class CoreAddonInstallService extends CoreAddonBaseService
         $core_addon_service->set($install_data);
         //清理缓存
         Cache::tag(self::$cache_tag_name)->clear();
-        Cache::set("local_install_addons", []);
         //执行命令
         //执行插件安装方法
         $class = "addon\\" . $this->addon . "\\" . 'Addon';
@@ -560,7 +559,6 @@ class CoreAddonInstallService extends CoreAddonBaseService
 
         $core_addon_service = new CoreAddonService();
         $core_addon_service->delByKey($this->addon);
-        Cache::set("local_install_addons", []);
 
         //清理缓存
         Cache::tag(self::$cache_tag_name)->clear();

@@ -3,7 +3,7 @@
         <el-card class="box-card !border-none" shadow="never">
 
             <div class="flex justify-between items-center">
-                <span class="text-[20px]">{{ pageName }}</span>
+                <span class="text-page-title">{{ pageName }}</span>
                 <el-button type="primary" @click="addEvent">{{ t('addMember') }}</el-button>
             </div>
 
@@ -48,7 +48,7 @@
                         <span>{{ !memberTableData.loading ? t('emptyData') : '' }}</span>
                     </template>
                     <el-table-column prop="member_no" :label="t('memberNo')" min-width="120" />
-                    <el-table-column prop="nickname" :show-overflow-tooltip="true" :label="t('nickname')" min-width="170">
+                    <el-table-column prop="nickname" :show-overflow-tooltip="true" :label="t('memberInfo')" min-width="170">
                         <template #default="{ row }">
                             <div class="flex items-center">
                                 <img class="w-[50px] h-[50px] mr-[10px]" v-if="row.headimg" :src="img(row.headimg)" alt="">
@@ -69,9 +69,9 @@
                     <el-table-column prop="balance" :label="t('balance')" min-width="130" align="right" />
                     <el-table-column prop="member_label" :label="t('lable')" min-width="120" align="center">
                         <template #default="{ row }">
-                            <div class="flex flex-col items-start">
+                            <div class="flex flex-col items-center">
                                 <div v-for="(item, key) in row.member_label_array" class="my-[3px]" :key="key">
-                                    <el-tag class="ml-[13px]" type="info">{{ item.label_name }}</el-tag>
+                                    <el-tag  type="info">{{ item.label_name }}</el-tag>
                                 </div>
                             </div>
                         </template>

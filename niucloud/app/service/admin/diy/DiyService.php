@@ -278,10 +278,10 @@ class DiyService extends BaseAdminService
         }
 
         $data[ 'component' ] = $this->getComponentList($data[ 'type' ]);
-        $data[ 'domain_url' ] = (new SystemService())->getUrl();
+        $data[ 'domain_url' ] = ( new SystemService() )->getUrl();
 
         // 查询已安装的有效的应用
-        $data[ 'addon_list' ] = (new CoreAddonService())->getInstallAddonList();
+        $data[ 'addon_list' ] = ( new CoreAddonService() )->getInstallAddonList();
         return $data;
     }
 
@@ -298,7 +298,7 @@ class DiyService extends BaseAdminService
             $sort_arr = [];
             foreach ($v[ 'list' ] as $ck => $cv) {
                 $support_page = $cv[ 'support_page' ];
-                if (!(count($support_page) == 0 || in_array($name, $support_page))) {
+                if (!( count($support_page) == 0 || in_array($name, $support_page) )) {
                     unset($data[ $k ][ 'list' ][ $ck ]);
                     continue;
                 }
@@ -372,6 +372,7 @@ class DiyService extends BaseAdminService
     public function getTemplate($params = [])
     {
         $page_template = TemplateDict::getTemplate($params);
+
         foreach ($page_template as $k => $v) {
             // 查询页面数据
             $page_params = [
@@ -428,7 +429,7 @@ class DiyService extends BaseAdminService
         // 查询当前装修的页面信息
         $template = $this->getTemplate([ 'action' => 'decorate', 'key' => [ $params[ 'type' ] ] ])[ $params[ 'type' ] ];
 
-        $template[ 'domain_url' ] = (new SystemService())->getUrl();
+        $template[ 'domain_url' ] = ( new SystemService() )->getUrl();
 
         // 查询默认页面数据
         $default_page_data = $this->getFirstPageData($params[ 'type' ]);
@@ -477,7 +478,7 @@ class DiyService extends BaseAdminService
         }
 
         // 查询链接的名称标识，保证数据准确性
-        $other_page = (new DiyRouteService())->getList([ 'url' => $use_template[ 'page' ] ]);
+        $other_page = ( new DiyRouteService() )->getList([ 'url' => $use_template[ 'page' ] ]);
         if (!empty($other_page)) {
             $use_template[ 'title' ] = $other_page[ 0 ][ 'title' ] ?? '';
             $use_template[ 'name' ] = $other_page[ 0 ][ 'name' ];

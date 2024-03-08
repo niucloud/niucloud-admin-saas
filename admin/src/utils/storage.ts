@@ -37,7 +37,7 @@ class Storage {
             const json: any = window.localStorage.getItem(`${this.prefix}.${key}`)
             return JSON.parse(json)
         } catch (error) {
-            return null
+            return window.localStorage.getItem(`${this.prefix}.${key}`)
         }
     }
 

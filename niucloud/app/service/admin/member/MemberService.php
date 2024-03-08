@@ -95,11 +95,16 @@ class MemberService extends BaseAdminService
             }
         }
 
-        $data['username'] = $data['member_no'];
+        $data['username'] = $data['mobile'];
         if(!empty($data['username'])){
             if(!$this->model->where([['site_id', '=', $this->site_id], ['username', '=', $data['username']]])->findOrEmpty()->isEmpty())
                 throw new AdminException('MEMBER_IS_EXIST');
         }
+
+        if (empty($data[ 'nickname' ]) && !empty($data['mobile'])) {
+            $data[ 'nickname' ] = substr_replace($data['mobile'], '****', 3, 4);
+        }
+
         $data['site_id'] = $this->site_id;
         $password_hash = create_password($data['password']);
         $data['password'] = $password_hash;

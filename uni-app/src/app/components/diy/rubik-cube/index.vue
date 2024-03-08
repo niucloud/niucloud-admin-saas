@@ -6,7 +6,8 @@
 			<view class="template-left">
 				<view @click="toRedirect(diyComponent.list[0].link)" :class="['item', diyComponent.mode]"
 					:style="{ marginRight: diyComponent.imageGap * 2 + 'rpx', width: diyComponent.list[0].imgWidth, height: diyComponent.list[0].imgHeight + 'px' }">
-					<image :src="img(diyComponent.list[0].imageUrl)" mode="scaleToFill" :style="diyComponent.list[0].pageItemStyle" :show-menu-by-longpress="true"/>
+					<image v-if="diyComponent.list[0].imageUrl" :src="img(diyComponent.list[0].imageUrl)" mode="scaleToFill" :style="diyComponent.list[0].pageItemStyle" :show-menu-by-longpress="true"/>
+					<image v-else :src="img('static/resource/images/diy/figure.png')" mode="scaleToFill" :style="diyComponent.list[0].pageItemStyle" :show-menu-by-longpress="true"/>
 				</view>
 			</view>
 
@@ -15,7 +16,8 @@
 					<template v-if="index > 0">
 						<view @click="toRedirect(item.link)" :class="['item', diyComponent.mode]"
 							:style="{ marginBottom: diyComponent.imageGap * 2 + 'rpx', width: item.imgWidth, height: item.imgHeight + 'px' }">
-							<image :src="img(item.imageUrl)" mode="scaleToFill" :style="item.pageItemStyle" :show-menu-by-longpress="true"/>
+							<image v-if="item.imageUrl" :src="img(item.imageUrl)" mode="scaleToFill" :style="item.pageItemStyle" :show-menu-by-longpress="true"/>
+							<image v-else :src="img('static/resource/images/diy/figure.png')" mode="scaleToFill" :style="item.pageItemStyle" :show-menu-by-longpress="true"/>
 						</view>
 					</template>
 				</template>
@@ -27,14 +29,16 @@
 			<view class="template-left">
 				<view @click="toRedirect(diyComponent.list[0].link)" :class="['item', diyComponent.mode]"
 					:style="{ marginRight: diyComponent.imageGap * 2 + 'rpx', width: diyComponent.list[0].imgWidth, height: diyComponent.list[0].imgHeight + 'px' }">
-					<image :src="img(diyComponent.list[0].imageUrl)" mode="scaleToFill" :style="diyComponent.list[0].pageItemStyle" :show-menu-by-longpress="true"/>
+					<image v-if="diyComponent.list[0].imageUrl" :src="img(diyComponent.list[0].imageUrl)" mode="scaleToFill" :style="diyComponent.list[0].pageItemStyle" :show-menu-by-longpress="true"/>
+					<image v-else :src="img('static/resource/images/diy/figure.png')" mode="scaleToFill" :style="diyComponent.list[0].pageItemStyle" :show-menu-by-longpress="true"/>
 				</view>
 			</view>
 
 			<view class="template-right">
 				<view @click="toRedirect(diyComponent.list[1].link)" :class="['item', diyComponent.mode]"
 					:style="{ marginBottom: diyComponent.imageGap * 2 + 'rpx', width: diyComponent.list[1].imgWidth, height: diyComponent.list[1].imgHeight + 'px' }">
-					<image :src="img(diyComponent.list[1].imageUrl)" mode="scaleToFill" :style="diyComponent.list[1].pageItemStyle" :show-menu-by-longpress="true"/>
+					<image v-if="diyComponent.list[1].imageUrl" :src="img(diyComponent.list[1].imageUrl)" mode="scaleToFill" :style="diyComponent.list[1].pageItemStyle" :show-menu-by-longpress="true"/>
+					<image v-else :src="img('static/resource/images/diy/figure.png')" mode="scaleToFill" :style="diyComponent.list[1].pageItemStyle" :show-menu-by-longpress="true"/>
 				</view>
 				<view class="template-bottom">
 					<template v-for="(item, index) in diyComponent.list" :key="index">
@@ -44,7 +48,8 @@
 										width: item.imgWidth,
 										height: item.imgHeight + 'px'
 									}">
-								<image :src="img(item.imageUrl)" mode="scaleToFill" :style="item.pageItemStyle" :show-menu-by-longpress="true"/>
+								<image v-if="item.imageUrl" :src="img(item.imageUrl)" mode="scaleToFill" :style="item.pageItemStyle" :show-menu-by-longpress="true"/>
+								<image v-else :src="img('static/resource/images/diy/figure.png')" mode="scaleToFill" :style="item.pageItemStyle" :show-menu-by-longpress="true"/>
 							</view>
 						</template>
 					</template>
@@ -56,7 +61,8 @@
 			<view :class="['item', diyComponent.mode]" v-for="(item, index) in diyComponent.list" :key="index"
                 @click="toRedirect(item.link)"
 				:style="{ marginRight: diyComponent.imageGap * 2 + 'rpx', marginBottom: diyComponent.imageGap * 2 + 'rpx', width: item.widthStyle, height: item.imgHeight + 'px' }">
-				<image :src="img(item.imageUrl)" :mode="'scaleToFill'" :style="item.pageItemStyle" :show-menu-by-longpress="true"/>
+				<image v-if="item.imageUrl" :src="img(item.imageUrl)" :mode="'scaleToFill'" :style="item.pageItemStyle" :show-menu-by-longpress="true"/>
+				<image v-else :src="img('static/resource/images/diy/figure.png')" :mode="'scaleToFill'" :style="item.pageItemStyle" :show-menu-by-longpress="true"/>
 			</view>
 		</template>
 
@@ -176,10 +182,9 @@
 
 	const refresh = () => {
 		if (diyStore.mode == 'decorate') {
-			diyComponent.value.list.forEach((item : any, index) => {
+			diyComponent.value.list.forEach((item : any) => {
 				// 装修模式下设置默认图
 				if (item.imageUrl == '') {
-					item.imageUrl = 'static/resource/images/diy/figure.png';
 					item.imgWidth = 690;
 					item.imgHeight = 330;
 				}
@@ -236,16 +241,14 @@
 				diyComponent.value.list.forEach((item, index) => {
 					var ratio = item.imgHeight / item.imgWidth;
 
-					let width = res.windowWidth - upx2px(diyComponent.value.margin.both *
-						2); // 减去左右间距
+					let width = res.windowWidth - upx2px(diyComponent.value.margin.both * 2); // 减去左右间距
 					if (diyComponent.value.imageGap > 0) {
 						width -= upx2px(params.ratio * diyComponent.value.imageGap * 2); // 减去间隙
 					}
 					item.imgWidth = width / params.ratio;
 					item.imgHeight = item.imgWidth * ratio;
 
-					if (maxHeight == 0 || maxHeight < item.imgHeight) maxHeight = item
-						.imgHeight;
+					if (maxHeight == 0 || maxHeight < item.imgHeight) maxHeight = item.imgHeight;
 				})
 
 				diyComponent.value.list.forEach((item, index) => {
@@ -274,7 +277,6 @@
 					item.imgWidth = item.imgWidth / 2;
 					item.imgHeight = item.imgWidth * ratio;
 
-
 					// 获取每行最大高度
 					if (index <= 1) {
 						if (maxHeightFirst == 0 || maxHeightFirst < item.imgHeight) {
@@ -287,8 +289,7 @@
 					}
 				});
 				diyComponent.value.list.forEach((item, index) => {
-					item.imgWidth = 'calc((100% - ' + upx2px(diyComponent.value.imageGap * 2) +
-						'px) / 2)';
+					item.imgWidth = 'calc((100% - ' + upx2px(diyComponent.value.imageGap * 2) + 'px) / 2)';
 					item.widthStyle = item.imgWidth;
 					if (index <= 1) {
 						item.imgHeight = maxHeightFirst;
@@ -312,12 +313,10 @@
 				diyComponent.value.list.forEach((item, index) => {
 					if (index == 0) {
 						var ratio = item.imgHeight / item.imgWidth; // 获取左图的尺寸比例
-						item.imgWidth = res.windowWidth - upx2px(diyComponent.value.margin
-							.both * 4) - upx2px(diyComponent.value.imageGap * 2);
+						item.imgWidth = res.windowWidth - upx2px(diyComponent.value.margin.both * 4) - upx2px(diyComponent.value.imageGap * 2);
 						item.imgWidth = item.imgWidth / 2;
 						item.imgHeight = item.imgWidth * ratio;
-						rightHeight = (item.imgHeight - upx2px(diyComponent.value.imageGap *
-							2)) / 2;
+						rightHeight = (item.imgHeight - upx2px(diyComponent.value.imageGap * 2)) / 2;
 						item.imgWidth += 'px';
 					} else {
 						item.imgWidth = diyComponent.value.list[0].imgWidth;
@@ -339,19 +338,16 @@
 
 					var ratio = item.imgHeight / item.imgWidth; // 获取左图的尺寸比例
 					if (index == 0) {
-						item.imgWidth = res.windowWidth - upx2px(diyComponent.value.margin
-							.both * 4);
+						item.imgWidth = res.windowWidth - upx2px(diyComponent.value.margin.both * 4);
 					} else if (index > 0) {
-						item.imgWidth = res.windowWidth - upx2px(diyComponent.value.margin
-							.both * 4) - upx2px(diyComponent.value.imageGap * 2);
+						item.imgWidth = res.windowWidth - upx2px(diyComponent.value.margin.both * 4) - upx2px(diyComponent.value.imageGap * 2);
 						item.imgWidth = item.imgWidth / 2;
 					}
 
 					item.imgHeight = item.imgWidth * ratio;
 
 					// 获取最大高度
-					if (index > 0 && (maxHeight == 0 || maxHeight < item.imgHeight))
-						maxHeight = item.imgHeight;
+					if (index > 0 && (maxHeight == 0 || maxHeight < item.imgHeight)) maxHeight = item.imgHeight;
 
 				});
 				diyComponent.value.list.forEach((item, index) => {
@@ -373,24 +369,20 @@
 					// 左图
 					if (index == 0) {
 						var ratio = item.imgHeight / item.imgWidth; // 获取左图的尺寸比例
-						item.imgWidth = res.windowWidth - upx2px(diyComponent.value.margin
-							.both * 4) - upx2px(diyComponent.value.imageGap * 2);
+						item.imgWidth = res.windowWidth - upx2px(diyComponent.value.margin.both * 4) - upx2px(diyComponent.value.imageGap * 2);
 						item.imgWidth = item.imgWidth / 2;
 						item.imgHeight = item.imgWidth * ratio;
 					} else if (index == 1) {
 						item.imgWidth = diyComponent.value.list[0].imgWidth;
-						item.imgHeight = (diyComponent.value.list[0].imgHeight - upx2px(diyComponent.value
-							.imageGap * 2)) / 2;
+						item.imgHeight = (diyComponent.value.list[0].imgHeight - upx2px(diyComponent.value.imageGap * 2)) / 2;
 					} else if (index > 1) {
-						item.imgWidth = (diyComponent.value.list[0].imgWidth - upx2px(diyComponent.value
-							.imageGap * 2)) / 2;
+						item.imgWidth = (diyComponent.value.list[0].imgWidth - upx2px(diyComponent.value.imageGap * 2)) / 2;
 						item.imgHeight = diyComponent.value.list[1].imgHeight;
 					}
 				});
 
 				diyComponent.value.list.forEach((item, index) => {
 					item.imgWidth += 'px';
-					item.imgHeight;
 				});
 			}
 		});
@@ -429,7 +421,6 @@
 			}
 		}
 	}
-
 
 	// 一行两个
 	.rubik-cube .item.row1-of2 {

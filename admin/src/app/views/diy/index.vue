@@ -4,7 +4,7 @@
             <p class="absolute top-[54px] left-[50%] translate-x-[-50%] text-[14px] truncate w-[130px] text-center">{{ page.use_template.title }}</p>
 
             <div v-show="page.use_template.url" class="w-[320px] h-[550px] mx-auto">
-                <iframe :id="'previewIframe_' + key" v-show="page.loadingIframe" class="w-[320px] h-[550px] mx-auto" :src="page.use_template.wapPreview" frameborder="0"></iframe>
+                <iframe :id="'previewIframe_' + type" v-show="page.loadingIframe" class="w-[320px] h-[550px] mx-auto" :src="page.use_template.wapPreview" frameborder="0"></iframe>
                 <div v-show="page.loadingDev" class="w-[320px] h-[550px] mx-auto bg-body pt-[20px] px-[20px]">
                     <div class="font-bold text-xl mb-[40px]">{{ t('developTitle') }}</div>
                     <div class="mb-[20px] flex flex-col">

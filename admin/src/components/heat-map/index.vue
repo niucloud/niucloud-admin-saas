@@ -2,18 +2,15 @@
     <div>
         <div @click="show">
             <slot>
-                <div v-if="value.heatMapData.length">{{ t('selected') }}<span class="text-primary p-[4px]">{{
-                    value.heatMapData.length }}</span>{{ t('selectedAfterHotArea') }}</div>
-                <div v-else>{{ t('addHotArea') }}</div>
+                <div v-if="value.heatMapData.length" class="cursor-pointer">{{ t('selected') }}<span class="text-primary p-[4px]">{{ value.heatMapData.length }}</span>{{ t('selectedAfterHotArea') }}</div>
+                <div v-else class="cursor-pointer">{{ t('addHotArea') }}</div>
             </slot>
         </div>
-        <el-dialog v-model="showDialog" :title="t('hotAreaSet')" width="45%" :close-on-press-escape="false"
-            :destroy-on-close="true" :close-on-click-modal="false">
+        <el-dialog v-model="showDialog" :title="t('hotAreaSet')" width="810px" :close-on-press-escape="false" :destroy-on-close="true" :close-on-click-modal="false">
 
             <div class="flex">
 
-                <div class="content-box relative bg-cover bg-gray-100 border border-dashed border-gray-500"
-                    :style="{ backgroundImage: 'url(' + img(value.imageUrl) + ')', width: contentBoxWidth + 'px', height: contentBoxHeight + 'px' }">
+                <div class="hot-area-img-wrap content-box relative bg-gray-100 border border-dashed border-gray-500 bg-no-repeat" :style="{ backgroundImage: 'url(' + img(value.imageUrl) + ')', width: contentBoxWidth + 'px', height: contentBoxHeight + 'px' }">
                     <div v-for="(item, index) in dragBoxArr" :id="'box_' + index" :key="index"
                         class="area-box border border-solid border-[#ccc] w-[100px] h-[100px] absolute top-0 left-0 select-none p-[5px]"
                         :style="{ left: item.left + item.unit, top: item.top + item.unit, width: item.width + item.unit, height: item.height + item.unit }"
@@ -32,16 +29,14 @@
 
                 <el-form label-width="80px" class="pl-[20px]">
                     <h3 class="mb-[10px] text-lg text-black">{{ t('hotAreaManage') }}</h3>
-                    <el-button type="primary" plain size="small" class="mb-[10px]" @click="addArea">{{ t('addHotArea')
-                    }}</el-button>
+                    <el-button type="primary" plain size="small" class="mb-[10px]" @click="addArea">{{ t('addHotArea') }}</el-button>
                     <div class="overflow-y-auto h-[300px]">
                         <template v-for="(item, index) in dragBoxArr" :key="index">
                             <div class="mb-[16px]" v-if="item">
                                 <el-form-item :label="t('hotArea') + (index + 1)">
                                     <div class="flex items-center">
                                         <diy-link v-model="item.link" />
-                                        <icon class="del cursor-pointer mx-[10px]" name="element-CircleCloseFilled"
-                                            color="#bbb" size="20px" @click="dragBoxArr.splice(index, 1)" />
+                                        <icon class="del cursor-pointer mx-[10px]" name="element-CircleCloseFilled" color="#bbb" size="20px" @click="dragBoxArr.splice(index, 1)" />
                                     </div>
                                 </el-form-item>
                             </div>
@@ -85,26 +80,42 @@ const value: any = computed({
     }
 })
 
+
+/**
+ * 公式：
+ * 宽度：400
+ * 比例：原图高/原图宽，示例：466/698=0.66
+ * 高度：宽度*比例，示例：400*0.66=264
+ */
+
 const showDialog = ref(false)
 const contentBoxWidth = ref(400)
 const contentBoxHeight = ref(400)
-const num = ref(4)// 每行显示的数量
 const dragBoxArr: any = reactive([])
+
+const imgRatio = ref(1); // 图片比例
+
+// 热区尺寸
+const areaRadio = ref(0.25) // 占位她比例
+const areaWidth = ref(100)
+const areaHeight = ref(100)
+const areaNum = ref(4); // 每行显示的数量
 
 // 添加热区
 const addArea = () => {
-    let left = dragBoxArr.length % num.value * 100
-    let top = Math.floor(dragBoxArr.length / num.value) * 100
-    if (top >= contentBoxWidth.value) {
+    let left = dragBoxArr.length % areaNum.value * areaWidth.value
+    let top = Math.floor(dragBoxArr.length / areaNum.value) * areaHeight.value
+    let edgeHeight = top + (areaHeight.value / 2)
+    if (top >= contentBoxHeight.value || edgeHeight >= contentBoxHeight.value) {
         top = 0
         left = 0
     }
 
     dragBoxArr.push({
-        left: left,
-        top: top,
-        width: 100,
-        height: 100,
+        left,
+        top,
+        width: areaWidth.value,
+        height: areaHeight.value,
         unit: 'px',
         link: {
             name: ''
@@ -530,6 +541,17 @@ const show = () => {
         })
         return
     }
+
+    // 计算图片比例
+    imgRatio.value = value.value.imgHeight / value.value.imgWidth;
+
+    // 根据图片比例，调整图片高度
+    contentBoxHeight.value = Math.floor(contentBoxWidth.value * imgRatio.value);
+
+    areaWidth.value = Math.floor(areaRadio.value * contentBoxHeight.value);
+    areaHeight.value = areaWidth.value;
+    areaNum.value = Math.floor(contentBoxWidth.value / areaWidth.value)
+
     if (Object.keys(value.value.heatMapData).length) {
         dragBoxArr.splice(0, dragBoxArr.length, ...value.value.heatMapData)
     } else {
@@ -575,6 +597,10 @@ defineExpose({
 <style lang="scss" scoped>
 .area-box {
     background-color: rgba(255, 255, 255, 0.7);
+}
+
+.hot-area-img-wrap{
+    background-size: 100%;
 }
 
 .box1,

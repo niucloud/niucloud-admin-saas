@@ -1,7 +1,7 @@
 <template>
     <div class="main-container p-5">
         <div class="flex justify-between items-center mb-[20px]">
-            <span class="text-[20px]">{{ pageName }}</span>
+            <span class="text-page-title">{{ pageName }}</span>
         </div>
         <el-tabs v-model="activeName" class="demo-tabs" @tab-change="handleClick">
             <el-tab-pane :label="t('wechatAccessFlow')" name="/channel/wechat" />
@@ -10,7 +10,7 @@
         </el-tabs>
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center">
-                <span class="text-[20px]">{{ pageName }}</span>
+                <span class="text-page-title">{{ pageName }}</span>
                 <el-button type="primary" class="w-[100px]" @click="batchAcquisitionFn">{{ t('batchAcquisition')
                 }}</el-button>
             </div>

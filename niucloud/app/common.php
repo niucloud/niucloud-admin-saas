@@ -334,6 +334,19 @@ function format_money($number)
 }
 
 /**
+ * 金额浮点数格式化
+ * @param $number
+ * @param $precision
+ * @return float|int
+ */
+function format_float_money($number, $precision = 2){
+    if($precision > 0){
+        return sprintf('%.'.$precision.'f', floor($number*(10**$precision))/(10**$precision));
+    }else{
+        return sprintf('%.'.$precision.'f', floor($number));
+    }
+}
+/**
  * 金额保留小数点后*位
  * @param $number
  * @return float
@@ -829,4 +842,39 @@ function file_copy(string $source_file, string $to_file) {
     } else {
         return false;
     }
+}
+
+/**
+ * 创建并生成二维码
+ * @param $url
+ * @param $site_id
+ * @param $dir
+ * @param $file_path
+ * @param $channel
+ * @param $size
+ * @return string
+ */
+function qrcode($url, $site_id, $dir, $file_path, $channel = '', $size = 4){
+    $dir = $dir ?: 'upload' . '/'.$site_id. '/'.'qrcode'.'/';//二维码默认存储位置
+    if (! is_dir($dir) && ! mkdir($dir, 0777, true) && ! is_dir($dir)) {
+        throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+    }
+    $path = $dir . '/' . $file_path . '.png';
+    if (file_exists($path)) {
+        unlink($path);
+    }
+    \core\util\QRcode::png($url, $path, QR_ECLEVEL_L, $size, 1);
+    return $path;
+}
+
+/**
+ * 获取海报
+ * @param int $site_id
+ * @param string|int $type
+ * @param array $param
+ * @param bool $is_throw_exception
+ * @return string|null
+ */
+function poster(int $site_id, string|int $type, array $param = [], string $channel = '',bool $is_throw_exception = true){
+    return (new \app\service\core\poster\CorePosterService())->get($site_id, $type, $param, $channel, $is_throw_exception);
 }

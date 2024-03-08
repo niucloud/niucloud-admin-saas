@@ -29,6 +29,8 @@
 	import useDiyStore from '@/app/stores/diy';
 	import { useShare } from '@/hooks/useShare'
 	import { img,redirect } from '@/utils/common';
+    import diyGroup from '@/addon/components/diy/group/index.vue'
+    import fixedGroup from '@/addon/components/fixed/group/index.vue'
 
 	const { setShare, onShareAppMessage, onShareTimeline } = useShare()
 	setShare();
@@ -112,11 +114,5 @@
 	});
 </script>
 <style lang="scss" scoped>
-	.bg-index {
-		width: 100%;
-		height: 100%;
-		box-sizing: border-box;
-		background-size: 100% !important;
-		background-repeat: no-repeat !important;
-	}
+	@import '@/styles/diy.scss';
 </style>

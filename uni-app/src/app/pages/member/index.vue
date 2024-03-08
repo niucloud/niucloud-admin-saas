@@ -29,6 +29,8 @@
 	import useDiyStore from '@/app/stores/diy'
 	import useMemberStore from '@/stores/member'
 	import { img,redirect } from '@/utils/common';
+    import diyGroup from '@/addon/components/diy/group/index.vue'
+    import fixedGroup from '@/addon/components/fixed/group/index.vue'
 
 	const loading = ref(true);
 	const diyStore = useDiyStore();
@@ -106,11 +108,5 @@
 </script>
 
 <style lang="scss" scoped>
-	.bg-index {
-		width: 100%;
-		height: 100%;
-		box-sizing: border-box;
-		background-size: 100% !important;
-		background-repeat: no-repeat !important;
-	}
+	@import '@/styles/diy.scss';
 </style>

@@ -12,7 +12,6 @@
       "addSite":"添加站点",
       "editSite":"编辑站点",
       "updateSite":"编辑站点",
-      "siteDeleteTips":"确定要删除该站点吗？",
       "statusExpire":"已到期",
       "phone":"客服电话",
       "groupIdPlaceholder":"请选择套餐",
@@ -45,5 +44,11 @@
       "managerPlaceholder": "请选择站点管理员",
       "newAddManager": "新增管理员",
       "edit": "编辑",
-      "siteDeleteTips": "确定要删除该站点吗？该操作将删除该站点和站点相关数据，该操作无法退回，确定要继续删除吗？"
+      "siteDeleteTips": "确定要删除该站点吗？该操作将删除该站点和站点相关数据，该操作无法退回，确定要继续删除吗？",
+      "siteDomain": "站点域名",
+      "siteDomainPlaceholder": "请输入站点域名",
+      "siteDomainTips": "站点域名的配置是针对站点的wap和web端",
+      "siteDomainTipsTwo": "配置的站点域名需要先配置域名解析",
+      "siteDomainTipsThree": "配置的站点域名需配置隐性解析到域名：",
+      "toSite": "访问站点"
 }

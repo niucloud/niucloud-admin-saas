@@ -21,7 +21,7 @@ router.push = (to: RouteLocationRaw) => {
     const route = typeof to == 'string' ? urlToRouteRaw(to) : to
     if (route.path) {
         const paths = route.path.split('/').filter((item: string) => { return item })
-        route.path = ['admin', 'site', 'decorate', 'home'].indexOf(paths[0]) == -1 ? `/${getAppType()}${route.path}` : route.path
+        route.path = ['admin', 'site', 'home'].indexOf(paths[0]) == -1 ? `/${getAppType()}${route.path}` : route.path
     }
     return originPush(route)
 }
@@ -34,7 +34,7 @@ router.resolve = (to: RouteLocationRaw, currentLocation?: RouteLocationNormalize
     const route = typeof to == 'string' ? urlToRouteRaw(to) : to
     if (route.path) {
         const paths = route.path.split('/').filter((item: string) => { return item })
-        route.path = ['admin', 'site', 'decorate', 'home'].indexOf(paths[0]) == -1 ? `/${getAppType()}${route.path}` : route.path
+        route.path = ['admin', 'site', 'home'].indexOf(paths[0]) == -1 ? `/${getAppType()}${route.path}` : route.path
     }
     return originResolve(route, currentLocation)
 }
@@ -74,7 +74,7 @@ router.beforeEach(async (to, from, next) => {
         matched = appType
     }
 
-    const loginPath = to.path == '/' ? '/admin/login' : `${matched}/login`
+    const loginPath = to.path == '/' ? '/admin/login' : `/${matched == '/admin' ? 'admin' : 'site'}/login`
 
     // 判断是否需登录
     if (NO_LOGIN_ROUTES.includes(to.path)) {
@@ -100,9 +100,10 @@ router.beforeEach(async (to, from, next) => {
 
                     // 设置首页路由
                     let firstRoute: symbol | string | undefined = findFirstValidRoute(userStore.routers)
-                    if (getAppType() != 'admin' && userStore.siteInfo?.apps.length > 1) {
+                    if (getAppType() != 'admin') {
                         firstRoute = userStore.addonIndexRoute[ userStore.siteInfo?.apps[0].key ]
                     }
+
                     ROOT_ROUTER.redirect = { name: firstRoute }
                     router.addRoute(ROOT_ROUTER)
 
@@ -133,13 +134,11 @@ router.beforeEach(async (to, from, next) => {
                             router.addRoute(SITE_ROUTE.name, route)
                         }
                     })
-
-                    next({ path: to.path, query: to.query, replace: true })
+                    next(to)
                 }
 
             } catch (err) {
                 console.log(err)
-                // userStore.logout()
                 next({ path: loginPath, query: { redirect: to.fullPath } })
             }
         }

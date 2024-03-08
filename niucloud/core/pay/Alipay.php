@@ -51,7 +51,7 @@ class Alipay extends BasePay
      */
     public function web(array $params)
     {
-        return $this->returnUrl(Pay::alipay()->web([
+        return $this->returnFormat(Pay::alipay()->web([
             'out_trade_no' => $params['out_trade_no'],
             'total_amount' => $params['money'],
             'subject' => $params['boby'],
@@ -66,7 +66,7 @@ class Alipay extends BasePay
      */
     public function wap(array $params)
     {
-        return $this->returnUrl(Pay::alipay()->wap([
+        return $this->returnFormat(Pay::alipay()->wap([
             'out_trade_no' => $params['out_trade_no'],
             'total_amount' => $params['money'],
             'subject' => $params['boby'],
@@ -81,8 +81,9 @@ class Alipay extends BasePay
      * @return array
      */
     public function app(array $params)
+
     {
-        return $this->returnUrl(Pay::alipay()->app([
+        return $this->returnFormat(Pay::alipay()->app([
             'out_trade_no' => $params['out_trade_no'],
             'total_amount' => $params['money'],
             'subject' => $params['boby'],//用户付款中途退出返回商户网站的地址, 一般是商品详情页或购物车页
@@ -379,6 +380,6 @@ class Alipay extends BasePay
 
     public function returnUrl($params)
     {
-        return ['url' => $params->getHeader('Location')[0]];
+        return ['url' => $params->getHeader('Location')[0] ?? ''];
     }
 }

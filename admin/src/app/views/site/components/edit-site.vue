@@ -21,7 +21,7 @@
                     </el-form-item> -->
 
                 <el-form-item :label="t('manager')" prop="uid">
-                    <el-select v-model="formData.uid" :placeholder="t('managerPlaceholder')" class="input-width" filterable>
+                    <el-select v-model="formData.uid" :placeholder="t('managerPlaceholder')" class="input-width" filterable autocomplete="off">
                         <el-option :label="t('newAddManager')" :value="0">
                             <template #default>
                                 <div class="flex items-center">
@@ -45,17 +45,17 @@
                 <div v-show="formData.uid === 0">
                     <el-form-item :label="t('username')" prop="username">
                         <el-input v-model="formData.username" clearable :placeholder="t('usernamePlaceholder')"
-                            class="input-width" />
+                            class="input-width" autocomplete="new-password"/>
                     </el-form-item>
 
                     <el-form-item :label="t('password')" prop="password">
                         <el-input v-model="formData.password" clearable :placeholder="t('passwordPlaceholder')"
-                            class="input-width" :show-password="true" type="password" />
+                            class="input-width" :show-password="true" type="password" autocomplete="new-password"/>
                     </el-form-item>
 
                     <el-form-item :label="t('confirmPassword')" prop="confirm_password">
                         <el-input v-model="formData.confirm_password" :placeholder="t('confirmPasswordPlaceholder')"
-                            type="password" :show-password="true" clearable class="input-width" />
+                            type="password" :show-password="true" clearable class="input-width" autocomplete="new-password" />
                     </el-form-item>
                 </div>
             </div>
@@ -72,6 +72,16 @@
                     </el-select>
                 </el-form-item>
             </div>
+
+            <el-form-item :label="t('siteDomain')" prop="site_domain">
+                <el-input v-model="formData.site_domain" clearable :placeholder="t('siteDomainPlaceholder')"
+                          class="input-width" />
+                <div>
+                    <p class="text-[12px] text-[#a9a9a9] leading-normal mt-[5px]">{{ t('siteDomainTips') }}</p>
+                    <p class="text-[12px] text-[#a9a9a9] leading-normal mt-[5px]">{{ t('siteDomainTipsTwo') }}</p>
+                    <p class="text-[12px] text-[#a9a9a9] leading-normal mt-[5px]">{{ t('siteDomainTipsThree') }}{{ domain }}</p>
+                </div>
+            </el-form-item>
 
             <el-form-item :label="t('expireTime')" prop="expire_time" class="input-width">
                 <el-date-picker class="flex-1 !flex" v-model="formData.expire_time" clearable type="datetime"
@@ -102,6 +112,7 @@ const loading = ref(true)
 const groupList = ref([])
 const siteUser = ref([])
 const siteType = ref([])
+const domain = location.hostname
 getAllUserList({}).then(({ data }) => {
     siteUser.value = data
 }).catch()
@@ -121,6 +132,7 @@ const initialFormData = {
     password: '',
     confirm_password: '',
     expire_time: end,
+    site_domain: '',
     group_id: ''
 }
 const formData: Record<string, any> = reactive({ ...initialFormData })

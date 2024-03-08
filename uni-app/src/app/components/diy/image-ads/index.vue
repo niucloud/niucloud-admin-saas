@@ -2,7 +2,8 @@
 	<view class="image-ads" :style="warpCss">
 		<view v-if="diyComponent.list.length == 1" class="leading-0 overflow-hidden" :style="swiperWarpCss">
 			<app-link :data="diyComponent.list[0].link">
-				<image :src="img(diyComponent.list[0].imageUrl)" :style="{height: imgHeight}" mode="heightFix" class="w-full" :show-menu-by-longpress="true"/>
+				<image v-if="diyComponent.list[0].imageUrl" :src="img(diyComponent.list[0].imageUrl)" :style="{height: imgHeight}" mode="heightFix" class="w-full" :show-menu-by-longpress="true"/>
+				<image v-else :src="img('static/resource/images/diy/figure.png')" :style="{height: imgHeight}" mode="heightFix" class="w-full" :show-menu-by-longpress="true"/>
 			</app-link>
 		</view>
 
@@ -10,7 +11,8 @@
 			<swiper-item class="swiper-item" v-for="(item) in diyComponent.list" :key="item.id" :style="swiperWarpCss">
 				<app-link :data="item.link">
 					<view class="item" :style="{height: imgHeight}">
-						<image :src="img(item.imageUrl)" mode="scaleToFill" class="w-full h-full" :show-menu-by-longpress="true"/>
+						<image v-if="item.imageUrl" :src="img(item.imageUrl)" mode="scaleToFill" class="w-full h-full" :show-menu-by-longpress="true"/>
+						<image v-else :src="img('static/resource/images/diy/figure.png')" mode="scaleToFill" class="w-full h-full" :show-menu-by-longpress="true"/>
 					</view>
 				</app-link>
 			</swiper-item>
@@ -86,9 +88,8 @@
 	const refresh = () => {
 		// 装修模式下设置默认图
 		if (diyStore.mode == 'decorate') {
-			diyComponent.value.list.forEach((item : any, index) => {
+			diyComponent.value.list.forEach((item : any) => {
 				if (item.imageUrl == '') {
-					item.imageUrl = 'static/resource/images/diy/figure.png';
 					item.imgWidth = 690;
 					item.imgHeight = 330;
 				}

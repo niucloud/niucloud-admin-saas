@@ -1,1 +1,0 @@
-import{a as r,b as _,e,__tla as l}from"./entry.60adbc61.js";import{u as o,__tla as s}from"./useLogin.368406ce.js";let t,i=Promise.all([(()=>{try{return l}catch{}})(),(()=>{try{return s}catch{}})()]).then(async()=>{t=r((a,n)=>{if(!_())return o().setLoginBack(a),e("/auth/login")})});export{i as __tla,t as default};

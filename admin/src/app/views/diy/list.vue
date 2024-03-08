@@ -2,7 +2,7 @@
     <div class="main-container">
         <el-card class="box-card !border-none" shadow="never">
             <div class="flex justify-between items-center">
-                <span class="text-[20px]">{{ pageName }}</span>
+                <span class="text-page-title">{{ pageName }}</span>
                 <el-button type="primary" class="w-[100px]" @click="dialogVisible = true">{{ t('addDiyPage') }}</el-button>
             </div>
 
@@ -52,11 +52,11 @@
 
                 <el-table-column :label="t('operation')" fixed="right" align="right" min-width="160">
                     <template #default="{ row }">
-                        <el-button type="primary" link @click="toPreview(row)">{{ t('promote') }}</el-button>
+                        <el-button type="primary" link @click="toPreview(row)">{{ t('preview') }}</el-button>
                         <el-button v-if="row.is_default == 0" type="primary" link @click="setUse(row.id)">{{ t('use') }}</el-button>
                         <el-button v-if="row.type == 'DIY_PAGE'" type="primary" link @click="openShare(row)">{{ t('shareSet') }}</el-button>
                         <el-button type="primary" link @click="editEvent(row)">{{ t('edit') }}</el-button>
-                        <el-button type="primary" link @click="deleteEvent(row.id)">{{ t('delete') }}</el-button>
+                        <el-button v-if="row.is_default == 0 || row.type == 'DIY_PAGE'" type="primary" link @click="deleteEvent(row.id)">{{ t('delete') }}</el-button>
                     </template>
                 </el-table-column>
 
@@ -163,10 +163,11 @@ const addEvent = async (formEl: FormInstance | undefined) => {
         if (valid) {
             dialogVisible.value = false
             const query = { type: formData.type, title: formData.title }
-            router.push({
+            const url = router.resolve({
                 path: '/decorate/edit',
                 query
             })
+            window.open(url.href)
         }
     })
 }

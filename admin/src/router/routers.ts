@@ -169,7 +169,7 @@ interface Route {
  */
 const createRoute = function (route: Route, parentRoute: RouteRecordRaw | null = null): RouteRecordRaw {
     const record: RouteRecordRaw = {
-        path: parentRoute ? route.router_path : route.router_path != 'decorate' ? `/${route.app_type}/${route.router_path}` : `/${route.router_path}`,
+        path: `/${route.app_type}/${route.router_path}`,
         name: route.menu_key,
         meta: {
             title: route.menu_name,
@@ -214,7 +214,7 @@ export function formatRouters(routes: Route[], parentRoute: RouteRecordRaw | nul
  */
 export function findFirstValidRoute(routes: RouteRecordRaw[]): string | undefined {
     for (const route of routes) {
-        if (route.meta?.type == 1) {
+        if (route.meta?.type == 1 && route.meta?.show) {
             return route.name as string
         }
         if (route.children) {
